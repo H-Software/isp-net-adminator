@@ -36,51 +36,43 @@ if($mssql_db_ok == 1)
 {
 
     $mssql_host = "127.0.0.1:1433";
+	$mssql_user = "admin";
+	$mssql_pass = "pass";
 
     if( !function_exists('mssql_connect') or !function_exists('mssql_select_db') or !function_exists('mssql_query'))
     {
 		echo "<div style=\"color; red; \">Error: Nejsou potrebne funkce pro MSSQL databazi!</div>\n";
 	
-		// TODO: enable this after fix MS SQL
+		if( !($db_mssql_no_exit == 1) ){ exit(); }
+    }
+
+    $mssql_spojeni = @mssql_connect($mssql_host,$mssql_user,$mssql_pass);
+
+    if(!$mssql_spojeni) {
+		echo " ERROR: mssql_connect (host: ".$mssql_host.") failed <br>\n";
+		echo ' MSSQL error: '.mssql_get_last_message()."<br>\n";
+		
+		// TODO: enable this section after fix MS SQL
 		// if( !($db_mssql_no_exit == 1) ){ exit(); }
     }
 
-	// TODO: enable this section after fix MS SQL
-
-    // $mssql_spojeni = mssql_connect($mssql_host,$mssql_user,$mssql_pass);
-
-    // if(!$mssql_spojeni)
-    // {
-	// echo " ERROR: myssql_connect (host: ".$mssql_host.") <br>\n";
-	// echo ' MSSQL error: '.mssql_get_last_message()."<br>\n";
-    
-	// if( !($db_mssql_no_exit == 1) ){ exit(); }
-    // }
-
-    // if($mssql_spojeni)
-    // {
-	// 	if(mssql_select_db($mssql_db,$mssql_spojeni))
-	// 	{ 
-	// 		//asi vse OK :)
+    if($mssql_spojeni)
+    {
+		if(mssql_select_db($mssql_db,$mssql_spojeni))
+		{ 
+			//asi vse OK :)
 		
-	// 		//mssql_query("SET NAMES 'utf-8'");
-	// 		//mssql_query("SET CHARACTER SET utf-8");
-	// 	}
-	// 	else
-	// 	{ 
-	// 		echo "Nejde zmenit databazi na ".$mssql_db."<br>\n";
-	// 		echo "MSSQL error: ". mssql_get_last_message()."<br>\n"; 
-	// 		if( !($db_mssql_no_exit == 1) ){ exit(); }
+			//mssql_query("SET NAMES 'utf-8'");
+			//mssql_query("SET CHARACTER SET utf-8");
+		}
+		else
+		{ 
+			echo "Nejde zmenit databazi na ".$mssql_db."<br>\n";
+			echo "MSSQL error: ". mssql_get_last_message()."<br>\n"; 
+			if( !($db_mssql_no_exit == 1) ){ exit(); }
 		
-	// 	}
-    // }
-    // else
-    // {
-	// 	echo "Nelze se pripojit k MS SQL serveru (".$mssql_host.") <br>\n";
-	
-	// 	if( !($db_mssql_no_exit == 1) ){ exit(); }
-    // }
-
+		}
+    }
 }
 
 ?>

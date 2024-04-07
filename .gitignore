@@ -36,3 +36,4 @@ extras/documentation
 /adminator2/export/
 /adminator3/templates_c/
 
+mysql-db-init.sql
