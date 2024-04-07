@@ -23,7 +23,11 @@ data/DoctrineORMModule/cache/
 demos/
 extras/documentation
 
+# IDE
+.DS_Store
 /.idea/
+
+# App
 /adminator2/vypisy/
 /adminator2/files2/dokumenty/
 /adminator2/files2/mk-bc/
@@ -31,3 +35,4 @@ extras/documentation
 /adminator2/files2/soubory/
 /adminator2/export/
 /adminator3/templates_c/
+
