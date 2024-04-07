@@ -222,12 +222,10 @@ function show_stats_faktury_neuhr()
  // 2. nf nesparovane
  // 3. datum posl. importu
  
- global $conn_mysql;
-
- // TODO: doresit
-
-//  $ret = array();
+  global $conn_mysql;
+  $ret = array();
  
+// TODO: doresit
 //  $dotaz_fn=mysql_query("SELECT * FROM faktury_neuhrazene ");
 //  $dotaz_fn_radku=mysql_num_rows($dotaz_fn);
  
@@ -253,5 +251,3 @@ function show_stats_faktury_neuhr()
 
  return $ret;
 }
-
-?>
