@@ -64,7 +64,7 @@ if( (isset($login)) and (isset($password)) and !isset($error))
  if ( $MSQ_R <> 1 )
  {
 
-  $body .= "<div>Chybný login / Chyba přístupu. Prosím zkuste se přihlásit znovu.</div>"; 
+  $body .= "<h2 style=\"color: red; \">Chybný login / Chyba přístupu. Prosím zkuste se přihlásit znovu.</h2>"; 
 
   $smarty->assign("lp_on",$lp_on);
   $smarty->assign("last_page",$lp);
@@ -81,16 +81,13 @@ if( (isset($login)) and (isset($password)) and !isset($error))
   //hadry okolo session
   $SN = "autorizace"; 
   session_name("$SN"); 
-  session_register("db_login_md5");
-  session_register("db_level");
-  session_register("db_nick");
 
   $time = date("U"); 
   $at = date("U") - 1800; 
 
   //co budeme ukladat do db ? zahashovany jmeno usera, nejdriv ho ale musime zjistit
 
-  $radek = mysql_fetch_array($MSQ);
+  $radek = $MSQ->fetch_array();
   $db_login = $radek["login"];
   $db_nick = $radek["login"];
   $db_level = $radek["level"];
@@ -103,21 +100,39 @@ if( (isset($login)) and (isset($password)) and !isset($error))
   $_SESSION["db_nick"] = $db_nick;
 
   //ted zjistime jestli nejde o refresh stanky :)
-  $MSQ_A = mysql_query("SELECT * FROM autorizace WHERE (id LIKE '$db_login_md5')");
-
-  if( mysql_num_rows($MSQ_A) == 1)
-  {
-   //ehm refresh, takze nic :)
+  try {
+    $MSQ_A = $conn_mysql->query("SELECT id FROM autorizace WHERE (id LIKE '".$conn_mysql->real_escape_string($db_login_md5)."')");
+  } catch (Exception $e) {
+      die ("<h2 style=\"color: red; \">Login Failed (check refresh): Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
   }
-  elseif( mysql_num_rows($MSQ_A) < 1 )
+
+  if($MSQ_A->num_rows == 1)
   {
-   // user v db neni, takze ho tam pridame
-   $MSQ_A2 = mysql_query("INSERT INTO autorizace VALUES ('$db_login_md5', '$time', '$db_nick', '$db_level')");
+      // ehm refresh, takze nic :)
+  }
+  elseif($MSQ_A->num_rows < 1)
+  {
+    // user v db neni, takze ho tam pridame
+    try {
+        $MSQ_A2 = $conn_mysql->query("INSERT INTO autorizace ".
+        " VALUES ('".$conn_mysql->real_escape_string($db_login_md5)."',".
+        " '".intval($time)."',".
+        " '".$conn_mysql->real_escape_string($db_nick)."',".
+        " '".intval($db_level)."') ");
+    } catch (Exception $e) {
+        die ("<h2 style=\"color: red; \">Login Failed (insert into autorizace): Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+    }
 
-   //hodime to este do logu
-   $ip=$_SERVER['REMOTE_ADDR'];
-
-   $MSQ_X = mysql_query("INSERT INTO login_log VALUES ('','$db_nick', '$time','$ip' )");
+    //hodime to este do logu
+    $ip=$_SERVER['REMOTE_ADDR'];
+    try {
+        $MSQ_X = $conn_mysql->query("INSERT INTO login_log ".
+                            "VALUES ('','".$conn_mysql->real_escape_string($db_nick)."',".
+                            " '".$conn_mysql->real_escape_string($time)."',".
+                            " '".$conn_mysql->real_escape_string($ip)."' )");
+    } catch (Exception $e) {
+        die ("<h2 style=\"color: red; \">Login Failed (insert into login_log): Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+    }
   }
   
   // $MSQ_D = MySQL_Query("DELETE FROM autorizace WHERE time < $at");
