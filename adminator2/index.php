@@ -2,13 +2,13 @@
 
 session_start();
 
+require ("include/config.php");
+
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
       <html>
       <head> ';
 
 require ("include/charset.php");
-
-require ("include/config.php");
 
 $login=$_POST["login"];
 $password=$_POST["password"];
@@ -19,7 +19,7 @@ if( ( strlen($login) > 0) )
   if( !(ereg('^([[:alnum:]]+)$',$login)) )
   {
     echo "</head><body>";
-        echo "<p>Chyba prihlasovani! Neplatna vstupni data (jmeno).</p>";
+    echo "<p>Chyba prihlasovani! Neplatna vstupni data (jmeno).</p>";
     echo "</body></html>";
     
     exit;
@@ -30,23 +30,30 @@ if((isset($login)) and (isset($password))):
 
     $p = md5($password);
     
-    $MSQ = mysql_query("SELECT login, level FROM users ".
-                   " WHERE (login LIKE '".mysql_real_escape_string($login)."') AND (password LIKE '".
-                   mysql_real_escape_string($p)."') ");
+    global $MSQ;
 
-    if (mysql_num_rows($MSQ) <> 1){
+    try {
+        $MSQ = $conn_mysql->query(
+            "SELECT login, level FROM users ".
+            " WHERE ( " 
+            . " login LIKE '".$conn_mysql->real_escape_string($login)."') "
+            . "AND (password LIKE '".$conn_mysql->real_escape_string($p)."') "
+        );
+    } catch (Exception $e) {
+        die ('Login Failed: Caught exception: ' .  $e->getMessage() . "\n" . "</div></div></body></html>\n");
+    }
 
+    if ($MSQ->num_rows <> 1){
         echo "</head><body>";
-    	    echo "<p>Neautorizovaný prístup. / Chyba prístupu.</p>";
-	echo "</body></html>";
-        
+    	echo "<p>Neautorizovaný prístup. / Chyba prístupu.</p>";
+	    echo "</body></html>";
+
         exit;
     }
     else{
-          
         //
         // uzivatel se zalogoval spravne, ted to ulozit do db
-	//
+	    //
 	
         //hadry okolo session
         $SN = "autorizace";
@@ -60,7 +67,7 @@ if((isset($login)) and (isset($password))):
 
         // co budeme ukladat do db ? zahashovany jmeno usera, nejdriv ho ale musime zjistit
     
-        $radek = mysql_fetch_array($MSQ);
+        $radek = $MSQ->fetch_array();
         
         $db_login=$radek["login"];
         $db_nick=$radek["login"];
@@ -231,5 +238,5 @@ else:
 </body>
 </html>
 
-<?php mysql_close($MC); ?>
+<?php $conn_mysql->close(); ?>
 

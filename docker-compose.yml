@@ -5,6 +5,8 @@ volumes:
 #  esdata01:
 #    driver: local
   grafana-storage:
+  mysql-data:
+  postgres-data:
 
 networks:
   default:
@@ -19,11 +21,53 @@ services:
   adminator:
     image: h-software/isp-net-adminator
     build: .
-    # command:
-    #   - sleep inf
+    # user: "www-data:www-data"
+    environment:
+      #
+      - MYSQL_SERVER=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWD=isp-net-passwd
+      #
+      - POSTGRES_SERVER=postgres
+      - POSTGRES_USER=adminator
+      - POSTGRES_PASSWD=isp-net-passwd
+      - POSTGRES_DB=adminator.new
+    tmpfs:
+      - /var/www/html/adminator3/templates_c:uid=33,gid=33
     ports:
       - "8080:80"
-  
+
+  mysql:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    command:
+      # https://dev.mysql.com/doc/mysql-linuxunix-excerpt/8.3/en/docker-mysql-more-topics.html#docker-configuring-server
+      - --character-set-server=utf8
+      - --collation-server=utf8_unicode_ci
+      # workaround for: The server requested authentication method unknown to the client
+      - --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_DATABASE=adminator2
+      - MYSQL_ROOT_PASSWORD=isp-net-passwd
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  postgres:
+    image: postgres:12-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=isp-net-passwd
+      - POSTGRES_USER=adminator
+      - POSTGRES_DB=adminator.new
+
   # otel-collector:
   #   deploy:
   #     resources:

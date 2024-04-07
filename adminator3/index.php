@@ -41,12 +41,27 @@ if( ( strlen($password) > 0) )
 if( (isset($login)) and (isset($password)) and !isset($error))
 {
 
- $p = md5($password); 
+  $p = md5($password);
  
- $MSQ = mysql_query("SELECT * FROM users WHERE (login LIKE '$login') AND (password LIKE '$p') "); 
- $MSQ_R = mysql_num_rows($MSQ);
+  global $MSQ;
+
+  try {
+    $MSQ = $conn_mysql->query(
+      "SELECT * FROM users WHERE (login LIKE '$login') AND (password LIKE '$p') "
+    );
+  } catch (Exception $e) {
+    $smarty->assign("lp_on",$lp_on);
+    $smarty->assign("last_page",$lp);
+    $smarty->assign("page_title", "Adminator3 :: login failed!");
+    $smarty->assign("body", "<h2 style=\"color: red; \">Error: Login failed!</h2><h3 style=\"color: red; \">Caught exception: " .  $e->getMessage() . "</h3>");
+    
+    $smarty->display("login-form.tpl");
+    die;
+  }
+
+ $MSQ_R = $MSQ->num_rows;
  
- if( $MSQ_R <> 1 )
+ if ( $MSQ_R <> 1 )
  {
 
   $body .= "<div>Chybný login / Chyba přístupu. Prosím zkuste se přihlásit znovu.</div>"; 
@@ -60,7 +75,8 @@ if( (isset($login)) and (isset($password)) and !isset($error))
 
  }
  else
- { // uzivatel se zalogoval spravne, ted to ulozit do db
+ { 
+  // uzivatel se zalogoval spravne, ted to ulozit do db
 
   //hadry okolo session
   $SN = "autorizace"; 
