@@ -1,38 +1,40 @@
 <?php
 
-function check_level ($user_level,$id)
-{
+function check_level ($user_level,$id) {
+  // co mame
+  // v promeny level mame level prihlaseneho uzivatele
+  // databazi levelu pro jednotlivy stranky
 
-// co mame
-// v promeny level mame level prihlaseneho uzivatele
-// databazi levelu pro jednotlivy stranky
+  // co chceme
+  // porovnat level uzivatele s prislusnym levelem 
+  // stranky podle jejiho id
 
-// co chceme
-// porovnat level uzivatele s prislusnym levelem 
-// stranky podle jejiho id
+  global $conn_mysql;
 
- $dotaz = mysql_query("SELECT level FROM leveling WHERE id = '".intval($id)."' ");
+  try {
+    $dotaz = $conn_mysql->query("SELECT level FROM leveling WHERE id = '".intval($id)."' ");
+    $radku = $dotaz->num_rows;
+  } catch (Exception $e) {
+    die ("<h2 style=\"color: red; \">Check level Failed: Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+  }
 
- $radku=mysql_num_rows($dotaz);
+  if ($radku==0)
+  {
+    return false; 
+    // "Chyba: NELZE ZJISTIT LEVEL prvku! ";
 
- if ($radku==0)
- {
-  return false; 
-  // "Chyba: NELZE ZJISTIT LEVEL prvku! ";
+    //exit;
+  }
 
-  //exit;
- }
+  while ($data = $dotaz->fetch_array())
+  {
+    $level_stranky=$data["level"];
+  }
 
- while ($data = mysql_fetch_array($dotaz))
- {
-   $level_stranky=$data["level"];
- }
-
- if ( $user_level >= $level_stranky)
- {
-   return true;
- }
-
+  if ( $user_level >= $level_stranky)
+  {
+    return true;
+  }
 }
 
 function check_level2 ($user_level,$level_col)
@@ -52,6 +54,3 @@ function check_level2 ($user_level,$level_col)
  { return true; }
 
 }
-
-
-?>

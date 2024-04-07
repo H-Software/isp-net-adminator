@@ -27,6 +27,8 @@ $MYSQL_SERVER = getenv("MYSQL_SERVER") ? getenv("MYSQL_SERVER") : "localhost";
 $MYSQL_USER = getenv("MYSQL_USER") ? getenv("MYSQL_USER") : "root";
 $MYSQL_PASSWD = getenv("MYSQL_PASSWD") ? getenv("MYSQL_PASSWD") : "password";
 
+global $conn_mysql;
+
 try {
     $conn_mysql = new mysqli(
         $MYSQL_SERVER,

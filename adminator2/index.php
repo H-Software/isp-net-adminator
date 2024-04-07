@@ -181,8 +181,8 @@ elseif (isset($lo)):
 
     $delka=strlen($sid);
 
-    $MSQ_D = mysql_query("DELETE FROM autorizace WHERE (id LIKE '".mysql_real_escape_string($sid)."')");
-    $MSA_D = mysql_affected_rows($MSQ_D);
+    $MSQ_D = $conn_mysql->query("DELETE FROM autorizace WHERE (id LIKE '".$conn_mysql->real_escape_string($sid)."')");
+    $MSA_D = $conn_mysql->affected_rows;
 
     echo '<div style="color: grey;"><br><br>'."debug info: <br> delka session: ".$delka."\n";
     echo " ,vysledek mazani: ".$MSQ_D."</div>";

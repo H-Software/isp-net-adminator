@@ -127,34 +127,34 @@
   
   <?php
   
-  $MSQ_USER2 = mysql_query("SELECT * FROM autorizace");
+  $MSQ_USER2 = $conn_mysql->query("SELECT * FROM autorizace");
 
-  $MSQ_USER_COUNT=mysql_num_rows($MSQ_USER2);
-        
+  $MSQ_USER_COUNT = $MSQ_USER2->num_rows;
+
   echo "<div style=\"color: gray; \">přihlášení uživatelé: ( ".$MSQ_USER_COUNT." )</div>";
   
   // zde vypis prihlasenych useru
       
       //prvne vypisem prihlaseneho
-      $MSQ_USER_NICK = mysql_query("SELECT * FROM autorizace WHERE nick LIKE '$nick' ");
+      $MSQ_USER_NICK = $conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '".$conn_mysql->real_escape_string($nick)."' ");
       
-      if (mysql_num_rows($MSQ_USER_NICK) <> 1){ echo "Chyba! Vyber nicku nelze provest."; }
+      if ($MSQ_USER_NICK->num_rows <> 1){ echo "Chyba! Vyber nicku nelze provest."; }
       else
       {
-        while ($data_user_nick = mysql_fetch_array($MSQ_USER_NICK) )
+        while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
         { echo "jméno:  <b>".$data_user_nick["nick"]."</b>, level: <b>".$data_user_nick["level"]."</b><br>"; }
       } // konec else
 
   // ted najilejeme prihlaseny lidi ( vsecky ) do pop-up okna
-  $MSQ_USER2 = mysql_query("SELECT * FROM autorizace");
+  $MSQ_USER2 = $conn_mysql->query("SELECT nick, level FROM autorizace");
 
-  $MSQ_USER_COUNT=mysql_num_rows($MSQ_USER2);
+  $MSQ_USER_COUNT=$MSQ_USER2->num_rows;
   
   if ( $MSQ_USER_COUNT < 1 ){ $obsah_pop_okna .= "Nikdo nepřihlášen. (divny)"; }
   else
   {
   
-   while ($data_user2 = mysql_fetch_array($MSQ_USER2))
+   while ($data_user2 = $MSQ_USER2->fetch_array())
    {     
      $obsah_pop_okna .= "jméno:  ".$data_user2["nick"].", level: ".$data_user2["level"].", "; 
    } //konec while  

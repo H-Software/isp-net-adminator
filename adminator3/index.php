@@ -154,12 +154,12 @@ elseif (isset($lo))
  $SN = "autorizace";
  session_name("$SN"); 
 
- $sid=$_SESSION["db_login_md5"];
+ $sid=$conn_mysql->real_escape_string($_SESSION["db_login_md5"]);
 
  $delka=strlen($sid);
 
- $MSQ_D = mysql_query("DELETE FROM autorizace WHERE (id LIKE '$sid')");
- $MSA_D = mysql_affected_rows($MSQ_D);
+ $MSQ_D = $conn_mysql->query("DELETE FROM autorizace WHERE (id LIKE '$sid')");
+ $MSA_D = $conn_mysql->affected_rows;
 
  $smarty->assign("delka",$delka);
 
