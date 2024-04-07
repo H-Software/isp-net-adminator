@@ -28,65 +28,72 @@ function start_ses()
 
 }
 
-function check_login()
-{
- global $sid, $ad, $level, $date;
-  
- $MSQ_S= mysql_query("SELECT * FROM autorizace where id != '$sid' ");
- $MSQ_S_RADKU= mysql_num_rows($MSQ_S);
+function check_login() {
+  global $sid, $ad, $level, $date, $conn_mysql;
 
- if ( $MSQ_S_RADKU == 0)
- {
-   //jestli je prihlasen pouze jeden clovek tak se neresi cas
-   $MSQ = mysql_query("SELECT * FROM autorizace WHERE (id = '$sid') "); 
- }
- else
- {
-   $MSQ = mysql_query("SELECT * FROM autorizace WHERE ( (id = '$sid') AND (date >= $ad) )"); 
- }
-
- $MSQ_R = mysql_num_rows($MSQ);
+  try {
+    $MSQ_S = $conn_mysql->query("SELECT id FROM autorizace WHERE id != '".$conn_mysql->real_escape_string($sid)."' ");
+    $MSQ_S_RADKU = $MSQ_S->num_rows;
+  } catch (Exception $e) {
+    die ("<h2 style=\"color: red; \">Login Failed (check login): Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+  }
  
- if( $MSQ_R <> 1 )
- {
-   $ret = array();
+  if( $MSQ_S_RADKU == 0 ){
+    //jestli je prihlasen pouze jeden clovek tak se neresi cas
+    $MSQ = $conn_mysql->query("SELECT id FROM autorizace WHERE (id = '".$conn_mysql->real_escape_string($sid)."') "); 
+  }
+  else {
+    $MSQ = $conn_mysql->query("SELECT id FROM autorizace ".
+          "WHERE (id = '".$conn_mysql->real_escape_string($sid)."') AND (date >= ".$conn_mysql->real_escape_string($ad).") "); 
+  }
 
-   $ret[] = "false";
-   $ret[] = "Neautorizovany pristup / Timeout Spojeni. (sid: ".$sid.", lvl: ".$level.", rows: ".$MSQ_R.",rows2: $MSQ_S_RADKU )";
+  $MSQ_R = $MSQ->num_rows;
+ 
+  if( $MSQ_R <> 1 ) {
+    $ret = array();
+
+    $ret[] = "false";
+    $ret[] = "Neautorizovany pristup / Timeout Spojeni. (sid: ".$sid.", lvl: ".$level.", rows: ".$MSQ_R.",rows2: $MSQ_S_RADKU )";
    
-   return $ret;  
- }
+    return $ret;  
+  }
 
- $MSQ = mysql_query("UPDATE autorizace SET date = $date WHERE id = '$sid'"); 
+  $MSQ = $conn_mysql->query("UPDATE autorizace ".
+    "SET date = ".$conn_mysql->real_escape_string($date)." WHERE id = '".$conn_mysql->real_escape_string($sid)."' "); 
 
- // sem asi odstranovani ostatnich useru co jim prosel limit
- $MSQ_D = mysql_query("DELETE FROM autorizace where ( date <= $ad) AND (id != '$sid') ");
+  // sem asi odstranovani ostatnich useru co jim prosel limit
+  $MSQ_D = $conn_mysql->query("DELETE FROM autorizace ".
+    " WHERE ( date <= ".$conn_mysql->real_escape_string($ad).") AND (id != '".$conn_mysql->real_escape_string($sid)."') ");
 
- return true;
+  return true;
 }
 
-function check_level ($user_level,$id)
-{
+function check_level ($user_level,$id) {
+  // co mame
+  // v promeny level mame level prihlaseneho uzivatele
+  // databazi levelu pro jednotlivy stranky
 
-// co mame
-// v promeny level mame level prihlaseneho uzivatele
-// databazi levelu pro jednotlivy stranky
+  // co chceme
+  // porovnat level uzivatele s prislusnym levelem
+  // stranky podle jejiho id
 
-// co chceme
-// porovnat level uzivatele s prislusnym levelem
-// stranky podle jejiho id
+  global $conn_mysql;
 
- $dotaz = mysql_query("SELECT * FROM leveling WHERE id = '$id' ");
- $radku=mysql_num_rows($dotaz);
+  try {
+    $dotaz = $conn_mysql->query("SELECT level FROM leveling WHERE id = '".intval($id)."' ");
+    $radku = $dotaz->num_rows;
+  } catch (Exception $e) {
+    die ("<h2 style=\"color: red; \">Check level Failed: Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+  }
 
- if ($radku==0)
- { return false; }
+  if ($radku==0)
+  { return false; }
 
- while ($data = mysql_fetch_array($dotaz))
- { $level_stranky = $data["level"]; }
+  while ($data = $dotaz->fetch_array())
+  { $level_stranky = $data["level"]; }
 
- if ( $user_level >= $level_stranky)
- { return true; }
+  if ( $user_level >= $level_stranky)
+  { return true; }
 
 }
 
@@ -160,25 +167,25 @@ function zobraz_kategorie($uri,$uri_replace)
 
 function vypis_prihlasene_uziv($nick)
 {
+  global $conn_mysql;
+  $ret = array();
 
- $ret = array();
-
- $MSQ_USER2 = mysql_query("SELECT * FROM autorizace");
- $MSQ_USER_COUNT=mysql_num_rows($MSQ_USER2);
+ $MSQ_USER2 = $conn_mysql->query("SELECT nick, level FROM autorizace");
+ $MSQ_USER_COUNT = $MSQ_USER2->num_rows;
 
  $ret[0] = $MSQ_USER_COUNT;
 
  //prvne vypisem prihlaseneho
- $MSQ_USER_NICK = mysql_query("SELECT * FROM autorizace WHERE nick LIKE '$nick' ");
+ $MSQ_USER_NICK = $conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '".$conn_mysql->real_escape_string($nick)."' ");
 
- if (mysql_num_rows($MSQ_USER_NICK) <> 1)
+ if ($MSQ_USER_NICK->num_rows <> 1)
  {
   $ret[100] = true;
   $ret[101] = "Chyba! Vyber nicku nelze provest.";
  }
  else
  {
-    while ($data_user_nick = mysql_fetch_array($MSQ_USER_NICK) )
+    while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
     {
       $ret[1] = $data_user_nick["nick"];
       $ret[2] = $data_user_nick["level"];
@@ -191,7 +198,7 @@ function vypis_prihlasene_uziv($nick)
   else
   {
 
-   while ($data_user2 = mysql_fetch_array($MSQ_USER2))
+   while ($data_user2 = $MSQ_USER2->fetch_array())
    {
      $obsah_pop_okna .= "jméno: ".$data_user2["nick"].", level: ".$data_user2["level"].", ";
    } //konec while
@@ -215,32 +222,32 @@ function show_stats_faktury_neuhr()
  // 2. nf nesparovane
  // 3. datum posl. importu
  
- $ret = array();
+  global $conn_mysql;
+  $ret = array();
  
- $dotaz_fn=mysql_query("SELECT * FROM faktury_neuhrazene ");
- $dotaz_fn_radku=mysql_num_rows($dotaz_fn);
+// TODO: doresit
+//  $dotaz_fn=mysql_query("SELECT * FROM faktury_neuhrazene ");
+//  $dotaz_fn_radku=mysql_num_rows($dotaz_fn);
  
- $ret[0] = $dotaz_fn_radku;
+//  $ret[0] = $dotaz_fn_radku;
  
- $dotaz_fn4=mysql_query("SELECT * FROM faktury_neuhrazene WHERE ( ignorovat = '1' ) order by id");
- $dotaz_fn4_radku=mysql_num_rows($dotaz_fn4);
+//  $dotaz_fn4=mysql_query("SELECT * FROM faktury_neuhrazene WHERE ( ignorovat = '1' ) order by id");
+//  $dotaz_fn4_radku=mysql_num_rows($dotaz_fn4);
    
- $ret[1] = $dotaz_fn4_radku;
+//  $ret[1] = $dotaz_fn4_radku;
  
- $dotaz_fn2=mysql_query("SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '0' ");
- $dotaz_fn2_radku=mysql_num_rows($dotaz_fn2);
+//  $dotaz_fn2=mysql_query("SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '0' ");
+//  $dotaz_fn2_radku=mysql_num_rows($dotaz_fn2);
 
- $ret[2] = $dotaz_fn2_radku;
+//  $ret[2] = $dotaz_fn2_radku;
       
- $dotaz_fn3=mysql_query("SELECT datum,DATE_FORMAT(datum, '%d.%m.%Y %H:%i:%s') as datum FROM fn_import_log order by id");
- $dotaz_fn3_radku=mysql_num_rows($dotaz_fn3);
+//  $dotaz_fn3=mysql_query("SELECT datum,DATE_FORMAT(datum, '%d.%m.%Y %H:%i:%s') as datum FROM fn_import_log order by id");
+//  $dotaz_fn3_radku=mysql_num_rows($dotaz_fn3);
        
- while( $data3=mysql_fetch_array($dotaz_fn3) )
- { $datum_fn3=$data3["datum"]; }
+//  while( $data3=mysql_fetch_array($dotaz_fn3) )
+//  { $datum_fn3=$data3["datum"]; }
 	 
- $ret[3] = $datum_fn3;
+//  $ret[3] = $datum_fn3;
 
  return $ret;
 }
-
-?>

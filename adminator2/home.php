@@ -34,7 +34,7 @@ require_once ("include/charset.php");
 
 //vlozeni prihlasovaci historie
 
- $dotaz_historie=mysql_query("SELECT date, nick, ip FROM login_log ORDER BY date DESC LIMIT 5");
+ $dotaz_historie=$conn_mysql->query("SELECT date, nick, ip FROM login_log ORDER BY date DESC LIMIT 5");
  
  echo "<div style=\"width: 800px; margin-left: auto; margin-right: auto; text-align: left; 
 	font-family: Verdana; font-weight: bold; font-size: 14px; padding-bottom: 20px; \">
@@ -42,7 +42,7 @@ require_once ("include/charset.php");
  
  echo "<div style=\"font-family: Verdana; font-size: 12px; \" >";
  
- while( $data_historie=mysql_fetch_array($dotaz_historie) )
+ while( $data_historie=$dotaz_historie->fetch_array() )
  {
     $datum = strftime("%d.%m.%Y %H:%M:%S", $data_historie["date"] );
     

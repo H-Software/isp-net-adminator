@@ -34,7 +34,7 @@ if( !( check_level($level,38) ) )
 { // neni level
  
  $smarty->assign("page_title","Adminator3 - chybny level");
- $smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+ $smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br> (current_level: " . $level . ")");
 
  $smarty->display('index-nolevel.tpl');
 
@@ -96,14 +96,14 @@ $smarty->assign("subcat_select",0);
 
 
 //vlozeni prihlasovaci historie
- $dotaz_historie=mysql_query("SELECT * FROM login_log ORDER BY date DESC LIMIT 5");
+ $dotaz_historie=$conn_mysql->query("SELECT nick, date, ip FROM login_log ORDER BY date DESC LIMIT 5");
 
- while ( $data_historie=mysql_fetch_array($dotaz_historie) )
+ while ( $data_historie=$dotaz_historie->fetch_array() )
  {
     $datum = strftime("%d.%m.%Y %H:%M:%S", $data_historie["date"] );
 
     $logged_users[] = array( "nick" => $data_historie["nick"], "datum" => $datum, "ip" => $data_historie["ip"]);    
- }// konec while
+ }
 
 $smarty->assign("logged_users",$logged_users);
 
