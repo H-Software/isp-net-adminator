@@ -1,0 +1,377 @@
+body
+{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+#obsah
+{
+    width: 990px;
+    margin: 2px auto;
+    border: 1px solid black;
+    text-align: left;
+    background-color: #EEEEEE;
+
+}
+
+.intro-banner
+{
+    background-color: #e5ecec;
+}
+
+.intro-banner-welcome
+{
+    vertical-align: 70%; 
+    padding-right: 20px; 
+    
+    margin-left: 10px; 
+    
+    color: #990033; 
+    font-weight: bold; 
+    font-family: arial; 
+    font-size: 14px; 
+}
+
+.intro-banner-logged
+{
+    padding-left: 20px; 
+    vertical-align: 70%; 
+    
+    color: #990033; 
+    font-weight: bold; 
+    font-family: arial; 
+    font-size: 12px;
+}
+
+.intro-logged-users
+{
+    color: grey; 
+    font-style: bold; 
+    font-size: 13px; 
+    
+    padding-top: 2px; 
+    padding-bottom: 2px;
+}
+
+.buttonalllogin
+{ 
+    height: 20px; 
+    width: 160px; 
+    font-size: 8pt; 
+    
+    margin-bottom: 3px;
+
+}
+
+.cara-kategorie
+{ 
+    border: dashed 1px black; 
+    
+    margin-top: 10px; 
+    margin-bottom: 10px; 
+    
+    margin-left: 10px; 
+    margin-right: 10px; 
+    
+}
+
+.cat 
+{   
+    color: #006699; 
+    font-size: 14px;
+}
+
+.cat2
+{   
+    color: #660099; 
+    font-size: 14px;
+}
+
+.cat-main-1-line
+{
+    padding-top: 2px; 
+    height: 20px; 
+}
+
+.cat-main-2-line
+{
+    height: 20px; 
+    padding-top: 7px;
+    padding-bottom: 0px;
+}
+
+.cat-no-records
+{
+    text-align: center;
+    color: red;
+}
+
+.cat-select-odkazy
+{
+    width: 135px; 
+    float: left; 
+    text-align: center; 
+}
+
+.cat-cara-oddelovaci
+{
+    clear: both;
+    border-bottom: 1px black solid;
+    margin-bottom: 5px;
+}
+
+.subcat-main
+{
+    height: 20px; 
+    background-color:#CCCCCC; 
+    clear: both;
+}
+
+.subcat-space
+{
+    margin-left: 20px;
+}
+
+.obsah-main
+{
+    padding-left: 10px; 
+    padding-bottom: 10px;
+    clear: both;
+}
+
+.home-main
+{
+    width: 700px;
+    padding-left: 200px;
+}
+
+.home-vypis-useru-napis
+{
+    width: 800px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    text-align: left;
+    
+    font-family: Verdana; 
+    font-weight: bold; 
+    font-size: 14px; 
+    
+    padding-bottom: 20px; 
+    padding-top: 10px;
+}
+
+.home-vypis-useru-main
+{
+    width: 800px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    text-align: left; 
+    padding-bottom: 2px; 
+    
+    font-family: Verdana; 
+    font-size: 12px; 
+
+}
+
+.home-vypis-useru-font1
+{
+    font-weight: bold;
+}
+
+.home-vypis-useru-font2
+{
+    font-style: italic; 
+    color: grey; 
+    font-weight: bold;
+}
+
+.base-subcat-main
+{
+    background-color: #BBBBBB; 
+    padding-left: 10px; 
+    margin-right: 10px; 
+/*    height: 22px; */
+
+}
+
+.others-cat-body
+{
+    padding-left: 50px; 
+    padding-top: 20px; 
+    font-size: 18px;
+}
+
+.global-cat-body
+{
+    padding-left: 50px; 
+    padding-top: 20px; 
+    font-size: 18px;
+}
+
+.about-body
+{
+    padding-left: 10px; 
+    padding-top: 5px; 
+}
+
+.changes-add { color: green; font-weight: bold; }
+.changes-repaid { color: red; font-weight: bold;  }
+.changes-info { color: grey; font-weight: bold; }
+.changes-upraveno { color: #0066CC; font-weight: bold; }
+
+
+.opravy-form-nevybrano
+{ color: grey; }
+
+.odkaz-uroven-vys{ color: #CC3300; }
+
+.select-nevybrano
+{ color: grey; }
+
+.vlastnici-selector-label
+{
+    margin-left: 5px; 
+    margin-right: 5px;
+}
+
+.zmeny-ucetni-banner
+{
+    padding-top: 10px; 
+    padding-bottom: 20px;
+    padding-right: 40px;
+    float: left;
+    
+    font-weight: bold; 
+    font-size: 18px;
+}
+
+.zmeny-ucetni-banner-add
+{
+    padding-top: 10px; 
+    padding-bottom: 20px;
+    padding-right: 40px;
+    
+    font-weight: bold; 
+    font-size: 18px;
+}
+
+.zmeny-ucetni-popis-sloupcu
+{
+    padding-left: 5px;
+    padding-bottom: 5px; 
+    margin-bottom: 5px;
+    float: left; 
+
+    border-bottom: 1px gray solid;
+    
+    font-weight: bold; 
+    font-size: 16px;
+}
+
+.zmeny-ucetni-popis-sloupcu2
+{
+    padding-left: 5px;
+    padding-bottom: 5px; 
+    margin-bottom: 5px;
+    float: left; 
+
+    border-bottom: 1px gray dashed;
+    
+    font-weight: bold; 
+    font-size: 16px;
+}
+
+.zmeny-ucetni-cara1
+{
+    margin-left: 5px;
+    padding-right: 2px;
+    float: left;
+    border-left: 1px gray solid;
+}
+
+.zu-radky
+{
+    padding-left: 5px; 
+    padding-bottom: 5px;
+    float: left;
+
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.zu-radky2
+{
+    padding-left: 5px; 
+    padding-bottom: 5px;
+    float: left;
+
+    font-size: 14px;
+}
+
+.zu-cara1
+{  border-bottom: 1px #BBBBBB dashed; }
+
+.zu-cara2
+{  border-bottom: 1px #999999 solid; }
+
+.zu-a-yes
+{ 
+    font-weight: bold;
+    color: green; 
+}
+
+.zu-a-no
+{ color: red; }
+
+.zu-form-ok-button
+{
+    width: 400px; 
+    background-color: green; 
+    color: white;
+}
+
+.form-add-no-click-ok { color: #0099FF; }
+
+.form-add-fail { color: red; }
+
+.work-ok { color: green; }
+.work-error { color: red; }
+
+.work-main-window
+{ 
+    height: 75px; 
+    width: 620px; 
+    padding: 15px; 
+    
+    text-align: center; 
+    background-color: silver;
+}
+
+.work-result
+{
+    width: 620px;
+    text-align: center; 
+}
+
+.work-complete
+{
+    color: green;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.fn-no-record
+{
+    color: maroon;
+}
+
+.print-reg-form-2012-05-input
+{
+    border: 2px solid orange;
+}
+
+.print-reg-form-2012-05-customer
+{
+    height: 18px;
+}

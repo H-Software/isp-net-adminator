@@ -1,0 +1,25 @@
+{
+  "name": "isp-net-adminator",
+  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+//  "image": "opencodeco/phpctl:php83-devcontainer",
+  "image" : "php:5.6-apache",
+  "postCreateCommand": "composer install",
+  "features": {
+    // Install the Dapr CLI
+//    "ghcr.io/dapr/cli/dapr-cli:0": {},
+    "ghcr.io/devcontainers/features/sshd:1": {},
+    // Enable Docker (via Docker-in-Docker)
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  }
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "sudo chmod a+x \"$(pwd)\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)\" /var/www/html"
+
+  // Configure tool-specific properties.
+  // "customizations": {},
+
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
+}

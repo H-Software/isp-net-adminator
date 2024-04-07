@@ -1,0 +1,151 @@
+<?php
+
+global $cesta;
+
+$cesta = "../";
+
+include ($cesta."include/config.php"); 
+include ($cesta."include/check_login.php");
+
+include ($cesta."include/check_level.php");
+
+if( !( check_level($level,127) ) )
+{
+ // neni level
+
+ $stranka=$cesta.'nolevelpage.php';
+ header("Location: ".$stranka);
+ 
+ echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
+ exit;
+      
+}
+
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
+      <html> 
+      <head> ';
+
+include ($cesta."include/charset.php"); 
+
+?>
+
+<title>Adminator 2 - VoIP systém</title> 
+
+</head>
+
+<body> 
+
+<?php include ($cesta."head.php"); ?> 
+
+<?php include ($cesta."category.php"); ?> 
+
+ <tr>
+ <td colspan="2" bgcolor="silver" height=""><? include("voip-subcat-inc.php"); ?></td>
+  </tr>
+ 
+  <tr>
+  <td colspan="2">
+  <!-- zacatek vlastniho obsahu -->
+  
+ <?php
+ 
+ // global $rs;
+ 
+ $item=$_GET["item"];
+ 
+ if( ( strlen($item) < 1) ){ $item=$_POST["item"]; }
+ 
+ echo "<div style=\"padding-top: 10px; \">
+	<span style=\"font-weight: bold; font-size: 18px; border-bottom: 1px solid grey; \" >Voip systém</span>";
+	
+	//<span style=\"border-bottom: 1px solid grey; \"> - Online systém DialTelecom</span>
+ 
+     echo " </div>";
+ 
+ include('../include/class.fileimporter.php'); 
+ 
+ include("../include/class.voip.main.php");
+
+ // echo "import ...";
+    
+  echo '
+  <form name="frmImportFile" enctype="multipart/form-data" method="post"> 
+	
+    <input type="hidden" name="value" value="yes"> 
+    <input type="hidden" name="item" value="1"> 
+  
+  <table width="" cellpadding="0" cellspacing="0" border="0"> 
+   <tr> 
+      <td>Import výpisu</td>
+   </tr>
+   
+   <tr><td><br></td></tr>
+   
+   <tr> 
+      <td >
+        <input type="file" name="import_file" id="import_file" />
+      </td>
+    </tr>
+
+    <tr><td><br></td></tr>
+       
+    <tr>
+      <td style="padding-left: 20px";><input type="submit" value="OK" /></td>         
+   </tr>     
+  </table> 
+
+  </form>';
+
+ //$typ_systemu = $_POST["typ_systemu"];
+ 
+ if( $_POST["value"] == 'yes' )
+ { 
+   //set the temp dir 
+   $path = $_SERVER['DOCUMENT_ROOT'].'/adminator2/vypisy/'; 
+   
+   echo "<div >cesta: ".$path."</div>";
+   
+   //dodelat if soubor cosi
+   { 
+   
+    //create an object of this class 
+    $importer2 = new fileImporter2( $path , 'adminator2' , 'voip_dial' ); 
+    //create DB connection, if DB is not connected 
+    $importer2->connectDatabase( '10.99.1.10', 'adminator2' ,'lopata'); 
+    //set delimiter,by defult tab   
+    $importer2->setDelimiter('comma'); //FOR COMMA,use $importer->setDelimiter('comma'); 
+   
+    //import file 
+    $vysledek = $importer2->importFile();
+   
+    if( $vysledek )
+    { 
+     echo "<div style=\"padding-top: 10px;color: green; \">";
+     echo "Soubor úspěšně importován.</div>"; 
+    } 
+    else 
+    { 
+     echo "<div style=\"padding-top: 10px; color: red; \">";
+     echo "Chyba! Soubor nelze importovat! Zkuste to znovu.</div>"; 
+    }     
+
+    // zapis do archivu
+    if( $vysledek == 1 ){ $vysledek_write="1"; }  
+    $pole2 = "<b>akce: import voip vypisu, typ systemu: ".$typ_systemu." </b><br>";
+    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
+   
+   } //konec 
+   
+ } // konec if value == yes
+
+ ?> 
+  <!-- konec vlastniho obsahu -->  
+  
+  </td>
+  </tr>
+  
+ </table>
+
+</body> 
+</html> 
+

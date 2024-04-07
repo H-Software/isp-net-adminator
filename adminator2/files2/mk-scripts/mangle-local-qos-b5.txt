@@ -1,0 +1,177 @@
+###
+##  Simelon local qos 
+###
+# skript pro naplneni mangle tabulky a queue tree 
+# 
+# mangle tabulka musi(mela) byt pred spustenim skript prazdna
+
+#jmeno vysilace ( pouziva se pro tvorbu nazvu marku, zadavat bez mezer )
+
+:local jmeno "xxx"
+
+#definice interfacu
+:local iface-dwn "xxx"
+:local iface-upl "xxy"
+
+#jmena user chainu
+
+:local chain-dwn ( $jmeno . "-dwn-local" )
+:local chain-upl ( $jmeno . "-upl-local" )
+
+# popis mark
+:local mark-dwn-local-prio ( $jmeno . "-dwn-local-prio" )
+:local mark-dwn-local-end  ( $jmeno . "-dwn-local-end" )
+
+:local mark-dwn-local-ftp ( $jmeno . "-dwn-local-ftp" )
+
+:local mark-upl-local-prio ( $jmeno . "-upl-local-prio" )
+:local mark-upl-local-end  ( $jmeno . "-upl-local-end" )
+
+:local mark-upl-local-ftp ( $jmeno . "-upl-local-ftp" )
+
+#definice parametreu queue
+
+:local class-dwn-local-parent ( "c-" . $jmeno . "-dwn-local-parent" )
+:local class-upl-local-parent ( "c-" . $jmeno . "-upl-local-parent" )
+
+:local class-dwn-local-prio ( "c-" . $jmeno . "-dwn-local-prio" )
+:local class-dwn-local-end ( "c-" . $jmeno . "-dwn-local-end" )
+
+:local class-upl-local-prio ( "c-" . $jmeno . "-upl-local-prio" )
+:local class-upl-local-end ( "c-" . $jmeno . "-upl-local-end" )
+
+#limity pro dwn i upl, uvadet v bitech
+:local limit-max-parent "2000000"
+
+:local limit-local "1000000"
+:local limit-max-local "2000000"
+
+
+
+/ ip firewall mangle 
+add chain=forward action=passthrough p2p=all-p2p comment="oznacovani p2p \
+    trafficu   -     ------------------ FINALNI UPRAVY DELAT V \
+    \"system-scripts\" ---------------" disabled=no 
+add chain=forward action=passthrough out-interface=$iface-dwn comment="celkovej  \
+    traffic - down" disabled=no 
+add chain=forward action=passthrough in-interface=$iface-dwn comment="celkovej  \
+    traffic - upload" disabled=no 
+add chain=forward action=accept protocol=icmp comment="vyhodime si icmp " \
+    disabled=no 
+add chain=forward action=jump jump-target=$chain-dwn out-interface=$iface-dwn \
+    src-address=10.0.0.0/8 comment="oznacime si vnitrni traffic - download" \
+    disabled=yes 
+add chain=forward action=jump jump-target=$chain-dwn out-interface=$iface-dwn \
+    src-address=212.80.82.0/24 comment="" disabled=yes 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-end \
+    passthrough=no p2p=all-p2p comment="prvne vyhodime p2p provoz" disabled=no 
+add chain=$chain-dwn action=accept src-address=212.80.82.234 src-port=25 \
+    protocol=tcp comment="accept na smtp" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no src-port=22 protocol=tcp comment="lokalni sluzby - prio" \
+    disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no src-port=53 protocol=tcp comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no src-port=53 protocol=udp comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no src-port=80 protocol=tcp comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no src-port=3389 protocol=tcp comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no src-port=8291 protocol=tcp comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no src-port=443 protocol=tcp comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no src-port=4090 protocol=tcp comment="kerio vpn :\)" \
+    disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no protocol=udp comment="udp provoz " disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=yes protocol=rdp comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no protocol=ipsec-esp comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no protocol=ipsec-ah comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-prio \
+    passthrough=no protocol=icmp comment="" disabled=no 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-ftp \
+    passthrough=no src-port=20-21 protocol=tcp comment="lokalni ftp - dwn" \
+    disabled=yes 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-ftp \
+    passthrough=no connection-type=ftp comment="" disabled=yes 
+add chain=$chain-dwn action=mark-packet new-packet-mark=$mark-dwn-local-end \
+    passthrough=no comment="konecna marka lokalniho trafficu" disabled=no 
+add chain=$chain-dwn action=accept comment="vyhodime si pakety z vnitrni site - \
+    download" disabled=no 
+add chain=forward action=jump jump-target=$chain-upl in-interface=$iface-dwn \
+    dst-address=10.0.0.0/8 comment="oznacime si vnitrni traffic - upload" \
+    disabled=no 
+add chain=forward action=jump jump-target=$chain-upl in-interface=$iface-dwn \
+    dst-address=212.80.82.0/24 comment="" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-prio \
+    passthrough=no p2p=all-p2p comment="prvne si vyhodime p2p provoz" \
+    disabled=no 
+add chain=$chain-upl action=accept dst-address=212.80.82.234 dst-port=25 \
+    protocol=tcp comment="accept na SMTP" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-prio \
+    passthrough=no dst-port=80 protocol=tcp comment="marking priority \
+    services" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-prio \
+    passthrough=no dst-port=53 protocol=tcp comment="" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-prio \
+    passthrough=no dst-port=53 protocol=udp comment="" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-prio \
+    passthrough=no dst-port=22 protocol=tcp comment="" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-prio \
+    passthrough=no dst-port=443 protocol=tcp comment="" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-prio \
+    passthrough=no dst-port=4090 protocol=tcp comment="kerio vpn" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-prio \
+    passthrough=no protocol=udp comment="udp provoz" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-prio \
+    passthrough=no protocol=icmp comment="" disabled=no 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-ftp \
+    passthrough=yes dst-port=20-21 protocol=tcp comment="lokalni ftp - upl" \
+    disabled=yes 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-ftp \
+    passthrough=yes connection-type=ftp comment="" disabled=yes 
+add chain=$chain-upl action=mark-packet new-packet-mark=$mark-upl-local-end \
+    passthrough=yes comment="marking local upload - end" disabled=no 
+add chain=$chain-upl action=accept comment="vyhodime si pakety z vnitrni site - \
+    upload" disabled=no 
+
+
+###
+##    naplneni queue tree
+###
+
+/ queue tree 
+
+add name=$class-dwn-local-parent parent=$iface-dwn packet-mark="" limit-at=0 \
+    queue=wireless-default priority=1 max-limit=$limit-max-parent burst-limit=0 \
+    burst-threshold=0 burst-time=0s disabled=no 
+
+add name=$class-dwn-local-prio parent=$class-dwn-local-parent \
+    packet-mark=$mark-dwn-local-prio limit-at=$limit-local queue=wireless-default \
+    priority=1 max-limit=$limit-max-local burst-limit=0 burst-threshold=0 burst-time=0s \
+    disabled=no 
+    
+add name=$class-dwn-local-end parent=$class-dwn-local-parent \
+    packet-mark=$mark-dwn-local-end limit-at=$limit-local queue=wireless-default \
+    priority=2 max-limit=$limit-max-local burst-limit=0 burst-threshold=0 burst-time=0s \
+    disabled=no
+    
+add name=$class-upl-local-parent parent=$iface-upl packet-mark="" limit-at=0 \
+    queue=wireless-default priority=1 max-limit=$limit-max-parent burst-limit=0 \
+    burst-threshold=0 burst-time=0s disabled=no 
+    
+add name=$class-upl-local-prio parent=$class-upl-local-parent \
+    packet-mark=$mark-upl-local-prio limit-at=$limit-local \
+    queue=wireless-default priority=1 max-limit=$limit-max-local burst-limit=0 \
+    burst-threshold=0 burst-time=0s disabled=no 
+    
+add name=$class-upl-local-end parent=$class-upl-local-parent \
+    packet-mark=$mark-upl-local-end limit-at=$limit-local queue=wireless-default \
+    priority=2 max-limit=$limit-max-local burst-limit=0 burst-threshold=0 burst-time=0s \
+    disabled=no 

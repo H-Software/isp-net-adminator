@@ -1,0 +1,47 @@
+# created by hujer
+###
+##  skript pro naliti trid do QoS-ka
+###
+#
+## released by 12.4.2007
+#
+## verze 1.0
+#
+
+/ queue tree 
+add name="C-download" parent=ether2 packet-mark="" limit-at=15000000 \
+    queue=wireless-simelon priority=1 max-limit=18000000 burst-limit=0 \
+    burst-threshold=0 burst-time=0s disabled=yes 
+
+add name="C-dwn-local" parent=C-download packet-mark=dwn-local-10 \
+    limit-at=1000000 queue=wireless-simelon priority=2 max-limit=8000000 \
+    burst-limit=0 burst-threshold=0 burst-time=0s disabled=yes 
+
+add name="C-inet-real" parent=C-download packet-mark=inet-dwn-real \
+    limit-at=1000000 queue=wireless-simelon priority=1 max-limit=10000000 \
+    burst-limit=0 burst-threshold=0 burst-time=0s disabled=yes 
+
+add name="C-inet-web" parent=C-download packet-mark=inet-dwn-web \
+    limit-at=3000000 queue=wireless-simelon priority=2 max-limit=11000000 \
+    burst-limit=0 burst-threshold=0 burst-time=0s disabled=yes 
+add name="C-upload" parent="eth-POE" packet-mark="" limit-at=10000000 \
+    queue=wireless-simelon priority=1 max-limit=15000000 burst-limit=0 \
+    burst-threshold=0 burst-time=0s disabled=yes 
+add name="C-upl-local" parent=C-upload packet-mark=upl-local-10 \
+    limit-at=1000000 queue=wireless-simelon priority=2 max-limit=8000000 \
+    burst-limit=0 burst-threshold=0 burst-time=0s disabled=yes 
+add name="C-local" parent=C-download packet-mark=dwn-local-10 limit-at=1000000 \
+    queue=wireless-simelon priority=2 max-limit=8000000 burst-limit=0 \
+    burst-threshold=0 burst-time=0s disabled=yes 
+add name="c-dwn-local-ftp" parent=C-dwn-local packet-mark=dwn-local-ftp \
+    limit-at=1000000 queue=wireless-simelon priority=3 max-limit=8000000 \
+    burst-limit=0 burst-threshold=0 burst-time=0s disabled=yes 
+add name="C-inet-upl-real" parent=C-upload packet-mark=inet-upl-real \
+    limit-at=1000000 queue=default priority=1 max-limit=5000000 burst-limit=0 \
+    burst-threshold=0 burst-time=0s disabled=yes 
+add name="C-inet-upl-web" parent=C-upload packet-mark=inet-upl-web \
+    limit-at=3000000 queue=wireless-simelon priority=2 max-limit=11000000 \
+    burst-limit=0 burst-threshold=0 burst-time=0s disabled=yes 
+add name="C-upl-local-ftp" parent=C-upl-local packet-mark=upl-local-ftp \
+    limit-at=1000000 queue=wireless-simelon priority=2 max-limit=5000000 \
+    burst-limit=0 burst-threshold=0 burst-time=0s disabled=yes

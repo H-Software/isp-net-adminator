@@ -1,0 +1,407 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Frameset//EN""http://www.w3.org/TR/REC-html40/frameset.dtd">
+<html>
+<head>
+<title>
+sarissa Overview
+</title>
+<link rel ="stylesheet" type="text/css" href="stylesheet.css" title="Style">
+<script>
+function asd() {
+	
+		parent.document.title="sarissa_ieemu_load.js Overview";
+	
+}
+</script>
+</head>
+<body bgcolor="#eeeeee" onload="asd();">
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#b8cade" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#b8cade" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> 	<font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#b8cade" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#b8cade" class="NavBarCell1">    <a href="index-all.html" --><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#b8cade" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#b8cade" align="right" valign="top">
+<em>
+<b>sarissa</b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="#eeeeee" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="#eeeeee" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<center>
+	
+	   <h2>sarissa_ieemu_load.js</h2>
+	
+</center>
+
+	
+
+
+<h4>Summary</h4>
+<p>
+	
+		No overview generated for 'sarissa_ieemu_load.js'<BR/><BR/>
+	
+</p>
+
+<hr>
+
+
+    <table border="1" cellpadding="3" cellspacing="0" width="100%">
+    <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+    <td colspan=2><font size="+2">
+    
+        <b>Class Summary</b>
+    
+    </font></td>
+    </tr>
+    
+    <tr bgcolor="#eeeeee" class="TableRowColor">
+    <td width="15%"><b><a href="SarissaParseError.html">SarissaParseError</a></b></td>
+    <td>&nbsp;</td>
+    </tr>
+    
+    </table>
+    <hr/> 
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<!-- ========== END METHOD SUMMARY =========== -->
+
+
+        <pre class="sourceview"><span class="comment">/**
+ * ====================================================================
+ * About
+ * ====================================================================
+ * Sarissa cross browser XML library - IE .load eulation (deprecated)
+ * <span class="attrib">@version</span> 0.9.7.3
+ * <span class="attrib">@author</span>: Manos Batsis, mailto: mbatsis at users full stop sourceforge full stop net
+ *
+ * This script emulates Internet Explorer's .load method of DOM Document objects. 
+ *
+ * All functionality in this file is DEPRECATED, XMLHttpRequest objects 
+ * should be used to load XML documents instead 
+ *
+ * <span class="attrib">@version</span> 0.9.7.3
+ * <span class="attrib">@author</span>: Manos Batsis, mailto: mbatsis at users full stop sourceforge full stop net
+ * ====================================================================
+ * Licence
+ * ====================================================================
+ * Sarissa is free software distributed under the GNU GPL version 2 (see &lt;a href="gpl.txt"&gt;gpl.txt&lt;/a&gt;) or higher, 
+ * GNU LGPL version 2.1 (see &lt;a href="lgpl.txt"&gt;lgpl.txt&lt;/a&gt;) or higher and Apache Software License 2.0 or higher 
+ * (see &lt;a href="asl.txt"&gt;asl.txt&lt;/a&gt;). This means you can choose one of the three and use that if you like. If 
+ * you make modifications under the ASL, i would appreciate it if you submitted those.
+ * In case your copy of Sarissa does not include the license texts, you may find
+ * them online in various formats at &lt;a href="http://www.gnu.org"&gt;http://www.gnu.org&lt;/a&gt; and 
+ * &lt;a href="http://www.apache.org"&gt;http://www.apache.org&lt;/a&gt;.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY 
+ * KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
+ * WARRANTIES OF MERCHANTABILITY,FITNESS FOR A PARTICULAR PURPOSE 
+ * AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR 
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */</span>
+<span class="reserved">if</span>(!_SARISSA_IS_IE){
+    <span class="reserved">if</span>(_SARISSA_HAS_DOM_CREATE_DOCUMENT){
+        <span class="comment">/**
+         * &lt;p&gt;Ensures the document was loaded correctly, otherwise sets the
+         * parseError to -1 to indicate something went wrong. Internal use&lt;/p&gt;
+         * <span class="attrib">@private</span>
+         */</span>
+        Sarissa.__handleLoad__ = <span class="reserved">function</span>(oDoc){
+            Sarissa.__setReadyState__(oDoc, 4);
+        };
+        <span class="reserved">function</span> SarissaParseError() {
+            <span class="reserved">this</span>.errorCode = 0;
+        };
+        <span class="comment">/**
+        * &lt;p&gt;Attached by an event handler to the load event. Internal use.&lt;/p&gt;
+        * <span class="attrib">@private</span>
+        */</span>
+        _sarissa_XMLDocument_onload = <span class="reserved">function</span>(){
+            Sarissa.__handleLoad__(<span class="reserved">this</span>);
+        };
+        <span class="comment">/**
+         * &lt;p&gt;Sets the readyState property of the given DOM Document object.
+         * Internal use.&lt;/p&gt;
+         * <span class="attrib">@private</span>
+         * <span class="attrib">@argument</span> oDoc the DOM Document object to fire the
+         *          readystatechange event
+         * <span class="attrib">@argument</span> iReadyState the number to change the readystate property to
+         */</span>
+        Sarissa.__setReadyState__ = <span class="reserved">function</span>(oDoc, iReadyState){
+            oDoc.readyState = iReadyState;
+            oDoc.readystate = iReadyState;
+            <span class="reserved">if</span> (oDoc.onreadystatechange != null &amp;&amp; typeof oDoc.onreadystatechange == <span class="literal">"function"</span>)
+                oDoc.onreadystatechange();
+        };
+        Sarissa.getDomDocument = <span class="reserved">function</span>(sUri, sName){
+            
+            var oDoc = document.implementation.createDocument(sUri?sUri:null, sName?sName:null, null);
+            <span class="reserved">if</span>(!oDoc.onreadystatechange){
+            
+                <span class="comment">/**
+                * &lt;p&gt;Emulate IE's onreadystatechange attribute&lt;/p&gt;
+                */</span>
+                oDoc.onreadystatechange = null;
+            };
+            <span class="reserved">if</span>(!oDoc.readyState){
+                <span class="comment">/**
+                * &lt;p&gt;Emulates IE's readyState property, which always gives an integer from 0 to 4:&lt;/p&gt;
+                * &lt;ul&gt;&lt;li&gt;1 == LOADING,&lt;/li&gt;
+                * &lt;li&gt;2 == LOADED,&lt;/li&gt;
+                * &lt;li&gt;3 == INTERACTIVE,&lt;/li&gt;
+                * &lt;li&gt;4 == COMPLETED&lt;/li&gt;&lt;/ul&gt;
+                */</span>
+                oDoc.readyState = 0;
+            };
+            <span class="reserved">if</span>(!oDoc.parseError){
+                oDoc.parseError = new SarissaParseError();
+            };
+            oDoc.addEventListener(<span class="literal">"load"</span>, _sarissa_XMLDocument_onload, false);
+            <span class="reserved">return</span> oDoc;
+        };
+        <span class="reserved">if</span>(window.XMLDocument){
+            <span class="comment">/**
+            * &lt;p&gt;Keeps a handle to the original load() method. Internal use and only
+            * if Mozilla version is lower than 1.4&lt;/p&gt;
+            * <span class="attrib">@private</span>
+            */</span>
+            XMLDocument.<span class="reserved">prototype</span>._sarissa_load = XMLDocument.<span class="reserved">prototype</span>.load;
+            <span class="comment">// NOTE: setting async to false will only work with documents</span>
+            <span class="comment">// called over HTTP (meaning a server), not the local file system,</span>
+            <span class="comment">// unless you are using Moz 1.4+.</span>
+        
+            <span class="comment">/**
+            * &lt;p&gt;This is deprecated, use XMLHttpRequest to load remote documents instead. 
+            * Overrides the original load method to provide synchronous loading for
+            * Mozilla versions prior to 1.4 and fix ready state stuff.&lt;/p&gt;
+            * <span class="attrib">@deprecated</span> 
+            * <span class="attrib">@returns</span> the DOM Object as it was before the load() call (may be  empty)
+            */</span>
+            XMLDocument.<span class="reserved">prototype</span>.load = <span class="reserved">function</span>(sURI) {
+                var oDoc = Sarissa.getDomDocument();
+                Sarissa.copyChildNodes(<span class="reserved">this</span>, oDoc);
+                <span class="reserved">this</span>.parseError.errorCode = 0;
+                Sarissa.__setReadyState__(<span class="reserved">this</span>, 1);
+                try {
+                    <span class="reserved">if</span>(<span class="reserved">this</span>.async == false &amp;&amp; _SARISSA_SYNC_NON_IMPLEMENTED) {
+                        var tmp = new XMLHttpRequest();
+                        tmp.open(<span class="literal">"GET"</span>, sURI, false);
+                        tmp.send(null);
+                        Sarissa.__setReadyState__(<span class="reserved">this</span>, 2);
+                        Sarissa.copyChildNodes(tmp.responseXML, <span class="reserved">this</span>);
+                        Sarissa.__setReadyState__(<span class="reserved">this</span>, 3);
+                    }<span class="reserved">else</span>{
+                        <span class="reserved">this</span>._sarissa_load(sURI);
+                    };
+                }
+                catch (objException) {
+                        oDoc.parseError.errorCode = -1;
+                }
+                finally {
+                    <span class="reserved">if</span> (!oDoc.documentElement || oDoc.documentElement.tagName == <span class="literal">"parsererror"</span>){
+                        oDoc.parseError.errorCode = -1;
+                    };
+                    <span class="reserved">if</span>(<span class="reserved">this</span>.async == false){
+                        Sarissa.__handleLoad__(<span class="reserved">this</span>);
+                    };
+                };
+                <span class="reserved">return</span> oDoc;
+            };
+        <span class="comment">//if(window.XMLDocument) , now mainly for opera  </span>
+        }<span class="comment">// TODO: check if the new document has content before trying to copynodes, check  for error handling in DOM 3 LS</span>
+        <span class="reserved">else</span> <span class="reserved">if</span>(document.implementation &amp;&amp; document.implementation.hasFeature &amp;&amp; document.implementation.hasFeature(<span class="literal">'LS'</span>, <span class="literal">'3.0'</span>)){
+            Document.<span class="reserved">prototype</span>.async = true;
+            Document.<span class="reserved">prototype</span>.onreadystatechange = null;
+            Document.<span class="reserved">prototype</span>.load = <span class="reserved">function</span>(sURI) {
+                var oldDoc = Sarissa.getDomDocument();
+                Sarissa.copyChildNodes(<span class="reserved">this</span>, oldDoc, false);
+                var parser = document.implementation.createLSParser(<span class="reserved">this</span>.async ? document.implementation.MODE_ASYNCHRONOUS : document.implementation.MODE_SYNCHRONOUS, null);
+                <span class="reserved">if</span>(<span class="reserved">this</span>.async){
+                    var self = <span class="reserved">this</span>;
+                    parser.addEventListener(<span class="literal">"load"</span>, 
+                        <span class="reserved">function</span>(e) { 
+                              self.readyState = 4;
+                              Sarissa.copyChildNodes(e.newDocument, self, false);
+                              self.onreadystatechange.call(); 
+                        }, 
+                        false); 
+                };
+                try {
+                    var oDoc = parser.parseURI(sURI);
+                    <span class="reserved">if</span>(!<span class="reserved">this</span>.async) {
+                        Sarissa.copyChildNodes(oDoc, <span class="reserved">this</span>, false);
+                    };
+                }
+                catch(e){
+                    <span class="reserved">this</span>.parseError.errorCode = -1;
+                };
+                <span class="reserved">return</span> oldDoc;
+            };
+            <span class="comment">/**
+            * &lt;p&gt;Factory method to obtain a new DOM Document object&lt;/p&gt;
+            * <span class="attrib">@argument</span> sUri the namespace of the root node (if any)
+            * <span class="attrib">@argument</span> sUri the local name of the root node (if any)
+            * <span class="attrib">@returns</span> a new DOM Document
+            */</span>
+            Sarissa.getDomDocument = <span class="reserved">function</span>(sUri, sName){
+                var oDoc = document.implementation.createDocument(sUri?sUri:null, sName?sName:null, null);
+                <span class="reserved">if</span>(!oDoc.parseError){
+                    oDoc.parseError = {errorCode:0};
+                };
+                <span class="reserved">return</span> oDoc;
+            };
+        }
+        <span class="reserved">else</span> {
+            Sarissa.getDomDocument = <span class="reserved">function</span>(sUri, sName){
+                var oDoc = document.implementation.createDocument(sUri?sUri:null, sName?sName:null, null);
+                <span class="comment">// looks like safari does not create the root element for some unknown reason</span>
+                <span class="reserved">if</span>(oDoc &amp;&amp; (sUri || sName) &amp;&amp; !oDoc.documentElement){
+                    oDoc.appendChild(oDoc.createElementNS(sUri, sName));
+                };
+                <span class="comment">// attachb to the new object as we have no prototype to use, this is for safari</span>
+                <span class="reserved">if</span>(!oDoc.load) {
+                        oDoc.load = <span class="reserved">function</span>(sUrl) {
+                            var oldDoc = document.implementation.createDocument();
+                            Sarissa.copyChildNodes(<span class="reserved">this</span>, oldDoc);
+                            <span class="reserved">this</span>.parseError = {errorCode : 0};
+                            Sarissa.__setReadyState__(<span class="reserved">this</span>, 1);
+                            <span class="reserved">if</span>(<span class="reserved">this</span>.async == false) {
+                                var tmp = new XMLHttpRequest();
+                                tmp.open(<span class="literal">"GET"</span>, sUrl, false);
+                                tmp.send(null);
+                                Sarissa.__setReadyState__(<span class="reserved">this</span>, 2);
+                                Sarissa.copyChildNodes(tmp.responseXML, oDoc);
+                                <span class="reserved">if</span>(!oDoc.documentElement || oDoc.getElementsByTagName(<span class="literal">"parsererror"</span>).length &gt;0){
+                                    oDoc.parseError.errorCode = -1;
+                                };
+                                Sarissa.__setReadyState__(<span class="reserved">this</span>, 3);
+                                Sarissa.__setReadyState__(<span class="reserved">this</span>, 4);
+                            }
+                            <span class="reserved">else</span> {
+                                var xmlhttp = new XMLHttpRequest();
+                                xmlhttp.open(<span class="literal">'GET'</span>, sUrl, true);
+                                xmlhttp.onreadystatechange = <span class="reserved">function</span>(){
+                                    <span class="reserved">if</span> (xmlhttp.readyState == 4) {
+                                        Sarissa.copyChildNodes(xmlhttp.responseXML, oDoc);
+                                        <span class="reserved">if</span>(!oDoc.documentElement || oDoc.getElementsByTagName(<span class="literal">"parsererror"</span>).length &gt; 0){
+                                            oDoc.parseError.errorCode = -1;
+                                        };      
+                                    };
+                                Sarissa.__setReadyState__(oDoc, xmlhttp.readyState);
+                                };
+                                xmlhttp.send(null);
+                            };
+                            <span class="reserved">return</span> oldDoc;
+                        };
+                };
+                <span class="reserved">return</span> oDoc;
+            };
+        };
+    };<span class="comment">//if(_SARISSA_HAS_DOM_CREATE_DOCUMENT)</span>
+};
+<span class="comment">//   EOF</span>
+</pre>
+	<hr>
+
+
+
+<!-- ========== START OF NAVBAR ========== -->
+<a name="navbar_top"><!-- --></a>
+<table border="0" width="100%" cellpadding="1" cellspacing="0">
+<tr>
+<td colspan=2 bgcolor="#b8cade" class="NavBarCell1">
+<a name="navbar_top_firstrow"><!-- --></a>
+<table border="0" cellpadding="0" cellspacing="3">
+  <tr align="center" valign="top">
+  
+  
+  <td bgcolor="#b8cade" class="NavBarCell1">    <a href="overview-summary.html"><font class="NavBarFont1"><b>Overview</b></font></a>&nbsp;</td>
+  <td bgcolor="#FFFFFF" class="NavBarCell1Rev">	&nbsp;<font class="NavBarFont1Rev"><b>File</b></font>&nbsp;</td>
+  
+
+  <td bgcolor="#FFFFFF" class="NavBarCell1"> <font class="NavBarFont1">Class</font>&nbsp;</td>
+  <td bgcolor="#b8cade" class="NavBarCell1">    <a href="overview-tree.html"><font class="NavBarFont1"><b>Tree</b></font></a>&nbsp;</td>
+  <td bgcolor="#b8cade" class="NavBarCell1">    <a href="index-all.html" --><font class="NavBarFont1"><b>Index</b></font></a>&nbsp;</td>
+  <td bgcolor="#b8cade" class="NavBarCell1">    <a href="help-doc.html"><font class="NavBarFont1"><b>Help</b></font></a>&nbsp;</td>
+  </tr>
+</table>
+</td>
+<td bgcolor="#b8cade" align="right" valign="top"><em>
+<b>sarissa</b></em>
+</td>
+</tr>
+
+<tr>
+<td bgcolor="#eeeeee" class="NavBarCell2"><font size="-2">
+&nbsp;PREV&nbsp;
+&nbsp;NEXT</font></td>
+<td bgcolor="#eeeeee" class="NavBarCell2"><font size="-2">
+  <a href="index.html" target="_top"><b>FRAMES</b></a>  &nbsp;
+&nbsp;<a href="overview-summary.html" target="_top"><b>NO FRAMES</b></a>
+&nbsp;&nbsp;
+<script>
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="allclasses-noframe.html" TARGET=""><B>All Classes</B></A>');
+  }
+  //-->
+</script>
+<noscript>
+<a href="allclasses-noframe.html" target=""><b>All Classes</b></a>
+</noscript>
+</font></td>
+</tr>
+</table>
+<!-- =========== END OF NAVBAR =========== -->
+
+<hr>
+<font size="-1">
+
+</font>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoc.sourceforge.net/" target="_parent">JSDoc</a> on Sat Jun 10 18:40:04 2006</div>
+</body>
+</html>

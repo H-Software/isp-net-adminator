@@ -1,0 +1,42 @@
+###
+##	skript pro naplneni tabulky/ek - "filter"
+###
+#
+##	resi firewall, komunikaci rb s okolim
+
+###
+##	created by hujer	verze 1.4 	released 12.7.2010
+###
+
+/ ip firewall filter 
+add action=accept chain=input comment="komunikace rb s okolim" \
+    connection-state=established disabled=no
+add action=jump chain=input comment="fw - lokalni ip" disabled=no \
+    jump-target=fw-input src-address=10.0.0.0/8
+add action=jump chain=input comment="fw - vip ip" disabled=no jump-target=\
+    fw-input src-address=212.80.82.0/24
+add action=accept chain=fw-input comment=\
+    "ssh - cko,  telnet, winbox, ftp, b-test" disabled=no dst-port=22 \
+    protocol=tcp
+add action=accept chain=fw-input comment="" disabled=no dst-port=23 protocol=\
+    tcp
+add action=accept chain=fw-input comment="" disabled=no dst-port=8291 \
+    protocol=tcp
+add action=accept chain=fw-input comment="" disabled=no dst-port=20 protocol=\
+    tcp
+add action=accept chain=fw-input comment="" disabled=no dst-port=161 \
+    protocol=tcp
+add action=accept chain=fw-input comment="" disabled=no dst-port=161 \
+    protocol=udp
+add action=accept chain=fw-input comment="" disabled=no dst-port=21 protocol=\
+    tcp
+add action=accept chain=fw-input comment="" disabled=no dst-port=2000 \
+    protocol=tcp
+add action=accept chain=fw-input comment="" disabled=no protocol=icmp
+add action=accept chain=fw-input comment="MK DISC" disabled=no dst-port=5678 \
+    protocol=udp
+add action=accept chain=fw-input comment="MK API" disabled=no dst-port=8728 \
+    protocol=tcp
+add action=log chain=fw-input comment="" disabled=no log-prefix=interni-fw:
+add action=return chain=fw-input comment="" disabled=no
+add action=drop chain=input comment="fw - konecna akce" disabled=no

@@ -1,0 +1,44 @@
+
+###
+##    Created by KacerHuhu
+##
+##	verze 1.2, 	released 6.7.2007
+##	
+##   upraveno aby v nazvu zalohy byl nakej datum a cas
+##   odesilani mailu je treba nastavit akorat dns název smtp serveru, viz. dalsi komentar
+###
+
+#sem dns název smtp serveru
+# 
+ :set smtp ( "mail.simelon.net" )
+
+ :set smtp-ip ( [:resolve  ($smtp)  ] ) 
+
+ :set time ([/system clock get time] )
+ :set date ([/system clock get date] )
+
+ :set identity  ([/system identity get name])
+
+ :set date2 ( [:pick $date 0 3] . [:pick $date 4 6] . [:pick $date 7 11] )  
+
+:set time2 ( [:pick $time 0 2] . [:pick $time 3 5]  )
+
+:set save-name ($identity . "-" . $date2 . "-" . $time2 . "-email")
+:set export-name ($identity . "-" . $date2 . "-" . $time2 . "-export")
+
+/system backup save name=($save-name)
+
+/export file=($export-name)
+
+: delay 2
+
+
+
+  /tool e-mail send server=($smtp-ip) to="router-board@simelon.net" from=( $identity . "@simelon.net" ) \
+    subject=($identity . " Backup") file=($save-name) \
+    body=( " zaloha router-boardu: " . $identity  . ", datum: " . $date . ", cas: " . $time )
+
+  /tool e-mail send server=($smtp-ip) to="router-board@simelon.net" from=( $identity . "@simelon.net" ) \
+    subject=($identity . " Export") file=($export-name . ".rsc")  \
+    body=( " export router-boardu: " . $identity  . ", datum: " . $date . ", cas: " . $time )
+
