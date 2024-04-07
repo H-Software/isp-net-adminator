@@ -127,7 +127,7 @@ if( (isset($login)) and (isset($password)) and !isset($error))
     $ip=$_SERVER['REMOTE_ADDR'];
     try {
         $MSQ_X = $conn_mysql->query("INSERT INTO login_log ".
-                            "VALUES ('','".$conn_mysql->real_escape_string($db_nick)."',".
+                            "VALUES (NULL,'".$conn_mysql->real_escape_string($db_nick)."',".
                             " '".$conn_mysql->real_escape_string($time)."',".
                             " '".$conn_mysql->real_escape_string($ip)."' )");
     } catch (Exception $e) {
