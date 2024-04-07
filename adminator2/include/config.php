@@ -16,26 +16,30 @@ $base_html = "<html>
                 <body>
 		<img src=\"img2/logo.png\">";
 
-$hlaska_connect = $base_html."<div style=\"color: black; padding-left: 20px;  \">";
-$hlaska_connect .= "<div style=\"padding-top: 50px; font-size: 18px; \">";
-$hlaska_connect .= "Omlouváme se, Adminátor2 v tuto chvíli není dostupný! </div>";
-$hlaska_connect .= "<div style=\"padding-top: 10px; font-size: 12px; \" >Detailní informace: Chyba! Nelze se pripojit k Mysql databázi. </div>";
+$hlaska_connect = $base_html."\n<div style=\"color: black; padding-left: 20px;  \">\n";
+$hlaska_connect .= "<div style=\"padding-top: 50px; font-size: 18px; \">\n";
+$hlaska_connect .= "Omlouváme se, Adminátor2 v tuto chvíli není dostupný! </div>\n";
+$hlaska_connect .= "<div style=\"padding-top: 10px; font-size: 12px; \" >\nDetailní informace: Chyba! Nelze se pripojit k Mysql databázi. </div>\n";
 
-$MC=mysql_connect("212.80.82.233", "adminator2", "rX.wuK.G") or die ($hlaska_connect.mysql_error()."</div></div></body></html>");
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-$db_mysql_link = $MC;
+try {
+    $conn_mysql = new mysqli(
+        "localhost",
+        "root",
+        "mySecretDBpass",
+        "adminator2");
+} catch (Exception $e) {
+    echo $hlaska_connect;
+    echo 'Caught exception: Connect to mysql server failed! Message: ',  $e->getMessage(), "\n";
+    if ($conn_mysql->connect_error) {
+        echo "connection error: " . $conn_mysql->connect_error . "\n";
+    }
+    echo  "</div></div></body></html>\n";
+    die();
+}
 
-$hlaska_db = $base_html."<div style=\"color: black; padding-left: 20px;  \">";
-
-$hlaska_db .= "<div style=\"padding-top: 50px; font-size: 18px; \">";
-$hlaska_db .= "Omlouváme se, Adminátor2 v tuto chvíli není dostupný! </div>";
-$hlaska_db .= "<div style=\"padding-top: 10px; font-size: 12px; \" >";
-$hlaska_db .= "Detailní informace: Chyba! Nelze vybrat databázi. ";
-$hlaska_db .= "<div style=\"font-size: 10px;\">Chybové hlášení: ";
-
-$MS=mysql_select_db("adminator2", $db_mysql_link) or die ($hlaska_db.mysql_error()."</div></div></body></html>");
-
-$db_mysql_db_sl = $MS;
+$db_mysql_link = $conn_mysql;
 
 mysql_query("SET NAMES 'utf8';");
 mysql_query("SET CHARACTER SET utf-8");

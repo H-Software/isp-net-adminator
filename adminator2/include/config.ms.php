@@ -8,25 +8,23 @@ if(!isset($mssql_db)){
     //zjisteni ucetni jednotky / databaze
     if($db_mysql_db_sl === true){
     
-	//zjisteni, zda se uctuje v "prechodnem obdobi"
-	$mysql_q_ms1 = mysql_query("SELECT value FROM settings WHERE name LIKE 'pohoda_accounting_turn_year' ");
-	$mysql_q_ms1_value = mysql_result($mysql_q_ms1, 0);
-	
-	if( $mysql_q_ms1_value == 1){
-	    $mssql_db = "StwPh_26109824_".(date("Y")-1); 
-	}
-	else{
-	    $mssql_db = "StwPh_26109824_".date("Y"); 
-	}
-	
-	//muzem provest 2cast kodu
-	$mssql_db_ok = 1;        
+		//zjisteni, zda se uctuje v "prechodnem obdobi"
+		$mysql_q_ms1 = mysql_query("SELECT value FROM settings WHERE name LIKE 'pohoda_accounting_turn_year' ");
+		$mysql_q_ms1_value = mysql_result($mysql_q_ms1, 0);
+		
+		if( $mysql_q_ms1_value == 1){
+			$mssql_db = "StwPh_26109824_".(date("Y")-1); 
+		}
+		else{
+			$mssql_db = "StwPh_26109824_".date("Y"); 
+		}
+		
+		//muzem provest 2cast kodu
+		$mssql_db_ok = 1;        
     }
     else{
-    
-	echo " ERROR: myssql_connect: need mysql connection for load settings \n";
-
-	if( !($db_mssql_no_exit == 1) ){ exit(); }	
+		echo " ERROR: myssql_connect: need mysql connection for load settings \n";
+		if( !($db_mssql_no_exit == 1) ){ exit(); }	
     }
 }
 else{
