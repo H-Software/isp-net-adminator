@@ -1,0 +1,59 @@
+#main li {
+	background-position:4px left;
+	background-repeat:no-repeat;
+}
+
+#shares li.share {
+	background-position:5px left;
+}
+
+#tagline {
+	top:83px;
+}
+
+label {
+	cursor:hand;
+}
+
+#sidemenu ul li {
+	height:20px;
+}
+
+#header h1 {
+	height:74px
+}
+
+#main {
+	overflow-y:scroll
+}
+
+#main li.share span.upload {
+	position:absolute;
+	top:1px;
+	right:8px;
+}
+#main li.share span.upload a {
+	height: 0;
+	overflow: hidden;
+	padding-top:22px;
+	width: 22px;
+}
+
+#main li.folder span.upload, #main li.file span.delete {
+	position:absolute;
+	top:1px;
+	right:8px;
+}
+
+#main li.file span.delete a, #main li.folder span.upload a  {
+	height: 0;
+	overflow: hidden;
+	padding-top:16px;
+	width: 16px;
+}
+
+#main li.file span.size {
+	position:absolute;
+	top:1px;
+	right:30px;
+}

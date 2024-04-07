@@ -1,0 +1,16 @@
+###
+##	Created by KacerHuhu
+##
+##	verze 1.1 , released 27.5.2008
+##
+##	pro routerboardy v simelonu, nastaveni snmp a scheduleru
+###
+
+:local identity  ([/system identity get name])
+
+/ system scheduler add name="zaloha-pres-email_v1.2" on-event=zaloha-pres-email_v1.2 start-date=Jul/06/2007 \
+    start-time=22:00:00 interval=1w comment="" disabled=no 
+
+/ snmp set enabled=yes contact="info@simelon.net" location=$identity
+
+/ snmp community set public name="public" address=0.0.0.0/0 read-access=yes 

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<database>
+
+	<table>
+		<name>[prefix]accounts</name>
+		<test_sql>SELECT `account_id` FROM `[prefix]accounts` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]accounts` (
+			  `account_id` int(11) NOT NULL auto_increment,
+			  `account_name` varchar(30) NOT NULL,
+			  `account_username` varchar(20) NOT NULL,
+			  `account_password` varchar(30) NOT NULL,
+			  `account_disabled` enum('no','yes') NOT NULL default 'no',
+			  `account_admin` enum('no','yes') NOT NULL default 'no',
+			  `theme` varchar(30) NOT NULL default 'default',
+			  PRIMARY KEY  (`account_id`)
+			)
+		</table_sql>
+		<table_data>
+			INSERT INTO `[prefix]accounts` VALUES (null, 'Administrator', '[admin_user]', '[admin_pass]', 'no', 'yes', 'default')
+		</table_data>
+		<update_sql>
+			DELETE FROM `[prefix]accounts` WHERE `account_username`='[admin_user]' LIMIT 1
+		</update_sql>
+		<update_sql>
+			INSERT INTO `[prefix]accounts` VALUES (null, 'Administrator', '[admin_user]', '[admin_pass]', 'no', 'yes', 'default')
+		</update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]accounts_has_groups</name>
+		<test_sql>SELECT `link_id` FROM `[prefix]accounts_has_groups` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]accounts_has_groups` (
+			  `link_id` int(11) NOT NULL auto_increment,
+			  `account_id` int(11) NOT NULL default '0',
+			  `group_id` int(11) NOT NULL default '0',
+			  PRIMARY KEY  (`link_id`)
+			)
+		</table_sql>
+		<table_data></table_data>
+		<update_sql></update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]accounts_has_perms</name>
+		<test_sql>SELECT `perm_id` FROM `[prefix]accounts_has_perms` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]accounts_has_perms` (
+			  `perm_id` int(11) NOT NULL auto_increment,
+			  `account_id` int(11) NOT NULL default '0',
+			  `share_id` int(11) NOT NULL default '0',
+			  `perm_r` enum('no','yes') NOT NULL default 'no',
+			  `perm_dl` enum('no','yes') NOT NULL default 'no',
+			  `perm_ul` enum('no','yes') NOT NULL default 'no',
+			  `perm_del` enum('no','yes') NOT NULL default 'no',
+			  PRIMARY KEY  (`perm_id`)
+			)
+		</table_sql>
+		<table_data></table_data>
+		<update_sql></update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]blacklist_dirs</name>
+		<test_sql>SELECT `blacklist_id` FROM `[prefix]blacklist_dirs` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]blacklist_dirs` (
+			  `blacklist_id` int(11) NOT NULL auto_increment,
+			  `blacklist_dir` varchar(50) NOT NULL,
+			  PRIMARY KEY  (`blacklist_id`)
+			)
+		</table_sql>
+		<table_data>
+			INSERT INTO `[prefix]blacklist_dirs` VALUES (null, 'temp')
+		</table_data>
+		<update_sql></update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]blacklist_ext</name>
+		<test_sql>SELECT `blacklist_id` FROM `[prefix]blacklist_ext` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]blacklist_ext` (
+			  `blacklist_id` int(11) NOT NULL auto_increment,
+			  `blacklist_extension` varchar(8) NOT NULL,
+			  PRIMARY KEY  (`blacklist_id`)
+			)
+		</table_sql>
+		<table_data>
+			INSERT INTO `[prefix]blacklist_ext` VALUES (null, 'db')
+		</table_data>
+		<update_sql></update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]blacklist_files</name>
+		<test_sql>SELECT `blacklist_id` FROM `[prefix]blacklist_files` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]blacklist_files` (
+			  `blacklist_id` int(11) NOT NULL auto_increment,
+			  `blacklist_file` varchar(50) NOT NULL,
+			  PRIMARY KEY  (`blacklist_id`)
+			)
+		</table_sql>
+		<table_data>
+			INSERT INTO `[prefix]blacklist_files` VALUES (null, 'thumbs.db')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]blacklist_files` VALUES (null, '.htaccess')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]blacklist_files` VALUES (null, 'desktop.ini')
+		</table_data>
+		<update_sql></update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]groups</name>
+		<test_sql>SELECT `group_id` FROM `[prefix]groups` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]groups` (
+			  `group_id` int(11) NOT NULL auto_increment,
+			  `group_name` varchar(30) NOT NULL,
+			  PRIMARY KEY  (`group_id`)
+			)
+		</table_sql>
+		<table_data></table_data>
+		<update_sql></update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]groups_has_perms</name>
+		<test_sql>SELECT `perm_id` FROM `[prefix]groups_has_perms` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]groups_has_perms` (
+			  `perm_id` int(11) NOT NULL auto_increment,
+			  `group_id` int(11) NOT NULL default '0',
+			  `share_id` int(11) NOT NULL default '0',
+			  `perm_r` enum('no','yes') NOT NULL default 'no',
+			  `perm_dl` enum('no','yes') NOT NULL default 'no',
+			  `perm_ul` enum('no','yes') NOT NULL default 'no',
+			  `perm_del` enum('no','yes') NOT NULL default 'no',
+			  PRIMARY KEY  (`perm_id`)
+			)
+		</table_sql>
+		<table_data></table_data>
+		<update_sql></update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]links</name>
+		<test_sql>SELECT `link_id` FROM `[prefix]links` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]links` (
+			  `link_id` int(11) NOT NULL auto_increment,
+			  `link_name` varchar(100) NOT NULL,
+			  `link_href` varchar(255) NOT NULL,
+			  `link_order` int(11) NOT NULL default '100',
+			  `link_target` varchar(15) default '_self',
+			  PRIMARY KEY  (`link_id`)
+			)
+		</table_sql>
+		<table_data>
+			INSERT INTO `[prefix]links` VALUES (null, 'blog.jc21.com', 'http://blog.jc21.com', 100, '_self')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]links` VALUES (null, 'ajaxfb.jc21.com', 'http://ajaxfb.jc21.com', 100, '_self')
+		</table_data>
+		<update_sql></update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]log</name>
+		<test_sql>SELECT `log_id` FROM `[prefix]log` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]log` (
+			  `log_id` int(11) NOT NULL auto_increment,
+			  `log_action` enum('download','upload','login','logout','delete','link') NOT NULL default 'download',
+			  `log_data` varchar(255) default NULL,
+			  `account_id` int(11) NOT NULL default '0',
+			  `share_id` int(11) NOT NULL default '0',
+			  `log_timestamp` int(11) NOT NULL,
+			  `log_ip` varchar(45) default NULL,
+			  PRIMARY KEY  (`log_id`)
+			)
+		</table_sql>
+		<table_data></table_data>
+		<update_sql></update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]settings</name>
+		<test_sql>SELECT `setting_id` FROM `[prefix]settings` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]settings` (
+			  `setting_id` int(11) NOT NULL auto_increment,
+			  `setting_name` varchar(20) NOT NULL,
+			  `setting_value` varchar(255) NOT NULL,
+			  PRIMARY KEY  (`setting_id`)
+			)
+		</table_sql>
+		<table_data>
+			INSERT INTO `[prefix]settings` VALUES (null, 'app_version_major', '2')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]settings` VALUES (null, 'app_version_minor', '0')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]settings` VALUES (null, 'app_version_revision', '1')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]settings` VALUES (null, 'app_installation_id', '[install_id]')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]settings` VALUES (null, 'site_name', 'AjaxFileBrowser')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]settings` VALUES (null, 'site_tagline', 'Because life wasn''t meant to be reloaded')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]settings` VALUES (null, 'site_footer', '&copy; jc21.com 2006')
+		</table_data>
+		<table_data>
+			INSERT INTO `[prefix]settings` VALUES (null, 'timezone', '[timezone]')
+		</table_data>
+		
+		<update_sql>
+			DELETE FROM `[prefix]settings` WHERE `setting_name`='app_version_major'
+		</update_sql>
+		<update_sql>
+			DELETE FROM `[prefix]settings` WHERE `setting_name`='app_version_minor'
+		</update_sql>
+		<update_sql>
+			DELETE FROM `[prefix]settings` WHERE `setting_name`='app_version_revision'
+		</update_sql>
+		<update_sql>
+			INSERT INTO `[prefix]settings` VALUES (null, 'app_version_major', '2')
+		</update_sql>
+		<update_sql>
+			INSERT INTO `[prefix]settings` VALUES (null, 'app_version_minor', '0')
+		</update_sql>
+		<update_sql>
+			INSERT INTO `[prefix]settings` VALUES (null, 'app_version_revision', '1')
+		</update_sql>
+		<update_sql>
+			DELETE FROM `[prefix]settings` WHERE `setting_name`='timezone'
+		</update_sql>
+		<update_sql>
+			INSERT INTO `[prefix]settings` VALUES (null, 'timezone', '[timezone]')
+		</update_sql>
+	</table>
+	
+	<table>
+		<name>[prefix]shares</name>
+		<test_sql>SELECT `share_id` FROM `[prefix]shares` LIMIT 0,1</test_sql> 
+		<table_sql>
+			CREATE TABLE `[prefix]shares` (
+			  `share_id` int(11) NOT NULL auto_increment,
+			  `share_name` varchar(30) NOT NULL,
+			  `share_dir` varchar(255) NOT NULL,
+			  `share_order` int(11) NOT NULL default '100',
+			  PRIMARY KEY  (`share_id`)
+			)
+		</table_sql>
+		<table_data></table_data>
+		<update_sql></update_sql>
+	</table>
+	
+</database>

@@ -1,0 +1,21 @@
+###
+##	Created by KacerHuhu
+##
+##	verze 1.1 , releaseg 6.7.2007
+##
+##	pro routerboardy v simelonu, nastaveni casu, ntp, a dns serveru
+###
+
+
+##prvne nastavime casovou zonu
+
+/ system clock set time-zone-name=Europe/Prague
+
+#synchronizace pres ntp servery
+
+/ system ntp client set enabled=yes mode=unicast primary-ntp=195.113.144.201 secondary-ntp=194.149.97.20 
+
+#nastaveni dns serveru
+
+/ip dns set primary-dns=10.3.1.1    
+/ip dns set secondary-dns=212.80.66.7       

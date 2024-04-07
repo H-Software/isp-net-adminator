@@ -1,0 +1,278 @@
+body {
+	font-size:100%;
+	background:#dadada url("[baseurl]admin/images/mainbg.jpg") top left;
+	font-family:"Trebuchet MS", Arial, Verdana;
+	color:#555;
+	margin:0;
+	padding:0;
+}
+
+
+form {
+	padding:0;
+	margin:0;
+}
+
+#header {
+	height:140px;
+	width:100%;
+	background: #007FD3 url("[baseurl]admin/images/topbg.jpg") top left repeat-x;
+	position:relative;
+}
+
+#header h1 {
+	height:140px;
+	width:526px;
+	margin:0;
+	padding:0;
+	text-indent:-999em;
+	background: url("[baseurl]admin/images/banner.jpg") top left no-repeat;
+}
+
+#viewsite {
+	position:absolute;
+	text-indent:-999em;
+	left:210px;
+	top:0;
+	height:40px;
+	width:200px;
+}
+
+#mainmenu {
+	list-style:none;
+	position:absolute;
+	left:0;
+	top:102px;
+	margin:0;
+	padding:0;
+}
+
+#mainmenu li {
+	float:left;
+	width:83px;
+	height:30px;
+	margin:0;
+	padding:0;
+}
+
+#mainmenu li.selected {
+	font-weight:bold;
+}
+
+#mainmenu li a {
+	display:block;
+	height:30px;
+	text-align:center;
+	text-decoration:none;
+	line-height:40px;
+	color:#fff;
+	font-size:12px;
+}
+
+#mainmenu li a:hover {
+	background: url("[baseurl]admin/images/menubg.jpg") bottom left no-repeat;
+	color:#FFC600;
+}
+
+#sidemenu {
+	float:left;
+	width: 150px;
+	margin:15px;
+	border:1px solid #989898;
+	background: url("[baseurl]admin/images/lightbg.jpg") top left;
+}
+
+#sidemenu ul {
+	width:100%;
+	padding:0;
+	margin:0;
+	list-style:none;
+}
+
+#sidemenu ul li {
+	padding:0;
+  margin:0;
+}
+
+#sidemenu ul li.selected {
+	background-color:#4C4C4C;
+	color:#fff;
+}
+
+#sidemenu ul li.selected a {
+	color:#fff;
+}
+
+#sidemenu ul li a {
+	display:block;
+	color:#555;
+	text-decoration:none;
+	font-size:12px;
+	padding: 2px 2px 2px 5px;
+}
+
+#sidemenu ul li a:hover {
+	background-color:#FFC600;
+}
+
+#main, #login, #home {
+	font-size:12px;
+	padding:5px;
+}
+
+#main {
+	margin:15px 15px 15px 180px;
+	border:1px solid #989898;
+	background: url("[baseurl]admin/images/lightbg.jpg") top left;
+}
+
+#main.wide {
+	margin: 15px;
+}
+
+#main h2, #login h2, #home h2 {
+	font-family:"Century Gothic", "Trebuchet MS", "Arial Narrow", Arial, sans-serif;
+	font-size:15px;
+	text-transform:uppercase;
+	text-align:left;
+	font-weight:normal;
+	margin:0;
+	padding:0;
+	border-bottom:1px solid #989898;
+}
+
+table {
+	margin:10px auto 10px auto;
+}
+
+#login {
+	margin: 15px auto 15px auto;
+	width:400px;
+	border:1px solid #989898;
+	background: url("[baseurl]admin/images/lightbg.jpg") top left;
+}
+
+#login p.error {
+	color:#f00;
+	text-align:center;
+	font-weight:bold;
+}
+
+ul.errors {
+	color:#f00;
+	list-style-type:square;
+}
+
+#home {
+	margin: 15px;
+	border:1px solid #989898;
+	background: url("[baseurl]admin/images/lightbg.jpg") top left;
+}
+
+.admin_option {
+	float:left;
+	width:200px;
+	height:70px;
+	margin:10px;
+}
+
+.admin_option a {
+	font-size:14px;
+	font-weight:bold;
+	color:#0061C0;
+}
+
+.clear {
+	clear:both;
+	line-height:1px;
+	height:1px;
+}
+
+#footer {
+	clear:both;
+	visibility:hidden;
+	background: #5F5F5F url("[baseurl]admin/images/footerbg.jpg") bottom left repeat-x;
+	height:38px;
+	width:100%;
+	font-size:12px;
+	color:#ccc;
+	padding:0;
+	margin:0;
+	position:relative;
+}
+
+#footer p {
+	position:absolute;
+	left:20px;
+	bottom:7px;
+	padding:0;
+	margin:0;
+}
+
+/* Whoa */
+table.whoa {
+	width:400px;
+	margin:0 auto 0 auto;
+}
+
+table.whoa2 {
+	width:90%;
+	margin:0 auto 0 auto;
+}
+
+
+table.whoa tr th, table.whoa2 tr th {
+	border-bottom:1px solid #999;
+	text-align:left;
+}
+
+table.whoa tr td, table.whoa2 tr td {
+	border-bottom:1px solid #ccc;
+	color:#666;
+}
+
+table.whoa tr td input, table.whoa2 tr td input {
+	height:12px;
+	font-size:12px;
+}
+
+.button, .tick, .cross, .back {
+	border:1px solid #336699;
+	background-color:#CCC;
+	color:#3399CC;
+	border:1px solid #FFC300;
+	color:#fff;
+	text-indent:14px;
+}
+
+
+.tick {
+	background: #0091DE url("[baseurl]admin/images/button_tick.jpg") top left repeat-x;
+}
+.cross {
+	background: #0091DE url("[baseurl]admin/images/button_cross.jpg") top left repeat-x;
+}
+.back {
+	background: #0091DE url("[baseurl]admin/images/button_back.jpg") top left repeat-x;
+}
+.forward {
+	background: #0091DE url("[baseurl]admin/images/button_forward.jpg") top left repeat-x;
+}
+
+a {
+	text-decoration:none;
+	cursor:pointer;
+	color:#EF870E;
+}
+
+a:link, a:visited: {
+	color:#00f;
+}
+
+.red {
+	color:#f00;
+}
+
+.blue {
+	color:#00f;
+}

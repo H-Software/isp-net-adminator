@@ -1,0 +1,16 @@
+#main li {
+	background-position:4px left;
+	background-repeat:no-repeat;
+}
+
+#shares li.share {
+	background-position:5px left;
+}
+
+#tagline {
+	top:83px;
+}
+
+label {
+	cursor:hand;
+}
