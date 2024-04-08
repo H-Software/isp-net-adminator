@@ -1,7 +1,5 @@
 <?php
 
-echo %$$$$$$$$$XXXXXX
-
 #echo E_ALL & ~E_NOTICE & ~E_DEPRECATED;
 
 /*

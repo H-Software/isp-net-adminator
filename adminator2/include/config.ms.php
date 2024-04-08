@@ -1,7 +1,8 @@
 <?php
 
-$mssql_user = "adminator2";
-$mssql_pass = "archimedes112";
+$mssql_host = "127.0.0.1:1433";
+$mssql_user = "admin";
+$mssql_pass = "pass";
 
 if(!isset($mssql_db)){
  
@@ -34,10 +35,6 @@ else{
 
 if($mssql_db_ok == 1)
 {
-
-    $mssql_host = "127.0.0.1:1433";
-	$mssql_user = "admin";
-	$mssql_pass = "pass";
 
     if( !function_exists('mssql_connect') or !function_exists('mssql_select_db') or !function_exists('mssql_query'))
     {
