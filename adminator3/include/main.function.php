@@ -8,10 +8,10 @@ function last_page()
       list($x,$y) = explode("adminator3/",$uri);
     } else {
       list($x, $y) = explode($_SERVER['HTTP_HOST'],$_SERVER['SCRIPT_URI']);
-      echo "<div>DEBUG: last page: $y</div>";
+      echo "<div>DEBUG: last page: " . $y . "," . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_URL'] . ",  </div>";
     }
     return $y;
-    
+
 } //konec funkce last page
 
 function check_level ($user_level,$id) {
