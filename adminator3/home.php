@@ -1,15 +1,13 @@
 <?php
 
 require 'smarty/Smarty.class.php';
-
-require "include/config.php";
 require "include/main.function.php";
 require "include/main.function.shared.php";
-
 require "include/main.classes.php";
 
-$smarty = new Smarty;
+require "include/config.php";
 
+$smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
@@ -159,7 +157,7 @@ if ( check_level($level,101) )
    $smarty->assign("sid",$sid);
  
    $nastenka = new board;
-   $nastenka->prepare_vars();
+   $nastenka->prepare_vars("");
    
    $nastenka->view_number = 10; //zprávy budou zobrazeny po ...
    

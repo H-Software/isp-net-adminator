@@ -162,7 +162,7 @@ function zobraz_kategorie($uri,$uri_replace)
   if( ereg("^.+about.+$",$uri) )
   { $kat_2radka[4]["barva"] = "silver"; }
  
-  $ret = array( $kategorie, $kat_2radka, $mapa);
+  $ret = array( $kategorie, $kat_2radka);
     
   return $ret;
 
