@@ -4,7 +4,6 @@ require 'smarty/Smarty.class.php';
 require "include/main.function.php";
 require "include/main.function.shared.php";
 require "include/main.classes.php";
-
 require "include/config.php";
 
 $smarty = new Smarty;

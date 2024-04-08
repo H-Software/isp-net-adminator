@@ -7,7 +7,6 @@ require "include/main.function.php";
 require "include/main.classes.php";
 
 $smarty = new Smarty;
-
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
@@ -98,7 +97,7 @@ $action = $_GET["action"];
 
 $smarty->assign("link_add","archiv-zmen-ucetni.php?action=add");
 
-$zmena = new zmeny_ucetni;
+$zmena = new zmeny_ucetni($conn_mysql);
 
 if( $action == "add")
 { //rezim pridani
@@ -213,5 +212,3 @@ else
 }
 
 $smarty->display($template);
-
-?>
