@@ -1,12 +1,10 @@
 <?php
 
-require 'smarty/Smarty.class.php';
 require_once "include/main.function.shared.php";
 require "include/config.php";
 require "include/main.function.php";
 
 $smarty = new Smarty;
-
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
