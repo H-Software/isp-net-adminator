@@ -68,7 +68,7 @@ COPY adminator2/ /var/www/html/adminator2/
 COPY adminator3/ /var/www/html/adminator3/
 # shared stuff
 COPY libs/smarty/ /var/www/html/adminator2/smarty/
-COPY libs/smarty/ /var/www/html/adminator3/smarty/
+# COPY libs/smarty/ /var/www/html/adminator3/smarty/
 
 COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/templates/inc.intro.category-ext.tpl
 COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator2/templates/inc.home.list-logged-users.tpl
@@ -76,7 +76,8 @@ COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
 
 RUN cd adminator3 \
-    && composer require nette/robot-loader:3.1.4
+    && composer require nette/robot-loader:3.1.4 \
+    && composer require smarty/smarty:2.6.33
     # && pecl install xdebug-2.5.5 \
     # && docker-php-ext-enable xdebug \
 
