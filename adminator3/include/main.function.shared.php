@@ -189,6 +189,16 @@ function fix_link_to_another_adminator($link){
 
     $uri=$_SERVER["REQUEST_URI"];
     
+    if (isset($_SERVER['HTTPS']) &&
+        ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) ||
+        isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+      $protocol = 'https://';
+    }
+    else {
+      $protocol = 'http://';
+    }
+
     if (preg_match("/\/adminator3\//i", $uri)) {
       return "adminator2/" . $link;
     }
@@ -197,11 +207,13 @@ function fix_link_to_another_adminator($link){
     }
     elseif (preg_match("/adminator2/i", $_SERVER['HTTP_HOST'])){
       $host = str_replace("adminator2", "adminator3", $_SERVER['HTTP_HOST']);
-      return $host . $link;
+      // die("debug: p: " . $protocol . ", host: " . $host . " link: " . $link);
+      return $protocol . $host . $link;
     }
     elseif (preg_match("/adminator3/i", $_SERVER['HTTP_HOST'])){
       $host = str_replace("adminator3", "adminator2", $_SERVER['HTTP_HOST']);
-      return $host . $link;
+      // die("debug: p: " . $protocol . ", host: " . $host . " link: " . $link);
+      return $protocol . $host . $link;
     }
 }
 
