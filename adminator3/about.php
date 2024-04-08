@@ -95,5 +95,3 @@ $smarty->assign("subcat_select",0);
 $smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
 $smarty->display('about/about.tpl');
-		 
-?>
