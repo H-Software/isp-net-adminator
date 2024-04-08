@@ -41,37 +41,6 @@
 
 <div class="cara-kategorie" ></div>
 
-   {if $show_se_cat eq "1"}
- 
-    <div style="padding-left: 10px; height: 25px; " >
-        
-     <div style="font-size: 12px; color: #666666; float: left; width: 100px;" >externí odkazy: </div>
-
-        <span class="subcat-space" ><a class="cat" href="http://nagios.simelon.net/" target="_new">Nagios</a></span>
-
-        <span class="subcat-space" >
-	    <a class="cat" href="https://trinity.simelon.net/monitoring/grafy.php" target="_new" >Monitoring</a>
-	</span>
-
-        <span class="subcat-space" >
-
-            <b> mail: </b>
-	    <a class="cat" href="http://mail.simelon.net/" target="_new"> index</a>
-	    <a class="cat" href="http://mail.simelon.net/padmin/" target="_new">admin </a>
-	    
-        </span>
-
-        <span class="subcat-space" >
-	
-	    <b>db:</b>
-	    <a class="cat" href="http://myadmin.simelon.net" target="_new">mysql</a>
-	    <a class="cat" href="http://pgadmin.simelon.net" target="_new">pgsql</a>
-	</span>
-
-        <span class="subcat-space" ><a class="cat" href="https://trinity.simelon.net/main/cacti" target="_blank"> cacti </a></span>
-        <span class="subcat-space" >
-	    <a class="cat" href="https://trinity.simelon.net/adminator2/home.php" > Adminator2 </a></span>
-	
-    </div>
-    
-    {/if}
+  {if $show_se_cat eq "1"}
+    {include file="inc.intro.category-ext.tpl"}
+  {/if}

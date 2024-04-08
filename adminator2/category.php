@@ -83,20 +83,20 @@
     <tr>
      <td align="center" ><div style="font-size: 12px; color: #666666; ">externí odkazy: </div></td>	
      
-        <td align="center" ><a class="cat" href="https://pbs.dialtelecom.cz:8444/" target="_new">VoIP Dial PBS</a></td>
+     <td align="center" ><a class="cat" href="https://pbs.local.net" target="_new">VoIP PBS</a></td>
 	
-	<td align="center" width="10%">
-	    <a class="cat" href="https://monitoring.simelon.net/" target="_new" >Monitoring / Cacti</a>
-	</td>
-	
-	<td align="center" width="10%" colspan="1">
-	
-	    <table width="100%" border="0" ><tr><td><b> mail: </b></td>
-	    <td><a class="cat" href="http://mail.simelon.net/" target="_new"> index</a></td>
-	    <td><a class="cat" href="http://mail.simelon.net/padmin/" target="_new">admin </a></td></tr>
-	    </table>
-	    
-	</td>
+    <td align="center" width="10%">
+        <a class="cat" href="https://monitoring.local.net/" target="_new" >Monitoring / Cacti</a>
+    </td>
+    
+    <td align="center" width="10%" colspan="1">
+    
+        <table width="100%" border="0" ><tr><td><b> mail: </b></td>
+        <td><a class="cat" href="http://mail.local.net/" target="_new"> index</a></td>
+        <td><a class="cat" href="http://mail.local.net/padmin/" target="_new">admin </a></td></tr>
+        </table>
+        
+    </td>
 	
 	<td align="center" colspan="1">
 		<table border="0" width="100%"><tr>

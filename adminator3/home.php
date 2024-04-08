@@ -67,6 +67,12 @@ else
 
 $smarty->assign("show_se_cat",$show_se_cat);
 
+$se_cat_adminator_link = $_SERVER['HTTP_HOST'];
+$se_cat_adminator_link = str_replace("adminator3", "adminator2", $se_cat_adminator_link);
+
+$smarty->assign("se_cat_adminator","adminator2");
+$smarty->assign("se_cat_adminator_link",$se_cat_adminator_link);
+
 $prihl_uziv = vypis_prihlasene_uziv($nick);
 
 if( $prihl_uziv[100] == true )
@@ -176,5 +182,3 @@ if ( check_level($level,101) )
  }
 
 $smarty->display('home.tpl');
-		 
-?>

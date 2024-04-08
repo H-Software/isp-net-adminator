@@ -3620,6 +3620,7 @@ class Aglobal
 		
     } //end of function test_router_for_monitoring
     
+	
 } //konec tridy Aglobal
 
 class paging_global {

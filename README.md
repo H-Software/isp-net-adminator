@@ -11,3 +11,11 @@ administration system for Internet Service Provider (ISP)
 ### postgres
 - https://medium.com/@agusmahari/docker-how-to-install-postgresql-using-docker-compose-d646c793f216
 - https://hub.docker.com/_/postgres
+
+### PHP
+- https://github.com/smarty-php/smarty
+- https://smarty-php.github.io/smarty/stable/
+- https://github.com/asimlqt/docker-php/blob/master/apache/5.6-dev/etc/php.ini
+
+### apache
+- https://httpd.apache.org/docs/2.4/rewrite/remapping.html

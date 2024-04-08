@@ -1,5 +1,5 @@
 <?php
-    require "mailing/class.phpmailer.php";
+  require "mailing/class.phpmailer.php";
 
  $dotaz_emaily=mysql_query("SELECT * FROM users WHERE (  email_opravy = '1' and id = 2 )");
   
@@ -42,4 +42,4 @@
      echo "<span style=\"color: green; font-weight: bold; \" >E-mail byl v pořádku odeslán.</span>";
     }
 
-?>
+ }
