@@ -33,6 +33,7 @@ services:
       - POSTGRES_PASSWD=isp-net-passwd
       - POSTGRES_DB=adminator.new
     tmpfs:
+      - /var/www/html/adminator2/templates_c:uid=33,gid=33
       - /var/www/html/adminator3/templates_c:uid=33,gid=33
     ports:
       - "8080:80"

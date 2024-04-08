@@ -4,6 +4,7 @@ require 'smarty/Smarty.class.php';
 
 require "include/config.php";
 require "include/main.function.php";
+require "include/main.function.shared.php";
 
 require "include/main.classes.php";
 
@@ -102,16 +103,7 @@ $smarty->assign("subcat_select",0);
 
 
 //vlozeni prihlasovaci historie
- $dotaz_historie=$conn_mysql->query("SELECT nick, date, ip FROM login_log ORDER BY date DESC LIMIT 5");
-
- while ( $data_historie=$dotaz_historie->fetch_array() )
- {
-    $datum = strftime("%d.%m.%Y %H:%M:%S", $data_historie["date"] );
-
-    $logged_users[] = array( "nick" => $data_historie["nick"], "datum" => $datum, "ip" => $data_historie["ip"]);    
- }
-
-$smarty->assign("logged_users",$logged_users);
+list_logged_users_history($conn_mysql, $smarty);
 
 //opravy a zavady vypis
 if ( check_level($level,101) )

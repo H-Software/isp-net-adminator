@@ -2,9 +2,17 @@
 
 require("include/config.php");
 
+require_once 'smarty/Smarty.class.php';
+
 require_once ("include/check_login.php");
+require_once ("include/main.function.shared.php");
 
 require_once ("include/check_level.php");
+
+$smarty = new Smarty;
+
+$smarty->compile_check = true;
+//$smarty->debugging = true;
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
       <html>
@@ -33,27 +41,8 @@ require_once ("include/charset.php");
 <?php
 
 //vlozeni prihlasovaci historie
-
- $dotaz_historie=$conn_mysql->query("SELECT date, nick, ip FROM login_log ORDER BY date DESC LIMIT 5");
- 
- echo "<div style=\"width: 800px; margin-left: auto; margin-right: auto; text-align: left; 
-	font-family: Verdana; font-weight: bold; font-size: 14px; padding-bottom: 20px; \">
-	Poslední přihlašení uživatelé: </div>";
- 
- echo "<div style=\"font-family: Verdana; font-size: 12px; \" >";
- 
- while( $data_historie=$dotaz_historie->fetch_array() )
- {
-    $datum = strftime("%d.%m.%Y %H:%M:%S", $data_historie["date"] );
-    
-    echo "<div style=\"width: 800px; margin-left: auto; margin-right: auto; text-align: left; padding-bottom: 2px; \" >";
-    echo "uživatel: <span style=\"font-weight: bold; \">".$data_historie["nick"]."</span>, přihlášen dne: ";
-    echo "<span style=\"font-style: italic; color: grey; font-weight: bold; \" >".$datum."</span>, z ip adresy: ";
-    echo "<span style=\"font-style: italic; color: grey; font-weight: bold; \" >".$data_historie["ip"]." </span></div>";
-  
- } // konec while
-
- echo "</div>";
+list($r, $render) = list_logged_users_history($conn_mysql, $smarty, "fetch");
+echo $render;
 
  // vlozeni vypisu zavad/oprav
  if ( check_level($level,101) )
