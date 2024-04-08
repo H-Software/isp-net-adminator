@@ -13,24 +13,6 @@ function last_page()
     
 } //konec funkce last page
 
-function start_ses()
-{
-  global $sid, $level, $nick, $date, $ad;
-  
-  session_start(); 
-
-  $SN = "autorizace"; 
-  session_name("$SN"); 
-
-  $sid = $_SESSION["db_login_md5"];
-  $level = $_SESSION["db_level"];
-  $nick = $_SESSION["db_nick"];
-
-  $date = date("U"); 
-  $ad = date("U") - 1200; 
-
-}
-
 function check_login() {
   global $sid, $ad, $level, $date, $conn_mysql;
 

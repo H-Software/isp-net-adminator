@@ -99,6 +99,25 @@ function init_postgres($app_name = "adminator") {
   
 }
 
+// TODO: zacit pouzivat i na A2
+function start_ses()
+{
+  global $sid, $level, $nick, $date, $ad;
+  
+  session_start(); 
+
+  $SN = "autorizace"; 
+  session_name("$SN"); 
+
+  $sid = $_SESSION["db_login_md5"];
+  $level = $_SESSION["db_level"];
+  $nick = $_SESSION["db_nick"];
+
+  $date = date("U"); 
+  $ad = date("U") - 1200; 
+
+}
+
 function list_logged_users_history($conn_mysql, $smarty, $action = "assign") {
   $r = array();
 

@@ -1,10 +1,9 @@
 <?php
 
 require 'smarty/Smarty.class.php';
-
+require("include/main.function.shared.php");
 require "include/config.php";
 require "include/main.function.php";
-
 require "include/main.classes.php";
 
 $smarty = new Smarty;
@@ -95,7 +94,4 @@ $smarty->assign("windowleft2","350");
 $smarty->assign("subcat_select",0);
 
 //vlastní obsah
-
 $smarty->display('about/about-changes.tpl');
-		 
-?>
