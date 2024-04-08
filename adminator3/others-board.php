@@ -1,14 +1,10 @@
 <?php
 
-require 'smarty/Smarty.class.php';
-
+require "include/main.function.shared.php";
 require "include/config.php";
 require "include/main.function.php";
 
-require "include/main.classes.php";
-
 $smarty = new Smarty;
-
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
@@ -95,7 +91,7 @@ $smarty->assign("subcat_select",0);
 
 //zacatek vlastniho obsahu
 
-$nastenka = new board;
+$nastenka = new board($conn_mysql);
 
  $smarty->assign("datum",date("j. m. Y")); 
  $smarty->assign("sid",$sid); 
@@ -183,5 +179,3 @@ else:
 endif;
 
 $smarty->display('others/board.tpl');
-
-?>

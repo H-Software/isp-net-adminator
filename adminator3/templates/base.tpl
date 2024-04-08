@@ -10,7 +10,7 @@
 
 {if $enable_calendar == 1}
  <script language="JavaScript" src="plugins/tigra_calendar/calendar_eu.js"></script>
- <link rel="stylesheet" href="plugins/tigra_calendar/calendar.css">	   
+ <link rel="stylesheet" href="plugins/tigra_calendar/calendar.css">
 {/if}
 
 {if $enable_work == 1}

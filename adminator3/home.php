@@ -152,7 +152,8 @@ if ( check_level($level,101) )
    $smarty->assign("datum",date("j. m. Y"));
    $smarty->assign("sid",$sid);
  
-   $nastenka = new board;
+   $nastenka = new board($conn_mysql);
+
    $nastenka->prepare_vars("");
    
    $nastenka->view_number = 10; //zprávy budou zobrazeny po ...
