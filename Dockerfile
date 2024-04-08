@@ -10,11 +10,17 @@ RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.
 #
 
 RUN apt-get update \
-    && apt-get install -y libpq-dev \
+    && apt-get install -y \
+        libpq-dev \
+        wget \
+        zip \
+        unzip \
+        zlib1g-dev \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install pgsql pdo_pgsql \
+    && docker-php-ext-install zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -51,6 +57,12 @@ RUN a2enmod ssl && a2enmod rewrite
 # RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 
+# development stuff
+RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2.x/composer.phar" \
+    && chmod +x /usr/local/bin/composer \
+    && mkdir -p /.composer/cache \
+    && chmod -R 777 /.composer
+
 # app code
 COPY adminator2/ /var/www/html/adminator2/
 COPY adminator3/ /var/www/html/adminator3/
@@ -63,11 +75,9 @@ COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator
 
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
 
+RUN cd adminator3 \
+    && composer require nette/robot-loader:3.1.4
+    # && pecl install xdebug-2.5.5 \
+    # && docker-php-ext-enable xdebug \
 
-# development stuff
-# RUN wget -O /usr/local/bin/composer "https://getcomposer.org/composer.phar" \
-#     && chmod +x /usr/local/bin/composer \
-#     && pecl install xdebug-2.5.5 \
-#     && docker-php-ext-enable xdebug \
-#     && mkdir -p /.composer/cache \
-#     && chmod -R 777 /.composer
+
