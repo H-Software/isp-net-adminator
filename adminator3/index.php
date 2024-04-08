@@ -1,7 +1,7 @@
 <?php
 
 require 'smarty/Smarty.class.php';
-
+require_once "include/main.function.shared.php";
 require "include/config.php";
 require "include/main.function.php";
 
@@ -19,7 +19,7 @@ $password = $_POST["password"];
 $lo = $_GET["lo"];
 $lp = $_GET["lp"];
 
-if( isset($lp) )
+if( isset($lp) and (strlen($lp) > 0) )
 { $lp_on = 1; }
 
 if( ( strlen($login) > 0) )

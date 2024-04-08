@@ -2,6 +2,8 @@
 
 session_start();
 
+require "include/main.function.shared.php";
+
 require ("include/config.php");
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
