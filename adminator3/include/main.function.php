@@ -8,6 +8,7 @@ function last_page()
       list($x,$y) = explode("adminator3/",$uri);
     } else {
       list($x, $y) = explode($_SERVER['HTTP_HOST'],$_SERVER['SCRIPT_URI']);
+      echo "<div>DEBUG: last page: $y</div>";
     }
     return $y;
     

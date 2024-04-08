@@ -1,10 +1,9 @@
 <?php
 
 // set_time_limit(0);
-
+require("include/main.function.shared.php");
 require_once ("include/config.php"); 
 require_once ("include/check_login.php");
-
 require_once ("include/check_level.php");
 
 if ( !( check_level($level,30) ) )
@@ -14,7 +13,6 @@ if ( !( check_level($level,30) ) )
  
  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
  exit;
- 
 }
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
@@ -366,364 +364,365 @@ require ("include/charset.php");
     	$sql_result = $sql_result." LIMIT 50";
     }
     
-    $vysl = mysql_query($sql_result);
+	try {
+        $vysl = $conn_mysql->query($sql_result);
+	} catch (Exception $e) {
+		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	}
     
     if (!$vysl) {
-        echo "<div style=\"color: red;\" >Chyba při provádění databázového dotazu (id: " . mysql_error() . ") </div>";
-
-	echo "\n</td>\n</tr>\n</table>\n</body>\n</html>\n";
+        echo "<div style=\"color: red;\" >Chyba při provádění databázového dotazu (id: " . $conn_mysql->connect_error . ") </div>";
+		echo "\n</td>\n</tr>\n</table>\n</body>\n</html>\n";
         exit;
     }
-               
-    $radku=mysql_num_rows($vysl);
+    
+    $radku = $vysl->num_rows;
 
     //ted zjistime jeslti je archiv 
     if( isset($id) )
     {
-    echo "<div style=\"padding-left: 5px; \">";
+		echo "<div style=\"padding-left: 5px; \">";
+		
+		echo "<div style=\"padding-top: 10px; padding-bottom: 10px; font-weight: bold; font-size: 18px; \">";
+		echo "Historie objektu: </div>";
     
-    echo "<div style=\"padding-top: 10px; padding-bottom: 10px; font-weight: bold; font-size: 18px; \">";
-    echo "Historie objektu: </div>";
+    	$dotaz_objekty=pg_query("SELECT dns_jmeno, ip, mac FROM objekty WHERE id_komplu = '".intval($id_objektu)."' ");
     
+		if( (pg_num_rows($dotaz_objekty) == 1) )
+		{
+			while( $data_objekty=pg_fetch_array($dotaz_objekty) )
+			{
+				echo "<div >dns jméno: <span style=\"color: grey;\">".$data_objekty["dns_jmeno"]."</span></div>";
+				echo "<div >ip adresa: <span style=\"color: grey;\">".$data_objekty["ip"]."</span></div>";
+				echo "<div >mac adresa: <span style=\"color: grey;\">".$data_objekty["mac"]."</span></div>";
+					
+				$id_vlastnika=$data_objekty["id_cloveka"];
+			}
     
-    $dotaz_objekty=pg_query("SELECT dns_jmeno, ip, mac FROM objekty WHERE id_komplu = '".intval($id_objektu)."' ");
-    
-     if( (pg_num_rows($dotaz_objekty) == 1) )
-     {
-       while( $data_objekty=pg_fetch_array($dotaz_objekty) )
-       {
-	echo "<div >dns jméno: <span style=\"color: grey;\">".$data_objekty["dns_jmeno"]."</span></div>";
-	echo "<div >ip adresa: <span style=\"color: grey;\">".$data_objekty["ip"]."</span></div>";
-	echo "<div >mac adresa: <span style=\"color: grey;\">".$data_objekty["mac"]."</span></div>";
-        
-	$id_vlastnika=$data_objekty["id_cloveka"];          
-       }
-    
-      $dotaz_vlastnik = pg_query("SELECT archiv, firma FROM vlastnici WHERE id_cloveka = '".intval($id_vlastnika)."' ");
-      while($data_vlastnik = pg_fetch_array($dotaz_vlastnik) )
-      {
-       $firma_vlastnik=$data_vlastnik["firma"];
-       $archiv_vlastnik=$data_vlastnik["archiv"];
+      		$dotaz_vlastnik = pg_query("SELECT archiv, firma FROM vlastnici WHERE id_cloveka = '".intval($id_vlastnika)."' ");
+			while($data_vlastnik = pg_fetch_array($dotaz_vlastnik) )
+			{
+				$firma_vlastnik=$data_vlastnik["firma"];
+				$archiv_vlastnik=$data_vlastnik["archiv"];
 
-	echo "<div style=\"padding-top: 5px; \" >Detail vlastníka: ";
+				echo "<div style=\"padding-top: 5px; \" >Detail vlastníka: ";
 	
-       if($archiv_vlastnik == 1)
-       { echo "<a href=\"vlastnici-archiv.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
-       else //if( $firma_vlastnik == 1 )
-       { echo "<a href=\"vlastnici2.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
-       //else
-       //{ echo "<a href=\"vlastnici.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
+				if($archiv_vlastnik == 1)
+				{ echo "<a href=\"vlastnici-archiv.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
+				else //if( $firma_vlastnik == 1 )
+				{ echo "<a href=\"vlastnici2.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
+				//else
+				//{ echo "<a href=\"vlastnici.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
 
-        echo "</div>";
-       }
+				echo "</div>";
+       		}
 
 				      
-       echo "<div style=\"padding-bottom: 20px; \"></div>";
-     } // konec if pg_num_rows
+       		echo "<div style=\"padding-bottom: 20px; \"></div>";
+     	} // konec if pg_num_rows
     
-     echo "</div>\n";
+     	echo "</div>\n";
     }//konec if isset id
     
    if ( $radku==0 ){ echo "Žádné změny v archivu "; }
    else  
    {
-      echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" class=\"az-main-table\" >\n";
+      	echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" class=\"az-main-table\" >\n";
 	    
-	echo "<tr >\n";    
-	    echo "<td class=\"az-border2\" ><b>id:</b></td>\n";
-	    echo "<td class=\"az-border2\" ><b>akce:</b></td>\n";
-	    echo "<td class=\"az-border2\" ><b>Provedeno kdy:</b></td>\n";
-	    echo "<td class=\"az-border2\" ><b>Provedeno kým:</b></td>\n";
-	    echo "<td class=\"az-border2\" ><b>Provedeno úspěšně:</b></td>\n";
-	echo "</tr>\n";
+		echo "<tr >\n";    
+			echo "<td class=\"az-border2\" ><b>id:</b></td>\n";
+			echo "<td class=\"az-border2\" ><b>akce:</b></td>\n";
+			echo "<td class=\"az-border2\" ><b>Provedeno kdy:</b></td>\n";
+			echo "<td class=\"az-border2\" ><b>Provedeno kým:</b></td>\n";
+			echo "<td class=\"az-border2\" ><b>Provedeno úspěšně:</b></td>\n";
+		echo "</tr>\n";
 	    
-        while ($data=mysql_fetch_array($vysl) ):
+        while ($data = $vysl->fetch_array() ):
 	    
-	 echo "<tr>\n";    
-           echo "<td class=\"az-border1\" >".$data["id"]."</td>\n";
-	   echo "<td class=\"az-border1\" ><span class=\"az-text\" >\n";
+	 		echo "<tr>\n";    
+           	echo "<td class=\"az-border1\" >".$data["id"]."</td>\n";
+	   		echo "<td class=\"az-border1\" ><span class=\"az-text\" >\n";
 	   
-	   $id_cloveka_res = "";  
-	   $akce = $data["akce"];
+			$id_cloveka_res = "";  
+			$akce = $data["akce"];
 
-	   if(ereg("odrazeni objektu", $akce) == true){
+	   		if(ereg("odrazeni objektu", $akce) == true){
 	
-	    $pomocne = explode("[id_komplu]", $akce);    
-	    $pomocne2 = explode(" ", $pomocne[1] );	    
-	    $pomocne3 = explode("<br>", $pomocne2[1] );	    
-	    $id_komplu_pomocne = trim($pomocne3[0]);
-	    
-	    $dotaz_id_komplu = pg_query("SELECT dns_jmeno FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
-      	    
-	    while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
-            { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
-	    
-	    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
-	    $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
-              
-	    $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
+				$pomocne = explode("[id_komplu]", $akce);    
+				$pomocne2 = explode(" ", $pomocne[1] );	    
+				$pomocne3 = explode("<br>", $pomocne2[1] );	    
+				$id_komplu_pomocne = trim($pomocne3[0]);
+				
+				$dotaz_id_komplu = pg_query("SELECT dns_jmeno FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+					
+				while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
+				{ $data_kompl_dns = $data_kompl["dns_jmeno"]; }
+			
+				$id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+				$id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+					
+				$akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
 	   
-	   }
+	   		}
 	
-	   if( ereg("id_stb",$akce) == true ){
+	   		if( ereg("id_stb",$akce) == true ){
 	   
-	     $pm = preg_match("/<b>\[id_stb\]<\/b>/",$akce);
+	     		$pm = preg_match("/<b>\[id_stb\]<\/b>/",$akce);
 	     
-	     if( ($pm == 1) ){    
-	        $stb_string = "<b>[id_stb]</b> =>";
-	     } 
-	     else{
-	        $stb_string = "[id_stb]=>";    
-	     }
+				if( ($pm == 1) ){    
+					$stb_string = "<b>[id_stb]</b> =>";
+				} 
+				else{
+	        		$stb_string = "[id_stb]=>";    
+	     		}
 	         
-	     $pom = explode($stb_string, $akce);    
-	     $pom2 = explode(" ", $pom[1]);
+				$pom = explode($stb_string, $akce);    
+				$pom2 = explode(" ", $pom[1]);
+				
+				//$id_stb = $pom2[1];
+				$id_stb = ereg_replace(",", "", $pom2["1"]);
+				$id_stb = trim($id_stb);
 	     
-	     //$id_stb = $pom2[1];
-	     $id_stb = ereg_replace(",", "", $pom2["1"]);
-	     $id_stb = trim($id_stb);
-	     
-	    // if( !($id_stb > 0) )
-	    //    $id_stb = trim($pom2[2]);
-	     
-	     $id_stb_pom_rs = "<a href=\"objekty-stb.php?id_stb=".$id_stb."\" >".$id_stb."</a>";
-	     
-	     $akce = ereg_replace(" ".$id_stb," ".$id_stb_pom_rs, $akce);    
+				// if( !($id_stb > 0) )
+				//    $id_stb = trim($pom2[2]);
+				
+				$id_stb_pom_rs = "<a href=\"objekty-stb.php?id_stb=".$id_stb."\" >".$id_stb."</a>";
+				
+				$akce = ereg_replace(" ".$id_stb," ".$id_stb_pom_rs, $akce);    
 	        	
-	   } 
+	  		} 
 	   
-	   if( ereg("prirazeni objektu k vlastnikovi", $akce) == true )
-	   {
-	    $pomocne = explode(" ", $akce);
-	    $id_komplu_pomocne = ereg_replace(",", "", $pomocne[7]);
+	   		if( ereg("prirazeni objektu k vlastnikovi", $akce) == true )
+	   		{
+				$pomocne = explode(" ", $akce);
+				$id_komplu_pomocne = ereg_replace(",", "", $pomocne[7]);
+				
+				$id_cloveka_pomocne = $pomocne[9];
+				
+				if( !($id_cloveka_pomocne > 0) ){
+					$id_cloveka_pomocne = $pomocne[10];
+				}
 	    
-	    $id_cloveka_pomocne = $pomocne[9];
-	    
-	    if( !($id_cloveka_pomocne > 0) ){
-		$id_cloveka_pomocne = $pomocne[10];
-	    }
-	    
-	    $dotaz_id_komplu=pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."'");
-	     while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
-             { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
-	    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
-	     $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+	    		$dotaz_id_komplu=pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."'");
+	     		while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
+             	{ $data_kompl_dns = $data_kompl["dns_jmeno"]; }
+	    		$id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+	    		$id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
               
-	    $akce = ereg_replace($id_komplu_pomocne, $id_komplu_pomocne_rs, $akce);    
+	    		$akce = ereg_replace($id_komplu_pomocne, $id_komplu_pomocne_rs, $akce);    
 	   
-	    $dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
-             while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
-             { $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
-    	    if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici-archiv.php"; }
-    	    elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici2.php"; }
-    	    else{ $id_cloveka_res .= "<a href=\"vlastnici.php"; }
+	    		$dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
+             	while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
+             	{ $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
+				if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici-archiv.php"; }
+				elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici2.php"; }
+				else{ $id_cloveka_res .= "<a href=\"vlastnici.php"; }
 
-	    $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
-	
-	    $akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);    
+				$id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
+			
+				$akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);    
 	     
-	   }
-	   elseif( ereg("smazani objektu", $akce) == true )
-	   {
-	    //nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole	    
-	   }
-	   elseif( ereg("pridani objektu do \"nove\" garant. tridy", $akce) == true )
-	   {
-	    //nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole	    
-	      
-	   }
-	   /*
-	   elseif( ereg('pridani objektu', $akce) == true )
-	   {
-	    $pomocne = explode(" ", $akce);    
-	
-	    //echo "i".$pomocne[8]."/i";
+	   		}
+			elseif( ereg("smazani objektu", $akce) == true )
+			{
+				//nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole	    
+			}
+			elseif( ereg("pridani objektu do \"nove\" garant. tridy", $akce) == true )
+			{
+				//nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole	    
+				
+			}
+			/*
+			elseif( ereg('pridani objektu', $akce) == true )
+			{
+				$pomocne = explode(" ", $akce);    
+			
+				//echo "i".$pomocne[8]."/i";
+				
+				$id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$pomocne[8];
+				$id_komplu_pomocne_rs .= "\" >".$pomocne[8]."</a>";
+					
+				$akce = ereg_replace($pomocne[8], $id_komplu_pomocne_rs, $akce);    
+				
+			}
+			*/
+	   		elseif( ereg("\[id_vlastnika\]", $akce) == true )
+	   		{
+				$pomocne = explode("[id_vlastnika]", $akce);    
+				$pomocne2 = explode(" ", $pomocne[1] );
+				$id_cloveka_pomocne = trim($pomocne2[2]);
+				
+				if( !( $id_cloveka_pomocne > 0 ) )
+				{ $id_cloveka_pomocne = $pomocne2[1]; }
 	    
-	    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$pomocne[8];
-	    $id_komplu_pomocne_rs .= "\" >".$pomocne[8]."</a>";
-              
-	    $akce = ereg_replace($pomocne[8], $id_komplu_pomocne_rs, $akce);    
-	     
-	   }
-	   */
-	   elseif( ereg("\[id_vlastnika\]", $akce) == true )
-	   {
-	    $pomocne = explode("[id_vlastnika]", $akce);    
-	    $pomocne2 = explode(" ", $pomocne[1] );
-	    $id_cloveka_pomocne = trim($pomocne2[2]);
-	    
-	    if( !( $id_cloveka_pomocne > 0 ) )
-	    { $id_cloveka_pomocne = $pomocne2[1]; }
-	    
-	     $dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
+	     		$dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
       	    
-             while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
-             { $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
+				while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
+				{ $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
 
-    	     if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici-archiv.php"; }
-    	     elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici2.php"; }
-    	     else{ $id_cloveka_res .= "<a href=\"vlastnici.php"; }
+				if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici-archiv.php"; }
+				elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici2.php"; }
+				else{ $id_cloveka_res .= "<a href=\"vlastnici.php"; }
 
-	    $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
-	        
-	    $akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);
+				$id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
+					
+				$akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);
 	       
-	   }
-	   elseif( ereg("\[id_cloveka\]", $akce) == true )
-	   {
-	    $pomocne = explode("[id_cloveka]", $akce);    
-	    $pomocne2 = explode(" ", $pomocne[1] );
-	    $id_cloveka_pomocne = trim($pomocne2[2]);
+			}
+			elseif( ereg("\[id_cloveka\]", $akce) == true )
+			{
+				$pomocne = explode("[id_cloveka]", $akce);    
+				$pomocne2 = explode(" ", $pomocne[1] );
+				$id_cloveka_pomocne = trim($pomocne2[2]);
 	    
-	    if( !( $id_cloveka_pomocne > 0 ) )
-	    { $id_cloveka_pomocne = $pomocne2[1]; }
-	    
-	     $dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
+				if( !( $id_cloveka_pomocne > 0 ) )
+				{ $id_cloveka_pomocne = $pomocne2[1]; }
+				
+				$dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
       	    
-             while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
-             { $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
+				while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
+				{ $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
 
-    	     if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici-archiv.php"; }
-    	     elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici2.php"; }
-    	     else{ $id_cloveka_res .= "<a href=\"vlastnici.php"; }
+				if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici-archiv.php"; }
+				elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"vlastnici2.php"; }
+				else{ $id_cloveka_res .= "<a href=\"vlastnici.php"; }
 
-	    $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
-	        
-	    $akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);
+				$id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
+					
+				$akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);
 
-	   }
-	   elseif( (ereg("uprava objektu", $akce) == true) )
-	   {
+			}
+			elseif( (ereg("uprava objektu", $akce) == true) )
+			{
 	   
-	     $pomocne = explode("[id_komplu]", $akce);    
-	     $pomocne2 = explode(" ", $pomocne[1] );	    
-	     $id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
-	    
-	     $dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+				$pomocne = explode("[id_komplu]", $akce);    
+				$pomocne2 = explode(" ", $pomocne[1] );	    
+				$id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
+				
+				$dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
       	    
-	    while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
-            { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
-	    
-	    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
-	    $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
-              
-	    $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
-	   }
-	   elseif( ereg("zakazani netu z duvodu sikany", $akce) == true )
-	   {
-	     $pomocne = explode("[id_komplu]", $akce);    
-	     $pomocne2 = explode(" ", $pomocne[1] );	    
-	     $id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
+	    		while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
+				{ $data_kompl_dns = $data_kompl["dns_jmeno"]; }
+				
+				$id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+				$id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+					
+				$akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
+			}
+			elseif( ereg("zakazani netu z duvodu sikany", $akce) == true )
+			{
+				$pomocne = explode("[id_komplu]", $akce);    
+				$pomocne2 = explode(" ", $pomocne[1] );	    
+				$id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
 	
-	     if( is_numeric($id_komplu_pomocne) )
-	     {
-	        $dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
-      	    
-	        while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
-                { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
-	    
-	        $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
-	        $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
-              
-	        $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
-	      }
-	   }
-	   elseif( ereg("pridani objektu", $akce) == true )
-	   {
-	     $pomocne = explode("[id_komplu]", $akce);    
-	     $pomocne2 = explode(" ", $pomocne[1] );	    
-	     $id_komplu_pomocne = $pomocne2[1];
-	
-	     //$id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
-	
-	     if( is_numeric($id_komplu_pomocne) )
-	     {
-	        $dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
-      	    
-	        while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
-                { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
-	    
-	        $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
-	        $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
-              
-	        $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
-	      }
+				if( is_numeric($id_komplu_pomocne) )
+				{
+					$dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+					
+					while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
+					{ $data_kompl_dns = $data_kompl["dns_jmeno"]; }
+				
+					$id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+					$id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+					
+					$akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
+				}
+			}
+			elseif( ereg("pridani objektu", $akce) == true )
+			{
+				$pomocne = explode("[id_komplu]", $akce);    
+				$pomocne2 = explode(" ", $pomocne[1] );	    
+				$id_komplu_pomocne = $pomocne2[1];
+			
+				//$id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
+			
+				if( is_numeric($id_komplu_pomocne) )
+				{
+					$dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+					
+					while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
+						{ $data_kompl_dns = $data_kompl["dns_jmeno"]; }
+				
+					$id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+					$id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+					
+					$akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
+				}
 	      
-	   }
-	   elseif( ereg("uprava nodu", $akce) == true )
-	   {
-	    $pomocne = explode("[id_nodu]", $akce);    
-	    $pomocne2 = explode(" ", $pomocne[1] );	    
-	    $id_nodu_pomocne = $pomocne2[2];
+	   		}
+	   		elseif( ereg("uprava nodu", $akce) == true )
+	   		{
+				$pomocne = explode("[id_nodu]", $akce);    
+				$pomocne2 = explode(" ", $pomocne[1] );	    
+				$id_nodu_pomocne = $pomocne2[2];
+				
+				if( ereg('^([[:digit:]]+)$',$id_nodu_pomocne) )
+				{
+				$dotaz_id_nodu = mysql_query("SELECT * FROM nod_list WHERE id = '".intval($id_nodu_pomocne)."' ");
+					
+				while($data_nod = mysql_fetch_array($dotaz_id_nodu) )
+				{ $nazev_nodu = $data_nod["jmeno"]; }
+				
+				$id_nodu_rs = "<a href=\"topology-nod-list.php?find=".$nazev_nodu."&typ_nodu=0";
+				$id_nodu_rs .= "\" >".$id_nodu_pomocne."</a>";
+						
+				//$id_nodu_pomocne2 = "[id_nodu] => ".$id_nodu_pomocne;
+				$akce = ereg_replace(" ".$id_nodu_pomocne." ", " ".$id_nodu_rs." ", $akce);    
+				}
+			}
+			elseif( ereg("automaticke nastaveni sikany", $akce) == true )
+			{
+				$pomocne = explode("[id_komplu]", $akce);    
+				$pomocne2 = explode(" ", $pomocne[1] );	    
+				$pomocne3 = explode("<br>", $pomocne2[1] );	    
+				$id_komplu_pomocne = trim($pomocne3[0]);
+				
+				$dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+					
+				while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
+				{ $data_kompl_dns = $data_kompl["dns_jmeno"]; }
 	    
-	    if( ereg('^([[:digit:]]+)$',$id_nodu_pomocne) )
-	    {
-	     $dotaz_id_nodu = mysql_query("SELECT * FROM nod_list WHERE id = '".intval($id_nodu_pomocne)."' ");
-      	    
-	     while($data_nod = mysql_fetch_array($dotaz_id_nodu) )
-             { $nazev_nodu = $data_nod["jmeno"]; }
-	    
-	     $id_nodu_rs = "<a href=\"topology-nod-list.php?find=".$nazev_nodu."&typ_nodu=0";
-	     $id_nodu_rs .= "\" >".$id_nodu_pomocne."</a>";
-                  
-	     //$id_nodu_pomocne2 = "[id_nodu] => ".$id_nodu_pomocne;
-	     $akce = ereg_replace(" ".$id_nodu_pomocne." ", " ".$id_nodu_rs." ", $akce);    
-	    }
-	   }
-	   elseif( ereg("automaticke nastaveni sikany", $akce) == true )
-	   {
-	    $pomocne = explode("[id_komplu]", $akce);    
-	    $pomocne2 = explode(" ", $pomocne[1] );	    
-	    $pomocne3 = explode("<br>", $pomocne2[1] );	    
-	    $id_komplu_pomocne = trim($pomocne3[0]);
-	    
-	    $dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
-      	    
-	    while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
-            { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
-	    
-	    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
-	    $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
-              
-	    $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
-	   }
-	   elseif( ereg("uprava routeru", $akce) == true ){
+				$id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+				$id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+					
+				$akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
+			}
+			elseif( ereg("uprava routeru", $akce) == true ){
 	   
-		$pomocne = explode("[id_routeru]", $akce);    
-		$pomocne2 = explode(">", $pomocne[1] );	    
-		$pomocne3 = explode("<", $pomocne2[2] );	    
-		$id_routeru_pomocne = trim($pomocne3[0]);
-	
-		$akce = ereg_replace("href=\"topology-router-list.php\"", "href=\"topology-router-list.php?f_id_routeru=".intval($id_routeru_pomocne)."&odeslano=OK\"", $akce);
-	   }
+				$pomocne = explode("[id_routeru]", $akce);    
+				$pomocne2 = explode(">", $pomocne[1] );	    
+				$pomocne3 = explode("<", $pomocne2[2] );	    
+				$id_routeru_pomocne = trim($pomocne3[0]);
+			
+				$akce = ereg_replace("href=\"topology-router-list.php\"", "href=\"topology-router-list.php?f_id_routeru=".intval($id_routeru_pomocne)."&odeslano=OK\"", $akce);
+	   		}
 	   
-	   echo $akce."</span>\n</td>\n";
-	
-	    echo "<td class=\"az-border1\"><span class=\"az-provedeno-kdy\" >";
-	      if ( ( strlen($data["provedeno_kdy2"]) < 1 ) ){ echo "&nbsp;"; }
-	      else{ echo $data["provedeno_kdy2"]; }
-	    echo "</span></td>\n";
+			echo $akce."</span>\n</td>\n";
+		
+			echo "<td class=\"az-border1\"><span class=\"az-provedeno-kdy\" >";
+			if ( ( strlen($data["provedeno_kdy2"]) < 1 ) ){ echo "&nbsp;"; }
+			else{ echo $data["provedeno_kdy2"]; }
+			echo "</span></td>\n";
+			
+			echo "<td class=\"az-border1\"><span class=\"az-provedeno-kym\" >";
+			if ( ( strlen($data["provedeno_kym"]) < 1 ) ){ echo "&nbsp;"; }
+			else{ echo $data["provedeno_kym"]; }
+			echo "</span></td>\n";		   
+		
+			echo "<td class=\"az-border1\">";
+			if ( $data["vysledek"] == 1 ){ echo "<span class=\"az-vysl-ano\">Ano</span>"; }
+			else{ echo "<span class=\"az-vysl-ne\">Ne</span>"; }
+			echo "</td>\n";
+		
+			echo "</tr>\n\n";
 	    
-	    echo "<td class=\"az-border1\"><span class=\"az-provedeno-kym\" >";
-	      if ( ( strlen($data["provedeno_kym"]) < 1 ) ){ echo "&nbsp;"; }
-	      else{ echo $data["provedeno_kym"]; }
-	    echo "</span></td>\n";		   
-	
-	    echo "<td class=\"az-border1\">";
-	      if ( $data["vysledek"] == 1 ){ echo "<span class=\"az-vysl-ano\">Ano</span>"; }
-	      else{ echo "<span class=\"az-vysl-ne\">Ne</span>"; }
-	    echo "</td>\n";
-	
-	    echo "</tr>\n\n";
-	    
-            endwhile;
+        endwhile;
 	    
 	    echo "</table>\n";
-         }
+    }
 
  ?> 
  
-  
   </td>
   </tr>
   

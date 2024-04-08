@@ -169,6 +169,26 @@ function check_login($app_name = "adminator3") {
   return true;
 }
 
+function fix_link_to_another_adminator($link){
+
+    $uri=$_SERVER["REQUEST_URI"];
+    
+    if (preg_match("/\/adminator3\//i", $uri)) {
+      return "adminator2/" . $link;
+    }
+    elseif (preg_match("/\/adminator2\//i", $uri)){
+      return "adminator3/" . $link;
+    }
+    elseif (preg_match("/adminator2/i", $_SERVER['HTTP_HOST'])){
+      $host = str_replace("adminator2", "adminator3", $_SERVER['HTTP_HOST']);
+      return $host . $link;
+    }
+    elseif (preg_match("/adminator3/i", $_SERVER['HTTP_HOST'])){
+      $host = str_replace("adminator3", "adminator2", $_SERVER['HTTP_HOST']);
+      return $host . $link;
+    }
+}
+
 function list_logged_users_history($conn_mysql, $smarty, $action = "assign") {
   $r = array();
 

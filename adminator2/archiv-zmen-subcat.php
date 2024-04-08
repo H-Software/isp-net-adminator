@@ -6,4 +6,6 @@
 
 <span style="padding-left: 30px; ">
     <span style="padding-right: 10px; ">A3:</span>  
-    <a href="/adminator3/archiv-zmen-ucetni.php">Změny pro účetní</a></span>
+    <a href=
+<?php echo fix_link_to_another_adminator("/archiv-zmen-ucetni.php"); ?>
+    >Změny pro účetní</a></span>
