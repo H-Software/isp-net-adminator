@@ -1,8 +1,7 @@
 <?php
-
+require("include/main.function.shared.php");
 require_once ("include/config.php"); 
 require_once ("include/check_login.php");
-
 require_once ("include/check_level.php");
 
 if ( !( check_level($level,30) ) )
@@ -70,72 +69,75 @@ require_once("include/charset.php");
     
     $zaklad_sql = "select *,DATE_FORMAT(provedeno_kdy, '%d.%m.%Y %H:%i:%s') as provedeno_kdy2 from archiv_zmen_work ";
     
-    if( ($pocet_check) )
-    {   
-	if ( ( strlen($pocet) > 0 ) )
-	{ $vysl=mysql_query($zaklad_sql." order by id DESC LIMIT $pocet " ); }
-        else
-	{ $vysl=mysql_query($zaklad_sql." order by id DESC " ); }
+    if( ($pocet_check) ){   
+      if ( ( strlen($pocet) > 0 ) )
+      { $sql=$zaklad_sql." order by id DESC LIMIT $pocet "; }
+      else
+	    { $sql=$zaklad_sql." order by id DESC "; }
     }
     else
-    { $vysl=mysql_query($zaklad_sql." order by id DESC LIMIT 1 "); }
+    { $sql=$zaklad_sql." order by id DESC LIMIT 1 "; }
 
-    $radku=mysql_num_rows($vysl);
+    try {
+      $vysl = $conn_mysql->query($sql);
+    } catch (Exception $e) {
+      die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+    }
+
+    $radku = $vysl->num_rows;
     
     // echo '<br><a href="include\export-archiv-zmen.php">export dat zde</a><br><br>';     
     
-   if ( $radku==0 ){ echo "Žádné změny v archivu "; }
-   else  
-   {
+    if ( $radku==0 ){ echo "Žádné změny v archivu "; }
+    else  
+    {
       echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" class=\"az-main-table\" >";
 	    
-	echo "<tr >";    
-	    echo "<td class=\"az-border2\" ><b>id:</b></td>";
-	    echo "<td class=\"az-border2\" ><b>akce:</b></td>";
-	// echo "<td><b>pozn:</b></td>";
-	    echo "<td class=\"az-border2\" ><b>Provedeno kdy:</b></td>";
-	    echo "<td class=\"az-border2\" ><b>Provedeno kým:</b></td>";
-	    echo "<td class=\"az-border2\" ><b>Provedeno úspěšně:</b></td>";
-	echo "</tr>";
+      echo "<tr >";    
+          echo "<td class=\"az-border2\" ><b>id:</b></td>";
+          echo "<td class=\"az-border2\" ><b>akce:</b></td>";
+      // echo "<td><b>pozn:</b></td>";
+          echo "<td class=\"az-border2\" ><b>Provedeno kdy:</b></td>";
+          echo "<td class=\"az-border2\" ><b>Provedeno kým:</b></td>";
+          echo "<td class=\"az-border2\" ><b>Provedeno úspěšně:</b></td>";
+      echo "</tr>";
 	    
-        while ($data=mysql_fetch_array($vysl) ):
+      while ($data=$vysl->fetch_array()):
 	    
-	 echo "<tr>";    
-           echo "<td class=\"az-border1\" style=\"vertical-align: top;\" >".$data["id"]."</td>";
-	   echo "<td class=\"az-border1\" ><span class=\"az-text\" >";
+        echo "<tr>";    
+              echo "<td class=\"az-border1\" style=\"vertical-align: top;\" >".$data["id"]."</td>";
+        echo "<td class=\"az-border1\" ><span class=\"az-text\" >";
 	   
-	   $id_cloveka_res = "";  
-	   $akce = $data["akce"];
+        $id_cloveka_res = "";  
+        $akce = $data["akce"];
 	     
-	   echo "<pre>".$akce."</pre></span></td>";
+	      echo "<pre>".$akce."</pre></span></td>";
 	
-	    echo "<td class=\"az-border1\" style=\"vertical-align: top;\"><span class=\"az-provedeno-kdy\" >";
-	      if ( ( strlen($data["provedeno_kdy2"]) < 1 ) ){ echo "&nbsp;"; }
-	      else{ echo $data["provedeno_kdy2"]; }
-	    echo "</span></td>";
+        echo "<td class=\"az-border1\" style=\"vertical-align: top;\"><span class=\"az-provedeno-kdy\" >";
+          if ( ( strlen($data["provedeno_kdy2"]) < 1 ) ){ echo "&nbsp;"; }
+          else{ echo $data["provedeno_kdy2"]; }
+        echo "</span></td>";
+        
+        echo "<td class=\"az-border1\" style=\"vertical-align: top;\"><span class=\"az-provedeno-kym\" >";
+          if ( ( strlen($data["provedeno_kym"]) < 1 ) ){ echo "&nbsp;"; }
+          else{ echo $data["provedeno_kym"]; }
+        echo "</span></td>";		   
+    
+        echo "<td class=\"az-border1\" style=\"vertical-align: top;\">";
+          if ( $data["vysledek"] == 1 ){ echo "<span class=\"az-vysl-ano\">Ano</span>"; }
+          else{ echo "<span class=\"az-vysl-ne\">&nbsp;</span>"; }
+        echo "</td>";
+    
+        echo "</tr>";
 	    
-	    echo "<td class=\"az-border1\" style=\"vertical-align: top;\"><span class=\"az-provedeno-kym\" >";
-	      if ( ( strlen($data["provedeno_kym"]) < 1 ) ){ echo "&nbsp;"; }
-	      else{ echo $data["provedeno_kym"]; }
-	    echo "</span></td>";		   
-	
-	    echo "<td class=\"az-border1\" style=\"vertical-align: top;\">";
-	      if ( $data["vysledek"] == 1 ){ echo "<span class=\"az-vysl-ano\">Ano</span>"; }
-	      else{ echo "<span class=\"az-vysl-ne\">&nbsp;</span>"; }
-	    echo "</td>";
-	
-	    echo "</tr>";
-	    
-            endwhile;
+      endwhile;
 	    
 	    echo "</table>";
     
     } //konec else
     
-
  ?> 
  
-  
   </td>
   </tr>
   
@@ -143,4 +145,3 @@ require_once("include/charset.php");
 
 </body> 
 </html> 
-

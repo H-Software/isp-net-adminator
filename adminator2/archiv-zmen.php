@@ -164,7 +164,9 @@ require ("include/charset.php");
     
     echo "<span style=\"margin-left: 10px; \"><input type=\"submit\" name=\"odeslano\" value=\"OK\" ></span>
     
-    <span style=\"margin-left: 40px; \"><a href=\"include\export-archiv-zmen.php\">export dat zde</a></span>
+    <span style=\"margin-left: 40px; \">";
+	echo '<a href="include\export-archiv-zmen.php">export dat zde</a>';
+	echo "</span>
     
     </form> \n\n";
  
