@@ -152,8 +152,9 @@ else:
     $smarty->assign("rs",$add); 
     $smarty->assign("body",$nastenka->error); 
  
-    header("Location: others-board.php"); //přesuneme se na úvodní stránku
-    
+    if($add){ 
+      header("Location: others-board.php"); //přesuneme se na úvodní stránku
+    }
  }
  else
  { //zobrazujeme formulář

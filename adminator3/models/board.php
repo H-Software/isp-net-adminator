@@ -140,17 +140,17 @@ class board{
     }
     
     function insert_into_db(){
-		$add = mysql_query("INSERT INTO board VALUES ('', '$this->author', '$this->email', '$this->from_date',
-					'$this->to_date', '$this->subject', '$this->body')");
-    
-		if( $add == 1 ){ 
-			return $add; }
-		else {
-			$this->error .= "<div>Došlo k chybě při zpracování SQL dotazu v databázi!</div>";	  
-				// $this->error .= mysql_error();
-			
-			return $add;
+		try {
+			$add = $this->conn_mysql->query("INSERT INTO board VALUES (NULL, '$this->author', '$this->email', '$this->from_date',
+			'$this->to_date', '$this->subject', '$this->body')");
+		} catch (Exception $e) {
+			die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 		}
-    }
     
+		if( $add === false ){ 
+			$this->error .= "<h2 style=\"color: red\">Došlo k chybě při zpracování SQL dotazu v databázi!</h2>\n";
+			$this->error .= "<h2 style=\"color: red\">Error description: " . $this->conn_mysql->error."</h2>\n";
+		}
+		return $add;
+    }
 }
