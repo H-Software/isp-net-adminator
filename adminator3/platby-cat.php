@@ -98,7 +98,7 @@ $body .= "Prosím vyberte z podkategorie výše....";
 $smarty->assign("body",$body);
 
 $smarty->assign("link_a2_platby",fix_link_to_another_adminator("/platby.php"));
-$smarty->assign("link_a2_faktury",fix_link_to_another_adminator("/faktury/faktury.php"));
+$smarty->assign("link_a2_faktury",fix_link_to_another_adminator("/faktury.php"));
 
 $smarty->display('platby-cat.tpl');
 

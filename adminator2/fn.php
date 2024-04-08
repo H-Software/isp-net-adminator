@@ -1,9 +1,9 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require_once("include/config.php"); 
+require_once("include/check_login.php");
+require_once("include/check_level.php");
 
 if ( !( check_level($level,107) ) )
 {
