@@ -52,7 +52,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       && docker-php-ext-configure mssql
 
 # apache conf
-RUN a2enmod ssl && a2enmod rewrite
+RUN a2enmod ssl \
+    && a2enmod rewrite \
+    && a2enmod proxy \
+    && a2enmod proxy_http
 # RUN mkdir -p /etc/apache2/ssl
 # RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
