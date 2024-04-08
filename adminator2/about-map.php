@@ -1,9 +1,8 @@
 <?php
-
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,96) ) )
 {
@@ -21,7 +20,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
       <html> 
       <head> ';
 
-include ("include/charset.php"); 
+require ("include/charset.php"); 
 
 ?>
 

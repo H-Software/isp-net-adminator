@@ -7,11 +7,11 @@
     
     <input type="button" class="buttonalllogin" name="OK2" value="Zobrazit všechny přihlášené" onclick="showWindow2()" >
 
-     <script type="text/javascript" src="/adminator3/include/js/main.js?2"></script>
-     <script type="text/javascript" src="/adminator3/include/js/classmaker.js?2"></script>
+     <script type="text/javascript" src="/include/js/main.js?2"></script>
+     <script type="text/javascript" src="/include/js/classmaker.js?2"></script>
 
-     <script type="text/javascript" src="/adminator3/include/js/dom.js?2"></script>
-     <script type="text/javascript" src="/adminator3/include/js/window.js?2"></script>
+     <script type="text/javascript" src="/include/js/dom.js?2"></script>
+     <script type="text/javascript" src="/include/js/window.js?2"></script>
 
      {literal}
      <script type="text/javascript" >

@@ -1,14 +1,12 @@
 <?php
 
 require 'smarty/Smarty.class.php';
-
+require("include/main.function.shared.php");
 require "include/config.php";
 require "include/main.function.php";
-
 require "include/main.classes.php";
 
 $smarty = new Smarty;
-
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
@@ -99,17 +97,17 @@ $action = $_GET["action"];
 
 $smarty->assign("link_add","archiv-zmen-ucetni.php?action=add");
 
-$zmena = new zmeny_ucetni;
+$zmena = new zmeny_ucetni($conn_mysql);
 
 if( $action == "add")
 { //rezim pridani
 
     if( !( check_level($level,148) ) )
     { // neni level
-	$smarty->assign("page_title","Adminator3 :: chybny level");
-	$smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-	$smarty->display('index-nolevel.tpl');
-	exit;
+      $smarty->assign("page_title","Adminator3 :: chybny level");
+      $smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+      $smarty->display('index-nolevel.tpl');
+      exit;
     }
 
     if( ( $update_id > 0 ) ){ $update_status=1; }
@@ -124,8 +122,8 @@ if( $action == "add")
     }
     else
     { //rezim pridani
-	$zmena->typ = $_POST["typ"];
-	$zmena->text = $_POST["text"];
+      $zmena->typ = $_POST["typ"];
+      $zmena->text = $_POST["text"];
     }
     
     //zde generovani a kontrola dat
@@ -141,28 +139,28 @@ if( $action == "add")
       else 
       { 	
         $zmena->fail = "true"; 
-	$zmena->error .= "<div class=\"form-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>"; 
+	      $zmena->error .= "<div class=\"form-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>"; 
       }
     
       if ( !( isset($zmena->fail) ) )
       { //ulozeni
-	if( $update_status == 1 )
-	{ //rezim upravy
-	
-	  //zde kontrola levelu pro update
-	
-	}
-	else
-	{ //rezim pridani 
-	  $rs = $zmena->save_vars_to_db();
-	
-	  if( $rs == true )
-	  { $db_result = "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; }
-	  else
-	  { $db_result = "<br><H3><div style=\"color: red; \">Chyba! Data do databáze nelze uložit. </div></H3>\n"; }
+        if( $update_status == 1 )
+        { //rezim upravy
+        
+          //zde kontrola levelu pro update
+        
+        }
+        else
+        { //rezim pridani 
+          $rs = $zmena->save_vars_to_db();
+        
+          if( $rs == true )
+          { $db_result = "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; }
+          else
+          { $db_result = "<br><H3><div style=\"color: red; \">Chyba! Data do databáze nelze uložit. </div></H3>\n"; }
 
-	  $smarty->assign("db_result",$db_result);
-	}
+          $smarty->assign("db_result",$db_result);
+        }
       } //konec if ! isset fail
       else{} // konec else ( !(isset(fail) ), musi tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
     
@@ -175,22 +173,22 @@ if( $action == "add")
     if( (isset($zmena->error)) or (!isset($zmena->send)) )
     { //zobrazeni formu
 
-	$smarty->assign("action",$_SERVER["PHP_SELF"]."?action=add");
-    
-	$smarty->assign("error",$zmena->error);
-	$smarty->assign("info",$zmena->info);
+        $smarty->assign("action",$_SERVER["PHP_SELF"]."?action=add");
+          
+        $smarty->assign("error",$zmena->error);
+        $smarty->assign("info",$zmena->info);
 
         $pole_typy = $zmena->get_types();
-	$smarty->assign("typ",$pole_typy);
+        $smarty->assign("typ",$pole_typy);
 
-	$smarty->assign("typ_select",$zmena->typ);
-	$smarty->assign("text",$zmena->text);
+        $smarty->assign("typ_select",$zmena->typ);
+        $smarty->assign("text",$zmena->text);
 
-	$template = "az-ucetni-add-form.tpl";	
+        $template = "az-ucetni-add-form.tpl";	
     } 
     elseif( ( isset($zmena->writed) or isset($updated) ) )
     { //vypis vlozenych udaju
-	$template = "az-ucetni-add-list.tpl";
+	    $template = "az-ucetni-add-list.tpl";
     }
     
 } //konec if action == add
@@ -214,5 +212,3 @@ else
 }
 
 $smarty->display($template);
-
-?>

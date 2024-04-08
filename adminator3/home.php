@@ -4,7 +4,6 @@ require 'smarty/Smarty.class.php';
 require "include/main.function.php";
 require "include/main.function.shared.php";
 require "include/main.classes.php";
-
 require "include/config.php";
 
 $smarty = new Smarty;
@@ -27,7 +26,6 @@ if( $cl[0] == "false" )
 
  exit;
 }
-
 
 if( !( check_level($level,38) ) )
 { // neni level

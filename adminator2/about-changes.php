@@ -1,7 +1,8 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
+require("include/main.function.shared.php");
+require("include/config.php");
+require_once ("include/check_login.php");
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 

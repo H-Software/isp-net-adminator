@@ -1,14 +1,12 @@
 <?php
 
 require 'smarty/Smarty.class.php';
-
+require("include/main.function.shared.php");
 require "include/config.php";
 require "include/main.function.php";
-
 require "include/main.classes.php";
 
 $smarty = new Smarty;
-
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
@@ -99,5 +97,3 @@ $smarty->assign("subcat_select",0);
 $smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
 $smarty->display('archiv-zmen-cat.tpl');
-
-?>
