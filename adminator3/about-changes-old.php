@@ -7,7 +7,6 @@ require "include/main.function.php";
 require "include/main.classes.php";
 
 $smarty = new Smarty;
-
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 

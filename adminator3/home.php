@@ -28,7 +28,6 @@ if( $cl[0] == "false" )
  exit;
 }
 
-
 if( !( check_level($level,38) ) )
 { // neni level
  
