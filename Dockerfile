@@ -54,6 +54,15 @@ COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 # app code
 COPY adminator2/ /var/www/html/adminator2/
 COPY adminator3/ /var/www/html/adminator3/
+# shared stuff
+COPY libs/smarty/ /var/www/html/adminator2/smarty/
+COPY libs/smarty/ /var/www/html/adminator3/smarty/
+
+COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/templates/inc.intro.category-ext.tpl
+COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator2/templates/inc.home.list-logged-users.tpl
+
+COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
+
 
 # development stuff
 # RUN wget -O /usr/local/bin/composer "https://getcomposer.org/composer.phar" \

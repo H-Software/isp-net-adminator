@@ -4,8 +4,11 @@ function last_page()
 {
     $uri=$_SERVER["REQUEST_URI"];
     
-    list($x,$y) = explode("adminator3/",$uri);
-    
+    if (preg_match("/\/adminator3\//i", $uri)) {
+      list($x,$y) = explode("adminator3/",$uri);
+    } else {
+      list($x, $y) = explode($_SERVER['HTTP_HOST'],$_SERVER['SCRIPT_URI']);
+    }
     return $y;
     
 } //konec funkce last page

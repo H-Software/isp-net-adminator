@@ -221,6 +221,60 @@ border-right: 1px dashed #C0C0C0;
     max-width: 250px;
 }
 
+<!--  A3 -->
+
+#subcat-space {
+    margin-left: 20px;
+    min-width: 15%;
+}
+
+.subcat-space a {
+    margin-left: 20px;
+    min-width: 15%;
+}
+
+.home-vypis-useru-napis
+{
+    width: 800px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    text-align: left;
+    
+    font-family: Verdana; 
+    font-weight: bold; 
+    font-size: 14px; 
+    
+    padding-bottom: 20px; 
+    padding-top: 10px;
+}
+
+.home-vypis-useru-main
+{
+    width: 800px; 
+    margin-left: auto; 
+    margin-right: auto; 
+    text-align: left; 
+    padding-bottom: 2px; 
+    
+    font-family: Verdana; 
+    font-size: 12px; 
+
+}
+
+.home-vypis-useru-font1
+{
+    font-weight: bold;
+}
+
+.home-vypis-useru-font2
+{
+    font-style: italic; 
+    color: grey; 
+    font-weight: bold;
+}
+
+<!--  end of A3 -->
+
 </style>
 
 
