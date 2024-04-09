@@ -65,6 +65,8 @@ class archivZmenController {
         { //rezim pridani
             $this->auth->check_level(148);
 
+            $update_id = $_POST['update_id'];
+            
             if( ( $update_id > 0 ) ){ $update_status=1; }
 
             $zmena->send = $_POST["send"];

@@ -117,7 +117,7 @@ class adminatorController{
 
         $kat_2radka = array();
 
-        $kat_2radka[0] = array( "nazev" => "Partner program", "url" => fix_link_to_another_adminator("/partner.php"), "width" => "", "align" => "center" );
+        $kat_2radka[0] = array( "nazev" => "Partner program", "url" => fix_link_to_another_adminator("/partner/partner-cat.php"), "width" => "", "align" => "center" );
 
         if( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) )
         { $kat_2radka[0]["barva"] = "silver"; }
