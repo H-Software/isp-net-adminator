@@ -43,7 +43,7 @@ echo $render;
  // vlozeni vypisu zavad/oprav
  if ( check_level($level,101) )
  {
-   include("opravy-for-home.php"); 
+   require("opravy-for-home.php"); 
  }
  
  echo "<br><br>";
@@ -54,9 +54,9 @@ echo $render;
  //generovani zprav z nastenky
  if( check_level($level,87) )
  {
-   require("board-header-for-home.php"); //vložíme hlavičku
-
-   require("board-main-for-home.php"); // hlavni data, poupravena
+   // moved to A3
+   // require("board-header-for-home.php"); //vložíme hlavičku
+   // require("board-main-for-home.php"); // hlavni data, poupravena
  }
 
 ?>
