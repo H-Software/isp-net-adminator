@@ -101,8 +101,9 @@ function init_postgres($app_name = "adminator") {
 
 function start_ses()
 {
-  global $sid, $level, $nick, $date, $ad;
-  
+  global $sid, $level, $nick, $date, $ad, $logger;
+  $logger->addInfo("start_ses called");
+
   session_start(); 
 
   $SN = "autorizace"; 
@@ -115,6 +116,11 @@ function start_ses()
   $date = date("U"); 
   $ad = date("U") - 1200; 
 
+  $logger->addInfo("start_ses: result: "
+            . "[nick => " . $nick
+            . ", level => " . $level
+            . ", sid => " . $sid
+            . "]");
   return array($sid, $level, $nick);
 }
 

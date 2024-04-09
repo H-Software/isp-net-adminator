@@ -22,6 +22,7 @@ administration system for Internet Service Provider (ISP)
 #### slim
 - https://www.slimframework.com/docs/v3/tutorial/first-app.html
 - https://github.com/slimphp/Tutorial-First-Application/blob/master/src/public/index.php
+- https://github.com/bryanjhv/slim-session/tree/3.7.2
 
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html

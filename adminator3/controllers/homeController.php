@@ -13,6 +13,8 @@ class homeController {
         $this->logger = $logger;
         $this->auth = $auth;
         $this->app = $app;
+        
+        $this->logger->addInfo("homeController\__construct called");
 	}
 
     function home(){
@@ -51,7 +53,10 @@ class homeController {
 
     function footer(){
 
-        $this->smarty->assign("nick_a_level",$this->auth->nick." (".$this->auth->level.")");
+        $this->logger->addDebug("homeController\\footer called");
+        $this->logger->addDebug("homeController\\footer: ".$this->auth->user_nick." (".$this->auth->user_level.")");
+
+        $this->smarty->assign("nick_a_level",$this->auth->user_nick." (".$this->auth->user_level.")");
         $this->smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
 
         //kategorie
@@ -81,7 +86,7 @@ class homeController {
         $this->smarty->assign("se_cat_adminator","adminator2");
         $this->smarty->assign("se_cat_adminator_link",$se_cat_adminator_link);
 
-        $prihl_uziv = vypis_prihlasene_uziv($nick);
+        $prihl_uziv = vypis_prihlasene_uziv($this->auth->user_nick);
 
         if( $prihl_uziv[100] == true ){
             $this->smarty->assign("pocet_prihl_uziv",0);

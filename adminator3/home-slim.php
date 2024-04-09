@@ -10,8 +10,6 @@ $smarty->compile_check = true;
 
 $auth = new auth_service($conn_mysql, $smarty, $logger);
 $auth->page_level_id = 38;
-// TODO: remove this (login beypass)
-$auth->check_login_no_die = true;
 $auth->check_all();
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -27,9 +25,23 @@ $container['logger'] = function($c) {
   return $logger;
 };
 
+// $app->add(
+//     new \Slim\Middleware\Session([
+//       'name' => 'adminator-auth',
+//       'autorefresh' => true,
+//       'lifetime' => '1 hour',
+//     ])
+// );
+
+// $container['session'] = function ($c) {
+//     return new \SlimSession\Helper();
+// };
+
+// $logger->addInfo("session id: ".$container['session']::id());
+
 // controllers
 $container['homeController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $app, $auth;
+    global $conn_mysql, $smarty, $logger, $auth, $app;
     return new homeController($conn_mysql, $smarty, $logger, $auth, $app);
 };
 
