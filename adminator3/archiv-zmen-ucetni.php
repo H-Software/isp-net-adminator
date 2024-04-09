@@ -74,14 +74,7 @@ $zmena = new zmeny_ucetni($conn_mysql);
 
 if( $action == "add")
 { //rezim pridani
-
-    if( !( check_level($level,148) ) )
-    { // neni level
-      $smarty->assign("page_title","Adminator3 :: chybny level");
-      $smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-      $smarty->display('index-nolevel.tpl');
-      exit;
-    }
+    $auth->check_level(148);
 
     if( ( $update_id > 0 ) ){ $update_status=1; }
 

@@ -39,7 +39,7 @@ class auth_service{
         }
     }
 
-    function check_level($page_level_id_custom = 0, $display_no_level_page = false){
+    function check_level($page_level_id_custom = 0, $display_no_level_page = true){
 
         // co mame
         // v promeny level mame level prihlaseneho uzivatele

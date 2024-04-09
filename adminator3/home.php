@@ -121,7 +121,7 @@ if ($auth->check_level(101,false) === true) {
  																    
  //generovani zprav z nastenky
 
-if ($auth->check_level(87) === true) {
+if ($auth->check_level(87, false) === true) {
    $smarty->assign("nastenka_povoleno",1);
    $smarty->assign("datum",date("j. m. Y"));
    $smarty->assign("sid",$sid);

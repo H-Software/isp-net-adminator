@@ -1,45 +1,16 @@
 <?php
 
-require_once 'smarty/Smarty.class.php';
-
-require_once "include/config.php";
-require_once "include/main.function.php";
-
-require_once "include/main.classes.php";
+require "include/main.function.shared.php";
+require "include/config.php";
+require "include/main.function.php";
 
 $smarty = new Smarty;
-
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-start_ses();
-$cl = check_login();
-
-if( $cl[0] == "false" )
-{ //chybny login ...
-
- $smarty->assign("page_title","Adminator3 :: chybný login");
- $smarty->assign("body",$cl[1]);
-
- $last_page = last_page();
- $smarty->assign("last_page",$last_page);
-  
- $smarty->display('index-nologin.tpl');
-
- exit;
-}
-
-
-if( !( check_level($level,146) ) )
-{ // neni level
- 
- $smarty->assign("page_title","Adminator3 :: chybny level");
- $smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-
- $smarty->display('index-nolevel.tpl');
-
- exit;
-}
+$auth = new auth_service($conn_mysql, $smarty, $logger);
+$auth->page_level_id = 146;
+$auth->check_all();
 
 $smarty->assign("page_title","Adminator3 :: Ostatní :: Tisk");
 
