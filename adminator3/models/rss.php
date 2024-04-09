@@ -69,7 +69,7 @@ class rss
         try {
             $q = $this->conn_mysql->query("SELECT * FROM board ORDER BY id DESC LIMIT 0,50");
         } catch (Exception $e) {
-            $this->logger->addError("rss\exportRSS mysql_query q failed! Caught exception: " . $e->getMessage());
+            $this->logger->addError("rss\\exportRSS mysql_query q failed! Caught exception: " . $e->getMessage());
             return false;
         }
 
@@ -125,7 +125,7 @@ class rss
         
         $itembody = Str_Replace("&","&amp;",$itembody);
         
-        $itemlink='https://trinity.simelon.net/adminator3/others-board.php?item_id='.$o->id;
+        $itemlink='http://' . $_SERVER['HTTP_HOST'] . '/others-board.php?item_id='.$o->id;
         
         // datum jako Sat, 15 May 2004 01:20:56 +0200
         $itempubdate = $o->from_date;

@@ -11,9 +11,9 @@ class opravy
 
         $order=" ORDER BY datum_vlozeni DESC ";
 
-	$dotaz=mysql_query($sql.$select." ) ".$order);
+    $dotaz=mysql_query($sql.$select." ) ".$order);
 
-	$dotaz_radku = mysql_num_rows($dotaz);
+    $dotaz_radku = mysql_num_rows($dotaz);
 
 	if ( $dotaz_radku == 0){ echo "<tr><td colspan=\"".$pocet_bunek."\" >Žádné opravy v databázi neuloženy. </tr>"; }
 	else
