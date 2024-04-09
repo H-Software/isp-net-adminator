@@ -1,5 +1,9 @@
 <?php
 
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
 class homeController {
     var $conn_mysql;
     var $smarty;
@@ -7,7 +11,9 @@ class homeController {
     var $auth;
     var $app;
 
-    function __construct($conn_mysql, $smarty, $logger, $auth, $app) {
+    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+    {
+        $this->container = $container;
 		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
@@ -17,9 +23,15 @@ class homeController {
         $this->logger->addInfo("homeController\__construct called");
 	}
 
-    function home(){
+    public function home(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
 
         $this->logger->addInfo("homeController\home called");
+
+        if ($request->isPost()) {
+            $data = $request->getParsedBody();
+            $this->logger->addDebug("homeController\home post data: ".var_export($data, true));    
+        }
 
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
@@ -49,6 +61,8 @@ class homeController {
         $this->logger->addInfo("homeController\home: end of rendering");
 
         $this->smarty->display('home.tpl');
+
+        return $response;
     }
 
     function footer(){

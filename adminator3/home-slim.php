@@ -42,7 +42,7 @@ $container['logger'] = function($c) {
 // controllers
 $container['homeController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new homeController($conn_mysql, $smarty, $logger, $auth, $app);
+    return new homeController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
 };
 
 // routering
@@ -54,6 +54,7 @@ $app->get('/hello', function (Request $request, Response $response) {
 });
 
 $app->get('/home', \homeController::class . ':home');
+$app->post('/home', \homeController::class . ':home');
 
 // final
 $app->run();
