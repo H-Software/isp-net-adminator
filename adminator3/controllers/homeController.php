@@ -50,9 +50,8 @@ class homeController {
     }
 
     function footer(){
-        global $nick, $level;
 
-        $this->smarty->assign("nick_a_level",$nick." (".$level.")");
+        $this->smarty->assign("nick_a_level",$this->auth->nick." (".$this->auth->level.")");
         $this->smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
 
         //kategorie
@@ -111,14 +110,12 @@ class homeController {
     function board(){
         //generovani zprav z nastenky
 
-        global $sid;
-
         if ($this->auth->check_level(87, false) === true) {
             $this->logger->addInfo("homeController\board allowed");
 
             $this->smarty->assign("nastenka_povoleno",1);
             $this->smarty->assign("datum",date("j. m. Y"));
-            $this->smarty->assign("sid",$sid);
+            $this->smarty->assign("sid",$this->auth->user_sid);
             
             $nastenka = new board($this->conn_mysql);
 

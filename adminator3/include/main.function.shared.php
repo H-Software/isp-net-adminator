@@ -115,6 +115,7 @@ function start_ses()
   $date = date("U"); 
   $ad = date("U") - 1200; 
 
+  return array($sid, $level, $nick);
 }
 
 function check_login($app_name = "adminator3") {
