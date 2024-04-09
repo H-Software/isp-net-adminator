@@ -8,12 +8,8 @@ $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-$logger = new \Monolog\Logger('my_logger');
-$file_handler = new \Monolog\Handler\StreamHandler('../a3-logs/app.log');
-$logger->pushHandler($file_handler);
-
 $auth = new auth_service($conn_mysql, $smarty, $logger);
-$auth->page_level_id = "38";
+$auth->page_level_id = 38;
 $auth->check_all();
 
 $smarty->assign("page_title","Adminator3 :: úvodní stránka");
@@ -80,8 +76,7 @@ $smarty->assign("subcat_select",0);
 list_logged_users_history($conn_mysql, $smarty);
 
 //opravy a zavady vypis
-if ( $auth->check_level(101,false) )
-{
+if ($auth->check_level(101,false) === true) {
  $v_reseni_filtr = $_GET["v_reseni_filtr"];
  $vyreseno_filtr = $_GET["vyreseno_filtr"];
  $limit=$_GET["limit"];
@@ -126,8 +121,7 @@ if ( $auth->check_level(101,false) )
  																    
  //generovani zprav z nastenky
 
- if ( $auth->check_level(87) )
- {
+if ($auth->check_level(87) === true) {
    $smarty->assign("nastenka_povoleno",1);
    $smarty->assign("datum",date("j. m. Y"));
    $smarty->assign("sid",$sid);
@@ -146,6 +140,8 @@ if ( $auth->check_level(101,false) )
    
    $smarty->assign("strany",$page);
 	
- }
+}
+
+$logger->addInfo("home page: end of rendering");
 
 $smarty->display('home.tpl');

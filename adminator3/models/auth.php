@@ -75,7 +75,7 @@ class auth_service{
             $rs = false;
         }
 
-        $this->logger->addInfo("check_level: find_page_level retval: " . var_export($page_level_rs, true));
+        $this->logger->addInfo("check_level: find_page_level: pl: " . $pl . ", retval: " . var_export($page_level_rs, true));
         $this->logger->addInfo("check_level: result: " . var_export($rs, true));
 
         if( $rs === false and $display_no_level_page === true) {
@@ -90,7 +90,7 @@ class auth_service{
             return false;
         }
         else{
-            true;
+            return true;
         }
     }
 
