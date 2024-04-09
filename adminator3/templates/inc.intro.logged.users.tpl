@@ -2,7 +2,7 @@
  <div class="intro-logged-users" >přihlášení uživatelé:  {$pocet_prihl_uziv} </div>
 
     <div style="padding-bottom: 5px; padding-top: 2px; " >
-      <a href="index.php?lo=true" target="_top" class="cat" >Odhlásit se</a>
+      <a href="/index.php?lo=true" target="_top" class="cat" >Odhlásit se</a>
     </div>
     
     <input type="button" class="buttonalllogin" name="OK2" value="Zobrazit všechny přihlášené" onclick="showWindow2()" >
@@ -25,7 +25,7 @@
             {
 
                 //vytvoreni okna
-                var params = {imagePath: "/adminator2/include/js/window/img/shadow-", sizes: [4,4,4,4]};
+                var params = {imagePath: "/include/js/window/img/shadow-", sizes: [4,4,4,4]};
                 w2 = new SZN.Window(params);
                 //nastaveni obsahu
      {/literal}

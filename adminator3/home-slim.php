@@ -21,21 +21,9 @@ require "app/src/dependencies.php";
 require "app/src/middleware.php";
 
 // routing
+$app->map(['GET', 'POST'],'/home', \homeController::class . ':home');
 
-// $app->get('/hello', function (Request $request, Response $response) {
-//     $this->logger->addInfo("hello route called");
-//     $response->getBody()->write("Hello from Slim");
-
-//     return $response;
-// });
-
-// map(['GET', 'POST']
-
-$app->get('/home', \homeController::class . ':home');
-$app->post('/home', \homeController::class . ':home');
-
-$app->get('/about', \aboutController::class . ':about');
-$app->post('/about', \aboutController::class . ':about');
+$app->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
 $app->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
 $app->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
 
