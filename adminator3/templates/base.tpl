@@ -5,20 +5,20 @@
 
 <title>{$page_title}</title>
 
-<link href="style.css" rel="stylesheet" type="text/css" >
-<link href="style-board.css" rel="stylesheet" type="text/css" >
+<link href="/style.css" rel="stylesheet" type="text/css" >
+<link href="/style-board.css" rel="stylesheet" type="text/css" >
 
 {if $enable_calendar == 1}
- <script language="JavaScript" src="plugins/tigra_calendar/calendar_eu.js"></script>
- <link rel="stylesheet" href="plugins/tigra_calendar/calendar.css">
+ <script language="JavaScript" src="/plugins/tigra_calendar/calendar_eu.js"></script>
+ <link rel="stylesheet" href="/plugins/tigra_calendar/calendar.css">
 {/if}
 
 {if $enable_work == 1}
- <script language="JavaScript" src="include/js/work.js" ></script>
+ <script language="JavaScript" src="/include/js/work.js" ></script>
 {/if}
 
 {if $enable_fn_check == 1}
- <script language="JavaScript" src="include/js/fn_check.js" ></script>
+ <script language="JavaScript" src="/include/js/fn_check.js" ></script>
 {/if}
 
 </head>

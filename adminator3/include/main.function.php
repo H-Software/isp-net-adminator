@@ -57,7 +57,7 @@ function zobraz_kategorie($uri,$uri_replace)
   if( ereg("^.+others.+$",$uri) or ereg("^.+syslog.+$",$uri) or ereg("^.+/mail.php$",$uri) or ereg("^.+opravy.+$",$uri) )
   { $kat_2radka[3]["barva"] = "silver"; }
 
-  $kat_2radka[4] = array( "nazev" => "O programu", "url" => "about.php", "width" => "", "align" => "center" );
+  $kat_2radka[4] = array( "nazev" => "O programu", "url" => "/about", "width" => "", "align" => "center" );
 
   if( ereg("^.+about.+$",$uri) )
   { $kat_2radka[4]["barva"] = "silver"; }

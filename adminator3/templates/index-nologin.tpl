@@ -19,7 +19,7 @@
 
         <p>Pokud nějakou dobu v systém nepracujete, dojde na serveru k odhlášení,
   ale na klientském pc zůstanou identifikační údaje</p>
-  <p><b>Náprava: </b>Prosím proveďte odhlášení <a href="index.php?lo=true&lp={$last_page}">zde</a> a poté se znovu přihlašte.</p>
+  <p><b>Náprava: </b>Prosím proveďte odhlášení <a href="/index.php?lo=true&lp={$last_page}">zde</a> a poté se znovu přihlašte.</p>
   <div style="color: grey">
   <p><i>Předcházení problému:</i> Pokud v administračním systému
   delší dobu nebudete pracovat, odhlašte se z něj.</p>
@@ -30,7 +30,7 @@
 
         <p>Pokud zavřete okno prohlížeče bez kliknutí na odkaz odhlášení, dojde na klientském pc
   k odhlášení ale na serveru zůstaly informace o přihlášení.</p>
-  <p><b>Náprava: </b>Prosím proveďte re-login ( znovu se přihlašte) <a href="relogin.php">zde</a>.</p>
+  <p><b>Náprava: </b>Prosím proveďte re-login ( znovu se přihlašte) <a href="/relogin.php">zde</a>.</p>
         <div style="color: grey">
   <p><i>Předcházení problému:</i> Pro správné a bezpečné odhlášení z administračního systému je
   třeba nejdříve kliknout na "Odhlásit" v hlavním okně a poté zavřít okno prohlížeče.

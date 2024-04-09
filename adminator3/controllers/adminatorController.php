@@ -12,7 +12,7 @@ class adminatorController{
         $this->logger->addInfo("adminatorController\__construct called");
 	}
 
-    function footer(){
+    function header(){
 
         $this->logger->addDebug("adminatorController\\footer called");
         $this->logger->addDebug("adminatorController\\footer: ".$this->auth->user_nick." (".$this->auth->user_level.")");

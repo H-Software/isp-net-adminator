@@ -29,11 +29,15 @@ require "app/src/middleware.php";
 //     return $response;
 // });
 
+// map(['GET', 'POST']
+
 $app->get('/home', \homeController::class . ':home');
 $app->post('/home', \homeController::class . ':home');
 
 $app->get('/about', \aboutController::class . ':about');
 $app->post('/about', \aboutController::class . ':about');
+$app->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
+$app->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
 
 // final
 $app->run();
