@@ -8,36 +8,11 @@ $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-start_ses();
-$cl = check_login();
+$auth = new auth_service($conn_mysql, $smarty, $logger);
+$auth->page_level_id = 87;
+$auth->check_all();
 
-if( $cl[0] == "false" )
-{ //chybny login ...
-   
- $smarty->assign("page_title","Adminator3 :: chybný login");
- $smarty->assign("body",$cl[1]);
-
- $last_page = last_page();
- $smarty->assign("last_page",$last_page);
-  
- $smarty->display('index-nologin.tpl');
-
- exit;
-}
-
-
-if( !( check_level($level,87) ) )
-{ // neni level
- 
- $smarty->assign("page_title","Adminator3 :: chybny level");
- $smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-
- $smarty->display('index-nolevel.tpl');
-
- exit;
-}
-
-$smarty->assign("page_title","Adminator3 :: Ostatní");
+$smarty->assign("page_title","Adminator3 :: Ostatní :: board");
 
 $smarty->assign("nick_a_level",$nick." (".$level.")");
 $smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);

@@ -8,33 +8,9 @@ $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-start_ses();
-$cl = check_login();
-
-if( $cl[0] == "false" )
-{ //chybny login ...
-   
- $smarty->assign("page_title","Adminator3 :: chybný login");
- $smarty->assign("body",$cl[1]);
-
- $last_page = last_page();
- $smarty->assign("last_page",$last_page);
-
- $smarty->display('index-nologin.tpl');
-
- exit;
-}
-
-if( !( check_level($level,38) ) )
-{ // neni level
- 
- $smarty->assign("page_title","Adminator3 - chybny level");
- $smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br> (current_level: " . $level . ")");
-
- $smarty->display('index-nolevel.tpl');
-
- exit;
-}
+$auth = new auth_service($conn_mysql, $smarty, $logger);
+$auth->page_level_id = 38;
+$auth->check_all();
 
 $smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
@@ -100,8 +76,7 @@ $smarty->assign("subcat_select",0);
 list_logged_users_history($conn_mysql, $smarty);
 
 //opravy a zavady vypis
-if ( check_level($level,101) )
-{
+if ($auth->check_level(101,false) === true) {
  $v_reseni_filtr = $_GET["v_reseni_filtr"];
  $vyreseno_filtr = $_GET["vyreseno_filtr"];
  $limit=$_GET["limit"];
@@ -146,8 +121,7 @@ if ( check_level($level,101) )
  																    
  //generovani zprav z nastenky
 
- if ( check_level($level,87) )
- {
+if ($auth->check_level(87, false) === true) {
    $smarty->assign("nastenka_povoleno",1);
    $smarty->assign("datum",date("j. m. Y"));
    $smarty->assign("sid",$sid);
@@ -166,6 +140,8 @@ if ( check_level($level,101) )
    
    $smarty->assign("strany",$page);
 	
- }
+}
+
+$logger->addInfo("home page: end of rendering");
 
 $smarty->display('home.tpl');

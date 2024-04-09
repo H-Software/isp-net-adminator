@@ -13,10 +13,15 @@ administration system for Internet Service Provider (ISP)
 - https://hub.docker.com/_/postgres
 
 ### PHP
-- https://github.com/smarty-php/smarty
-- https://smarty-php.github.io/smarty/stable/
 - https://github.com/asimlqt/docker-php/blob/master/apache/5.6-dev/etc/php.ini
 - https://github.com/nette/robot-loader/tree/v3.1.4
+#### smarty
+- https://github.com/smarty-php/smarty
+- https://smarty-php.github.io/smarty/stable/
+- https://github.com/mathmarques/Smarty-View/tree/1.x
+#### slim
+- https://www.slimframework.com/docs/v3/tutorial/first-app.html
+- https://github.com/slimphp/Tutorial-First-Application/blob/master/src/public/index.php
 
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html

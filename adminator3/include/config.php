@@ -15,6 +15,11 @@ $loader->register();
 // $res = $loader->getIndexedClasses();
 // print_r($res);
 
+// logger init
+$logger = new \Monolog\Logger('my_logger');
+$file_handler = new \Monolog\Handler\StreamHandler('../a3-logs/app.log');
+$logger->pushHandler($file_handler);
+
 // DB init
 
 init_mysql("Adminator3");

@@ -99,7 +99,6 @@ function init_postgres($app_name = "adminator") {
   
 }
 
-// TODO: zacit pouzivat i na A2
 function start_ses()
 {
   global $sid, $level, $nick, $date, $ad;
