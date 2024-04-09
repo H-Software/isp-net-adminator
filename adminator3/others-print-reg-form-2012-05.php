@@ -1,45 +1,18 @@
 <?php
 
-require_once 'smarty/Smarty.class.php';
-
-require_once "include/config.php";
-require_once "include/main.function.php";
-
-require_once "include/main.classes.php";
+require "include/main.function.shared.php";
+require "include/config.php";
+require "include/main.function.php";
 
 $smarty = new Smarty;
-
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-start_ses();
-$cl = check_login();
+$auth = new auth_service($conn_mysql, $smarty, $logger);
+$auth->page_level_id = 146;
+$auth->check_all();
 
-if( $cl[0] == "false" )
-{ //chybny login ...
-
- $smarty->assign("page_title","Adminator3 :: chybný login");
- $smarty->assign("body",$cl[1]);
-
- $last_page = last_page();
- $smarty->assign("last_page",$last_page);
-  
- $smarty->display('index-nologin.tpl');
-
- exit;
-}
-
-
-if( !( check_level($level,146) ) )
-{ // neni level
- 
- $smarty->assign("page_title","Adminator3 :: chybny level");
- $smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-
- $smarty->display('index-nolevel.tpl');
-
- exit;
-}
+$ac = new adminatorController($conn_mysql, $smarty, $logger, $auth);
 
 $smarty->assign("page_title","Adminator3 :: Ostatní :: Tisk - Reg. Form. 2012-05");
 
@@ -50,7 +23,7 @@ $smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
 $uri=$_SERVER["REQUEST_URI"];
 $uri_replace = str_replace ("adminator3", "", $uri);
 
-list($kategorie, $kat_2radka, $mapa) = zobraz_kategorie($uri,$uri_replace);
+list($kategorie, $kat_2radka, $mapa) = $ac->zobraz_kategorie($uri,$uri_replace);
 
 $smarty->assign("kategorie",$kategorie);
 $smarty->assign("kat_2radka",$kat_2radka);
@@ -67,7 +40,7 @@ else
 
 $smarty->assign("show_se_cat",$show_se_cat);
 
-$prihl_uziv = vypis_prihlasene_uziv($nick);
+$prihl_uziv = $ac->vypis_prihlasene_uziv();
 
 if( $prihl_uziv[100] == true )
 {
@@ -113,7 +86,6 @@ if( isset($button_send) ){
 
     //finalni zobrazeni sablony
     $smarty->display('others/print-reg-form-2012-05.tpl');
-    
 }
 else{
 
@@ -125,13 +97,6 @@ else{
 
     $smarty->assign("input_ec",$rf->input_ec);
 
-    
-
-
     //finalni zobrazeni sablony
     $smarty->display('others/print-reg-form-2012-05-form.tpl');
-
 }
-
-
-?>

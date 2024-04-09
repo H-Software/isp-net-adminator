@@ -12,6 +12,8 @@ $auth = new auth_service($conn_mysql, $smarty, $logger);
 $auth->page_level_id = 151;
 $auth->check_all();
 
+$ac = new adminatorController($conn_mysql, $smarty, $logger, $auth);
+
 $smarty->assign("page_title","Adminator3 :: Ostatní :: Web Simelon");
 
 $smarty->assign("nick_a_level",$nick." (".$level.")");
@@ -21,7 +23,7 @@ $smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
 $uri=$_SERVER["REQUEST_URI"];
 $uri_replace = str_replace ("adminator3", "", $uri);
 
-list($kategorie, $kat_2radka, $mapa) = zobraz_kategorie($uri,$uri_replace);
+list($kategorie, $kat_2radka, $mapa) = $ac->zobraz_kategorie($uri,$uri_replace);
 
 $smarty->assign("kategorie",$kategorie);
 $smarty->assign("kat_2radka",$kat_2radka);
@@ -38,7 +40,7 @@ else
 
 $smarty->assign("show_se_cat",$show_se_cat);
 
-$prihl_uziv = vypis_prihlasene_uziv($nick);
+$prihl_uziv = $ac->vypis_prihlasene_uziv();
 
 if( $prihl_uziv[100] == true )
 {
@@ -66,8 +68,11 @@ $smarty->assign("windowleft2","350");
 $smarty->assign("subcat_select",0);
 
 //zacatek vlastniho obsahu
-
-$MS=mysql_select_db("simelonnet");
+try {
+	$count = $conn_mysql->select_db("simelonnet");
+} catch (Exception $e) {
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+}
 
 //tab qestions
   $dotaz_q = mysql_query("
