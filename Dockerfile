@@ -19,10 +19,13 @@ RUN apt-get update \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pgsql pdo_pgsql \
+    && docker-php-ext-install opcache pgsql pdo_pgsql \
     && docker-php-ext-install zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    # && pecl install apcu \
+    # && docker-php-ext-enable apcu \
+    # && docker-php-ext-install intl 
 
 RUN echo 'date.timezone = "UTC"' > /usr/local/etc/php/conf.d/timezone.ini
 
@@ -80,8 +83,10 @@ COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/includ
 
 RUN cd adminator3 \
     && composer require nette/robot-loader:3.1.4 \
-    && composer require smarty/smarty:2.6.33
-    # && pecl install xdebug-2.5.5 \
-    # && docker-php-ext-enable xdebug \
+    && composer require smarty/smarty:2.6.33 \
+    && composer require slim/slim:3.* \
+    && composer require monolog/monolog:^1.17
+#     # && docker-php-ext-enable xdebug \
 
-
+# RUN cd adminator3 \
+#     && composer install
