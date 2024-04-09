@@ -1,4 +1,6 @@
 <?
+ // sirotek, nenasel jsem, ze by se toto nekde pouzivalo
+ 
  //
  //funkce pro stranku
  //

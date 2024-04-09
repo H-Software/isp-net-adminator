@@ -18,7 +18,7 @@ $loader->register();
 
 // logger init
 $logger = new \Monolog\Logger('my_logger');
-$file_handler = new \Monolog\Handler\StreamHandler('../a3-logs/app.log');
+$file_handler = new \Monolog\Handler\StreamHandler(__DIR__ . '/../a3-logs/app.log');
 $logger->pushHandler($file_handler);
 
 // DB init

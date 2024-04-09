@@ -85,7 +85,9 @@ function nacti_soubory($find_string)
  }
  closedir($handle); 
 
- sort($soubor);
+ if(is_array($soubor)){
+  sort($soubor);
+ }
  
  return $soubor;
  
