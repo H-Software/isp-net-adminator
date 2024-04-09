@@ -7,8 +7,6 @@ class auth_service{
     var $smarty;
     var $logger;
 
-    var $user_level;
-
     var $page_level_id; // IDcko, dle ktereho zjistime, jestli user ma dostatecny level
 
     var $page_level_id_custom; // IDcko ala page_level_id ale pro jinou stranku/sub-page
@@ -24,7 +22,7 @@ class auth_service{
         start_ses();
 
         $cl = check_login();
-        $this->logger->addInfo("check_login retval: ".var_export($cl));
+        $this->logger->addInfo("check_login retval: ".var_export($cl, true));
 
         if( $cl[0] == "false" ){ 
             //wrong login ...
@@ -51,11 +49,16 @@ class auth_service{
         // porovnat level uzivatele s prislusnym levelem
         // stranky podle jejiho id
 
-        global $level, $user_level;
+        global $level;
         
-        $this->logger->addInfo("check_level called 
-                                    [page_level_id_custom => " . $page_level_id_custom . ","
-                                    ." page_level_id => " . $this->page_level_id) . "]";
+        $user_level = $level; // for clarification and future usage
+
+        $this->logger->addInfo("check_level: called with
+                                    [page_level_id_custom => " . $page_level_id_custom
+                                    . ", page_level_id => " . $this->page_level_id
+                                    . ", user_level => " . $user_level
+                                    . ", level => " . $level
+                                    . "]");
 
         if(intval($page_level_id_custom) > 0){
             $pl = $page_level_id_custom;
@@ -64,21 +67,16 @@ class auth_service{
             $pl = $this->page_level_id;
         }
 
-        // $rs = check_level($level,$pl);
-        $page_level_rs = $this->find_page_level($level);
-        if( $page_level_rs === false){
-            $rs = false;
+        $page_level_rs = $this->find_page_level($pl);
+        if($user_level >= intval($page_level_rs)){
+            $rs = true; 
         }
         else{
-            if ( $user_level >= $page_level_rs){
-                $rs = true; 
-            }
-            else{
-                $rs = false;
-            }
+            $rs = false;
         }
 
-        $this->logger->addInfo("check_level retval: " . var_export($rs));
+        $this->logger->addInfo("check_level: find_page_level retval: " . var_export($page_level_rs, true));
+        $this->logger->addInfo("check_level: result: " . var_export($rs, true));
 
         if( $rs === false and $display_no_level_page === true) {
             // user nema potrebny level a nechceme pokracovat
@@ -104,14 +102,16 @@ class auth_service{
             die ("<h2 style=\"color: red; \">Check level Failed: Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
+        $this->logger->addInfo("find_page_level: num_rows: " . $radku);
+
         if ($radku==0){ 
             return false; 
         }
 
         while ($data = $dotaz->fetch_array())
-        { $level_stranky = $data["level"]; }
+        { $level_stranky = intval($data["level"]); }
 
-        if( is_int($level_stranky) ){
+        if($level_stranky > 0){
             return $level_stranky;
         }
         else{
