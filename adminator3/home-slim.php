@@ -27,5 +27,8 @@ $app->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
 $app->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
 $app->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
 
+$app->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');
+$app->map(['GET', 'POST'],'/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
+
 // final
 $app->run();

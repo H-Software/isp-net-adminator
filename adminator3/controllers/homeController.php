@@ -36,7 +36,7 @@ class homeController {
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
         // $this->footer();
-        $ac = new adminatorController(null, $this->smarty, $this->logger, $this->auth);
+        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
         $ac->header();
 
         //vlozeni prihlasovaci historie

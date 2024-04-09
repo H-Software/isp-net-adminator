@@ -2,9 +2,9 @@
 
 $cesta = "../";
 
+require($cesta."include/main.function.shared.php");
 require_once ($cesta."include/config.php"); 
 require ($cesta."include/check_login.php");
-
 require ($cesta."include/check_level.php");
 
 if( !( check_level($level,75) ) )
@@ -47,7 +47,8 @@ require ($cesta."include/charset.php");
     <span style="margin-left: 40px; "><a href="partner-servis-add.php" >Servisní zásahy</a></span> 
  	
  </td>
- </tr>
+ </tr>
+
   
   <tr>
   <td colspan="2" >

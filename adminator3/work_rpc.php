@@ -1,6 +1,7 @@
 <?
 
- require("include/config.php");
+require "include/main.function.shared.php";
+require "include/config.php";
 
  $data_s = "/srv/www/htdocs.ssl/reinhard.remote.log";
 

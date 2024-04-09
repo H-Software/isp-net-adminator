@@ -20,7 +20,7 @@ class aboutController {
         $this->auth = $auth;
         $this->app = $app;
         
-        $this->logger->addInfo("homeController\__construct called");
+        $this->logger->addInfo("aboutController\__construct called");
 	}
 
     public function about(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -32,7 +32,7 @@ class aboutController {
 
         $this->smarty->assign("page_title","Adminator3 :: O programu");
 
-        $ac = new adminatorController(null, $this->smarty, $this->logger, $this->auth);
+        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
         $ac->header();
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
@@ -50,7 +50,7 @@ class aboutController {
 
         $this->smarty->assign("page_title","Adminator3 :: O programu :: Staré změny");
 
-        $ac = new adminatorController(null, $this->smarty, $this->logger, $this->auth);
+        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
         $ac->header();
 
         $this->smarty->display('about/about-changes-old.tpl');
@@ -66,7 +66,7 @@ class aboutController {
 
         $this->smarty->assign("page_title","Adminator3 :: O programu :: Změny");
 
-        $ac = new adminatorController(null, $this->smarty, $this->logger, $this->auth);
+        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
         $ac->header();
         
         $this->smarty->display('about/about-changes.tpl');
