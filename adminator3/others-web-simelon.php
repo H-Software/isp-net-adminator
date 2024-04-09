@@ -75,14 +75,18 @@ try {
 }
 
 //tab qestions
-  $dotaz_q = mysql_query("
-		    SELECT id_question, jmeno, prijmeni, telefon, email, vs, dotaz, text, datum_vlozeni
-		    FROM questions ORDER BY id_question
-		    ");
+try {
+	$dotaz_q = $conn_mysql->query("
+	SELECT id_question, jmeno, prijmeni, telefon, email, vs, dotaz, text, datum_vlozeni
+	FROM questions ORDER BY id_question
+	");
+} catch (Exception $e) {
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+}
 
   $pole_q = array();
   
-  while( $data_q = mysql_fetch_array($dotaz_q) )
+  while( $data_q = $dotaz_q->fetch_array() )
   {
     $pole_q[] = array( 
 			"id_question" => $data_q["id_question"], "jmeno" => $data_q["jmeno"], 
@@ -96,16 +100,20 @@ try {
 $smarty->assign("data_q",$pole_q);
 
 //tab orders
-  $dotaz_o = mysql_query("
-		    SELECT id_order, jmeno, prijmeni, adresa, telefon, email,
-			    internet, text_internet, iptv, balicek, text_iptv,
-			    voipcislo, voip, text_voip, poznamka, datum_vlozeni
-		    FROM orders ORDER BY id_order
-		    ");
+try {
+	$dotaz_q = $conn_mysql->query("
+	SELECT id_order, jmeno, prijmeni, adresa, telefon, email,
+		internet, text_internet, iptv, balicek, text_iptv,
+		voipcislo, voip, text_voip, poznamka, datum_vlozeni
+	FROM orders ORDER BY id_order
+	");
+} catch (Exception $e) {
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+}
 
   $pole_o = array();
   
-  while( $data_o = mysql_fetch_array($dotaz_o) )
+  while( $data_o = $dotaz_o->fetch_array() )
   {
     $pole_o[] = array( 
 			"id_order" => $data_o["id_order"], "jmeno" => $data_o["jmeno"], 
@@ -124,9 +132,11 @@ $smarty->assign("data_o",$pole_o);
 //print_r($pole_o);
 
 //zpatky default DB
-$MS=mysql_select_db("adminator2");
-  
+try {
+	$count = $conn_mysql->select_db("adminator2");
+} catch (Exception $e) {
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+}
+
 //finalni zobrazeni stranky
 $smarty->display("others/web-simelon.tpl");
-
-?>
