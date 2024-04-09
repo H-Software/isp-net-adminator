@@ -1,34 +1,5 @@
 <?php
 
-function check_level ($user_level,$id) {
-  // co mame
-  // v promeny level mame level prihlaseneho uzivatele
-  // databazi levelu pro jednotlivy stranky
-
-  // co chceme
-  // porovnat level uzivatele s prislusnym levelem
-  // stranky podle jejiho id
-
-  global $conn_mysql;
-
-  try {
-    $dotaz = $conn_mysql->query("SELECT level FROM leveling WHERE id = '".intval($id)."' ");
-    $radku = $dotaz->num_rows;
-  } catch (Exception $e) {
-    die ("<h2 style=\"color: red; \">Check level Failed: Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-  }
-
-  if ($radku==0)
-  { return false; }
-
-  while ($data = $dotaz->fetch_array())
-  { $level_stranky = $data["level"]; }
-
-  if ( $user_level >= $level_stranky)
-  { return true; }
-
-}
-
 function zobraz_kategorie($uri,$uri_replace)
 {
 

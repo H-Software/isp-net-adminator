@@ -8,7 +8,11 @@ $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-$auth = new auth_service($conn_mysql, $smarty);
+$logger = new \Monolog\Logger('my_logger');
+$file_handler = new \Monolog\Handler\StreamHandler('../a3-logs/app.log');
+$logger->pushHandler($file_handler);
+
+$auth = new auth_service($conn_mysql, $smarty, $logger);
 $auth->page_level_id = "38";
 $auth->check_all();
 
