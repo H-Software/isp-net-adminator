@@ -23,13 +23,16 @@ class opravy
         try {
           $dotaz = $this->conn_mysql->query($sf);
         } catch (Exception $e) {
-            $this->logger->addError("opravy\vypis_opravy mysql_query dotaz failed! Caught exception: " . $e->getMessage());
-            return false;
+            $this->logger->addError('opravy\vypis_opravy mysql_query dotaz failed! Caught exception: ' . $e->getMessage());
+            die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
         $dotaz_radku = $dotaz->num_rows;
 
-        if ( $dotaz_radku == 0){ echo "<tr><td colspan=\"".$pocet_bunek."\" >Žádné opravy v databázi neuloženy. </tr>"; }
+        if ( $dotaz_radku == 0)
+        { 
+          echo "<tr><td colspan=\"".$pocet_bunek."\" >Žádné opravy v databázi neuloženy. </tr>"; 
+        }
         else
         {
 
@@ -58,7 +61,7 @@ class opravy
               $dotaz_radku_S1=$dotaz_S1->num_rows;
             } catch (Exception $e) {
                 $this->logger->addError("opravy\vypis_opravy mysql_query dotaz_S1 failed! Caught exception: " . $e->getMessage());
-                return false;
+                die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
             }
 
             // zde zjistit jestli uz se zobrazilo
@@ -170,7 +173,7 @@ class opravy
 
                 $id_cloveka=$data["id_vlastnika"];
 
-                $vlastnik_dotaz=pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka'");
+                $vlastnik_dotaz=pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($id_cloveka) . "'");
                 $vlastnik_radku=pg_num_rows($vlastnik_dotaz);
 
                 while ($data_vlastnik=pg_fetch_array($vlastnik_dotaz))
@@ -238,6 +241,11 @@ class opravy
           {
 
             // $zobrazene_polozky[]=$id_opravy;
+            // try {
+            //   $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+            // } catch (Exception $e) {
+            //   die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            // }
 
             $dotaz_S2=mysql_query("SELECT * FROM opravy WHERE id_predchozi_opravy = '$id_opravy' ");
             

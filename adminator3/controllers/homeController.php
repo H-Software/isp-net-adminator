@@ -43,9 +43,7 @@ class homeController {
 
         //vlozeni prihlasovaci historie
         list_logged_users_history($this->conn_mysql, $this->smarty);
-
-        $this->opravy_a_zavady();
-
+        
         //informace z modulu neuhrazené faktury
             
         $neuhr_faktury_pole = $a->show_stats_faktury_neuhr();
@@ -59,7 +57,9 @@ class homeController {
         $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
 
         //tady opravy az se dodelaj
-                                                                            
+
+        $this->opravy_a_zavady();
+
         $this->board();
 
         $this->logger->addInfo("homeController\home: end of rendering");
@@ -121,10 +121,13 @@ class homeController {
             
             $this->smarty->assign("action",$_SERVER["PHP_SELF"]);
             
-            $oprava = new opravy;
-
+            $oprava = new opravy($this->conn_mysql, $this->logger);
+         
+            // ob_start();
             $oprava->vypis_opravy();
-            
+            // $content_opravy_a_zavady = ob_get_clean(); 
+            // $this->smarty->assign("content_opravy_a_zavady", $content_opravy_a_zavady);
+
             // $this->smarty->assign("dotaz_radku",$dotaz_radku);
         }
     }

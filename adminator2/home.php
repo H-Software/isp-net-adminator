@@ -41,12 +41,12 @@ list($r, $render) = list_logged_users_history($conn_mysql, $smarty, "fetch");
 echo $render;
 
  // vlozeni vypisu zavad/oprav
- if ( check_level($level,101) )
- {
-   require("opravy-for-home.php"); 
- }
+//  if ( check_level($level,101) )
+//  {
+//    require("opravy-for-home.php"); 
+//  }
  
- echo "<br><br>";
+// echo "<br><br>";
 
  //informace z modulu neuhrazené faktury
  // require("./faktury/fn-for-home.php");
