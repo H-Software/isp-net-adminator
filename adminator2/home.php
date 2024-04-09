@@ -49,15 +49,15 @@ echo $render;
  echo "<br><br>";
 
  //informace z modulu neuhrazené faktury
- require("./faktury/fn-for-home.php");
+ // require("./faktury/fn-for-home.php");
 
  //generovani zprav z nastenky
- if( check_level($level,87) )
- {
+//  if( check_level($level,87) )
+//  {
    // moved to A3
    // require("board-header-for-home.php"); //vložíme hlavičku
    // require("board-main-for-home.php"); // hlavni data, poupravena
- }
+//  }
 
 ?>
 

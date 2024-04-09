@@ -64,9 +64,13 @@ class adminator {
 
          while( $data3=$dotaz_fn3->fetch_array() )
          { $datum_fn3=$data3["datum"]; }
-            
-         $ret[3] = $datum_fn3;
-
+        
+         if(strlen($datum_fn3) > 0){
+            $ret[3] = $datum_fn3;
+         } else{
+            $ret[3] = "Unknown";
+         }
+         
         return $ret;
     }
 }
