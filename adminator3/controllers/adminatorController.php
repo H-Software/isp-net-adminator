@@ -2,9 +2,15 @@
 
 class adminatorController{
 
-    public function __construct($conn_mysql = null, $smarty, $logger, $auth)
+    var $conn_mysql;
+    var $smarty;
+    var $logger;
+    var $auth;
+    var $app;
+    
+    public function __construct($conn_mysql, $smarty, $logger, $auth)
     {
-		// $this->conn_mysql = $conn_mysql;
+		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
         $this->auth = $auth;
@@ -12,7 +18,8 @@ class adminatorController{
         $this->logger->addInfo("adminatorController\__construct called");
 	}
 
-    function header(){
+    function header()
+    {
 
         $this->logger->addDebug("adminatorController\\footer called");
         $this->logger->addDebug("adminatorController\\footer: ".$this->auth->user_nick." (".$this->auth->user_level.")");
@@ -24,7 +31,7 @@ class adminatorController{
         $uri=$_SERVER["REQUEST_URI"];
         $uri_replace = str_replace ("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka, $mapa) = zobraz_kategorie($uri,$uri_replace);
+        list($kategorie, $kat_2radka, $mapa) = $this->zobraz_kategorie($uri,$uri_replace);
 
         $this->smarty->assign("kategorie",$kategorie);
         $this->smarty->assign("kat_2radka",$kat_2radka);
@@ -47,7 +54,7 @@ class adminatorController{
         $this->smarty->assign("se_cat_adminator","adminator2");
         $this->smarty->assign("se_cat_adminator_link",$se_cat_adminator_link);
 
-        $prihl_uziv = vypis_prihlasene_uziv($this->auth->user_nick);
+        $prihl_uziv = $this->vypis_prihlasene_uziv();
 
         if( $prihl_uziv[100] == true ){
             $this->smarty->assign("pocet_prihl_uziv",0);
@@ -72,4 +79,115 @@ class adminatorController{
 
         $this->smarty->assign("subcat_select",0);
     }
+
+    function zobraz_kategorie($uri,$uri_replace)
+    {
+
+        $kategorie = array();
+
+        $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici-cat.php", "align" => "center", "width" => "18%" );
+
+        if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici-cat.php+",$uri) or ereg("^.+vypovedi",$uri) )
+        { $kategorie[0]["barva"] = "silver"; }
+
+        $kategorie[1] = array( "nazev" => "Služby", "url" => fix_link_to_another_adminator("/objekty-subcat.php"), "align" => "center", "width" => "18%" );
+
+        if( ereg("^.+objekty.",$uri) or ereg("^.+objekty-subcat.php",$uri) )
+        { $kategorie[1]["barva"] = "silver"; }
+
+        $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby-cat.php", "align" => "center", "width" => "18%" );
+
+        if( ereg("^.+platby.+$",$uri) )
+        { $kategorie[2]["barva"] = "silver"; }
+
+        $kategorie[3] = array( "nazev" => "Topologie", "url" => fix_link_to_another_adminator("/topology-nod-list.php"), "align" => "center", "width" => "" );
+
+        if( ereg("^.+topology",$uri) )
+        { $kategorie[3]["barva"] = "silver"; }
+
+        $kategorie[4] = array( "nazev" => "Nastavení", "url" => fix_link_to_another_adminator("/admin-subcat.php"), "align" => "center", "width" => "" );
+
+        if( ereg("^.+admin.+$",$uri_replace ) or ereg("^.+admin-subcat.php$",$uri) )
+        {  $kategorie[4]["barva"] = "silver"; }
+
+        $kategorie[5] = array( "nazev" => "Úvodní strana", "url" => "/home", "align" => "center", "width" => "" );
+        
+        if( ereg("^.+home.php$",$uri) )
+        { $kategorie[5]["barva"] = "silver"; }
+
+        $kat_2radka = array();
+
+        $kat_2radka[0] = array( "nazev" => "Partner program", "url" => fix_link_to_another_adminator("/partner.php"), "width" => "", "align" => "center" );
+
+        if( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) )
+        { $kat_2radka[0]["barva"] = "silver"; }
+
+        $kat_2radka[1] = array( "nazev" => "Změny", "url" => "/archiv-zmen-cat.php", "width" => "", "align" => "center" );
+
+        if( ereg("^.+archiv-zmen.+$",$uri) )
+        { $kat_2radka[1]["barva"] = "silver"; }
+
+        $kat_2radka[2] = array( "nazev" => "Work", "url" => "/work.php", "width" => "", "align" => "center" );
+
+        if( ereg("^.+work.+$",$uri) )
+        { $kat_2radka[2]["barva"] = "silver"; }
+
+        $kat_2radka[3] = array( "nazev" => "Ostatní", "url" => "/others-cat.php", "width" => "", "align" => "center" );
+
+        if( ereg("^.+others.+$",$uri) or ereg("^.+syslog.+$",$uri) or ereg("^.+/mail.php$",$uri) or ereg("^.+opravy.+$",$uri) )
+        { $kat_2radka[3]["barva"] = "silver"; }
+
+        $kat_2radka[4] = array( "nazev" => "O programu", "url" => "/about", "width" => "", "align" => "center" );
+
+        if( ereg("^.+about.+$",$uri) )
+        { $kat_2radka[4]["barva"] = "silver"; }
+        
+        $ret = array( $kategorie, $kat_2radka);
+            
+        return $ret;
+    }
+
+    function vypis_prihlasene_uziv()
+    {
+        $ret = array();
+
+        $MSQ_USER2 = $this->conn_mysql->query("SELECT nick, level FROM autorizace");
+        $MSQ_USER_COUNT = $MSQ_USER2->num_rows;
+
+        $ret[0] = $MSQ_USER_COUNT;
+
+        //prvne vypisem prihlaseneho
+        $MSQ_USER_NICK = $this->conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '".$this->conn_mysql->real_escape_string($this->auth->user_nick)."' ");
+
+        if ($MSQ_USER_NICK->num_rows <> 1)
+        {
+            $ret[100] = true;
+            $ret[101] = "Chyba! Vyber nicku nelze provest.";
+        }
+        else
+        {
+            while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
+            {
+            $ret[1] = $data_user_nick["nick"];
+            $ret[2] = $data_user_nick["level"];
+            }
+        } // konec else
+
+        // ted najilejeme prihlaseny lidi ( vsecky ) do pop-up okna
+        if ( $MSQ_USER_COUNT < 1 )
+        { $obsah_pop_okna .= "Nikdo nepřihlášen. (divny)"; }
+        else
+        {
+
+        while ($data_user2 = $MSQ_USER2->fetch_array())
+        {
+            $obsah_pop_okna .= "jméno: ".$data_user2["nick"].", level: ".$data_user2["level"].", ";
+        } //konec while
+
+        $ret[3] = $obsah_pop_okna;
+
+        } // konec if
+
+        return $ret;
+        }
 }
