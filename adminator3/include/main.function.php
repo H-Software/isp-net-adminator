@@ -30,7 +30,7 @@ function zobraz_kategorie($uri,$uri_replace)
   if( ereg("^.+admin.+$",$uri_replace ) or ereg("^.+admin-subcat.php$",$uri) )
   {  $kategorie[4]["barva"] = "silver"; }
 
-  $kategorie[5] = array( "nazev" => "Úvodní strana", "url" => "home.php", "align" => "center", "width" => "" );
+  $kategorie[5] = array( "nazev" => "Úvodní strana", "url" => "/home", "align" => "center", "width" => "" );
  
   if( ereg("^.+home.php$",$uri) )
   { $kategorie[5]["barva"] = "silver"; }

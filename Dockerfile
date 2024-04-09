@@ -85,6 +85,7 @@ RUN cd adminator3 \
     && composer require nette/robot-loader:3.1.4 \
     && composer require smarty/smarty:2.6.33 \
     && composer require slim/slim:3.* \
+    && composer require bryanjhv/slim-session:~3.0 \
     && composer require monolog/monolog:^1.17
 #     # && docker-php-ext-enable xdebug \
 

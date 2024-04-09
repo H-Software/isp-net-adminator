@@ -7,9 +7,17 @@ class auth_service{
     var $smarty;
     var $logger;
 
+    var $user_nick;
+
+    var $user_level;
+
+    var $user_sid;
+
     var $page_level_id; // IDcko, dle ktereho zjistime, jestli user ma dostatecny level
 
     var $page_level_id_custom; // IDcko ala page_level_id ale pro jinou stranku/sub-page
+
+    var $check_auth_no_die;
 
     function __construct($conn_mysql, $smarty, $logger) {
         $this->conn_mysql = $conn_mysql;
@@ -19,12 +27,27 @@ class auth_service{
   
     function check_login(){
 
-        start_ses();
+        list($sid, $level, $nick) = start_ses();
+
+        $this->user_nick = $nick;
+        $this->user_level = $level;
+        $this->user_sid = $sid;
+
+        $this->logger->addInfo("auth\check_login: start_ses: result: "
+            . "[nick => " . $nick
+            . ", level => " . $level
+            . ", sid => " . $sid
+            . "]");
 
         $cl = check_login();
-        $this->logger->addInfo("check_login retval: ".var_export($cl, true));
+        $this->logger->addInfo("auth\check_login retval: ".var_export($cl, true));
 
-        if( $cl[0] == "false" ){ 
+        if($this->check_auth_no_die === true){
+            $this->logger->addWarning("auth\check_login: enabled check_auth_no_die");
+            return true;
+        }
+
+        if( $cl[0] == "false"){ 
             //wrong login ...
         
             $this->smarty->assign("page_title","Adminator3 :: chybný login");
@@ -49,15 +72,10 @@ class auth_service{
         // porovnat level uzivatele s prislusnym levelem
         // stranky podle jejiho id
 
-        global $level;
-        
-        $user_level = $level; // for clarification and future usage
-
-        $this->logger->addInfo("check_level: called with
+        $this->logger->addInfo("auth\check_level: called with
                                     [page_level_id_custom => " . $page_level_id_custom
                                     . ", page_level_id => " . $this->page_level_id
-                                    . ", user_level => " . $user_level
-                                    . ", level => " . $level
+                                    . ", user_level => " . $this->user_level
                                     . "]");
 
         if(intval($page_level_id_custom) > 0){
@@ -71,20 +89,20 @@ class auth_service{
         if($page_level_rs === false or !is_int($page_level_rs)){
             $rs = false;
         }
-        elseif($user_level >= $page_level_rs){
+        elseif($this->user_level >= $page_level_rs){
             $rs = true; 
         }
         else{
             $rs = false;
         }
 
-        $this->logger->addInfo("check_level: find_page_level: pl: " . $pl . ", retval: " . var_export($page_level_rs, true));
-        $this->logger->addInfo("check_level: result: " . var_export($rs, true));
+        $this->logger->addInfo("Auth\check_level: find_page_level: pl: " . $pl . ", retval: " . var_export($page_level_rs, true));
+        $this->logger->addInfo("Auth\check_level: result: " . var_export($rs, true));
 
         if( $rs === false and $display_no_level_page === true) {
             // user nema potrebny level a nechceme pokracovat
             $this->smarty->assign("page_title","Adminator3 - chybny level");
-            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br> (current_level: " . $level . ")");
+            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br> (current_level: " . $this->user_level . ")");
             $this->smarty->display('index-nolevel.tpl');
         
             exit;
@@ -105,7 +123,7 @@ class auth_service{
             die ("<h2 style=\"color: red; \">Check level Failed: Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
-        $this->logger->addInfo("find_page_level: num_rows: " . $radku);
+        $this->logger->addInfo("auth\\find_page_level: num_rows: " . $radku);
 
         if ($radku==0){ 
             return false; 

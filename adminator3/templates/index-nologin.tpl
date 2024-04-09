@@ -9,7 +9,7 @@
 
 <body>
 
-<p><H3>Nelze obnovit přihlášení do Administračního systému sítě Simelon ! </H3></p>
+<p><H3>Nelze obnovit přihlášení do Administračního systému ISP Adminator ! </H3></p>
 
 <p>To může být z několika důvodů:</p>
 

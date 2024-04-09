@@ -5,7 +5,7 @@
 {if $lp_on == 1}
  <meta http-equiv="refresh" content="2;url={$last_page}" >
 {else}
- <meta http-equiv="refresh" content="2;url=home.php">
+ <meta http-equiv="refresh" content="2;url=/home">
 {/if}
  
  <title>{$page_title}</title>
@@ -14,7 +14,7 @@
  
 <body>
  
- <p>Jste bezpečně přihlašováni do administračního systému sítě Simelon ...</p>
+ <p>Jste bezpečně přihlašováni do administračního systému ISP Adminator ...</p>
  <p>
  
  <form name="hours">
@@ -31,7 +31,7 @@
       {if $lp_on == 1}
         <a href="{$last_page}" >sem</a>  
       {else}
-        <a href="home.php" >sem</a>
+        <a href="/home" >sem</a>
       {/if}
     </td>
    </tr>
@@ -44,4 +44,3 @@
  </p>
   					       
 {include file="inc.footer.tpl"}
-					       
