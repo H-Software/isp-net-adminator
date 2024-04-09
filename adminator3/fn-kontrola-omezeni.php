@@ -72,6 +72,8 @@ $smarty->assign("subcat_select",0);
 $pocet_synchro_faktur = $a->synchro_db_nf();
  
 $rs = $a->fn_kontrola_omezeni();
+$dotaz_vlastnici_num = $ret[0];
+$zaznam = $ret[1];
 
  $smarty->assign("nadpis","Kontrola omezení objektu vs. neuhr. fakturám");
 

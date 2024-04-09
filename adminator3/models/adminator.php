@@ -31,7 +31,7 @@ class adminator {
         
         $ret = array();
 
-        try {
+     try {
 			$dotaz_fn = $this->conn_mysql->query("SELECT * FROM faktury_neuhrazene");
             $dotaz_fn_radku = $dotaz_fn->num_rows;
             $ret[0] = $dotaz_fn_radku;
@@ -39,7 +39,7 @@ class adminator {
 			die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 		}
 
-        try {
+    try {
             $dotaz_fn4 = $this->conn_mysql->query("SELECT * FROM faktury_neuhrazene WHERE ( ignorovat = '1' ) order by id");
             $dotaz_fn4_radku = $dotaz_fn4->num_rows;
             $ret[1] = $dotaz_fn4_radku;
@@ -47,7 +47,7 @@ class adminator {
 			die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 		}
 
-        try {
+    try {
             $dotaz_fn2 = $this->conn_mysql->query("SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '0' ");
             $dotaz_fn2_radku = $dotaz_fn2->num_rows;
             $ret[2] = $dotaz_fn2_radku;
@@ -55,7 +55,7 @@ class adminator {
 			die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 		}
 
-        try {
+    try {
             $dotaz_fn3 = $this->conn_mysql->query("SELECT datum,DATE_FORMAT(datum, '%d.%m.%Y %H:%i:%s') as datum FROM fn_import_log order by id");
             $dotaz_fn3_radku = $dotaz_fn3->num_rows;
 		} catch (Exception $e) {
@@ -92,6 +92,10 @@ class adminator {
         } catch (Exception $e) {
           die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
+
+        $this->logger->addInfo("adminator\synchro_db_nf: dotaz_mysql_fn query: "
+                                . "result: ".var_export($vymazani_pg_fn, true)
+                                . " num_rows: ".var_export($dotaz_mysql_fn_radku, true));
 
         while( $data = $dotaz_mysql_fn->fetch_array() )
         {
@@ -131,6 +135,17 @@ class adminator {
 
 
             $res = pg_insert($db_ok2, 'faktury_neuhrazene', $fn_add);
+            if($res === false)
+            {
+              $this->logger->addError("adminator\\synchro_db_nf pg_insert res failed! ".pg_last_error($db_ok2));
+            }
+            else{
+              $res_rows = pg_affected_rows($res);
+              $this->logger->addInfo("adminator\synchro_db_nf: pg_insert res: "
+                                      . " result: ".var_export($res, true)
+                                      . " affected_rows: ".var_export($res_rows, true)
+                                    );
+            }
 
             $pocet_cyklu++;
 
@@ -141,9 +156,11 @@ class adminator {
 
     function fn_kontrola_omezeni()
     {
-        $this->logger->addInfo("adminator\fn_kontrola_omezeni called");
-
+        $ret = array();
+        
         global $db_ok2;
+
+        $this->logger->addInfo("adminator\\fn_kontrola_omezeni called");
 
         $sql_dotaz =
     
@@ -170,10 +187,17 @@ class adminator {
              t2.id_komplu, t2.ip, t2.dov_net, t2.sikana_status, 
                  nf.datsplat, nf.cislo, nf.datum, nf.id, t2.sikana_text";
       
-    
        $dotaz_vlastnici = pg_query($sql_dotaz);
-       $dotaz_vlastnici_num = pg_num_rows($dotaz_vlastnici);
-    
+       if ($dotaz_vlastnici === false){
+          $this->logger->addError("adminator\\fn_kontrola_omezeni pg_query dotaz_vlastnici failed! ".pg_last_error($db_ok2));
+          return $ret;
+       } else{
+          $dotaz_vlastnici_num = pg_num_rows($dotaz_vlastnici);
+          $this->logger->addInfo("adminator\\fn_kontrola_omezeni pg_query dotaz_vlastnici: "
+                                  . " result: ".var_export($dotaz_vlastnici, true)
+                                  . " num_rows: ".var_export($dotaz_vlastnici_num, true));
+       }
+
        $index = 1;   
        while( $data = pg_fetch_array($dotaz_vlastnici))
        { 
@@ -226,6 +250,10 @@ class adminator {
                  if( ($duvod == "sikana") and ($nf_cislo == $cislo_faktury_sikana) )
                  {
                     $platba_dotaz = pg_query("SELECT * FROM platby WHERE ( id_cloveka = '$id_cloveka' AND zaplaceno_za LIKE '$nf_datum2' ) ");
+                    if ($platba_dotaz === false){
+                      $this->logger->addError("adminator\\fn_kontrola_omezeni pg_query platba_dotaz failed! ".pg_last_error($db_ok2));
+                    }
+
                     $platba_dotaz_num = pg_num_rows($platba_dotaz);
     
                     if( $platba_dotaz_num > 0 )
@@ -245,21 +273,22 @@ class adminator {
                   {
                       $zprava .= "<span style=\"color: maroon;\" > nic nedluzi, ale ma omezeni (asi za neco jinyho) </span>";
                   }
-                }
-                else
-                { //nalezeno více faktur
-                  $zprava .= "<span style=\"color: maroon;\" >dluzi vice faktur, neumim zjistit </span>";
-                }
+            }
+            else
+            { //nalezeno více faktur
+              $zprava .= "<span style=\"color: maroon;\" >dluzi vice faktur, neumim zjistit </span>";
+            }
     
-                $zaznam[] = "<b>zaznam c</b>: ".$index.", <b>id_komplu</b>: ".$id_komplu.", <b>id_cloveka</b>: ".$id_cloveka
-                . ",<b>duvod</b>: ".$duvod.", <b>cislo_fa</b>: ".$nf_cislo.", <b>cislo_fa_sikana:</b> ".$cislo_faktury_sikana
-            .". ".$zprava."<br>";
+            $zaznam[] = "<b>zaznam c</b>: ".$index.", <b>id_komplu</b>: ".$id_komplu.", <b>id_cloveka</b>: ".$id_cloveka
+                        . ",<b>duvod</b>: ".$duvod.", <b>cislo_fa</b>: ".$nf_cislo.", <b>cislo_fa_sikana:</b> ".$cislo_faktury_sikana
+                        .". ".$zprava."<br>";
     
             $index++;
        }
-       $ret = array();
-       // TODO: dodelat naplneni pole
        
+       $ret[0] = $dotaz_vlastnici_num;
+       $ret[1] = array($zaznam);
+
        return $ret;
     }
 }
