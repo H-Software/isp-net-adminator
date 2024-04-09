@@ -40,6 +40,8 @@ services:
       - /var/www/html/adminator3/temp:uid=33,gid=33
       # monolog
       - /var/www/html/a3-logs:uid=33,gid=33
+      # adminator print
+      - /var/www/html/adminator3/print/temp:uid=33,gid=33
     ports:
       - "8080:80"
 

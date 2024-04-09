@@ -28,6 +28,9 @@ class homeController {
 
         $this->logger->addInfo("homeController\home called");
 
+        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
+        $a = new adminator($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
+
         if ($request->isPost()) {
             $data = $request->getParsedBody();
             $this->logger->addDebug("homeController\home post data: ".var_export($data, true));    
@@ -36,7 +39,6 @@ class homeController {
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
         // $this->footer();
-        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
         $ac->header();
 
         //vlozeni prihlasovaci historie
@@ -46,7 +48,7 @@ class homeController {
 
         //informace z modulu neuhrazené faktury
             
-        $neuhr_faktury_pole = show_stats_faktury_neuhr();
+        $neuhr_faktury_pole = $a->show_stats_faktury_neuhr();
         $this->logger->addInfo("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
 
         $this->smarty->assign("d",$neuhr_faktury_pole[0]);

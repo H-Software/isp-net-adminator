@@ -1,31 +1,18 @@
 <?php
 
-require_once("../include/config.php");
+require "../include/main.function.shared.php";
+require "../include/config.php";
+require "../include/main.function.php";
 
-require_once ("../include/main.function.php");
+// $smarty = new Smarty;
+// $smarty->compile_check = true;
+//$smarty->debugging = true;
 
-start_ses();
-$cl = check_login();
+$auth = new auth_service($conn_mysql, $smarty, $logger);
+$auth->page_level_id = 146;
+$auth->check_all();
 
-if( $cl[0] == "false" )
-{ //chybny login ...
-
- require("inc.headend.php");
- echo "Adminator3 :: Tisk :: chybný login";
- 
- exit;
-}
-
-
-if( !( check_level($level,146) ) )
-{ // neni level
-
- require("inc.headend.php");
- echo "Adminator3 :: chybny level";
- 
- exit;
-}
-
+// $ac = new adminatorController($conn_mysql, $smarty, $logger, $auth);
 
 $ec = $_POST["ec"];
 
@@ -291,5 +278,3 @@ else
       </html>';
 								    
 } //konec else !isset nazev
-
-?>

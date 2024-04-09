@@ -189,5 +189,5 @@ class adminatorController{
         } // konec if
 
         return $ret;
-        }
+    }
 }

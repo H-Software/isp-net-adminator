@@ -1,9 +1,9 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,21) ) )
 {
@@ -34,7 +34,6 @@ include ("include/charset.php");
 
 <? include ("category.php"); ?> 
 
- 
  <tr>
  <td colspan="2" height="50" bgcolor="silver">
       <? include("admin-subcat2-inc.php"); ?>
@@ -44,13 +43,17 @@ include ("include/charset.php");
   <td colspan="2">
  
   <?
-  
-	$vysledek=mysql_query("select * from leveling order by level asc" );
-        $radku=mysql_num_rows($vysledek);
+  	try {
+        $vysledek = $conn_mysql->query("select * from leveling order by level asc");
+	} catch (Exception $e) {
+		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	}
+
+    $radku=$vysledek->num_rows;
 	
 	if ($radku==0) echo "Zadné levely v db (divny) ";
-	        else
-	        {
+	else
+	{
 	    echo '<br><br>Výpis levelů stránek: <BR><BR>';
 				    
 	    echo '<table border="1" width="100%" >';
@@ -60,7 +63,6 @@ include ("include/charset.php");
 	    <td width=\"30%\"><b>Popis: </b></td>
 	    									    
 	    <td width=\"20%\"><b>Level: </b></td>
-															    
 				    
 	    <td width=\"10%\"><b>Úprava: </b></td>
 	    <td width=\"10%\"><b>Smazání: </b></td>
@@ -68,25 +70,22 @@ include ("include/charset.php");
 							
 	    echo "\n";
 	
-	while ($zaznam=mysql_fetch_array($vysledek)):
+		while ($zaznam=$vysledek->fetch_array()):
+			$id=$zaznam["id"];
+			
+			echo "<tr><td>".$zaznam["id"]."</td>\n";
+			echo "<td>".$zaznam["popis"]."</td>\n";
+			
+			echo "<td>".$zaznam["level"]."</td>\n";
+			
+			echo '<td><form method="POST" action="admin-level-update.php">
+				<input type="hidden" name="update_id" value="'.$id.'">
+			<input type="submit" value="update">
+			</form></td>';							
+			
+			echo "</tr>";
 	
-	$id=$zaznam["id"];
-	
-	 echo "<tr><td>".$zaznam["id"]."</td>\n";
-	  echo "<td>".$zaznam["popis"]."</td>\n";
-	
-	  echo "<td>".$zaznam["level"]."</td>\n";
-	  
-	  
-	    echo '<td><form method="POST" action="admin-level-update.php">
-	        <input type="hidden" name="update_id" value="'.$id.'">
-		<input type="submit" value="update">
-		</form></td>';
-								  
-	  
-	 echo "</tr>";
-	
-	  endwhile;
+	  	endwhile;
     }
 ?>
   

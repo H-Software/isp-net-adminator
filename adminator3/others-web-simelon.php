@@ -101,7 +101,7 @@ $smarty->assign("data_q",$pole_q);
 
 //tab orders
 try {
-	$dotaz_q = $conn_mysql->query("
+	$dotaz_o = $conn_mysql->query("
 	SELECT id_order, jmeno, prijmeni, adresa, telefon, email,
 		internet, text_internet, iptv, balicek, text_iptv,
 		voipcislo, voip, text_voip, poznamka, datum_vlozeni
