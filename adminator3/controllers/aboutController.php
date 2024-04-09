@@ -20,7 +20,7 @@ class aboutController {
         $this->auth = $auth;
         $this->app = $app;
         
-        $this->logger->addInfo("homeController\__construct called");
+        $this->logger->addInfo("aboutController\__construct called");
 	}
 
     public function about(ServerRequestInterface $request, ResponseInterface $response, array $args)

@@ -122,7 +122,7 @@ class adminatorController{
         if( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) )
         { $kat_2radka[0]["barva"] = "silver"; }
 
-        $kat_2radka[1] = array( "nazev" => "Změny", "url" => "/archiv-zmen-cat.php", "width" => "", "align" => "center" );
+        $kat_2radka[1] = array( "nazev" => "Změny", "url" => "/archiv-zmen/cat", "width" => "", "align" => "center" );
 
         if( ereg("^.+archiv-zmen.+$",$uri) )
         { $kat_2radka[1]["barva"] = "silver"; }
