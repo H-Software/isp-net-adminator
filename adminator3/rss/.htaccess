@@ -7,9 +7,5 @@ Deny from All
 
 #allow from all
 Allow From 127.0.0.1
-
-Allow From 10.0.0.0/8 #lokalni ip
-Allow From 192.168.168.0/24 #vpn
-Allow From 212.80.95.176/29 #verejny adresy
-Allow From 212.80.82.0/24       #verejny adresy
-
+Allow from 192.168.0.0/16
+Allow From 10.0.0.0/8
