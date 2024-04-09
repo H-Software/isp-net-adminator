@@ -14,14 +14,14 @@ echo '
      
      <div style="padding-left: 40px; float: left;">A3:
       <span style="margin-left: 100px; ">
-        <a href="/adminator3/fn-kontrola-omezeni.php" >Kontrola omezení obj. vůči neuhr. fakturám</a>
+        <a href="' . fix_link_to_another_adminator("/fn-kontrola-omezeni.php"). '" >Kontrola omezení obj. vůči neuhr. fakturám</a>
       </span>
      </div>
      
      <div>
 
     <span style="padding-left: 20px; ">
-	<img src="/adminator2/img2/pohoda-sql-2.jpg" alt="pohoda sql" border="0" style="padding-top: 2px; padding-bottom: 0px; ">
+	<img src="/img2/pohoda-sql-2.jpg" alt="pohoda sql" border="0" style="padding-top: 2px; padding-bottom: 0px; ">
     </span>
     
       <span style="margin-left: 40px; "><a href="'.$cesta.'pohoda_sql/phd_change_vs.php" > Změna VarSym</a></span>
