@@ -68,7 +68,10 @@ class auth_service{
         }
 
         $page_level_rs = $this->find_page_level($pl);
-        if($user_level >= intval($page_level_rs)){
+        if($page_level_rs === false or !is_int($page_level_rs)){
+            $rs = false;
+        }
+        elseif($user_level >= $page_level_rs){
             $rs = true; 
         }
         else{

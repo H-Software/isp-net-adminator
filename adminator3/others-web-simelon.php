@@ -1,45 +1,16 @@
 <?php
 
-require 'smarty/Smarty.class.php';
-
+require "include/main.function.shared.php";
 require "include/config.php";
 require "include/main.function.php";
 
-require "include/main.classes.php";
-
 $smarty = new Smarty;
-
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-start_ses();
-$cl = check_login();
-
-if( $cl[0] == "false" )
-{ //chybny login ...
-   
- $smarty->assign("page_title","Adminator3 :: chybný login");
- $smarty->assign("body",$cl[1]);
-
- $last_page = last_page();
- $smarty->assign("last_page",$last_page);
-   
- $smarty->display('index-nologin.tpl');
-
- exit;
-}
-
-
-if( !( check_level($level,151) ) )
-{ // neni level
- 
- $smarty->assign("page_title","Adminator3 :: chybny level");
- $smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-
- $smarty->display('index-nolevel.tpl');
-
- exit;
-}
+$auth = new auth_service($conn_mysql, $smarty, $logger);
+$auth->page_level_id = 151;
+$auth->check_all();
 
 $smarty->assign("page_title","Adminator3 :: Ostatní :: Web Simelon");
 
@@ -147,7 +118,7 @@ $smarty->assign("data_o",$pole_o);
 
 //print_r($pole_o);
 
-//zpatny default DB
+//zpatky default DB
 $MS=mysql_select_db("adminator2");
   
 //finalni zobrazeni stranky

@@ -10,7 +10,7 @@ function zobraz_kategorie($uri,$uri_replace)
   if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici-cat.php+",$uri) or ereg("^.+vypovedi",$uri) )
   { $kategorie[0]["barva"] = "silver"; }
 
-  $kategorie[1] = array( "nazev" => "Služby", "url" => "/adminator2/objekty-subcat.php", "align" => "center", "width" => "18%" );
+  $kategorie[1] = array( "nazev" => "Služby", "url" => fix_link_to_another_adminator("/objekty-subcat.php"), "align" => "center", "width" => "18%" );
 
   if( ereg("^.+objekty.",$uri) or ereg("^.+objekty-subcat.php",$uri) )
   { $kategorie[1]["barva"] = "silver"; }
@@ -20,12 +20,12 @@ function zobraz_kategorie($uri,$uri_replace)
   if( ereg("^.+platby.+$",$uri) )
   { $kategorie[2]["barva"] = "silver"; }
 
-  $kategorie[3] = array( "nazev" => "Topologie", "url" => "/adminator2/topology-nod-list.php", "align" => "center", "width" => "" );
+  $kategorie[3] = array( "nazev" => "Topologie", "url" => fix_link_to_another_adminator("/topology-nod-list.php"), "align" => "center", "width" => "" );
 
   if( ereg("^.+topology",$uri) )
   { $kategorie[3]["barva"] = "silver"; }
 
-  $kategorie[4] = array( "nazev" => "Nastavení", "url" => "/adminator2/admin-subcat.php", "align" => "center", "width" => "" );
+  $kategorie[4] = array( "nazev" => "Nastavení", "url" => fix_link_to_another_adminator("/admin-subcat.php"), "align" => "center", "width" => "" );
 
   if( ereg("^.+admin.+$",$uri_replace ) or ereg("^.+admin-subcat.php$",$uri) )
   {  $kategorie[4]["barva"] = "silver"; }
@@ -37,7 +37,7 @@ function zobraz_kategorie($uri,$uri_replace)
 
   $kat_2radka = array();
 
-  $kat_2radka[0] = array( "nazev" => "Partner program", "url" => "/adminator2/partner.php", "width" => "", "align" => "center" );
+  $kat_2radka[0] = array( "nazev" => "Partner program", "url" => fix_link_to_another_adminator("/partner.php"), "width" => "", "align" => "center" );
 
   if( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) )
   { $kat_2radka[0]["barva"] = "silver"; }
