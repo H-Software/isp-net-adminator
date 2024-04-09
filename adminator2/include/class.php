@@ -1233,7 +1233,7 @@ class vlastnik2
 		echo "<a href=\"http://app01.cho01.iptv.grapesc.cz:9080/admin/admin/provisioning/".
 		        "subscriber-search.html?type=SUBSCRIBER_CODE&subscriptionNewState=&subscriptionStbAccountState=".
 		    	"&localityId=&offerId=&submit=OK&searchText=".urlencode($iptv_prefix_name.$data["prijmeni"])."\" target=\"_new\" >".
-			"<img src=\"/adminator2/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >".
+			"<img src=\"/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >".
 		    "</a>";
 	    echo "</div>";
 	    
@@ -3035,7 +3035,7 @@ class stb
 		    
 		    echo "<div style=\"float: left;\" >".
 			    "<a href=\"".$p_link1."\" target=\"_new\" >".
-		   		"<img src=\"https://trinity.simelon.net/adminator2/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >".
+		   		"<img src=\"/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >".
 			    "</a>".
 			  "</div>";
 		    
