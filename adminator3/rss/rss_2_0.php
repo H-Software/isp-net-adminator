@@ -5,7 +5,7 @@ require "../include/config.php";
 require "../include/main.function.php";
 
 //prvne pokus o autorizaci
-$rss = new rss($conn_mysql);
+$rss = new rss($conn_mysql, $logger);
 
 $rs_check_login = $rss->check_login_rss($_GET["sid"]);
 

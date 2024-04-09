@@ -18,8 +18,11 @@ class rss
 
     var $conn_mysql;
 
-    function __construct($conn_mysql) {
+    var $logger;
+
+    function __construct($conn_mysql, $logger) {
         $this->conn_mysql = $conn_mysql;
+        $this->logger = $logger;
     }
     
     function check_login_rss($get_sid)
@@ -32,23 +35,28 @@ class rss
         }
         else
         {
-        $pocet_vysl = 0;
-        
-        $MSQ_S = mysql_query("SELECT * FROM users");
-        
-        while( $data = mysql_fetch_array($MSQ_S) )
-        {
-            $login = $data["login"];
-            $login_crypt = md5($login);
+            $pocet_vysl = 0;
             
-            if( $login_crypt == $get_sid)
-            { $pocet_vysl++; }
-        }
+            try {
+                $MSQ_S = $this->conn_mysql->query("SELECT * FROM users");
+            } catch (Exception $e) {
+                $this->logger->addError("rss\check_login_rss mysql_query MSQ_S failed! Caught exception: " . $e->getMessage());
+                return false;
+            }
 
-        if( $pocet_vysl == 1 )
-        { return true; } 
-        else
-        { return false; }
+            while( $data = $MSQ_S->fetch_array() )
+            {
+                $login = $data["login"];
+                $login_crypt = md5($login);
+                
+                if( $login_crypt == $get_sid)
+                { $pocet_vysl++; }
+            }
+
+            if( $pocet_vysl == 1 )
+            { return true; } 
+            else
+            { return false; }
         }
         
     } //konec funkce check_login_rss
@@ -57,15 +65,21 @@ class rss
     function exportRSS()
     {
         $this->putHeader();
-        $q = mysql_query("SELECT * FROM board ORDER BY id DESC LIMIT 0,50");
 
-        while ($row=mysql_fetch_object($q)) 
-        $this->putItem($row);
+        try {
+            $q = $this->conn_mysql->query("SELECT * FROM board ORDER BY id DESC LIMIT 0,50");
+        } catch (Exception $e) {
+            $this->logger->addError("rss\exportRSS mysql_query q failed! Caught exception: " . $e->getMessage());
+            return false;
+        }
+
+        while ($row=$q->fetch_object()) 
+            $this->putItem($row);
 
         $this->putEnd();
     }
 
-        // hlavička
+    // hlavička
     function putHeader()
     {
         // nastavení typu aplikace XML
