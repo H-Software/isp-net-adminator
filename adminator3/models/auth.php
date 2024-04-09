@@ -17,6 +17,8 @@ class auth_service{
 
     var $page_level_id_custom; // IDcko ala page_level_id ale pro jinou stranku/sub-page
 
+    var $check_login_no_die;
+
     function __construct($conn_mysql, $smarty, $logger) {
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
@@ -34,7 +36,12 @@ class auth_service{
         $cl = check_login();
         $this->logger->addInfo("check_login retval: ".var_export($cl, true));
 
-        if( $cl[0] == "false" ){ 
+        if($this->check_login_no_die === true){
+            $this->logger->addWarning("check_login: enabled check_login_no_die");
+            return true;
+        }
+
+        if( $cl[0] == "false"){ 
             //wrong login ...
         
             $this->smarty->assign("page_title","Adminator3 :: chybný login");

@@ -31,7 +31,7 @@
       {if $lp_on == 1}
         <a href="{$last_page}" >sem</a>  
       {else}
-        <a href="home.php" >sem</a>
+        <a href="/home" >sem</a>
       {/if}
     </td>
    </tr>
