@@ -11,10 +11,10 @@ $id_vlastnika=$_GET["id_vlastnika"];
 $vypovedni_lhuta=$_GET["vypovedni_lhuta"];
 $uhrazeni_vypovedni_lhuty=$_GET["uhrazeni_vypovedni_lhuty"];
 
-include ("include/config.php");
-include ("include/config.pg.php");
+require_once ("include/main.function.shared.php");
+require_once ("include/config.php");
 
-$dotaz_klient=pg_query("SELECT * from vlastnici WHERE id_cloveka LIKE '$id_vlastnika' ");
+$dotaz_klient=pg_query("SELECT * from vlastnici WHERE id_cloveka = '" . intval($id_vlastnika) . "' ");
 
 while ($data=pg_fetch_array($dotaz_klient) ):
 

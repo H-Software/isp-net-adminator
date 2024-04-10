@@ -6,6 +6,8 @@ require_once ("include/class.php");
 require("include/check_login.php");
 require("include/check_level.php");
 
+require("include/c_listing-vlastnici.php");
+
 if( !( check_level($level,13) ) )
 {
  // neni level
@@ -280,7 +282,7 @@ else
       $select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
       
       $select2=" OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
-      $select2 .= "OR vs LIKE '$sql' OR id_cloveka LIKE '$sql' OR k_platbe LIKE '$sql' ) ";
+      $select2 .= "OR vs LIKE '$sql') ";
 
       if ( $_GET["select"] == 2){ $select3=" AND fakturacni > 0 "; }
       if ( $_GET["select"] == 3){ $select3=" AND fakturacni is NULL "; }
@@ -304,12 +306,10 @@ else
 						  
   }
   elseif ( $co ==3)
-  {  $dotaz_source= "SELECT * FROM vlastnici WHERE id_cloveka LIKE '$sql' AND firma is null AND ( archiv = 0 or archiv is null )"; }
+  {  $dotaz_source= "SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($sql) ."' AND firma is null AND ( archiv = 0 or archiv is null )"; }
   else  
   { echo "<div style=\"padding-top: 20px; padding-bottom: 20px; \">Zadejte výraz k vyhledání.... </div>"; exit; }
 										      
-    
-    include("include/c_listing-vlastnici.php");
      
     global $list;
        
@@ -318,7 +318,7 @@ else
     $poradek="find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
     
     //vytvoreni objektu
-    $listovani = new c_Listing("./vlastnici.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+    $listovani = new c_listing_vlastnici("./vlastnici.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
        
    if (($list == "")||($list == "1")){ $bude_chybet = 0; }
    else{ $bude_chybet = (($list-1) * $listovani->interval); }
