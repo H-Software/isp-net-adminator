@@ -1638,11 +1638,8 @@ class vlastnikarchiv
     function vypis ($sql,$co,$dotaz_final)
     {
 					
-			
     // co - co hledat, 1- podle dns, 2-podle ip
-					    
-
-										    
+						    
     $dotaz=pg_query($dotaz_final);
 
     $radku=pg_num_rows($dotaz);

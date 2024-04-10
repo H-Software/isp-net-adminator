@@ -2,8 +2,7 @@
 version: "3.8"
 
 volumes:
-#  esdata01:
-#    driver: local
+  adminator-php-log:
   grafana-storage:
   mysql-data:
   postgres-data:
@@ -33,6 +32,8 @@ services:
       - POSTGRES_USER=adminator
       - POSTGRES_PASSWD=isp-net-passwd
       - POSTGRES_DB=adminator.new
+    volumes:
+      - adminator-php-log:/var/log/php:uid=33,gid=33
     tmpfs:
       # for smarty
       - /var/www/html/adminator2/templates_c:uid=33,gid=33
