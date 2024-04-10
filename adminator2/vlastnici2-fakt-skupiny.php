@@ -1,9 +1,10 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require_once ("include/class.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,99) ) )
 {
@@ -47,9 +48,13 @@ include ("include/charset.php");
   
   <?php
 
-  $dotaz=mysql_query("SELECT * FROM fakturacni_skupiny order by nazev DESC ");
-  $dotaz_radku=mysql_num_rows($dotaz);	
-  
+	try {
+		$dotaz = $conn_mysql->query("SELECT * FROM fakturacni_skupiny order by nazev DESC ");
+		$dotaz_radku = $dotaz->num_rows;
+	} catch (Exception $e) {
+		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	}
+
   $styl_v_okraje = "border-right: dashed 1px gray; ";
   
   echo '<table border="0" width="" >
@@ -156,111 +161,109 @@ include ("include/charset.php");
     { echo "<tr><td>Žádné údaje v databázi </td></tr>"; }
     else
     {
-      while( $data=mysql_fetch_array($dotaz) )
+      while( $data=$dotaz->fetch_array() )
       {
       
-       //prvni radek
-       echo "<tr>";
+		//prvni radek
+		echo "<tr>";
     
-	echo "<td class=\"fakturacni-skupiny\" >".$data["id"]."</td>";
-	echo "<td class=\"fakturacni-skupiny\" >".$data["nazev"]."</td>";
-	
-	echo "<td width=\"50px\" class=\"fakturacni-skupiny\" >";
+		echo "<td class=\"fakturacni-skupiny\" >".$data["id"]."</td>";
+		echo "<td class=\"fakturacni-skupiny\" >".$data["nazev"]."</td>";
+		
+		echo "<td width=\"50px\" class=\"fakturacni-skupiny\" >";
 	    if ( $data["typ"] == 1 )echo "DÚ";
 	    elseif( $data["typ"] == 2 ) echo "FÚ";
 	    else echo "N/A";
-	echo "</td>";
-	
-	echo "<td align=\"center\" class=\"fakturacni-skupiny\" ";
-	    if ( $data["typ_sluzby"] == 0 )echo " bgcolor=\"#99FF99\" >wifi";
-	    elseif( $data["typ_sluzby"] == 1 ) echo " bgcolor=\"#fbbc86\" >optika";
-	    else echo " >N/A";
-	echo "</td>";
-
-	echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
-	    <td>&nbsp;</td>";
-
-	echo "<td class=\"fakturacni-skupiny\">";
-	    if ( $data["sluzba_int"] == 1 )
-	    { echo "<span style=\"color: green; font-weight: bold; \" >Ano</span>"; }
-	    elseif( $data["sluzba_int"] == 0 )
-	    { echo "<span style=\"color: #CC6666; \" >Ne</span>"; }
-	    else echo "N/A";
-	echo "</td>";
-
-	echo "<td class=\"fakturacni-skupiny\">";
-	    if( $data["sluzba_iptv"] == 1 )
-	      { echo "<span style=\"color: green; font-weight: bold; \" >Ano</span>"; }
-	    elseif( $data["sluzba_iptv"] == 0 )
-	      { echo "<span style=\"color: #CC6666; \" >Ne</span>"; }
-	    else echo "N/A";
-	echo "</td>";
-
-	echo "<td class=\"fakturacni-skupiny\" >";
-	    if( $data["sluzba_voip"] == 1 )
-	      { echo "<span style=\"color: green; font-weight: bold; \" >Ano</span>"; }
-	    elseif( $data["sluzba_voip"] == 0 )
-	      { echo "<span style=\"color: #CC6666; \" >Ne</span>"; }
-	    else echo "N/A";
-	echo "</td>";
-
-	//vert. okraj
-        echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
-	    <td>&nbsp;</td>";
-
-	echo "<td class=\"fakturacni-skupiny\" >
-		<a href=\"vlastnici2-fs-update.php?update_id=".$data["id"]."\" >upravit</a>
-	      </td>";
+		echo "</td>";
 		
-	echo "<td class=\"fakturacni-skupiny\" >
-		<a href=\"vlastnici2-fs-erase.php?erase_id=".$data["id"]."\" >smazat</a>
-	      </td>";
+		echo "<td align=\"center\" class=\"fakturacni-skupiny\" ";
+			if ( $data["typ_sluzby"] == 0 )echo " bgcolor=\"#99FF99\" >wifi";
+			elseif( $data["typ_sluzby"] == 1 ) echo " bgcolor=\"#fbbc86\" >optika";
+			else echo " >N/A";
+		echo "</td>";
 
-	echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
-	    <td>&nbsp;</td>";
-	
-      echo "</tr>";
+		echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
+			<td>&nbsp;</td>";
+
+		echo "<td class=\"fakturacni-skupiny\">";
+			if ( $data["sluzba_int"] == 1 )
+			{ echo "<span style=\"color: green; font-weight: bold; \" >Ano</span>"; }
+			elseif( $data["sluzba_int"] == 0 )
+			{ echo "<span style=\"color: #CC6666; \" >Ne</span>"; }
+			else echo "N/A";
+		echo "</td>";
+
+		echo "<td class=\"fakturacni-skupiny\">";
+			if( $data["sluzba_iptv"] == 1 )
+			{ echo "<span style=\"color: green; font-weight: bold; \" >Ano</span>"; }
+			elseif( $data["sluzba_iptv"] == 0 )
+			{ echo "<span style=\"color: #CC6666; \" >Ne</span>"; }
+			else echo "N/A";
+		echo "</td>";
+
+		echo "<td class=\"fakturacni-skupiny\" >";
+			if( $data["sluzba_voip"] == 1 )
+			{ echo "<span style=\"color: green; font-weight: bold; \" >Ano</span>"; }
+			elseif( $data["sluzba_voip"] == 0 )
+			{ echo "<span style=\"color: #CC6666; \" >Ne</span>"; }
+			else echo "N/A";
+		echo "</td>";
+
+		//vert. okraj
+        echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
+	    	<td>&nbsp;</td>";
+
+		echo "<td class=\"fakturacni-skupiny\" >
+			<a href=\"vlastnici2-fs-update.php?update_id=".$data["id"]."\" >upravit</a>
+			</td>";
+			
+		echo "<td class=\"fakturacni-skupiny\" >
+			<a href=\"vlastnici2-fs-erase.php?erase_id=".$data["id"]."\" >smazat</a>
+			</td>";
+
+		echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
+			<td>&nbsp;</td>";
+		
+		echo "</tr>";
     
-      //druhej radek
+		//druhej radek
+		
+		//zjisteni poctu lidi ve skupine
+		
+		$dotaz_obj_fs = pg_query("SELECT id_cloveka FROM vlastnici WHERE fakturacni_skupina_id = '".$data["id"]."'");
+		$dotaz_obj_fs_rows = pg_num_rows($dotaz_obj_fs);
       
-      //zjisteni poctu lidi ve skupine
-      
-      $dotaz_obj_fs = pg_query("SELECT id_cloveka FROM vlastnici WHERE fakturacni_skupina_id = '".$data["id"]."'");
-      $dotaz_obj_fs_rows = pg_num_rows($dotaz_obj_fs);
-      
-      //vypis
-      echo "<tr>";
-        echo "<td><span style=\"color: grey;\" >".$dotaz_obj_fs_rows."</span></td>";
-	
-	echo "<td colspan=\"3\" ><span style=\"color: grey; \" >".$data["fakturacni_text"]."</span></td>";
-	
-	echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
-	    <td>&nbsp;</td>";
+		//vypis
+		echo "<tr>";
+		echo "<td><span style=\"color: grey;\" >".$dotaz_obj_fs_rows."</span></td>";
+		
+		echo "<td colspan=\"3\" ><span style=\"color: grey; \" >".$data["fakturacni_text"]."</span></td>";
+		
+		echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
+			<td>&nbsp;</td>";
 
-	echo "<td><span style=\"color: grey; \" >".$data["sluzba_int_id_tarifu"]."</span></td>";
-	echo "<td><span style=\"color: grey; \" >".$data["sluzba_iptv_id_tarifu"]."</span></td>";
+		echo "<td><span style=\"color: grey; \" >".$data["sluzba_int_id_tarifu"]."</span></td>";
+		echo "<td><span style=\"color: grey; \" >".$data["sluzba_iptv_id_tarifu"]."</span></td>";
+		
+		echo "<td>&nbsp;</td>";
 	
-	echo "<td>&nbsp;</td>";
-	
-	//vert. okraj
+		//vert. okraj
         echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
 	    <td>&nbsp;</td>";
 	
-	echo "<td colspan=\"2\" >&nbsp;</td>";
-	
-	echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
-	    <td>&nbsp;</td>";
+		echo "<td colspan=\"2\" >&nbsp;</td>";
+		
+		echo "<td><span style=\"".$styl_v_okraje."\" >&nbsp;</span></td>
+			<td>&nbsp;</td>";
 			
-      echo "</tr>";
+      	echo "</tr>";
        
      } // konec while
 
     } // konec else - if dotaz_radku == 0
     	
   echo "</table>";
-    
-//  }
-  
+      
   ?>
     
     <!-- konec vlastniho obsahu -->

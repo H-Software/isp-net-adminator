@@ -43,6 +43,8 @@ services:
       - /var/www/html/a3-logs:uid=33,gid=33
       # adminator print
       - /var/www/html/adminator3/print/temp:uid=33,gid=33
+      # adminator export xls
+      - /var/www/html/adminator2/export:uid=33,gid=33
     ports:
       - "8080:80"
 
