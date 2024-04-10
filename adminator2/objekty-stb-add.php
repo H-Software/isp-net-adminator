@@ -1,9 +1,10 @@
 <?php
 
-require_once("include/config.php"); 
-require_once("include/check_login.php");
-
-require_once("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
+require("include/class.php"); 
 
 if( !( check_level($level,136) ) ) 
 {
@@ -41,9 +42,6 @@ if( !( check_level($level,136) ) )
 
 <?php
  
- //hlavni soubor se tridama ...
- require_once("include/class.php");
-
  $update_id = $_POST["update_id"];
 
  global $odeslano;
@@ -69,15 +67,18 @@ if( !( check_level($level,136) ) )
  if( ( $update_status==1 and !( isset($send) ) ) )
  { 
   //rezim upravy
-  
-  $dotaz_upd = mysql_query("SELECT * FROM objekty_stb WHERE id_stb = '".intval($update_id)."' ");
-  $radku_upd = mysql_num_rows($dotaz_upd);
- 
+  try {
+    $dotaz_upd = $conn_mysql->query("SELECT * FROM objekty_stb WHERE id_stb = '".intval($update_id)."' ");
+    $radku_upd = $dotaz_upd->num_rows;
+  } catch (Exception $e) {
+    die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+  }
+   
   if( $radku_upd == 0 )
   { echo "<div style=\"color: red; \" >Chyba! Požadovaná data nelze načíst! </div>"; }
   else
   {
-    while( $data=mysql_fetch_array($dotaz_upd) ):
+    while( $data=$dotaz_upd->fetch_array() ):
     
      // primy promenny
      $popis = $data["popis"];	
@@ -136,9 +137,9 @@ if( !( check_level($level,136) ) )
  {
 
    //zjisti jestli neni duplicitni dns, ip adresa, mac ...
-   $MSQ_POPIS = mysql_query("SELECT * FROM objekty_stb WHERE popis LIKE '$popis' ");
-   $MSQ_IP = mysql_query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '$ip' ");
-   $MSQ_MAC = mysql_query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '$mac' ");
+   $MSQ_POPIS = $conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '$popis' ");
+   $MSQ_IP = $conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '$ip' ");
+   $MSQ_MAC = $conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '$mac' ");
     
    if( mysql_num_rows($MSQ_POPIS) > 0 )
    { 
@@ -214,33 +215,33 @@ if( !( check_level($level,136) ) )
      { 
        while ($data4=mysql_fetch_array($vysl4) ):
 	
-	$pole_puvodni_data["id_stb"]=$data4["id_stb"];		
-	
-	$pole_puvodni_data["mac_adresa"] = $data4["mac_adresa"];		
-	$pole_puvodni_data["ip_adresa"] = $data4["ip_adresa"];
-	$pole_puvodni_data["puk"] = $data4["puk"];		
-	$pole_puvodni_data["popis"] = $data4["popis"];		
-	$pole_puvodni_data["id_nodu"] = $data4["id_nodu"];		
-	$pole_puvodni_data["sw_port"] = $data4["sw_port"];
-	$pole_puvodni_data["pozn"] = $data4["pozn"];		
-	$pole_puvodni_data["upravil_kdo"] = $data4["upravil_kdo"];		
-	
-	$pole_puvodni_data["id_tarifu"] = $data4["id_tarifu"];		
+        $pole_puvodni_data["id_stb"]=$data4["id_stb"];		
+        
+        $pole_puvodni_data["mac_adresa"] = $data4["mac_adresa"];		
+        $pole_puvodni_data["ip_adresa"] = $data4["ip_adresa"];
+        $pole_puvodni_data["puk"] = $data4["puk"];		
+        $pole_puvodni_data["popis"] = $data4["popis"];		
+        $pole_puvodni_data["id_nodu"] = $data4["id_nodu"];		
+        $pole_puvodni_data["sw_port"] = $data4["sw_port"];
+        $pole_puvodni_data["pozn"] = $data4["pozn"];		
+        $pole_puvodni_data["upravil_kdo"] = $data4["upravil_kdo"];		
+        
+        $pole_puvodni_data["id_tarifu"] = $data4["id_tarifu"];		
 	
        endwhile;
      } // konec else if radku <> 1
   
       //pridavani do pole pro porovnavani z archivu zmen...
-      	$obj_upd["mac_adresa"] = $mac;		
-	$obj_upd["ip_adresa"] = $ip;
-	$obj_upd["puk"] = $puk;		
-	$obj_upd["popis"] = $popis;		
-	$obj_upd["id_nodu"] = $id_nodu;		
-	$obj_upd["sw_port"] = $port_id;
-	$obj_upd["pozn"] = $pozn;		
-	$obj_upd["upravil_kdo"] = $nick;		
+      $obj_upd["mac_adresa"] = $mac;		
+      $obj_upd["ip_adresa"] = $ip;
+      $obj_upd["puk"] = $puk;		
+      $obj_upd["popis"] = $popis;		
+      $obj_upd["id_nodu"] = $id_nodu;		
+      $obj_upd["sw_port"] = $port_id;
+      $obj_upd["pozn"] = $pozn;		
+      $obj_upd["upravil_kdo"] = $nick;		
 
-	$obj_upd["id_tarifu"] = $id_tarifu;		
+      $obj_upd["id_tarifu"] = $id_tarifu;		
 
       $res = mysql_query("UPDATE objekty_stb SET mac_adresa = '$mac', ip_adresa = '$ip',
     			    puk = '$puk', popis = '$popis', id_nodu = '$id_nodu', sw_port = '$port_id',

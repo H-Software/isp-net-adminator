@@ -49,8 +49,12 @@
 	$sql_nod .= " OR ip_rozsah LIKE '%$nod_find%' OR adresa LIKE '%$nod_find%' ";
 	$sql_nod .= " OR pozn LIKE '%$nod_find%' ) AND ( typ_nodu = '2' ) ORDER BY jmeno ASC ";
 	
-       $vysledek=mysql_query($sql_nod);
-       $radku=mysql_num_rows($vysledek);
+	   try {
+		$vysledek = $conn_mysql->query($sql_nod);
+		$radku = $vysledek->num_rows;
+	   } catch (Exception $e) {
+		  die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	   }
 
        print '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
 
@@ -64,12 +68,12 @@
           if( (!isset($selected_nod)) ){ echo "selected"; }
          echo ' > Není vybráno</option>';
 
-          while ($zaznam2=mysql_fetch_array($vysledek) )
-	  {
-            echo '<option value="'.$zaznam2["id"].'"';
-              if ( ( $selected_nod == $zaznam2["id"]) ){ echo " selected "; }
-            echo '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
-	  } //konec while
+          while ($zaznam2=$vysledek->fetch_array() )
+		  {
+			echo '<option value="'.$zaznam2["id"].'"';
+			if ( ( $selected_nod == $zaznam2["id"]) ){ echo " selected "; }
+			echo '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
+		  } //konec while
         } //konec else
         
 	print '</select>';
@@ -105,9 +109,13 @@
 
      //echo "<option value=\"\" class=\"select-nevybrano\" >Nevybráno</option>";
     
-     $dotaz_t2 = mysql_query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ORDER BY gen_poradi ");
+	 try {
+		$dotaz_t2 = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ORDER BY gen_poradi ");
+	 } catch (Exception $e) {
+		  die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	 }
     
-     while( $data_t2 = mysql_fetch_array($dotaz_t2) )
+     while( $data_t2 = $dotaz_t2->fetch_array() )
      { 
       echo "<option value=\"".$data_t2["id_tarifu"]."\" ";
              
@@ -282,17 +290,21 @@
 	<?php
 	    echo "<option value=\"0\" style=\"color: grey;\">Nevybráno</option>";
 
-	    $dotaz_a_vlan = mysql_query("SELECT jmeno, vlan_id FROM nod_list WHERE typ_nodu = '2' ORDER BY vlan_id ");
+		try {
+			$dotaz_a_vlan = $conn_mysql->query("SELECT jmeno, vlan_id FROM nod_list WHERE typ_nodu = '2' ORDER BY vlan_id ");
+		} catch (Exception $e) {
+			  die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		}
 
-    	    while( $data_vlan = mysql_fetch_array($dotaz_a_vlan) )
-    	    {	 
+		while( $data_vlan = $dotaz_a_vlan->fetch_array() )
+		{	 
     		echo "<option value=\"".$data_vlan["vlan_id"]."\" ";
 
     		if( $another_vlan_id == $data_vlan["vlan_id"] ){ echo " SELECTED "; }
 		
-		echo " >".$data_vlan["jmeno"];
-		echo " ( vlan_id: ".$data_vlan["vlan_id"]." )		
-		    </option>";
+			echo " >".$data_vlan["jmeno"];
+			echo " ( vlan_id: ".$data_vlan["vlan_id"]." )		
+				</option>";
 	    }
 	    
     /*

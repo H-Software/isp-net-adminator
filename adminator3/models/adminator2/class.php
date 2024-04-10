@@ -2124,7 +2124,7 @@ class objektypridani {
 	  
 	    $sql_src .= " ORDER BY public_ip_to_use.ip_address ASC ";
 		// try {
-		// 	$vysl_ip = $conn_mysql->query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($selected_nod)."' ");
+		// 	$ = $conn_mysql->query();
 		//  } catch (Exception $e) {
 		// 	die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 		//  }
@@ -2731,7 +2731,8 @@ class vlastnikfind
 
 class stb
 {
-   
+ var $conn_mysql;
+
  var $find_id_nodu;		//promenne pro hledani
  var $find_search_string;
  var $find_var_vlastnik;
@@ -2754,6 +2755,10 @@ class stb
     
  var $id_cloveka; 		//pokud se vypisou STB dle ic_cloveka //u vlastniku//, tak zde prislusny clovek
  
+ function __construct($conn_mysql) {
+	$this->conn_mysql = $conn_mysql;
+ }
+
  function generujdata()
  {
    
@@ -3188,8 +3193,11 @@ class stb
        $sql = "SELECT nod_list.id, nod_list.jmeno FROM nod_list, objekty_stb ".
     		" WHERE ( (nod_list.id = objekty_stb.id_nodu) AND (nod_list.typ_nodu = 2) ) ".
     		" group by nod_list.id";
-       
-       $rs = mysql_query($sql);
+		try {
+			$rs = $this->conn_mysql->query($sql);
+		} catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		}
        
        if(!$rs){    
     	    
@@ -3199,17 +3207,17 @@ class stb
     	    return $ret;
        }
        
-       $rs_num = mysql_num_rows($rs);
+       $rs_num = $rs->num_rows;
         
        if( $rs_num == 0){
     
     	    $text = htmlspecialchars("Žádné nody nenalezeny");
-	    $ret["error"] = array("1" => $text);
+	    	$ret["error"] = array("1" => $text);
     	    
     	    return $ret;
        }
        
-       while( $data = mysql_fetch_array($rs)){
+       while( $data = $rs->fetch_array()){
     	    
     	    $id = intval($data["id"]);
     	    $val = htmlspecialchars($data["jmeno"]);
