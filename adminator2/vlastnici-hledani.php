@@ -1,9 +1,10 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require_once ("include/class.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,102) ) )
 {
@@ -115,9 +116,7 @@ include ("include/charset.php");
 	  </tr>
 	
 	<?php
-	
-	require("include/class.php");
-	
+		
 	$find=$_GET["find"];
 	$najdi=$_GET["najdi"];
 	
@@ -136,7 +135,7 @@ include ("include/charset.php");
 	    $select1 .= " OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
 	    
 	    $select2=" OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
-	    $select2 .= "OR vs LIKE '$sql' OR id_cloveka LIKE '$sql' OR k_platbe LIKE '$sql' ) ";
+	    $select2 .= "OR vs LIKE '$sql' ) ";
 			 
 		if ( $_GET["select"] == 2){ $select3=" AND fakturacni > 0 "; }
 		if ( $_GET["select"] == 3){ $select3=" AND fakturacni is NULL "; }
@@ -183,7 +182,7 @@ include ("include/charset.php");
 	$select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
 	
 	$select2 = " OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
-	$select2 .= " OR vs LIKE '$sql' OR id_cloveka LIKE '$sql' OR k_platbe LIKE '$sql' ) ";
+	$select2 .= " OR vs LIKE '$sql') ";
 
 	$dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
 	

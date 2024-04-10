@@ -92,12 +92,16 @@ require_once("include/charset.php");
 	if( $_GET["select"] == 3 )
 	{ $fu_sql_select .= " WHERE typ = '1' "; } //pouze DU
 	
-	$dotaz_fakt_skup=mysql_query($fu_sql_base." ".$fu_sql_select." ORDER BY nazev DESC");
-	$dotaz_fakt_skup_radku=mysql_num_rows($dotaz_fakt_skup);
-	
+	try {
+		$dotaz_fakt_skup=$conn_mysql->query($fu_sql_base." ".$fu_sql_select." ORDER BY nazev DESC");
+		$dotaz_fakt_skup_radku=$dotaz_fakt_skup->num_rows;
+	} catch (Exception $e) {
+		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	}
+
 	if( $dotaz_fakt_skup_radku > 0 )
 	{
-	    while( $data_fakt_skup=mysql_fetch_array($dotaz_fakt_skup) )
+	    while( $data_fakt_skup=$dotaz_fakt_skup->fetch_array() )
 	    {
 	    
 	    echo "\t\t<option value=\"".$data_fakt_skup["id"]."\" ";
@@ -237,7 +241,7 @@ require_once("include/charset.php");
 		$select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
 		
 		$select2=" OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
-		$select2 .= " OR vs LIKE '$sql' OR id_cloveka LIKE '$sql' OR k_platbe LIKE '$sql' ) ";
+		$select2 .= " OR vs LIKE '$sql' ) ";
 			 
 		if ( $_GET["select"] == 2){ $select3=" AND fakturacni > 0 "; }
 		if ( $_GET["select"] == 3){ $select3=" AND fakturacni is NULL "; }
@@ -272,7 +276,7 @@ require_once("include/charset.php");
 	  		 
 	     $dotaz_source= "SELECT *, to_char(billing_suspend_start,'FMDD. FMMM. YYYY') as billing_suspend_start_f, ".
 	    		    " to_char(billing_suspend_stop,'FMDD. FMMM. YYYY') as billing_suspend_stop_f ".
-	    		    " FROM vlastnici WHERE ( archiv = 0 or archiv is null ) AND id_cloveka LIKE '$sql' "; 
+	    		    " FROM vlastnici WHERE ( archiv = 0 or archiv is null ) AND id_cloveka = '$sql' "; 
 	  }
 	  else
 	  { 

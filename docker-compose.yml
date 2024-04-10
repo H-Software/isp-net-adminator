@@ -2,8 +2,7 @@
 version: "3.8"
 
 volumes:
-#  esdata01:
-#    driver: local
+  adminator-php-log:
   grafana-storage:
   mysql-data:
   postgres-data:
@@ -33,6 +32,8 @@ services:
       - POSTGRES_USER=adminator
       - POSTGRES_PASSWD=isp-net-passwd
       - POSTGRES_DB=adminator.new
+    volumes:
+      - adminator-php-log:/var/log/php:uid=33,gid=33
     tmpfs:
       # for smarty
       - /var/www/html/adminator2/templates_c:uid=33,gid=33
@@ -43,6 +44,8 @@ services:
       - /var/www/html/a3-logs:uid=33,gid=33
       # adminator print
       - /var/www/html/adminator3/print/temp:uid=33,gid=33
+      # adminator export xls
+      - /var/www/html/adminator2/export:uid=33,gid=33
     ports:
       - "8080:80"
 

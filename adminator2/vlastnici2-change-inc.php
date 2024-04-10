@@ -72,24 +72,28 @@
 	     
 	      if ( $fakturacni > 0){ $sql= "SELECT * FROM fakturacni_skupiny WHERE typ = 2 order by nazev DESC"; }
 	      else { $sql = "SELECT * FROM fakturacni_skupiny WHERE typ = 1 order by nazev DESC"; }
-	     	     
-	      $dotaz_fakt_skup=mysql_query($sql);
-	      $dotaz_fakt_skup_radku=mysql_num_rows($dotaz_fakt_skup);
-		      
+	    
+		  try {
+			$dotaz_fakt_skup = $conn_mysql->query($sql);
+			$dotaz_fakt_skup_radku = $dotaz_fakt_skup->num_rows;
+		  } catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		  }
+			
 	       if( $dotaz_fakt_skup_radku > 0 )
 	       {
-	        while( $data_fakt_skup=mysql_fetch_array($dotaz_fakt_skup) )
+	        while( $data_fakt_skup=$dotaz_fakt_skup->fetch_array() )
 	        {
 						      
-	          echo "\t\t<option value=\"".$data_fakt_skup["id"]."\" ";
+	          	echo "\t\t<option value=\"".$data_fakt_skup["id"]."\" ";
 	            if ($fakt_skupina == $data_fakt_skup["id"] ){ echo " selected "; }
-		  echo " > ".$data_fakt_skup["nazev"];
-		
-		  if( $data_fakt_skup["typ"] == 1 ){ echo " (DÚ) "; }
-		    elseif( $data_fakt_skup["typ"] == 2 ){ echo " (FÚ) "; }
-		  else{ echo $data_fakt_skup["typ"]; }
-					
-		  echo " </option>\n";
+				echo " > ".$data_fakt_skup["nazev"];
+				
+				if( $data_fakt_skup["typ"] == 1 ){ echo " (DÚ) "; }
+				elseif( $data_fakt_skup["typ"] == 2 ){ echo " (FÚ) "; }
+				else{ echo $data_fakt_skup["typ"]; }
+							
+				echo " </option>\n";
 												  
 	        } // konec while
 	       } // kone if dotaz > 0
@@ -262,13 +266,17 @@
 	    	    if($sluzba_int_id_tarifu == 999 or !isset($sluzba_int_id_tarifu) ){ echo " selected "; }
 	     echo " style=\"color: gray; \">Nevybráno</option>";
 	     
-	     $dotaz_tarify_id_tarifu = mysql_query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
+		 try {
+			$dotaz_tarify_id_tarifu = $conn_mysql->query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
+		 } catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		 }
 	     
-	     while( $data_tarify = mysql_fetch_array($dotaz_tarify_id_tarifu) )
+	     while( $data_tarify = $dotaz_tarify_id_tarifu->fetch_array() )
 	     {
 	        echo "<option value=\"".$data_tarify["id_tarifu"]."\" ";
 		    if( $sluzba_int_id_tarifu == $data_tarify["id_tarifu"] ){ echo " selected "; }
-		echo " >".$data_tarify["jmeno_tarifu"]." (".$data_tarify["zkratka_tarifu"].")</option>";
+			echo " >".$data_tarify["jmeno_tarifu"]." (".$data_tarify["zkratka_tarifu"].")</option>";
 	     
 	     }
 	     	     
@@ -329,19 +337,23 @@
 	    	    if($sluzba_iptv_id_tarifu == 999 or !isset($sluzba_iptv_id_tarifu) ){ echo " selected "; }
 	     echo " style=\"color: gray; \">Nevybráno</option>";
 	     
-	     $dotaz_iptv_id_tarifu = mysql_query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");
-	     
-	     while( $data_iptv = mysql_fetch_array($dotaz_iptv_id_tarifu) )
+		 try {
+			$dotaz_iptv_id_tarifu = $conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");
+		 } catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		 }
+
+	     while( $data_iptv = $dotaz_iptv_id_tarifu->fetch_array() )
 	     {
 	        echo "<option value=\"".$data_iptv["id_tarifu"]."\" ";
 		    if( $sluzba_iptv_id_tarifu == $data_iptv["id_tarifu"] ){ echo " selected "; }
-		echo " >".$data_iptv["jmeno_tarifu"]." (".$data_iptv["zkratka_tarifu"].")</option>";
+			echo " >".$data_iptv["jmeno_tarifu"]." (".$data_iptv["zkratka_tarifu"].")</option>";
 	     }
 	     
 	     echo "</select>";
-	    echo "</td>";	
+	     echo "</td>";	
 		
-           echo "</tr>";
+         echo "</tr>";
       
        }
 
