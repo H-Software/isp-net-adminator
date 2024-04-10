@@ -1,4 +1,5 @@
 <?php
+
 //coded by Warden - http://warden.dharma.cz
 
 /*
@@ -11,7 +12,7 @@ $listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom
 
 //definice tridy c_Listing
 
-class c_Listing {
+class c_listing_partner {
     var $url;
     var $interval;
     var $sql;
@@ -27,10 +28,10 @@ class c_Listing {
    // $select="./objekty.php?";
     
     //konstruktor...naplni promenne
-    function c_Listing($conUrl = "./objekty.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
-        $this->errName[1] = "Pøi volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
-        $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
-        // $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
+    function c_listing_partner($conUrl = "./partner.php.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+        $this->errName[1] = "PÅ™i volÃ¡nÃ­ konstruktotu nebyl zadÃ¡n SQL dotaz!<br>\n";
+        $this->errName[2] = "Nelze zobrazit listovÃ¡nÃ­, chyba databÃ¡ze(Query)!<br>\n";
+        // $this->errName[3] = "Nelze zobrazit listovï¿½nï¿½, chyba databï¿½ze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;
@@ -49,11 +50,11 @@ class c_Listing {
     
     //vyber dat z databaze
     function dbSelect(){
-        $listRecord = @pg_query($this->sql);
+        $listRecord = @mysql_query($this->sql);
         if (!$listRecord){
             $this->error(2);
         }
-        $allRecords = @pg_num_rows($listRecord);
+        $allRecords = @mysql_num_rows($listRecord);
         if (!$allRecords){
             $this->error(3);
         }
@@ -154,4 +155,5 @@ class c_Listing {
         }
     }
 }
+
 ?>

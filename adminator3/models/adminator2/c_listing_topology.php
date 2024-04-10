@@ -11,7 +11,7 @@ $listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom
 
 //definice tridy c_Listing
 
-class c_Listing {
+class c_listing_topology {
     var $url;
     var $interval;
     var $sql;
@@ -25,8 +25,8 @@ class c_Listing {
     var $aftError = "</div>";
     
     //konstruktor...naplni promenne
-    function c_Listing($conUrl = "./topology-nod-list.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
-    	$this->errName[1] = "Při vol�n� konstruktotu nebyl zadán SQL dotaz!<br>\n";
+    function c_listing_topology($conUrl = "./topology-nod-list.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+    	$this->errName[1] = "Při vol�n� konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
         $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
         $this->url = $conUrl;

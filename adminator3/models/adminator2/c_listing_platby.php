@@ -11,7 +11,7 @@ $listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom
 
 //definice tridy c_Listing
 
-class c_Listing {
+class c_listing_platby {
     var $url;
     var $interval;
     var $sql;
@@ -24,13 +24,11 @@ class c_Listing {
     var $befError = "<div align=\"center\" style=\"color: maroon;\">";
     var $aftError = "</div>";
     
-   // $select="./objekty.php?";
-    
     //konstruktor...naplni promenne
-    function c_Listing($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+    function c_listing_platby($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
         $this->errName[1] = "P�i vol�n� konstruktotu nebyl zad�n SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listov�n�, chyba datab�ze(Query)!<br>\n";
-        // $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
+        $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;
@@ -49,11 +47,11 @@ class c_Listing {
     
     //vyber dat z databaze
     function dbSelect(){
-        $listRecord = pg_query($this->sql);
+        $listRecord = @pg_query($this->sql);
         if (!$listRecord){
             $this->error(2);
         }
-        $allRecords = pg_num_rows($listRecord);
+        $allRecords = @pg_num_rows($listRecord);
         if (!$allRecords){
             $this->error(3);
         }
