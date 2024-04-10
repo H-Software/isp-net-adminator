@@ -1,10 +1,10 @@
 <?php
 
-
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require_once ("include/class.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,79) ) )
 {
@@ -51,7 +51,8 @@ include ("include/charset.php");
  
  
  </td>
-  </tr> 
+  </tr>
+ 
   
   <tr>
   <td colspan="2">
