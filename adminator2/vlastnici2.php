@@ -300,7 +300,7 @@ require_once("include/charset.php");
 	    		    $_GET["razeni"]."&razeni2=".$_GET["razeni2"]."&fakt_skupina=".$_GET["fakt_skupina"];
 		      
 	  //vytvoreni objektu
-	  $listovani = new c_Listing("./vlastnici2.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+	  $listovani = new c_listing_vlastnici2("./vlastnici2.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
 		      
 	  if(($list == "")||($list == "1")){    //pokud není list zadán nebo je první
 	    $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
