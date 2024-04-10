@@ -343,7 +343,7 @@ include ("include/charset.php");
   $listovani->listInterval();
   
   $objekt = new objekt;
-  $objekt->vypis($sql,$co,0,$dotaz_final);
+  $objekt->vypis($sql,$co,0,$dotaz_final,$conn_mysql);
      
   $objekt->vypis_tab(2);  
  

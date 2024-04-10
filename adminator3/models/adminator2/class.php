@@ -211,7 +211,7 @@ class objekt
   
  } //konec funkce zjistipocet
  
- function vypis($sql,$co,$id,$dotaz_final)
+ function vypis($sql,$co,$id,$dotaz_final,$conn_mysql)
  {
    global $db_ok2;
     
@@ -220,11 +220,15 @@ class objekt
     if ( $co==3 ) //wifi sit ...vypis u vlastniku(dalsi pouziti nevim)
     { 
       //prvne vyberem wifi tarify...
-      $dotaz_f = mysql_query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
+	  try {
+		$dotaz_f = $conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
+	  } catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
       
       $i = 0;
 	  
-      while( $data_f = mysql_fetch_array($dotaz_f) )
+      while( $data_f = $dotaz_f->fetch_array() )
       {
          if( $i == 0 ){ $tarif_sql .= "AND ( "; }
          if( $i > 0 ){ $tarif_sql .= " OR "; }
@@ -241,11 +245,15 @@ class objekt
     }
     elseif ( $co==4 ) //fiber sit ...vypis pouze u vlastniku
     { 
-      $dotaz_f = mysql_query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
+	  try {
+		$dotaz_f = $conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
+	  } catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
       
       $i = 0;
 	  
-      while( $data_f = mysql_fetch_array($dotaz_f) )
+      while( $data_f = $dotaz_f->fetch_array() )
       {
          if( $i == 0 ){ $tarif_sql .= "AND ( "; }
          if( $i > 0 ){ $tarif_sql .= " OR "; }

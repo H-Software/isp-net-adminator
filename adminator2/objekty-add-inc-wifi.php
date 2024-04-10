@@ -172,10 +172,14 @@ if ( ( $update_status==1 and (isset($odeslano)) ) )
 }
 
 // checknem stav vysilace a filtraci
-$msq_stav_nodu=mysql_query("SELECT stav, router_id FROM nod_list WHERE id= '".intval($selected_nod)."' ");
-$msq_stav_nodu_radky=mysql_num_rows($msq_stav_nodu);
- 
-while ($data=mysql_fetch_array($msq_stav_nodu) )
+try {
+  $msq_stav_nodu = $conn_mysql->query("SELECT stav, router_id FROM nod_list WHERE id= '".intval($selected_nod)."' ");
+  $msq_stav_nodu_radky = $msq_stav_nodu->num_rows;
+} catch (Exception $e) {
+  die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+}
+
+while ($data=$msq_stav_nodu->fetch_array() )
 { $stav_nodu = $data["stav"]; $router_id = $data["router_id"]; }
 
 if ( $stav_nodu == 2 )
@@ -479,14 +483,17 @@ Objekt byl přidán/upraven , zadané údaje:<br><br>
 <b>Linka</b>: 
 <?php 
  //echo "id tarifu: ".$id_tarifu;
-
- $vysledek4 = mysql_query("SELECT jmeno_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu='".intval($id_tarifu)."' ");
- $radku4 = mysql_num_rows($vysledek4);
+ try {
+  $vysledek4 = $conn_mysql->query("SELECT jmeno_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu='".intval($id_tarifu)."' ");
+  $radku4 = $vysledek4->num_rows;
+ } catch (Exception $e) {
+    die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+ }
  
  if($radku4==0) echo "Nelze zjistit tarif";
  else 
  {
-  while( $zaznam4=mysql_fetch_array($vysledek4) )
+  while( $zaznam4=$vysledek4->fetch_array() )
   { echo $zaznam4["jmeno_tarifu"]." (".$zaznam4["zkratka_tarifu"].") "; }
  }
  
@@ -498,12 +505,17 @@ Objekt byl přidán/upraven , zadané údaje:<br><br>
 <b>Poznámka</b>: <?php echo $pozn; ?><br>
 <b>Přípojný bod</b>:
 <?php
-    $vysledek3=mysql_query("SELECT jmeno,id FROM nod_list WHERE id='".intval($selected_nod)."'" );
-    $radku3=mysql_num_rows($vysledek3);
+	  try {
+      $vysledek3 = $conn_mysql->query("SELECT jmeno,id FROM nod_list WHERE id='".intval($selected_nod)."'");
+      $radku3 = $vysledek3->num_rows;
+    } catch (Exception $e) {
+      die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+    }
+
     if($radku3==0) echo "Nelze zjistit ";
     else 
     {
-         while ($zaznam3=mysql_fetch_array($vysledek3) )
+         while ($zaznam3=$vysledek3->fetch_array() )
          { echo $zaznam3["jmeno"]." (".$zaznam3["id"].") ".''; }
     }
     

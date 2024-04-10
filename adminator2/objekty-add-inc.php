@@ -80,16 +80,12 @@
 	$sql_nod .= " OR pozn LIKE '%$nod_find%' ) AND ( typ_nodu = '1' ) ORDER BY jmeno ASC ";
 	
 	  try {
-		$dotaz_f = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ");
+		$vysledek = $conn_mysql->query($sql_nod);
+		$radku=$vysledek->num_rows;
 	  } catch (Exception $e) {
 		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 	  }
-
-       $vysledek=mysql_query($sql_nod);
-       //$vysledek=mysql_query("SELECT * from nod_list ORDER BY jmeno ASC" );
        
-       $radku=mysql_num_rows($vysledek);
-
        print '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
 
        if($typ_ip==4)
@@ -106,12 +102,12 @@
           if( ( $_POST["selected"] == 0 ) or ( (!isset($selected_nod)) ) ) { echo "selected"; }
          echo ' > Není vybráno</option>';
 
-          while ($zaznam2=mysql_fetch_array($vysledek) )
-	  {
-            echo '<option value="'.$zaznam2["id"].'"';
-              if ( ( $selected_nod == $zaznam2["id"]) ){ echo " selected "; }
-            echo '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
-	  } //konec while
+          while ($zaznam2=$vysledek->fetch_array() )
+			{
+				echo '<option value="'.$zaznam2["id"].'"';
+				if ( ( $selected_nod == $zaznam2["id"]) ){ echo " selected "; }
+				echo '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
+			} //konec while
         } //konec else
         
 	print '</select>';
@@ -326,10 +322,13 @@
      echo "<select name=\"id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
 
      //echo "<option value=\"\" class=\"select-nevybrano\" >Nevybráno</option>";
+	try {
+		$dotaz_t2 = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '0' ORDER BY zkratka_tarifu ");
+	} catch (Exception $e) {
+		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	}
     
-     $dotaz_t2 = mysql_query("SELECT * FROM tarify_int WHERE typ_tarifu = '0' ORDER BY zkratka_tarifu ");
-    
-     while( $data_t2 = mysql_fetch_array($dotaz_t2) )
+     while( $data_t2 = $dotaz_t2->fetch_array() )
      { 
       echo "<option value=\"".$data_t2["id_tarifu"]."\" ";
              
