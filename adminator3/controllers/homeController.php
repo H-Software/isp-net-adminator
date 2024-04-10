@@ -98,6 +98,8 @@ class homeController {
 
     function opravy_a_zavady(){
         //opravy a zavady vypis
+        $pocet_bunek = 11;
+
         if ($this->auth->check_level(101,false) === true) {
             $this->logger->addInfo("homeController\opravy_a_zavady allowed");
 
@@ -111,9 +113,9 @@ class homeController {
             if( !isset($limit) ){ $limit="10"; }
 
             // vypis
-            $this->smarty->assign("opravy_povoleno",0);
+            $this->smarty->assign("opravy_povoleno",1);
 
-            $this->smarty->assign("pocet_bunek",11);
+            $this->smarty->assign("pocet_bunek",$pocet_bunek);
             
             $this->smarty->assign("vyreseno_filtr",$vyreseno_filtr);
             $this->smarty->assign("v_reseni_filtr",$v_reseni_filtr);
@@ -121,12 +123,27 @@ class homeController {
             
             $this->smarty->assign("action",$_SERVER["PHP_SELF"]);
             
-            $oprava = new opravy($this->conn_mysql, $this->logger);
+            $opravy = new opravy($this->conn_mysql, $this->logger);
          
             // ob_start();
-            $oprava->vypis_opravy();
-            // $content_opravy_a_zavady = ob_get_clean(); 
-            // $this->smarty->assign("content_opravy_a_zavady", $content_opravy_a_zavady);
+            $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
+            // $ob_content = ob_get_clean(); 
+            if($rs_vypis){
+                if (strlen($rs_vypis[0]) > 0){
+                    // no records in DB
+                    $this->logger->addDebug("homeController\opravy_a_zavady list: no records found in database.");    
+
+                    $content_opravy_a_zavady = $rs_vypis[0];
+                }
+                else{
+                    // ??
+                }
+            }
+            else{
+                $content_opravy_a_zavady = $ob_content;
+            }
+
+            $this->smarty->assign("content_opravy_a_zavady", $content_opravy_a_zavady);
 
             // $this->smarty->assign("dotaz_radku",$dotaz_radku);
         }
