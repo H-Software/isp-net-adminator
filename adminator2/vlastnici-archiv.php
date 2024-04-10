@@ -5,6 +5,7 @@ require("include/config.php");
 require_once ("include/class.php"); 
 require("include/check_login.php");
 require("include/check_level.php");
+require("include/c_listing-vlastnici2.php");
 
 if ( !( check_level($level,82) ) )
 {
@@ -280,11 +281,11 @@ include ("include/charset.php");
         vlastnik2::vypis_tab(1);
 
          if ( $co==1)
-             {
+         {
 
                 $sql="%".$sql."%";
                 $select1=" WHERE archiv = '1' AND ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' OR ulice LIKE '$sql' OR mesto LIKE '$sql' ";
-                $select2=" OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' OR vs LIKE '$sql' OR id_cloveka LIKE '$sql' ) ";
+                $select2=" OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' OR vs LIKE '$sql' ) ";
 
                 if ( $_GET["select"] == 2){ $select3=" AND fakturacni > 0 "; }
                 if ( $_GET["select"] == 3){ $select3=" AND fakturacni is NULL "; }
@@ -310,54 +311,47 @@ include ("include/charset.php");
                 if ( (strlen($select4) > 1 ) ){ $select4=$select4.$select5; }
 
                 $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
-              }
+          }
           elseif ( $co ==3)
-             {
+          {
+            $dotaz_source="SELECT * FROM vlastnici WHERE archiv = '1' AND id_cloveka = '$sql' ";
+          }
+          else  { 
+            echo "Zadejte výraz k vyhledání.... <br>";
+            exit; 
+          }
 
-             $dotaz_source="SELECT * FROM vlastnici WHERE archiv = '1' AND id_cloveka LIKE '$sql' ";
+          global $list;
+          $list=$_GET["list"];
 
-             }
-           else  { echo "Zadejte výraz k vyhledání.... <br>"; Exit; }
+          $poradek="find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
 
+          //vytvoreni objektu
+          $listovani = new c_Listing("./vlastnici-archiv.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
 
-          include("include/c_listing-vlastnici2.php");
+          if (($list == "")||($list == "1")){    //pokud není list zadán nebo je první
+            $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
+          }
+          else
+          {
+            $bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
+          }
 
+          $interval=$listovani->interval;
 
-              global $list;
-
-              $list=$_GET["list"];
-
-              $poradek="find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
-
-              //vytvoreni objektu
-              $listovani = new c_Listing("./vlastnici-archiv.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
-
-             if (($list == "")||($list == "1")){    //pokud není list zadán nebo je první
-                $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
-             }
-             else
-             {
-              $bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
-             }
-
-            $interval=$listovani->interval;
-
-           $dotaz_final=$dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+          $dotaz_final=$dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
 
-           $listovani->listInterval();
+          $listovani->listInterval();
 
+          $ip = new vlastnikarchiv;
+          $ip->vypis($sql,$co,$dotaz_final);
 
-            $ip = new vlastnikarchiv;
-            $ip->vypis($sql,$co,$dotaz_final);
+          vlastnikarchiv::vypis_tab(2);
 
-        vlastnikarchiv::vypis_tab(2);
-
-
-        $listovani->listInterval();
+          $listovani->listInterval();
 
         ?>
-
 
 <!-- konec obsahu -->
   </td>
@@ -367,4 +361,3 @@ include ("include/charset.php");
 
 </body> 
 </html> 
-
