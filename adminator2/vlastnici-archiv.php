@@ -278,7 +278,7 @@ include ("include/charset.php");
         // odendani objektu od vlastnika
         if ( check_level($level,49) ){ $odendani_povoleno="true"; }
 
-        vlastnik2::vypis_tab(1);
+        vlastnik2_a2::vypis_tab(1);
 
          if ( $co==1)
          {

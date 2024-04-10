@@ -10,7 +10,7 @@ echo '<script type="text/javascript" >
                 {
 
                         //vytvoreni okna
-                        var params = {imagePath: "/adminator2/include/js/window/img/shadow-", sizes: [4,4,4,4]};
+                        var params = {imagePath: "/include/js/window/img/shadow-", sizes: [4,4,4,4]};
                         w2 = new SZN.Window(params);
                         //nastaveni obsahu
                         var txt = SZN.cTxt("'.$windowtext2.' ");

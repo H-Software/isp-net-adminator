@@ -960,7 +960,7 @@ class vlastnik
 //konec class-y vlastnik
 }
 
-class vlastnik2
+class vlastnik2_a2
 {
     
    var $level;
