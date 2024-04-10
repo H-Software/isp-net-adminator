@@ -1,9 +1,10 @@
 <?php
 
-require_once("include/config.php"); 
-require_once("include/check_login.php");
-
-require_once("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require_once ("include/class.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if( !( check_level($level,40) ) ) 
 {
@@ -39,8 +40,6 @@ echo '<script type="text/javascript" src="/adminator3/plugins/tigra_calendar/cus
 
 <?php
 
-require_once("include/class.php");
-
 //vytvoreni objektu
 $Aglobal = new Aglobal();
 
@@ -63,36 +62,36 @@ if( ( $update_status==1 and !( isset($send)) ) )
     
     while($data=pg_fetch_array($dotaz_upd)):
     
-	// primy promenny 
-	$nick2=$data["nick"];    $vs=$data["vs"];	 $k_platbe=$data["k_platbe"];	
-	$jmeno=$data["jmeno"];   $prijmeni=$data["prijmeni"];	
-	$ulice=$data["ulice"];   $mesto=$data["mesto"]; 	$psc=$data["psc"];
-	$email=$data["mail"];     $icq=$data["icq"];	$tel=$data["telefon"];
-	$firma=$data["firma"];	$poznamka=$data["poznamka"];
-	$ucetni_index=$data["ucetni_index"]; $archiv=$data["archiv"]; 
-	$fakt_skupina=$data["fakturacni_skupina_id"]; $typ_smlouvy=$data["typ_smlouvy"];
-	$fakturacni=$data["fakturacni"]; $splatnost=$data["splatnost"];        
-	$trvani_do=$data["trvani_do"];   $datum_podpisu=$data["datum_podpisu"];
-	$sluzba_int = $data["sluzba_int"];	$sluzba_iptv = $data["sluzba_iptv"];
-	$sluzba_voip = $data["sluzba_voip"];
+      // primy promenny 
+      $nick2=$data["nick"];    $vs=$data["vs"];	 $k_platbe=$data["k_platbe"];	
+      $jmeno=$data["jmeno"];   $prijmeni=$data["prijmeni"];	
+      $ulice=$data["ulice"];   $mesto=$data["mesto"]; 	$psc=$data["psc"];
+      $email=$data["mail"];     $icq=$data["icq"];	$tel=$data["telefon"];
+      $firma=$data["firma"];	$poznamka=$data["poznamka"];
+      $ucetni_index=$data["ucetni_index"]; $archiv=$data["archiv"]; 
+      $fakt_skupina=$data["fakturacni_skupina_id"]; $typ_smlouvy=$data["typ_smlouvy"];
+      $fakturacni=$data["fakturacni"]; $splatnost=$data["splatnost"];        
+      $trvani_do=$data["trvani_do"];   $datum_podpisu=$data["datum_podpisu"];
+      $sluzba_int = $data["sluzba_int"];	$sluzba_iptv = $data["sluzba_iptv"];
+      $sluzba_voip = $data["sluzba_voip"];
 
-	$sluzba_int_id_tarifu = $data["sluzba_int_id_tarifu"];
-	$sluzba_iptv_id_tarifu = $data["sluzba_iptv_id_tarifu"];
-    
-	$billing_freq = $data["billing_freq"];
-    
-	$billing_suspend_status = $data["billing_suspend_status"];
-	$billing_suspend_reason = $data["billing_suspend_reason"];
-	
-	$billing_suspend_start  = $data["billing_suspend_start"];
-	$billing_suspend_stop   = $data["billing_suspend_stop"];
-         
-	//konverze z DB formatu
-	list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$billing_suspend_start);
-	$billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
+      $sluzba_int_id_tarifu = $data["sluzba_int_id_tarifu"];
+      $sluzba_iptv_id_tarifu = $data["sluzba_iptv_id_tarifu"];
+        
+      $billing_freq = $data["billing_freq"];
+        
+      $billing_suspend_status = $data["billing_suspend_status"];
+      $billing_suspend_reason = $data["billing_suspend_reason"];
+      
+      $billing_suspend_start  = $data["billing_suspend_start"];
+      $billing_suspend_stop   = $data["billing_suspend_stop"];
+            
+      //konverze z DB formatu
+      list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$billing_suspend_start);
+      $billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-	list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = split("-",$billing_suspend_stop);
-	$billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
+      list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = split("-",$billing_suspend_stop);
+      $billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
 	
     endwhile;
     
@@ -429,6 +428,7 @@ if ( $update_status =="1" )
     { $pole=$pole." [".$key."] => ".$val."\n"; }
         
     if ( $res == 1){ $vysledek_write="1"; }
+    
     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
      
     $writed = "true"; 

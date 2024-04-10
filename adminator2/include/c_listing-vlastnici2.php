@@ -30,7 +30,7 @@ class c_Listing {
     function c_Listing($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
         $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
-        // $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
+        // $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;
@@ -47,11 +47,11 @@ class c_Listing {
     
     //vyber dat z databaze
     function dbSelect(){
-        $listRecord = @pg_query($this->sql);
+        $listRecord = pg_query($this->sql);
         if (!$listRecord){
             $this->error(2);
         }
-        $allRecords = @pg_num_rows($listRecord);
+        $allRecords = pg_num_rows($listRecord);
         if (!$allRecords){
             $this->error(3);
         }
