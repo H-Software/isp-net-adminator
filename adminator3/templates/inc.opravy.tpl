@@ -1,5 +1,5 @@
 
-<div style="width: 800px; position: relative; margin-left: auto; margin-right: auto; padding-bottom: 30px; padding-top: 20px; boder: 1px solid grey;" >
+<div style="position: relative; margin-left: auto; margin-right: auto; padding-bottom: 30px; padding-top: 20px; boder: 1px solid grey;" >
 
     <table border="1" width="800px" align="left" style="font-size: 12px; font-family: Verdana; ">
 

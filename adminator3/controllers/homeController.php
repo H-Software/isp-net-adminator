@@ -127,12 +127,12 @@ class homeController {
          
             // ob_start();
             $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
-            // $ob_content = ob_get_clean(); 
+            // $ob_content = ob_get_clean();
+
             if($rs_vypis){
                 if (strlen($rs_vypis[0]) > 0){
                     // no records in DB
-                    $this->logger->addDebug("homeController\opravy_a_zavady list: no records found in database.");    
-
+                    $this->logger->addInfo("homeController\opravy_a_zavady list: no records found in database.");    
                     $content_opravy_a_zavady = $rs_vypis[0];
                 }
                 else{
