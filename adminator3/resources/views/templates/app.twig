@@ -2,24 +2,42 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>SlimBorn</title>
+	<meta http-equiv="Content-Language" content="cs">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<meta http-equiv="Cache-Control" content="must-revalidate, no-cache, post-check=0, pre-check=0" > 
+	<meta http-equiv="Pragma" content="public" > 
+			
+	<meta http-equiv="Cache-Control" content="no-cache" > 
+	<meta http-equiv="Pragma" content="no-cache" > 
+	<meta http-equiv="Expires" content="-1" >
+
+	<title>Adminator</title>
+
+	<link href="/style-login.css" rel="stylesheet" type="text/css">
+
+	<!-- erase me -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<link rel="stylesheet" href="/assets/css/app.css">
+	<!-- erase me -->
 
 </head>
 <body>
-	{% include 'templates/partials/navigation.twig' %}
-	<div class="container">
-		{% include 'templates/partials/flash.twig' %}
-		{% block content %}
-		    
-		{% endblock %}
+	<div style="text-align: center;" >
+
+		<div class="login"><img alt="logo" src="/img2/logo.png" ></div>
+		<div class="login"><img alt="logo 2" src="/img2/im-adm10b.jpg" width="400" ></div>
+
+		<div class="container">
+			{% include 'templates/partials/flash.twig' %}
+			{% block content %}
+				
+			{% endblock %}
+
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
 	</div>
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
-	
 </body>
 </html>
