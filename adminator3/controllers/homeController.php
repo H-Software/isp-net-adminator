@@ -43,9 +43,7 @@ class homeController {
 
         //vlozeni prihlasovaci historie
         list_logged_users_history($this->conn_mysql, $this->smarty);
-
-        $this->opravy_a_zavady();
-
+        
         //informace z modulu neuhrazené faktury
             
         $neuhr_faktury_pole = $a->show_stats_faktury_neuhr();
@@ -59,11 +57,12 @@ class homeController {
         $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
 
         //tady opravy az se dodelaj
-                                                                            
+
+        $this->opravy_a_zavady();
+
         $this->board();
 
         $this->logger->addInfo("homeController\home: end of rendering");
-
         $this->smarty->display('home.tpl');
 
         return $response;
@@ -98,12 +97,14 @@ class homeController {
 
     function opravy_a_zavady(){
         //opravy a zavady vypis
+        $pocet_bunek = 11;
+
         if ($this->auth->check_level(101,false) === true) {
             $this->logger->addInfo("homeController\opravy_a_zavady allowed");
 
             $v_reseni_filtr = $_GET["v_reseni_filtr"];
             $vyreseno_filtr = $_GET["vyreseno_filtr"];
-            $limit=$_GET["limit"];
+            $limit = $_GET["limit"];
 
             if( !isset($v_reseni_filtr) ){ $v_reseni_filtr="99"; }
             if( !isset($vyreseno_filtr) ){ $vyreseno_filtr="0"; }
@@ -111,21 +112,44 @@ class homeController {
             if( !isset($limit) ){ $limit="10"; }
 
             // vypis
-            $this->smarty->assign("opravy_povoleno",0);
+            $this->smarty->assign("opravy_povoleno",1);
 
-            $this->smarty->assign("pocet_bunek",11);
+            $this->smarty->assign("pocet_bunek",$pocet_bunek);
             
             $this->smarty->assign("vyreseno_filtr",$vyreseno_filtr);
             $this->smarty->assign("v_reseni_filtr",$v_reseni_filtr);
             $this->smarty->assign("limit",$limit);
             
-            $this->smarty->assign("action",$_SERVER["PHP_SELF"]);
+            $this->smarty->assign("action",$_SERVER['SCRIPT_URL']);
             
-            $oprava = new opravy;
+            $opravy = new opravy($this->conn_mysql, $this->logger);
+         
+            $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
+            // $this->logger->addDebug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));    
 
-            $oprava->vypis_opravy();
-            
-            // $this->smarty->assign("dotaz_radku",$dotaz_radku);
+            if($rs_vypis)
+            {
+                if (strlen($rs_vypis[0]) > 0)
+                {
+                    // no records in DB
+                    $this->logger->addInfo("homeController\opravy_a_zavady list: no records found in database.");    
+                    $content_opravy_a_zavady = $rs_vypis[0];
+                }
+                elseif(strlen($rs_vypis[1]) > 0)
+                {
+                    // raw html
+                    $content_opravy_a_zavady = $rs_vypis[1];
+                }
+                else{
+                    // ??
+                    $this->logger->addError("homeController\opravy_a_zavady unexpected return value");
+                }
+            }
+            else{
+                $this->logger->addError("homeController\opravy_a_zavady no return value from vypis_opravy call");
+            }
+
+            $this->smarty->assign("content_opravy_a_zavady", $content_opravy_a_zavady);
         }
     }
 }

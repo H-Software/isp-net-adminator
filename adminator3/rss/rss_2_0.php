@@ -1,36 +1,25 @@
 <?php
 
-include("../include/config.php");
-
-include("../include/rss.function.php");
-
-class rss_wrong_login
-{
-    var $subject,$body, $author;
-
-    function rss_wrong_login($subject,$body,$author) 
-    {
-	$this->subject = $subject;
-	$this->body = $body;
-	$this->author = $author;
-    }
-		
-}
+require "../include/main.function.shared.php";
+require "../include/config.php";
+require "../include/main.function.php";
 
 //prvne pokus o autorizaci
-$rs_check_login = check_login_rss($_GET["sid"]);
+$rss = new rss($conn_mysql, $logger);
+
+$rs_check_login = $rss->check_login_rss($_GET["sid"]);
 
 if( $rs_check_login == false )
 {
   $row = new rss_wrong_login("spatny login", "Špatný login, prosím přihlašte se do administračního systému.","System");
   
-  putHeader();
-  putItem($row);
-  putEnd();
+  $rss->putHeader();
+  $rss->putItem($row);
+  $rss->putEnd();
 }
 else
 {
-  exportRSSS();
+  $rss->exportRSS();
 }
 
 ?>

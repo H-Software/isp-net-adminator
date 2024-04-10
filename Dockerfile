@@ -27,8 +27,6 @@ RUN apt-get update \
     # && docker-php-ext-enable apcu \
     # && docker-php-ext-install intl 
 
-RUN echo 'date.timezone = "UTC"' > /usr/local/etc/php/conf.d/timezone.ini
-
 # PHP MSSQL stuff
 # https://github.com/petersonwsantos/docker-php5.6-mssql/blob/master/Dockerfile
 # https://github.com/Namoshek/docker-php-mssql/blob/master/8.1/fpm/Dockerfile
@@ -63,11 +61,26 @@ RUN a2enmod ssl \
 # RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 
+COPY ./configs/php /usr/local/etc/php/conf.d/
+
 # development stuff
 RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2.x/composer.phar" \
     && chmod +x /usr/local/bin/composer \
     && mkdir -p /.composer/cache \
     && chmod -R 777 /.composer
+
+RUN mkdir -p /var/www/html/adminator3/
+
+RUN cd adminator3 \
+    && composer require nette/robot-loader:3.1.4 \
+    && composer require smarty/smarty:2.6.33 \
+    && composer require slim/slim:3.* \
+    && composer require bryanjhv/slim-session:~3.0 \
+    && composer require monolog/monolog:^1.17
+#     # && docker-php-ext-enable xdebug \
+
+# RUN cd adminator3 \
+#     && composer install
 
 # app code
 COPY adminator2/ /var/www/html/adminator2/
@@ -80,14 +93,3 @@ COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/te
 COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator2/templates/inc.home.list-logged-users.tpl
 
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
-
-RUN cd adminator3 \
-    && composer require nette/robot-loader:3.1.4 \
-    && composer require smarty/smarty:2.6.33 \
-    && composer require slim/slim:3.* \
-    && composer require bryanjhv/slim-session:~3.0 \
-    && composer require monolog/monolog:^1.17
-#     # && docker-php-ext-enable xdebug \
-
-# RUN cd adminator3 \
-#     && composer install

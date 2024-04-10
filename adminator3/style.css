@@ -142,7 +142,7 @@ subcat-spacebody
 
 .home-main
 {
-    width: 700px;
+    width: 850px;
     padding-left: 200px;
 }
 
@@ -220,6 +220,14 @@ subcat-spacebody
 .changes-info { color: grey; font-weight: bold; }
 .changes-upraveno { color: #0066CC; font-weight: bold; }
 
+.opravy-homepage table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.opravy-homepage table td {
+    position: relative;
+}
 
 .opravy-form-nevybrano
 { color: grey; }

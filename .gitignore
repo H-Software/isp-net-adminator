@@ -37,3 +37,5 @@ extras/documentation
 /adminator3/templates_c/
 
 mysql-db-init*.sql
+postgres-db-init-adminator-new.sql
+adminator3/.php_cs.cache
