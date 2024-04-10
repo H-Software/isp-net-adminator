@@ -136,8 +136,11 @@ class opravy
             
             }// konec elseif dotaz_radku_S1
 
-          } // konec elseif vyreseno_filrt == 0
-
+          } // konec elseif vyreseno_filtr == 0
+          else
+          {
+            $this->logger->addWarning("opravy\\vypis_opravy: vyreseno_filtr not set! ");
+          }
               
           if ( ( $v_reseni_filtr == 99 and $vyreseno_filtr == 99 ) )
           { $zobrazovat="ano"; }
@@ -383,7 +386,8 @@ class opravy
           } // konec if sekundar == 1 
 
       } // konec while 1
-
+      $this->logger->addInfo("opravy\\vypis_opravy: end of main loop");
+      
     }//konec funkce vypis_opravy
 
 } // konec tridy opravy

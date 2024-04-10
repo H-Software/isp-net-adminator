@@ -125,9 +125,9 @@ class homeController {
             
             $opravy = new opravy($this->conn_mysql, $this->logger);
          
-            // ob_start();
+            ob_start();
             $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
-            // $ob_content = ob_get_clean();
+            $ob_content = ob_get_clean();
 
             if($rs_vypis){
                 if (strlen($rs_vypis[0]) > 0){
@@ -137,6 +137,7 @@ class homeController {
                 }
                 else{
                     // ??
+                    $this->logger->addError("homeController\opravy_a_zavady unexpected return value");
                 }
             }
             else{
