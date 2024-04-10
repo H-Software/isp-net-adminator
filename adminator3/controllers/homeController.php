@@ -63,7 +63,6 @@ class homeController {
         $this->board();
 
         $this->logger->addInfo("homeController\home: end of rendering");
-
         $this->smarty->display('home.tpl');
 
         return $response;
@@ -125,15 +124,21 @@ class homeController {
             
             $opravy = new opravy($this->conn_mysql, $this->logger);
          
-            ob_start();
             $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
-            $ob_content = ob_get_clean();
+            // $this->logger->addDebug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));    
 
-            if($rs_vypis){
-                if (strlen($rs_vypis[0]) > 0){
+            if($rs_vypis)
+            {
+                if (strlen($rs_vypis[0]) > 0)
+                {
                     // no records in DB
                     $this->logger->addInfo("homeController\opravy_a_zavady list: no records found in database.");    
                     $content_opravy_a_zavady = $rs_vypis[0];
+                }
+                elseif(strlen($rs_vypis[1]) > 0)
+                {
+                    // raw html
+                    $content_opravy_a_zavady = $rs_vypis[1];
                 }
                 else{
                     // ??
@@ -141,12 +146,10 @@ class homeController {
                 }
             }
             else{
-                $content_opravy_a_zavady = $ob_content;
+                $this->logger->addError("homeController\opravy_a_zavady no return value from vypis_opravy call");
             }
 
             $this->smarty->assign("content_opravy_a_zavady", $content_opravy_a_zavady);
-
-            // $this->smarty->assign("dotaz_radku",$dotaz_radku);
         }
     }
 }

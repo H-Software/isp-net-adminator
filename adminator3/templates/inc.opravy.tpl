@@ -1,7 +1,7 @@
 
-<div style="position: relative; margin-left: auto; margin-right: auto; padding-bottom: 30px; padding-top: 20px; boder: 1px solid grey;" >
+<div class="opravy-homepage" style="width: 800px; position: relative; padding-bottom: 30px; padding-top: 20px;" >
 
-    <table border="1" width="800px" align="left" style="font-size: 12px; font-family: Verdana; ">
+    <table style="position: relative; font-size: 12px; font-family: Verdana; ">
 
       <tr>
         <td colspan="{$pocet_bunek}" ><br>

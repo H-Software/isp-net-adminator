@@ -6,6 +6,8 @@ class opravy
 
     var $logger;
 
+    var $vypis_opravy_content_html;
+
     function __construct($conn_mysql, $logger) {
         $this->conn_mysql = $conn_mysql;
         $this->logger = $logger;
@@ -13,8 +15,20 @@ class opravy
 
     function vypis_opravy($pocet_bunek)
     {
+        $this->logger->addInfo("opravy\\vypis_opravy called");
 
         $ret = array();
+        $this->vypis_opravy_content_html = "";
+
+        $v_reseni_filtr = $_GET["v_reseni_filtr"];
+        $vyreseno_filtr = $_GET["vyreseno_filtr"];
+
+        $limit=$_GET["limit"];
+
+        if ( !isset($v_reseni_filtr) ){ $v_reseni_filtr="99"; }
+        if ( !isset($vyreseno_filtr) ){ $vyreseno_filtr="0"; }
+
+        if ( !isset($limit) ){ $limit="10"; }
 
         $sql="SELECT * FROM opravy WHERE ( id_opravy > 0 ";
 
@@ -174,7 +188,7 @@ class opravy
 
               //    $barva="red";
                 
-              echo "<tr>
+              $this->vypis_opravy_content_html .= "<tr>
                   <td class=\"".$class."\" style=\" color: ".$barva."; \" >".$data["id_opravy"]."</td>
                   <td class=\"".$class."\" style=\" color: ".$barva."; \" >".$data["id_predchozi_opravy"]."</td>
                   <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
@@ -195,55 +209,55 @@ class opravy
               }
 
               if ( $archiv_vlastnik == 1 )
-              { echo "<a href=\"vlastnici-archiv.php?find_id=".$data["id_vlastnika"]."\" "; }
+              { $this->vypis_opravy_content_html .= "<a href=\"vlastnici-archiv.php?find_id=".$data["id_vlastnika"]."\" "; }
               elseif ($firma_vlastnik == 1 )
-              { echo "<a href=\"vlastnici2.php?find_id=".$data["id_vlastnika"]."\" "; }
+              { $this->vypis_opravy_content_html .= "<a href=\"vlastnici2.php?find_id=".$data["id_vlastnika"]."\" "; }
               else
-              { echo "<a href=\"vlastnici.php?find_id=".$data["id_vlastnika"]."\" "; }
+              { $this->vypis_opravy_content_html .= "<a href=\"vlastnici.php?find_id=".$data["id_vlastnika"]."\" "; }
 
-              echo "title=\"Detail vlastníka: ".$popis_vlastnika."\" >".$data["id_vlastnika"]."</a> \n\n";
+              $this->vypis_opravy_content_html .= "title=\"Detail vlastníka: ".$popis_vlastnika."\" >".$data["id_vlastnika"]."</a> \n\n";
                     
-              echo "</td>
+              $this->vypis_opravy_content_html .= "</td>
                     <td class=\"".$class."\" style=\" color: ".$barva."; \" >".$data["datum_vlozeni"]."</td>
                     <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
 
-              if ( $data["priorita"] == 0) echo "Nízká";
-              elseif ( $data["priorita"] == 1) echo "Normální";
-              elseif ( $data["priorita"] == 2) echo "Vysoká";
-              else echo "Nelze zjistit";
+              if ( $data["priorita"] == 0) $this->vypis_opravy_content_html .= "Nízká";
+              elseif ( $data["priorita"] == 1) $this->vypis_opravy_content_html .= "Normální";
+              elseif ( $data["priorita"] == 2) $this->vypis_opravy_content_html .= "Vysoká";
+              else $this->vypis_opravy_content_html .= "Nelze zjistit";
 
-              echo "</td>
+              $this->vypis_opravy_content_html .= "</td>
               <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
-                  if ( $data["v_reseni"] == 0 ) echo "Ne";
-                  elseif ( $data["v_reseni"] == 1 ) echo "Ano (".$data["v_reseni_kym"].") ";
-                  else echo "Nelze zjistit";
+                  if ( $data["v_reseni"] == 0 ) $this->vypis_opravy_content_html .= "Ne";
+                  elseif ( $data["v_reseni"] == 1 ) $this->vypis_opravy_content_html .= "Ano (".$data["v_reseni_kym"].") ";
+                  else $this->vypis_opravy_content_html .= "Nelze zjistit";
 
-              echo "</td>
+              $this->vypis_opravy_content_html .= "</td>
               <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
-                  if ( $data["vyreseno"] == 0 ) echo "Ne";
-                  elseif ( $data["vyreseno"] == 1 ) echo "Ano (".$data["vyreseno_kym"].") ";
-                  else echo "Nelze zjistit";
+                  if ( $data["vyreseno"] == 0 ) $this->vypis_opravy_content_html .= "Ne";
+                  elseif ( $data["vyreseno"] == 1 ) $this->vypis_opravy_content_html .= "Ano (".$data["vyreseno_kym"].") ";
+                  else $this->vypis_opravy_content_html .= "Nelze zjistit";
 
-              echo "</td>
+              $this->vypis_opravy_content_html .= "</td>
               <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
-              if ( ( strlen($data["vlozil"]) > 1 ) ){ echo $data["vlozil"]; }
-              else { echo "<br>"; }
+              if ( ( strlen($data["vlozil"]) > 1 ) ){ $this->vypis_opravy_content_html .= $data["vlozil"]; }
+              else { $this->vypis_opravy_content_html .= "<br>"; }
 
-              echo "</td>";
+              $this->vypis_opravy_content_html .= "</td>";
 
-              echo "<td class=\"".$class."\" style=\" color: ".$barva."; \" >
+              $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" >
                 <a href=\"opravy-zacit-resit.php?id_opravy=".$data["id_opravy"]."\" >začít řešit</a></td>";
 
-              echo "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"opravy-index.php?typ=1&id_vlastnika=".$data["id_vlastnika"];
+              $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"opravy-index.php?typ=1&id_vlastnika=".$data["id_vlastnika"];
 
-              if( $data["id_predchozi_opravy"] == 0){ echo "&id_predchozi_opravy=".$data["id_opravy"]; }
-              else{ echo "&id_predchozi_opravy=".$data["id_predchozi_opravy"]; }
+              if( $data["id_predchozi_opravy"] == 0){ $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data["id_opravy"]; }
+              else{ $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data["id_predchozi_opravy"]; }
 
-              echo "\" >vložit odpověď</a></td>";
+              $this->vypis_opravy_content_html .= "\" >vložit odpověď</a></td>";
 
-              echo "</tr>";
+              $this->vypis_opravy_content_html .= "</tr>";
 
-              echo "<tr><td colspan=\"".$pocet_bunek."\" class=\"opravy-tab-line3\" >".$data["text"]."</td></tr>";
+              $this->vypis_opravy_content_html .= "<tr><td colspan=\"".$pocet_bunek."\" class=\"opravy-tab-line3\" >".$data["text"]."</td></tr>";
 
           } // konec if zobrazovat == ano
 
@@ -307,7 +321,7 @@ class opravy
 
                     $zobrazeno_limit++;
 
-                    echo "<tr>
+                    $this->vypis_opravy_content_html .= "<tr>
                         <td class=\"".$class."\" style=\" color: ".$barva."; \" >".$data_S2["id_opravy"]."</td>
                         <td class=\"".$class."\" style=\" color: ".$barva."; \" >".$data_S2["id_predchozi_opravy"]."</td>
                         <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
@@ -326,58 +340,58 @@ class opravy
                     }
 
                     if ( $archiv_vlastnik == 1 )
-                    { echo "<a href=\"vlastnici-archiv.php?find_id=".$data_S2["id_vlastnika"]."\" "; }
+                    { $this->vypis_opravy_content_html .= "<a href=\"vlastnici-archiv.php?find_id=".$data_S2["id_vlastnika"]."\" "; }
                     elseif ($firma_vlastnik == 1 )
-                    { echo "<a href=\"vlastnici2.php?find_id=".$data_S2["id_vlastnika"]."\" "; }
+                    { $this->vypis_opravy_content_html .= "<a href=\"vlastnici2.php?find_id=".$data_S2["id_vlastnika"]."\" "; }
                     else
-                    { echo "<a href=\"vlastnici.php?find_id=".$data_S2["id_vlastnika"]."\" "; }
+                    { $this->vypis_opravy_content_html .= "<a href=\"vlastnici.php?find_id=".$data_S2["id_vlastnika"]."\" "; }
 
-                    echo "title=\"Detail vlastníka: ".$popis_vlastnika."\" >".$data_S2["id_vlastnika"]."</a> \n\n";
+                    $this->vypis_opravy_content_html .= "title=\"Detail vlastníka: ".$popis_vlastnika."\" >".$data_S2["id_vlastnika"]."</a> \n\n";
                           
-                    echo "</td>";
-                      // echo "<td class=\"".$class."\" >".$data_S2["text"]."</td>";
-                      echo "<td class=\"".$class."\" style=\" color: ".$barva."; \" >".$data_S2["datum_vlozeni"]."</td>
+                    $this->vypis_opravy_content_html .= "</td>";
+                      // $this->vypis_opravy_content_html .= "<td class=\"".$class."\" >".$data_S2["text"]."</td>";
+                      $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" >".$data_S2["datum_vlozeni"]."</td>
                       <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
 
-                      if ( $data_S2["priorita"] == 0) echo "Nízká";
-                      elseif ( $data_S2["priorita"] == 1) echo "Normální";
-                      elseif ( $data_S2["priorita"] == 2) echo "Vysoká";
-                      else echo "Nelze zjistit";
+                      if ( $data_S2["priorita"] == 0) $this->vypis_opravy_content_html .= "Nízká";
+                      elseif ( $data_S2["priorita"] == 1) $this->vypis_opravy_content_html .= "Normální";
+                      elseif ( $data_S2["priorita"] == 2) $this->vypis_opravy_content_html .= "Vysoká";
+                      else $this->vypis_opravy_content_html .= "Nelze zjistit";
 
-                      echo "</td>
+                      $this->vypis_opravy_content_html .= "</td>
                       <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
-                          if ( $data_S2["v_reseni"] == 0 ) echo "Ne";
-                          elseif ( $data_S2["v_reseni"] == 1 ) echo "Ano (".$data_S2["v_reseni_kym"].") ";
-                          else echo "Nelze zjistit";
+                          if ( $data_S2["v_reseni"] == 0 ) $this->vypis_opravy_content_html .= "Ne";
+                          elseif ( $data_S2["v_reseni"] == 1 ) $this->vypis_opravy_content_html .= "Ano (".$data_S2["v_reseni_kym"].") ";
+                          else $this->vypis_opravy_content_html .= "Nelze zjistit";
 
-                      echo "</td>
+                      $this->vypis_opravy_content_html .= "</td>
                       <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
-                          if ( $data_S2["vyreseno"] == 0 ) echo "Ne";
-                          elseif ( $data_S2["vyreseno"] == 1 ) echo "Ano (".$data_S2["vyreseno_kym"].") ";
-                          else echo "Nelze zjistit";
+                          if ( $data_S2["vyreseno"] == 0 ) $this->vypis_opravy_content_html .= "Ne";
+                          elseif ( $data_S2["vyreseno"] == 1 ) $this->vypis_opravy_content_html .= "Ano (".$data_S2["vyreseno_kym"].") ";
+                          else $this->vypis_opravy_content_html .= "Nelze zjistit";
 
-                      echo "</td>
+                      $this->vypis_opravy_content_html .= "</td>
                       <td class=\"".$class."\" style=\" color: ".$barva."; \" >";
-                      if ( ( strlen($data_S2["vlozil"]) > 1 ) ){ echo $data_S2["vlozil"]; }
-                      else { echo "<br>"; }
+                      if ( ( strlen($data_S2["vlozil"]) > 1 ) ){ $this->vypis_opravy_content_html .= $data_S2["vlozil"]; }
+                      else { $this->vypis_opravy_content_html .= "<br>"; }
 
-                      echo "</td>";
+                      $this->vypis_opravy_content_html .= "</td>";
 
-                    echo "<td class=\"".$class."\" style=\" color: ".$barva."; \" >
+                    $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" >
                       <a href=\"opravy-zacit-resit.php?id_opravy=".$data_S2["id_opravy"]."\" >začít řešit</a></td>";
 
-                    echo "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"opravy-index.php?typ=1&id_vlastnika=".$data_S2["id_vlastnika"];
+                    $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"opravy-index.php?typ=1&id_vlastnika=".$data_S2["id_vlastnika"];
 
-                    if( $data_S2["id_predchozi_opravy"] == 0){ echo "&id_predchozi_opravy=".$data_S2["id_opravy"]; }
-                    else{ echo "&id_predchozi_opravy=".$data_S2["id_predchozi_opravy"]; }
+                    if( $data_S2["id_predchozi_opravy"] == 0){ $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data_S2["id_opravy"]; }
+                    else{ $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data_S2["id_predchozi_opravy"]; }
 
-                    echo "\" >vložit odpověď</a></td>";
+                    $this->vypis_opravy_content_html .= "\" >vložit odpověď</a></td>";
                           
-                    //	echo "<tr><td class=\"".$class."\" colspan=\"\" >".$data_S2["text"]."</td></tr>";
+                    //	$this->vypis_opravy_content_html .= "<tr><td class=\"".$class."\" colspan=\"\" >".$data_S2["text"]."</td></tr>";
 
-                    echo "<tr><td colspan=\"".$pocet_bunek."\" class=\"opravy-tab-line3\" >".$data_S2["text"]."</td></tr>";
+                    $this->vypis_opravy_content_html .= "<tr><td colspan=\"".$pocet_bunek."\" class=\"opravy-tab-line3\" >".$data_S2["text"]."</td></tr>";
 
-                    echo "</tr>";
+                    $this->vypis_opravy_content_html .= "</tr>";
                   
                   } // konec if zobrazeno ne
         
@@ -386,8 +400,14 @@ class opravy
           } // konec if sekundar == 1 
 
       } // konec while 1
-      $this->logger->addInfo("opravy\\vypis_opravy: end of main loop");
       
+      $this->logger->addInfo("opravy\\vypis_opravy: end of main loop");
+      $this->logger->addInfo("opravy\\vypis_opravy: content " . var_export($this->vypis_opravy_content_html, true));
+
+      $ret = array("", $this->vypis_opravy_content_html);
+
+      return $ret;
+
     }//konec funkce vypis_opravy
 
 } // konec tridy opravy
