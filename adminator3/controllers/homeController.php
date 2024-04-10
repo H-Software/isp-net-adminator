@@ -104,7 +104,7 @@ class homeController {
 
             $v_reseni_filtr = $_GET["v_reseni_filtr"];
             $vyreseno_filtr = $_GET["vyreseno_filtr"];
-            $limit=$_GET["limit"];
+            $limit = $_GET["limit"];
 
             if( !isset($v_reseni_filtr) ){ $v_reseni_filtr="99"; }
             if( !isset($vyreseno_filtr) ){ $vyreseno_filtr="0"; }
@@ -120,7 +120,7 @@ class homeController {
             $this->smarty->assign("v_reseni_filtr",$v_reseni_filtr);
             $this->smarty->assign("limit",$limit);
             
-            $this->smarty->assign("action",$_SERVER["PHP_SELF"]);
+            $this->smarty->assign("action",$_SERVER['SCRIPT_URL']);
             
             $opravy = new opravy($this->conn_mysql, $this->logger);
          

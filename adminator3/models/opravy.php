@@ -16,7 +16,7 @@ class opravy
     function vypis_opravy($pocet_bunek)
     {
         $this->logger->addInfo("opravy\\vypis_opravy called");
-
+        $this->logger->addInfo("opravy\\vypis_opravy: script_url: ".$_SERVER['SCRIPT_URL']);
         $ret = array();
         $this->vypis_opravy_content_html = "";
 
@@ -209,11 +209,11 @@ class opravy
               }
 
               if ( $archiv_vlastnik == 1 )
-              { $this->vypis_opravy_content_html .= "<a href=\"vlastnici-archiv.php?find_id=".$data["id_vlastnika"]."\" "; }
+              { $this->vypis_opravy_content_html .= "<a href=\"". fix_link_to_another_adminator("/vlastnici-archiv.php?find_id=".$data["id_vlastnika"])."\" "; }
               elseif ($firma_vlastnik == 1 )
-              { $this->vypis_opravy_content_html .= "<a href=\"vlastnici2.php?find_id=".$data["id_vlastnika"]."\" "; }
+              { $this->vypis_opravy_content_html .= "<a href=\"". fix_link_to_another_adminator("/vlastnici2.php?find_id=".$data["id_vlastnika"])."\" "; }
               else
-              { $this->vypis_opravy_content_html .= "<a href=\"vlastnici.php?find_id=".$data["id_vlastnika"]."\" "; }
+              { $this->vypis_opravy_content_html .= "<a href=\"". fix_link_to_another_adminator("/vlastnici.php?find_id=".$data["id_vlastnika"])."\" "; }
 
               $this->vypis_opravy_content_html .= "title=\"Detail vlastníka: ".$popis_vlastnika."\" >".$data["id_vlastnika"]."</a> \n\n";
                     
@@ -246,9 +246,10 @@ class opravy
               $this->vypis_opravy_content_html .= "</td>";
 
               $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" >
-                <a href=\"opravy-zacit-resit.php?id_opravy=".$data["id_opravy"]."\" >začít řešit</a></td>";
+                <a href=\"". fix_link_to_another_adminator("/opravy-zacit-resit.php?id_opravy=".$data["id_opravy"]) . "\" >začít řešit</a></td>";
 
-              $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"opravy-index.php?typ=1&id_vlastnika=".$data["id_vlastnika"];
+              $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"".
+                                                       fix_link_to_another_adminator("/opravy-index.php?typ=1&id_vlastnika=".$data["id_vlastnika"]);
 
               if( $data["id_predchozi_opravy"] == 0){ $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data["id_opravy"]; }
               else{ $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data["id_predchozi_opravy"]; }
@@ -340,11 +341,11 @@ class opravy
                     }
 
                     if ( $archiv_vlastnik == 1 )
-                    { $this->vypis_opravy_content_html .= "<a href=\"vlastnici-archiv.php?find_id=".$data_S2["id_vlastnika"]."\" "; }
+                    { $this->vypis_opravy_content_html .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici-archiv.php?find_id=".$data_S2["id_vlastnika"]) . "\" "; }
                     elseif ($firma_vlastnik == 1 )
-                    { $this->vypis_opravy_content_html .= "<a href=\"vlastnici2.php?find_id=".$data_S2["id_vlastnika"]."\" "; }
+                    { $this->vypis_opravy_content_html .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2.php?find_id=".$data_S2["id_vlastnika"]) . "\" "; }
                     else
-                    { $this->vypis_opravy_content_html .= "<a href=\"vlastnici.php?find_id=".$data_S2["id_vlastnika"]."\" "; }
+                    { $this->vypis_opravy_content_html .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici.php?find_id=".$data_S2["id_vlastnika"]) . "\" "; }
 
                     $this->vypis_opravy_content_html .= "title=\"Detail vlastníka: ".$popis_vlastnika."\" >".$data_S2["id_vlastnika"]."</a> \n\n";
                           
@@ -378,9 +379,10 @@ class opravy
                       $this->vypis_opravy_content_html .= "</td>";
 
                     $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" >
-                      <a href=\"opravy-zacit-resit.php?id_opravy=".$data_S2["id_opravy"]."\" >začít řešit</a></td>";
+                      <a href=\"". fix_link_to_another_adminator("/opravy-zacit-resit.php?id_opravy=".$data_S2["id_opravy"]) . "\" >začít řešit</a></td>";
 
-                    $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"opravy-index.php?typ=1&id_vlastnika=".$data_S2["id_vlastnika"];
+                    $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"" . 
+                                                          fix_link_to_another_adminator("/opravy-index.php?typ=1&id_vlastnika=".$data_S2["id_vlastnika"]);
 
                     if( $data_S2["id_predchozi_opravy"] == 0){ $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data_S2["id_opravy"]; }
                     else{ $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data_S2["id_predchozi_opravy"]; }
@@ -402,7 +404,7 @@ class opravy
       } // konec while 1
       
       $this->logger->addInfo("opravy\\vypis_opravy: end of main loop");
-      $this->logger->addInfo("opravy\\vypis_opravy: content " . var_export($this->vypis_opravy_content_html, true));
+      // $this->logger->addDebug("opravy\\vypis_opravy: content " . var_export($this->vypis_opravy_content_html, true));
 
       $ret = array("", $this->vypis_opravy_content_html);
 
