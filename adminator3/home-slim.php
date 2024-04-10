@@ -22,14 +22,19 @@ $app = new \Slim\App(['settings' => $slim_config]);
 require "app/src/dependencies.php";
 
 // app routing
-$app->map(['GET', 'POST'],'/home', \homeController::class . ':home');
+use App\Middleware\GuestMiddleware;
+use App\Middleware\AuthMiddleware;
 
-$app->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
-$app->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
-$app->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
+$app->group('', function () {
+    $this->map(['GET', 'POST'],'/home', \homeController::class . ':home');
 
-$app->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');
-$app->map(['GET', 'POST'],'/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
+    $this->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
+    $this->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
+    $this->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
+    
+    $this->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');
+    $this->map(['GET', 'POST'],'/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
+})->add(new AuthMiddleware($container));
 
 // final
 $app->run();
