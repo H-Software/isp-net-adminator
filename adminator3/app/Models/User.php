@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class User extends Model
 {
-	protected $table = 'users';
+	protected $table = 'users_slim';
 
 	public $first_name;
 
