@@ -452,7 +452,7 @@ function _store_workbook() {
         if ($sheet->_selected) {
             $this->_selected++;
         }
-        $sheet->_close($this->_sheetnames);
+        // $sheet->_close($this->_sheetnames);
     }
 
     # Add Workbook globals

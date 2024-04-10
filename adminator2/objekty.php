@@ -1,9 +1,11 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
+require("include/class.php"); 
+require("include/c_listing-objekty.php");
 
 if ( !( check_level($level,1) ) )
 {
@@ -23,10 +25,6 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 include ("include/charset.php"); 
 
-include ("include/class.php"); 
-
-include("include/c_listing-objekty.php");
-  
 ?>
 
 <title>Adminator2 - Objekty</title> 
@@ -265,11 +263,15 @@ include("include/c_listing-objekty.php");
    
   if( $mod_vypisu == 1 )
   { 
-    $dotaz_f = mysql_query("SELECT * FROM tarify_int WHERE typ_tarifu = '0' ");
+    try {
+      $dotaz_f = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '0' ");
+    } catch (Exception $e) {
+      die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+    }
     
     $i = 0;
     
-    while( $data_f = mysql_fetch_array($dotaz_f) )
+    while( $data_f = $dotaz_f->fetch_array() )
     {
      if( $i == 0 ){ $tarif_sql .= "AND ( "; }
      if( $i > 0 ){ $tarif_sql .= " OR "; }
@@ -284,11 +286,15 @@ include("include/c_listing-objekty.php");
   }
   elseif( $mod_vypisu == 2 )
   { 
-    $dotaz_f = mysql_query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ");
+    try {
+      $dotaz_f = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ");
+    } catch (Exception $e) {
+      die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+    }
     
     $i = 0;
     
-    while( $data_f = mysql_fetch_array($dotaz_f) )
+    while( $data_f = $dotaz_f->fetch_array() )
     {
      if( $i == 0 ){ $tarif_sql .= "AND ( "; }
      if( $i > 0 ){ $tarif_sql .= " OR "; }
@@ -324,7 +330,7 @@ include("include/c_listing-objekty.php");
    $poradek .= "&mod_vypisu=".$mod_vypisu;
   
    //vytvoreni objektu
-   $listovani = new c_Listing("./objekty.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+   $listovani = new c_listing_objekty("./objekty.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
 
     if(($list == "")||($list == "1")){ $bude_chybet = 0;  } //pokud není list zadán nebo je první bude ve výběru sql dotazem chybet 0 záznamů
     else
@@ -337,7 +343,7 @@ include("include/c_listing-objekty.php");
   $listovani->listInterval();
   
   $objekt = new objekt;
-  $objekt->vypis($sql,$co,0,$dotaz_final);
+  $objekt->vypis($sql,$co,0,$dotaz_final,$conn_mysql);
      
   $objekt->vypis_tab(2);  
  

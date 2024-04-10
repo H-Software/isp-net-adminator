@@ -16,6 +16,7 @@ RUN apt-get update \
         zip \
         unzip \
         zlib1g-dev \
+        git \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
@@ -79,9 +80,6 @@ RUN cd adminator3 \
     && composer require monolog/monolog:^1.17
 #     # && docker-php-ext-enable xdebug \
 
-# RUN cd adminator3 \
-#     && composer install
-
 # app code
 COPY adminator2/ /var/www/html/adminator2/
 COPY adminator3/ /var/www/html/adminator3/
@@ -95,3 +93,10 @@ COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/te
 COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator2/templates/inc.home.list-logged-users.tpl
 
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
+
+
+# RUN cd adminator3 \
+#      && composer update
+
+# RUN cd adminator3 \
+#     && composer install

@@ -1,11 +1,11 @@
 <?php
 
-require_once ("include/config.php"); 
-require_once ("include/check_login.php");
-
-require_once ("include/check_level.php");
-
-require_once ("include/class.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
+require("include/class.php"); 
+// require("include/c_listing-objekty.php");
 
 if( !( check_level($level,135) ) )
 {
@@ -69,7 +69,7 @@ $get_odkazy = "".urlencode("&par_vlastnik")."=".urlencode($par_vlastnik).
 		"".urlencode("&id_stb")."=".urlencode($id_stb);
 
 //vytvoreni objektu
-$stb = new stb;
+$stb = new stb($conn_mysql);
 
 $stb->level = intval($level);
 
@@ -152,7 +152,7 @@ else{
 
  $stb->generate_sql_query();
 
-    $paging_url = "?".urlencode("order")."=".$stb->order.$get_odkazy;
+ $paging_url = "?".urlencode("order")."=".$stb->order.$get_odkazy;
     
  $paging = new paging_global($paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $stb->sql_query);
                  
