@@ -79,6 +79,12 @@
 	$sql_nod .= " OR ip_rozsah LIKE '%$nod_find%' OR adresa LIKE '%$nod_find%' ";
 	$sql_nod .= " OR pozn LIKE '%$nod_find%' ) AND ( typ_nodu = '1' ) ORDER BY jmeno ASC ";
 	
+	  try {
+		$dotaz_f = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ");
+	  } catch (Exception $e) {
+		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
+
        $vysledek=mysql_query($sql_nod);
        //$vysledek=mysql_query("SELECT * from nod_list ORDER BY jmeno ASC" );
        

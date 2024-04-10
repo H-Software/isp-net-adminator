@@ -120,7 +120,6 @@ class objekt
  function vypis_razeni()
  {
  
-
    $input_value="1";
    $input_value2="2";
 
@@ -2026,25 +2025,30 @@ class objektypridani {
 	
     } //konec funkce check_l2tp_cr
     
-    function generujdata ($selected_nod, $typ_ip, $dns)
+    function generujdata ($selected_nod, $typ_ip, $dns, $conn_mysql)
     {
      // promenne ktere potrebujem, a ktere budeme ovlivnovat
      global $ip, $mac, $ip_rozsah, $umisteni_aliasu, $tunnel_user, $tunnel_pass, $fail, $error;    
 	    
      // skusime ip vygenerovat
-     $vysl_ip=mysql_query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($selected_nod)."' ");
-     $radku_ip=mysql_num_rows($vysl_ip);
+	 try {
+		$vysl_ip = $conn_mysql->query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($selected_nod)."' ");
+	 } catch (Exception $e) {
+		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	 }
+
+     $radku_ip=$vysl_ip->num_rows;
 
      //print "<div style=\"color: grey;\" >debug sql: "."SELECT ip_rozsah, umisteni_aliasu FROM nod_list WHERE id = '".intval($selected_nod)."' "."</div>";
     	    
      if($radku_ip == 1) 
      {
-	while ($data_ip=mysql_fetch_array($vysl_ip) ){
-	
-	   $ip_rozsah=$data_ip["ip_rozsah"];
-	  
-	   list($a,$b,$c,$d) =split("[.]",$ip_rozsah);
-	}
+		while ($data_ip=mysql_fetch_array($vysl_ip) ){
+		
+			$ip_rozsah=$data_ip["ip_rozsah"];
+			
+			list($a,$b,$c,$d) =split("[.]",$ip_rozsah);
+		}
 	
 	/*
 	if( $ip_rozsah){
@@ -2111,7 +2115,11 @@ class objektypridani {
 	    }
 	  
 	    $sql_src .= " ORDER BY public_ip_to_use.ip_address ASC ";
-	    
+		// try {
+		// 	$vysl_ip = $conn_mysql->query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($selected_nod)."' ");
+		//  } catch (Exception $e) {
+		// 	die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		//  }
 	    $dotaz=mysql_query($sql_src);
 	    
 	    if( (mysql_num_rows($dotaz) == 0) )

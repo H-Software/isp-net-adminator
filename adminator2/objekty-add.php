@@ -1,9 +1,11 @@
 <?php
 
-require_once ("include/config.php"); 
-require_once("include/check_login.php");
-
-require_once("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
+// require("include/class.php"); 
+// require("include/c_listing-objekty.php");
 
 if( !( check_level($level,2) ) ) 
 {
@@ -11,7 +13,7 @@ if( !( check_level($level,2) ) )
   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";  
   exit;
 }
-   
+
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 
       <head> ';

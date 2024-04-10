@@ -46,8 +46,8 @@ if( ( $update_status==1 and !( isset($send) ) ) )
     elseif( $verejna_l=="99" ) 
     { $typ_ip="1"; }
     else { 
-	$typ_ip="2"; 
-	$vip_rozsah=$verejna_l; 
+      $typ_ip="2"; 
+      $vip_rozsah=$verejna_l; 
     }
     
     $sikana_status_l=$data["sikana_status"]; 
@@ -90,7 +90,7 @@ require_once("include/class.php");
   //co mame: v promeny selected_nod mame id nodu kam se to bude pripojovat
   // co chcete: ip adresu , idealne ze spravnyho rozsahu :)
 
-objektypridani::generujdata($selected_nod, $typ_ip, $dns); 
+objektypridani::generujdata($selected_nod, $typ_ip, $dns, $conn_mysql); 
 
 if( (strlen($ip) > 0) )  { objektypridani::checkip($ip); }
 
