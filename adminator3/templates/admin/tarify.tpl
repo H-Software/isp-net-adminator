@@ -2,7 +2,7 @@
 
 {include file="admin/inc.subcat.tpl"}
 
-<div class="global-cat-body" >
+<div class="global-cat-body2" >
 
 {$body}
 

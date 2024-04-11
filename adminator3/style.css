@@ -236,6 +236,12 @@ subcat-spacebody
     font-size: 18px;
 }
 
+.global-cat-body2
+{
+    padding-left: 0px; 
+    padding-top: 20px; 
+}
+
 .about-body
 {
     padding-left: 10px; 

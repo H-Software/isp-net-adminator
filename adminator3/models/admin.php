@@ -202,13 +202,13 @@ class admin {
 		  if( isset($send) )
 		  {
 		   //budeme ukladat ..
-		   $output .= "budeme ukladat ...";
+		   $output .= "budeme ukladat ... T.B.A.";
 		  
 		  }
 		  else
 		  {
 			//zobrazeni formu pro update ...
-			$output .= "zobrazeni formu pro update ....";
+			$output .= "zobrazeni formu pro update .... T.B.A.";
 		  
 		  }
 		  
@@ -320,7 +320,6 @@ class admin {
 						
 						<td style=\"".$style2."\" colspan=\"\" >";
 						
-						//echo $data["garant"];
 						if ( $data["garant"] == 1 )
 						{ $output .= "Ano"; }
 						elseif ( $data["garant"] == 0 )
@@ -352,10 +351,10 @@ class admin {
 						$output .= "</td>
 						
 						<td style=\"".$style2."\" colspan=\"\" >
-						<a href=\"".$_SERVER["PHP_SELF"]."?update_id=".$data["id_tarifu"]."\" >upravit</a>
+						<a href=\"".$_SERVER["SCRIPT_URL"]."?update_id=".$data["id_tarifu"]."\" >upravit</a>
 						</td>
 						<td style=\"".$style2."\" colspan=\"\" >
-						<a href=\"".$_SERVER["PHP_SELF"]."?erase_id=".$data["id_tarifu"]."\" >smazat</a>
+						<a href=\"".$_SERVER["SCRIPT_URL"]."?erase_id=".$data["id_tarifu"]."\" >smazat</a>
 						</td>
 				
 					</tr>
