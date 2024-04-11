@@ -103,9 +103,9 @@ class adminatorController{
 
         $kategorie = array();
 
-        $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici-cat.php", "align" => "center", "width" => "18%" );
+        $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" );
 
-        if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici-cat.php+",$uri) or ereg("^.+vypovedi",$uri) )
+        if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici/cat+",$uri) or ereg("^.+vypovedi",$uri) )
         { $kategorie[0]["barva"] = "silver"; }
 
         $kategorie[1] = array( "nazev" => "Služby", "url" => fix_link_to_another_adminator("/objekty-subcat.php"), "align" => "center", "width" => "18%" );
