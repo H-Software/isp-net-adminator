@@ -113,7 +113,7 @@ class adminatorController{
         if( ereg("^.+objekty.",$uri) or ereg("^.+objekty-subcat.php",$uri) )
         { $kategorie[1]["barva"] = "silver"; }
 
-        $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby-cat.php", "align" => "center", "width" => "18%" );
+        $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby/cat", "align" => "center", "width" => "18%" );
 
         if( ereg("^.+platby.+$",$uri) )
         { $kategorie[2]["barva"] = "silver"; }

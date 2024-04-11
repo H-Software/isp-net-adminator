@@ -1,6 +1,6 @@
 {include file="base.tpl"}
 
-{include file="inc.cat.platby.tpl"}
+{include file="platby/inc.cat.platby.tpl"}
 
 <div class="global-cat-body" >{$body}</div>
 

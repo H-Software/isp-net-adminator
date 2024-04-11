@@ -97,6 +97,11 @@ $container['vlastniciController'] = function ($c) {
     return new vlastniciController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
 };
 
+$container['platbyController'] = function ($c) {
+    global $conn_mysql, $smarty, $logger, $auth, $app;
+    return new platbyController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+};
+
 $container['workController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
     return new workController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
