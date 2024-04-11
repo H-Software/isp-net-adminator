@@ -1,9 +1,9 @@
 <?php
 
-include ("include/config.php");
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,28) ) )
 {
@@ -19,6 +19,9 @@ if ( !( check_level($level,28) ) )
 
 ?>	 
 
+<h2>removed</h2>
+
+<!--
 <frameset rows="155px,*">
 
     <frame name="top" src="soubory-top.php" scrolling="no" frameborder="0"/>
@@ -33,3 +36,4 @@ if ( !( check_level($level,28) ) )
 	    <h4>Vas browser nepodporuje ramy (frames). A to je fakt divny :)</h4>
 	</body>
 </noframes>
+-->
