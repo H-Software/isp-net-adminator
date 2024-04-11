@@ -4,7 +4,6 @@ session_start();
 
 require "include/main.function.shared.php";
 require "include/config.php";
-require "include/main.function.php";
 
 $smarty = new Smarty;
 $smarty->compile_check = true;
@@ -51,6 +50,8 @@ $app->group('', function () {
 
     $this->map(['GET', 'POST'],'/vlastnici/cat', \vlastniciController::class . ':cat');
     $this->map(['GET', 'POST'],'/vlastnici2', \vlastniciController::class . ':vlastnici2');
+
+    $this->map(['GET', 'POST'],'/platby/cat', \platbyController::class . ':cat');
 
     $this->map(['GET', 'POST'],'/work', \workController::class . ':work');
 
