@@ -28,13 +28,34 @@ class adminController extends adminatorController {
 
         $this->logger->addInfo("adminController\admin called");
         
-        $this->checkLevel();
+        $this->checkLevel(91);
 
         $this->smarty->assign("page_title","Adminator3 :: admin");
 
         $this->header();
 
+        $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+
+        $this->smarty->display('admin/subcat.tpl');
+
         return $response;
     }
 
+    public function adminMain(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("adminController\adminMain called");
+        
+        $this->checkLevel(17);
+
+        $this->smarty->assign("page_title","Adminator3 :: admin :: subca2");
+
+        $this->header();
+
+        $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+
+        $this->smarty->display('admin/subcat2.tpl');
+
+        return $response;
+    }
 }
