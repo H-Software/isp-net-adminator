@@ -23,14 +23,29 @@ class homeController {
         $this->logger->addInfo("homeController\__construct called");
 	}
 
-    public function home(ServerRequestInterface $request, ResponseInterface $response, array $args)
-    {
-            
-        $this->logger->addInfo("homeController\home called");
+    private function checkLevel(){
 
         $this->container->auth->page_level_id = 38;
 
-        $this->container->auth->checkLevel($this->container->logger);
+        $checkLevel = $this->container->auth->checkLevel($this->container->logger);
+        
+        $this->logger->addInfo("homeController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
+
+        if($checkLevel === false){
+
+            $this->smarty->assign("page_title","Adminator3 - chybny level");
+            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+            $this->smarty->display('index-nolevel.tpl');
+            
+            exit;
+        }
+    }
+    
+    public function home(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {            
+        $this->logger->addInfo("homeController\home called");
+
+        $this->checkLevel();
 
         $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
         $a = new adminator($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
@@ -42,7 +57,6 @@ class homeController {
 
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
-        // $this->footer();
         $ac->header();
 
         //vlozeni prihlasovaci historie

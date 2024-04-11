@@ -94,11 +94,14 @@ class Auth
 
         if( $rs === false and $display_no_level_page === true) {
             // user nema potrebny level a nechceme pokracovat
+			
             // $this->smarty->assign("page_title","Adminator3 - chybny level");
             // $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br> (current_level: " . $user_level . ")");
             // $this->smarty->display('index-nolevel.tpl');
         
-            exit;
+            //exit;
+
+			return false;
         }
         elseif($rs === false and $display_no_level_page === false){
             return false;

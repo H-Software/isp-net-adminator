@@ -17,10 +17,6 @@ $app = new \Slim\App(['settings' => $slim_config]);
 
 require "app/src/dependencies.php";
 
-// $auth_svc = new auth_service($conn_mysql, $smarty, $logger);
-// $auth_svc->page_level_id = 38;
-// $auth_svc->check_all();
-
 // routes
 use App\Middleware\GuestMiddleware;
 use App\Middleware\AuthMiddleware;
