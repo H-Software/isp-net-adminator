@@ -82,6 +82,11 @@ $container['aboutController'] = function ($c) {
     return new aboutController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
 };
 
+$container['adminController'] = function ($c) {
+    global $conn_mysql, $smarty, $logger, $auth, $app;
+    return new adminController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+};
+
 $container['archivZmenController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
     return new archivZmenController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);

@@ -42,6 +42,10 @@ $app->group('', function () {
     $this->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
     $this->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
     
+    $this->map(['GET', 'POST'],'/admin', \adminController::class . ':admin');
+    $this->map(['GET', 'POST'],'/admin/admin', \adminController::class . ':adminMain');
+    $this->map(['GET', 'POST'],'/admin/level-list', \adminController::class . ':adminLevelList');
+
     $this->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');
     $this->map(['GET', 'POST'],'/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
 

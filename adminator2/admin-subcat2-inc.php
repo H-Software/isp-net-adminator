@@ -11,7 +11,7 @@
 
 <span style="padding-left: 30px; "><a href="admin-level-add.php" >Přidání levelu pro stránku</a></span>
 
-<span style="padding-left: 30px; "><a href="admin-level-list.php" >Výpis levelů stránek</a></span>
+<span style="padding-left: 30px; ">Výpis levelů stránek</span>
 
 <br>
 
