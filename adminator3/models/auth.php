@@ -15,7 +15,7 @@ class auth_service{
 
     var $page_level_id; // IDcko, dle ktereho zjistime, jestli user ma dostatecny level
 
-    var $page_level_id_custom; // IDcko ala page_level_id ale pro jinou stranku/sub-page
+    var $page_level_id_cxustom; // IDcko ala page_level_id ale pro jinou stranku/sub-page
 
     var $check_auth_no_die;
 

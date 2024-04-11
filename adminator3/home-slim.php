@@ -10,16 +10,16 @@ $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-$auth = new auth_service($conn_mysql, $smarty, $logger);
-// $auth->page_level_id = 38;
-// $auth->check_all();
-
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 $app = new \Slim\App(['settings' => $slim_config]);
 
 require "app/src/dependencies.php";
+
+// $auth_svc = new auth_service($conn_mysql, $smarty, $logger);
+// $auth_svc->page_level_id = 38;
+// $auth_svc->check_all();
 
 // routes
 use App\Middleware\GuestMiddleware;
