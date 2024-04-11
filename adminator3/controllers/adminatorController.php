@@ -123,7 +123,7 @@ class adminatorController{
         if( ereg("^.+topology",$uri) )
         { $kategorie[3]["barva"] = "silver"; }
 
-        $kategorie[4] = array( "nazev" => "Nastavení", "url" => fix_link_to_another_adminator("/admin-subcat.php"), "align" => "center", "width" => "" );
+        $kategorie[4] = array( "nazev" => "Nastavení", "url" => fix_link_to_another_adminator("/admin"), "align" => "center", "width" => "" );
 
         if( ereg("^.+admin.+$",$uri_replace ) or ereg("^.+admin-subcat.php$",$uri) )
         {  $kategorie[4]["barva"] = "silver"; }
