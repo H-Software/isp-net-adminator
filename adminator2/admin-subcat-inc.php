@@ -8,5 +8,5 @@
 
 <span style="padding-left: 30px; "><a href="admin-partner.php" >Externí partner program</a></span>
 
-<span style="padding-left: 30px; "><a href="admin-tarify.php" >Tarify Internet</a></span>
+<span style="padding-left: 30px; ">Tarify Internet</span>
 

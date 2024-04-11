@@ -126,7 +126,7 @@ class adminatorController{
             
         // pozice okna
         $this->smarty->assign("windowtop2","150px");
-        $this->smarty->assign("windowleft2","70%");
+        $this->smarty->assign("windowleft2","50%");
 
         $this->smarty->assign("subcat_select",0);
     }
