@@ -2,7 +2,8 @@
  <div class="intro-logged-users" >přihlášení uživatelé:  {$pocet_prihl_uziv} </div>
 
     <div style="padding-bottom: 5px; padding-top: 2px; " >
-      <a href="/index.php?lo=true" target="_top" class="cat" >Odhlásit se</a>
+      <a href="/auth/signout" target="_top" class="cat" style="margin-right: 10px;">Odhlásit se</a>
+      <a href="/auth/password/change" target="_top" class="cat" >Změna hesla</a>
     </div>
     
     <input type="button" class="buttonalllogin" name="OK2" value="Zobrazit všechny přihlášené" onclick="showWindow2()" >

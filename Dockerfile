@@ -20,8 +20,13 @@ RUN apt-get update \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install opcache pgsql pdo_pgsql \
-    && docker-php-ext-install zip \
+    && docker-php-ext-install \
+            opcache \
+            pgsql \
+            pdo_pgsql \
+            zip \
+            pdo \
+            pdo_mysql \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     # && pecl install apcu \
@@ -73,11 +78,19 @@ RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2
 RUN mkdir -p /var/www/html/adminator3/
 
 RUN cd adminator3 \
-    && composer require nette/robot-loader:3.1.4 \
-    && composer require smarty/smarty:2.6.33 \
-    && composer require slim/slim:3.* \
-    && composer require bryanjhv/slim-session:~3.0 \
-    && composer require monolog/monolog:^1.17
+    && composer require \
+        nette/robot-loader:3.1.4 \
+        smarty/smarty:2.6.33 \
+        slim/slim:3.* \
+        slim/twig-view:^2.1 \
+        slim/csrf:^0.6.0 \
+        slim/flash:^0.1.0 \
+        monolog/monolog:^1.17 \
+        respect/validation:^1.0 \
+    && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
+    && composer require\
+        illuminate/database:^5.2
+        
 #     # && docker-php-ext-enable xdebug \
 
 # app code

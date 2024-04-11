@@ -23,10 +23,29 @@ class homeController {
         $this->logger->addInfo("homeController\__construct called");
 	}
 
-    public function home(ServerRequestInterface $request, ResponseInterface $response, array $args)
-    {
+    private function checkLevel($page_level_id){
 
+        $this->container->auth->page_level_id = $page_level_id;
+
+        $checkLevel = $this->container->auth->checkLevel($this->container->logger);
+        
+        $this->logger->addInfo("homeController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
+
+        if($checkLevel === false){
+
+            $this->smarty->assign("page_title","Adminator3 - chybny level");
+            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+            $this->smarty->display('index-nolevel.tpl');
+            
+            exit;
+        }
+    }
+    
+    public function home(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {            
         $this->logger->addInfo("homeController\home called");
+
+        $this->checkLevel(38);
 
         $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
         $a = new adminator($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
@@ -38,7 +57,6 @@ class homeController {
 
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
-        // $this->footer();
         $ac->header();
 
         //vlozeni prihlasovaci historie
@@ -71,7 +89,7 @@ class homeController {
     function board(){
         //generovani zprav z nastenky
 
-        if ($this->auth->check_level(87, false) === true) {
+        if ($this->container->auth->checkLevel($this->container->logger, 87, false) === true) {
             $this->logger->addInfo("homeController\board allowed");
 
             $this->smarty->assign("nastenka_povoleno",1);
@@ -99,7 +117,7 @@ class homeController {
         //opravy a zavady vypis
         $pocet_bunek = 11;
 
-        if ($this->auth->check_level(101,false) === true) {
+        if ($this->container->auth->checkLevel($this->container->logger, 101, false) === true) {
             $this->logger->addInfo("homeController\opravy_a_zavady allowed");
 
             $v_reseni_filtr = $_GET["v_reseni_filtr"];

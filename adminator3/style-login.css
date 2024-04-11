@@ -5,45 +5,18 @@ body
     border-color:#000066;
 }
 
-b
+.login img
 {
-    font-size: 12;
-    font-weight:bolder;
+    margin-bottom: 10px; 
+    margin-top: 10px;
 }
 
-table
+.login-message
 {
-    border-width: 1;
-    border-color: #000066;
-    background-color: white;
-    color: #000066;
-}
-
-input
-{
-    font-family:arial ce;
-    font-size: 12;
-    color: #000066;
-    border-color: #000066;
-}
-
-td
-{
-    border-width:0;
-}
-
-.submit
-{
-    font-family:arial ce;
-    font-size: 12;
-    color: #000066;
-    font-weight: bolder;
-    border-width: 1;
-    border-color: #000066;
-}
-
-.big
-{
+    margin-top: 50px;
+    margin-bottom: 20px; 
     font-size: 14;
+    font-weight:bolder;
     color: black;
+    display: block;
 }

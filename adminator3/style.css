@@ -1,3 +1,30 @@
+/* table
+{
+    border-width: 1;
+    border-color: #000066;
+    background-color: white;
+    color: #000066;
+}
+
+input
+{
+    font-family:arial ce;
+    font-size: 12;
+    color: #000066;
+    border-color: #000066;
+
+}
+
+.submit
+{
+    font-family:arial ce;
+    font-size: 12;
+    color: #000066;
+    font-weight: bolder;
+    border-width: 1;
+    border-color: #000066;
+} */
+
 subcat-spacebody
 {
     margin: 0;
@@ -230,7 +257,25 @@ subcat-spacebody
 }
 
 .opravy-form-nevybrano
-{ color: grey; }
+{ 
+    color: grey; 
+}
+
+.opravy-form-control-items
+{
+
+    font-size: 11px;
+}
+
+.opravy-form-control-items input
+{
+    font-size: 11px;
+}
+
+.opravy-form-control-items select
+{
+    font-size: 11px;
+}
 
 .odkaz-uroven-vys{ color: #CC3300; }
 

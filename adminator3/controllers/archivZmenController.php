@@ -23,12 +23,30 @@ class archivZmenController {
         $this->logger->addInfo("archivZmenController\__construct called");
 	}
 
+    private function checkLevel($page_level_id){
+
+        $this->container->auth->page_level_id = $page_level_id;
+
+        $checkLevel = $this->container->auth->checkLevel($this->container->logger);
+        
+        $this->logger->addInfo("archivZmenController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
+
+        if($checkLevel === false){
+
+            $this->smarty->assign("page_title","Adminator3 - chybny level");
+            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+            $this->smarty->display('index-nolevel.tpl');
+            
+            exit;
+        }
+    }
+
     public function archivZmenCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
         $this->logger->addInfo("archivZmenController\archivZmenCat called");
         
-        $this->auth->check_level(30);
+        $this->checkLevel(30);
 
         $this->smarty->assign("page_title","Adminator3 :: Změny :: kategorie");
 
@@ -47,7 +65,7 @@ class archivZmenController {
 
         $this->logger->addInfo("archivZmenController\archivZmenUcetni called");
         
-        $this->auth->check_level(147);
+        $this->checkLevel(147);
 
         $this->smarty->assign("page_title","Adminator3 :: Změny pro účetní");
 
@@ -63,7 +81,7 @@ class archivZmenController {
 
         if( $action == "add")
         { //rezim pridani
-            $this->auth->check_level(148);
+            $this->checkLevel(148);
 
             $update_id = $_POST['update_id'];
             
