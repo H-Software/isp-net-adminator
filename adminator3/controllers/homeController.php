@@ -4,7 +4,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class homeController {
+class homeController extends adminatorController {
     var $conn_mysql;
     var $smarty;
     var $logger;
@@ -47,7 +47,6 @@ class homeController {
 
         $this->checkLevel(38);
 
-        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
         $a = new adminator($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
 
         if ($request->isPost()) {
@@ -57,13 +56,13 @@ class homeController {
 
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
-        $ac->header();
+        $this->header();
 
         //vlozeni prihlasovaci historie
         list_logged_users_history($this->conn_mysql, $this->smarty);
         
         //informace z modulu neuhrazené faktury
-            
+        //
         $neuhr_faktury_pole = $a->show_stats_faktury_neuhr();
         $this->logger->addInfo("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
 

@@ -4,7 +4,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class aboutController {
+class aboutController extends adminatorController {
     var $conn_mysql;
     var $smarty;
     var $logger;
@@ -23,24 +23,6 @@ class aboutController {
         $this->logger->addInfo("aboutController\__construct called");
 	}
 
-    private function checkLevel($page_level_id){
-
-        $this->container->auth->page_level_id = $page_level_id;
-
-        $checkLevel = $this->container->auth->checkLevel($this->container->logger);
-        
-        $this->logger->addInfo("aboutController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
-
-        if($checkLevel === false){
-
-            $this->smarty->assign("page_title","Adminator3 - chybny level");
-            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-            $this->smarty->display('index-nolevel.tpl');
-            
-            exit;
-        }
-    }
-
     public function about(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
@@ -50,8 +32,7 @@ class aboutController {
 
         $this->smarty->assign("page_title","Adminator3 :: O programu");
 
-        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
-        $ac->header();
+        $this->header();
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -68,8 +49,7 @@ class aboutController {
 
         $this->smarty->assign("page_title","Adminator3 :: O programu :: Staré změny");
 
-        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
-        $ac->header();
+        $this->header();
 
         $this->smarty->display('about/about-changes-old.tpl');
 
@@ -84,8 +64,7 @@ class aboutController {
 
         $this->smarty->assign("page_title","Adminator3 :: O programu :: Změny");
 
-        $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
-        $ac->header();
+        $this->header();
         
         $this->smarty->display('about/about-changes.tpl');
 

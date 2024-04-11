@@ -45,6 +45,9 @@ $app->group('', function () {
     
     $this->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');
     $this->map(['GET', 'POST'],'/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
+
+    $this->map(['GET', 'POST'],'/work', \workController::class . ':work');
+
 })->add(new AuthMiddleware($container));
 
 // final
