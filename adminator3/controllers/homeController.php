@@ -23,9 +23,9 @@ class homeController {
         $this->logger->addInfo("homeController\__construct called");
 	}
 
-    private function checkLevel(){
+    private function checkLevel($page_level_id){
 
-        $this->container->auth->page_level_id = 38;
+        $this->container->auth->page_level_id = $page_level_id;
 
         $checkLevel = $this->container->auth->checkLevel($this->container->logger);
         
@@ -45,7 +45,7 @@ class homeController {
     {            
         $this->logger->addInfo("homeController\home called");
 
-        $this->checkLevel();
+        $this->checkLevel(38);
 
         $ac = new adminatorController($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
         $a = new adminator($this->conn_mysql, $this->smarty, $this->logger, $this->auth);

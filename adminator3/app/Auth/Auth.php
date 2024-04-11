@@ -94,19 +94,9 @@ class Auth
         $logger->addInfo("Auth\check_level: find_page_level: pl: " . $pl . ", retval: " . var_export($page_level_rs, true));
         $logger->addInfo("Auth\check_level: result: " . var_export($rs, true));
 
-        if( $rs === false and $display_no_level_page === true) {
-            // user nema potrebny level a nechceme pokracovat
-			
-            // $this->smarty->assign("page_title","Adminator3 - chybny level");
-            // $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br> (current_level: " . $user_level . ")");
-            // $this->smarty->display('index-nolevel.tpl');
-        
-            //exit;
-
+        if( $rs === false) {
+            // user nema potrebny level
 			return false;
-        }
-        elseif($rs === false and $display_no_level_page === false){
-            return false;
         }
         else{
             return true;

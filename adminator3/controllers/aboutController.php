@@ -23,12 +23,30 @@ class aboutController {
         $this->logger->addInfo("aboutController\__construct called");
 	}
 
+    private function checkLevel($page_level_id){
+
+        $this->container->auth->page_level_id = $page_level_id;
+
+        $checkLevel = $this->container->auth->checkLevel($this->container->logger);
+        
+        $this->logger->addInfo("aboutController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
+
+        if($checkLevel === false){
+
+            $this->smarty->assign("page_title","Adminator3 - chybny level");
+            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+            $this->smarty->display('index-nolevel.tpl');
+            
+            exit;
+        }
+    }
+
     public function about(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
         $this->logger->addInfo("aboutController\about called");
         
-        $this->auth->check_level(142);
+        $this->checkLevel(142);
 
         $this->smarty->assign("page_title","Adminator3 :: O programu");
 
@@ -46,7 +64,7 @@ class aboutController {
     {
         $this->logger->addInfo("aboutController\changesOld called");
         
-        $this->auth->check_level(144);
+        $this->checkLevel(144);
 
         $this->smarty->assign("page_title","Adminator3 :: O programu :: Staré změny");
 
@@ -62,7 +80,7 @@ class aboutController {
     {
         $this->logger->addInfo("aboutController\changes called");
 
-        $this->auth->check_level(145);
+        $this->checkLevel(145);
 
         $this->smarty->assign("page_title","Adminator3 :: O programu :: Změny");
 
