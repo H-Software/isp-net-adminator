@@ -76,4 +76,35 @@ class platbyController extends adminatorController {
 
         return $response;
     }
+
+    public function fnKontrolaOmezeni(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->addInfo("platbyController\\fn called");
+        
+        $this->checkLevel(149);
+
+        $this->smarty->assign("page_title","Adminator3 :: N.F. :: Kontrola omezeni vs. platby");
+
+        $this->header();
+
+        $platby = new platby($this->conn_mysql, $this->logger);
+
+        $pocet_synchro_faktur = $platby->synchro_db_nf();
+ 
+        // $rs = $a->fn_kontrola_omezeni();
+        // $dotaz_vlastnici_num = $ret[0];
+        // $zaznam = $ret[1];
+
+        $this->smarty->assign("nadpis","Kontrola omezení objektu vs. neuhr. fakturám");
+
+        $this->smarty->assign("faktury_pocet",$pocet_synchro_faktur);
+        
+        $this->smarty->assign("vlastnici_pocet",$dotaz_vlastnici_num);
+        
+        $this->smarty->assign("pole_data",$zaznam);
+
+        $this->smarty->display('faktury/fn-kontrola-omezeni.tpl');
+
+        return $response;
+    }
 }

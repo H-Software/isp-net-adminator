@@ -1,6 +1,6 @@
 {include file="base.tpl"}
 
-{include file="inc.cat.platby-fn.tpl"}
+{include file="platby/inc.cat.platby-fn.tpl"}
 
   <div style="margin-left: 5px; margin-top: 5px;" >
       <div style="font-size: 16px; font-weight: bold; margin-bottom: 5px;">{$nadpis}</div>

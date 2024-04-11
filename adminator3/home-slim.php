@@ -53,6 +53,7 @@ $app->group('', function () {
 
     $this->map(['GET', 'POST'],'/platby/cat', \platbyController::class . ':cat');
     $this->map(['GET', 'POST'],'/platby/fn', \platbyController::class . ':fn');
+    $this->map(['GET', 'POST'],'/platby/fn-kontrola-omezeni', \platbyController::class . ':fnKontrolaOmezeni');
 
     $this->map(['GET', 'POST'],'/work', \workController::class . ':work');
 
