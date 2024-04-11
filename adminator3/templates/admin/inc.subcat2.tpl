@@ -11,7 +11,7 @@
 
     <span style="padding-left: 30px; "><a class="cat2" href="admin-user-list.php">Výpis uživatelů (A2)</a></span>
 
-    <span style="padding-left: 30px; "><a class="cat2" href="admin-level-add.php" >Přidání levelu pro stránku (A2)</a></span>
+    <span style="padding-left: 30px; "><a class="cat2" href="/admin/level-action" >Přidání levelu pro stránku</a></span>
 
     <br>
 
