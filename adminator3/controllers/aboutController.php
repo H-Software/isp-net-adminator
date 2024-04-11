@@ -32,7 +32,7 @@ class aboutController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: O programu");
 
-        $this->header();
+        $this->header($request, $response);
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -49,7 +49,7 @@ class aboutController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: O programu :: Staré změny");
 
-        $this->header();
+        $this->header($request, $response);
 
         $this->smarty->display('about/about-changes-old.tpl');
 
@@ -64,7 +64,7 @@ class aboutController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: O programu :: Změny");
 
-        $this->header();
+        $this->header($request, $response);
         
         $this->smarty->display('about/about-changes.tpl');
 

@@ -32,7 +32,7 @@ class archivZmenController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Změny :: kategorie");
 
-        $this->header();
+        $this->header($request, $response);
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -50,7 +50,7 @@ class archivZmenController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Změny pro účetní");
 
-        $this->header();
+        $this->header($request, $response);
         
         //zacatek vlastniho obsahu
         $action = $_GET["action"];

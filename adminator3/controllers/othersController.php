@@ -32,7 +32,7 @@ class othersController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Ostatní");
 
-        $this->header();
+        $this->header($request, $response);
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -49,7 +49,7 @@ class othersController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Board");
 
-        $this->header();
+        $this->header($request, $response);
 
         $nastenka = new board($this->conn_mysql);
 

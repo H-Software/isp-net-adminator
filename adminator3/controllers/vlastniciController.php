@@ -31,7 +31,7 @@ class vlastniciController extends adminatorController {
 
       $this->smarty->assign("page_title","Adminator3 :: Zákazníci");
 
-      $this->header();
+      $this->header($request, $response);
       
       $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -48,7 +48,7 @@ class vlastniciController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Zákazníci");
 
-        $this->header();
+        $this->header($request, $response);
 
         $select = $_GET["select"];
 

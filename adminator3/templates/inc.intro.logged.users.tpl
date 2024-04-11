@@ -50,9 +50,8 @@
             w2.content.style.width = "{$windowdelka2}px";
 
             var pos1 = SZN.Dom.getBoxPosition(SZN.gEl('windowPlaceholder2'));
-            w2.container.style.top = '{$windowtop2}px';
-            w2.container.style.left = '{$windowleft2}px';
-
+            w2.container.style.top = '{$windowtop2}';
+            w2.container.style.left = '{$windowleft2}';
      {literal}
             SZN.gEl('windowPlaceholder2').appendChild(w2.container);
 

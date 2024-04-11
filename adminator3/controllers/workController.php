@@ -32,7 +32,7 @@ class workController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Work");
 
-        $this->header();
+        $this->header($request, $response);
 
         $this->smarty->assign("enable_work",1); //slozeni JS skriptu pro stranku
         $this->smarty->assign("action",$_SERVER['SCRIPT_URL']);
