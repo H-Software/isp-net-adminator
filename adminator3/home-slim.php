@@ -47,8 +47,10 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
 
     $this->map(['GET', 'POST'],'/others', \othersController::class . ':others');
-
     $this->map(['GET', 'POST'],'/others/board', \othersController::class . ':board');
+
+    $this->map(['GET', 'POST'],'/vlastnici/cat', \vlastniciController::class . ':cat');
+    $this->map(['GET', 'POST'],'/vlastnici2', \vlastniciController::class . ':vlastnici2');
 
     $this->map(['GET', 'POST'],'/work', \workController::class . ':work');
 
