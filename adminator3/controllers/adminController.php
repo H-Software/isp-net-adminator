@@ -76,4 +76,17 @@ class adminController extends adminatorController {
 
         return $response;
     }
+
+    public function adminLevelAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->addInfo("adminController\adminLevelAction called");
+          
+        $this->checkLevel(23);
+
+        $this->smarty->assign("page_title","Adminator3 :: uprava levelu stranek");
+
+        $this->header();
+
+    }
+    
 }
