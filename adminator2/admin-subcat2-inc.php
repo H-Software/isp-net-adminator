@@ -9,7 +9,7 @@
 
 <span style="padding-left: 30px; "><a href="admin-user-list.php">Výpis uživatelů</a></span>
 
-<span style="padding-left: 30px; "><a href="admin-level-add.php" >Přidání levelu pro stránku</a></span>
+<span style="padding-left: 30px; ">Přidání levelu pro stránku</span>
 
 <span style="padding-left: 30px; ">Výpis levelů stránek</span>
 

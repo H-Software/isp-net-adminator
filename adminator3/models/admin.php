@@ -68,8 +68,8 @@ class admin {
 		if ( ( $_POST["popis_new"] ) )
 		{
 			//budeme ukladat
-			$popis=$_POST["popis_new"];
-			$level=$_POST["level_new"];
+			$popis = $this->conn_mysql->real_escape_string($_POST["popis_new"]);
+			$level = intval($_POST["level_new"]);
 	
 			$output .= "Zadáno do formuláre : <br><br>";
 			$output .= "popis stránky: ".$popis."<br>";
@@ -83,7 +83,7 @@ class admin {
 			}
 			else{
 				// novy zaznam
-				$sql = "";
+				$sql = "INSERT INTO leveling (popis, level) VALUES ('$popis','$level')";
 			}
 
 			try {
@@ -137,7 +137,7 @@ class admin {
 
 			$output .= '<table border="0" width="100%" id="table2">
 				<tr>
-				<td width="25%"><label>Polozky: </label></td>
+				<td width="25%"><label>Popis: </label></td>
 				<td><input type="text" name="popis_new" size="30" value="'.$popis.'"></td
 				</tr>
 
