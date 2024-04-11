@@ -3,7 +3,7 @@
     
     <span style="margin-left: 20px; "><a href="/home" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>
     
-    <span style="padding-left: 20px; "><a class="cat2" href="others-board.php">Nástěnka</a></span>
+    <span style="padding-left: 20px; "><a class="cat2" href="/others/board">Nástěnka</a></span>
 
     <span style="padding-left: 20px; "><a class="cat2" href="others-print.php">Tisk</a></span>
 

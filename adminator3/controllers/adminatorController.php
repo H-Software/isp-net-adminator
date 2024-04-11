@@ -150,7 +150,7 @@ class adminatorController{
         if( ereg("^.+work.+$",$uri) )
         { $kat_2radka[2]["barva"] = "silver"; }
 
-        $kat_2radka[3] = array( "nazev" => "Ostatní", "url" => "/others-cat.php", "width" => "", "align" => "center" );
+        $kat_2radka[3] = array( "nazev" => "Ostatní", "url" => "/others", "width" => "", "align" => "center" );
 
         if( ereg("^.+others.+$",$uri) or ereg("^.+syslog.+$",$uri) or ereg("^.+/mail.php$",$uri) or ereg("^.+opravy.+$",$uri) )
         { $kat_2radka[3]["barva"] = "silver"; }
