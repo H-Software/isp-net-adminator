@@ -1,7 +1,7 @@
 
 <div class="opravy-homepage" style="width: 800px; position: relative; padding-bottom: 30px; padding-top: 20px;" >
 
-    <table style="position: relative; font-size: 12px; font-family: Verdana; ">
+    <table style="position: relative; font-size: 12px; font-family: Verdana;">
 
       <tr>
         <td colspan="{$pocet_bunek}" ><br>
@@ -10,10 +10,10 @@
       <form action="{$action}" method="GET" name="form4" >
     
       <tr>
-        <td colspan="3" ><span style="font-size: 18px; font-weight: bold; " >
+        <td colspan="3" ><span style="font-size: 14px; font-weight: bold;" >
                 <a href="opravy-index.php?zobr_vlastnika=0&typ=2&priorita_filtr=99&v_reseni_filtr=99&vyreseno_filtr=99" >Výpis Závad/oprav </a></span>
         </td>
-        <td colspan="7" >
+        <td colspan="8" class="opravy-form-control-items">
 
           <input type="hidden" name="typ" value="{$typ}" >
 
