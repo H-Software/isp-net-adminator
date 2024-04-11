@@ -1,5 +1,9 @@
 <?php
 
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
 class adminatorController{
 
     var $conn_mysql;
@@ -36,7 +40,31 @@ class adminatorController{
         }
     }
 
-    function header()
+    public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false){
+        
+            $ret = array();
+
+            // CSRF token name and value for update form
+            $csrf = $this->container->get('csrf');
+            $csrf_nameKey = $csrf->getTokenNameKey();
+            $csrf_valueKey = $csrf->getTokenValueKey();
+            $csrf_name = $request->getAttribute($csrf_nameKey);
+            $csrf_value = $request->getAttribute($csrf_valueKey);
+
+            if($return_form_html === true)
+            {
+                $ret[0] = '<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">'
+                           . '<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">';
+            }
+            else
+            {
+                $ret = array("", $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
+            }
+
+            return $ret;
+    }
+
+    function header(ServerRequestInterface $request, ResponseInterface $response)
     {
 
         $this->logger->addDebug("adminatorController\\footer called");
@@ -46,6 +74,7 @@ class adminatorController{
         $this->smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
 
         //kategorie
+
         $uri=$_SERVER["REQUEST_URI"];
         $uri_replace = str_replace ("adminator3", "", $uri);
 
@@ -53,6 +82,10 @@ class adminatorController{
 
         $this->smarty->assign("kategorie",$kategorie);
         $this->smarty->assign("kat_2radka",$kat_2radka);
+
+        $csrf = $this->generateCsrfToken($request, $response, true);
+        // $this->logger->addInfo("adminController\header: csrf generated: ".var_export($csrf, true));
+        $this->smarty->assign("kat_csrf_html", $csrf[0]);
 
         $this->smarty->assign("show_se_cat_values", array("0","1"));
         $this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
@@ -92,8 +125,8 @@ class adminatorController{
         $this->smarty->assign("windowpadding2","40");
             
         // pozice okna
-        $this->smarty->assign("windowtop2","150");
-        $this->smarty->assign("windowleft2","350");
+        $this->smarty->assign("windowtop2","150px");
+        $this->smarty->assign("windowleft2","70%");
 
         $this->smarty->assign("subcat_select",0);
     }

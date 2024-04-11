@@ -38,7 +38,7 @@ class homeController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
-        $this->header();
+        $this->header($request, $response);
 
         //vlozeni prihlasovaci historie
         list_logged_users_history($this->conn_mysql, $this->smarty);

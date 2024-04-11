@@ -32,7 +32,7 @@ class adminController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: admin");
 
-        $this->header();
+        $this->header($request, $response);
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -50,7 +50,7 @@ class adminController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: admin :: subca2");
 
-        $this->header();
+        $this->header($request, $response);
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -68,7 +68,7 @@ class adminController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: vypis levelu stranek");
 
-        $this->header();
+        $this->header($request, $response);
 
         // CSRF token name and value for update form
         $csrf = $this->container->get('csrf');
@@ -95,7 +95,7 @@ class adminController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: uprava levelu stranek");
 
-        $this->header();
+        $this->header($request, $response);
 
         // CSRF token name and value for update form
         $csrf = $this->container->get('csrf');

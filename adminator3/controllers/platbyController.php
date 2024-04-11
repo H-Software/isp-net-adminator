@@ -31,7 +31,7 @@ class platbyController extends adminatorController {
 
       $this->smarty->assign("page_title","Adminator3 :: Platby");
 
-      $this->header();
+      $this->header($request, $response);
       
       $body .= "Prosím vyberte z podkategorie výše....";
 
@@ -53,7 +53,7 @@ class platbyController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Platby");
 
-        $this->header();
+        $this->header($request, $response);
 
         
         return $response;
@@ -68,7 +68,7 @@ class platbyController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Faktury Neuhrazene");
 
-        $this->header();
+        $this->header($request, $response);
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -85,7 +85,7 @@ class platbyController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: N.F. :: Kontrola omezeni vs. platby");
 
-        $this->header();
+        $this->header($request, $response);
 
         $platby = new platby($this->conn_mysql, $this->logger);
 
