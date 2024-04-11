@@ -113,5 +113,24 @@ class adminController extends adminatorController {
         $this->smarty->display('admin/level-action.tpl');
 
     }
+
+    public function adminTarify(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->addInfo("adminController\adminTarify called");
+          
+        $this->checkLevel(131);
+
+        $this->smarty->assign("page_title","Adminator3 :: Admin :: Tarify");
+
+        $this->header($request, $response);
+
+        // $csrf_html = $this->generateCsrfToken($request, $response, true);
+
+        $rs = admin::tarifyList();
+
+        $this->smarty->assign("body",$rs[0]);
+
+        $this->smarty->display('admin/tarify.tpl');
+    }
     
 }

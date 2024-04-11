@@ -11,6 +11,6 @@
     
     <span style="padding-left: 30px; "><a class="cat2" href="/adminator2/admin-partner.php" >Externí partner program (A2)</a></span>
     
-    <span style="padding-left: 30px; "><a class="cat2" href="/adminator2/admin-tarify.php" >Tarify Internet (A2)</a></span>
+    <span style="padding-left: 30px; "><a class="cat2" href="/admin/tarify" >Tarify Internet</a></span>
 
 </div>

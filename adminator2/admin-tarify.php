@@ -1,9 +1,9 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,131) ) )
 {
@@ -141,13 +141,23 @@ include ("include/charset.php");
   {
     $id_tarifu = $_GET["id_tarifu"];
     
-    $dotaz_tarify = mysql_query(" SELECT * FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ORDER BY id_tarifu");
-    $dotaz_tarify_radku = mysql_num_rows($dotaz_tarify);
+    try {
+      $dotaz_tarify = $conn_mysql->query(" SELECT * FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ORDER BY id_tarifu");
+      $dotaz_tarify_radku = $dotaz_tarify->num_rows;
+		} catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		}
+
   }
   else
   {
-    $dotaz_tarify = mysql_query(" SELECT * FROM tarify_int ORDER BY id_tarifu");
-    $dotaz_tarify_radku = mysql_num_rows($dotaz_tarify);
+
+    try {
+      $dotaz_tarify = $conn_mysql->query(" SELECT * FROM tarify_int ORDER BY id_tarifu");
+      $dotaz_tarify_radku = $dotaz_tarify->num_rows;
+		} catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		}
   }
   
   if( $dotaz_tarify_radku == 0 )
@@ -161,7 +171,7 @@ include ("include/charset.php");
   else
   {
    
-   while( $data = mysql_fetch_array($dotaz_tarify) )
+   while( $data = $dotaz_tarify->fetch_array() )
    {
     echo "
 	<tr >
