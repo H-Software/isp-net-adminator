@@ -54,7 +54,7 @@ include ("include/charset.php");
 	if ($radku==0) echo "Zadné levely v db (divny) ";
 	else
 	{
-	    echo '<br><br>Výpis levelů stránek: <BR><BR>';
+	    echo '<br>Výpis levelů stránek: <BR>';
 				    
 	    echo '<table border="1" width="100%" >';
 						    

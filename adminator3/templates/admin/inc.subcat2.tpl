@@ -13,9 +13,9 @@
 
     <span style="padding-left: 30px; "><a class="cat2" href="admin-level-add.php" >Přidání levelu pro stránku (A2)</a></span>
 
-    <span style="padding-left: 30px; "><a class="cat2" href="admin-level-list.php" >Výpis levelů stránek (A2)</a></span>
-
     <br>
+
+    <span style="padding-left: 30px; "><a class="cat2" href="/admin/level-list" >Výpis levelů stránek</a></span>
 
     <span style="padding-left: 30px; "><a class="cat2" href="admin-kontrola.php" >Kontrola databáze (A2)</a></span>
 

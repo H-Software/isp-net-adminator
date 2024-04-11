@@ -58,4 +58,22 @@ class adminController extends adminatorController {
 
         return $response;
     }
+
+    public function adminLevelList(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("adminController\adminLevelList called");
+        
+        $this->checkLevel(21);
+
+        $this->smarty->assign("page_title","Adminator3 :: vypis levelu stranek");
+
+        $this->header();
+
+        $this->smarty->assign("body",admin::levelList());
+
+        $this->smarty->display('admin/level-list.tpl');
+
+        return $response;
+    }
 }
