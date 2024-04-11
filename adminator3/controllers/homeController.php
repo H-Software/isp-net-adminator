@@ -22,24 +22,6 @@ class homeController extends adminatorController {
         
         $this->logger->addInfo("homeController\__construct called");
 	}
-
-    private function checkLevel($page_level_id){
-
-        $this->container->auth->page_level_id = $page_level_id;
-
-        $checkLevel = $this->container->auth->checkLevel($this->container->logger);
-        
-        $this->logger->addInfo("homeController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
-
-        if($checkLevel === false){
-
-            $this->smarty->assign("page_title","Adminator3 - chybny level");
-            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-            $this->smarty->display('index-nolevel.tpl');
-            
-            exit;
-        }
-    }
     
     public function home(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {            

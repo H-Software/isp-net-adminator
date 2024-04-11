@@ -35,9 +35,9 @@ class workController extends adminatorController {
         $this->header();
 
         $this->smarty->assign("enable_work",1); //slozeni JS skriptu pro stranku
-        $this->smarty->assign("action",$_SERVER["PHP_SELF"]);
+        $this->smarty->assign("action",$_SERVER['SCRIPT_URL']);
         
-        $data_s = "/srv/www/htdocs.ssl/reinhard.remote.log";
+        $data_s = "/srv/www/htdocs.ssl/server.remote.log";
         
         /*
         $akce = $_POST["akce"];
