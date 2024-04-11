@@ -47,7 +47,7 @@ class platbyController extends adminatorController {
     public function platby(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("platbyController\\platby2 called");
+        $this->logger->addInfo("platbyController\\platby called");
         
         $this->checkLevel();
 
@@ -56,8 +56,24 @@ class platbyController extends adminatorController {
         $this->header();
 
         
-
         return $response;
     }
 
+    public function fn(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("platbyController\\fn called");
+        
+        $this->checkLevel(107);
+
+        $this->smarty->assign("page_title","Adminator3 :: Faktury Neuhrazene");
+
+        $this->header();
+
+        $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+
+        $this->smarty->display('platby/fn.tpl');
+
+        return $response;
+    }
 }

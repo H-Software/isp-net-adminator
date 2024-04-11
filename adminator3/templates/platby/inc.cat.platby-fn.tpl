@@ -2,9 +2,9 @@
 <div class="base-subcat-main">
 
     
-    <span style="margin-left: 20px; "><a href="platby-cat.php" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>
+    <span style="margin-left: 20px; "><a href="/platby/cat" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>
 
-    <span style="margin-left: 40px; "><a href="fn-kontrola-omezeni.php" >Kontrola omezení obj. vůči neuhr. fakturám</a></span>							
+    <span style="margin-left: 40px; "><a href="platby/fn-kontrola-omezeni" >Kontrola omezení obj. vůči neuhr. fakturám</a></span>							
 
     <div></div>
     <span style="margin-left: 20px;">A2: </span>
