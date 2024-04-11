@@ -87,3 +87,12 @@ $container['archivZmenController'] = function ($c) {
     return new archivZmenController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
 };
 
+$container['othersController'] = function ($c) {
+    global $conn_mysql, $smarty, $logger, $auth, $app;
+    return new othersController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+};
+
+$container['workController'] = function ($c) {
+    global $conn_mysql, $smarty, $logger, $auth, $app;
+    return new workController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+};

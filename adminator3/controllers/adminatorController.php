@@ -18,6 +18,24 @@ class adminatorController{
         $this->logger->addInfo("adminatorController\__construct called");
 	}
 
+    public function checkLevel($page_level_id){
+
+        $this->container->auth->page_level_id = $page_level_id;
+
+        $checkLevel = $this->container->auth->checkLevel($this->container->logger);
+        
+        $this->logger->addInfo("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
+
+        if($checkLevel === false){
+
+            $this->smarty->assign("page_title","Adminator3 - chybny level");
+            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+            $this->smarty->display('index-nolevel.tpl');
+            
+            exit;
+        }
+    }
+
     function header()
     {
 
@@ -127,12 +145,12 @@ class adminatorController{
         if( ereg("^.+archiv-zmen.+$",$uri) )
         { $kat_2radka[1]["barva"] = "silver"; }
 
-        $kat_2radka[2] = array( "nazev" => "Work", "url" => "/work.php", "width" => "", "align" => "center" );
+        $kat_2radka[2] = array( "nazev" => "Work", "url" => "/work", "width" => "", "align" => "center" );
 
         if( ereg("^.+work.+$",$uri) )
         { $kat_2radka[2]["barva"] = "silver"; }
 
-        $kat_2radka[3] = array( "nazev" => "Ostatní", "url" => "/others-cat.php", "width" => "", "align" => "center" );
+        $kat_2radka[3] = array( "nazev" => "Ostatní", "url" => "/others", "width" => "", "align" => "center" );
 
         if( ereg("^.+others.+$",$uri) or ereg("^.+syslog.+$",$uri) or ereg("^.+/mail.php$",$uri) or ereg("^.+opravy.+$",$uri) )
         { $kat_2radka[3]["barva"] = "silver"; }
