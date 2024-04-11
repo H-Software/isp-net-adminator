@@ -7,7 +7,7 @@ class admin {
 		$this->conn_mysql = $conn_mysql;
 	}
 
-	function levelList(){
+	function levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value){
 
 		$output  = "";
 
@@ -48,6 +48,8 @@ class admin {
 				
 				$output .= '<td>
 					<form method="POST" action="/admin/level-action">
+						<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">
+						<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">
 						<input type="hidden" name="update_id" value="'.$id.'">
 						<input type="submit" value="update">
 					</form></td>';
@@ -59,7 +61,9 @@ class admin {
 		return $output;
 	}
 
-	function levelAction(){
+	function levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value){
+
+		$output = "";
 
 		if ( ( $_POST["popis_new"] ) )
 		{
@@ -67,9 +71,9 @@ class admin {
 			$popis=$_POST["popis_new"];
 			$level=$_POST["level_new"];
 	
-			echo "Zadáno do formuláre : <br><br>";
-			echo "popis stránky: ".$popis."<br>";
-			echo "level stránky: ".$level."<br>";
+			$output .= "Zadáno do formuláre : <br><br>";
+			$output .= "popis stránky: ".$popis."<br>";
+			$output .= "level stránky: ".$level."<br>";
 			
 			$id_new=intval($_POST["new_id"]);
 		
@@ -88,8 +92,8 @@ class admin {
 				die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 			}
 		
-			if ($rs) echo "<br><br>MySql potvrdilo, takze: <br><H2>Data v databazi upravena.</H2><br><br>";
-			else echo "Houstone, tento zapis do databaze nevysel :)";
+			if ($rs) $output .= "<br><br>MySql potvrdilo, takze: <br><H2>Data v databazi upravena.</H2><br><br>";
+			else $output .= "Houstone, tento zapis do databaze nevysel :)";
 																			
 		}
 		else
@@ -109,7 +113,7 @@ class admin {
 
 				$radku = $vysledek->num_rows;
 			
-				if ($radku==0) echo "Zadné levely v db (divny) ";
+				if ($radku==0) $output .= "Zadné levely v db (divny) ";
 				else
 				{
 					while ($zaznam=$vysledek->fetch_array()):
@@ -120,15 +124,18 @@ class admin {
 				}
 			}
 
-			print '
+			$output .= '
 				<br><H4>Úprava levelu stránky: </H4><br>
-				<form method="POST" action="'.$_SERVER["PHP_SELF"].'">';
+				<form method="POST" action="'.$_SERVER['SCRIPT_URL'].'">
+				<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">
+				<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">
+				';
 
 			if($update_id > 0){
-				echo "<input type=\"hidden\" name=\"new_id\" value=\" " .$id . "\">";
+				$output .= "<input type=\"hidden\" name=\"new_id\" value=\" " .$id . "\">";
 			}
 
-			print '<table border="0" width="100%" id="table2">
+			$output .= '<table border="0" width="100%" id="table2">
 				<tr>
 				<td width="25%"><label>Polozky: </label></td>
 				<td><input type="text" name="popis_new" size="30" value="'.$popis.'"></td
@@ -155,5 +162,7 @@ class admin {
 				</form>';
 
 		}
+
+		return array($output);
 	}
 }
