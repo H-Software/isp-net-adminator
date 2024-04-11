@@ -3,6 +3,7 @@
 namespace App\Auth;
 
 use App\Models\User;
+use App\Models\PageLevel;
 
 /**
  * Auth
@@ -52,7 +53,8 @@ class Auth
 		return $a['level'];
 	}
 
-	function checkLevel($logger, $page_level_id_custom = 0, $display_no_level_page = true){
+	function checkLevel($logger, $page_level_id_custom = 0, $display_no_level_page = true)
+    {
 
         // co mame
         // v promeny level mame level prihlaseneho uzivatele
@@ -111,26 +113,17 @@ class Auth
         }
     }
 
-	function find_page_level($logger,$page_id){
-		global $conn_mysql;
-        try {
-            $dotaz = $conn_mysql->query("SELECT level FROM leveling WHERE id = '".intval($page_id)."' ");
-            $radku = $dotaz->num_rows;
-        } catch (Exception $e) {
-            die ("<h2 style=\"color: red; \">Check level Failed: Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-        }
+	function find_page_level($logger,$page_id)
+    {
 
-        $logger->addInfo("auth\\find_page_level: num_rows: " . $radku);
+        $rs = PageLevel::find(isset($page_id) ? $page_id : 0, ['level']);
+		$a = $rs->toArray();
+		$page_level = $a['level'];
 
-        if ($radku==0){ 
-            return false; 
-        }
+        $logger->addInfo("auth\\find_page_level: find result: " . var_export($page_level, true));
 
-        while ($data = $dotaz->fetch_array())
-        { $level_stranky = intval($data["level"]); }
-
-        if($level_stranky > 0){
-            return $level_stranky;
+        if($page_level > 0){
+            return $page_level;
         }
         else{
             return false;
