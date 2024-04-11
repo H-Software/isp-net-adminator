@@ -91,9 +91,9 @@ class platbyController extends adminatorController {
 
         $pocet_synchro_faktur = $platby->synchro_db_nf();
  
-        // $rs = $a->fn_kontrola_omezeni();
-        // $dotaz_vlastnici_num = $ret[0];
-        // $zaznam = $ret[1];
+        $ret = $platby->fn_kontrola_omezeni();
+        $dotaz_vlastnici_num = $ret[0];
+        $zaznam = $ret[1];
 
         $this->smarty->assign("nadpis","Kontrola omezení objektu vs. neuhr. fakturám");
 
