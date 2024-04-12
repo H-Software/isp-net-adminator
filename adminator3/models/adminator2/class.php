@@ -1,6 +1,6 @@
 <?php
 
-class objekt
+class objekt_a2
 {
 
  function vypis_tab($par)
@@ -747,13 +747,13 @@ class vlastnik
 
       echo "<table border=\"0\" width=\"100%\" >";
         
-	objekt::vypis($sql,$co,$id);
+	objekt_a2::vypis($sql,$co,$id);
 
       echo "</table>";
       
     echo "</td></tr>\n\n";
 
-    $objekt = new objekt(); 
+    $objekt = new objekt_a2(); 
     
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
@@ -770,7 +770,7 @@ class vlastnik
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt::vypis($sql,$co,$id);
+      objekt_a2::vypis($sql,$co,$id);
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -790,7 +790,7 @@ class vlastnik
 	   
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt::vypis($sql,$co,$id);
+      objekt_a2::vypis($sql,$co,$id);
 	    
       echo "</table>";
     
@@ -1310,7 +1310,7 @@ class vlastnik2_a2
     // tady asi bude generovani fakturacnich udaju	
     if( ( $id_f > 0 ) ){ fakturacni::vypis($id_f,$id_v); }
     
-    $objekt = new objekt(); 
+    $objekt = new objekt_a2(); 
     
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
@@ -1326,7 +1326,7 @@ class vlastnik2_a2
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt::vypis($sql,$co,$id);
+      objekt_a2::vypis($sql,$co,$id);
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -1344,7 +1344,7 @@ class vlastnik2_a2
 	   
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt::vypis($sql,$co,$id);
+      objekt_a2::vypis($sql,$co,$id);
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -1742,7 +1742,7 @@ class vlastnikarchiv
 	// $id=$data["id_cloveka"];
 	// print "debug: id: $id";
 	
-	 objekt::vypis($sql,$co,$id);
+	 objekt_a2::vypis($sql,$co,$id);
 
 
 

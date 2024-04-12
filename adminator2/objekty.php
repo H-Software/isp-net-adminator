@@ -156,7 +156,7 @@ include ("include/charset.php");
 
     // tafy generovani exportu
     if ( $export_povolen == true )
-    { objekt::export_vypis_odkaz(); }	
+    { objekt_a2::export_vypis_odkaz(); }	
     
     echo "<span style=\"padding-right: 25px; \" >
 	    <span style=\"padding-right: 15px; \">mód objektů:</span> 
@@ -196,7 +196,7 @@ include ("include/charset.php");
   if ( ( strlen($dns_find) > 0 ) ){ $co=1; $sql=$dns_find; }  
   if ( ( strlen($ip_find) > 0  ) ){ $co=2; $sql=$ip_find; }
   
-  // objekt::vypis_tab(1);
+  // objekt_a2::vypis_tab(1);
 
       echo "\n".'<table border="0" width="100%">'."\n";
       echo '<tr>
@@ -246,7 +246,7 @@ include ("include/charset.php");
  //vnejsi tab
  echo "\n <tr >";
 
- objekt::vypis_razeni();
+ objekt_a2::vypis_razeni();
 
  //konec vnejsi tab
  echo "</tr></form>";
@@ -255,7 +255,7 @@ include ("include/charset.php");
  //global $se;
  //global $es;
  
- list($se,$order) = objekt::select($es,$razeni);
+ list($se,$order) = objekt_a2::select($es,$razeni);
 
  global $dotaz_source;
 
@@ -342,7 +342,7 @@ include ("include/charset.php");
   
   $listovani->listInterval();
   
-  $objekt = new objekt;
+  $objekt = new objekt_a2;
   $objekt->vypis($sql,$co,0,$dotaz_final,$conn_mysql);
      
   $objekt->vypis_tab(2);  
