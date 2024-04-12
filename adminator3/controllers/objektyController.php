@@ -82,7 +82,7 @@ class objektyController extends adminatorController {
 
         $this->header($request, $response);
 
-        $stb = new \stb($this->conn_mysql);
+        // $stb = new \stb($this->conn_mysql);
 
         $this->smarty->fetch('objekty/stb-action.tpl');
 
