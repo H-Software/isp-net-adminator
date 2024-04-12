@@ -52,9 +52,17 @@ class objektyController extends adminatorController {
 
         $stb = new stb($this->conn_mysql);
 
-        $output = $stb->stbPrepareRender();
+        if ($this->container->auth->checkLevel($this->container->logger, 137, false) === true) {
+            $stb->enable_modify_action = true;
+        }
+        
+        if ($this->container->auth->checkLevel($this->container->logger, 152, false) === true) {
+            $stb->enable_unpair_action = true;
+        }
 
-        $this->smarty->assign("body",$output);
+        $rs = $stb->stbListGetBodyContent();
+
+        $this->smarty->assign("body",$rs[0]);
 
         $this->smarty->display('objekty/stb.tpl');
 

@@ -17,8 +17,10 @@ class stb
     
     var $debug = 0; 		//vypis sekudarnich informaci (sql dotazy atd)
     
-    var $level; 			//level prislusneho prihlaseneho cloveka, kvuli sekundarni kontrole opravneni
-   
+    var $enable_modify_action = false;
+
+    var $enable_unpair_action = false;
+
     var $sql_query;
     
     //var $sql_query_listing;
@@ -32,8 +34,10 @@ class stb
 		$this->conn_mysql = $conn_mysql;
 	}
 
-    public function stbPrepareRender()
+    public function stbListGetBodyContent()
     {
+        $output = "";
+
         $odeslano = $_GET["odeslano"];
         $par_vlastnik = intval($_GET["par_vlastnik"]);
         $id_nodu = intval($_GET["id_nodu"]);
@@ -52,35 +56,30 @@ class stb
                 "".urlencode("&list")."=".urlencode($list).
                 "".urlencode("&odeslano")."=".urlencode($odeslano).
                 "".urlencode("&id_stb")."=".urlencode($id_stb);
-        
-        //vytvoreni objektu
-        $stb = $this;
-        
-        $stb->level = intval($level);
-        
+                
         if( $order > 0 ){
-            $stb->order = $order;
+            $this->order = $order;
         }
         
         if($id_nodu > 0){
-            $stb->find_id_nodu = $id_nodu;
+            $this->find_id_nodu = $id_nodu;
         }
         
         if( $par_vlastnik > 0 ){
-            $stb->find_par_vlastnik = $par_vlastnik;
+            $this->find_par_vlastnik = $par_vlastnik;
         }
         
         if( (strlen($search) > 0) ){
-            $stb->find_search_string = $search;
+            $this->find_search_string = $search;
         }
         
         if( $id_stb > 0 ){
-            $stb->id_stb = $id_stb;
+            $this->id_stb = $id_stb;
         }
         
-         $stb->vypis_pocet_sloupcu = 8;
+         $this->vypis_pocet_sloupcu = 8;
          
-         echo "<div style=\"padding-top: 15px; padding-bottom: 15px; \" >
+         $output .= "<div style=\"padding-top: 15px; padding-bottom: 15px; \" >
             <span style=\" padding-left: 5px; 
             font-size: 16px; font-weight: bold; \" >
             .:: Výpis Set-Top-Boxů ::. </span>
@@ -105,27 +104,27 @@ class stb
                
               </div>\n";
         
-        $rs_select_nod = $stb->filter_select_nods();
+        $rs_select_nod = $this->filter_select_nods();
         
         if( isset($rs_select_nod["error"]) ){
             
-            echo "<div style=\"padding: 10px; color: red; font-size: 14px;\">".
+            $output .= "<div style=\"padding: 10px; color: red; font-size: 14px;\">".
                 "Chyba! Funkce \"filter_select_nod\" hlásí chybu: ";
             
             foreach ($rs_select_nod["error"] as $key => $val) {
-                echo "#".$key.":<br> ".$val;
+                $output .= "#".$key.":<br> ".$val;
             }
             
-            echo "</div>\n";
+            $output .= "</div>\n";
         }
         
         if( !is_array($rs_select_nod["data"]) ){
         
-            echo "<div style=\"padding: 10px; color: red; font-size: 14px;\">".
+            $output .= "<div style=\"padding: 10px; color: red; font-size: 14px;\">".
                 "Chyba! Funkce \"filter_select_nod\" nevrací žádné relevatní data</div>\n";
         }
         
-        echo "<form method=\"GET\" action=\"\" >";
+        $output .= "<form method=\"GET\" action=\"\" >";
         
         //filtr - hlavni okno
         if( $_GET["odeslano"] == "OK" ){
@@ -135,201 +134,201 @@ class stb
             $display = "none";
         }
         
-         $stb->generate_sql_query();
+         $this->generate_sql_query();
         
-         $paging_url = "?".urlencode("order")."=".$stb->order.$get_odkazy;
+         $paging_url = "?".urlencode("order")."=".$this->order.$get_odkazy;
             
-         $paging = new paging_global($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $stb->sql_query);
+         $paging = new paging_global($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $this->sql_query);
                          
          $bude_chybet = ( (($list == "")||($list == "1")) ? 0 : ((($list-1) * $paging->interval)) );
          
          $interval = $paging->interval;
           
-         $stb->sql_query = $stb->sql_query . " LIMIT ".$interval." OFFSET ".$bude_chybet." "; 
+         $this->sql_query = $this->sql_query . " LIMIT ".$interval." OFFSET ".$bude_chybet." "; 
         
-        echo "<div id=\"objekty_stb_filter\" style=\"width: 1000px; margin: 10px; display: ".$display."; padding: 10px; border: 1px solid gray; \" >";
+        $output .= "<div id=\"objekty_stb_filter\" style=\"width: 1000px; margin: 10px; display: ".$display."; padding: 10px; border: 1px solid gray; \" >";
         
         //vlastnik - bez
-        echo "<div style=\"width: 150px; float: left;\" >".
+        $output .= "<div style=\"width: 150px; float: left;\" >".
                 "přiřazeno k vlastníkovi: </div>";
         
-        echo "<div style=\"float: left; \">".    
+        $output .= "<div style=\"float: left; \">".    
                 "<select size=\"1\" name=\"par_vlastnik\" style=\"width: 70px;\" >".
                 "<option value=\"0\" style=\"color: gray;\" >obojí</option>".
-                "<option value=\"1\" "; if($par_vlastnik == 1) echo " selected "; echo ">Ano (spárované)</option>".
-                "<option value=\"2\" "; if($par_vlastnik == 2) echo " selected "; echo ">Ne (nespárované)</option>".
+                "<option value=\"1\" "; if($par_vlastnik == 1) $output .= " selected "; $output .= ">Ano (spárované)</option>".
+                "<option value=\"2\" "; if($par_vlastnik == 2) $output .= " selected "; $output .= ">Ne (nespárované)</option>".
                 "</select>".    
                "</div>";
         
         //pripojnej bod
-        echo "<div style=\"width: 100px; float: left; padding-left: 10px; \" >".
+        $output .= "<div style=\"width: 100px; float: left; padding-left: 10px; \" >".
                 "Přípojný bod: </div>\n";
         
-        echo "<div style=\"float: left; padding-left: 10px; \">\n".    
+        $output .= "<div style=\"float: left; padding-left: 10px; \">\n".    
                 "<select size=\"1\" name=\"id_nodu\" >\n".
                 "<option value=\"0\" style=\"color: gray;\" >nevybráno (všechny)</option>\n";
                 
             foreach ($rs_select_nod["data"] as $nod_id => $nod_name) {
-                    echo "<option value=\"".$nod_id."\" ";
+                    $output .= "<option value=\"".$nod_id."\" ";
                     
-                    if($nod_id == $id_nodu) echo " selected ";
+                    if($nod_id == $id_nodu) $output .= " selected ";
                     
-                    echo " >".$nod_name."</option>\n";
+                    $output .= " >".$nod_name."</option>\n";
             }
                     
-            echo "</select>".
+            $output .= "</select>".
               "</div>\n";
         
         //tarif 
-        echo "<div style=\"width: 50px; float: left; padding-left: 10px; \" >".
+        $output .= "<div style=\"width: 50px; float: left; padding-left: 10px; \" >".
                 "Tarif: </div>\n";
         
-        echo "<div style=\"float: left; padding-left: 10px; \">\n".    
+        $output .= "<div style=\"float: left; padding-left: 10px; \">\n".    
                 "<select size=\"1\" name=\"id_tarifu\" >\n".
                 "<option value=\"0\" style=\"color: gray;\" >nevybráno (všechny)</option>\n".
                 "</select>\n".
               "</div>\n";
         
         //tlacitko
-        echo "<div style=\"float: left; padding-left: 100%; width: 250px; text-align: right; padding-left: 10px; \" >".
+        $output .= "<div style=\"float: left; padding-left: 100%; width: 250px; text-align: right; padding-left: 10px; \" >".
                 "<input type=\"submit\" name=\"odeslano\" value=\"OK\" ></div>\n";
         
         //oddelovac
-        echo "<div style=\"clear: both; height: 5px; \"></div>\n";
+        $output .= "<div style=\"clear: both; height: 5px; \"></div>\n";
         
         //druha radka
-        echo "<div style=\"float: left; \" >Hledání: </div>\n";
+        $output .= "<div style=\"float: left; \" >Hledání: </div>\n";
         
-        echo "<div style=\"float: left; padding-left: 20px; \" >".
+        $output .= "<div style=\"float: left; padding-left: 20px; \" >".
             "<input type=\"text\" name=\"search\" value=\"".htmlspecialchars($search)."\" ></div>\n";
         
-        echo "<div style=\"float: left; padding-left: 20px; \" >Id Stb: </div>\n";
+        $output .= "<div style=\"float: left; padding-left: 20px; \" >Id Stb: </div>\n";
         
-        echo "<div style=\"float: left; padding-left: 20px; \" >".
+        $output .= "<div style=\"float: left; padding-left: 20px; \" >".
             "<input type=\"text\" name=\"id_stb\" size=\"3\" value=\"".htmlspecialchars($id_stb)."\" ></div>\n";
         
         //tlacitko
-        echo "<div style=\"float: left; padding-left: 10px; \" >".
+        $output .= "<div style=\"float: left; padding-left: 10px; \" >".
                 "<input type=\"submit\" name=\"odeslano\" value=\"OK\" ></div>\n";
         
         //oddelovac
-        echo "<div style=\"clear: both; \"></div>\n";
+        $output .= "<div style=\"clear: both; \"></div>\n";
         
-        echo "</div>\n";
+        $output .= "</div>\n";
         
-        echo "</form>\n";
+        $output .= "</form>\n";
         
         //listovani
-         echo $paging->listInterval();
+        // TODO: fix paging for STB
+        // $output .= $paging->listInterval();
          
-        
         //zacatek tabulky ... popis
         
-        echo "<table border=\"0\" width=\"1000px\" style=\"padding-left: 10px; \" >";
+        $output .= "<table border=\"0\" width=\"1000px\" style=\"padding-left: 10px; \" >";
         
-        echo "
+        $output .= "
             <tr>\n";
             
              //popis
-             echo "<td width=\"200px\" style=\"border-bottom: 1px dashed gray; \" >\n";
-             echo "\t<div style=\"font-weight: bold; float: left; \">popis</div>\n";
+             $output .= "<td width=\"200px\" style=\"border-bottom: 1px dashed gray; \" >\n";
+             $output .= "\t<div style=\"font-weight: bold; float: left; \">popis</div>\n";
              
-             echo "\t<div style=\"float: left; padding-left: 55%; \">".
+             $output .= "\t<div style=\"float: left; padding-left: 55%; \">".
                     "<a href=\"?".urlencode("order")."=1".$get_odkazy."\">";
                 
                 if($order == 1){
-                    echo "<img src=\"img2/sorting_a-z_hot.jpg\" width=\"20px\" alt=\"sorting_a-z-hot\" >";
+                    $output .= "<img src=\"img2/sorting_a-z_hot.jpg\" width=\"20px\" alt=\"sorting_a-z-hot\" >";
                     }
                     else{
-                    echo "<img src=\"img2/sorting_a-z_normal.jpg\" width=\"20px\" alt=\"sorting_a-z-normal\" >";        
+                    $output .= "<img src=\"img2/sorting_a-z_normal.jpg\" width=\"20px\" alt=\"sorting_a-z-normal\" >";        
                     }
-               echo "</a>".
+               $output .= "</a>".
                     "</div>\n";
              
-             echo "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
+             $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
                     "<a href=\"?".urlencode("order")."=2".$get_odkazy."\">";
                     
                     if($order == 2){
-                    echo "<img src=\"img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
+                    $output .= "<img src=\"img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
                     }
                     else{
-                    echo "<img src=\"img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";        
+                    $output .= "<img src=\"img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";        
                     }
                 
-                echo "</a>".
+                $output .= "</a>".
                     "</div>\n";
              
-             echo "</td>\n";
+             $output .= "</td>\n";
              
              //ip adresa
-             echo "<td style=\"border-bottom: 1px dashed gray;\" >\n";
-             echo "\t<div style=\"font-weight: bold; float: left; \">IP adresa</div>\n";
+             $output .= "<td style=\"border-bottom: 1px dashed gray;\" >\n";
+             $output .= "\t<div style=\"font-weight: bold; float: left; \">IP adresa</div>\n";
              
-             echo "\t<div style=\"float: left; padding-left: 20%; \">".
+             $output .= "\t<div style=\"float: left; padding-left: 20%; \">".
                     "<a href=\"?".urlencode("order=")."3".$get_odkazy."\">";
                      
                     if($order == 3){
-                     echo "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >"; 	    
+                     $output .= "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >"; 	    
                      }
                      else{	    
-                     echo "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >"; 	    
+                     $output .= "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >"; 	    
                      }
                      
-                     echo "</a>".
+                     $output .= "</a>".
                     "</div>\n";
              
-             echo "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
+             $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
                      "<a href=\"?".urlencode("order")."=4".$get_odkazy."\">";
                     
                     if($order == 4){	    
-                     echo "<img src=\"img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
+                     $output .= "<img src=\"img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
                      }
                      else{
-                     echo "<img src=\"img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
+                     $output .= "<img src=\"img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
                      }
                      
-               echo "</a>".
+               $output .= "</a>".
                     "</div>\n";
              
-             echo "</td>\n";
+             $output .= "</td>\n";
              
              //poznamka
-             echo "<td style=\"border-bottom: 1px dashed gray;\" ><b>poznámka</b></td>\n";
+             $output .= "<td style=\"border-bottom: 1px dashed gray;\" ><b>poznámka</b></td>\n";
              
              //mac adresa
-             echo "<td style=\"border-bottom: 1px dashed gray; width: 168px; \" >";
-                echo "\t<div style=\"font-weight: bold; float: left; \">MAC adresa</div>\n";
+             $output .= "<td style=\"border-bottom: 1px dashed gray; width: 168px; \" >";
+                $output .= "\t<div style=\"font-weight: bold; float: left; \">MAC adresa</div>\n";
         
-                echo "\t<div style=\"float: left; padding-left: 20%; \">".
+                $output .= "\t<div style=\"float: left; padding-left: 20%; \">".
                     "<a href=\"?".urlencode("order")."=5".$get_odkazy."\">";
                 
                 if($order == 5){
-                    echo "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
+                    $output .= "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
                 }
                 else{
-                     echo "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";        
+                     $output .= "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";        
                 }
                 
-                echo "</a>".
+                $output .= "</a>".
                     "</div>\n";
                       
-                 echo "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
+                 $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
                      "<a href=\"?".urlencode("order")."=6".$get_odkazy."\">";
                     
                 if($order == 6){ 
-                     echo "<img src=\"img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
+                     $output .= "<img src=\"img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
                  }
                  else{
-                     echo "<img src=\"img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
+                     $output .= "<img src=\"img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
                  }
                      
-                echo "</a>".
+                $output .= "</a>".
                     "</div>\n";
         
-             echo "</td>\n";
+             $output .= "</td>\n";
         
              //uprava
-             echo "<td style=\"border-bottom: 1px dashed gray;\" ><b>úprava</b></td>
+             $output .= "<td style=\"border-bottom: 1px dashed gray;\" ><b>úprava</b></td>
             
              <td style=\"border-bottom: 1px dashed gray;\" ><b>smazat</b></td>
         
@@ -340,71 +339,71 @@ class stb
             </tr>\n\n";
             
             //2. radka
-            echo "<tr>
+            $output .= "<tr>
              <td style=\"border-bottom: 1px solid black;\" >\n";
-             echo "\t<div style=\"font-weight: bold; float: left; \">přípojný nod</div>\n";
+             $output .= "\t<div style=\"font-weight: bold; float: left; \">přípojný nod</div>\n";
             
-             echo "\t<div style=\"float: left; padding-left: 32%; \">".
+             $output .= "\t<div style=\"float: left; padding-left: 32%; \">".
                     "<a href=\"?".urlencode("order")."=9".$get_odkazy."\">";
                      
                     if($order == 9){
-                     echo "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >"; 	    
+                     $output .= "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >"; 	    
                      }
                      else{	    
-                     echo "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >"; 	    
+                     $output .= "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >"; 	    
                      }
                      
-                     echo "</a>".
+                     $output .= "</a>".
                     "</div>\n";
         
-             echo "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
+             $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
                     "<a href=\"?".urlencode("order=")."10".$get_odkazy."\">";
                     
                     if($order == 10){
-                    echo "<img src=\"img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
+                    $output .= "<img src=\"img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
                     }
                     else{
-                    echo "<img src=\"img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";        
+                    $output .= "<img src=\"img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";        
                     }
                 
-                echo "</a>".
+                $output .= "</a>".
                     "</div>\n";
              
-             echo "</td>\n";
+             $output .= "</td>\n";
             
              //PUK
-             echo "<td style=\"border-bottom: 1px solid black;\" >".
+             $output .= "<td style=\"border-bottom: 1px solid black;\" >".
                    "\t<div style=\"font-weight: bold; float: left; \">PUK</div>\n";
         
-             echo "\t<div style=\"float: left; padding-left: 43%; \">".
+             $output .= "\t<div style=\"float: left; padding-left: 43%; \">".
                     "<a href=\"?".urlencode("order")."=7".$get_odkazy."\" >";
                 
              if($order == 7){ 
-                echo "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
+                $output .= "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
              }
              else{
-                echo "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";
+                $output .= "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";
              }
         
-             echo "</a>".
+             $output .= "</a>".
                 "</div>\n";
                      
-             echo "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
+             $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
                      "<a href=\"?".urlencode("order")."=8".$get_odkazy."\" >";
                     
              if($order == 8){ 
-                 echo "<img src=\"img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
+                 $output .= "<img src=\"img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
              }
              else{
-                echo "<img src=\"img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
+                $output .= "<img src=\"img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
              }
              
-             echo "</a>".
+             $output .= "</a>".
                     "</div>\n";
         
-             echo "</td>\n";
+             $output .= "</td>\n";
                   
-             echo "<td style=\"border-bottom: 1px solid black;\" ><b>id stb (historie)</b></td>
+             $output .= "<td style=\"border-bottom: 1px solid black;\" ><b>id stb (historie)</b></td>
             
              <td style=\"border-bottom: 1px solid black;\" ><b>id človeka</b></td>
         
@@ -416,14 +415,18 @@ class stb
                   
             </tr>\n";
         
-         echo "<tr><td colspan=\"".$stb->vypis_pocet_sloupcu."\"><br></td></tr>\n";
+         $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
          
-         $stb->vypis();
+         $this->vypis();
           
-         echo "</table>\n";
+         $output .= "</table>\n";
         
-         echo $paging->listInterval();
+         // TODO: fix paging for STB
+         // $output .= $paging->listInterval();
         
+         $ret = array($output);
+
+         return $ret;
     }
 
 
@@ -736,16 +739,17 @@ class stb
            //uprava
                echo "<td style=\"".$class_stb_liche."\" >";
        
-               if( !( check_level($this->level,137) ) )
-               { echo "<div style=\"\" style=\"".$class_stb_liche."\" >úprava</div>\n"; }
-               else
+               // if( !( check_level($this->level,137) ) )
+               if($this->enable_modify_action === true)               
                {
                echo "<form method=\"POST\" action=\"objekty-stb-add.php\" >
                <input type=\"hidden\" name=\"update_id\" value=\"".intval($data_vypis["id_stb"])."\" >
                <input class=\"\" type=\"submit\" value=\"update\" >
                </form>\n";
                }
-   
+               else
+               { echo "<div style=\"\" style=\"".$class_stb_liche."\" >úprava</div>\n"; }
+
                echo "</td>\n";
    
            //smazani
@@ -833,7 +837,9 @@ class stb
            //zbytek	
            if($mod == 1){
                    
-               if( check_level($this->level, 152) ){
+               // if( check_level($this->level, 152) )
+               if($this->enable_unpair_action === true)
+               {
                    echo "<td style=\"".$class_stb_sude."\" ><a href=\"objekty-stb-unpairing.php?id=".intval($data_vypis["id_stb"])."\" >odendat</a></td>";
                }
                else{
