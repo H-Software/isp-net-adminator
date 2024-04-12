@@ -4,6 +4,7 @@ require("include/main.function.shared.php");
 require_once("include/config.php"); 
 require_once("include/check_login.php");
 require_once("include/check_level.php");
+require "./include/c_listing_topology.php";    //předpokládáme třídu uloženou v externím souboru
 
 if( !( check_level($level,5) ) )
 {
@@ -158,10 +159,6 @@ require ("include/charset.php");
     <span style=\"font-weight: bold; padding-right: 10px; \">Hledaný výraz:</span> ".$find."
   </div>";
   
-  /*
-  
-  */
-  require "./include/c_listing_topology.php";    //předpokládáme třídu uloženou v externím souboru
 
  //aby se stihli pingy
  // set_time_limit(0);
@@ -199,7 +196,7 @@ require ("include/charset.php");
     $sql_source .= "&typ_nodu=".$typ_nodu;
     
    //vytvoreni objektu
-   $listovani = new c_Listing($sql_source, 30, $list,
+   $listovani = new c_listing_topology($sql_source, 30, $list,
 	"<center><div class=\"text-listing\">\n", "</div></center>\n",$sql." ; ");
 				     
     if (($list == "")||($list == "1"))

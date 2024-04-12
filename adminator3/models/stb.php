@@ -99,7 +99,7 @@ class stb
                </span>
             
                <span style=\"padding-left: 25px; \" >
-                 <a href=\"admin-login-iptv.php\" target=\"_new\" >aktivace funkcí IPTV portálu (přihlašení)</a>
+                 <!-- <a href=\"/admin-login-iptv.php\" target=\"_new\" >--> aktivace funkcí IPTV portálu (přihlašení)<!--</a>-->
                </span>
                
               </div>\n";
@@ -753,15 +753,15 @@ class stb
            //smazani
            $output .= "<td style=\"".$class_stb_liche."\" >\n";
    
-               $output .= "<div style=\"\" ><a href=\"objekty-stb-erase.php?".
-                   urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\" >smazání</a>".
+               $output .= "<div style=\"\" ><a href=\"" . fix_link_to_another_adminator("/objekty-stb-erase.php?".
+                   urlencode("id_stb")."=".intval($data_vypis["id_stb"]))."\" >smazání</a>".
                  "</div>";
                
                $output .= "</td>\n";
            
            //test
                $output .= "<td style=\"".$class_stb_liche."\" >
-            <a href=\"objekty-test.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\" >test</a>
+            <a href=\"" . fix_link_to_another_adminator("/objekty-test.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"]))."\" >test</a>
            </td>\n";
                
                //tarif
