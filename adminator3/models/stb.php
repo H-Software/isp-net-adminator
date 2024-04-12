@@ -90,7 +90,7 @@ class stb
                
                 <span style=\"\" >
                   <a href=\"objekty-stb-add-portal.php\" >
-                    <img src=\"/adminator2/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >
+                    <img src=\"/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >
                   </a>
             </span>
             
@@ -224,7 +224,7 @@ class stb
          
         //zacatek tabulky ... popis
         
-        $output .= "<table border=\"0\" width=\"1000px\" style=\"padding-left: 10px; \" >";
+        $output .= "<table border=\"0\" width=\"1000px\" style=\"padding-left: 0px; \" >";
         
         $output .= "
             <tr>\n";
@@ -237,10 +237,10 @@ class stb
                     "<a href=\"?".urlencode("order")."=1".$get_odkazy."\">";
                 
                 if($order == 1){
-                    $output .= "<img src=\"img2/sorting_a-z_hot.jpg\" width=\"20px\" alt=\"sorting_a-z-hot\" >";
+                    $output .= "<img src=\"//img2/sorting_a-z_hot.jpg\" width=\"20px\" alt=\"sorting_a-z-hot\" >";
                     }
                     else{
-                    $output .= "<img src=\"img2/sorting_a-z_normal.jpg\" width=\"20px\" alt=\"sorting_a-z-normal\" >";        
+                    $output .= "<img src=\"/img2/sorting_a-z_normal.jpg\" width=\"20px\" alt=\"sorting_a-z-normal\" >";        
                     }
                $output .= "</a>".
                     "</div>\n";
@@ -249,10 +249,10 @@ class stb
                     "<a href=\"?".urlencode("order")."=2".$get_odkazy."\">";
                     
                     if($order == 2){
-                    $output .= "<img src=\"img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
+                    $output .= "<img src=\"/img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
                     }
                     else{
-                    $output .= "<img src=\"img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";        
+                    $output .= "<img src=\"/img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";        
                     }
                 
                 $output .= "</a>".
@@ -268,10 +268,10 @@ class stb
                     "<a href=\"?".urlencode("order=")."3".$get_odkazy."\">";
                      
                     if($order == 3){
-                     $output .= "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >"; 	    
+                     $output .= "<img src=\"/img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >"; 	    
                      }
                      else{	    
-                     $output .= "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >"; 	    
+                     $output .= "<img src=\"/img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >"; 	    
                      }
                      
                      $output .= "</a>".
@@ -281,10 +281,10 @@ class stb
                      "<a href=\"?".urlencode("order")."=4".$get_odkazy."\">";
                     
                     if($order == 4){	    
-                     $output .= "<img src=\"img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
+                     $output .= "<img src=\"/img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
                      }
                      else{
-                     $output .= "<img src=\"img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
+                     $output .= "<img src=\"/img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
                      }
                      
                $output .= "</a>".
@@ -303,10 +303,10 @@ class stb
                     "<a href=\"?".urlencode("order")."=5".$get_odkazy."\">";
                 
                 if($order == 5){
-                    $output .= "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
+                    $output .= "<img src=\"/img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
                 }
                 else{
-                     $output .= "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";        
+                     $output .= "<img src=\"/img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";        
                 }
                 
                 $output .= "</a>".
@@ -316,10 +316,10 @@ class stb
                      "<a href=\"?".urlencode("order")."=6".$get_odkazy."\">";
                     
                 if($order == 6){ 
-                     $output .= "<img src=\"img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
+                     $output .= "<img src=\"/img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
                  }
                  else{
-                     $output .= "<img src=\"img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
+                     $output .= "<img src=\"/img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
                  }
                      
                 $output .= "</a>".
@@ -347,10 +347,10 @@ class stb
                     "<a href=\"?".urlencode("order")."=9".$get_odkazy."\">";
                      
                     if($order == 9){
-                     $output .= "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >"; 	    
+                     $output .= "<img src=\"/img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >"; 	    
                      }
                      else{	    
-                     $output .= "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >"; 	    
+                     $output .= "<img src=\"/img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >"; 	    
                      }
                      
                      $output .= "</a>".
@@ -360,10 +360,10 @@ class stb
                     "<a href=\"?".urlencode("order=")."10".$get_odkazy."\">";
                     
                     if($order == 10){
-                    $output .= "<img src=\"img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
+                    $output .= "<img src=\"/img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
                     }
                     else{
-                    $output .= "<img src=\"img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";        
+                    $output .= "<img src=\"/img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";        
                     }
                 
                 $output .= "</a>".
@@ -379,10 +379,10 @@ class stb
                     "<a href=\"?".urlencode("order")."=7".$get_odkazy."\" >";
                 
              if($order == 7){ 
-                $output .= "<img src=\"img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
+                $output .= "<img src=\"/img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
              }
              else{
-                $output .= "<img src=\"img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";
+                $output .= "<img src=\"/img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";
              }
         
              $output .= "</a>".
@@ -392,10 +392,10 @@ class stb
                      "<a href=\"?".urlencode("order")."=8".$get_odkazy."\" >";
                     
              if($order == 8){ 
-                 $output .= "<img src=\"img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
+                 $output .= "<img src=\"/img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
              }
              else{
-                $output .= "<img src=\"img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
+                $output .= "<img src=\"/img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
              }
              
              $output .= "</a>".
@@ -417,7 +417,7 @@ class stb
         
          $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
          
-         $this->vypis();
+         $output .= $this->vypis();
           
          $output .= "</table>\n";
         
@@ -653,6 +653,8 @@ class stb
     function vypis($mod = 0, $id_cloveka = 0)
     {
        
+        $output = "";
+
        $this->listing_mod = $mod;
        $this->id_cloveka  = $id_cloveka;
        
@@ -660,45 +662,41 @@ class stb
            $this->generate_sql_query();    
        }
        
-       try {
-           $dotaz_vypis = $this->conn_mysql->query($this->sql_query);
-           $dotaz_vypis_radku = $dotaz_vypis->num_rows;
-       } catch (Exception $e) {
-           die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-       }
+        $dotaz_vypis = $this->conn_mysql->query($this->sql_query);
+        $dotaz_vypis_radku = $dotaz_vypis->num_rows;
    
        if($this->debug == 1){
    
-       echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
+       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
                <div style=\"color: red; font-weight: bold; \" >debug sql: ".$this->sql_query.
                
                "<br>var search: ".$this->find_search_string.
                "</div>
                </td></tr>\n";
    
-       echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
+       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
                    
        }
        
        if(!$dotaz_vypis){
    
-       echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
+       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
                <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: ".
                mysql_errno().": ".mysql_error()."</div>
                </td></tr>";
    
-       echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
+       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
                    
        }
            
        if( ($dotaz_vypis_radku == 0) and ( $mod != 1 ) )
        {
    
-       echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
+       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
                <div style=\"color: red; font-weight: bold; \" >Žádný set-top-box nenalezen.</div>
                </td></tr>";
    
-       echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
+       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
        }
        else
        {
@@ -707,88 +705,88 @@ class stb
          
        while($data_vypis = $dotaz_vypis->fetch_array())
        {
-         echo "
+         $output .= "
            <tr>
            <td style=\"".$class_stb_liche."\" >".$data_vypis["popis"]."&nbsp;</td>
            <td style=\"".$class_stb_liche."\" >".$data_vypis["ip_adresa"]."&nbsp;</td>\n";
                
                //pozn
-               echo "<td style=\"".$class_stb_liche."\" ><span class=\"pozn\"><img title=\"poznamka\" src=\"img2/poznamka3.png\" alt=\"poznamka\" ";
-               echo " onclick=\"window.alert(' poznámka: ".htmlspecialchars($data_vypis["pozn"])." , Vytvořeno: ".$pridano." ');\" ></span>\n</td>\n";
+               $output .= "<td style=\"".$class_stb_liche."\" ><span class=\"pozn\"><img title=\"poznamka\" src=\"/img2/poznamka3.png\" alt=\"poznamka\" ";
+               $output .= " onclick=\"window.alert(' poznámka: ".htmlspecialchars($data_vypis["pozn"])." , Vytvořeno: ".$pridano." ');\" ></span>\n</td>\n";
    
            //mac adresa
-           echo "<td style=\"".$class_stb_liche."\" >\n";
+           $output .= "<td style=\"".$class_stb_liche."\" >\n";
            
-               echo "<div style=\"float: left; width: 135px; padding-top: 2px;\" >".htmlspecialchars($data_vypis["mac_adresa"])."</div>";
+               $output .= "<div style=\"float: left; width: 135px; padding-top: 2px;\" >".htmlspecialchars($data_vypis["mac_adresa"])."</div>";
                        
                $p_link1 = "http://app01.cho01.iptv.grapesc.cz:9080/admin/admin/provisioning/stb-search.html?".
                    "searchText=".urlencode($data_vypis["mac_adresa"])."&amp;type=".urlencode("MAC_ADDRESS")."&amp;submit=OK";
                
-               echo "<div style=\"float: left;\" >".
+               $output .= "<div style=\"float: left;\" >".
                    "<a href=\"".$p_link1."\" target=\"_new\" >".
                       "<img src=\"/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >".
                    "</a>".
                  "</div>";
                
-               echo "<div style=\"clear: both;\" ></div>";
+               $output .= "<div style=\"clear: both;\" ></div>";
                
-           //echo "</div>";
+           //$output .= "</div>";
                
-           echo "</td>\n";
+           $output .= "</td>\n";
            
            //uprava
-               echo "<td style=\"".$class_stb_liche."\" >";
+               $output .= "<td style=\"".$class_stb_liche."\" >";
        
                // if( !( check_level($this->level,137) ) )
                if($this->enable_modify_action === true)               
                {
-               echo "<form method=\"POST\" action=\"objekty-stb-add.php\" >
+               $output .= "<form method=\"POST\" action=\"objekty-stb-add.php\" >
                <input type=\"hidden\" name=\"update_id\" value=\"".intval($data_vypis["id_stb"])."\" >
                <input class=\"\" type=\"submit\" value=\"update\" >
                </form>\n";
                }
                else
-               { echo "<div style=\"\" style=\"".$class_stb_liche."\" >úprava</div>\n"; }
+               { $output .= "<div style=\"\" style=\"".$class_stb_liche."\" >úprava</div>\n"; }
 
-               echo "</td>\n";
+               $output .= "</td>\n";
    
            //smazani
-           echo "<td style=\"".$class_stb_liche."\" >\n";
+           $output .= "<td style=\"".$class_stb_liche."\" >\n";
    
-               echo "<div style=\"\" ><a href=\"objekty-stb-erase.php?".
+               $output .= "<div style=\"\" ><a href=\"objekty-stb-erase.php?".
                    urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\" >smazání</a>".
                  "</div>";
                
-               echo "</td>\n";
+               $output .= "</td>\n";
            
            //test
-               echo "<td style=\"".$class_stb_liche."\" >
+               $output .= "<td style=\"".$class_stb_liche."\" >
             <a href=\"objekty-test.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\" >test</a>
            </td>\n";
                
                //tarif
-               echo "<td style=\"".$class_stb_liche."\" >".htmlspecialchars($data_vypis["jmeno_tarifu"])."</td>\n";
+               $output .= "<td style=\"".$class_stb_liche."\" >".htmlspecialchars($data_vypis["jmeno_tarifu"])."</td>\n";
                
                //druhej radek
-               echo "</tr>\n".
+               $output .= "</tr>\n".
                "<tr>\n";
                                                               
                //pripojny bod / nod
-               echo "<td style=\"".$class_stb_sude."\" >\n";
+               $output .= "<td style=\"".$class_stb_sude."\" >\n";
                    
-               echo "<span class=\"objekty-2radka objekty-odkaz\">".
+               $output .= "<span class=\"objekty-2radka objekty-odkaz\">".
                                  "<a href=\"topology-nod-list.php?".urlencode("typ_nodu")."=2".urlencode("&find")."=".urlencode($data_vypis["nod_jmeno"])."\" >".
                                  $data_vypis["nod_jmeno"]."</a>".
                     "</span>";
-               echo "</td>\n";
+               $output .= "</td>\n";
                
                //puk
-               echo "<td style=\"".$class_stb_sude."\" >".$data_vypis["puk"]."&nbsp;</td>\n";
+               $output .= "<td style=\"".$class_stb_sude."\" >".$data_vypis["puk"]."&nbsp;</td>\n";
                
                //id stb (historie)
-               echo "<td style=\"".$class_stb_sude."\" >H: \n";
-               echo "<a href=\"archiv-zmen.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\" >".$data_vypis["id_stb"]."</a>\n";
-               echo "</td>\n";
+               $output .= "<td style=\"".$class_stb_sude."\" >H: \n";
+               $output .= "<a href=\"" . fix_link_to_another_adminator("archiv-zmen.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])) ."\" >".$data_vypis["id_stb"]."</a>\n";
+               $output .= "</td>\n";
                
            //vlastnik - id cloveka
            $id_cloveka = $data_vypis["id_cloveka"];
@@ -797,15 +795,15 @@ class stb
            
            $odkaz_data = ($rs_create_link === false ? "E_1" : $rs_create_link);
            
-               echo "<td style=\"".$class_stb_sude."\" >V: ".$rs_create_link."&nbsp;</td>";
+               $output .= "<td style=\"".$class_stb_sude."\" >V: ".$rs_create_link."&nbsp;</td>";
                
-               echo "<td style=\"".$class_stb_sude."\" >".$data_vypis["sw_port"]."&nbsp;</td>";
+               $output .= "<td style=\"".$class_stb_sude."\" >".$data_vypis["sw_port"]."&nbsp;</td>";
    
-               echo "<td colspan=\"2\" style=\"".$class_stb_sude."\" >";
+               $output .= "<td colspan=\"2\" style=\"".$class_stb_sude."\" >";
                
-               echo ($data_vypis["datum_vytvoreni_f"] == 0 ? "nelze zjistit " : $data_vypis["datum_vytvoreni_f"]);
+               $output .= ($data_vypis["datum_vytvoreni_f"] == 0 ? "nelze zjistit " : $data_vypis["datum_vytvoreni_f"]);
                
-               echo "</td>";
+               $output .= "</td>";
    
            //generovani Reg. Formu
            if( (intval($data_vypis["id_cloveka"]) > 0) ){
@@ -818,19 +816,19 @@ class stb
            
            if( (intval($id_komplu) > 0) ){
    
-                 echo "<td style=\"".$class_stb_sude."\" >".
-               "<a href=\"/adminator3/print/reg-form-pdf.php?".urlencode("id_vlastnika")."=".intval($id_komplu)."\">R.F.</a>".
+                 $output .= "<td style=\"".$class_stb_sude."\" >".
+               "<a href=\"/print/reg-form-pdf.php?".urlencode("id_vlastnika")."=".intval($id_komplu)."\">R.F.</a>".
                "</td>";
            
            } 
            else{
-               echo "<td style=\"".$class_stb_sude."\">E</td>";
+               $output .= "<td style=\"".$class_stb_sude."\">E</td>";
            }
            
            }
            else{
-               echo "<td style=\"".$class_stb_sude."\" >".
-               "<a href=\"/adminator3/print/reg-form-pdf.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\">R.F.</a>".
+               $output .= "<td style=\"".$class_stb_sude."\" >".
+               "<a href=\"/print/reg-form-pdf.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\">R.F.</a>".
                "</td>";
            }
            
@@ -840,23 +838,25 @@ class stb
                // if( check_level($this->level, 152) )
                if($this->enable_unpair_action === true)
                {
-                   echo "<td style=\"".$class_stb_sude."\" ><a href=\"objekty-stb-unpairing.php?id=".intval($data_vypis["id_stb"])."\" >odendat</a></td>";
+                   $output .= "<td style=\"".$class_stb_sude."\" ><a href=\"objekty-stb-unpairing.php?id=".intval($data_vypis["id_stb"])."\" >odendat</a></td>";
                }
                else{
-                   echo "<td style=\"".$class_stb_sude."\" ><div style=\"color: gray; \" >odendat</div></td>";
+                   $output .= "<td style=\"".$class_stb_sude."\" ><div style=\"color: gray; \" >odendat</div></td>";
                }
            }
            else
            {
-           //echo "<td style=\"".$class_stb_sude."\" >&nbsp;</td>";
+           //$output .= "<td style=\"".$class_stb_sude."\" >&nbsp;</td>";
            }
            
-           echo "</tr>\n";
+           $output .= "</tr>\n";
    
        } //konec while
    
         } //konec else if $dotaz_vypis_radku == 0
     
+        return $output;
+
       } //konec funkce vypis
    
       //
