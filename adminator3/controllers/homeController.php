@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Controllers;
+
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -29,7 +31,7 @@ class homeController extends adminatorController {
 
         $this->checkLevel(38);
 
-        $a = new adminator($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
+        $a = new \adminator($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
 
         if ($request->isPost()) {
             $data = $request->getParsedBody();
@@ -77,7 +79,7 @@ class homeController extends adminatorController {
             $this->smarty->assign("datum",date("j. m. Y"));
             $this->smarty->assign("sid",$this->auth->user_sid);
             
-            $nastenka = new board($this->conn_mysql);
+            $nastenka = new \board($this->conn_mysql);
 
             $nastenka->prepare_vars("");
             
@@ -121,7 +123,7 @@ class homeController extends adminatorController {
             
             $this->smarty->assign("action",$_SERVER['SCRIPT_URL']);
             
-            $opravy = new opravy($this->conn_mysql, $this->logger);
+            $opravy = new \opravy($this->conn_mysql, $this->logger);
          
             $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
             // $this->logger->addDebug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));    
