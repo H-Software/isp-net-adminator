@@ -11,5 +11,7 @@ Vlastníci2 - Company, s.r.o.</div>
 {* hledaci a filtrovaci prvky *}
 {include file="vlastnici/inc.selectors.tpl"}
 
+<h2>building this page is in progress :)</h2>
+
 {* konecny soubor *}
 {include file="base-end.tpl"}

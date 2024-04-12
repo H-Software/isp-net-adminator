@@ -57,6 +57,8 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/vlastnici/cat', \vlastniciController::class . ':cat');
     $this->map(['GET', 'POST'],'/vlastnici2', \vlastniciController::class . ':vlastnici2');
 
+    $this->map(['GET', 'POST'],'/objekty/cat', \objektyController::class . ':cat');
+
     $this->map(['GET', 'POST'],'/platby/cat', \platbyController::class . ':cat');
     $this->map(['GET', 'POST'],'/platby/fn', \platbyController::class . ':fn');
     $this->map(['GET', 'POST'],'/platby/fn-kontrola-omezeni', \platbyController::class . ':fnKontrolaOmezeni');

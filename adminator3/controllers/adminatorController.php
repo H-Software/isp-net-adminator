@@ -22,7 +22,23 @@ class adminatorController{
         $this->logger->addInfo("adminatorController\__construct called");
 	}
 
-    public function checkLevel($page_level_id){
+    public function renderNoLogin ()
+    {
+        $this->smarty->assign("page_title","Adminator3 - chybny level");
+
+        $this->header();
+
+        $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+        $this->smarty->display('global/no-level.tpl');
+        
+        exit;
+    }
+    public function checkLevel($page_level_id = 0){
+
+        if ($page_level_id == 0){
+            $this->renderNoLogin();
+            return false;
+        }
 
         $this->container->auth->page_level_id = $page_level_id;
 
@@ -31,12 +47,8 @@ class adminatorController{
         $this->logger->addInfo("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false){
-
-            $this->smarty->assign("page_title","Adminator3 - chybny level");
-            $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-            $this->smarty->display('index-nolevel.tpl');
-            
-            exit;
+            $this->renderNoLogin();
+            return false;
         }
     }
 
@@ -64,7 +76,7 @@ class adminatorController{
             return $ret;
     }
 
-    function header(ServerRequestInterface $request, ResponseInterface $response)
+    function header(ServerRequestInterface $request = null, ResponseInterface $response = null)
     {
 
         $this->logger->addDebug("adminatorController\\footer called");
@@ -83,9 +95,15 @@ class adminatorController{
         $this->smarty->assign("kategorie",$kategorie);
         $this->smarty->assign("kat_2radka",$kat_2radka);
 
-        $csrf = $this->generateCsrfToken($request, $response, true);
-        // $this->logger->addInfo("adminController\header: csrf generated: ".var_export($csrf, true));
-        $this->smarty->assign("kat_csrf_html", $csrf[0]);
+        if(is_object($request) and is_object($response)){
+            $csrf = $this->generateCsrfToken($request, $response, true);
+            // $this->logger->addInfo("adminController\header: csrf generated: ".var_export($csrf, true));
+            $this->smarty->assign("kat_csrf_html", $csrf[0]);
+        }
+        else
+        {
+            $this->logger->addDebug("adminatorController\\footer: no required vars for generateCsrfToken");
+        }
 
         $this->smarty->assign("show_se_cat_values", array("0","1"));
         $this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
@@ -141,9 +159,9 @@ class adminatorController{
         if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici/cat+",$uri) or ereg("^.+vypovedi",$uri) )
         { $kategorie[0]["barva"] = "silver"; }
 
-        $kategorie[1] = array( "nazev" => "Služby", "url" => fix_link_to_another_adminator("/objekty-subcat.php"), "align" => "center", "width" => "18%" );
+        $kategorie[1] = array( "nazev" => "Služby", "url" => "/objekty/cat", "align" => "center", "width" => "18%" );
 
-        if( ereg("^.+objekty.",$uri) or ereg("^.+objekty-subcat.php",$uri) )
+        if( ereg("^.+objekty.",$uri) )
         { $kategorie[1]["barva"] = "silver"; }
 
         $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby/cat", "align" => "center", "width" => "18%" );
@@ -158,7 +176,7 @@ class adminatorController{
 
         $kategorie[4] = array( "nazev" => "Nastavení", "url" => "/admin", "align" => "center", "width" => "" );
 
-        if( ereg("^.+admin.+$",$uri_replace ) or ereg("^.+admin-subcat.php$",$uri) )
+        if( ereg("^.+admin.+$",$uri_replace ) )
         {  $kategorie[4]["barva"] = "silver"; }
 
         $kategorie[5] = array( "nazev" => "Úvodní strana", "url" => "/home", "align" => "center", "width" => "" );
