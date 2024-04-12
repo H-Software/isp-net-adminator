@@ -79,8 +79,8 @@ class adminatorController{
     function header(ServerRequestInterface $request = null, ResponseInterface $response = null)
     {
 
-        $this->logger->addDebug("adminatorController\\footer called");
-        $this->logger->addDebug("adminatorController\\footer: ".$this->auth->user_nick." (".$this->auth->user_level.")");
+        $this->logger->addDebug("adminatorController\\header called");
+        $this->logger->addDebug("adminatorController\\header: logged user info: ".$this->auth->user_nick." (".$this->auth->user_level.")");
 
         $this->smarty->assign("nick_a_level",$this->auth->user_nick." (".$this->auth->user_level.")");
         $this->smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
@@ -102,7 +102,7 @@ class adminatorController{
         }
         else
         {
-            $this->logger->addDebug("adminatorController\\footer: no required vars for generateCsrfToken");
+            $this->logger->addWarning("adminatorController\\header: no required vars for generateCsrfToken");
         }
 
         $this->smarty->assign("show_se_cat_values", array("0","1"));
