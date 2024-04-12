@@ -89,7 +89,7 @@ class platbyController extends adminatorController {
 
         $this->header($request, $response);
 
-        $platby = new platby($this->conn_mysql, $this->logger);
+        $platby = new \platby($this->conn_mysql, $this->logger);
 
         $pocet_synchro_faktur = $platby->synchro_db_nf();
  

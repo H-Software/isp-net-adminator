@@ -54,7 +54,7 @@ class vlastniciController extends adminatorController {
 
         $select = $_GET["select"];
 
-        $vlastnik2 = new vlastnik2($this->conn_mysql);
+        $vlastnik2 = new \vlastnik2($this->conn_mysql);
         
         $this->smarty->assign("select",$select);
         

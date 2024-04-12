@@ -66,9 +66,8 @@ class objektyController extends adminatorController {
 
         $this->smarty->assign("body",$rs[0]);
 
-        $this->smarty->display('objekty/stb.tpl');
+        $this->smarty->fetch('objekty/stb.tpl');
 
-        return $response;
     }
 
 
@@ -77,9 +76,15 @@ class objektyController extends adminatorController {
 
         $this->logger->addInfo("objektyController\\stb called");
         
-        $this->checkLevel(135);
+        $this->checkLevel(136);
 
-        $this->smarty->assign("page_title","Adminator3 :: Objekty STB");
+        $this->smarty->assign("page_title","Adminator3 :: STB :: upravy");
+
+        $this->header($request, $response);
+
+        $this->smarty->fetch('objekty/stb-action.tpl');
+
+
     }
 
 }

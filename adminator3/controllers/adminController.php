@@ -82,7 +82,7 @@ class adminController extends adminatorController {
         $this->logger->addInfo("adminController\adminLevelList: csrf generated: ".var_export($csrf_name, true));
 
         // render
-        $this->smarty->assign("body",admin::levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value));
+        $this->smarty->assign("body",\admin::levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value));
 
         $this->smarty->display('admin/level-list.tpl');
 
@@ -108,7 +108,7 @@ class adminController extends adminatorController {
 
         $this->logger->addInfo("adminController\adminLevelAction: csrf generated: ".var_export($csrf_name, true));
 
-        $rs = admin::levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
+        $rs = \admin::levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
 
         $this->smarty->assign("body",$rs[0]);
 
@@ -128,7 +128,7 @@ class adminController extends adminatorController {
 
         // $csrf_html = $this->generateCsrfToken($request, $response, true);
 
-        $rs = admin::tarifList();
+        $rs = \admintarifList();
 
         $this->smarty->assign("body",$rs[0]);
 
