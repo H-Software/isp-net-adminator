@@ -124,7 +124,7 @@ class stb
                 "Chyba! Funkce \"filter_select_nod\" nevrací žádné relevatní data</div>\n";
         }
         
-        $output .= "<form method=\"GET\" action=\"\" >";
+        $output .= "<form method=\"GET\" action=\"" . $_SERVER['SCRIPT_URL']. "\" >";
         
         //filtr - hlavni okno
         if( $_GET["odeslano"] == "OK" ){
@@ -719,7 +719,7 @@ class stb
            
                $output .= "<div style=\"float: left; width: 135px; padding-top: 2px;\" >".htmlspecialchars($data_vypis["mac_adresa"])."</div>";
                        
-               $p_link1 = "http://app01.cho01.iptv.grapesc.cz:9080/admin/admin/provisioning/stb-search.html?".
+               $p_link1 = "http://app01.cho01.iptv.local:9080/admin/admin/provisioning/stb-search.html?".
                    "searchText=".urlencode($data_vypis["mac_adresa"])."&amp;type=".urlencode("MAC_ADDRESS")."&amp;submit=OK";
                
                $output .= "<div style=\"float: left;\" >".
@@ -775,7 +775,7 @@ class stb
                $output .= "<td style=\"".$class_stb_sude."\" >\n";
                    
                $output .= "<span class=\"objekty-2radka objekty-odkaz\">".
-                                 "<a href=\"topology-nod-list.php?".urlencode("typ_nodu")."=2".urlencode("&find")."=".urlencode($data_vypis["nod_jmeno"])."\" >".
+                                 "<a href=\"". fix_link_to_another_adminator("/topology-nod-list.php?".urlencode("typ_nodu")."=2".urlencode("&find")."=".urlencode($data_vypis["nod_jmeno"])) . "\" >".
                                  $data_vypis["nod_jmeno"]."</a>".
                     "</span>";
                $output .= "</td>\n";
@@ -785,7 +785,7 @@ class stb
                
                //id stb (historie)
                $output .= "<td style=\"".$class_stb_sude."\" >H: \n";
-               $output .= "<a href=\"" . fix_link_to_another_adminator("archiv-zmen.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])) ."\" >".$data_vypis["id_stb"]."</a>\n";
+               $output .= "<a href=\"" . fix_link_to_another_adminator("/archiv-zmen.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])) ."\" >".$data_vypis["id_stb"]."</a>\n";
                $output .= "</td>\n";
                
            //vlastnik - id cloveka

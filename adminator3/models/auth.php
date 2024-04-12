@@ -1,5 +1,7 @@
 <?php
 
+// deprecated and broken stuff
+
 class auth_service{
 
     var $conn_mysql;
