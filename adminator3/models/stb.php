@@ -29,6 +29,8 @@ class stb
        
     var $id_cloveka; 		//pokud se vypisou STB dle ic_cloveka //u vlastniku//, tak zde prislusny clovek
 
+    var $find_par_vlastnik;
+
 	function __construct($conn_mysql)
     {
 		$this->conn_mysql = $conn_mysql;
@@ -640,8 +642,8 @@ class stb
                     { 
                     echo "<br><H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit. </div></H3>\n"; 
 
-                    $link = $MC;
-                    echo mysql_errno($link) . ": " . mysql_error($link) . "\n";     
+                    // $link = $MC;
+                    // echo mysql_errno($link) . ": " . mysql_error($link) . "\n";     
                     echo "res: $res \n";
                     
                     /*
@@ -880,8 +882,8 @@ class stb
     {
        $sql_sloupce = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, pozn, datum_vytvoreni ";
       
-        $dotaz = mysql_query("SELECT ".$sql_sloupce." FROM objekty_stb WHERE id_cloveka = '".intval($id_cloveka)."' ORDER BY id_stb");
-        $dotaz_radku = mysql_num_rows($dotaz);
+        $dotaz = $this->conn_mysql->mysql_query("SELECT ".$sql_sloupce." FROM objekty_stb WHERE id_cloveka = '".intval($id_cloveka)."' ORDER BY id_stb");
+        $dotaz_radku = $dotaz->num_rows;
    
        return $dotaz_radku;
     }
