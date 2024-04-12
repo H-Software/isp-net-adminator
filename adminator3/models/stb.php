@@ -139,7 +139,7 @@ class stb
         
          $paging_url = "?".urlencode("order")."=".$stb->order.$get_odkazy;
             
-         $paging = new paging_global($conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $stb->sql_query);
+         $paging = new paging_global($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $stb->sql_query);
                          
          $bude_chybet = ( (($list == "")||($list == "1")) ? 0 : ((($list-1) * $paging->interval)) );
          

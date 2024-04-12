@@ -50,11 +50,11 @@ class objektyController extends adminatorController {
 
         $this->header($request, $response);
 
-        $obj = new objekt($this->conn_mysql);
+        $stb = new stb($this->conn_mysql);
 
-        $obj->stbPrepareRender();
-        
-        $this->smarty->assign("body","T.B.A.");
+        $output = $stb->stbPrepareRender();
+
+        $this->smarty->assign("body",$output);
 
         $this->smarty->display('objekty/stb.tpl');
 
