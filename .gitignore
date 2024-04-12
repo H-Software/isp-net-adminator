@@ -40,3 +40,4 @@ postgres-db-init-adminator-new.sql
 
 adminator3/.php_cs.cache
 docker-compose.yml
+stb copy 2.php
