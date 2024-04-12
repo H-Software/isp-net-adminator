@@ -27,7 +27,7 @@ class objektyController extends adminatorController {
     {
       $this->logger->addInfo("objektyController\cat called");
 
-      $this->checkLevel();
+      $this->checkLevel(93);
 
       $this->smarty->assign("page_title","Adminator3 :: Objekty");
 
@@ -35,20 +35,36 @@ class objektyController extends adminatorController {
       
       $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
-      $this->smarty->display('objekty/objekty-cat.tpl');
+      $this->smarty->display('objekty/subcat.tpl');
 
     }
 
-    public function objekty(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    public function stb(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("objektyController\\objekty called");
+        $this->logger->addInfo("objektyController\\stb called");
         
-        $this->checkLevel();
+        $this->checkLevel(135);
 
-        $this->smarty->assign("page_title","Adminator3 :: Objekty");
+        $this->smarty->assign("page_title","Adminator3 :: Objekty STB");
 
         $this->header($request, $response);
+
+        $stb = new stb($this->conn_mysql);
+
+        if ($this->container->auth->checkLevel($this->container->logger, 137, false) === true) {
+            $stb->enable_modify_action = true;
+        }
+        
+        if ($this->container->auth->checkLevel($this->container->logger, 152, false) === true) {
+            $stb->enable_unpair_action = true;
+        }
+
+        $rs = $stb->stbListGetBodyContent();
+
+        $this->smarty->assign("body",$rs[0]);
+
+        $this->smarty->display('objekty/stb.tpl');
 
         return $response;
     }

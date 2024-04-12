@@ -1,6 +1,6 @@
 <?php
 
-class objekt
+class objekt_a2
 {
 
  function vypis_tab($par)
@@ -747,13 +747,13 @@ class vlastnik
 
       echo "<table border=\"0\" width=\"100%\" >";
         
-	objekt::vypis($sql,$co,$id);
+	objekt_a2::vypis($sql,$co,$id);
 
       echo "</table>";
       
     echo "</td></tr>\n\n";
 
-    $objekt = new objekt(); 
+    $objekt = new objekt_a2(); 
     
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
@@ -770,7 +770,7 @@ class vlastnik
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt::vypis($sql,$co,$id);
+      objekt_a2::vypis($sql,$co,$id);
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -790,7 +790,7 @@ class vlastnik
 	   
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt::vypis($sql,$co,$id);
+      objekt_a2::vypis($sql,$co,$id);
 	    
       echo "</table>";
     
@@ -1310,7 +1310,7 @@ class vlastnik2_a2
     // tady asi bude generovani fakturacnich udaju	
     if( ( $id_f > 0 ) ){ fakturacni::vypis($id_f,$id_v); }
     
-    $objekt = new objekt(); 
+    $objekt = new objekt_a2(); 
     
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
@@ -1326,7 +1326,7 @@ class vlastnik2_a2
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt::vypis($sql,$co,$id);
+      objekt_a2::vypis($sql,$co,$id);
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -1344,7 +1344,7 @@ class vlastnik2_a2
 	   
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt::vypis($sql,$co,$id);
+      objekt_a2::vypis($sql,$co,$id);
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -1742,7 +1742,7 @@ class vlastnikarchiv
 	// $id=$data["id_cloveka"];
 	// print "debug: id: $id";
 	
-	 objekt::vypis($sql,$co,$id);
+	 objekt_a2::vypis($sql,$co,$id);
 
 
 
@@ -2729,519 +2729,6 @@ class vlastnikfind
 	
 } // konec class vlastnikfind
 
-class stb
-{
- var $conn_mysql;
-
- var $find_id_nodu;		//promenne pro hledani
- var $find_search_string;
- var $find_var_vlastnik;
- 
- var $id_stb; 			//pro vypis konkretniho stb, z archivu zmen atd
- 
- var $order;			//razeni
-    
- var $vypis_pocet_sloupcu;	//pocet sloupcu v tabulce
- 
- var $debug = 0; 		//vypis sekudarnich informaci (sql dotazy atd)
- 
- var $level; 			//level prislusneho prihlaseneho cloveka, kvuli sekundarni kontrole opravneni
-
- var $sql_query;
- 
- //var $sql_query_listing;
-  
- var $listing_mod; 		// v jakym modu bude vypis /vlastnici -- dle id_cloveka, objekty -- beznej vypis
-    
- var $id_cloveka; 		//pokud se vypisou STB dle ic_cloveka //u vlastniku//, tak zde prislusny clovek
- 
- function __construct($conn_mysql) {
-	$this->conn_mysql = $conn_mysql;
- }
-
- function generujdata()
- {
-   
-     // promenne ktere potrebujem, a ktere budeme ovlivnovat
-     global $ip;
-    
-     //skusime ip vygenerovat   
-	 $vysl_nod = $this->conn_mysql->query("SELECT * FROM nod_list WHERE id = '370' ");
-	 $radku_nod = $vysl_nod->num_rows;
-
-     if( $radku_nod <> 1 ) 
-     {
-       $gen_ip = "E1"; //echo "chybnej vyber nodu";
-     }
-     else	
-     {
-		    
-	while ($data_nod = $vysl_nod->fetch_array() )
-	{ $ip_rozsah=$data_nod["ip_rozsah"]; }  
-	 
-	list($a,$b,$c,$d) =split("[.]",$ip_rozsah);
-			  
-	// c-ckova ip	
-	$gen_ip_find = $a.".".$b.".".$c.".".$d."/24";
-		
-	$msq_check_ip = $this->conn_mysql->query("SELECT * FROM objekty_stb ORDER BY ip_adresa ASC");
-	$msq_check_ip_radku = $msq_check_ip->num_rows;
-	
-	if( $msq_check_ip_radku == 0 ) //nic v db, takze prvni adresa ...
-	{ 
-	  $d=16; 
-	  $gen_ip = $a.".".$b.".".$c.".".$d; 
-	}
-	else
-	{
-	  while( $data_check_ip = $msq_check_ip->fetch_array() )
-	  { $gen_ip = $data_check_ip["ip_adresa"]; }
-		     
-	  list($a,$b,$c,$d) = split("[.]",$gen_ip);
-		     
-	  if( $d >= "250") //jsme u stropu, vracime rozsah ...
-	  { $gen_ip = $a.".".$b.".".$c.".0"; }
-	  else
-	  {
-	    $d = $d + 2;
-	    $gen_ip = $a.".".$b.".".$c.".".$d;
-	  }
-	 } // konec else radku == 0
-		
-		
-	// vysledek predame
-	if( ( strlen($ip) <= 0) ){ $ip = $gen_ip; }
-		 
-      }
-   
- } //konec funkce generujdata
-
- function checkip($ip)
- {
-    $ip_check=ereg('^([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})$',$ip);
-    
-    if( !($ip_check) )
-    {
-      global $fail;  
-      $fail="true";
-      
-      global $error; 
-      $error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
-    }
-    
- } //konec funkce check-ip			 
-
- function checkmac($mac) 
- {
-    $mac_check=ereg('^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$',$mac);
-    
-    if( !($mac_check) )
-    {
-      global $fail;	
-      $fail="true";
-      
-      global $error;  
-      $error .= "<div class=\"objekty-add-fail-mac\"><H4>MAC adresa ( ".$mac." ) není ve správném formátu !!! ( Správný formát je: 00:00:64:65:73:74 ) </H4></div>";
-    }
-    
-  } //konec funkce check-mac
-
-  function checkcislo($cislo)
-  {
-     $rra_check=ereg('^([[:digit:]]+)$',$cislo);
-     
-     if( !($rra_check) )
-     {
-      global $fail;	$fail="true";
-      
-      global $error;	
-      $error .= "<div class=\"objekty-add-fail-cislo\"><H4>Zadaný číselný údaj ( ".$cislo." ) není ve  správném formátu !!! </H4></div>";
-     }		    
-    
-  } // konec funkce check cislo
-
- function zjistipocetobj($id_cloveka)
- {
-    $sql_sloupce = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, pozn, datum_vytvoreni ";
-   
-     $dotaz = mysql_query("SELECT ".$sql_sloupce." FROM objekty_stb WHERE id_cloveka = '".intval($id_cloveka)."' ORDER BY id_stb");
-     $dotaz_radku = mysql_num_rows($dotaz);
-
-    return $dotaz_radku;
- }
- 
- function generate_sql_query(){
-
-    /*
-    novej sql doraz
-    
-    SELECT id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, objekty_stb.pozn, 
-	    datum_vytvoreni, DATE_FORMAT(datum_vytvoreni, '%d.%m.%Y %H:%i:%s') as datum_vytvoreni_f, nod_list.jmeno 
-	FROM objekty_stb, nod_list 
-	WHERE ( (objekty_stb.id_nodu = nod_list.id) ) 
-	GROUP BY objekty_stb.id_stb 
-	ORDER BY id_stb
-    */
-    
-    $sql_rows = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, objekty_stb.pozn, datum_vytvoreni, ".
-		    " DATE_FORMAT(datum_vytvoreni, '%d.%m.%Y %H:%i:%s') as datum_vytvoreni_f, nod_list.jmeno AS nod_jmeno ".
-		    ", jmeno_tarifu ";
-  
-    
-    if($this->listing_mod == 1){
-
-     $this->sql_query = "SELECT ".$sql_rows." FROM objekty_stb, nod_list, tarify_iptv ".
-    				 " WHERE ( (objekty_stb.id_nodu = nod_list.id) ".
-    					" AND (objekty_stb.id_tarifu = tarify_iptv.id_tarifu) ".
-    					" AND (id_cloveka = '".intval($this->id_cloveka)."') ) ".
-    				 " GROUP BY objekty_stb.id_stb ".
-    				 " ORDER BY id_stb";    
-    }
-    else{
-
-        $sql_where = "";
-
-		if( $this->find_id_nodu > 0 )
-        {
-    	    $sql_where .= " AND (id_nodu = '".intval($this->find_id_nodu)."') ";
-        } 
-        
-        if(isset($this->find_par_vlastnik)){
-    	    
-    	    if($this->find_par_vlastnik == 1)
-    	        $sql_where .= " AND (id_cloveka > 0) ";
-    	    elseif($this->find_par_vlastnik == 2)
-    		$sql_where .= " AND (id_cloveka is NULL) ";
-    	    else{
-    		//chyba :)
-    	    }
-        
-        }
-        
-        if( (strlen($this->find_search_string) > 0) ){
-		
-		$find_search_string = "%".$this->conn_mysql->real_escape_string($this->find_search_string)."%";
-		
-    		$sql_where .= " AND ( (id_stb = '$find_search_string') OR ".
-    			    " (id_cloveka = '$find_search_string') OR ".
-    			    " (mac_adresa LIKE '$find_search_string' ) OR ".
-    			    " (ip_adresa LIKE '$find_search_string') OR ".
-    			    " (puk LIKE '$find_search_string') OR ".
-    			    " (popis LIKE '$find_search_string') OR ".
-    			    " (objekty_stb.pozn LIKE '$find_search_string') OR ".
-    			    " (nod_list.jmeno LIKE '$find_search_string') ".
-    		" ) ";
-        
-        }
-    
-	if( isset($this->id_stb) ){
-	
-	    $sql_where .= " AND (id_stb = '".intval($this->id_stb)."') ";
-	}
-	
-	if($this->order == 1){
-    	    $sql_order = " ORDER BY popis ASC ";
-        }
-        elseif($this->order == 2){
-    	    $sql_order = " ORDER BY popis DESC ";
-        }
-        elseif($this->order == 3){
-    	    $sql_order = " ORDER BY ip_adresa ASC ";
-        }
-        elseif($this->order == 4){
-    	    $sql_order = " ORDER BY ip_adresa DESC ";
-        }
-        elseif($this->order == 5){
-    	    $sql_order = " ORDER BY mac_adresa ASC ";
-        }
-        elseif($this->order == 6){
-    	    $sql_order = " ORDER BY mac_adresa DESC ";
-        }
-        elseif($this->order == 7){
-    	    $sql_order = " ORDER BY puk ASC ";
-        }
-        elseif($this->order == 8){
-    	    $sql_order = " ORDER BY puk DESC ";
-        }
-        elseif($this->order == 9){
-    	    $sql_order = " ORDER BY nod_list.jmeno ASC ";
-        }
-        elseif($this->order == 10){
-    	    $sql_order = " ORDER BY nod_list.jmeno DESC ";
-        }
-        
-        $this->sql_query = "SELECT ".$sql_rows." FROM objekty_stb, nod_list, tarify_iptv ".
-    				    " WHERE ( (objekty_stb.id_nodu = nod_list.id) AND (objekty_stb.id_tarifu = tarify_iptv.id_tarifu) ".
-    				    $sql_where." ) "." GROUP BY objekty_stb.id_stb ".$sql_order; 
-    	
-    
-    } //end of else if mod == 1
-     
- } //end of function generate_sql_query
- 
- function vypis($mod = 0, $id_cloveka = 0)
- {
-    
-    $this->listing_mod = $mod;
-    $this->id_cloveka  = $id_cloveka;
-    
-    if(empty($this->sql_query)){
-		$this->generate_sql_query();    
-    }
-    
-	try {
-		$dotaz_vypis = $this->conn_mysql->query($this->sql_query);
-		$dotaz_vypis_radku = $dotaz_vypis->num_rows;
-	} catch (Exception $e) {
-		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-	}
-
-    if($this->debug == 1){
-
-	echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-            <div style=\"color: red; font-weight: bold; \" >debug sql: ".$this->sql_query.
-            
-            "<br>var search: ".$this->find_search_string.
-            "</div>
-    	    </td></tr>\n";
-
-	echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
-    	    	
-    }
-    
-    if(!$dotaz_vypis){
-
-	echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-            <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: ".
-            mysql_errno().": ".mysql_error()."</div>
-    	    </td></tr>";
-
-	echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
-    	    	
-    }
-        
-    if( ($dotaz_vypis_radku == 0) and ( $mod != 1 ) )
-    {
-
-	echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-            <div style=\"color: red; font-weight: bold; \" >Žádný set-top-box nenalezen.</div>
-    	    </td></tr>";
-
-	echo "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
-    }
-    else
-    {
-        $class_stb_liche = "border-bottom: 1px dashed gray; font-size: 15px; ";
-	$class_stb_sude = "border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px; ";
-	  
-	while($data_vypis = $dotaz_vypis->fetch_array())
-	{
-	  echo "
-	    <tr>
-	    <td style=\"".$class_stb_liche."\" >".$data_vypis["popis"]."&nbsp;</td>
-	    <td style=\"".$class_stb_liche."\" >".$data_vypis["ip_adresa"]."&nbsp;</td>\n";
-    	    
-    	    //pozn
-    	    echo "<td style=\"".$class_stb_liche."\" ><span class=\"pozn\"><img title=\"poznamka\" src=\"img2/poznamka3.png\" alt=\"poznamka\" ";
-    	    echo " onclick=\"window.alert(' poznámka: ".htmlspecialchars($data_vypis["pozn"])." , Vytvořeno: ".$pridano." ');\" ></span>\n</td>\n";
-
-	    //mac adresa
-	    echo "<td style=\"".$class_stb_liche."\" >\n";
-		
-		    echo "<div style=\"float: left; width: 135px; padding-top: 2px;\" >".htmlspecialchars($data_vypis["mac_adresa"])."</div>";
-				    
-		    $p_link1 = "http://app01.cho01.iptv.grapesc.cz:9080/admin/admin/provisioning/stb-search.html?".
-				"searchText=".urlencode($data_vypis["mac_adresa"])."&amp;type=".urlencode("MAC_ADDRESS")."&amp;submit=OK";
-		    
-		    echo "<div style=\"float: left;\" >".
-			    "<a href=\"".$p_link1."\" target=\"_new\" >".
-		   		"<img src=\"/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >".
-			    "</a>".
-			  "</div>";
-		    
-		    echo "<div style=\"clear: both;\" ></div>";
-		    
-		//echo "</div>";
-			
-	    echo "</td>\n";
-	    
-	    //uprava
-    	    echo "<td style=\"".$class_stb_liche."\" >";
-    
-    	    if( !( check_level($this->level,137) ) )
-    	    { echo "<div style=\"\" style=\"".$class_stb_liche."\" >úprava</div>\n"; }
-    	    else
-    	    {
-    		echo "<form method=\"POST\" action=\"objekty-stb-add.php\" >
-        	<input type=\"hidden\" name=\"update_id\" value=\"".intval($data_vypis["id_stb"])."\" >
-        	<input class=\"\" type=\"submit\" value=\"update\" >
-    		</form>\n";
-    	    }
-
-    	    echo "</td>\n";
-
-	    //smazani
-	    echo "<td style=\"".$class_stb_liche."\" >\n";
-
-    	    echo "<div style=\"\" ><a href=\"objekty-stb-erase.php?".
-    		    urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\" >smazání</a>".
-    		  "</div>";
-    	    
-    	    echo "</td>\n";
-	    
-	    //test
-    	    echo "<td style=\"".$class_stb_liche."\" >
-		 <a href=\"objekty-test.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\" >test</a>
-		</td>\n";
-    	    
-    	    //tarif
-    	    echo "<td style=\"".$class_stb_liche."\" >".htmlspecialchars($data_vypis["jmeno_tarifu"])."</td>\n";
-    	    
-    	    //druhej radek
-    	    echo "</tr>\n".
-    		"<tr>\n";
-    		                                               
-    	    //pripojny bod / nod
-    	    echo "<td style=\"".$class_stb_sude."\" >\n";
-    	    	
-    	    echo "<span class=\"objekty-2radka objekty-odkaz\">".
-    	                      "<a href=\"topology-nod-list.php?".urlencode("typ_nodu")."=2".urlencode("&find")."=".urlencode($data_vypis["nod_jmeno"])."\" >".
-    	                      $data_vypis["nod_jmeno"]."</a>".
-    	         "</span>";
-    	    echo "</td>\n";
-    	    
-    	    //puk
-    	    echo "<td style=\"".$class_stb_sude."\" >".$data_vypis["puk"]."&nbsp;</td>\n";
-    	    
-    	    //id stb (historie)
-    	    echo "<td style=\"".$class_stb_sude."\" >H: \n";
-    		echo "<a href=\"archiv-zmen.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\" >".$data_vypis["id_stb"]."</a>\n";
-    	    echo "</td>\n";
-    	    
-	    //vlastnik - id cloveka
-	    $id_cloveka = $data_vypis["id_cloveka"];
-	    
-	    $rs_create_link = ($id_cloveka > 0 ? Aglobal::create_link_to_owner($id_cloveka) : "");
-	    
-	    $odkaz_data = ($rs_create_link === false ? "E_1" : $rs_create_link);
-	    
-    	    echo "<td style=\"".$class_stb_sude."\" >V: ".$rs_create_link."&nbsp;</td>";
-    	    
-    	    echo "<td style=\"".$class_stb_sude."\" >".$data_vypis["sw_port"]."&nbsp;</td>";
-
-    	    echo "<td colspan=\"2\" style=\"".$class_stb_sude."\" >";
-    	    
-    		echo ($data_vypis["datum_vytvoreni_f"] == 0 ? "nelze zjistit " : $data_vypis["datum_vytvoreni_f"]);
-    		
-    	    echo "</td>";
-
-	    //generovani Reg. Formu
-	    if( (intval($data_vypis["id_cloveka"]) > 0) ){
-	
-		$rs_rf = pg_query("SELECT id_komplu FROM objekty WHERE id_cloveka = '".intval($data_vypis["id_cloveka"])."'");
-		
-		while($data_rf = pg_fetch_array($rs_rf)){
-		    $id_komplu = $data_rf["id_komplu"];
-		}
-		
-		if( (intval($id_komplu) > 0) ){
-
-	          echo "<td style=\"".$class_stb_sude."\" >".
-		    "<a href=\"/adminator3/print/reg-form-pdf.php?".urlencode("id_vlastnika")."=".intval($id_komplu)."\">R.F.</a>".
-		    "</td>";
-		
-		} 
-		else{
-		    echo "<td style=\"".$class_stb_sude."\">E</td>";
-		}
-		
-	    }
-	    else{
-	        echo "<td style=\"".$class_stb_sude."\" >".
-		    "<a href=\"/adminator3/print/reg-form-pdf.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\">R.F.</a>".
-		    "</td>";
-	    }
-	    
-	    //zbytek	
-	    if($mod == 1){
-				
-			if( check_level($this->level, 152) ){
-				echo "<td style=\"".$class_stb_sude."\" ><a href=\"objekty-stb-unpairing.php?id=".intval($data_vypis["id_stb"])."\" >odendat</a></td>";
-			}
-			else{
-				echo "<td style=\"".$class_stb_sude."\" ><div style=\"color: gray; \" >odendat</div></td>";
-			}
-	    }
-	    else
-	    {
-		//echo "<td style=\"".$class_stb_sude."\" >&nbsp;</td>";
-	    }
-	    
-	    echo "</tr>\n";
-
-	} //konec while
-
-     } //konec else if $dotaz_vypis_radku == 0
- 
-   } //konec funkce vypis
-
-   //
-   //funkce pro filtraci vypisu
-   //
-   
-   function filter_select_nods(){
-       
-       $ret = array();
-       
-       //sql 
-       $sql = "SELECT nod_list.id, nod_list.jmeno FROM nod_list, objekty_stb ".
-    		" WHERE ( (nod_list.id = objekty_stb.id_nodu) AND (nod_list.typ_nodu = 2) ) ".
-    		" group by nod_list.id";
-		try {
-			$rs = $this->conn_mysql->query($sql);
-		} catch (Exception $e) {
-			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-		}
-       
-       if(!$rs){    
-    	    
-    	    $text = htmlspecialchars(mysql_errno() . ": " . mysql_error());
-    	    $ret["error"] = array("2" => $text);
-    
-    	    return $ret;
-       }
-       
-       $rs_num = $rs->num_rows;
-        
-       if( $rs_num == 0){
-    
-    	    $text = htmlspecialchars("Žádné nody nenalezeny");
-	    	$ret["error"] = array("1" => $text);
-    	    
-    	    return $ret;
-       }
-       
-       while( $data = $rs->fetch_array()){
-    	    
-    	    $id = intval($data["id"]);
-    	    $val = htmlspecialchars($data["jmeno"]);
-    	    
-    	    $ret["data"][$id] = $val;
-       }
-       
-       return $ret;
-       
-   } //end of function filter_select_nods
-        
-   function filter_select_tarifs(){
-   
-	//dodelat :) 
-	//TODO: add logic for filter tarifs
-
-   } //end of function filter_select_tarifs
-   
-   
-} //konec tridy stb
 
 class fakturacni_skupina
 {
