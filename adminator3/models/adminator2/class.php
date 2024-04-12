@@ -2979,7 +2979,7 @@ class stb
      
  } //end of function generate_sql_query
  
- function vypis($mod,$id_cloveka)
+ function vypis($mod = 0, $id_cloveka = 0)
  {
     
     $this->listing_mod = $mod;
@@ -3165,12 +3165,12 @@ class stb
 	    //zbytek	
 	    if($mod == 1){
 				
-		if( check_level($this->level, 152) ){
-		    echo "<td style=\"".$class_stb_sude."\" ><a href=\"objekty-stb-unpairing.php?id=".intval($data_vypis["id_stb"])."\" >odendat</a></td>";
-		}
-		else{
-		    echo "<td style=\"".$class_stb_sude."\" ><div style=\"color: gray; \" >odendat</div></td>";
-		}
+			if( check_level($this->level, 152) ){
+				echo "<td style=\"".$class_stb_sude."\" ><a href=\"objekty-stb-unpairing.php?id=".intval($data_vypis["id_stb"])."\" >odendat</a></td>";
+			}
+			else{
+				echo "<td style=\"".$class_stb_sude."\" ><div style=\"color: gray; \" >odendat</div></td>";
+			}
 	    }
 	    else
 	    {
@@ -3664,7 +3664,7 @@ class paging_global {
     var $db_type = "mysql";
     
     //konstruktor...naplni promenne
-    function __construct($conUrl = "home.php", $conInterval = 10, $conList = 1, $conBefore, $conAfter, $conSql = "", $db_type){
+    function __construct($conUrl = "home.php", $conInterval = 10, $conList = 1, $conBefore, $conAfter, $conSql = ""){
         $this->errName[1] = "Při volání konstruktoru nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
         // $this->errName[3] = "Nelze zobrazit listov▒n▒, chyba datab▒ze(Num_Rows)!<br>\n";
@@ -3689,10 +3689,10 @@ class paging_global {
 
     //vyber dat z databaze
     function dbSelect(){
-        global $conn_mysq;
+        global $conn_mysql;
 
         if($this->db_type == "mysql")
-    	    $listRecord = $conn_mysq->query($this->sql);
+    	    $listRecord = $conn_mysql->query($this->sql);
         elseif($this->db_type == "pgsql")
     	    $listRecord = pg_query($this->sql);
         else{

@@ -237,7 +237,6 @@ echo "</form>\n";
 //listovani
  echo $paging->listInterval();
  
-echo "<b>debug: tracepoint 1</b>";
 
 //zacatek tabulky ... popis
 
