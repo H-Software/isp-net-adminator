@@ -5,7 +5,7 @@ require("include/config.php");
 require("include/check_login.php");
 require("include/check_level.php");
 require("include/class.php"); 
-// require("include/c_listing-objekty.php");
+require("include/c_listing-objekty.php");
 
 if( !( check_level($level,135) ) )
 {
@@ -154,7 +154,7 @@ else{
 
  $paging_url = "?".urlencode("order")."=".$stb->order.$get_odkazy;
     
- $paging = new paging_global($paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $stb->sql_query);
+ $paging = new paging_global($conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $stb->sql_query);
                  
  $bude_chybet = ( (($list == "")||($list == "1")) ? 0 : ((($list-1) * $paging->interval)) );
  
@@ -237,6 +237,7 @@ echo "</form>\n";
 //listovani
  echo $paging->listInterval();
  
+
 //zacatek tabulky ... popis
 
 echo "<table border=\"0\" width=\"1000px\" style=\"padding-left: 10px; \" >";

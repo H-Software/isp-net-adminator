@@ -38,8 +38,8 @@
 	$sql_nod .= " OR ip_rozsah LIKE '%$nod_find%' OR adresa LIKE '%$nod_find%' ";
 	$sql_nod .= " OR pozn LIKE '%$nod_find%' ) AND ( typ_nodu = '2' ) ORDER BY jmeno ASC ";
 	
-       $vysledek=mysql_query($sql_nod);
-       $radku=mysql_num_rows($vysledek);
+       $vysledek=$conn_mysql->query($sql_nod);
+       $radku=$vysledek->num_rows;
 
        print "<select size=\"1\" name=\"id_nodu\" onChange=\"self.document.forms.form1.submit()\" >";
 
@@ -53,7 +53,7 @@
           if( (!isset($id_nodu)) ){ echo "selected"; }
          echo " > Není vybráno</option> \n";
 
-          while ($zaznam2=mysql_fetch_array($vysledek) )
+          while ($zaznam2=$vysledek->fetch_array() )
 	  {
             echo '<option value="'.$zaznam2["id"].'"';
               if ( ( $id_nodu == $zaznam2["id"]) ){ echo " selected "; }
@@ -136,9 +136,9 @@
     	    
     	    <?php
     	    
-    		$tarif_q = mysql_query("SELECT id_tarifu, jmeno_tarifu FROM tarify_iptv ORDER by jmeno_tarifu ASC");
+    		$tarif_q = $conn_mysql->query("SELECT id_tarifu, jmeno_tarifu FROM tarify_iptv ORDER by jmeno_tarifu ASC");
     	    
-    		while( $data_tarif = mysql_fetch_array($tarif_q)){
+    		while( $data_tarif = $tarif_q->fetch_array()){
     		
     		    echo "<option value=\"".intval($data_tarif["id_tarifu"])."\" ";
     		    

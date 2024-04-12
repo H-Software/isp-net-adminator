@@ -40,16 +40,16 @@
             {
               $pole3 .= "změna <b>Přípojného bodu</b> z: ";
 
-              $vysl_t1=mysql_query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."'");
-              while ($data_t1=mysql_fetch_array($vysl_t1) )
+              $vysl_t1=$conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."'");
+              while ($data_t1=$vysl_t1->fetch_array() )
               { $pole3 .= "<span class=\"az-s1\">".$data_t1["jmeno"]."</span>"; }
 
               $pole3 .= " na: ";
 
               $val2 = $obj_upd[$key];
 
-              $vysl_t2=mysql_query("select jmeno FROM nod_list WHERE id = '$val2'" );
-              while ($data_t2=mysql_fetch_array($vysl_t2) )
+              $vysl_t2=$conn_mysql->query("select jmeno FROM nod_list WHERE id = '$val2'" );
+              while ($data_t2=$vysl_t2->fetch_array() )
               { $pole3 .= "<span class=\"az-s2\">".$data_t2["jmeno"]."</span>"; }
 
               $pole3 .= ", ";                                                                                                                 
@@ -94,9 +94,9 @@
         (preg_match("/.*změna.*Čísla.*portu.*/", $pole3) > 0)
      ){
 
-	Aglobal::work_handler("4"); //rh-fiber - radius
-	Aglobal::work_handler("7"); //trinity - sw.h3c.vlan.set.pl update
-	Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+	// Aglobal::work_handler("4"); //rh-fiber - radius
+	// Aglobal::work_handler("7"); //trinity - sw.h3c.vlan.set.pl update
+	// Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
    
    }
    
@@ -105,7 +105,7 @@
    if(preg_match("/.*změna.*Tarifu.*/", $pole3) > 0)
    {
    
-	$p_link1 = "http://app01.cho01.iptv.grapesc.cz:9080/admin/admin/provisioning/stb-search.html?".
+	$p_link1 = "http://app01.cho01.iptv.local:9080/admin/admin/provisioning/stb-search.html?".
 	            "searchText=".urlencode($pole_puvodni_data["mac_adresa"])."&amp;type=".urlencode("MAC_ADDRESS")."&amp;submit=OK";
 	                                  
 	echo "<div style=\"color: #ff4500; font-weight: bold; font-size: 18px;\" >".
@@ -126,6 +126,6 @@
    
    if( $res == 1){ $vysledek_write="1"; }
    
-   $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
+   $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
  
 ?>

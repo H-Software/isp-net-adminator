@@ -42,6 +42,9 @@ if( !( check_level($level,136) ) )
 
 <?php
  
+ //vytvoreni objektu
+ $stb = new stb($conn_mysql);
+
  $update_id = $_POST["update_id"];
 
  global $odeslano;
@@ -116,18 +119,18 @@ if( !( check_level($level,136) ) )
  }
 
  //zde generovani nevyplnenych policek ...
- stb::generujdata(); 
+ $stb->generujdata(); 
 
  //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
- if( (strlen($ip) > 0) ){ stb::checkip($ip); }
+ if( (strlen($ip) > 0) ){ $stb->checkip($ip); }
 
- if( (strlen($mac) > 0) ){ stb::checkmac($mac); }
+ if( (strlen($mac) > 0) ){ $stb->checkmac($mac); }
 
- if( (strlen($puk) > 0) ){ stb::checkcislo($puk); }
+ if( (strlen($puk) > 0) ){ $stb->checkcislo($puk); }
 
- if( (strlen($id_nodu) > 0) ){ stb::checkcislo($id_nodu); }
+ if( (strlen($id_nodu) > 0) ){ $stb->checkcislo($id_nodu); }
 
- if( (strlen($port_id) > 0) ){ stb::checkcislo($port_id); }
+ if( (strlen($port_id) > 0) ){ $stb->checkcislo($port_id); }
 													    
  // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
  if( ( ($ip != "") and ($mac != "") and ( $id_nodu > 0 ) and ($id_tarifu > 0) ) ):
@@ -141,17 +144,17 @@ if( !( check_level($level,136) ) )
    $MSQ_IP = $conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '$ip' ");
    $MSQ_MAC = $conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '$mac' ");
     
-   if( mysql_num_rows($MSQ_POPIS) > 0 )
+   if( $MSQ_POPIS->num_rows > 0 )
    { 
     $error .= "<div style=\"color: #CC0066; \" ><h4>Popis ( ".$popis." ) již existuje!!!</h4></div>"; 
     $fail = "true"; 
    }
-   if( mysql_num_rows($MSQ_IP) > 0 )
+   if( $MSQ_IP->mysql_num_rows > 0 )
    { 
     $error .= "<div style=\"color: #CC0066; \" ><h4>IP adresa ( ".$ip." ) již existuje!!!</h4></div>"; 
     $fail = "true"; 
    }
-   if( mysql_num_rows($MSQ_MAC) > 0 )
+   if( $MSQ_MAC->num_rows > 0 )
    { 
     $error .= "<div style=\"color: #CC0066; \" ><h4>MAC adresa ( ".$mac." ) již existuje!!!</h4></div>"; 
     $fail = "true"; 
@@ -164,13 +167,13 @@ if( !( check_level($level,136) ) )
  {
 
    //zjisti jestli neni duplicitni dns, ip
-   $MSQ_POPIS = mysql_query("SELECT * FROM objekty_stb WHERE ( popis LIKE '$popis' AND id_stb != '$update_id' ) ");
-   $MSQ_IP = mysql_query("SELECT * FROM objekty_stb WHERE ( ip_adresa LIKE '$ip' AND id_stb != '$update_id' )");
-   $MSQ_MAC = mysql_query("SELECT * FROM objekty_stb WHERE ( mac_adresa LIKE '$mac' AND id_stb != '$update_id' ) ");
+   $MSQ_POPIS = $conn_mysql->query("SELECT * FROM objekty_stb WHERE ( popis LIKE '$popis' AND id_stb != '$update_id' ) ");
+   $MSQ_IP = $conn_mysql->query("SELECT * FROM objekty_stb WHERE ( ip_adresa LIKE '$ip' AND id_stb != '$update_id' )");
+   $MSQ_MAC = $conn_mysql->query("SELECT * FROM objekty_stb WHERE ( mac_adresa LIKE '$mac' AND id_stb != '$update_id' ) ");
     
-   if (mysql_num_rows($MSQ_POPIS) > 0){ $error .= "<h4>Popis ( ".$popis." ) již existuje!!!</h4>"; $fail = "true"; }
-   if (mysql_num_rows($MSQ_IP) > 0){ $error .= "<h4>IP adresa ( ".$ip." ) již existuje!!!</h4>"; $fail = "true"; }
-   if (mysql_num_rows($MSQ_MAC) > 0){ $error .= "<h4>MAC adresa ( ".$mac." ) již existuje!!!</h4>"; $fail = "true"; }
+   if ($MSQ_POPIS->num_rows > 0){ $error .= "<h4>Popis ( ".$popis." ) již existuje!!!</h4>"; $fail = "true"; }
+   if ($MSQ_IP->num_rows > 0){ $error .= "<h4>IP adresa ( ".$ip." ) již existuje!!!</h4>"; $fail = "true"; }
+   if ($MSQ_MAC->num_rows > 0){ $error .= "<h4>MAC adresa ( ".$mac." ) již existuje!!!</h4>"; $fail = "true"; }
  
  }
 
@@ -204,16 +207,16 @@ if( !( check_level($level,136) ) )
      //prvne stavajici data docasne ulozime 
      $pole2 = "<b>akce: uprava stb objektu; </b><br>";
     	 
-     $vysl4 = mysql_query("SELECT * FROM objekty_stb WHERE id_stb = '".intval($update_id)."' ");
+     $vysl4 = $conn_mysql->query("SELECT * FROM objekty_stb WHERE id_stb = '".intval($update_id)."' ");
 
-     if( ( mysql_num_rows($vysl4) <> 1 ) )
+     if( ( $vysl4->num_rows <> 1 ) )
      { 
        echo "<div style=\"color: red; padding-top: 5px; padding-bottom: 5px; \" >";
        echo "Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </div>"; 
      }
      else  
      { 
-       while ($data4=mysql_fetch_array($vysl4) ):
+       while ($data4=$vysl4->fetch_array() ):
 	
         $pole_puvodni_data["id_stb"]=$data4["id_stb"];		
         
@@ -243,7 +246,7 @@ if( !( check_level($level,136) ) )
 
       $obj_upd["id_tarifu"] = $id_tarifu;		
 
-      $res = mysql_query("UPDATE objekty_stb SET mac_adresa = '$mac', ip_adresa = '$ip',
+      $res = $conn_mysql->query("UPDATE objekty_stb SET mac_adresa = '$mac', ip_adresa = '$ip',
     			    puk = '$puk', popis = '$popis', id_nodu = '$id_nodu', sw_port = '$port_id',
 			    pozn = '$pozn', upravil_kdo = '$nick', id_tarifu = '$id_tarifu' ".
 			    " WHERE id_stb = '".intval($update_id)."' Limit 1 ");
@@ -263,11 +266,11 @@ if( !( check_level($level,136) ) )
     {
      // rezim pridani
      
-     $res = mysql_query("INSERT INTO objekty_stb 
+     $res = $conn_mysql->query("INSERT INTO objekty_stb 
     			    (mac_adresa, ip_adresa, puk, popis, id_nodu, sw_port, pozn, vlozil_kdo, id_tarifu) 
     			 VALUES ('$mac','$ip','$puk','$popis','$id_nodu','$port_id','$pozn','$nick', '$id_tarifu') ");
 
-     $id_stb = mysql_insert_id($MC);
+     $id_stb = $conn_mysql->insert_id;
      
      if( $res )
      { echo "<br><H3><div style=\"color: green;\" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
@@ -296,18 +299,18 @@ if( !( check_level($level,136) ) )
           
      if( $res == 1 ){ $vysledek_write="1"; }
     
-     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
-    		      "VALUES ('".mysql_real_escape_string($pole)."',".
-    		      "'".mysql_real_escape_string($nick)."',".
-    		      "'".mysql_real_escape_string($vysledek_write)."')");
+     $add = $conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
+    		      "VALUES ('".$conn_mysql->real_escape_string($pole)."',".
+    		      "'".$conn_mysql->real_escape_string($nick)."',".
+    		      "'".$conn_mysql->real_escape_string($vysledek_write)."')");
      
      $writed = "true"; 
 
      //automaticke ovezovani
 
-     Aglobal::work_handler("4"); //rh-fiber - radius
-     Aglobal::work_handler("7"); //trinity - sw.h3c.vlan.set.pl update                                 
-     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+     // Aglobal::work_handler("4"); //rh-fiber - radius
+     // Aglobal::work_handler("7"); //trinity - sw.h3c.vlan.set.pl update                                 
+     // Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
                 
      //pridani do IPTV portálu
      
@@ -389,23 +392,26 @@ STB Objekt byl přidán/upraven, zadané údaje:<br><br>
 
 <b>Přípojný bod</b>:
 <?php
-    $vysledek3=mysql_query("select jmeno, id from nod_list WHERE id='".intval($id_nodu)."' ");
-    $radku3=mysql_num_rows($vysledek3);
+    $vysledek3=$conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($id_nodu)."' ");
+    $radku3=$vysledek3->num_rows;
     
     if($radku3==0) echo " Nelze zjistit ";
     else 
     {
-        while( $zaznam3=mysql_fetch_array($vysledek3) )
-	{ echo $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
+        while( $zaznam3=$vysledek3->fetch_array() )
+	      { echo $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
     }
 
 echo "<br><br>";
 
 echo "<b>Poznámka</b>:".htmlspecialchars($pozn)."<br>";
 
-$ms_tarif = mysql_query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($id_tarifu)."'");
+$ms_tarif = $conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($id_tarifu)."'");
 
-echo "<b>Tarif</b>: ".mysql_result($ms_tarif, 0, 0)."<br><br>";
+$ms_tarif->data_seek(0);
+$ms_tarif_r = $ms_tarif->fetch_row();
+
+echo "<b>Tarif</b>: ".$ms_tarif_r[0]."<br><br>";
 
 endif; 
 
