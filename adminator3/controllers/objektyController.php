@@ -27,7 +27,7 @@ class objektyController extends adminatorController {
     {
       $this->logger->addInfo("objektyController\cat called");
 
-      $this->checkLevel();
+      $this->checkLevel(93);
 
       $this->smarty->assign("page_title","Adminator3 :: Objekty");
 
@@ -35,7 +35,7 @@ class objektyController extends adminatorController {
       
       $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
-      $this->smarty->display('objekty/objekty-cat.tpl');
+      $this->smarty->display('objekty/subcat.tpl');
 
     }
 
