@@ -16,6 +16,13 @@ administration system for Internet Service Provider (ISP)
 - https://github.com/asimlqt/docker-php/blob/master/apache/5.6-dev/etc/php.ini
 - https://github.com/nette/robot-loader/tree/v3.1.4
 - https://dev.to/mtk3d/how-to-configure-php-logs-for-docker-2384
+#### forms
+- https://symfony.com/doc/3.x/forms.html
+- https://packagist.org/packages/symfony/form#v3.4.47
+- https://laravel.com/docs/4.2/html
+- https://github.com/formr/formr
+- https://packagist.org/packages/formr/formr#1.4.6
+
 #### smarty
 - smarty 2.x docs
   - https://www.smarty.net/docsv2/en/
