@@ -1,10 +1,9 @@
 <?php
 
+require("include/main.function.shared.php");
 require_once ("include/config.php"); 
 require_once ("include/check_login.php");
-
 require_once ("include/check_level.php");
-
 require_once("include/class.php");
 
 $level_col = "lvl_objekty_stb_add_portal";
@@ -56,15 +55,20 @@ require("include/charset.php");
     
 	$id_stb = intval($_GET["id_stb"]);
 	
-	$mq_stb = mysql_query("SELECT mac_adresa, popis FROM objekty_stb WHERE id_stb = '$id_stb' ");
+	$mq_stb = $conn_mysql->query("SELECT mac_adresa, popis FROM objekty_stb WHERE id_stb = '$id_stb' ");
 	
-	$stb_mac_adresa = mysql_result($mq_stb, 0, 0);
-	$stb_popis = "Simelon - ".mysql_result($mq_stb, 0, 1);
+	$mq_stb->data_seek(0);
+
+	/* Fetch single row */
+	$mq_stb_r = $mq_stb->fetch_row();
+
+	$stb_mac_adresa = $mq_stb_r[0];
+	$stb_popis = "Simelon - ".$mq_stb_r[1];
 	
 	//debug
 	//echo "mac: ".$stb_mac_adresa.", popis: ".$stb_popis."<br>\n";
 
-    	echo "<form method=\"post\" action=\"http://app01.cho01.iptv.grapesc.cz:9080/admin/admin/provisioning/stb-edit.html\" name=\"iptvportal\" >";
+    	echo "<form method=\"post\" action=\"http://app01.cho01.iptv.local:9080/admin/admin/provisioning/stb-edit.html\" name=\"iptvportal\" >";
     	    
     	echo "<input type=\"hidden\" name=\"mac\" value=\"".$stb_mac_adresa."\" >";
     	    
@@ -84,9 +88,9 @@ require("include/charset.php");
     
 	echo "<div style=\"padding-top: 10px; padding-bottom: 10px;\">Vyberte Set-top-box</div>\n";
 		    
-		$mq_stb = mysql_query("SELECT mac_adresa, popis, id_stb FROM objekty_stb ORDER BY id_stb");
+		$mq_stb = $conn_mysql->query("SELECT mac_adresa, popis, id_stb FROM objekty_stb ORDER BY id_stb");
 		
-		while($data_stb = mysql_fetch_array($mq_stb) ){
+		while($data_stb = $mq_stb->fetch_array() ){
 		
 		    echo "<div style=\"border-bottom: 1px solid gray; width: 500px; \" >";
 		    

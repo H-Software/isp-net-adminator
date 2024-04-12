@@ -2765,10 +2765,10 @@ class stb
      // promenne ktere potrebujem, a ktere budeme ovlivnovat
      global $ip;
     
-     //skusime ip vygenerovat
-     $vysl_nod = mysql_query("SELECT * FROM nod_list WHERE id = '370' ");
-     $radku_nod = mysql_num_rows($vysl_nod);
-	    
+     //skusime ip vygenerovat   
+	 $vysl_nod = $this->conn_mysql->query("SELECT * FROM nod_list WHERE id = '370' ");
+	 $radku_nod = $vysl_nod->num_rows;
+
      if( $radku_nod <> 1 ) 
      {
        $gen_ip = "E1"; //echo "chybnej vyber nodu";
@@ -2776,7 +2776,7 @@ class stb
      else	
      {
 		    
-	while ($data_nod = mysql_fetch_array($vysl_nod) )
+	while ($data_nod = $vysl_nod->fetch_array() )
 	{ $ip_rozsah=$data_nod["ip_rozsah"]; }  
 	 
 	list($a,$b,$c,$d) =split("[.]",$ip_rozsah);
@@ -2784,8 +2784,8 @@ class stb
 	// c-ckova ip	
 	$gen_ip_find = $a.".".$b.".".$c.".".$d."/24";
 		
-	$msq_check_ip = mysql_query("SELECT * FROM objekty_stb ORDER BY ip_adresa ASC");
-	$msq_check_ip_radku = mysql_num_rows($msq_check_ip);
+	$msq_check_ip = $this->conn_mysql->query("SELECT * FROM objekty_stb ORDER BY ip_adresa ASC");
+	$msq_check_ip_radku = $msq_check_ip->num_rows;
 	
 	if( $msq_check_ip_radku == 0 ) //nic v db, takze prvni adresa ...
 	{ 
@@ -2794,7 +2794,7 @@ class stb
 	}
 	else
 	{
-	  while( $data_check_ip = mysql_fetch_array($msq_check_ip) )
+	  while( $data_check_ip = $msq_check_ip->fetch_array() )
 	  { $gen_ip = $data_check_ip["ip_adresa"]; }
 		     
 	  list($a,$b,$c,$d) = split("[.]",$gen_ip);
@@ -2901,8 +2901,8 @@ class stb
 
         $sql_where = "";
 
-	if( $this->find_id_nodu > 0 )
-        { 
+		if( $this->find_id_nodu > 0 )
+        {
     	    $sql_where .= " AND (id_nodu = '".intval($this->find_id_nodu)."') ";
         } 
         
@@ -2920,7 +2920,7 @@ class stb
         
         if( (strlen($this->find_search_string) > 0) ){
 		
-		$find_search_string = "%".mysql_real_escape_string($this->find_search_string)."%";
+		$find_search_string = "%".$this->conn_mysql->real_escape_string($this->find_search_string)."%";
 		
     		$sql_where .= " AND ( (id_stb = '$find_search_string') OR ".
     			    " (id_cloveka = '$find_search_string') OR ".
@@ -2986,11 +2986,15 @@ class stb
     $this->id_cloveka  = $id_cloveka;
     
     if(empty($this->sql_query)){
-	$this->generate_sql_query();    
+		$this->generate_sql_query();    
     }
     
-    $dotaz_vypis = mysql_query($this->sql_query);
-    $dotaz_vypis_radku = mysql_num_rows($dotaz_vypis);
+	try {
+		$dotaz_vypis = $this->conn_mysql->query($this->sql_query);
+		$dotaz_vypis_radku = $dotaz_vypis->num_rows;
+	} catch (Exception $e) {
+		die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	}
 
     if($this->debug == 1){
 
@@ -3030,7 +3034,7 @@ class stb
         $class_stb_liche = "border-bottom: 1px dashed gray; font-size: 15px; ";
 	$class_stb_sude = "border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px; ";
 	  
-	while($data_vypis = mysql_fetch_array($dotaz_vypis))
+	while($data_vypis = $dotaz_vypis->fetch_array())
 	{
 	  echo "
 	    <tr>
@@ -3232,7 +3236,8 @@ class stb
    function filter_select_tarifs(){
    
 	//dodelat :) 
-	
+	//TODO: add logic for filter tarifs
+
    } //end of function filter_select_tarifs
    
    
@@ -3684,11 +3689,12 @@ class paging_global {
 
     //vyber dat z databaze
     function dbSelect(){
-        
+        global $conn_mysq;
+
         if($this->db_type == "mysql")
-    	    $listRecord = @mysql_query($this->sql);
+    	    $listRecord = $conn_mysq->query($this->sql);
         elseif($this->db_type == "pgsql")
-    	    $listRecord = @pg_query($this->sql);
+    	    $listRecord = pg_query($this->sql);
         else{
         }
         
@@ -3697,9 +3703,9 @@ class paging_global {
         }
 
         if($this->db_type == "mysql")        
-    	    $allRecords = @mysql_num_rows($listRecord);
+    	    $allRecords = $listRecord->num_rows;
         elseif($this->db_type == "pgsql")
-    	    $allRecords = @pg_num_rows($listRecord);
+    	    $allRecords = pg_num_rows($listRecord);
         else{
         
         }

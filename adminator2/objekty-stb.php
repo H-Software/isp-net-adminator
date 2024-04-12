@@ -5,7 +5,7 @@ require("include/config.php");
 require("include/check_login.php");
 require("include/check_level.php");
 require("include/class.php"); 
-// require("include/c_listing-objekty.php");
+require("include/c_listing-objekty.php");
 
 if( !( check_level($level,135) ) )
 {
@@ -237,6 +237,8 @@ echo "</form>\n";
 //listovani
  echo $paging->listInterval();
  
+echo "<b>debug: tracepoint 1</b>";
+
 //zacatek tabulky ... popis
 
 echo "<table border=\"0\" width=\"1000px\" style=\"padding-left: 10px; \" >";
