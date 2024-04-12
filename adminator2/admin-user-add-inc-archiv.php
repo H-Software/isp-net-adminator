@@ -46,9 +46,9 @@
     
    if($res == 1){ $vysledek_write="1"; }  
    
-   $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-		    "('".mysql_real_escape_string($pole2)."','".
-			mysql_real_escape_string($nick)."','".
-			mysql_real_escape_string($vysledek_write)."') ");
+   $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+		    "('".$conn_mysql->real_escape_string($pole2)."','".
+			$conn_mysql->real_escape_string($nick)."','".
+			$conn_mysql->real_escape_string($vysledek_write)."') ");
     
 ?>
