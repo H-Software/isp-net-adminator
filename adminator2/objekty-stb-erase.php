@@ -1,11 +1,11 @@
 <?php
 
-require_once("include/config.php"); 
-require_once("include/check_login.php");
-
-require_once("include/check_level.php");
-
-require_once("include/class.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
+require("include/class.php"); 
+// require("include/c_listing-objekty.php");
 
 if( !( check_level2($level, "lvl_objekty_stb_erase") ) )
 { 
@@ -95,9 +95,9 @@ require ("include/charset.php");
     }
     
     //autorestarty
-    Aglobal::work_handler("4"); //rh-fiber - radius
-    Aglobal::work_handler("7"); //trinity - sw.h3c.vlan.set.pl update
-    Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+    // Aglobal::work_handler("4"); //rh-fiber - radius
+    // Aglobal::work_handler("7"); //trinity - sw.h3c.vlan.set.pl update
+    // Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
                            
     
     //IPTV portál
