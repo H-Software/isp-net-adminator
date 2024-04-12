@@ -39,16 +39,20 @@ class objektyController extends adminatorController {
 
     }
 
-    public function objekty(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    public function stb(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("objektyController\\objekty called");
+        $this->logger->addInfo("objektyController\\stb called");
         
-        $this->checkLevel();
+        $this->checkLevel(135);
 
-        $this->smarty->assign("page_title","Adminator3 :: Objekty");
+        $this->smarty->assign("page_title","Adminator3 :: Objekty STB");
 
         $this->header($request, $response);
+
+        $this->smarty->assign("body","T.B.A.");
+
+        $this->smarty->display('objekty/stb.tpl');
 
         return $response;
     }
