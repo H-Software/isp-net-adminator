@@ -106,9 +106,14 @@ class Auth
 	function find_page_level($logger,$page_id)
     {
 
+        $page_level = 0;
+
         $rs = PageLevel::find(isset($page_id) ? $page_id : 0, ['level']);
-		$a = $rs->toArray();
-		$page_level = $a['level'];
+		if(is_object($rs))
+        {
+            $a = $rs->toArray();
+            $page_level = $a['level'];
+        }
 
         $logger->addInfo("auth\\find_page_level: find result: " . var_export($page_level, true));
 
