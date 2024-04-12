@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Controllers;
+
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -50,7 +52,7 @@ class objektyController extends adminatorController {
 
         $this->header($request, $response);
 
-        $stb = new stb($this->conn_mysql);
+        $stb = new \stb($this->conn_mysql);
 
         if ($this->container->auth->checkLevel($this->container->logger, 137, false) === true) {
             $stb->enable_modify_action = true;
@@ -66,7 +68,25 @@ class objektyController extends adminatorController {
 
         $this->smarty->display('objekty/stb.tpl');
 
-        return $response;
+    }
+
+
+    public function stbAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("objektyController\\stbAction called");
+        
+        $this->checkLevel(136);
+
+        $this->smarty->assign("page_title","Adminator3 :: STB :: Actions");
+
+        $this->header($request, $response);
+
+        // $stb = new \stb($this->conn_mysql);
+
+        $this->smarty->fetch('objekty/stb-action.tpl');
+
+
     }
 
 }

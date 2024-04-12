@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Controllers;
+
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -57,7 +59,7 @@ class archivZmenController extends adminatorController {
 
         $this->smarty->assign("link_add","/archiv-zmen/ucetni?action=add");
 
-        $zmena = new zmeny_ucetni($this->conn_mysql);
+        $zmena = new \zmeny_ucetni($this->conn_mysql);
 
         if( $action == "add")
         { //rezim pridani

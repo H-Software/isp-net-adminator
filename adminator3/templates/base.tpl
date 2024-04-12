@@ -8,6 +8,8 @@
 <link href="/style.css" rel="stylesheet" type="text/css" >
 <link href="/style-board.css" rel="stylesheet" type="text/css" >
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
 {if $enable_calendar == 1}
  <script language="JavaScript" src="/plugins/tigra_calendar/calendar_eu.js"></script>
  <link rel="stylesheet" href="/plugins/tigra_calendar/calendar.css">

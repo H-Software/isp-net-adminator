@@ -29,6 +29,8 @@ class stb
        
     var $id_cloveka; 		//pokud se vypisou STB dle ic_cloveka //u vlastniku//, tak zde prislusny clovek
 
+    var $find_par_vlastnik;
+
 	function __construct($conn_mysql)
     {
 		$this->conn_mysql = $conn_mysql;
@@ -79,30 +81,7 @@ class stb
         
          $this->vypis_pocet_sloupcu = 8;
          
-         $output .= "<div style=\"padding-top: 15px; padding-bottom: 15px; \" >
-            <span style=\" padding-left: 5px; 
-            font-size: 16px; font-weight: bold; \" >
-            .:: Výpis Set-Top-Boxů ::. </span>
-            
-            <span style=\"padding-left: 25px; \" >
-              <a href=\"objekty-stb-add.php\" >přidání nového stb objektu</a>
-            </span>
-               
-                <span style=\"\" >
-                  <a href=\"objekty-stb-add-portal.php\" >
-                    <img src=\"/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >
-                  </a>
-            </span>
-            
-               <span style=\"padding-left: 25px; \" >
-                 <a href=\"#\" onclick=\"visible_change(objekty_stb_filter)\" >filtr/hledání</a>
-               </span>
-            
-               <span style=\"padding-left: 25px; \" >
-                 <!-- <a href=\"/admin-login-iptv.php\" target=\"_new\" >--> aktivace funkcí IPTV portálu (přihlašení)<!--</a>-->
-               </span>
-               
-              </div>\n";
+         $output .= "";
         
         $rs_select_nod = $this->filter_select_nods();
         
@@ -429,7 +408,6 @@ class stb
          return $ret;
     }
 
-
     function generujdata()
     {
       
@@ -535,8 +513,8 @@ class stb
     {
        $sql_sloupce = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, pozn, datum_vytvoreni ";
       
-        $dotaz = mysql_query("SELECT ".$sql_sloupce." FROM objekty_stb WHERE id_cloveka = '".intval($id_cloveka)."' ORDER BY id_stb");
-        $dotaz_radku = mysql_num_rows($dotaz);
+        $dotaz = $this->conn_mysql->mysql_query("SELECT ".$sql_sloupce." FROM objekty_stb WHERE id_cloveka = '".intval($id_cloveka)."' ORDER BY id_stb");
+        $dotaz_radku = $dotaz->num_rows;
    
        return $dotaz_radku;
     }
@@ -740,7 +718,7 @@ class stb
                // if( !( check_level($this->level,137) ) )
                if($this->enable_modify_action === true)               
                {
-               $output .= "<form method=\"POST\" action=\"objekty-stb-add.php\" >
+               $output .= "<form method=\"POST\" action=\"" . $_SERVER['SCRIPT_URL'] . "\" >
                <input type=\"hidden\" name=\"update_id\" value=\"".intval($data_vypis["id_stb"])."\" >
                <input class=\"\" type=\"submit\" value=\"update\" >
                </form>\n";
