@@ -22,7 +22,7 @@ class admin {
 		if ($radku==0) $output .= "Zadné levely v db (divny) ";
 		else
 		{
-			$output .= '<br><br>Výpis levelů stránek: <BR><BR>';
+			$output .= '<div style="padding-top: 5px; padding-bottom: 5px;">Výpis levelů stránek: </div>';
 						
 			$output .= '<table border="1" width="100%" >';
 								
