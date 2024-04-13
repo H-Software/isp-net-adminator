@@ -88,10 +88,17 @@ class objektyController extends adminatorController {
 
         $rs = $stb->stbAction($request, $response, $csrf);
 
-        $this->smarty->assign("body",$rs[0]);
-        
         if (isset($rs[1])){
-            $this->smarty->display($rs[1]);
+            // view form
+            $this->smarty->assign($rs[0]);
+            
+            try {
+                $this->smarty->display($rs[1]);
+            }
+            catch (Exception $e) {
+                $this->logger->addError("objektyController\\stbAction: smarty display failed: " . var_export($e->getMessage(), true));
+            }
+
         }
         else{
             $this->smarty->display('objekty/stb-action.tpl');

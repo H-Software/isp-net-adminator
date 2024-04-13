@@ -8,3 +8,4 @@
     <div class="col-md-6 col-md-offset-3">
         {$body}
     </div>
+</dov>

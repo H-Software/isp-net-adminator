@@ -420,20 +420,11 @@ class stb
 
         $this->logger->addInfo("stb\\stbAction called");
 
-        $form_data = array(
-                        'hiddenCsrfKey' => $csrf[1] . ',,' . $csrf[3],
-                        'hiddenCsrfName' => $csrf[2] . ',,' . $csrf[4],
-                    );
-
-        $uri = $request->getUri();
-
         // bootstrap -> bootstrap.js
         // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
         $form = new Formr\Formr('bootstrap', 'hush');
 
         $form->required = 'Name';
-
-        $form->action = $uri->getPath();
 
         if($form->submitted())
         {
@@ -445,23 +436,27 @@ class stb
             return $ret;
         }
 
+        $form_csrf = array(
+            $csrf[1] => $csrf[3],
+            $csrf[2] => $csrf[4],
+        );
+        
+        $uri = $request->getUri();
+
+        $form_data['f_open'] = $form->open("stb-action-add","stb-action-add", $uri->getPath(), '','',$form_csrf);
+        $form_data['f_close'] = $form->close();
+        $form_data['f_submit_button'] = $form->submit_button('OK / Odeslat / Uložit ....');
+
+        $form_data['f_input_popis'] = $form->text('popis','Popis objektu');
+        $form_data['f_input_nod_find'] = $form->text('nod_find','Přípojný bod - filtr');
+
+        
         // print messages, formatted using Bootstrap alerts
         $form->messages();
 
-        // create the form
-        $form->id = "stb-action-add";
+        $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));
 
-        $form_data['textName'] = "Name,Name";
-
-        // $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));
-
-        $rs = $form->fastform($form_data);
-
-        //$rs = $form->create(, true);
-
-        // , $csrf_name, $csrf_value
-
-        $ret[0] = $rs;
+        $ret[0] = $form_data;
         $ret[1] = "objekty/stb-action-form.tpl";
 
         return $ret;

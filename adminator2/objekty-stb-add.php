@@ -43,7 +43,7 @@ if( !( check_level($level,136) ) )
 <?php
  
  //vytvoreni objektu
- $stb = new stb($conn_mysql);
+ $stb = new stb_a2($conn_mysql);
 
  $update_id = $_POST["update_id"];
 
