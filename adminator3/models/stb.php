@@ -594,6 +594,12 @@ class stb
             }
         }
 
+        // prepare data
+        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
+        
+        $node_list = $topology->getNodesFiltered("");
+        $this->logger->addDebug("stb\\stbAction: node_list data: " . var_export($node_list, true));
+
         $form_data = $this->stbActionRenderForm($request, $response, $csrf);
 
         // $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));

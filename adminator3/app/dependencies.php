@@ -48,8 +48,8 @@ $container['validator'] = function ($container) {
 };
 
 $container['HomeController'] = function($container) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-	return new \App\Controllers\HomeController($container,$conn_mysql, $smarty, $logger, $auth, $app);
+    global $conn_mysql, $smarty;
+	return new \App\Controllers\HomeController($container,$conn_mysql, $smarty);
 };
 
 $container['AuthController'] = function($container) {
@@ -71,12 +71,6 @@ $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 $app->add($container->csrf);
 
 v::with('App\\Validation\\Rules\\');
-
-// controllers
-// $container['homeController'] = function ($c) {
-//     global $conn_mysql, $smarty, $logger, $auth, $app;
-//     return new \App\Controllers\homeController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
-// };
 
 $container['aboutController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;

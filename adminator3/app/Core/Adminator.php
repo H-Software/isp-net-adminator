@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Core;
+
 class adminator {
     var $conn_mysql;
     var $smarty;
@@ -7,12 +9,11 @@ class adminator {
     var $auth;
     var $app;
     
-    public function __construct($conn_mysql, $smarty, $logger, $auth)
+    public function __construct($conn_mysql, $smarty, $logger)
     {
 		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
-        $this->auth = $auth;
         
         $this->logger->addInfo("adminator\__construct called");
 	}
