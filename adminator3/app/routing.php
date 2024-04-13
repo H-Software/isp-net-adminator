@@ -1,21 +1,5 @@
 <?php
 
-session_start();
-
-require "include/main.function.shared.php";
-require "include/config.php";
-
-$smarty = new Smarty;
-$smarty->compile_check = true;
-//$smarty->debugging = true;
-
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
-$app = new \Slim\App(['settings' => $slim_config]);
-
-require "app/src/dependencies.php";
-
 // routes
 use App\Middleware\GuestMiddleware;
 use App\Middleware\AuthMiddleware;
@@ -29,14 +13,14 @@ $app->group('', function () {
 
 
 $app->group('', function () {
-    $this->get('/', 'HomeController:index')->setName('home');
+    $this->get('/', HomeController::class . ':home')->setName('home');
 	$this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
 	$this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
 	$this->post('/auth/password/change', 'PasswordController:postChangePassword');
 })->add(new AuthMiddleware($container));
 
 $app->group('', function () {
-    $this->map(['GET', 'POST'],'/home', \homeController::class . ':home');
+    $this->map(['GET', 'POST'],'/home', HomeController::class . ':home');
 
     $this->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
     $this->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
@@ -74,6 +58,3 @@ $app->group('', function () {
 //     $response = $response->withStatus(301);
 //     return $response->withHeader('Location', "/img2/" . $name);
 // });
-
-// final
-$app->run();

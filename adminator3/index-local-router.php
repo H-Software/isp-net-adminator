@@ -6,7 +6,7 @@ chdir(__DIR__);
 $filePath = realpath(ltrim($_SERVER["REQUEST_URI"], '/'));
 if ($filePath && is_dir($filePath)){
     // attempt to find an index file
-    foreach (['home-slim.php, index.php', 'index.html'] as $indexFile){
+    foreach (['index.php', 'index.html'] as $indexFile){
         if ($filePath = realpath($filePath . DIRECTORY_SEPARATOR . $indexFile)){
             break;
         }
@@ -34,5 +34,5 @@ if ($filePath && is_file($filePath)) {
     }
 } else {
     // rewrite to our index file
-    include __DIR__ . DIRECTORY_SEPARATOR . 'home-slim.php';
+    include __DIR__ . DIRECTORY_SEPARATOR . 'index.php';
 }
