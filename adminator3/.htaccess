@@ -18,5 +18,5 @@
   # RewriteBase /
 
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^ home-slim.php [QSA,L]
+  RewriteRule ^ index.php [QSA,L]
 </IfModule>

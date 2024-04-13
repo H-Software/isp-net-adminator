@@ -6,7 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class homeController extends adminatorController {
+class HomeController extends adminatorController {
     var $conn_mysql;
     var $smarty;
     var $logger;
