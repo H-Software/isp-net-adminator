@@ -79,7 +79,7 @@ class homeController extends adminatorController {
             $this->smarty->assign("datum",date("j. m. Y"));
             $this->smarty->assign("sid",$this->auth->user_sid);
             
-            $nastenka = new \board($this->conn_mysql);
+            $nastenka = new \board($this->conn_mysql, $this->logger);
 
             $nastenka->prepare_vars("");
             

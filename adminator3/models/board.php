@@ -23,8 +23,9 @@ class board{
     
     var $write; //jestli opravdu budem zapisovat, ci zobrazime form pro opraveni hodnot
     
-	function __construct($conn_mysql) {
+	function __construct($conn_mysql, $logger) {
 		$this->conn_mysql = $conn_mysql;
+		$this->logger = $logger;
 	}
 
     function prepare_vars($nick){
@@ -144,12 +145,14 @@ class board{
 			$add = $this->conn_mysql->query("INSERT INTO board VALUES (NULL, '$this->author', '$this->email', '$this->from_date',
 			'$this->to_date', '$this->subject', '$this->body')");
 		} catch (Exception $e) {
-			die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+			// die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 		}
     
-		if( $add === false ){ 
-			$this->error .= "<h2 style=\"color: red\">Došlo k chybě při zpracování SQL dotazu v databázi!</h2>\n";
-			$this->error .= "<h2 style=\"color: red\">Error description: " . $this->conn_mysql->error."</h2>\n";
+		$this->logger->addWarning("board\\insert_into_db: query result: " . var_export($add, true));
+
+		if( $add === NULL or $add === false ){ 
+			$this->error .= "<div>Došlo k chybě při zpracování SQL dotazu v databázi!</div>\n";
+			$this->error .= "<div>Error description: " . $this->conn_mysql->error."</div>\n";
 		}
 		return $add;
     }

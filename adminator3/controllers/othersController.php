@@ -53,7 +53,7 @@ class othersController extends adminatorController {
 
         $this->header($request, $response);
 
-        $nastenka = new \board($this->conn_mysql);
+        $nastenka = new \board($this->conn_mysql, $this->logger);
 
         $this->smarty->assign("datum",date("j. m. Y")); 
         $this->smarty->assign("sid",$sid); 
@@ -114,9 +114,9 @@ class othersController extends adminatorController {
                 $this->smarty->assign("rs",$add); 
                 $this->smarty->assign("body",$nastenka->error); 
 
-                if($add){ 
-                    header("Location: others-board.php"); //přesuneme se na úvodní stránku
-                }
+                // if($add){ 
+                //     header("Location: others-board.php"); //přesuneme se na úvodní stránku
+                // }
             }
             else
             { //zobrazujeme formulář
@@ -128,7 +128,7 @@ class othersController extends adminatorController {
                 $this->smarty->assign("enable_calendar",1); 
 
                 $this->smarty->assign("mod",2); //zobrazujeme formular pro zadavani dat
-                $this->smarty->assign("mod_hlaska", "->> Přidat zprávu - povinné údaje zvýrazněny tučným písmem");
+                $this->smarty->assign("mod_hlaska", "->> Přidat zprávu");
 
                 $this->smarty->assign("nick",$_SESSION['user']); 
 

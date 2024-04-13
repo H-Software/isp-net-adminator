@@ -1,15 +1,17 @@
 
-<div class="tableheading typ-zprav" >{$mod_hlaska}</div>
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
 
-<div style="width: 600px; background-color: #eaead7; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; " >
+        <div class="tableheading typ-zprav" >{$mod_hlaska}</div>
+            {if $rs == 1}
+            <div class="alert alert-success pt-15 text-center" role="alert" >Zpráva úspěšně uložena.</div>
+            {else}
+            <div class="alert alert-danger pt-15 text-center" role="alert" >Zprávu se nepodařilo uložit.</div>
 
-{if $rs == 1}
- <div style="color: #339966; font-weight: bold; padding: 10px; " >Zpráva úspěšně uložena.</div>
-{else}
- <div style="color: red; padding: 10px;" >Zprávu se nepodařilo uložit.</div>
+            <div class="alert alert-danger pt-15 text-center" role="alert" >{$body}</div>
 
-{/if}
+            {/if}
+        </div>
 
-<div>{$body}</div>
-
+    </div>
 </div>

@@ -4,9 +4,8 @@
 }
 .error {
 	FONT-SIZE: 14px;
-	color : #eaead7;
+	color : #eaead7 !important;
 	font-weight : bold;
-	background-color : #7D7642;
 }
 .head-main
 {
