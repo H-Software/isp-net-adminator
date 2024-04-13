@@ -39,5 +39,8 @@ extras/documentation
 postgres-db-init-adminator-new.sql
 
 adminator3/.php_cs.cache
+a3-logs/
+
 docker-compose.yml
+
 stb copy 2.php

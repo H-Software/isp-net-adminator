@@ -87,6 +87,7 @@ RUN cd adminator3 \
         slim/flash:^0.1.0 \
         monolog/monolog:^1.17 \
         respect/validation:^1.0 \
+        formr/formr:1.4.6 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require\
         illuminate/database:^5.2
