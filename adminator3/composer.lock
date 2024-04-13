@@ -4,66 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4267dedab9dd503e1d66343430e8808b",
+    "content-hash": "46595334d2781dd437f60b861ef543f8",
     "packages": [
-        {
-            "name": "bryanjhv/slim-session",
-            "version": "3.7.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bryanjhv/slim-session.git",
-                "reference": "4820d38467bb4e2896f893e3a1bef695f1729568"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bryanjhv/slim-session/zipball/4820d38467bb4e2896f893e3a1bef695f1729568",
-                "reference": "4820d38467bb4e2896f893e3a1bef695f1729568",
-                "shasum": ""
-            },
-            "require": {
-                "slim/slim": "^3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bryan Horna",
-                    "email": "bryanjhv@gmail.com",
-                    "homepage": "https://bryanjhv.github.io",
-                    "role": "developer"
-                }
-            ],
-            "description": "Session middleware and helper for Slim framework 3.",
-            "homepage": "https://github.com/bryanjhv/slim-session",
-            "keywords": [
-                "helper",
-                "middleware",
-                "session",
-                "slim"
-            ],
-            "support": {
-                "issues": "https://github.com/bryanjhv/slim-session/issues",
-                "source": "https://github.com/bryanjhv/slim-session.git"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/bryanjhv",
-                    "type": "custom"
-                }
-            ],
-            "time": "2022-04-13T05:21:41+00:00"
-        },
         {
             "name": "doctrine/inflector",
             "version": "v1.1.0",
@@ -133,6 +75,53 @@
                 "source": "https://github.com/doctrine/inflector/tree/master"
             },
             "time": "2015-11-06T14:35:42+00:00"
+        },
+        {
+            "name": "formr/formr",
+            "version": "1.4.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/formr/formr.git",
+                "reference": "816bf4af80f2933d739e541ba451dde0e78795e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/formr/formr/zipball/816bf4af80f2933d739e541ba451dde0e78795e6",
+                "reference": "816bf4af80f2933d739e541ba451dde0e78795e6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "class.formr.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Gavin",
+                    "homepage": "https://formr.github.io",
+                    "role": "Original Author"
+                }
+            ],
+            "description": "Formr is a PHP micro-framework which helps you build and validate forms quickly, painlessly, and without all the messy overhead.",
+            "support": {
+                "issues": "https://github.com/formr/formr/issues",
+                "source": "https://github.com/formr/formr/tree/1.4.6"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/timgavin",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-10-28T16:12:52+00:00"
         },
         {
             "name": "illuminate/container",
