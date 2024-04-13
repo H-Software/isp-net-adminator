@@ -46,7 +46,7 @@ class stb
     {
         // bootstrap -> bootstrap.js
         // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
-        $this->action_form = new Formr\Formr('bootstrap', 'hush');
+        $this->action_form = new Formr\Formr('bootstrap5', 'hush');
     }
 
     public function stbListGetBodyContent()
@@ -433,17 +433,18 @@ class stb
 
         $this->action_form->required = 'popis, id_nodu, puk, port_id, id_tarifu';
 
-        if($this->action_form->submitted() and strlen($this->action_form->messages()) == 0 )
+        if($this->action_form->submitted())
         {
-            $data = $this->action_form->fastpost('POST');
-
+            $data = $this->action_form->validate('Name, Email, Comments');
             $this->logger->addDebug("stb\\stbAction: form submitted: data: ".var_export($data, true));
 
-            $name = $data['popis'];
+            if($this->action_form->ok()) {
+                $rs .= $this->action_form->success_message = "Thank you, {$data['name']}!";
 
-            $ret[0] = "<div>filled name: " . $name . "</div>";
+                $ret[0] = $rs;
 
-            return $ret;
+                return $ret;
+            }
         }
 
         $form_data = $this->stbActionRenderForm($request, $response, $csrf);

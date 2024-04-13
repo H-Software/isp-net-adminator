@@ -102,6 +102,7 @@ class objektyController extends adminatorController {
         }
         else{
             // result view, ..
+            $this->smarty->assign("body", $rs[0]);
             $this->smarty->display('objekty/stb-action.tpl');
         }
 
