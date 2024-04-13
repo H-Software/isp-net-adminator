@@ -34,9 +34,10 @@ class stb
 
     var $find_par_vlastnik;
 
-	function __construct($conn_mysql)
+	function __construct($conn_mysql, $logger)
     {
 		$this->conn_mysql = $conn_mysql;
+        $this->logger = $logger;
 	}
 
     public function stbListGetBodyContent()
@@ -411,11 +412,18 @@ class stb
          return $ret;
     }
 
-    function stbAction(ServerRequestInterface $request, ResponseInterface $response)
+    function stbAction(ServerRequestInterface $request, ResponseInterface $response, $csrf)
     {
         // 0 field -> html code for smarty
         // 1 field -> name (and path) of smarty template
         $ret = array();
+
+        $this->logger->addInfo("stb\\stbAction called");
+
+        $form_data = array(
+                        'hiddenCsrfKey' => $csrf[1] . ',,' . $csrf[3],
+                        'hiddenCsrfName' => $csrf[2] . ',,' . $csrf[4],
+                    );
 
         $uri = $request->getUri();
 
@@ -424,12 +432,15 @@ class stb
         $form = new Formr\Formr('bootstrap', 'hush');
 
         $form->required = 'Name';
+
         $form->action = $uri->getPath();
 
         if($form->submitted())
         {
-            $data = $form->validate('Name, Email, Comments');
-            $email = $data['email'];
+            $data = $form->fastpost('POST');
+            $name = $data['Name'];
+
+            $ret[0] = "<div>filled name: " . $name . "</div>";
 
             return $ret;
         }
@@ -439,7 +450,16 @@ class stb
 
         // create the form
         $form->id = "stb-action-add";
-        $rs = $form->create('Name, Email2, Comments|textarea', true);
+
+        $form_data['textName'] = "Name,Name";
+
+        // $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));
+
+        $rs = $form->fastform($form_data);
+
+        //$rs = $form->create(, true);
+
+        // , $csrf_name, $csrf_value
 
         $ret[0] = $rs;
         $ret[1] = "objekty/stb-action-form.tpl";
