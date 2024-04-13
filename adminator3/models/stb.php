@@ -34,11 +34,20 @@ class stb
 
     var $find_par_vlastnik;
 
+    var $action_form;
+
 	function __construct($conn_mysql, $logger)
     {
 		$this->conn_mysql = $conn_mysql;
         $this->logger = $logger;
 	}
+
+    function formInit()
+    {
+        // bootstrap -> bootstrap.js
+        // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
+        $this->action_form = new Formr\Formr('bootstrap', 'hush');
+    }
 
     public function stbListGetBodyContent()
     {
@@ -420,56 +429,26 @@ class stb
 
         $this->logger->addInfo("stb\\stbAction called");
 
-        // bootstrap -> bootstrap.js
-        // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
-        $form = new Formr\Formr('bootstrap', 'hush');
+        $this->formInit();
 
-        $form->required = 'Name';
+        $this->action_form->required = 'popis, id_nodu, puk, port_id, id_tarifu';
 
-        if($form->submitted())
+        if($this->action_form->submitted() and strlen($this->action_form->messages()) == 0 )
         {
-            $data = $form->fastpost('POST');
-            $name = $data['Name'];
+            $data = $this->action_form->fastpost('POST');
+
+            $this->logger->addDebug("stb\\stbAction: form submitted: data: ".var_export($data, true));
+
+            $name = $data['popis'];
 
             $ret[0] = "<div>filled name: " . $name . "</div>";
 
             return $ret;
         }
 
-        $form_csrf = array(
-            $csrf[1] => $csrf[3],
-            $csrf[2] => $csrf[4],
-        );
-        
-        $uri = $request->getUri();
+        $form_data = $this->stbActionRenderForm($request, $response, $csrf);
 
-        $form_data['f_open'] = $form->open("stb-action-add","stb-action-add", $uri->getPath(), '','',$form_csrf);
-        $form_data['f_close'] = $form->close();
-        $form_data['f_submit_button'] = $form->submit_button('OK / Odeslat / Uložit ....');
-
-        $form_data['f_input_popis'] = $form->text('popis','Popis objektu');
-        $form_data['f_input_nod_find'] = $form->text('nod_find','Přípojný bod - filtr');
-        $form_data['f_input_nod_find_button'] = $form->button('g1', '', 'Hledat (nody)', '', 'class="btn btn-secondary form-inline"');
-
-        $form_data['f_input_ip'] = $form->text('ip','IP adresa');
-        $form_data['f_input_id_nodu'] = $form->text('id_nodu','');
-
-        $form_data['f_input_mac'] = $form->text('mac','mac adresa');
-        $form_data['f_input_gen_button'] = $form->button('g2', '', 'Generovat údaje', '', 'class="btn btn-secondary"');
-
-        $form_data['f_input_puk'] = $form->text('puk','puk');
-        $form_data['f_input_pin1'] = $form->text('pin1','pin1');
-        $form_data['f_input_pin2'] = $form->text('pin2','pin2');
-
-        $form_data['f_input_port_id'] = $form->text('port_id','Číslo portu (ve switchi)');
-        $form_data['f_input_pozn'] = $form->textarea('pozn','poznámka', '', 'rows="5" wrap="soft"');
-        $form_data['f_input_id_tarifu'] = $form->text('id_tarifu','tarif');
-
-
-        // print messages, formatted using Bootstrap alerts
-        $form->messages();
-
-        $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));
+        // $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));
 
         $ret[0] = $form_data;
         $ret[1] = "objekty/stb-action-form.tpl";
@@ -478,6 +457,43 @@ class stb
 
     }
 
+    function stbActionRenderForm (ServerRequestInterface $request, ResponseInterface $response, $csrf)
+    {
+        $form_csrf = array(
+            $csrf[1] => $csrf[3],
+            $csrf[2] => $csrf[4],
+        );
+        
+        $uri = $request->getUri();
+
+        $form_data['f_open'] = $this->action_form->open("stb-action-add","stb-action-add", $uri->getPath(), '','',$form_csrf);
+        $form_data['f_close'] = $this->action_form->close();
+        $form_data['f_submit_button'] = $this->action_form->submit_button('OK / Odeslat / Uložit');
+
+        $form_data['f_input_popis'] = $this->action_form->text('popis','Popis objektu');
+        $form_data['f_input_nod_find'] = $this->action_form->text('nod_find','Přípojný bod - filtr');
+        $form_data['f_input_nod_find_button'] = $this->action_form->button('g1', '', 'Hledat (nody)', '', 'class="btn btn-secondary form-inline"');
+
+        $form_data['f_input_ip'] = $this->action_form->text('ip','IP adresa');
+        $form_data['f_input_id_nodu'] = $this->action_form->text('id_nodu','');
+
+        $form_data['f_input_mac'] = $this->action_form->text('mac','mac adresa');
+        $form_data['f_input_gen_button'] = $this->action_form->button('g2', '', 'Generovat údaje', '', 'class="btn btn-secondary"');
+
+        $form_data['f_input_puk'] = $this->action_form->text('puk','puk');
+        $form_data['f_input_pin1'] = $this->action_form->text('pin1','pin1');
+        $form_data['f_input_pin2'] = $this->action_form->text('pin2','pin2');
+
+        $form_data['f_input_port_id'] = $this->action_form->text('port_id','Číslo portu (ve switchi)');
+        $form_data['f_input_pozn'] = $this->action_form->textarea('pozn','poznámka', '', 'rows="5" wrap="soft"');
+        $form_data['f_input_id_tarifu'] = $this->action_form->text('id_tarifu','tarif');
+
+
+        // print messages, formatted using Bootstrap alerts
+        $form_data['f_messages'] = $this->action_form->messages();
+
+        return $form_data;
+    }
     function generujdata()
     {
       

@@ -13,6 +13,12 @@
             <div class="panel-body">Optická síť</div>            
         </div>
 
+        {if strlen($f_messages) gt 0}
+            <div class="col-md-12 panel panel-default">
+            <div class="panel-heading">{$f_messages}</div>
+        </div>
+        {/if}
+
         <div class="col-md-6">
             {$f_input_popis}
         </div>

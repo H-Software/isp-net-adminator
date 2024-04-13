@@ -91,7 +91,7 @@ class objektyController extends adminatorController {
         if (isset($rs[1])){
             // view form
             $this->smarty->assign($rs[0]);
-            
+
             try {
                 $this->smarty->display($rs[1]);
             }
@@ -101,6 +101,7 @@ class objektyController extends adminatorController {
 
         }
         else{
+            // result view, ..
             $this->smarty->display('objekty/stb-action.tpl');
         }
 
