@@ -46,6 +46,13 @@ class Auth
 		unset($_SESSION['user']);
 	}
 
+    public function getUserEmail()
+    {
+        $rs = User::find(isset($_SESSION['user']) ? $_SESSION['user'] : 0, ['email']);
+        $a = $rs->toArray();
+		return $a['email'];
+    }
+
 	public function getUserLevel()
 	{
 		$rs = User::find(isset($_SESSION['user']) ? $_SESSION['user'] : 0, ['level']);

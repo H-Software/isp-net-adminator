@@ -43,7 +43,7 @@ if( !( check_level($level,136) ) )
 <?php
  
  //vytvoreni objektu
- $stb = new stb($conn_mysql);
+ $stb = new stb_a2($conn_mysql);
 
  $update_id = $_POST["update_id"];
 
@@ -214,7 +214,7 @@ if( !( check_level($level,136) ) )
        echo "<div style=\"color: red; padding-top: 5px; padding-bottom: 5px; \" >";
        echo "Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </div>"; 
      }
-     else  
+     else
      { 
        while ($data4=$vysl4->fetch_array() ):
 	

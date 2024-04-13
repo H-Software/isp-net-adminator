@@ -4,13 +4,16 @@
 </div> *}
 
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col"></div>
+    <div class="col-10">
             <div class="head-main-napis">Bulletin Board - Nástěnka ver. 2.0</div>
-    </div> 
+    </div>
+    <div class="col"></div>
 </div>
 
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col"></div>
+    <div class="col-10">
         <div class="row head-menu-main">
 
             <div class="col-md-1">&nbsp;
@@ -34,5 +37,6 @@
             </div>
         </div>
     </div>
+    <div class="col"></div>
 </div>
 

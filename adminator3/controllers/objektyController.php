@@ -52,7 +52,7 @@ class objektyController extends adminatorController {
 
         $this->header($request, $response);
 
-        $stb = new \stb($this->conn_mysql);
+        $stb = new \stb($this->conn_mysql,$this->logger);
 
         if ($this->container->auth->checkLevel($this->container->logger, 137, false) === true) {
             $stb->enable_modify_action = true;
@@ -82,10 +82,29 @@ class objektyController extends adminatorController {
 
         $this->header($request, $response);
 
-        $stb = new \stb($this->conn_mysql);
+        $stb = new \stb($this->conn_mysql, $this->logger);
 
-        $this->smarty->fetch('objekty/stb-action.tpl');
+        $csrf = $this->generateCsrfToken($request, $response, false);
 
+        $rs = $stb->stbAction($request, $response, $csrf);
+
+        if (isset($rs[1])){
+            // view form
+            $this->smarty->assign($rs[0]);
+
+            try {
+                $this->smarty->display($rs[1]);
+            }
+            catch (Exception $e) {
+                $this->logger->addError("objektyController\\stbAction: smarty display failed: " . var_export($e->getMessage(), true));
+            }
+
+        }
+        else{
+            // result view, ..
+            $this->smarty->assign("body", $rs[0]);
+            $this->smarty->display('objekty/stb-action.tpl');
+        }
 
     }
 

@@ -1,11 +1,9 @@
-{include file="base.tpl"}
+{include file="base-bs.tpl" tpl_include_subcat = 'objekty/inc.subcat'}
 
-{include file="objekty/inc.subcat.tpl"}
+<div class="container-sm justify-content-md-center">
+    <div class="col-md-6 col-md-offset-3">
+        {$body}
+    </div>
+</dov>
 
-<div class="global-cat-body2" >
-
-{$body}
-
-</div>
-
-{include file="base-end.tpl"}
+{include file="base-bs-end.tpl"}

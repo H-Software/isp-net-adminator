@@ -1,5 +1,11 @@
 <?php
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Respect\Validation\Validator as v;
+
+use App\Auth;
+
 class stb
 {
 
@@ -31,10 +37,25 @@ class stb
 
     var $find_par_vlastnik;
 
-	function __construct($conn_mysql)
+    var $action_form;
+
+    var $action_form_validation_errors = "";
+
+    var $action_form_validation_errors_wrapper_start = '<div class="alert alert-danger" role="alert">';
+    var $action_form_validation_errors_wrapper_end = '</div>';
+
+	function __construct($conn_mysql, $logger)
     {
 		$this->conn_mysql = $conn_mysql;
+        $this->logger = $logger;
 	}
+
+    function formInit()
+    {
+        // bootstrap -> bootstrap.js
+        // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
+        $this->action_form = new Formr\Formr('bootstrap5', 'hush');
+    }
 
     public function stbListGetBodyContent()
     {
@@ -408,6 +429,220 @@ class stb
          return $ret;
     }
 
+    function stbActionValidateFormData($data)
+    {
+        $popisValidator = v::noWhitespace()->notEmpty()->alnum("-")->length(1,15);
+
+        if($popisValidator->validate($data['popis']) === false)
+        {
+            $this->action_form_validation_errors .= 
+                                    $this->action_form_validation_errors_wrapper_start
+                                    . "\"Popis\" musi obsahovat pouze cisla ci pismena a musi byt maximalne 5 znaku dlouhy."
+                                    . $this->action_form_validation_errors_wrapper_end
+                                    ;
+        }
+
+         //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
+        $this->checkip($data['ip']); 
+        $this->checkmac($data['mac']); 
+        $this->checkcislo($data['puk']);
+        $this->checkcislo($data['id_nodu']);
+        $this->checkcislo($data['port_id']);
+
+        //zjisti jestli neni duplicitni dns, ip adresa, mac ...
+        $MSQ_POPIS = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '" . $data['popis'] . "' ");
+        $MSQ_IP = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '". $data['ip'] . "' ");
+        $MSQ_MAC = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '" . $data['mac']. "' ");
+        
+        if( $MSQ_POPIS->num_rows > 0 )
+        { 
+            $error .= "<div class=\"alert alert-danger\" role=\"alert\">Popis (".$data['popis']." ) již existuje!!!</div>"; 
+        }
+        if( $MSQ_IP->mysql_num_rows > 0 )
+        { 
+            $error .= "<div class=\"alert alert-danger\" role=\"alert\">IP adresa ( ".$data['ip']." ) již existuje!!!</div>"; 
+        }
+        if( $MSQ_MAC->num_rows > 0 )
+        { 
+            $error .= "<div class=\"alert alert-danger\" role=\"alert\">MAC adresa ( ".$data['mac']." ) již existuje!!!</div>"; 
+        }
+ 
+        $this->action_form_validation_errors .= $error;
+        
+        if(empty($this->action_form_validation_errors))
+        {
+            return true;
+        }
+        else
+        {
+            $this->logger->addInfo("stb\\stbActionValidateFormData: data validation failed. dump action_form_validation_errors: ".var_export($this->action_form_validation_errors, true));
+            return false;
+        }
+    }
+
+    function stbActionSaveIntoDatabase($data)
+    {
+            $sql = "INSERT INTO objekty_stb "
+            . " (mac_adresa, ip_adresa, puk, popis, id_nodu, sw_port, pozn, vlozil_kdo, id_tarifu)" 
+            . " VALUES ('" . $data['mac'] ."','" . $data['ip'] . "','" . $data['puk'] . "','" 
+            . $data['popis'] . "','" . $data['id_nodu'] . "','" . $data['port_id'] . "','" . $data['pozn'] . "','"
+            . \App\Auth\Auth::getUserEmail() . "', '" . $data['id_tarifu'] . "') ";
+
+            $this->logger->addInfo("stb\\stbActionSaveIntoDatabase: sql dump: ".var_export($sql, true));
+
+            $res = $this->conn_mysql->query($sql);
+
+            $id_stb = $this->conn_mysql->insert_id;
+
+            if($res)
+            { $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
+            else
+            { 
+                $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit. </div></H3>\n"; 
+                $output .= "res: $res \n";
+            }	
+
+            // pridame to do archivu zmen
+            $pole="<b> akce: pridani stb objektu ; </b><br>";
+
+            $pole .= "[id_stb]=> ".$id_stb.", ";
+            $pole .= "[mac_adresa]=> ".$data['mac'].", [ip_adresa]=> ".$data['ip'].", [puk]=> ".$data['puk'].", [popis]=> ".$data['popis'];
+            $pole .= ", [id_nodu]=> ".$data['id_nodu'].", [sw_port]=> ".$data['port_id']." [pozn]=> ".$data['pozn'].", [id_tarifu]=> ".$data['id_tarifu'];
+
+            if( $res == 1 ){ $vysledek_write="1"; }
+
+            $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
+                "VALUES ('".$this->conn_mysql->real_escape_string($pole)."',".
+                "'".$this->conn_mysql->real_escape_string(\App\Auth\Auth::getUserEmail())."',".
+                "'" . $vysledek_write . "')");
+
+            // $writed = "true"; 
+            return $output;
+    }
+
+    function stbAction(ServerRequestInterface $request, ResponseInterface $response, $csrf)
+    {
+        // 0 field -> html code for smarty
+        // 1 field -> name (and path) of smarty template
+        $ret = array();
+
+        $this->logger->addInfo("stb\\stbAction called ");
+
+        $this->formInit();
+
+        $this->action_form->required = 'popis, ip, mac, id_nodu, puk, port_id, id_tarifu';
+
+        if($this->action_form->submitted())
+        {
+            // go for extract data
+            $data = $this->action_form->validate('popis, ip, mac, id_nodu, puk, port_id, id_tarifu');
+            $this->logger->addDebug("stb\\stbAction: form data: ".var_export($data, true));
+
+            if($this->action_form->ok())
+            {
+                // go for validate data
+                $rs_v = $this->stbActionValidateFormData($data);
+                $this->logger->addInfo("stb\\stbAction: form data validation result: ".var_export($rs_v, true));
+
+                if( $rs_v === true){
+                    // go for save into databze
+    
+                    $rs_s = $this->stbActionSaveIntoDatabase($data);
+                    $rs .= $rs_s;
+
+                    // TODO: improve showing data from form
+                        $rs .= "<br>
+                        STB Objekt byl přidán/upraven, zadané údaje:<br><br>
+                        <b>Popis objektu</b>: " . $data['popis'] . "<br>
+                        <b>IP adresa</b>: " . $data['ip'] . "<br>
+                        <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
+                        
+                        <b>Puk</b>: " . $data['puk'] . "<br>
+                        <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
+                        
+                        <b>Přípojný bod</b>: ";
+
+                        $vysledek3=$this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");
+                        $radku3=$vysledek3->num_rows;
+                        
+                        if($radku3==0) $rs .= " Nelze zjistit ";
+                        else 
+                        {
+                            while( $zaznam3=$vysledek3->fetch_array() )
+                              { $rs .= $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
+                        }
+                    
+                        $rs .= "<br><br>";
+                        
+                        $rs .= "<b>Poznámka</b>:".htmlspecialchars($data['pozn'])."<br>";
+                        
+                        $ms_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($data['id_tarifu'])."'");
+                        
+                        $ms_tarif->data_seek(0);
+                        $ms_tarif_r = $ms_tarif->fetch_row();
+                        
+                        $rs .= "<b>Tarif</b>: ".$ms_tarif_r[0]."<br><br>";
+
+                    $ret[0] = $rs;
+                    return $ret;
+                }
+                else
+                {
+                    // ship validation results to form
+                    $this->logger->addWarning("stb\\stbAction: form data validatation failed");
+                }
+            }
+        }
+
+        $form_data = $this->stbActionRenderForm($request, $response, $csrf);
+
+        // $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));
+
+        $ret[0] = $form_data;
+        $ret[1] = "objekty/stb-action-form.tpl";
+
+        return $ret;
+
+    }
+
+    function stbActionRenderForm (ServerRequestInterface $request, ResponseInterface $response, $csrf)
+    {
+        $form_csrf = array(
+            $csrf[1] => $csrf[3],
+            $csrf[2] => $csrf[4],
+        );
+        
+        $uri = $request->getUri();
+
+        $form_data['f_open'] = $this->action_form->open("stb-action-add","stb-action-add", $uri->getPath(), '','',$form_csrf);
+        $form_data['f_close'] = $this->action_form->close();
+        $form_data['f_submit_button'] = $this->action_form->submit_button('OK / Odeslat / Uložit');
+
+        $form_data['f_input_popis'] = $this->action_form->text('popis','Popis objektu');
+        $form_data['f_input_nod_find'] = $this->action_form->text('nod_find','Přípojný bod - filtr');
+        $form_data['f_input_nod_find_button'] = $this->action_form->button('g1', '', 'Hledat (nody)', '', 'class="btn btn-secondary form-inline"');
+
+        $form_data['f_input_ip'] = $this->action_form->text('ip','IP adresa');
+        $form_data['f_input_id_nodu'] = $this->action_form->text('id_nodu','');
+
+        $form_data['f_input_mac'] = $this->action_form->text('mac','mac adresa');
+        $form_data['f_input_gen_button'] = $this->action_form->button('g2', '', 'Generovat údaje', '', 'class="btn btn-secondary"');
+
+        $form_data['f_input_puk'] = $this->action_form->text('puk','puk');
+        $form_data['f_input_pin1'] = $this->action_form->text('pin1','pin1');
+        $form_data['f_input_pin2'] = $this->action_form->text('pin2','pin2');
+
+        $form_data['f_input_port_id'] = $this->action_form->text('port_id','Číslo portu (ve switchi)');
+        $form_data['f_input_pozn'] = $this->action_form->textarea('pozn','poznámka', '', 'rows="5" wrap="soft"');
+        $form_data['f_input_id_tarifu'] = $this->action_form->text('id_tarifu','tarif');
+
+
+        // print messages, formatted using Bootstrap alerts
+        $form_data['f_messages'] = $this->action_form->messages();
+        $form_data['f_messages_validation'] = $this->action_form_validation_errors;
+
+        return $form_data;
+    }
     function generujdata()
     {
       
@@ -471,11 +706,11 @@ class stb
        
        if( !($ip_check) )
        {
-         global $fail;  
-         $fail="true";
-         
-         global $error; 
-         $error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
+            $this->action_form_validation_errors .= 
+                            $this->action_form_validation_errors_wrapper_start
+                            . "IP adresa ( ".$ip." ) není ve správném formátu !!!"
+                            . $this->action_form_validation_errors_wrapper_end
+                            ;
        }
        
     } //konec funkce check-ip			 
@@ -486,11 +721,11 @@ class stb
        
        if( !($mac_check) )
        {
-         global $fail;	
-         $fail="true";
-         
-         global $error;  
-         $error .= "<div class=\"objekty-add-fail-mac\"><H4>MAC adresa ( ".$mac." ) není ve správném formátu !!! ( Správný formát je: 00:00:64:65:73:74 ) </H4></div>";
+            $this->action_form_validation_errors .= 
+                    $this->action_form_validation_errors_wrapper_start
+                    . "MAC adresa ( ".$mac." ) není ve správném formátu !!! (Správný formát je: 00:00:64:65:73:74)"
+                    . $this->action_form_validation_errors_wrapper_end
+                    ;
        }
        
      } //konec funkce check-mac
@@ -501,10 +736,11 @@ class stb
         
         if( !($rra_check) )
         {
-         global $fail;	$fail="true";
-         
-         global $error;	
-         $error .= "<div class=\"objekty-add-fail-cislo\"><H4>Zadaný číselný údaj ( ".$cislo." ) není ve  správném formátu !!! </H4></div>";
+            $this->action_form_validation_errors .= 
+                    $this->action_form_validation_errors_wrapper_start
+                    . "Zadaný číselný údaj ( ".$cislo." ) není ve  správném formátu!"
+                    . $this->action_form_validation_errors_wrapper_end
+                    ;
         }		    
        
      } // konec funkce check cislo

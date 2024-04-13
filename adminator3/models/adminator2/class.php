@@ -3303,4 +3303,3 @@ class paging_global {
     }
 }
 
-?>

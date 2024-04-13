@@ -1,5 +1,6 @@
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col"></div>
+    <div class="col-8">
 
 
         <div class="tableheading typ-zprav" >{$mod_hlaska}</div>
@@ -37,5 +38,6 @@
 
         </div>
 
-    </div> 
+    </div>
+    <div class="col"></div>
 </div>
