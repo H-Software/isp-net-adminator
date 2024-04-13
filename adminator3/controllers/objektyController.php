@@ -84,8 +84,15 @@ class objektyController extends adminatorController {
 
         $stb = new \stb($this->conn_mysql);
 
-        $this->smarty->fetch('objekty/stb-action.tpl');
+        $rs = $stb->stbAction($request, $response);
 
+        $this->smarty->assign("body",$rs[0]);
+        if (isset($rs[1])){
+            $this->smarty->display($rs[1]);
+        }
+        else{
+            $this->smarty->display('objekty/stb-action.tpl');
+        }
 
     }
 

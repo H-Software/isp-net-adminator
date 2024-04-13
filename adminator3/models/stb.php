@@ -1,5 +1,8 @@
 <?php
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
 class stb
 {
 
@@ -406,6 +409,43 @@ class stb
          $ret = array($output);
 
          return $ret;
+    }
+
+    function stbAction(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        // 0 field -> html code for smarty
+        // 1 field -> name (and path) of smarty template
+        $ret = array();
+
+        $uri = $request->getUri();
+
+        // bootstrap -> bootstrap.js
+        // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
+        $form = new Formr\Formr('bootstrap', 'hush');
+
+        $form->required = 'Name';
+        $form->action = $uri->getPath();
+
+        if($form->submitted())
+        {
+            $data = $form->validate('Name, Email, Comments');
+            $email = $data['email'];
+
+            return $ret;
+        }
+
+        // print messages, formatted using Bootstrap alerts
+        $form->messages();
+
+        // create the form
+        $form->id = "stb-action-add";
+        $rs = $form->create('Name, Email2, Comments|textarea', true);
+
+        $ret[0] = $rs;
+        $ret[1] = "objekty/stb-action-form.tpl";
+
+        return $ret;
+
     }
 
     function generujdata()
