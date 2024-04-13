@@ -74,7 +74,7 @@ class othersController extends adminatorController {
         $nastenka->subject = $_POST["subject"];
         $nastenka->body = $_POST["body"];
 
-        $nastenka->prepare_vars($nick);
+        $nastenka->prepare_vars($_SESSION['user']);
 
         if($nastenka->action == "view"):
 
@@ -121,12 +121,16 @@ class othersController extends adminatorController {
             else
             { //zobrazujeme formulář
 
+                $csrf = $this->generateCsrfToken($request, $response, true);
+                // $this->logger->addInfo("adminController\header: csrf generated: ".var_export($csrf, true));
+                $this->smarty->assign("csrf_html", $csrf[0]);
+
                 $this->smarty->assign("enable_calendar",1); 
 
                 $this->smarty->assign("mod",2); //zobrazujeme formular pro zadavani dat
                 $this->smarty->assign("mod_hlaska", "->> Přidat zprávu - povinné údaje zvýrazněny tučným písmem");
 
-                $this->smarty->assign("nick",$nick); 
+                $this->smarty->assign("nick",$_SESSION['user']); 
 
                 $this->smarty->assign("email",$nastenka->email); 
                 $this->smarty->assign("subject",$nastenka->subject); 

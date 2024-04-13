@@ -1,35 +1,41 @@
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
 
- <div class="tableheading typ-zprav" >{$mod_hlaska}</div>
- 
- {section name="entry" loop=$zpravy}
 
-  <div class="tableheading" style="padding-top: 2px; " >zpráva č. {$zpravy[entry].id}</div>
+        <div class="tableheading typ-zprav" >{$mod_hlaska}</div>
+        
+        {section name="entry" loop=$zpravy}
 
-  <div class="table zprava-main" >
-     <a href="mailto:{$zpravy[entry].email}" ><b>{$zpravy[entry].author}</b></a>
-     <br>
-     <b>{$zpravy[entry].subject}</b> [{$zpravy[entry].from_date} - {$zpravy[entry].to_date}]
-     <br><br>{$zpravy[entry].body}
-  </div>
+          <div class="tableheading" style="padding-top: 2px; " >zpráva č. {$zpravy[entry].id}</div>
 
-  <br>
+          <div class="table zprava-main" >
+            <a href="mailto:{$zpravy[entry].email}" ><b>{$zpravy[entry].author}</b></a>
+            <br>
+            <b>{$zpravy[entry].subject}</b> [{$zpravy[entry].from_date} - {$zpravy[entry].to_date}]
+            <br><br>{$zpravy[entry].body}
+          </div>
 
- {/section}
-	
- <div style="width: 590px; text-align: right; border-top: 1px solid #7D7642; padding-top: 5px; " class="table" >
-   <b>strana
+          <br>
 
-   {section name="page" loop=$strany}
-    | 
-	{if $strany[page].i == $strany[page].i_akt}
-	  {$strany[page].i2}
-	{else}
-	 <a href="others-board.php?action=view&what={$strany[page].what}&page={$strany[page].i}">
-	  {$strany[page].i2}
-         </a>
-	{/if}
-   {/section}
-  
-   |</b>
+        {/section}
+          
+        <div style="text-align: right; border-top: 1px solid #7D7642; padding-top: 5px; " class="table" >
+          <b>strana
 
- </div>
+          {section name="page" loop=$strany}
+            | 
+          {if $strany[page].i == $strany[page].i_akt}
+            {$strany[page].i2}
+          {else}
+          <a href="/others/board?action=view&what={$strany[page].what}&page={$strany[page].i}">
+            {$strany[page].i2}
+                </a>
+          {/if}
+          {/section}
+          
+          |</b>
+
+        </div>
+
+    </div> 
+</div>

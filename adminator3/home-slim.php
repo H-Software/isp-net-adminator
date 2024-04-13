@@ -69,5 +69,11 @@ $app->group('', function () {
 
 })->add(new AuthMiddleware($container));
 
+// $app->map(['GET'],'/others/img/{name}', function ($request, $response, array $args) {
+//     $name = $args['name'];
+//     $response = $response->withStatus(301);
+//     return $response->withHeader('Location', "/img2/" . $name);
+// });
+
 // final
 $app->run();
