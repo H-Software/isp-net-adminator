@@ -1,6 +1,7 @@
 
 <div class="row justify-content-md-center">
-    <div class="col-md-3 col-md-offset-3">
+    <div class="col"></div>
+    <div class="col-8">
         <div class="panel panel-default">
             <div class="panel-heading">{$mod_hlaska}</div>
             <!-- <div class="tableheadingwrite typ-zprav" >{$mod_hlaska}</div> -->
@@ -72,4 +73,5 @@
             </form>
         </div>
     </div>
+    <div class="col"></div>
 </div>

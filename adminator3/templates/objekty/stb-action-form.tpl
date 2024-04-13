@@ -1,20 +1,15 @@
-{include file="base.tpl"}
 
-{include file="objekty/inc.subcat.tpl"}
+{include file="base-bs.tpl" tpl_include_subcat = 'objekty/inc.subcat'}
 
-{include file="base-end.tpl"}
-
-<div class="container-sm justify-content-md-center">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            {$f_open}
-            <div class="col-md-12 panel panel-default">
-                <div class="panel-heading">Mód:</div>
-                <div class="panel-body">Optická síť</div>            
+    {$f_open}
+    <div class="row g-3">
+            <div class="col-md-12 card">
+                <div class="card-header bg-secondary text-white">Mód:</div>
+                <div class="card-body text-white" style="background-color: #99C4D2;">Optická síť</div>            
             </div>
 
             {if strlen($f_messages) gt 0}
-            <div class="col-md-12 panel panel-default">
+            <div class="col-md-12">
                 <div>{$f_messages}</div>
             </div>
             {/if}
@@ -79,7 +74,7 @@
                 {$f_submit_button}
             </div>
 
-            {$f_close}
-        </div>
     </div>
-</div>
+    {$f_close}
+
+{include file="base-bs-end.tpl"}
