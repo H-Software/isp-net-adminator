@@ -14,6 +14,12 @@
             </div>
             {/if}
 
+            {if strlen($f_messages_validation) gt 0}
+                <div class="col-md-12">
+                    <div>{$f_messages_validation}</div>
+                </div>
+            {/if}
+            
             <div class="col-md-6">
                 {$f_input_popis}
             </div>

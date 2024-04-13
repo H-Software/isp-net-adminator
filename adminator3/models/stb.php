@@ -2,6 +2,7 @@
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Respect\Validation\Validator as v;
 
 class stb
 {
@@ -35,6 +36,11 @@ class stb
     var $find_par_vlastnik;
 
     var $action_form;
+
+    var $action_form_validation_errors = "";
+
+    var $action_form_validation_errors_wrapper_start = '<div class="alert alert-danger" role="alert">';
+    var $action_form_validation_errors_wrapper_end = '</div>';
 
 	function __construct($conn_mysql, $logger)
     {
@@ -421,6 +427,35 @@ class stb
          return $ret;
     }
 
+    function stbActionValidateFromData($data)
+    {
+        $popisValidator = v::noWhitespace()->notEmpty()->alpha()->length(1,5);
+
+        if($popisValidator->validate($data['popis']) === false)
+        {
+            $this->action_form_validation_errors .= 
+                                    $this->action_form_validation_errors_wrapper_start
+                                    . "\"Popis\" musi obsahovat pouze cisla ci pismena a musi byt maximalne 5 znaku dlouhy."
+                                    . $this->action_form_validation_errors_wrapper_end
+                                    ;
+        }
+
+         //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
+        $this->checkip($data['ip']); 
+        $this->checkmac($data['mac']); 
+        $this->checkcislo($data['puk']);
+        $this->checkcislo($data['id_nodu']);
+        $this->checkcislo($data['port_id']);
+
+        if(empty($this->action_form_validation_errors))
+        {
+            return false;
+        }
+        else{
+            return false;
+        }
+    }
+
     function stbAction(ServerRequestInterface $request, ResponseInterface $response, $csrf)
     {
         // 0 field -> html code for smarty
@@ -431,19 +466,36 @@ class stb
 
         $this->formInit();
 
-        $this->action_form->required = 'popis, id_nodu, puk, port_id, id_tarifu';
+        $this->action_form->required = 'popis, ip, mac, id_nodu, puk, port_id, id_tarifu';
 
         if($this->action_form->submitted())
         {
-            $data = $this->action_form->validate('Name, Email, Comments');
-            $this->logger->addDebug("stb\\stbAction: form submitted: data: ".var_export($data, true));
+            // go for extract data
+            $data = $this->action_form->validate('popis, ip, mac, id_nodu, puk, port_id, id_tarifu');
+            $this->logger->addDebug("stb\\stbAction: form data: ".var_export($data, true));
 
-            if($this->action_form->ok()) {
-                $rs .= $this->action_form->success_message = "Thank you, {$data['name']}!";
+            if($this->action_form->ok())
+            {
+                // go for validate data
+                $rs_v = $this->stbActionValidateFromData($data);
+                $this->logger->addInfo("stb\\stbAction: form data validation result: ".var_export($rs_v, true));
 
-                $ret[0] = $rs;
+                if( $rs_v === true){
+                    // go for save into databze
+    
+                    //TODO: add saving into database
+                    
+                    // TODO: improve showing data from form
+                    $rs .= $this->action_form->success_message = "Thank you, saving this data: ".var_export($data, true);
 
-                return $ret;
+                    $ret[0] = $rs;
+                    return $ret;
+                }
+                else
+                {
+                    // ship validation results to form
+                    $this->logger->addWarning("stb\\stbAction: form data validatation failed");
+                }
             }
         }
 
@@ -492,6 +544,7 @@ class stb
 
         // print messages, formatted using Bootstrap alerts
         $form_data['f_messages'] = $this->action_form->messages();
+        $form_data['f_messages_validation'] = $this->action_form_validation_errors;
 
         return $form_data;
     }
@@ -558,11 +611,11 @@ class stb
        
        if( !($ip_check) )
        {
-         global $fail;  
-         $fail="true";
-         
-         global $error; 
-         $error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
+            $this->action_form_validation_errors .= 
+                            $this->action_form_validation_errors_wrapper_start
+                            . "IP adresa ( ".$ip." ) není ve správném formátu !!!"
+                            . $this->action_form_validation_errors_wrapper_end
+                            ;
        }
        
     } //konec funkce check-ip			 
@@ -573,11 +626,11 @@ class stb
        
        if( !($mac_check) )
        {
-         global $fail;	
-         $fail="true";
-         
-         global $error;  
-         $error .= "<div class=\"objekty-add-fail-mac\"><H4>MAC adresa ( ".$mac." ) není ve správném formátu !!! ( Správný formát je: 00:00:64:65:73:74 ) </H4></div>";
+            $this->action_form_validation_errors .= 
+                    $this->action_form_validation_errors_wrapper_start
+                    . "MAC adresa ( ".$mac." ) není ve správném formátu !!! (Správný formát je: 00:00:64:65:73:74)"
+                    . $this->action_form_validation_errors_wrapper_end
+                    ;
        }
        
      } //konec funkce check-mac
@@ -588,10 +641,11 @@ class stb
         
         if( !($rra_check) )
         {
-         global $fail;	$fail="true";
-         
-         global $error;	
-         $error .= "<div class=\"objekty-add-fail-cislo\"><H4>Zadaný číselný údaj ( ".$cislo." ) není ve  správném formátu !!! </H4></div>";
+            $this->action_form_validation_errors .= 
+                    $this->action_form_validation_errors_wrapper_start
+                    . "Zadaný číselný údaj ( ".$cislo." ) není ve  správném formátu!"
+                    . $this->action_form_validation_errors_wrapper_end
+                    ;
         }		    
        
      } // konec funkce check cislo
