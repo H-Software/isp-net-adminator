@@ -449,8 +449,23 @@ class stb
 
         $form_data['f_input_popis'] = $form->text('popis','Popis objektu');
         $form_data['f_input_nod_find'] = $form->text('nod_find','Přípojný bod - filtr');
+        $form_data['f_input_nod_find_button'] = $form->button('g1', '', 'Hledat (nody)', '', 'class="btn btn-secondary form-inline"');
 
-        
+        $form_data['f_input_ip'] = $form->text('ip','IP adresa');
+        $form_data['f_input_id_nodu'] = $form->text('id_nodu','');
+
+        $form_data['f_input_mac'] = $form->text('mac','mac adresa');
+        $form_data['f_input_gen_button'] = $form->button('g2', '', 'Generovat údaje', '', 'class="btn btn-secondary"');
+
+        $form_data['f_input_puk'] = $form->text('puk','puk');
+        $form_data['f_input_pin1'] = $form->text('pin1','pin1');
+        $form_data['f_input_pin2'] = $form->text('pin2','pin2');
+
+        $form_data['f_input_port_id'] = $form->text('port_id','Číslo portu (ve switchi)');
+        $form_data['f_input_pozn'] = $form->textarea('pozn','poznámka', '', 'rows="5" wrap="soft"');
+        $form_data['f_input_id_tarifu'] = $form->text('id_tarifu','tarif');
+
+
         // print messages, formatted using Bootstrap alerts
         $form->messages();
 

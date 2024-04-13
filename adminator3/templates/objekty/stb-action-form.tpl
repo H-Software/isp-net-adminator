@@ -21,35 +21,55 @@
             {$f_input_nod_find}
         </div>
 
-        <div class="col-12">
-            <label for="inputAddress" class="form-label">Address</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-        </div>
-
-        <div class="col-12">
-            <label for="inputAddress2" class="form-label">Address 2</label>
-            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-        </div>
-        
         <div class="col-md-6">
-            <label for="inputCity" class="form-label">City</label>
-            <input type="text" class="form-control" id="inputCity">
-        </div>
-        
-        <div class="col-md-4">
-            <label for="inputState" class="form-label">State</label>
-            <select id="inputState" class="form-control">
-            <option selected>Choose...</option>
-            <option>...</option>
-            </select>
-        </div>
-        
-        <div class="col-md-2">
-            <label for="inputZip" class="form-label">Zip</label>
-            <input type="text" class="form-control" id="inputZip">
+            {$f_input_ip}
         </div>
 
-        <div class="col-12 text-center">
+        <div class="col-md-6">
+            <label for="id_nodu" class="form-label">Přípojný bod</label>
+            <div class="form-inline">
+                <div class="form-group">{$f_input_id_nodu}</div>
+                <div class="form-group">{$f_input_nod_find_button}</div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            {$f_input_mac}
+        </div>
+
+        <div class="col-md-6">
+            <div style="padding-top: 22px;">
+                {$f_input_gen_button}
+            </div>
+        </div>
+
+        <div class="col-md-12"></div>
+
+        <div class="col-md-6">
+            {$f_input_puk}
+        </div>
+
+        <div class="col-md-6">
+            {$f_input_pin1}
+        </div>
+
+        <div class="col-md-6">
+            {$f_input_port_id}
+        </div>
+
+        <div class="col-md-6">
+            {$f_input_pin2}
+        </div>
+
+        <div class="col-md-6">
+            {$f_input_pozn}
+        </div>
+
+        <div class="col-md-6">
+            {$f_input_id_tarifu}
+        </div>
+        
+        <div class="col-md-12 text-center warning" style="padding-top: 22px;">
             {$f_submit_button}
         </div>
 
