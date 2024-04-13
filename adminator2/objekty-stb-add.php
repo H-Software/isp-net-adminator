@@ -214,7 +214,7 @@ if( !( check_level($level,136) ) )
        echo "<div style=\"color: red; padding-top: 5px; padding-bottom: 5px; \" >";
        echo "Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </div>"; 
      }
-     else  
+     else
      { 
        while ($data4=$vysl4->fetch_array() ):
 	

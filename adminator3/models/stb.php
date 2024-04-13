@@ -4,6 +4,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
 
+use App\Auth;
+
 class stb
 {
 
@@ -427,9 +429,9 @@ class stb
          return $ret;
     }
 
-    function stbActionValidateFromData($data)
+    function stbActionValidateFormData($data)
     {
-        $popisValidator = v::noWhitespace()->notEmpty()->alpha()->length(1,5);
+        $popisValidator = v::noWhitespace()->notEmpty()->alnum("-")->length(1,15);
 
         if($popisValidator->validate($data['popis']) === false)
         {
@@ -447,13 +449,75 @@ class stb
         $this->checkcislo($data['id_nodu']);
         $this->checkcislo($data['port_id']);
 
+        //zjisti jestli neni duplicitni dns, ip adresa, mac ...
+        $MSQ_POPIS = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '" . $data['popis'] . "' ");
+        $MSQ_IP = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '". $data['ip'] . "' ");
+        $MSQ_MAC = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '" . $data['mac']. "' ");
+        
+        if( $MSQ_POPIS->num_rows > 0 )
+        { 
+            $error .= "<div class=\"alert alert-danger\" role=\"alert\">Popis (".$data['popis']." ) již existuje!!!</div>"; 
+        }
+        if( $MSQ_IP->mysql_num_rows > 0 )
+        { 
+            $error .= "<div class=\"alert alert-danger\" role=\"alert\">IP adresa ( ".$data['ip']." ) již existuje!!!</div>"; 
+        }
+        if( $MSQ_MAC->num_rows > 0 )
+        { 
+            $error .= "<div class=\"alert alert-danger\" role=\"alert\">MAC adresa ( ".$data['mac']." ) již existuje!!!</div>"; 
+        }
+ 
+        $this->action_form_validation_errors .= $error;
+        
         if(empty($this->action_form_validation_errors))
         {
+            return true;
+        }
+        else
+        {
+            $this->logger->addInfo("stb\\stbActionValidateFormData: data validation failed. dump action_form_validation_errors: ".var_export($this->action_form_validation_errors, true));
             return false;
         }
-        else{
-            return false;
-        }
+    }
+
+    function stbActionSaveIntoDatabase($data)
+    {
+            $sql = "INSERT INTO objekty_stb "
+            . " (mac_adresa, ip_adresa, puk, popis, id_nodu, sw_port, pozn, vlozil_kdo, id_tarifu)" 
+            . " VALUES ('" . $data['mac'] ."','" . $data['ip'] . "','" . $data['puk'] . "','" 
+            . $data['popis'] . "','" . $data['id_nodu'] . "','" . $data['port_id'] . "','" . $data['pozn'] . "','"
+            . \App\Auth\Auth::getUserEmail() . "', '" . $data['id_tarifu'] . "') ";
+
+            $this->logger->addInfo("stb\\stbActionSaveIntoDatabase: sql dump: ".var_export($sql, true));
+
+            $res = $this->conn_mysql->query($sql);
+
+            $id_stb = $this->conn_mysql->insert_id;
+
+            if($res)
+            { $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
+            else
+            { 
+                $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit. </div></H3>\n"; 
+                $output .= "res: $res \n";
+            }	
+
+            // pridame to do archivu zmen
+            $pole="<b> akce: pridani stb objektu ; </b><br>";
+
+            $pole .= "[id_stb]=> ".$id_stb.", ";
+            $pole .= "[mac_adresa]=> ".$data['mac'].", [ip_adresa]=> ".$data['ip'].", [puk]=> ".$data['puk'].", [popis]=> ".$data['popis'];
+            $pole .= ", [id_nodu]=> ".$data['id_nodu'].", [sw_port]=> ".$data['port_id']." [pozn]=> ".$data['pozn'].", [id_tarifu]=> ".$data['id_tarifu'];
+
+            if( $res == 1 ){ $vysledek_write="1"; }
+
+            $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
+                "VALUES ('".$this->conn_mysql->real_escape_string($pole)."',".
+                "'".$this->conn_mysql->real_escape_string(\App\Auth\Auth::getUserEmail())."',".
+                "'" . $vysledek_write . "')");
+
+            // $writed = "true"; 
+            return $output;
     }
 
     function stbAction(ServerRequestInterface $request, ResponseInterface $response, $csrf)
@@ -462,7 +526,7 @@ class stb
         // 1 field -> name (and path) of smarty template
         $ret = array();
 
-        $this->logger->addInfo("stb\\stbAction called");
+        $this->logger->addInfo("stb\\stbAction called ");
 
         $this->formInit();
 
@@ -477,16 +541,47 @@ class stb
             if($this->action_form->ok())
             {
                 // go for validate data
-                $rs_v = $this->stbActionValidateFromData($data);
+                $rs_v = $this->stbActionValidateFormData($data);
                 $this->logger->addInfo("stb\\stbAction: form data validation result: ".var_export($rs_v, true));
 
                 if( $rs_v === true){
                     // go for save into databze
     
-                    //TODO: add saving into database
-                    
+                    $rs_s = $this->stbActionSaveIntoDatabase($data);
+                    $rs .= $rs_s;
+
                     // TODO: improve showing data from form
-                    $rs .= $this->action_form->success_message = "Thank you, saving this data: ".var_export($data, true);
+                        $rs .= "<br>
+                        STB Objekt byl přidán/upraven, zadané údaje:<br><br>
+                        <b>Popis objektu</b>: " . $data['popis'] . "<br>
+                        <b>IP adresa</b>: " . $data['ip'] . "<br>
+                        <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
+                        
+                        <b>Puk</b>: " . $data['puk'] . "<br>
+                        <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
+                        
+                        <b>Přípojný bod</b>: ";
+
+                        $vysledek3=$this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");
+                        $radku3=$vysledek3->num_rows;
+                        
+                        if($radku3==0) $rs .= " Nelze zjistit ";
+                        else 
+                        {
+                            while( $zaznam3=$vysledek3->fetch_array() )
+                              { $rs .= $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
+                        }
+                    
+                        $rs .= "<br><br>";
+                        
+                        $rs .= "<b>Poznámka</b>:".htmlspecialchars($data['pozn'])."<br>";
+                        
+                        $ms_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($data['id_tarifu'])."'");
+                        
+                        $ms_tarif->data_seek(0);
+                        $ms_tarif_r = $ms_tarif->fetch_row();
+                        
+                        $rs .= "<b>Tarif</b>: ".$ms_tarif_r[0]."<br><br>";
 
                     $ret[0] = $rs;
                     return $ret;
