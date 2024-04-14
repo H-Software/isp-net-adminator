@@ -8,7 +8,7 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 DROP TABLE IF EXISTS `archiv_zmen`;
 CREATE TABLE `archiv_zmen` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `akce` varchar(4096) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `akce` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `provedeno_kdy` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `provedeno_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `vysledek` tinyint(1) NOT NULL DEFAULT '0',
@@ -21,14 +21,17 @@ INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysl
 (3,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 7, [mac_adresa]=> 66:22:33:44:55:66, [ip_adresa]=> 10.10.10.6, [puk]=> 666, [popis]=> stb6, [id_nodu]=> 2, [sw_port]=> 6 [pozn]=> pozn 6, [id_tarifu]=> 1',	'2024-04-12 09:54:46',	'admin',	1),
 (4,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 8, [mac_adresa]=> 77:22:33:44:55:66, [ip_adresa]=> 10.10.10.7, [puk]=> 777, [popis]=> stb 7, [id_nodu]=> 2, [sw_port]=> 7 [pozn]=> pozn 7, [id_tarifu]=> 1',	'2024-04-12 10:00:24',	'admin',	1),
 (5,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 9, [mac_adresa]=> 88:22:33:44:55:66, [ip_adresa]=> 10.10.10.8, [puk]=> 888, [popis]=> stb 8, [id_nodu]=> 2, [sw_port]=> 8 [pozn]=> pozn 8, [id_tarifu]=> 1',	'2024-04-12 10:03:37',	'admin',	1),
-(6,	'<b>akce: uprava stb objektu; </b><br>[id_stb]=> 2, diferencialni data: změna pole: <b>puk</b> z: <span class=\"az-s1\" ></span> na: <span class=\"az-s2\">111</span>, změna pole: <b>pozn</b> z: <span class=\"az-s1\" >xxx222</span> na: <span class=\"az-s2\">xxx111</span>, ',	'2024-04-12 12:29:43',	'admin',	1);
+(6,	'<b>akce: uprava stb objektu; </b><br>[id_stb]=> 2, diferencialni data: změna pole: <b>puk</b> z: <span class=\"az-s1\" ></span> na: <span class=\"az-s2\">111</span>, změna pole: <b>pozn</b> z: <span class=\"az-s1\" >xxx222</span> na: <span class=\"az-s2\">xxx111</span>, ',	'2024-04-12 12:29:43',	'admin',	1),
+(7,	'',	'2024-04-13 20:53:47',	'admin@admin',	1),
+(8,	'',	'2024-04-13 20:56:56',	'admin@admin',	1),
+(9,	'',	'2024-04-13 20:58:06',	'admin@admin',	1);
 
 DROP TABLE IF EXISTS `archiv_zmen_work`;
 CREATE TABLE `archiv_zmen_work` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `akce` varchar(4096) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `provedeno_kdy` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `provedeno_kym` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `akce` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `provedeno_kdy` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `provedeno_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `vysledek` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -36,26 +39,26 @@ CREATE TABLE `archiv_zmen_work` (
 
 DROP TABLE IF EXISTS `autorizace`;
 CREATE TABLE `autorizace` (
-  `id` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `date` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `nick` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `level` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1712925762',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713020651',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
   `zu_id` int NOT NULL AUTO_INCREMENT,
-  `zu_text` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `zu_typ` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zu_text` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zu_typ` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `zu_akceptovano` int unsigned NOT NULL,
-  `zu_akceptovano_kdy` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `zu_akceptovano_kym` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `zu_akceptovano_pozn` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `zu_vlozeno_kdy` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `zu_vlozeno_kym` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zu_akceptovano_kdy` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zu_akceptovano_kym` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zu_akceptovano_pozn` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zu_vlozeno_kdy` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zu_vlozeno_kym` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`zu_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -63,7 +66,7 @@ CREATE TABLE `az_ucetni` (
 DROP TABLE IF EXISTS `az_ucetni_typy`;
 CREATE TABLE `az_ucetni_typy` (
   `zu_id_typ` int NOT NULL AUTO_INCREMENT,
-  `zu_nazev_typ` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zu_nazev_typ` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`zu_id_typ`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -71,8 +74,8 @@ CREATE TABLE `az_ucetni_typy` (
 DROP TABLE IF EXISTS `board`;
 CREATE TABLE `board` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `author` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `email` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `author` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `email` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `from_date` date NOT NULL,
   `to_date` date NOT NULL,
   `subject` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -82,12 +85,16 @@ CREATE TABLE `board` (
 
 INSERT INTO `board` (`id`, `author`, `email`, `from_date`, `to_date`, `subject`, `body`) VALUES
 (5,	'admin',	'test',	'2024-04-08',	'2024-04-19',	'subject',	'text'),
-(6,	'admin',	'mail',	'2024-04-09',	'2024-04-16',	'sub',	'hahaha');
+(6,	'admin',	'mail',	'2024-04-09',	'2024-04-16',	'sub',	'hahaha'),
+(7,	'1',	'',	'2024-04-13',	'2024-04-27',	'test',	'rffff'),
+(8,	'1',	'',	'2024-04-13',	'2024-04-27',	'test',	'rffff'),
+(9,	'1',	'',	'2024-04-13',	'2024-04-27',	'test4',	'rffff4'),
+(10,	'1',	'x@xx',	'2024-04-20',	'2024-04-20',	'hu@hu',	'hu');
 
 DROP TABLE IF EXISTS `fakturacni_skupiny`;
 CREATE TABLE `fakturacni_skupiny` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nazev` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `nazev` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `typ` tinyint unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -98,16 +105,16 @@ INSERT INTO `fakturacni_skupiny` (`id`, `nazev`, `typ`) VALUES
 DROP TABLE IF EXISTS `faktury_neuhrazene`;
 CREATE TABLE `faktury_neuhrazene` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `Cislo` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `VarSym` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `Cislo` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `VarSym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `Datum` date NOT NULL,
   `DatSplat` date NOT NULL,
-  `KcCelkem` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `KcLikv` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `Firma` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `Jmeno` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ICO` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `DIC` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `KcCelkem` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `KcLikv` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `Firma` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `Jmeno` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ICO` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `DIC` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `par_id_vlastnika` int NOT NULL,
   `par_stav` int NOT NULL,
   `datum_vlozeni` date NOT NULL,
@@ -115,7 +122,7 @@ CREATE TABLE `faktury_neuhrazene` (
   `aut_email_stav` int NOT NULL,
   `aut_email_datum` date NOT NULL,
   `ignorovat` int NOT NULL,
-  `po_splatnosti_vlastnik` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `po_splatnosti_vlastnik` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_unique` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -169,7 +176,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (90,	10,	'vlastnici-cat'),
 (91,	10,	'a2: admin-subcat'),
 (92,	10,	'a3: platby-cat'),
-(93,	10,	'a2: objekty-subcat'),
+(93,	20,	'a2: objekty-subcat'),
 (94,	99,	'objekty-lite'),
 (95,	10,	'a3: others-cat'),
 (96,	10,	'a2: about-map.php'),
@@ -180,7 +187,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (115,	50,	'a2: automatika-fn-check-vlastnik'),
 (131,	40,	'admin tarify'),
 (135,	20,	'a2: objekty-stb'),
-(136,	10,	'a2: objekty-stb-add'),
+(136,	10,	'objekty-stb-add'),
 (137,	20,	'stb uprava'),
 (139,	10,	'objekty test'),
 (140,	30,	' a2: vlastnici2-fs-update'),
@@ -192,14 +199,15 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (147,	10,	'a3: archiv-zmen-ucetni.php'),
 (148,	10,	'a3: archiv-zmen-ucetni.php : add'),
 (149,	10,	'a3: fn-kontrola-omezeni.php'),
+(150,	40,	'objekty stb unpair'),
 (151,	10,	'a3: others-web-simelon');
 
 DROP TABLE IF EXISTS `login_log`;
 CREATE TABLE `login_log` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nick` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `nick` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `date` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ip` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ip` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -221,7 +229,7 @@ CREATE TABLE `nod_list` (
   `jmeno` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `adresa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `pozn` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ip_rozsah` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ip_rozsah` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `typ_nodu` int unsigned NOT NULL,
   `stav` int unsigned NOT NULL,
   `router_id` int unsigned NOT NULL,
@@ -231,22 +239,23 @@ CREATE TABLE `nod_list` (
 
 INSERT INTO `nod_list` (`id`, `jmeno`, `adresa`, `pozn`, `ip_rozsah`, `typ_nodu`, `stav`, `router_id`, `vlan_id`) VALUES
 (1,	'prvni nod',	'u me doma',	'test pozn',	'10.10.10.0/24',	0,	0,	0,	0),
-(2,	'opticky nod 1',	'',	'',	'',	2,	0,	0,	0),
+(2,	'opticky nod 1',	'',	'',	'10.10.100.0/24',	2,	0,	0,	0),
+(3,	'opticky nod 2',	'kdesi 2',	'',	'10.10.200.0/24',	2,	0,	0,	0),
 (370,	'cosi specialniho pro stb',	'',	'',	'',	0,	0,	0,	0);
 
 DROP TABLE IF EXISTS `objekty_stb`;
 CREATE TABLE `objekty_stb` (
   `id_stb` int NOT NULL AUTO_INCREMENT,
   `id_cloveka` int NOT NULL DEFAULT '0',
-  `mac_adresa` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `puk` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ip_adresa` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `popis` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `mac_adresa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `puk` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ip_adresa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `popis` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `id_nodu` int NOT NULL,
   `sw_port` int NOT NULL,
-  `pozn` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pozn` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `vlozil_kdo` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `upravil_kdo` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `upravil_kdo` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `datum_vytvoreni` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `id_tarifu` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_stb`)
@@ -260,7 +269,11 @@ INSERT INTO `objekty_stb` (`id_stb`, `id_cloveka`, `mac_adresa`, `puk`, `ip_adre
 (6,	0,	'55:22:33:44:55:66',	'5555',	'10.10.10.5',	'stb5',	2,	5,	'pozn 5',	'admin',	'',	'2024-04-12 09:42:30',	1),
 (7,	0,	'66:22:33:44:55:66',	'666',	'10.10.10.6',	'stb6',	2,	6,	'pozn 6',	'admin',	'',	'2024-04-12 09:54:46',	1),
 (8,	0,	'77:22:33:44:55:66',	'777',	'10.10.10.7',	'stb 7',	2,	7,	'pozn 7',	'admin',	'',	'2024-04-12 10:00:24',	1),
-(9,	0,	'88:22:33:44:55:66',	'888',	'10.10.10.8',	'stb 8',	2,	8,	'pozn 8',	'admin',	'',	'2024-04-12 10:03:37',	1);
+(9,	0,	'88:22:33:44:55:66',	'888',	'10.10.10.8',	'stb 8',	2,	8,	'pozn 8',	'admin',	'',	'2024-04-12 10:03:37',	1),
+(10,	0,	'00:00:64:65:73:74',	'1111',	'1.1.1.1',	'xxxxx',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:51:58',	1),
+(11,	0,	'00:00:64:65:73:73',	'1111',	'1.1.1.1',	'xxxz',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:53:47',	1),
+(12,	0,	'32:22:33:44:55:66',	'111',	'10.10.10.4',	'xxeee',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:56:56',	1),
+(13,	0,	'11:23:33:44:55:66',	'1111',	'10.10.10.5',	'stbx',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:58:06',	1);
 
 DROP TABLE IF EXISTS `opravy`;
 CREATE TABLE `opravy` (
@@ -269,11 +282,11 @@ CREATE TABLE `opravy` (
   `id_vlastnika` int unsigned NOT NULL,
   `datum_vlozeni` date NOT NULL,
   `v_reseni` int unsigned NOT NULL DEFAULT '0',
-  `v_reseni_kym` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `vlozil` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `v_reseni_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `vlozil` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `priorita` int unsigned NOT NULL DEFAULT '0',
   `vyreseno` int unsigned NOT NULL DEFAULT '0',
-  `vyreseno_kym` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `vyreseno_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `text` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id_opravy`),
   UNIQUE KEY `id_opravy` (`id_opravy`)
@@ -296,12 +309,15 @@ DROP TABLE IF EXISTS `tarify_int`;
 CREATE TABLE `tarify_int` (
   `id_tarifu` int NOT NULL AUTO_INCREMENT,
   `typ_tarifu` int unsigned NOT NULL,
-  `zkratka_tarifu` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `jmeno_tarifu` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `speed_down` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `speed_up` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zkratka_tarifu` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `jmeno_tarifu` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `speed_down` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `speed_up` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `gen_poradi` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id_tarifu`)
+  PRIMARY KEY (`id_tarifu`),
+  UNIQUE KEY `id_tarifu` (`id_tarifu`),
+  UNIQUE KEY `zkratka_tarifu` (`zkratka_tarifu`),
+  UNIQUE KEY `jmeno_tarifu` (`jmeno_tarifu`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `tarify_int` (`id_tarifu`, `typ_tarifu`, `zkratka_tarifu`, `jmeno_tarifu`, `speed_down`, `speed_up`, `gen_poradi`) VALUES
@@ -310,9 +326,10 @@ INSERT INTO `tarify_int` (`id_tarifu`, `typ_tarifu`, `zkratka_tarifu`, `jmeno_ta
 DROP TABLE IF EXISTS `tarify_iptv`;
 CREATE TABLE `tarify_iptv` (
   `id_tarifu` int NOT NULL AUTO_INCREMENT,
-  `jmeno_tarifu` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `jmeno_tarifu` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id_tarifu`),
-  CONSTRAINT `tarify_iptv_ibfk_1` FOREIGN KEY (`id_tarifu`) REFERENCES `tarify_int` (`id_tarifu`)
+  UNIQUE KEY `id_tarifu_unique` (`id_tarifu`),
+  UNIQUE KEY `jmeno_tarifu` (`jmeno_tarifu`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `tarify_iptv` (`id_tarifu`, `jmeno_tarifu`) VALUES
@@ -321,8 +338,8 @@ INSERT INTO `tarify_iptv` (`id_tarifu`, `jmeno_tarifu`) VALUES
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `login` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `password` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `login` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `password` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `level` int unsigned NOT NULL DEFAULT '0',
   `lvl_admin_login_iptv` int unsigned NOT NULL DEFAULT '0',
   `lvl_objekty_stb_add_portal` int unsigned NOT NULL DEFAULT '0',
@@ -358,11 +375,11 @@ CREATE TABLE `vypovedi` (
   `datum_vlozeni` date NOT NULL,
   `datum_uzavreni` date NOT NULL,
   `datum_vypovedi` date NOT NULL,
-  `duvod` text COLLATE utf8mb3_unicode_ci NOT NULL,
-  `uhrazeni_vypovedni_lhuty` text COLLATE utf8mb3_unicode_ci NOT NULL,
+  `duvod` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `uhrazeni_vypovedni_lhuty` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `vypovedni_lhuta` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_vypovedi`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 
--- 2024-04-12 13:04:32
+-- 2024-04-14 18:57:55

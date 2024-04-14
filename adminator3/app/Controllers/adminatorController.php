@@ -12,7 +12,6 @@ class adminatorController extends Controller {
     var $smarty;
     var $logger;
     var $auth;
-    var $app;
     
     public function __construct($conn_mysql, $smarty, $logger, $auth)
     {
@@ -82,9 +81,9 @@ class adminatorController extends Controller {
     {
 
         $this->logger->addDebug("adminatorController\\header called");
-        $this->logger->addDebug("adminatorController\\header: logged user info: ".$this->auth->user_nick." (".$this->auth->user_level.")");
+        $this->logger->addDebug("adminatorController\\header: logged user info: " . \App\Auth\Auth::getUserEmail() . " (" . $this->auth->user_level . ")");
 
-        $this->smarty->assign("nick_a_level",$this->auth->user_nick." (".$this->auth->user_level.")");
+        $this->smarty->assign("nick_a_level", \App\Auth\Auth::getUserEmail() . " (" . $this->auth->user_level . ")");
         $this->smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
 
         //kategorie
@@ -228,7 +227,7 @@ class adminatorController extends Controller {
         $ret[0] = $MSQ_USER_COUNT;
 
         //prvne vypisem prihlaseneho
-        $MSQ_USER_NICK = $this->conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '".$this->conn_mysql->real_escape_string($this->auth->user_nick)."' ");
+        $MSQ_USER_NICK = $this->conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '" . \App\Auth\Auth::getUserEmail() . "' ");
 
         if ($MSQ_USER_NICK->num_rows <> 1)
         {

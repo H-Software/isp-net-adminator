@@ -1,21 +1,48 @@
 <?php
 
+namespace App\Core;
+
 class adminator {
-    var $conn_mysql;
-    var $smarty;
-    var $logger;
-    var $auth;
-    var $app;
+  var $conn_mysql;
+  var $smarty;
+  var $logger;
     
-    public function __construct($conn_mysql, $smarty, $logger, $auth)
+  public function __construct($conn_mysql, $smarty, $logger)
+  {
+    $this->conn_mysql = $conn_mysql;
+    $this->smarty = $smarty;
+    $this->logger = $logger;
+
+    $this->logger->addInfo("adminator\__construct called");
+  }
+
+  public function getTarifIptvListForForm($show_zero_value = true)
+  {
+
+    $this->logger->addInfo("adminator\getTarifIptvListForForm called");
+
+    if($show_zero_value === true)
     {
-		$this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->auth = $auth;
-        
-        $this->logger->addInfo("adminator\__construct called");
-	}
+        $tarifs[0] = "Není vybráno";
+    }
+
+    $q = $this->conn_mysql->query("SELECT id_tarifu, jmeno_tarifu FROM tarify_iptv ORDER by jmeno_tarifu ASC");
+  
+    $num_rows = $q->num_rows;
+    
+    if($num_rows < 1)
+    {
+      $tarifs[0] =  "nelze zjistit / žádný tarif nenalezen";
+      return $tarifs;
+    }
+    
+    while( $data = $q->fetch_array())
+    {
+      $tarifs[$data['id_tarifu']] = $data["jmeno_tarifu"];    
+    }
+
+    return $tarifs;
+  }
 
     function show_stats_faktury_neuhr()
     {

@@ -6,7 +6,7 @@ chdir(__DIR__);
 $filePath = realpath(ltrim($_SERVER["REQUEST_URI"], '/'));
 if ($filePath && is_dir($filePath)){
     // attempt to find an index file
-    foreach (['index.php', 'index.html'] as $indexFile){
+    foreach (['index.php'] as $indexFile){
         if ($filePath = realpath($filePath . DIRECTORY_SEPARATOR . $indexFile)){
             break;
         }

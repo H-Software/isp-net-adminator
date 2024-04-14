@@ -32,9 +32,13 @@
                 {$f_input_ip}
             </div>
 
+            {* 
+                special formatting because of "inline"
+                https://getbootstrap.com/docs/5.3/forms/layout/#inline-forms
+            *}
             <div class="col-md-6">
                 <label for="id_nodu" class="form-label">Přípojný bod</label>
-                <div class="form-inline">
+                <div class="row row-cols-lg-auto g-2 align-items-center">
                     <div class="form-group">{$f_input_id_nodu}</div>
                     <div class="form-group">{$f_input_nod_find_button}</div>
                 </div>

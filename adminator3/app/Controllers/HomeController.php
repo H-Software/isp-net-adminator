@@ -10,18 +10,15 @@ class HomeController extends adminatorController {
     var $conn_mysql;
     var $smarty;
     var $logger;
-    var $auth;
-    var $app;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+
+    public function __construct(ContainerInterface $container, $conn_mysql, $smarty)
     {
         $this->container = $container;
 		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->auth = $auth;
-        $this->app = $app;
-        
+
+        $this->logger = $this->container->logger;
         $this->logger->addInfo("homeController\__construct called");
 	}
     
@@ -31,7 +28,7 @@ class HomeController extends adminatorController {
 
         $this->checkLevel(38);
 
-        $a = new \adminator($this->conn_mysql, $this->smarty, $this->logger, $this->auth);
+        $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
         if ($request->isPost()) {
             $data = $request->getParsedBody();
@@ -77,7 +74,7 @@ class HomeController extends adminatorController {
 
             $this->smarty->assign("nastenka_povoleno",1);
             $this->smarty->assign("datum",date("j. m. Y"));
-            $this->smarty->assign("sid",$this->auth->user_sid);
+            // $this->smarty->assign("sid",);
             
             $nastenka = new \board($this->conn_mysql, $this->logger);
 
