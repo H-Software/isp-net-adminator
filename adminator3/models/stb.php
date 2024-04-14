@@ -431,13 +431,14 @@ class stb
 
     function stbActionValidateFormData($data)
     {
-        $popisValidator = v::noWhitespace()->notEmpty()->alnum("-")->length(1,15);
+        $popisValidatorMaxLenght = 15;
+        $popisValidator = v::noWhitespace()->notEmpty()->alnum("-")->length(1,$popisValidatorMaxLenght);
 
         if($popisValidator->validate($data['popis']) === false)
         {
             $this->action_form_validation_errors .= 
                                     $this->action_form_validation_errors_wrapper_start
-                                    . "\"Popis\" musi obsahovat pouze cisla ci pismena a musi byt maximalne 5 znaku dlouhy."
+                                    . "\"Popis\" musi obsahovat pouze cisla ci pismena a musi byt maximalne " . $popisValidatorMaxLenght . " znaku dlouhy."
                                     . $this->action_form_validation_errors_wrapper_end
                                     ;
         }
@@ -446,6 +447,8 @@ class stb
         $this->checkip($data['ip']); 
         $this->checkmac($data['mac']); 
         $this->checkcislo($data['puk']);
+        $this->checkcislo($data['pin1']);
+        $this->checkcislo($data['pin2']);
         $this->checkcislo($data['id_nodu']);
         $this->checkcislo($data['port_id']);
 
@@ -530,13 +533,15 @@ class stb
 
         $this->formInit();
 
-        $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano');
-        $this->action_form->required = 'popis, ip, mac, id_nodu, puk, port_id, id_tarifu';
+        $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2');
+        $this->logger->addDebug("stb\\stbAction: form data: ".var_export($data, true));
+
+        $this->action_form->required = 'popis,ip,mac,id_nodu,puk,port_id,id_tarifu';
+        // $this->action_form->required = 'nod_find, pozn, pin1, pin2';
 
         if(!empty($data['odeslano']))
         {
-            // go for extract data
-            $this->logger->addDebug("stb\\stbAction: form data: ".var_export($data, true));
+            // go for final
 
             if($this->action_form->ok())
             {
@@ -618,6 +623,10 @@ class stb
             $csrf[2] => $csrf[4],
         );
         
+        for ($x = 0; $x <= 48; $x++) {
+            $form_port_id[$x] = $x;
+        }
+
         $uri = $request->getUri();
 
         $form_id = "stb-action-add";
@@ -628,33 +637,33 @@ class stb
 
         $form_data['f_input_popis'] = $this->action_form->text('popis','Popis objektu', $data['popis']);
 
-        $form_data['f_input_nod_find'] = $this->action_form->text('nod_find','Přípojný bod - filtr');
+        $form_data['f_input_nod_find'] = $this->action_form->text('nod_find','Přípojný bod - filtr', $data['nod_find']);
 
-        $form_data['f_input_nod_find_button'] = $this->action_form->input_button(
+        $form_data['f_input_nod_find_button'] = $this->action_form->input_submit(
                                                                         'g1',
                                                                         '',
                                                                         'Hledat (nody)',
                                                                         '',
-                                                                        'class="btn btn-secondary form-inline" '
-                                                                        . 'onClick="self.document.forms[0].submit()"');
+                                                                        'class="btn btn-secondary" ');
 
-        $form_data['f_input_ip'] = $this->action_form->text('ip','IP adresa');
-        $form_data['f_input_id_nodu'] = $this->action_form->select('id_nodu','', '','','','','', $node_list);
+        $form_data['f_input_ip'] = $this->action_form->text('ip','IP adresa',$data['ip']);
+        $form_data['f_input_id_nodu'] = $this->action_form->select('id_nodu','', $data['id_nodu'],'','','','', $node_list);
 
-        $form_data['f_input_mac'] = $this->action_form->text('mac','mac adresa');
-        $form_data['f_input_gen_button'] = $this->action_form->input_button(
+        $form_data['f_input_mac'] = $this->action_form->text('mac','mac adresa', $data['mac_adresa']);
+        $form_data['f_input_gen_button'] = $this->action_form->input_submit(
                                                                 'g2',
                                                                 '',
                                                                 'Generovat údaje',
                                                                 '',
-                                                                'class="btn btn-secondary" '
-                                                               . 'onClick="self.document.forms[0].submit()"');
+                                                                'class="btn btn-secondary" ');
 
-        $form_data['f_input_puk'] = $this->action_form->text('puk','puk');
-        $form_data['f_input_pin1'] = $this->action_form->text('pin1','pin1');
-        $form_data['f_input_pin2'] = $this->action_form->text('pin2','pin2');
+        $form_data['f_input_puk'] = $this->action_form->text('puk','puk', $data['puk']);
+        $form_data['f_input_pin1'] = $this->action_form->text('pin1','pin1', $data['pin1']);
+        $form_data['f_input_pin2'] = $this->action_form->text('pin2','pin2', $data['pin2']);
 
-        $form_data['f_input_port_id'] = $this->action_form->text('port_id','Číslo portu (ve switchi)');
+
+        $form_data['f_input_port_id'] = $this->action_form->select('port_id','Číslo portu (ve switchi)', $data['port_id'], '', 'class="form-select form-select-sm"', '', '', $form_port_id);
+
         $form_data['f_input_pozn'] = $this->action_form->textarea('pozn','poznámka', '', 'rows="5" wrap="soft"');
         $form_data['f_input_id_tarifu'] = $this->action_form->text('id_tarifu','tarif');
 

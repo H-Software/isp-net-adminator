@@ -3,20 +3,22 @@
 namespace App\Core;
 
 class adminator {
-    var $conn_mysql;
-    var $smarty;
-    var $logger;
-    var $auth;
-    var $app;
+  var $conn_mysql;
+  var $smarty;
+  var $logger;
     
-    public function __construct($conn_mysql, $smarty, $logger)
-    {
-		$this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-        $this->logger = $logger;
-        
-        $this->logger->addInfo("adminator\__construct called");
-	}
+  public function __construct($conn_mysql, $smarty, $logger)
+  {
+    $this->conn_mysql = $conn_mysql;
+    $this->smarty = $smarty;
+    $this->logger = $logger;
+
+    $this->logger->addInfo("adminator\__construct called");
+  }
+
+  public function getTarifListForForm($search_string, $typ_nodu = 2)
+  {
+  }
 
     function show_stats_faktury_neuhr()
     {

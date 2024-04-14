@@ -10,8 +10,7 @@ class HomeController extends adminatorController {
     var $conn_mysql;
     var $smarty;
     var $logger;
-    var $auth;
-    var $app;
+
 
     public function __construct(ContainerInterface $container, $conn_mysql, $smarty)
     {
