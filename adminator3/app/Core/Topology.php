@@ -11,12 +11,12 @@ class Topology {
     
     public function __construct($conn_mysql, $smarty, $logger)
     {
-	    $this->conn_mysql = $conn_mysql;
+        $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
         
         $this->logger->addInfo("topology\__construct called");
-	}
+    }
 
     public function getNodeListForForm($search_string, $typ_nodu = 2, $show_zero_value = true)
     {
