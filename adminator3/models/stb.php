@@ -444,8 +444,6 @@ class stb
         //                             ;
         // }
 
-        // 'popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2'
-
         $popis = $this->action_form->post('popis','"Popis objektu"','alpha_dash|min[3]|max[20]');
         // $this->logger->addInfo("stb\\stbActionValidateFormData: popis validation retvat: ".var_export($data, true));
 
@@ -556,74 +554,60 @@ class stb
 
         $this->formInit();
 
-        // <div style="font-color: red;">test</div>
-
+        // fill $_POST into array for reusing in the form and etc
         $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2');
 
         // required intentionaly setted after validate, because in first render we dont see error "card"
         $this->action_form->required = 'popis,ip,mac,id_nodu,port_id,id_tarifu';
 
-        // $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2');
-        // $this->logger->addDebug("stb\\stbAction: form data: ".var_export($data, true));
-
         if(!empty($this->action_form->post('odeslano')))
         {
-            // go for final
+            // go for final, but validate data first
             $this->stbActionValidateFormData();
 
             // if form is OK, go to saving data, otherwise "continue" rendering form (not saving)
             if($this->action_form->ok() and empty($this->action_form_validation_errors))
             {
-                // go for validate data
-                // ??
+                // go for save into databze
 
-                if(true){
-                    // go for save into databze
-    
-                    $rs_s = $this->stbActionSaveIntoDatabase($data);
-                    $rs .= $rs_s;
+                $rs_s = $this->stbActionSaveIntoDatabase($data);
+                $rs .= $rs_s;
 
-                    // TODO: improve showing data from form
-                        $rs .= "<br>
-                        STB Objekt byl přidán/upraven, zadané údaje:<br><br>
-                        <b>Popis objektu</b>: " . $data['popis'] . "<br>
-                        <b>IP adresa</b>: " . $data['ip'] . "<br>
-                        <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
-                        
-                        <b>Puk</b>: " . $data['puk'] . "<br>
-                        <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
-                        
-                        <b>Přípojný bod</b>: ";
-
-                        $vysledek3=$this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");
-                        $radku3=$vysledek3->num_rows;
-                        
-                        if($radku3==0) $rs .= " Nelze zjistit ";
-                        else 
-                        {
-                            while( $zaznam3=$vysledek3->fetch_array() )
-                              { $rs .= $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
-                        }
+                // TODO: improve showing data from form
+                    $rs .= "<br>
+                    STB Objekt byl přidán/upraven, zadané údaje:<br><br>
+                    <b>Popis objektu</b>: " . $data['popis'] . "<br>
+                    <b>IP adresa</b>: " . $data['ip'] . "<br>
+                    <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
                     
-                        $rs .= "<br><br>";
-                        
-                        $rs .= "<b>Poznámka</b>:".htmlspecialchars($data['pozn'])."<br>";
-                        
-                        $ms_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($data['id_tarifu'])."'");
-                        
-                        $ms_tarif->data_seek(0);
-                        $ms_tarif_r = $ms_tarif->fetch_row();
-                        
-                        $rs .= "<b>Tarif</b>: ".$ms_tarif_r[0]."<br><br>";
+                    <b>Puk</b>: " . $data['puk'] . "<br>
+                    <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
+                    
+                    <b>Přípojný bod</b>: ";
 
-                    $ret[0] = $rs;
-                    return $ret;
-                }
-                else
-                {
-                    // ship validation results to form
-                    $this->logger->addWarning("stb\\stbAction: form data validatation failed");
-                }
+                    $vysledek3=$this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");
+                    $radku3=$vysledek3->num_rows;
+                    
+                    if($radku3==0) $rs .= " Nelze zjistit ";
+                    else 
+                    {
+                        while( $zaznam3=$vysledek3->fetch_array() )
+                            { $rs .= $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
+                    }
+                
+                    $rs .= "<br><br>";
+                    
+                    $rs .= "<b>Poznámka</b>:".htmlspecialchars($data['pozn'])."<br>";
+                    
+                    $ms_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($data['id_tarifu'])."'");
+                    
+                    $ms_tarif->data_seek(0);
+                    $ms_tarif_r = $ms_tarif->fetch_row();
+                    
+                    $rs .= "<b>Tarif</b>: ".$ms_tarif_r[0]."<br><br>";
+
+                $ret[0] = $rs;
+                return $ret;
             }
         }
 
