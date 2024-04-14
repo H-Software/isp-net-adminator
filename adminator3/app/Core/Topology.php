@@ -18,9 +18,14 @@ class Topology {
         $this->logger->addInfo("topology\__construct called");
 	}
 
-    public function getNodeListForForm($search_string, $typ_nodu = 2)
+    public function getNodeListForForm($search_string, $typ_nodu = 2, $show_zero_value = true)
     {
         $this->logger->addInfo("topology\getNodesFiltered called");
+
+        if($show_zero_value === true)
+        {
+            $nodes[0] = "Není vybráno";
+        }
 
         $search_string = $this->conn_mysql->real_escape_string($search_string);
 
@@ -33,7 +38,8 @@ class Topology {
     
         if($num_rows < 1)
         {
-          return false;
+            $nodes[0] = "nelze zjistit / žádný nod nenalezen";
+            return $nodes;
         }
         else
         {

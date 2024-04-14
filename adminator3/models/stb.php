@@ -4,8 +4,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
 
-use App\Auth;
-
 class stb
 {
 
@@ -531,6 +529,8 @@ class stb
 
         $this->logger->addInfo("stb\\stbAction called ");
 
+        $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+
         $this->formInit();
 
         $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2');
@@ -599,13 +599,19 @@ class stb
             }
         }
 
+        //
         // prepare data
+        //
+
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
         
-        $node_list = $topology->getNodeListForForm("");
+        $node_list = $topology->getNodeListForForm($data['nod_find']);
         $this->logger->addDebug("stb\\stbAction: node_list data: " . var_export($node_list, true));
 
-        $form_data = $this->stbActionRenderForm($request, $response, $csrf, $data, $node_list);
+        $tarifs_iptv = $a->getTarifIptvListForForm();
+        $this->logger->addDebug("stb\\stbAction: tarifs iptv list data: " . var_export($tarifs_iptv, true));
+
+        $form_data = $this->stbActionRenderForm($request, $response, $csrf, $data, $node_list, $tarifs_iptv);
 
         // $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));
 
@@ -616,18 +622,27 @@ class stb
 
     }
 
-    function stbActionRenderForm (ServerRequestInterface $request, ResponseInterface $response, $csrf, $data, $node_list)
+    function stbActionRenderForm (ServerRequestInterface $request, ResponseInterface $response, $csrf, $data, $node_list, $tarifs_iptv_list)
     {
         $form_csrf = array(
             $csrf[1] => $csrf[3],
             $csrf[2] => $csrf[4],
         );
         
-        for ($x = 0; $x <= 48; $x++) {
+        for ($x = 1; $x <= 48; $x++) {
             $form_port_id[$x] = $x;
         }
 
         $uri = $request->getUri();
+
+        // if()
+        // {
+
+        // }
+        // else
+        // {
+
+        // }
 
         $form_id = "stb-action-add";
 
@@ -647,7 +662,7 @@ class stb
                                                                         'class="btn btn-secondary" ');
 
         $form_data['f_input_ip'] = $this->action_form->text('ip','IP adresa',$data['ip']);
-        $form_data['f_input_id_nodu'] = $this->action_form->select('id_nodu','', $data['id_nodu'],'','','','', $node_list);
+        $form_data['f_input_id_nodu'] = $this->action_form->select('id_nodu','', $data['id_nodu'], '', 'class="form-select-inline form-select-sm"','','', $node_list);
 
         $form_data['f_input_mac'] = $this->action_form->text('mac','mac adresa', $data['mac_adresa']);
         $form_data['f_input_gen_button'] = $this->action_form->input_submit(
@@ -664,8 +679,9 @@ class stb
 
         $form_data['f_input_port_id'] = $this->action_form->select('port_id','Číslo portu (ve switchi)', $data['port_id'], '', 'class="form-select form-select-sm"', '', '', $form_port_id);
 
-        $form_data['f_input_pozn'] = $this->action_form->textarea('pozn','poznámka', '', 'rows="5" wrap="soft"');
-        $form_data['f_input_id_tarifu'] = $this->action_form->text('id_tarifu','tarif');
+        $form_data['f_input_pozn'] = $this->action_form->textarea('pozn','poznámka', $data['pozn'], 'rows="5" wrap="soft"');
+
+        $form_data['f_input_id_tarifu'] = $this->action_form->select('id_tarifu', 'Tarif', $data['id_tarifu'], '', 'class="form-select form-select-sm"','','', $tarifs_iptv_list);
 
 
         // print messages, formatted using Bootstrap alerts
