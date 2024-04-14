@@ -18,7 +18,7 @@ class Topology {
         $this->logger->addInfo("topology\__construct called");
 	}
 
-    public function getNodesFiltered($search_string, $typ_nodu = 2)
+    public function getNodeListForForm($search_string, $typ_nodu = 2)
     {
         $this->logger->addInfo("topology\getNodesFiltered called");
 
@@ -39,7 +39,7 @@ class Topology {
         {
             while ($data = $rs->fetch_array() )
             {
-                $nodes[$data['id']] = array($data["jmeno"], $data["ip_rozsah"]);
+                $nodes[$data['id']] = $data["jmeno"] . " (".$data["ip_rozsah"].")";
             }
 
             return $nodes;

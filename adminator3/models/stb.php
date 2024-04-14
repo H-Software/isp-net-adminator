@@ -530,12 +530,12 @@ class stb
 
         $this->formInit();
 
+        $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano');
         $this->action_form->required = 'popis, ip, mac, id_nodu, puk, port_id, id_tarifu';
 
-        if($this->action_form->submitted())
+        if(!empty($data['odeslano']))
         {
             // go for extract data
-            $data = $this->action_form->validate('popis, ip, mac, id_nodu, puk, port_id, id_tarifu');
             $this->logger->addDebug("stb\\stbAction: form data: ".var_export($data, true));
 
             if($this->action_form->ok())
@@ -597,10 +597,10 @@ class stb
         // prepare data
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
         
-        $node_list = $topology->getNodesFiltered("");
+        $node_list = $topology->getNodeListForForm("");
         $this->logger->addDebug("stb\\stbAction: node_list data: " . var_export($node_list, true));
 
-        $form_data = $this->stbActionRenderForm($request, $response, $csrf);
+        $form_data = $this->stbActionRenderForm($request, $response, $csrf, $data, $node_list);
 
         // $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));
 
@@ -611,7 +611,7 @@ class stb
 
     }
 
-    function stbActionRenderForm (ServerRequestInterface $request, ResponseInterface $response, $csrf)
+    function stbActionRenderForm (ServerRequestInterface $request, ResponseInterface $response, $csrf, $data, $node_list)
     {
         $form_csrf = array(
             $csrf[1] => $csrf[3],
@@ -620,19 +620,35 @@ class stb
         
         $uri = $request->getUri();
 
-        $form_data['f_open'] = $this->action_form->open("stb-action-add","stb-action-add", $uri->getPath(), '','',$form_csrf);
-        $form_data['f_close'] = $this->action_form->close();
-        $form_data['f_submit_button'] = $this->action_form->submit_button('OK / Odeslat / Uložit');
+        $form_id = "stb-action-add";
 
-        $form_data['f_input_popis'] = $this->action_form->text('popis','Popis objektu');
+        $form_data['f_open'] = $this->action_form->open($form_id,$form_id, $uri->getPath(), '','',$form_csrf);
+        $form_data['f_close'] = $this->action_form->close();
+        $form_data['f_submit_button'] = $this->action_form->input_submit('odeslano', '', 'OK / Odeslat / Uložit');
+
+        $form_data['f_input_popis'] = $this->action_form->text('popis','Popis objektu', $data['popis']);
+
         $form_data['f_input_nod_find'] = $this->action_form->text('nod_find','Přípojný bod - filtr');
-        $form_data['f_input_nod_find_button'] = $this->action_form->button('g1', '', 'Hledat (nody)', '', 'class="btn btn-secondary form-inline"');
+
+        $form_data['f_input_nod_find_button'] = $this->action_form->input_button(
+                                                                        'g1',
+                                                                        '',
+                                                                        'Hledat (nody)',
+                                                                        '',
+                                                                        'class="btn btn-secondary form-inline" '
+                                                                        . 'onClick="self.document.forms[0].submit()"');
 
         $form_data['f_input_ip'] = $this->action_form->text('ip','IP adresa');
-        $form_data['f_input_id_nodu'] = $this->action_form->text('id_nodu','');
+        $form_data['f_input_id_nodu'] = $this->action_form->select('id_nodu','', '','','','','', $node_list);
 
         $form_data['f_input_mac'] = $this->action_form->text('mac','mac adresa');
-        $form_data['f_input_gen_button'] = $this->action_form->button('g2', '', 'Generovat údaje', '', 'class="btn btn-secondary"');
+        $form_data['f_input_gen_button'] = $this->action_form->input_button(
+                                                                'g2',
+                                                                '',
+                                                                'Generovat údaje',
+                                                                '',
+                                                                'class="btn btn-secondary" '
+                                                               . 'onClick="self.document.forms[0].submit()"');
 
         $form_data['f_input_puk'] = $this->action_form->text('puk','puk');
         $form_data['f_input_pin1'] = $this->action_form->text('pin1','pin1');
