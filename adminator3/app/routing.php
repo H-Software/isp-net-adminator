@@ -13,14 +13,17 @@ $app->group('', function () {
 
 
 $app->group('', function () {
-    $this->get('/', HomeController::class . ':home')->setName('home');
+    // $this->get('/', function ($req, $res, $args) {
+    //     return $res->withStatus(302)->withHeader('Location', '/home');
+    // });
+    // $this->get('/', HomeController::class . ':index')->setName('home');
 	$this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
 	$this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
 	$this->post('/auth/password/change', 'PasswordController:postChangePassword');
 })->add(new AuthMiddleware($container));
 
 $app->group('', function () {
-    $this->map(['GET', 'POST'],'/home', HomeController::class . ':home');
+    $this->map(['GET', 'POST'],'/home', HomeController::class . ':home')->setName('home');;
 
     $this->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
     $this->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
