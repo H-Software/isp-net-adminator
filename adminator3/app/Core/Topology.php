@@ -11,7 +11,7 @@ class Topology {
     
     public function __construct($conn_mysql, $smarty, $logger)
     {
-		$this->conn_mysql = $conn_mysql;
+	    $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
         
@@ -49,6 +49,6 @@ class Topology {
             }
 
             return $nodes;
-         }
+        }
     }
 }
