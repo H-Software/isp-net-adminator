@@ -817,10 +817,10 @@ function zjisti_fa_text_a_castku($fakturacni_skupina_id,$platit)
 function gen_router_vypis_router($id)
 {
     
-    global $mac;
+    global $mac, $conn_mysql;
     
-    $dotaz_router=mysql_query("SELECT * FROM router_list WHERE id = $id order by id");
-    $dotaz_router_radku=mysql_num_rows($dotaz_router);
+    $dotaz_router=$conn_mysql->query("SELECT * FROM router_list WHERE id = $id order by id");
+    $dotaz_router_radku=$dotaz_router->num_rows;
 
     if ($dotaz_router_radku <> 1 )
     {
@@ -830,7 +830,7 @@ function gen_router_vypis_router($id)
     }
     else
     {
-     while($data=mysql_fetch_array($dotaz_router))
+     while($data=$dotaz_router->fetch_array())
      {
 	$parent_router=$data["parent_router"];
 	
@@ -850,7 +850,7 @@ function gen_router_vypis_router($id)
 	}
 	else
 	{
-	    vypis_router($parent_router);
+	    gen_router_vypis_router($parent_router);
 	}
 
     } // konec while

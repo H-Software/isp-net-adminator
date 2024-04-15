@@ -126,7 +126,7 @@ echo "<span style=\"font-size: ; font-weight: bold; padding-left: 50px; \" >
 echo "</div>";
 
 echo "<form method=\"POST\" action=\"".$_SERVER["PHP_SELF"]."\">
-     <table border=\"1\" >
+     <table border=\"0\" >
 	<tr>
 	  <td><div style=\"font-weight: bold; \">Filtrování: </div></td>
 	  <td><div style=\"padding-left: 25px; padding-right: 25px\">Typ klienta: </div></td>
