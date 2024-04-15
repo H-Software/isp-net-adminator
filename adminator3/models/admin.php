@@ -52,6 +52,12 @@ class admin {
 
 		$output  = "";
 		
+		if($_POST['search'])
+		{
+			$search_string = $this->conn_mysql->real_escape_string($_POST['search']);
+			$this->logger->addInfo("admin\LevelList search string: " . var_export($search_string, true));
+		}
+
 		list($q_num_rows, $q_data) = $this->levelListDbQuery();
 
 		// $this->logger->addInfo("admin\LevelList dump q_data: " . var_export($q_data, true));
@@ -65,30 +71,37 @@ class admin {
 			$output .= '<table
 							id="level-list"
 							class="table table-striped fs-6"
-							>';
-							// data-toggle="table" 
-							// data-pagination="true"
-							// data-side-pagination="client"
-							// data-server-sort="false"			
+							data-toggle="table"
+							data-pagination="true"
+							data-side-pagination="client"
+							data-search="true"
+							';
+
+							// 
+							// 
+							// data-server-sort="false"
+							
+			$output .= '>';
+
 			$output .= "\n
 			<thead>
-			<tr>
-			<th width=\"5%\" scope=\"col\" class=\"table-primary\">id</th>
-			<th width=\"30%\" scope=\"col\" class=\"table-primary\"><b>Popis</b></th>
-													
-			<th width=\"20%\" scope=\"col\" class=\"table-primary\"><b>Level </b></th>
-						
-			<th width=\"10%\" scope=\"col\" class=\"table-primary\"><b>Úprava</b></th>
-			<th width=\"10%\" scope=\"col\" class=\"table-primary\"><b>Smazání</b></th>
-			</tr>
+				<tr class=\"table-light\">
+					<th width=\"5%\" scope=\"col\" data-field=\"id\" data-sortable=\"true\">id</th>
+					<th width=\"30%\" scope=\"col\" data-field=\"name\">Popis</th>
+															
+					<th width=\"20%\" scope=\"col\" data-field=\leve\">Level</th>
+								
+					<th width=\"10%\" scope=\"col\">Úprava</th>
+					<th width=\"10%\" scope=\"col\">Smazání</th>
+				</tr>
 			</thead>
-			<tbody>
+			<tbody id=\"hidden\"> <!-- hidden is used because of jquery duplicates this element -->
 			\n";
 			
 			foreach ($q_data as $d){
 				$output .= "<tr>"
-							. "<td>".$d["id"]."</td>\n"
-							. "<td>".$d["popis"]."</td>\n"
+							. "<td scope=\"row\">".$d["id"]."</td>\n"
+							. "<td >".$d["popis"]."</td>\n"
 							. "<td>".$d["level"]."</td>\n"
 							. '<td>
 								<form method="POST" action="/admin/level-action" >
