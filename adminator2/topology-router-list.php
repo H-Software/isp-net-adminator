@@ -441,7 +441,7 @@ require ("include/charset.php");
 		//prvky pro listovaci odkazy
 		$paging_url = "?".$get_odkazy;
 		    
-		$paging = new paging_global($paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $sql_final);
+		$paging = new paging_global($conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $sql_final);
 		     
 		$bude_chybet = ( (($list == "")||($list == "1")) ? 0 : ((($list-1) * $paging->interval)) );
 		      
