@@ -1,21 +1,23 @@
 
- <div class="intro-logged-users" >přihlášení uživatelé:  {$pocet_prihl_uziv} </div>
+ {* <div class="intro-logged-users" >přihlášení uživatelé:  {$pocet_prihl_uziv} </div> *}
 
     <div style="padding-bottom: 5px; padding-top: 2px; " >
       <a href="/auth/signout" target="_top" class="cat" style="margin-right: 10px;">Odhlásit se</a>
-      <a href="/auth/password/change" target="_top" class="cat" >Změna hesla</a>
     </div>
-    
-    <input type="button" class="buttonalllogin" name="OK2" value="Zobrazit všechny přihlášené" onclick="showWindow2()" >
+    <div style="padding-bottom: 5px; padding-top: 2px; " >
+        <a href="/auth/password/change" target="_top" class="cat" >Změna hesla</a>
+    </div>
+
+    {* <input type="button" class="buttonalllogin" name="OK2" value="Zobrazit všechny přihlášené" onclick="showWindow2()" >
 
      <script type="text/javascript" src="/include/js/main.js?2"></script>
      <script type="text/javascript" src="/include/js/classmaker.js?2"></script>
 
      <script type="text/javascript" src="/include/js/dom.js?2"></script>
-     <script type="text/javascript" src="/include/js/window.js?2"></script>
+     <script type="text/javascript" src="/include/js/window.js?2"></script> *}
 
      {literal}
-     <script type="text/javascript" >
+     <!-- <script type="text/javascript" >
 
         var windowShow2 = false;
         var w2 = null;
@@ -28,11 +30,11 @@
                 //vytvoreni okna
                 var params = {imagePath: "/include/js/window/img/shadow-", sizes: [4,4,4,4]};
                 w2 = new SZN.Window(params);
-                //nastaveni obsahu
+                //nastaveni obsahu -->
      {/literal}
-                var txt = SZN.cTxt("{$windowtext2}");
+                {* var txt = SZN.cTxt("{$windowtext2}"); *}
      {literal}
-                var button = SZN.cEl('input','closeButton');
+                <!-- var button = SZN.cEl('input','closeButton');
                 button.type="button";
                 button.value="OK";
                 button.onclick=showWindow2;
@@ -44,16 +46,16 @@
 
             w2.container.style.position = 'absolute';
             w2.content.style.border = "1px solid #000000";
-            w2.content.style.backgroundColor = "#bababa";
+            w2.content.style.backgroundColor = "#bababa"; -->
      {/literal}
-            w2.content.style.padding = "{$windowpadding2}px";
+            {* w2.content.style.padding = "{$windowpadding2}px";
             w2.content.style.width = "{$windowdelka2}px";
 
             var pos1 = SZN.Dom.getBoxPosition(SZN.gEl('windowPlaceholder2'));
             w2.container.style.top = '{$windowtop2}';
-            w2.container.style.left = '{$windowleft2}';
+            w2.container.style.left = '{$windowleft2}'; *}
      {literal}
-            SZN.gEl('windowPlaceholder2').appendChild(w2.container);
+            <!-- SZN.gEl('windowPlaceholder2').appendChild(w2.container);
 
             if (windowShow2) {
                 windowShow2 = false;
@@ -63,8 +65,7 @@
                 w2.show();
             }
         }
-
-     </script>
+     </script> -->
     {/literal}
 
     <div id="windowPlaceholder2" ></div>
