@@ -209,6 +209,8 @@ require ("include/charset.php");
     }
     
     $vysledek = $conn_mysql->query($sql." LIMIT ".$bude_chybet.",".$listovani->interval." ");
+	echo "SQL DUMP: ".$sql." LIMIT ".$bude_chybet.",".$listovani->interval." ";
+	
     //$vysledek = mysql_query($sql);
 			     
     echo "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
