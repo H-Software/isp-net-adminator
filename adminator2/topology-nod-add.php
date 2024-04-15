@@ -259,10 +259,10 @@ else
 		       
     echo "<select name=\"filter_router_id\" size=\"1\" >\n";
 				 
-    $dotaz_parent = mysql_query("SELECT id,nazev,ip_adresa FROM router_list ORDER BY nazev");
+    $dotaz_parent = $conn_mysql->query("SELECT id,nazev,ip_adresa FROM router_list ORDER BY nazev");
     echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
 						     
-    while( $data_parent = mysql_fetch_array($dotaz_parent) )
+    while( $data_parent = $dotaz_parent->fetch_array() )
     {
 	echo "\t\t\t<option value=\"".intval($data_parent["id"])."\" ";
 	
