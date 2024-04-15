@@ -26,20 +26,18 @@ class adminatorController extends Controller {
     public function jsonRender(ServerRequestInterface $request, ResponseInterface $response, $data, $status = 200, $msg = '') {
         
         // $this->logger->addInfo("JsonViewer\\render called");
-        // $this->logger->addInfo("JsonViewer\\render response dump: " . var_export($this->response, true));
+        // $this->logger->addInfo("JsonViewer\\render response dump: " . var_export($data, true));
 
         $status = intval($status);
-        $_response = ['code' => 200, 'data' => null, 'msg' => ''];
-        $_response['code'] = $status;
-        if(200 == $status){
+        $_response = ['code' => $status, 'data' => null, 'msg' => ''];
+        if(200 == $status or 418 == $status){
             $_response['data'] = $data;
         }else{
             $_response['msg'] = $msg;
         }
 
-        $newResponse = $response->withJson($_response);
-
-        $this->logger->addInfo("JsonViewer\\render response dump: " . var_export($newResponse, true));
+        $newResponse = $response->withJson($_response, $status, JSON_PRETTY_PRINT);
+        // $this->logger->addInfo("JsonViewer\\render response dump: " . var_export($newResponse, true));
 
         return $newResponse;
     }

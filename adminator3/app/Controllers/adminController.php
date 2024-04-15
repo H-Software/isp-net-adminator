@@ -66,6 +66,8 @@ class adminController extends adminatorController {
 
         $this->logger->addInfo("adminController\adminLevelList called");
         
+        $admin = new \admin($this->conn_mysql, $this->logger);
+
         $this->checkLevel(21);
 
         $this->smarty->assign("bs_layout_main_col_count", "8");
@@ -84,7 +86,7 @@ class adminController extends adminatorController {
         $this->logger->addInfo("adminController\adminLevelList: csrf generated: ".var_export($csrf_name, true));
 
         // render
-        $this->smarty->assign("body",\admin::levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value));
+        $this->smarty->assign("body",$admin->levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value));
 
         $this->smarty->display('admin/level-list.tpl');
 
@@ -93,10 +95,18 @@ class adminController extends adminatorController {
 
     function adminLevelListJson(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
+        $this->logger->addInfo("adminController\adminLevelListJson called");
         
-        $data = ['username' => 'leego.sir',  'age' => 18];
-        $ret = $this->Jsonrender($request, $response, $data);
-        return $ret;
+        $this->checkLevel(21);
+
+        $admin = new \admin($this->conn_mysql, $this->logger);
+
+        list ($data, $status, $msg) = $admin->levelListJson();
+
+        // $this->logger->addInfo("adminController\adminLevelListJson response: ". var_export(array($data, $status, $msg), true));
+
+        $newResponse = $this->Jsonrender($request, $response, $data, $status, $msg);
+        return $newResponse;
     }
 
     public function adminLevelAction(ServerRequestInterface $request, ResponseInterface $response, array $args)

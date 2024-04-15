@@ -3,26 +3,64 @@
 class admin {
 	var $conn_mysql;
 
-	function __construct($conn_mysql) {
+	function __construct($conn_mysql, $logger) {
 		$this->conn_mysql = $conn_mysql;
+		$this->logger = $logger;
+	}
+
+	function levelListDbQuery()
+	{
+		try {
+			$rs= $this->conn_mysql->query("select * from leveling where id > 100 order by level asc");
+		} catch (Exception $e) {
+		}
+	
+		$num_rows = $rs->num_rows;
+
+		if ($num_rows > 0)
+		{
+			$data = $rs->fetch_all(MYSQLI_ASSOC);
+		}
+
+		return array($num_rows, $data);
+	}
+
+	function levelListJson()
+	{
+		$r_data = array();
+		$r_status = 418;
+		$r_msg = "";
+
+        // $r_data = ['username' => 'leego.sir',  'age' => 18];
+
+		list($q_num_rows, $q_data) = $this->levelListDbQuery();
+		// $this->logger->addInfo("admin\LevelList dump q_data: " . var_export($q_data, true));
+
+		if ($q_num_rows==0)
+		{
+			$r_data = array(0 => "Zadné levely v databazi");
+		}
+		else
+		{
+			$r_data = $q_data;
+		}
+
+		return array($r_data, $r_status, $r_msg);
 	}
 
 	function levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value){
 
 		$output  = "";
-
-		try {
-			$vysledek = $this->conn_mysql->query("select * from leveling order by level asc");
-		} catch (Exception $e) {
-		}
-	
-		$radku=$vysledek->num_rows;
 		
-		if ($radku==0) $output .= "<div style=\"padding-top: 5px; padding-bottom: 5px;\">Zadné levely v databazi</div>";
+		list($q_num_rows, $q_data) = $this->levelListDbQuery();
+
+		// $this->logger->addInfo("admin\LevelList dump q_data: " . var_export($q_data, true));
+
+		$output .= '<div style="padding-top: 5px; padding-bottom: 5px;">Výpis levelů stránek</div>';
+
+		if ($q_num_rows==0) $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Zadné levely v databazi</div>";
 		else
-		{
-			$output .= '<div style="padding-top: 5px; padding-bottom: 5px;">Výpis levelů stránek</div>';
-						
+		{						
 			// $output .= '<table class="table table-striped fs-6">';
 			$output .= '<table
 							id="level-list"
@@ -46,27 +84,24 @@ class admin {
 			</thead>
 			<tbody>
 			\n";
-										
-			while ($zaznam=$vysledek->fetch_array()):
-				$id=$zaznam["id"];
-				
+			
+			foreach ($q_data as $d){
 				$output .= "<tr>"
-							. "<td>".$zaznam["id"]."</td>\n"
-							. "<td>".$zaznam["popis"]."</td>\n"
-							. "<td>".$zaznam["level"]."</td>\n"
+							. "<td>".$d["id"]."</td>\n"
+							. "<td>".$d["popis"]."</td>\n"
+							. "<td>".$d["level"]."</td>\n"
 							. '<td>
 								<form method="POST" action="/admin/level-action" >
 									<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">
 									<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">
-									<input type="hidden" name="update_id" value="'.$id.'">
+									<input type="hidden" name="update_id" value="'.$d['id'].'">
 									<input type="submit" value="update">
 								</form>'
 							 . '</td>'
 							. "</tr>";
-		
-			  endwhile;
+			}
 
-			  $output .= "<tbody></table>";
+			$output .= "<tbody></table>";
 		}
 		return $output;
 	}
