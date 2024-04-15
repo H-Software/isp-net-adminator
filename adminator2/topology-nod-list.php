@@ -503,7 +503,7 @@ require ("include/charset.php");
 	echo "<tr>";
 	    
 	    echo "<td class=\"tab-topology\" colspan=\"".$colspan_filtrace."\" >
-		<a href=\" " .fix_link_to_another_adminator("/archiv-zmen?id_nodu=".intval($id) . "\" style=\"font-size: 12px; \">H: ".$id."</a>".
+		<a href=\" " . fix_link_to_another_adminator("/archiv-zmen?id_nodu=".intval($id)) . "\" style=\"font-size: 12px; \">H: ".$id."</a>".
 		"</td>\n";
 	    	    
 	    echo "<td class=\"tab-topology\" colspan=\"3\">
