@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\archivZmen;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -38,7 +39,55 @@ class archivZmenController extends adminatorController {
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
-        $this->smarty->display('archiv-zmen-cat.tpl');
+        $this->smarty->display('archiv-zmen/archiv-zmen-cat.tpl');
+
+        return $response;
+    }
+
+    public function archivZmenWork(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("archivZmenController\archivZmenWork called");
+        
+        $this->checkLevel(30);
+
+        $this->smarty->assign("bs_layout_main_col_count", "8");
+
+        $this->smarty->assign("page_title","Adminator3 :: Změny :: Archiv změn Work");
+
+        $this->header($request, $response);
+
+        $az = new \App\Core\ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
+
+        $body = $az->archivZmenWork();
+
+        $this->smarty->assign("body",$body);
+
+        $this->smarty->display('archiv-zmen/work.tpl');
+
+        return $response;
+    }
+
+    public function archivZmenList(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("archivZmenController\archivZmenList called");
+        
+        $this->checkLevel(30);
+
+        $this->smarty->assign("bs_layout_main_col_count", "10");
+
+        $this->smarty->assign("page_title","Adminator3 :: Změny :: Archiv změn");
+
+        $this->header($request, $response);
+
+        $az = new \App\Core\ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
+
+        $body = $az->archivZmenList();
+
+        $this->smarty->assign("body",$body);
+
+        $this->smarty->display('archiv-zmen/list.tpl');
 
         return $response;
     }

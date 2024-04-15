@@ -1,6 +1,6 @@
 {include file="base.tpl"}
 
-{include file="inc.cat.archiv-zmen.tpl"}
+{include file="archiv-zmen/inc.cat.archiv-zmen.tpl"}
 
 <div class="others-cat-body" >{$body}</div>
 
