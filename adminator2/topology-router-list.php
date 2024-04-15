@@ -402,14 +402,14 @@ require ("include/charset.php");
 	   
 	    $sql_final = $sql_base." ".$sql_where2." ORDER BY id";
 	    
-	    $dotaz_routery=mysql_query($sql_final);
-	    $dotaz_routery_radku=mysql_num_rows($dotaz_routery);
+	    $dotaz_routery=$sql_final->query();
+	    $dotaz_routery_radku=$dotaz_routery->num_rows;
 	  
 	    if(!$dotaz_routery){
 		
 		echo "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
 		echo "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
-		echo "<div style=\"\" >".mysql_error()."</div>";
+		// echo "<div style=\"\" >".mysql_error()."</div>";
 		
 		
 	    }
