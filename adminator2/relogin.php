@@ -10,8 +10,6 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
 require ("include/charset.php"); 
 
-require ("include/config.php"); 
-
 $login=$_POST["login"];
 $password=$_POST["password"];
 $lo=$_GET["lo"];
@@ -32,9 +30,9 @@ Else:
 //hadry okolo session
 $SN = "autorizace"; 
 Session_name("$SN"); 
-session_register("db_login_md5");
-session_register("db_level");
-session_register("db_nick");
+// session_register("db_login_md5");
+// session_register("db_level");
+// session_register("db_nick");
 
 $time = Date("U"); 
 $at = Date("U") - 1800; 
