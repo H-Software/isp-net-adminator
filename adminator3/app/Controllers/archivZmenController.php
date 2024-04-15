@@ -68,6 +68,30 @@ class archivZmenController extends adminatorController {
         return $response;
     }
 
+    public function archivZmenList(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("archivZmenController\archivZmenList called");
+        
+        $this->checkLevel(30);
+
+        $this->smarty->assign("bs_layout_main_col_count", "8");
+
+        $this->smarty->assign("page_title","Adminator3 :: Změny :: Archiv změn");
+
+        $this->header($request, $response);
+
+        $az = new \App\Core\ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
+
+        $body = $az->archivZmenList();
+
+        $this->smarty->assign("body",$body);
+
+        $this->smarty->display('archiv-zmen/list.tpl');
+
+        return $response;
+    }
+
     public function archivZmenUcetni(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
