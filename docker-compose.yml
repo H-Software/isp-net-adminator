@@ -36,10 +36,7 @@ services:
       - adminator-php-log:/var/log/php:uid=33,gid=33
     tmpfs:
       # apache logs
-      - /var/log/apache2/adminator2-error.log:uid=33,gid=33
-      - /var/log/apache2/adminator2-access.log:uid=33,gid=33
-      - /var/log/apache2/adminator3-error.log:uid=33,gid=33
-      - /var/log/apache2/adminator3-access.log:uid=33,gid=33
+      - /var/log/apache2/adminator:uid=33,gid=33
       # for smarty
       - /var/www/html/adminator2/templates_c:uid=33,gid=33
       - /var/www/html/adminator3/templates_c:uid=33,gid=33
