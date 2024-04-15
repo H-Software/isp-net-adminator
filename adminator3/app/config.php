@@ -9,7 +9,6 @@ $loader->addDirectory(__DIR__ . '/../models');
 // $loader->addDirectory(__DIR__ . '/../controllers');
 $loader->addDirectory(__DIR__ . '/../app/Middleware');
 $loader->addDirectory(__DIR__ . '/../app/Auth');
-$loader->addDirectory(__DIR__ . '/../app/Api');
 $loader->addDirectory(__DIR__ . '/../app/Core');
 $loader->addDirectory(__DIR__ . '/../app/Controllers');
 $loader->addDirectory(__DIR__ . '/../app/Models');
