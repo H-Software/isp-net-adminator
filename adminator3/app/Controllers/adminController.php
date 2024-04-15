@@ -91,6 +91,14 @@ class adminController extends adminatorController {
         return $response;
     }
 
+    function adminLevelListJson(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        
+        $data = ['username' => 'leego.sir',  'age' => 18];
+        $ret = $this->Jsonrender($request, $response, $data);
+        return $ret;
+    }
+
     public function adminLevelAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->addInfo("adminController\adminLevelAction called");
