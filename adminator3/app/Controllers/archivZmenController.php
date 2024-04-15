@@ -108,7 +108,7 @@ class archivZmenController extends adminatorController {
 
         $this->smarty->assign("link_add","/archiv-zmen/ucetni?action=add");
 
-        $zmena = new \zmeny_ucetni($this->conn_mysql);
+        $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger);
 
         if( $action == "add")
         { //rezim pridani
@@ -184,7 +184,7 @@ class archivZmenController extends adminatorController {
 
                 $this->smarty->assign("action","?action=add");
                 $this->smarty->assign("csrf_html", $csrf[0]);
-                
+
                 $this->smarty->assign("error",$zmena->error);
                 $this->smarty->assign("info",$zmena->info);
 

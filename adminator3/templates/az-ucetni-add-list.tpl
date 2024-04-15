@@ -7,8 +7,8 @@
 
     {$db_result}
     
-    se to teda ulozilo asi ...
-    vypis hodnot ..
+    {* se to teda ulozilo asi ...
+    vypis hodnot .. *}
         
 </div>
 
