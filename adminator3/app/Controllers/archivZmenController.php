@@ -75,7 +75,7 @@ class archivZmenController extends adminatorController {
         
         $this->checkLevel(30);
 
-        $this->smarty->assign("bs_layout_main_col_count", "8");
+        $this->smarty->assign("bs_layout_main_col_count", "10");
 
         $this->smarty->assign("page_title","Adminator3 :: Změny :: Archiv změn");
 

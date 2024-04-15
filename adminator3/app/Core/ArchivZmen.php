@@ -47,50 +47,52 @@ class ArchivZmen {
 
         $id_objektu = $id;
     
-        echo "<div style=\"padding-left: 5px; padding-top: 10px; \">\n";
+        $output .= "<div style=\"padding-left: 5px; padding-top: 10px; \">\n";
         
-        echo "<div style=\" padding-bottom: 10px; padding-right: 40px; font-size: 18px; font-weight: bold; float: left; \" >\n";
-        echo " Archiv změn</div>\n";
+        $output .= "<div style=\" padding-bottom: 10px; padding-right: 40px; font-size: 18px; font-weight: bold; float: left; \" >\n";
+        $output .= " Archiv změn</div>\n";
     
-        echo "<div style=\" \" ><form method=\"GET\" action=\"\" >\n";
+        $output .= "<div style=\" \" ><form method=\"GET\" action=\"\" >\n";
         
-        echo "<span style=\"margin-right: 20px; \" ><label>Vyberte počet záznamů: </label></span>
+        $output .= "<span style=\"margin-right: 20px; \" >
+                        <label>Vyberte počet záznamů: </label>
+                    </span>
         
-        <select name=\"pocet\" size=\"1\" >
-            <option value=\"50\" "; if ($pocet == "50" or !isset($pocet) ){ echo " selected "; } echo " >50</option>
-            <option value=\"100\" "; if( $pocet == "100" ){ echo " selected "; } echo " >100</option>
-            <option value=\"150\""; if( $pocet == "150" ){ echo " selected "; } echo " >150</option>
-            
-            <option value=\"1000\""; if( $pocet == "500" ){ echo " selected "; } echo " >500</option>
-            
-        </select>\n";
+                    <select name=\"pocet\" size=\"1\" >
+                        <option value=\"50\" "; if ($pocet == "50" or !isset($pocet) ){ $output .= " selected "; } $output .= " >50</option>
+                        <option value=\"100\" "; if( $pocet == "100" ){ $output .= " selected "; } $output .= " >100</option>
+                        <option value=\"150\""; if( $pocet == "150" ){ $output .= " selected "; } $output .= " >150</option>
+                        
+                        <option value=\"1000\""; if( $pocet == "500" ){ $output .= " selected "; } $output .= " >500</option>
+                        
+                    </select>\n";
         
         if( !isset($id_nodu) and !isset($id) and !isset($id_stb) and !isset($id_cloveka) and !isset($id_routeru) )
         {
         
-        echo "<span style=\"margin-right: 20px; margin-left: 20px; \">Typ záznamů:</span>\n";
+        $output .= "<span style=\"margin-right: 20px; margin-left: 20px; \">Typ záznamů:</span>\n";
 
-        echo "<select name=\"typ\" size=\"1\" >
-            <option value=\"0\" "; if ($typ == "0" or !isset($typ) ){ echo " selected "; } echo " >Vše</option>
+        $output .= "<select name=\"typ\" size=\"1\" style=\"max-width: 300px;\">
+            <option value=\"0\" "; if ($typ == "0" or !isset($typ) ){ $output .= " selected "; } $output .= " >Vše</option>
         
             <optgroup label=\"objekty\" >
         
-            <option value=\"1\" "; if( $typ == "1" ){ echo " selected "; } echo " >akce: úprava objektu</option>
-            <option value=\"2\""; if( $typ == "2" ){ echo " selected "; } echo " >akce: přidání objektu</option>
-            <option value=\"3\""; if( $typ == "3" ){ echo " selected "; } echo " >akce: smazáni objektu</option>
+            <option value=\"1\" "; if( $typ == "1" ){ $output .= " selected "; } $output .= " >akce: úprava objektu</option>
+            <option value=\"2\""; if( $typ == "2" ){ $output .= " selected "; } $output .= " >akce: přidání objektu</option>
+            <option value=\"3\""; if( $typ == "3" ){ $output .= " selected "; } $output .= " >akce: smazáni objektu</option>
         
-            <option value=\"4\""; if( $typ == "4" ){ echo " selected "; } echo " >akce: úprava stb objektu</option>
-            <option value=\"5\""; if( $typ == "5" ){ echo " selected "; } echo " >akce: přidání stb objektu</option>
-            <option value=\"6\""; if( $typ == "6" ){ echo " selected "; } echo " >akce: smazaní stb objektu</option>
+            <option value=\"4\""; if( $typ == "4" ){ $output .= " selected "; } $output .= " >akce: úprava stb objektu</option>
+            <option value=\"5\""; if( $typ == "5" ){ $output .= " selected "; } $output .= " >akce: přidání stb objektu</option>
+            <option value=\"6\""; if( $typ == "6" ){ $output .= " selected "; } $output .= " >akce: smazaní stb objektu</option>
             
             <optgroup label=\"vlastníci\" >
         
-            <option value=\"7\""; if( $typ == "7" ){ echo " selected "; } echo " >akce: úprava vlastníka</option>
-            <option value=\"8\""; if( $typ == "8" ){ echo " selected "; } echo " >akce: přidáni vlastníka</option>
+            <option value=\"7\""; if( $typ == "7" ){ $output .= " selected "; } $output .= " >akce: úprava vlastníka</option>
+            <option value=\"8\""; if( $typ == "8" ){ $output .= " selected "; } $output .= " >akce: přidáni vlastníka</option>
         
-            <option value=\"9\""; if( $typ == "9" ){ echo " selected "; } echo " >akce: přidáni fakturační adresy</option>
-            <option value=\"10\""; if( $typ == "10" ){ echo " selected "; } echo " >akce: úprava fakturační adresy</option>
-            <option value=\"11\""; if( $typ == "11" ){ echo " selected "; } echo " >akce: smazání fakturační adresy</option>
+            <option value=\"9\""; if( $typ == "9" ){ $output .= " selected "; } $output .= " >akce: přidáni fakturační adresy</option>
+            <option value=\"10\""; if( $typ == "10" ){ $output .= " selected "; } $output .= " >akce: úprava fakturační adresy</option>
+            <option value=\"11\""; if( $typ == "11" ){ $output .= " selected "; } $output .= " >akce: smazání fakturační adresy</option>
         
         <!-- akce: poslani emailu z duvodu neplaceni -->
         
@@ -98,39 +100,39 @@ class ArchivZmen {
         
             <optgroup label=\"obojí (objekty i vlastníci)\" >
         
-            <option value=\"12\""; if( $typ == "12" ){ echo " selected "; } echo " >akce: přiřazení objektu k vlastníkovi</option>
-            <option value=\"13\""; if( $typ == "13" ){ echo " selected "; } echo " >akce: prirazeni objektu typu STB k vlastnikovi</option>
+            <option value=\"12\""; if( $typ == "12" ){ $output .= " selected "; } $output .= " >akce: přiřazení objektu k vlastníkovi</option>
+            <option value=\"13\""; if( $typ == "13" ){ $output .= " selected "; } $output .= " >akce: prirazeni objektu typu STB k vlastnikovi</option>
 
-            <option value=\"14\""; if( $typ == "14" ){ echo " selected "; } echo " >akce: odrazeni objektu (od vlastníka)</option>
-            <option value=\"15\""; if( $typ == "15" ){ echo " selected "; } echo " >akce: odparovani stb objektu (od vlastníka)</option>
+            <option value=\"14\""; if( $typ == "14" ){ $output .= " selected "; } $output .= " >akce: odrazeni objektu (od vlastníka)</option>
+            <option value=\"15\""; if( $typ == "15" ){ $output .= " selected "; } $output .= " >akce: odparovani stb objektu (od vlastníka)</option>
 
-            <option value=\"25\""; if( $typ == "25" ){ echo " selected "; } echo " >akce: zakazani netu z duvodu sikany</option>
+            <option value=\"25\""; if( $typ == "25" ){ $output .= " selected "; } $output .= " >akce: zakazani netu z duvodu sikany</option>
 
         <!-- akce: automaticke nastaveni sikany z duvodu neuhr. faktur -->
         
             <optgroup label=\"topologie - routery \" >
 
-            <option value=\"17\""; if( $typ == "17" ){ echo " selected "; } echo " >akce: přidání routeru</option>
-            <option value=\"18\""; if( $typ == "18" ){ echo " selected "; } echo " >akce: úprava routeru</option>
-            <option value=\"19\""; if( $typ == "19" ){ echo " selected "; } echo " >akce: smazání routeru</option>
+            <option value=\"17\""; if( $typ == "17" ){ $output .= " selected "; } $output .= " >akce: přidání routeru</option>
+            <option value=\"18\""; if( $typ == "18" ){ $output .= " selected "; } $output .= " >akce: úprava routeru</option>
+            <option value=\"19\""; if( $typ == "19" ){ $output .= " selected "; } $output .= " >akce: smazání routeru</option>
 
             <optgroup label=\"topologie - nody/lokality \" >
 
-            <option value=\"20\""; if( $typ == "20" ){ echo " selected "; } echo " >akce: přidání nodu</option>
-            <option value=\"21\""; if( $typ == "21" ){ echo " selected "; } echo " >akce: úprava nodu</option>
-            <option value=\"22\""; if( $typ == "22" ){ echo " selected "; } echo " >akce: smazání nodu</option>
+            <option value=\"20\""; if( $typ == "20" ){ $output .= " selected "; } $output .= " >akce: přidání nodu</option>
+            <option value=\"21\""; if( $typ == "21" ){ $output .= " selected "; } $output .= " >akce: úprava nodu</option>
+            <option value=\"22\""; if( $typ == "22" ){ $output .= " selected "; } $output .= " >akce: smazání nodu</option>
 
             <optgroup label=\"monitoring - grafy \" >
 
-            <option value=\"23\""; if( $typ == "23" ){ echo " selected "; } echo " >akce: přidání/změna grafu</option>
-            <option value=\"24\""; if( $typ == "24" ){ echo " selected "; } echo " >akce: smazání grafu</option>
+            <option value=\"23\""; if( $typ == "23" ){ $output .= " selected "; } $output .= " >akce: přidání/změna grafu</option>
+            <option value=\"24\""; if( $typ == "24" ){ $output .= " selected "; } $output .= " >akce: smazání grafu</option>
 
             <optgroup label=\"ostatní (prostě zbytek)\" >
 
-            <option value=\"16\""; if( $typ == "16" ){ echo " selected "; } echo " >akce: požadavek na restart</option>
+            <option value=\"16\""; if( $typ == "16" ){ $output .= " selected "; } $output .= " >akce: požadavek na restart</option>
                 
     <!--	    	
-            <option value=\"\""; if( $typ == "" ){ echo " selected "; } echo " >akce: pridani hotovostni platby</option>
+            <option value=\"\""; if( $typ == "" ){ $output .= " selected "; } $output .= " >akce: pridani hotovostni platby</option>
 
             akce: pridani opravy
             
@@ -141,15 +143,14 @@ class ArchivZmen {
         
         }
         
-        echo "<span style=\"margin-left: 10px; \"><input type=\"submit\" name=\"odeslano\" value=\"OK\" ></span>
-        
+        $output .= "<span style=\"margin-left: 10px; \"><input type=\"submit\" name=\"odeslano\" value=\"OK\" ></span>
         <span style=\"margin-left: 40px; \">";
-        echo '<a href="include\export-archiv-zmen.php">export dat zde</a>';
-        echo "</span>
+        $output .=  '<!--<a href="include\export-archiv-zmen.php">-->export dat<!--</a>-->';
+        $output .= "</span>
         
-        </form> \n\n";
+        </form></div>\n\n";
     
-        echo "</div>\n"; //konec hlavni divu
+        $output .= "</div>\n"; //konec hlavni divu
         
         $zaklad_sql = "select *,DATE_FORMAT(provedeno_kdy, '%d.%m.%Y %H:%i:%s') as provedeno_kdy2 from archiv_zmen ";
         
@@ -355,9 +356,8 @@ class ArchivZmen {
         }
         
         if (!$vysl) {
-            echo "<div style=\"color: red;\" >Chyba při provádění databázového dotazu </div>";
-            echo "\n</td>\n</tr>\n</table>\n</body>\n</html>\n";
-            exit;
+            $output .= "<div style=\"color: red;\" >Chyba při provádění databázového dotazu </div>";
+            return $output;
         }
         
         $radku = $vysl->num_rows;
@@ -365,10 +365,10 @@ class ArchivZmen {
         //ted zjistime jeslti je archiv 
         if( isset($id) )
         {
-            echo "<div style=\"padding-left: 5px; \">";
+            $output .= "<div style=\"padding-left: 5px; \">";
             
-            echo "<div style=\"padding-top: 10px; padding-bottom: 10px; font-weight: bold; font-size: 18px; \">";
-            echo "Historie objektu: </div>";
+            $output .= "<div style=\"padding-top: 10px; padding-bottom: 10px; font-weight: bold; font-size: 18px; \">";
+            $output .= "Historie objektu: </div>";
         
             $dotaz_objekty=pg_query("SELECT dns_jmeno, ip, mac FROM objekty WHERE id_komplu = '".intval($id_objektu)."' ");
         
@@ -376,9 +376,9 @@ class ArchivZmen {
             {
                 while( $data_objekty=pg_fetch_array($dotaz_objekty) )
                 {
-                    echo "<div >dns jméno: <span style=\"color: grey;\">".$data_objekty["dns_jmeno"]."</span></div>";
-                    echo "<div >ip adresa: <span style=\"color: grey;\">".$data_objekty["ip"]."</span></div>";
-                    echo "<div >mac adresa: <span style=\"color: grey;\">".$data_objekty["mac"]."</span></div>";
+                    $output .= "<div >dns jméno: <span style=\"color: grey;\">".$data_objekty["dns_jmeno"]."</span></div>";
+                    $output .= "<div >ip adresa: <span style=\"color: grey;\">".$data_objekty["ip"]."</span></div>";
+                    $output .= "<div >mac adresa: <span style=\"color: grey;\">".$data_objekty["mac"]."</span></div>";
                         
                     $id_vlastnika=$data_objekty["id_cloveka"];
                 }
@@ -389,44 +389,44 @@ class ArchivZmen {
                     $firma_vlastnik=$data_vlastnik["firma"];
                     $archiv_vlastnik=$data_vlastnik["archiv"];
 
-                    echo "<div style=\"padding-top: 5px; \" >Detail vlastníka: ";
+                    $output .= "<div style=\"padding-top: 5px; \" >Detail vlastníka: ";
         
                     if($archiv_vlastnik == 1)
-                    { echo "<a href=\"vlastnici-archiv.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
+                    { $output .= "<a href=\"vlastnici-archiv.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
                     else //if( $firma_vlastnik == 1 )
-                    { echo "<a href=\"vlastnici2.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
+                    { $output .= "<a href=\"vlastnici2.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
                     //else
-                    //{ echo "<a href=\"vlastnici.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
+                    //{ $output .= "<a href=\"vlastnici.php?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n"; }
 
-                    echo "</div>";
+                    $output .= "</div>";
                 }
 
                         
-                echo "<div style=\"padding-bottom: 20px; \"></div>";
+                $output .= "<div style=\"padding-bottom: 20px; \"></div>";
             } // konec if pg_num_rows
         
-            echo "</div>\n";
+            $output .= "</div>\n";
         }//konec if isset id
         
         if ( $radku==0 )
-        { echo "Žádné změny v archivu "; }
-        else  
+        { $output .= "Žádné změny v archivu "; }
+        else
         {
-            echo "<table width=\"100%\" border=\"0\" cellpadding=\"5\" class=\"az-main-table\" >\n";
+            $output .= "<table border=\"0\" cellpadding=\"5\" class=\"az-main-table table table-striped fs-6\" >\n";
             
-            echo "<tr >\n";    
-                echo "<td class=\"az-border2\" ><b>id:</b></td>\n";
-                echo "<td class=\"az-border2\" ><b>akce:</b></td>\n";
-                echo "<td class=\"az-border2\" ><b>Provedeno kdy:</b></td>\n";
-                echo "<td class=\"az-border2\" ><b>Provedeno kým:</b></td>\n";
-                echo "<td class=\"az-border2\" ><b>Provedeno úspěšně:</b></td>\n";
-            echo "</tr>\n";
+            $output .= "<tr class=\"table-light\">\n";    
+                $output .= "<td class=\"az-border2\" ><b>id</b></td>\n";
+                $output .= "<td class=\"az-border2\" ><b>akce</b></td>\n";
+                $output .= "<td class=\"az-border2\" ><b>Provedeno kdy</b></td>\n";
+                $output .= "<td class=\"az-border2\" ><b>Provedeno kým</b></td>\n";
+                $output .= "<td class=\"az-border2\" ><b>Provedeno úspěšně</b></td>\n";
+            $output .= "</tr>\n";
             
             while ($data = $vysl->fetch_array() ):
             
-                echo "<tr>\n";    
-                echo "<td class=\"az-border1\" >".$data["id"]."</td>\n";
-                echo "<td class=\"az-border1\" ><span class=\"az-text\" >\n";
+                $output .= "<tr>\n";    
+                $output .= "<td class=\"az-border1\" >".$data["id"]."</td>\n";
+                $output .= "<td class=\"az-border1\" ><span class=\"az-text\" >\n";
         
                 $id_cloveka_res = "";  
                 $akce = $data["akce"];
@@ -471,11 +471,11 @@ class ArchivZmen {
                     // if( !($id_stb > 0) )
                     //    $id_stb = trim($pom2[2]);
                     
-                    $id_stb_pom_rs = "<a href=\"objekty-stb.php?id_stb=".$id_stb."\" >".$id_stb."</a>";
+                    $id_stb_pom_rs = "<a class=\"fs-6\" href=\"/objekty/stb?id_stb=".$id_stb."\" >".$id_stb."</a>";
                     
                     $akce = ereg_replace(" ".$id_stb," ".$id_stb_pom_rs, $akce);    
                     
-                } 
+                }
         
                 if( ereg("prirazeni objektu k vlastnikovi", $akce) == true )
                 {
@@ -522,7 +522,7 @@ class ArchivZmen {
                 {
                     $pomocne = explode(" ", $akce);    
                 
-                    //echo "i".$pomocne[8]."/i";
+                    //$output .= "i".$pomocne[8]."/i";
                     
                     $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$pomocne[8];
                     $id_komplu_pomocne_rs .= "\" >".$pomocne[8]."</a>";
@@ -682,28 +682,28 @@ class ArchivZmen {
                     $akce = ereg_replace("href=\"topology-router-list.php\"", "href=\"topology-router-list.php?f_id_routeru=".intval($id_routeru_pomocne)."&odeslano=OK\"", $akce);
                 }
         
-                echo $akce."</span>\n</td>\n";
+                $output .=  $akce."</span>\n</td>\n";
             
-                echo "<td class=\"az-border1\"><span class=\"az-provedeno-kdy\" >";
-                if ( ( strlen($data["provedeno_kdy2"]) < 1 ) ){ echo "&nbsp;"; }
-                else{ echo $data["provedeno_kdy2"]; }
-                echo "</span></td>\n";
+                $output .= "<td class=\"az-border1\"><span class=\"az-provedeno-kdy\" >";
+                if ( ( strlen($data["provedeno_kdy2"]) < 1 ) ){ $output .= "&nbsp;"; }
+                else{ $output .=  $data["provedeno_kdy2"]; }
+                $output .= "</span></td>\n";
                 
-                echo "<td class=\"az-border1\"><span class=\"az-provedeno-kym\" >";
-                if ( ( strlen($data["provedeno_kym"]) < 1 ) ){ echo "&nbsp;"; }
-                else{ echo $data["provedeno_kym"]; }
-                echo "</span></td>\n";		   
+                $output .= "<td class=\"az-border1\"><span class=\"az-provedeno-kym\" >";
+                if ( ( strlen($data["provedeno_kym"]) < 1 ) ){ $output .= "&nbsp;"; }
+                else{ $output .=  $data["provedeno_kym"]; }
+                $output .= "</span></td>\n";		   
             
-                echo "<td class=\"az-border1\">";
-                if ( $data["vysledek"] == 1 ){ echo "<span class=\"az-vysl-ano\">Ano</span>"; }
-                else{ echo "<span class=\"az-vysl-ne\">Ne</span>"; }
-                echo "</td>\n";
+                $output .= "<td class=\"az-border1\">";
+                if ( $data["vysledek"] == 1 ){ $output .= "<span class=\"az-vysl-ano\">Ano</span>"; }
+                else{ $output .= "<span class=\"az-vysl-ne\">Ne</span>"; }
+                $output .= "</td>\n";
             
-                echo "</tr>\n\n";
+                $output .= "</tr>\n\n";
             
             endwhile;
             
-            echo "</table>\n";
+            $output .= "</table>\n";
         }
 
         return $output;
@@ -732,7 +732,11 @@ class ArchivZmen {
 
         $output .= "<span style=\"margin-left: 10px; \"><input type=\"submit\" name=\"odeslano\" value=\"OK\" ></span>
         
-                    <!-- <span style=\"margin-left: 40px; \"><a href=\"include\export-archiv-zmen.php\">export dat zde</a></span> -->
+                    <span style=\"margin-left: 40px; \">
+                        <!-- <a href=\"include\export-archiv-zmen.php\"> -->
+                        export dat
+                        <!--</a>-->
+                    </span>
                     
                     </form></div>";
     
@@ -760,7 +764,7 @@ class ArchivZmen {
 
         $radku = $vysl->num_rows;
         
-        // echo '<br><a href="include\export-archiv-zmen.php">export dat zde</a><br><br>';     
+        $output .=  '<br><!--<a href="include\export-archiv-zmen.php">-->export dat zde<!--</a>--><br><br>';     
         
         if ( $radku==0 )
         { $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"margin-top: 15px; margin-bottom: 15px;\">Žádné změny v archivu</div>"; }
@@ -771,7 +775,6 @@ class ArchivZmen {
             $output .= "<tr >";    
                 $output .= "<td class=\"az-border2\" ><b>id:</b></td>";
                 $output .= "<td class=\"az-border2\" ><b>akce:</b></td>";
-            // $output .= "<td><b>pozn:</b></td>";
                 $output .= "<td class=\"az-border2\" ><b>Provedeno kdy:</b></td>";
                 $output .= "<td class=\"az-border2\" ><b>Provedeno kým:</b></td>";
                 $output .= "<td class=\"az-border2\" ><b>Provedeno úspěšně:</b></td>";
@@ -790,12 +793,12 @@ class ArchivZmen {
             
                 $output .= "<td class=\"az-border1\" style=\"vertical-align: top;\"><span class=\"az-provedeno-kdy\" >";
                 if ( ( strlen($data["provedeno_kdy2"]) < 1 ) ){ $output .= "&nbsp;"; }
-                else{ echo $data["provedeno_kdy2"]; }
+                else{ $output .=  $data["provedeno_kdy2"]; }
                 $output .= "</span></td>";
                 
                 $output .= "<td class=\"az-border1\" style=\"vertical-align: top;\"><span class=\"az-provedeno-kym\" >";
                 if ( ( strlen($data["provedeno_kym"]) < 1 ) ){ $output .= "&nbsp;"; }
-                else{ echo $data["provedeno_kym"]; }
+                else{ $output .=  $data["provedeno_kym"]; }
                 $output .= "</span></td>";		   
             
                 $output .= "<td class=\"az-border1\" style=\"vertical-align: top;\">";
