@@ -434,11 +434,11 @@ require("include/charset.php");
     	 
 	    echo "<select name=\"parent_router\" size=\"1\" >";
 	    
-	    $dotaz_parent = mysql_query("SELECT * FROM router_list ORDER BY nazev");
+	    $dotaz_parent = $conn_mysql->query("SELECT * FROM router_list ORDER BY nazev");
 	    
 	    echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>";
 	    
-	    while( $data_parent=mysql_fetch_array($dotaz_parent))
+	    while( $data_parent=$dotaz_parent->fetch_array())
 	    {
 		echo "<option value=\"".$data_parent["id"]."\" ";
 		
@@ -491,11 +491,11 @@ require("include/charset.php");
 	
 	    echo "<select name=\"monitoring_cat\" size=\"1\" >";
 	    
-	    $dotaz_cat = mysql_query("SELECT * FROM kategorie WHERE sablona LIKE 4 order by id");
+	    $dotaz_cat = $conn_mysql->query("SELECT * FROM kategorie WHERE sablona LIKE 4 order by id");
 	
 		echo "<option value=\"0\" class=\"select-nevybrano\"> Není zvoleno </option>";
 		
-	    while( $data_cat=mysql_fetch_array($dotaz_cat))
+	    while( $data_cat=$dotaz_cat->fetch_array())
 	    {
 		echo "<option value=\"".$data_cat["id"]."\" ";
 		
@@ -544,9 +544,9 @@ require("include/charset.php");
         $sql_nod .= " OR ip_rozsah LIKE '%$nod_find%' OR adresa LIKE '%$nod_find%' ";
         $sql_nod .= " OR pozn LIKE '%$nod_find%' ) ORDER BY jmeno ASC ";
 
-       $vysledek=mysql_query($sql_nod);
+       $vysledek=$conn_mysql->query($sql_nod);
        //$vysledek=mysql_query("SELECT * from nod_list ORDER BY jmeno ASC" );
-       $radku=mysql_num_rows($vysledek);
+       $radku=$vysledek->num_rows;
 
        print '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
 
@@ -560,7 +560,7 @@ require("include/charset.php");
           if( (!isset($selected_nod)) ){ echo "selected"; }
          echo ' > Není vybráno</option>';
 
-          while ($zaznam2=mysql_fetch_array($vysledek) )
+          while ($zaznam2=$vysledek->fetch_array() )
           {
             echo '<option value="'.$zaznam2["id"].'"';
               if ( ( $selected_nod == $zaznam2["id"]) ){ echo " selected "; }
