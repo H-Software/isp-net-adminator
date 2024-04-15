@@ -559,14 +559,14 @@ require ("include/charset.php");
                     if( $data["monitoring"] == 1)
                     {
                         echo "<span style=\"font-weight: bold; \">";
-                        echo "<a href=\"https://monitoring.simelon.net/mon/www-generated/rb_all_".$data["ip_adresa"].".php\" target=\"_blank\" >Ano</a></span>";
+                        echo "<a href=\"https://monitoring.local.net/mon/www-generated/rb_all_".$data["ip_adresa"].".php\" target=\"_blank\" >Ano</a></span>";
                     }
                     elseif ( $data["monitoring"] == 0) { echo "Ne";}
                     else { echo "N/A"; }
 
                     echo "<span style=\"color: grey; \"> ( ";
                     if ( $data["monitoring_cat"] > 0 )
-                    { echo "<a href=\"https://monitoring.simelon.net/mon/www/rb_all.php\" target=\"_blank\" >"; }
+                    { echo "<a href=\"https://monitoring.local.net/mon/www/rb_all.php\" target=\"_blank\" >"; }
 
                     echo htmlspecialchars($data["kategorie_jmeno"]." / ".$data["monitoring_cat"]);
 
@@ -616,8 +616,8 @@ require ("include/charset.php");
 		
 		    $id_routeru = $data["id"];
 		
-		    $dotaz_top=mysql_query("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
-		    $dotaz_top_radku=mysql_num_rows($dotaz_top);
+		    $dotaz_top=$conn_mysql->query("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
+		    $dotaz_top_radku=$dotaz_top->num_rows;
 		
 	    	    if ( $dotaz_top_radku < 1)
 		    { echo "<span style=\"color: teal; font-size: 16px; font-weight: bold;\">
@@ -628,7 +628,7 @@ require ("include/charset.php");
 		    
 		    echo "<table border=\"0\" width=\"100%\" >";
 		    
-		    while($data_top=mysql_fetch_array($dotaz_top)):
+		    while($data_top=$dotaz_top->fetch_array()):
 		    
 		    echo "<tr>";
 		    

@@ -209,7 +209,6 @@ require ("include/charset.php");
     
     $vysledek = $conn_mysql->query($sql." LIMIT ".$bude_chybet.",".$listovani->interval." ");
 
-	// TODO: fix paging
 	echo "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
     
     $radku = $vysledek->num_rows;
@@ -618,8 +617,8 @@ require ("include/charset.php");
     echo "</table>";
 
     echo "<div style=\"padding-top: 20px; margin-bottom: 20px; \" >";
-	// TODO: fix paging
-    echo "<span style=\"margin-top: 5px; margin-bottom: 15px; \">".$listovani->listInterval();
+
+	echo "<span style=\"margin-top: 5px; margin-bottom: 15px; \">".$listovani->listInterval();
     
     echo "</div>";    //zobrazení stránkovače
     
