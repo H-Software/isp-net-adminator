@@ -450,8 +450,8 @@ require ("include/charset.php");
 		//uprava sql
 		$sql_final = $sql_final . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 	
-		$dotaz_routery=mysql_query($sql_final);
-		$dotaz_routery_radku=mysql_num_rows($dotaz_routery);
+		$dotaz_routery=$conn_mysql->query($sql_final);
+		$dotaz_routery_radku=$dotaz_routery->num_rows;
 	  	
 	  	//listovani
 	  	echo $paging->listInterval();
@@ -492,7 +492,7 @@ require ("include/charset.php");
                 echo "<tr>\n<td colspan=\"".$pocet_sloupcu."\" >&nbsp;\n</td>\n</tr>\n";
 
 
-		while( $data=mysql_fetch_array($dotaz_routery) ):
+		while( $data=$dotaz_routery->fetch_array() ):
 	    
                   $alarm=$data["alarm"];
 
