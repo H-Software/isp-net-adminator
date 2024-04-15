@@ -315,7 +315,7 @@ require ("include/charset.php");
 	    
 		if( $dotaz_router_radku_1 > 0 )
 		{
-	    	    require("./include/hierarchy.php");
+	    	    // require("./include/hierarchy.php");
 	         
 	    	    //prvni uroven
 	    	    while($data_router_1=$dotaz_router_1->fetch_array())
@@ -324,7 +324,7 @@ require ("include/charset.php");
 		
 	    		$id = $data_router_1["id"];	
 	       
-	    		vypis_router($id,"0");
+	    		hierarchy_vypis_router($id,"0");
 	              
 	    	    } // while dotaz_router
 		} // konec if dotaz_router_radku > 0
