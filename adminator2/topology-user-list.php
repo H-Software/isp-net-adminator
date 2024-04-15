@@ -82,9 +82,9 @@ require_once("include/charset.php");
 			    
 		    <option value=\"0\" class=\"top-neni-vybr\" > není vybráno </option>\n";
 			    
-	    	    $vysledek=mysql_query("select id, jmeno from nod_list ORDER BY jmeno ASC" );
+	    	    $vysledek=$conn_mysql->query("select id, jmeno from nod_list ORDER BY jmeno ASC" );
 		
-		    while($zaznam2 = mysql_fetch_array($vysledek) )
+		    while($zaznam2 = $vysledek->fetch_array() )
 		    {
 			$selected = ( $vysilac == $zaznam2["id"] ? " selected " : "");
 			
@@ -170,8 +170,8 @@ require_once("include/charset.php");
 	echo "\t<td>".$zaznam["dns_jmeno"]."</td>\n";
 	echo "\t<td>".$zaznam["ip"]."</td>\n";
 		 
-	$vysledek_ms=mysql_query("SELECT jmeno FROM nod_list WHERE id = '".intval($id)."' ");
-	$radku=mysql_num_rows($vysledek_ms);
+	$vysledek_ms=$conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($id)."' ");
+	$radku=$vysledek_ms->num_rows;
 											
 	if($radku==0){
 	    echo "\t<td>nepřiřazeno/jméno nodu nenalezeno) </td>";
