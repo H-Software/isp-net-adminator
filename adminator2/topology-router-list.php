@@ -20,7 +20,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
       <html> 
       <head> ';
       
-echo "<script type=\"text/javascript\" src=\"include/js/simelon-global.js\"></script>";
+echo "<script type=\"text/javascript\" src=\"include/js/adminator-global.js\"></script>";
 
 require ("include/charset.php");
 
@@ -544,7 +544,7 @@ require ("include/charset.php");
 
                     //2.1 - id
                     echo "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
-            		echo "<a href=\"archiv-zmen.php?id_routeru=".intval($data["id"])."\" >H</a>";
+            		echo "<a href=\"" . fix_link_to_another_adminator("/archiv-zmen?id_routeru=".intval($data["id"]))."\" >H</a>";
             	    echo "</td>";
 
                     //2.2 - parent router

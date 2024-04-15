@@ -20,7 +20,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
       <html> 
       <head>';
 
-echo "<script type=\"text/javascript\" src=\"include/js/simelon-global.js\"></script>";
+echo "<script type=\"text/javascript\" src=\"include/js/adminator-global.js\"></script>";
 
 require("include/charset.php"); 
 
