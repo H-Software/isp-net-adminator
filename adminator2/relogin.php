@@ -1,13 +1,16 @@
 <? 
 Session_start(); 
 
+require("include/main.function.shared.php");
+require("include/config.php"); 
+
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 
       <head> ';
 
-include ("include/charset.php"); 
+require ("include/charset.php"); 
 
-include ("include/config.php"); 
+require ("include/config.php"); 
 
 $login=$_POST["login"];
 $password=$_POST["password"];
