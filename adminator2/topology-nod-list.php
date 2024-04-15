@@ -195,9 +195,9 @@ require ("include/charset.php");
     $sql_source .= "&typ_vysilace=".$typ_vysilace."&stav=".$stav."&find=".$find_orez;
     $sql_source .= "&typ_nodu=".$typ_nodu;
     
-   //vytvoreni objektu
-   $listovani = new c_listing_topology($sql_source, 30, $list,
-	"<center><div class=\"text-listing\">\n", "</div></center>\n",$sql." ; ");
+   // TODO: fix paging
+   // $listovani = new c_listing_topology($sql_source, 30, $list,
+   // "<center><div class=\"text-listing\">\n", "</div></center>\n",$sql." ; ");
 				     
     if (($list == "")||($list == "1"))
     {    //pokud není list zadán nebo je první
@@ -209,13 +209,12 @@ require ("include/charset.php");
     }
     
     $vysledek = $conn_mysql->query($sql." LIMIT ".$bude_chybet.",".$listovani->interval." ");
-	echo "SQL DUMP: ".$sql." LIMIT ".$bude_chybet.",".$listovani->interval." ";
-	
-    //$vysledek = mysql_query($sql);
-			     
-    echo "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
+	// echo "SQL DUMP: ".$sql." LIMIT ".$bude_chybet.",".$listovani->interval." ";
+
+	// TODO: fix paging
+	// echo "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
     
-    $radku=$vysledek->num_rows;
+    $radku = $vysledek->num_rows;
     
     if ($radku==0)
     {
