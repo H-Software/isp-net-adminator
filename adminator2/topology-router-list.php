@@ -402,7 +402,7 @@ require ("include/charset.php");
 	   
 	    $sql_final = $sql_base." ".$sql_where2." ORDER BY id";
 	    
-	    $dotaz_routery=$sql_final->query();
+	    $dotaz_routery=$conn_mysql->query($sql_final);
 	    $dotaz_routery_radku=$dotaz_routery->num_rows;
 	  
 	    if(!$dotaz_routery){
