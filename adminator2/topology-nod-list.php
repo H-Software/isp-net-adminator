@@ -195,9 +195,8 @@ require ("include/charset.php");
     $sql_source .= "&typ_vysilace=".$typ_vysilace."&stav=".$stav."&find=".$find_orez;
     $sql_source .= "&typ_nodu=".$typ_nodu;
     
-   // TODO: fix paging
-   // $listovani = new c_listing_topology($sql_source, 30, $list,
-   // "<center><div class=\"text-listing\">\n", "</div></center>\n",$sql." ; ");
+    $listovani = new c_listing_topology($sql_source, 30, $list,
+   					"<center><div class=\"text-listing\">\n", "</div></center>\n",$sql." ; ");
 				     
     if (($list == "")||($list == "1"))
     {    //pokud není list zadán nebo je první
@@ -209,7 +208,6 @@ require ("include/charset.php");
     }
     
     $vysledek = $conn_mysql->query($sql." LIMIT ".$bude_chybet.",".$listovani->interval." ");
-	// echo "SQL DUMP: ".$sql." LIMIT ".$bude_chybet.",".$listovani->interval." ";
 
 	// TODO: fix paging
 	// echo "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
