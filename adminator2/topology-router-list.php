@@ -139,7 +139,7 @@ require ("include/charset.php");
 	  }
 
 	  if( isset($f_search) ){
-	    $f_search_safe = mysql_real_escape_string($f_search);
+	    $f_search_safe = $conn_mysql->real_escape_string($f_search);
 	    
 	    $arr_sql_where[] = "( router_list.nazev LIKE '%".$f_search_safe."%' OR ".
 				" router_list.ip_adresa LIKE '%".$f_search_safe."%' OR ".
