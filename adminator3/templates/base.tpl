@@ -36,6 +36,8 @@
 
 <script src="https://unpkg.com/bootstrap-table@1.22.4/dist/bootstrap-table.min.js"></script>
 
+<script language="JavaScript" src="/public/js/adminator.js" ></script>
+
 </head>
 
 <body>

@@ -26,7 +26,7 @@ class admin {
 			// $output .= '<table class="table table-striped fs-6">';
 			$output .= '<table
 							id="level-list"
-							class="table fs-6"
+							class="table table-striped fs-6"
 							>';
 							// data-toggle="table" 
 							// data-pagination="true"
@@ -35,13 +35,13 @@ class admin {
 			$output .= "\n
 			<thead>
 			<tr>
-			<th width=\"5%\" scope=\"col\">id:</th>
-			<th width=\"30%\" scope=\"col\"><b>Popis: </b></th>
+			<th width=\"5%\" scope=\"col\" class=\"table-primary\">id</th>
+			<th width=\"30%\" scope=\"col\" class=\"table-primary\"><b>Popis</b></th>
 													
-			<th width=\"20%\" scope=\"col\"><b>Level: </b></th>
+			<th width=\"20%\" scope=\"col\" class=\"table-primary\"><b>Level </b></th>
 						
-			<th width=\"10%\" scope=\"col\"><b>Úprava: </b></th>
-			<th width=\"10%\" scope=\"col\"><b>Smazání: </b></th>
+			<th width=\"10%\" scope=\"col\" class=\"table-primary\"><b>Úprava</b></th>
+			<th width=\"10%\" scope=\"col\" class=\"table-primary\"><b>Smazání</b></th>
 			</tr>
 			</thead>
 			<tbody>
@@ -55,7 +55,7 @@ class admin {
 							. "<td>".$zaznam["popis"]."</td>\n"
 							. "<td>".$zaznam["level"]."</td>\n"
 							. '<td>
-								<form method="POST" action="/admin/level-action">
+								<form method="POST" action="/admin/level-action" >
 									<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">
 									<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">
 									<input type="hidden" name="update_id" value="'.$id.'">
