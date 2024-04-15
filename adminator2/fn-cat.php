@@ -14,7 +14,7 @@ echo '
      
      <div style="padding-left: 40px; float: left;">A3:
       <span style="margin-left: 100px; ">
-        <a href="' . fix_link_to_another_adminator("/fn-kontrola-omezeni.php"). '" >Kontrola omezení obj. vůči neuhr. fakturám</a>
+        <a href="' . fix_link_to_another_adminator("/platby/fn-kontrola-omezeni"). '" >Kontrola omezení obj. vůči neuhr. fakturám</a>
       </span>
      </div>
      

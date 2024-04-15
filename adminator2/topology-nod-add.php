@@ -1,9 +1,9 @@
 <?php
 
-require_once ("include/config.php"); 
-require_once ("include/check_login.php");
-
-require_once ("include/check_level.php");
+require("include/main.function.shared.php");
+require_once("include/config.php"); 
+require_once("include/check_login.php");
+require_once("include/check_level.php");
 
 if ( !( check_level($level,4) ) )
 {
@@ -118,7 +118,7 @@ if( ( isset($_POST["jmeno"]) and !isset($error) ) )
   { 
     echo "<span style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </span>"; 
   
-    echo "<div>chyba: ".mysql_errno().": ".mysql_error()."</div>\n";
+    // echo "<div>chyba: ".mysql_errno().": ".mysql_error()."</div>\n";
         
   }
 	  	  
@@ -216,8 +216,8 @@ else
 	    echo "<select name=\"router_id\" size=\"1\" >\n";
 	    echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
 				
-	    $dotaz_parent = mysql_query("SELECT id, nazev, ip_adresa FROM router_list ORDER BY nazev");					    
-	    while( $data_parent=mysql_fetch_array($dotaz_parent))
+	    $dotaz_parent = $conn_mysql->query("SELECT id, nazev, ip_adresa FROM router_list ORDER BY nazev");					    
+	    while( $data_parent=$dotaz_parent->fetch_array())
 	    {
 	      echo "\t\t\t<option value=\"".intval($data_parent["id"])."\" ";
 	      if ( $data_parent["id"] == $router_id )echo " selected ";
@@ -259,10 +259,10 @@ else
 		       
     echo "<select name=\"filter_router_id\" size=\"1\" >\n";
 				 
-    $dotaz_parent = mysql_query("SELECT id,nazev,ip_adresa FROM router_list ORDER BY nazev");
+    $dotaz_parent = $conn_mysql->query("SELECT id,nazev,ip_adresa FROM router_list ORDER BY nazev");
     echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
 						     
-    while( $data_parent = mysql_fetch_array($dotaz_parent) )
+    while( $data_parent = $dotaz_parent->fetch_array() )
     {
 	echo "\t\t\t<option value=\"".intval($data_parent["id"])."\" ";
 	

@@ -75,7 +75,7 @@ require ("include/charset.php");
     <span style=\"padding-left: 20px; font-size: 20px; font-weight: bold; \">
     Výpis lokalit / přípojných bodů
     </span>
-    <span style=\"padding-left: 80px; \" ><a href=\"include/export-topology.php\" >export lokalit/nodů</a></span>  
+    <span style=\"padding-left: 80px; \" ><!--<a href=\"include/export-topology.php\" >-->export lokalit/nodů<!--</a>--></span>  
  
     <span style=\"padding-left: 80px; \" >
 	Výpis lokalit/nodů s latencemi ";
@@ -195,9 +195,8 @@ require ("include/charset.php");
     $sql_source .= "&typ_vysilace=".$typ_vysilace."&stav=".$stav."&find=".$find_orez;
     $sql_source .= "&typ_nodu=".$typ_nodu;
     
-   //vytvoreni objektu
-   $listovani = new c_listing_topology($sql_source, 30, $list,
-	"<center><div class=\"text-listing\">\n", "</div></center>\n",$sql." ; ");
+    $listovani = new c_listing_topology($conn_mysql, $sql_source, 30, $list,
+   					"<center><div class=\"text-listing\">\n", "</div></center>\n",$sql." ; ");
 				     
     if (($list == "")||($list == "1"))
     {    //pokud není list zadán nebo je první
@@ -208,16 +207,15 @@ require ("include/charset.php");
      $bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
     }
     
-    $vysledek = mysql_query($sql." LIMIT ".$bude_chybet.",".$listovani->interval." ");
-    //$vysledek = mysql_query($sql);
-			     
-    echo "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
+    $vysledek = $conn_mysql->query($sql." LIMIT ".$bude_chybet.",".$listovani->interval." ");
+
+	echo "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
     
-    $radku=mysql_num_rows($vysledek);
-        
+    $radku = $vysledek->num_rows;
+    
     if ($radku==0)
     {
-	 echo "<div >Žadné lokality/nody dle hladeného výrazu ( ".$find." ) v databázi neuloženy. </div>";
+	 echo "<div style=\"padding-top: 15px; padding-left: 15px;\">Žadné lokality/nody dle hladeného výrazu ( ".$find." ) v databázi neuloženy. </div>";
 	// echo "<div >debug: sql: ".$sql." </div>";
     }
     else
@@ -453,7 +451,7 @@ require ("include/charset.php");
 	echo "<tr>";
 								 
 	echo "\n";
-        while ($zaznam=mysql_fetch_array($vysledek)):
+        while ($zaznam=$vysledek->fetch_array()):
 	
 	 $id=$zaznam["id"];
 	
@@ -504,7 +502,7 @@ require ("include/charset.php");
 	echo "<tr>";
 	    
 	    echo "<td class=\"tab-topology\" colspan=\"".$colspan_filtrace."\" >
-		<a href=\"archiv-zmen.php?id_nodu=".intval($id)."\" style=\"font-size: 12px; \">H: ".$id."</a>".
+		<a href=\" " . fix_link_to_another_adminator("/archiv-zmen?id_nodu=".intval($id)) . "\" style=\"font-size: 12px; \">H: ".$id."</a>".
 		"</td>\n";
 	    	    
 	    echo "<td class=\"tab-topology\" colspan=\"3\">
@@ -516,8 +514,8 @@ require ("include/charset.php");
 	    { $router_nazev="<span style=\"color: red\">nelze zjistit </span>"; $router_ip=""; }
 	    else
 	    {
-		$vysledek_router=mysql_query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
-		while($data_router=mysql_fetch_array($vysledek_router))
+		$vysledek_router=$conn_mysql->query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
+		while($data_router=$vysledek_router->fetch_array())
 		{ $router_nazev = $data_router["nazev"]; $router_ip = $data_router["ip_adresa"]; }
             }
 	    
@@ -537,7 +535,7 @@ require ("include/charset.php");
 	     elseif ( $typ_vysilace == 7 ){ $typ_vysilace2="ap-5.8Ghz-smerovka"; }
 	     elseif ( $typ_vysilace == 8 ){ $typ_vysilace2="jiné"; }
 	     else { $typ_vysilace2=$typ_vysilace; }			
-	     																		       
+	    									       
 	    echo "<td class=\"tab-topology\" colspan=\"".$colspan_typ_vysilace."\" ><span style=\"color: #666666; font-size: 13px; \">".$typ_vysilace2."</span> </td>\n";
 	    
 	     list($a,$b,$c,$d) = split("[.]",$zaznam["ip_rozsah"]);
@@ -614,12 +612,13 @@ require ("include/charset.php");
 	  echo "</tr>";
 
           endwhile;
- }
+ 	}
 
     echo "</table>";
 
     echo "<div style=\"padding-top: 20px; margin-bottom: 20px; \" >";
-    echo "<span style=\"margin-top: 5px; margin-bottom: 15px; \">".$listovani->listInterval();
+
+	echo "<span style=\"margin-top: 5px; margin-bottom: 15px; \">".$listovani->listInterval();
     
     echo "</div>";    //zobrazení stránkovače
     

@@ -409,7 +409,7 @@ class ArchivZmen {
         }//konec if isset id
         
         if ( $radku==0 )
-        { $output .= "Žádné změny v archivu "; }
+        { $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"margin-top: 15px; margin-bottom: 15px;\">Žádné změny v archivu</div>"; }
         else
         {
             $output .= "<table border=\"0\" cellpadding=\"5\" class=\"az-main-table table table-striped fs-6\" >\n";

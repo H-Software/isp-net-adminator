@@ -1,9 +1,9 @@
 <?php
 
-require_once ("include/config.php"); 
-require_once ("include/check_login.php");
-
-require_once ("include/check_level.php");
+require("include/main.function.shared.php");
+require_once("include/config.php"); 
+require_once("include/check_login.php");
+require_once("include/check_level.php");
 
 if( !( check_level($level,132) ) )
 {
@@ -136,9 +136,9 @@ require("include/charset.php");
   }
 }
 
- $dotaz_router = mysql_query("SELECT nazev FROM router_list WHERE id = '".intval($id_routeru)."' ");
+ $dotaz_router = $conn_mysql->query("SELECT nazev FROM router_list WHERE id = '".intval($id_routeru)."' ");
 
- if( mysql_num_rows($dotaz_router) <> 1 )
+ if( $dotaz_router->num_rows <> 1 )
  { 
   echo "Chyba! Nelze vybrat router! <br>";
   exit;
@@ -147,10 +147,10 @@ require("include/charset.php");
  ob_flush();  
  flush();
   
- while( $data_router = mysql_fetch_array($dotaz_router) )
+ while( $data_router = $dotaz_router->fetch_array() )
  { $nazev_routeru = $data_router["nazev"]; }
  
- $mbox = imap_open("{lamia.simelon.net:993/imap/ssl}INBOX", "router-board@simelon.net", "archimedes");
+ $mbox = imap_open("{lamia.adminator.net.net:993/imap/ssl}INBOX", "router-board@adminator.net", "archimedes");
 
  if($mbox)
  { echo "<div style=\"color: green; font-size: 16px; \" >Připojení k emailové schránce se zdařilo</div>\n"; }
@@ -175,7 +175,7 @@ require("include/charset.php");
  foreach ($result as $overview) 
  {	
     $from = $overview->from;    
-    $nazev_routeru_2 = $nazev_routeru."@simelon.net";
+    $nazev_routeru_2 = $nazev_routeru."@adminator.net";
     
     if( $from == $nazev_routeru_2 )
     { $maily[] = $overview->msgno; }

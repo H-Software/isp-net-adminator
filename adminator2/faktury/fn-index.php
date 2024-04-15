@@ -4,9 +4,9 @@ global $cesta;
 
 $cesta = "../";
 
+require($cesta."include/main.function.shared.php");
 include ($cesta."include/config.php"); 
 include ($cesta."include/check_login.php");
-
 include ($cesta."include/check_level.php");
 
 if ( !( check_level($level,108) ) ) 
@@ -110,9 +110,9 @@ if ( $razeni2 > 0)
  
 }
 
-$dotaz=mysql_query($sql);
+$dotaz=$conn_mysql->query($sql);
 
-$dotaz_radku=mysql_num_rows($dotaz);
+$dotaz_radku=$dotaz->num_rows;
 
 echo "<div style=\"padding-top: 20px; padding-bottom: 20px;\" >
 	<span style=\"font-size: 20px; font-weight: bold;  \" >
@@ -125,7 +125,7 @@ echo "<span style=\"font-size: ; font-weight: bold; padding-left: 50px; \" >
 echo "</div>";
 
 echo "<form method=\"POST\" action=\"".$_SERVER["PHP_SELF"]."\">
-     <table border=\"1\" >
+     <table border=\"0\" >
 	<tr>
 	  <td><div style=\"font-weight: bold; \">Filtrování: </div></td>
 	  <td><div style=\"padding-left: 25px; padding-right: 25px\">Typ klienta: </div></td>
@@ -296,7 +296,7 @@ $i=1;
 
 global $ico;
 
-while ( ( $data=mysql_fetch_array($dotaz) ) )
+while ( ( $data=$dotaz->fetch_array() ) )
 {
 
   $Firma = $data["Firma"];

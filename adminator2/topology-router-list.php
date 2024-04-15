@@ -1,11 +1,10 @@
 <?php
 
-require_once ("include/config.php"); 
-require_once ("include/check_login.php");
-
-require_once ("include/check_level.php");
-
-require_once ("include/class.php");
+require("include/main.function.shared.php");
+require_once("include/config.php"); 
+require_once("include/check_login.php");
+require_once("include/check_level.php");
+require("include/class.php");
 
 if ( !( check_level($level,85) ) )
 {
@@ -21,7 +20,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
       <html> 
       <head> ';
       
-echo "<script type=\"text/javascript\" src=\"include/js/simelon-global.js\"></script>";
+echo "<script type=\"text/javascript\" src=\"include/js/adminator-global.js\"></script>";
 
 require ("include/charset.php");
 
@@ -140,7 +139,7 @@ require ("include/charset.php");
 	  }
 
 	  if( isset($f_search) ){
-	    $f_search_safe = mysql_real_escape_string($f_search);
+	    $f_search_safe = $conn_mysql->real_escape_string($f_search);
 	    
 	    $arr_sql_where[] = "( router_list.nazev LIKE '%".$f_search_safe."%' OR ".
 				" router_list.ip_adresa LIKE '%".$f_search_safe."%' OR ".
@@ -285,8 +284,8 @@ require ("include/charset.php");
 	  if($typ == 1)
 	  {
 	  
-	    $dotaz_router_main=mysql_query("SELECT * FROM router_list WHERE id = 1 order by id");
-	    $dotaz_router_main_radku=mysql_num_rows($dotaz_router_main);
+	    $dotaz_router_main=$conn_mysql->query("SELECT * FROM router_list WHERE id = 1 order by id");
+	    $dotaz_router_main_radku=$dotaz_router_main->num_rows;
 	  
 	    if( $dotaz_router_main_radku <> 1)
 	    { 
@@ -294,7 +293,7 @@ require ("include/charset.php");
 		exit;    
 	    }
 	  
-	    while( $data_main=mysql_fetch_array($dotaz_router_main) )
+	    while( $data_main=$dotaz_router_main->fetch_array() )
 	    {
 		//pouze erik
 	   
@@ -311,21 +310,21 @@ require ("include/charset.php");
 	  
 		echo "</td>\n</tr>\n";
 	
-		$dotaz_router_1=mysql_query("SELECT * FROM router_list WHERE parent_router = 1 order by id");
-		$dotaz_router_radku_1=mysql_num_rows($dotaz_router_1);
+		$dotaz_router_1=$conn_mysql->query("SELECT * FROM router_list WHERE parent_router = 1 order by id");
+		$dotaz_router_radku_1=$dotaz_router_1->num_rows;
 	    
 		if( $dotaz_router_radku_1 > 0 )
 		{
-	    	    require("./include/hierarchy.php");
+	    	    // require("./include/hierarchy.php");
 	         
 	    	    //prvni uroven
-	    	    while($data_router_1=mysql_fetch_array($dotaz_router_1))
+	    	    while($data_router_1=$dotaz_router_1->fetch_array())
 	    	    {    
 			global $uroven;
 		
 	    		$id = $data_router_1["id"];	
 	       
-	    		vypis_router($id,"0");
+	    		hierarchy_vypis_router($id,"0");
 	              
 	    	    } // while dotaz_router
 		} // konec if dotaz_router_radku > 0
@@ -345,14 +344,14 @@ require ("include/charset.php");
 	  
 	  echo "<tr><td colspan=\"".$uroven_max."\" >Nepřiřazené routery:  </td></tr>";
 	  
-	  $dotaz_routery=mysql_query("SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id");
-	  $dotaz_routery_radku=mysql_num_rows($dotaz_routery);
+	  $dotaz_routery=$conn_mysql->query("SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id");
+	  $dotaz_routery_radku=$dotaz_routery->num_rows;
 	  
 	  if ( $dotaz_routery_radku < 1 )
 	  { echo "<tr><td colspan=\"5\" > Žádné routery v databázi. </td></tr>"; }
 	  else
 	  {
-	    while( $data=mysql_fetch_array($dotaz_routery) ):
+	    while( $data=$dotaz_routery->fetch_array() ):
 	    
 		echo "<tr>";
 	  
@@ -366,9 +365,9 @@ require ("include/charset.php");
 		    echo $data["parent_router"];
 		    
 		    $parent_router=$data["parent_router"];
-		    $dotaz_sec=mysql_query("SELECT * FROM router_list WHERE id = '".intval($parent_router)."' ");
+		    $dotaz_sec=$conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($parent_router)."' ");
 		    
-		    while($data_sec=mysql_fetch_array($dotaz_sec))
+		    while($data_sec=$dotaz_sec->fetch_array())
 		    { echo "<span style=\"color: grey; font-weight: bold;\"> ( ".htmlspecialchars($data_sec["nazev"])." ) </span>"; }
 		    
 		    echo "</td>";
@@ -403,14 +402,14 @@ require ("include/charset.php");
 	   
 	    $sql_final = $sql_base." ".$sql_where2." ORDER BY id";
 	    
-	    $dotaz_routery=mysql_query($sql_final);
-	    $dotaz_routery_radku=mysql_num_rows($dotaz_routery);
+	    $dotaz_routery=$conn_mysql->query($sql_final);
+	    $dotaz_routery_radku=$dotaz_routery->num_rows;
 	  
 	    if(!$dotaz_routery){
 		
 		echo "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
 		echo "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
-		echo "<div style=\"\" >".mysql_error()."</div>";
+		// echo "<div style=\"\" >".mysql_error()."</div>";
 		
 		
 	    }
@@ -442,17 +441,20 @@ require ("include/charset.php");
 		//prvky pro listovaci odkazy
 		$paging_url = "?".$get_odkazy;
 		    
-		$paging = new paging_global($paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $sql_final);
+		$paging = new paging_global($conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $sql_final);
 		     
 		$bude_chybet = ( (($list == "")||($list == "1")) ? 0 : ((($list-1) * $paging->interval)) );
 		      
 		$interval = $paging->interval;
 		       
 		//uprava sql
-		$sql_final = $sql_final . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
-	
-		$dotaz_routery=mysql_query($sql_final);
-		$dotaz_routery_radku=mysql_num_rows($dotaz_routery);
+		// TODO: fix paging
+		/// $sql_final = $sql_final . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+
+		// echo "<div>SQL DUMP: ".$sql_final . "</div>";
+		$dotaz_routery=$conn_mysql->query($sql_final);
+		
+		$dotaz_routery_radku=$dotaz_routery->num_rows;
 	  	
 	  	//listovani
 	  	echo $paging->listInterval();
@@ -493,7 +495,7 @@ require ("include/charset.php");
                 echo "<tr>\n<td colspan=\"".$pocet_sloupcu."\" >&nbsp;\n</td>\n</tr>\n";
 
 
-		while( $data=mysql_fetch_array($dotaz_routery) ):
+		while( $data=$dotaz_routery->fetch_array() ):
 	    
                   $alarm=$data["alarm"];
 
@@ -542,7 +544,7 @@ require ("include/charset.php");
 
                     //2.1 - id
                     echo "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
-            		echo "<a href=\"archiv-zmen.php?id_routeru=".intval($data["id"])."\" >H</a>";
+            		echo "<a href=\"" . fix_link_to_another_adminator("/archiv-zmen?id_routeru=".intval($data["id"]))."\" >H</a>";
             	    echo "</td>";
 
                     //2.2 - parent router
@@ -557,14 +559,14 @@ require ("include/charset.php");
                     if( $data["monitoring"] == 1)
                     {
                         echo "<span style=\"font-weight: bold; \">";
-                        echo "<a href=\"https://monitoring.simelon.net/mon/www-generated/rb_all_".$data["ip_adresa"].".php\" target=\"_blank\" >Ano</a></span>";
+                        echo "<a href=\"https://monitoring.local.net/mon/www-generated/rb_all_".$data["ip_adresa"].".php\" target=\"_blank\" >Ano</a></span>";
                     }
                     elseif ( $data["monitoring"] == 0) { echo "Ne";}
                     else { echo "N/A"; }
 
                     echo "<span style=\"color: grey; \"> ( ";
                     if ( $data["monitoring_cat"] > 0 )
-                    { echo "<a href=\"https://monitoring.simelon.net/mon/www/rb_all.php\" target=\"_blank\" >"; }
+                    { echo "<a href=\"https://monitoring.local.net/mon/www/rb_all.php\" target=\"_blank\" >"; }
 
                     echo htmlspecialchars($data["kategorie_jmeno"]." / ".$data["monitoring_cat"]);
 
@@ -614,8 +616,8 @@ require ("include/charset.php");
 		
 		    $id_routeru = $data["id"];
 		
-		    $dotaz_top=mysql_query("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
-		    $dotaz_top_radku=mysql_num_rows($dotaz_top);
+		    $dotaz_top=$conn_mysql->query("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
+		    $dotaz_top_radku=$dotaz_top->num_rows;
 		
 	    	    if ( $dotaz_top_radku < 1)
 		    { echo "<span style=\"color: teal; font-size: 16px; font-weight: bold;\">
@@ -626,7 +628,7 @@ require ("include/charset.php");
 		    
 		    echo "<table border=\"0\" width=\"100%\" >";
 		    
-		    while($data_top=mysql_fetch_array($dotaz_top)):
+		    while($data_top=$dotaz_top->fetch_array()):
 		    
 		    echo "<tr>";
 		    

@@ -47,9 +47,9 @@ require_once ("include/charset.php");
     echo "<div style=\"padding-left: 30px; padding-right: 20px; float: left; width: 440px; \" >
 	    <select name=\"single_action\" size=\"1\" >";
 	    
-	$dotaz_akce = mysql_query("SELECT id, name FROM workitems_names ORDER BY id");
+	$dotaz_akce = $conn_mysql->query("SELECT id, name FROM workitems_names ORDER BY id");
     	
-	while( $data = mysql_fetch_array($dotaz_akce) )
+	while( $data = $dotaz_akce->fetch_array() )
 	{ echo "<option value=\"".$data["id"]."\">".$data["name"]."</option>\n"; }
 	
     echo "</select>
@@ -85,9 +85,9 @@ require_once ("include/charset.php");
     $sql = "SELECT workitems.id, workitems_names.name, workitems.number_request, workitems.in_progress, workitems_names.priority ".
 	   " FROM workitems, workitems_names WHERE workitems.number_request = workitems_names.id ";
      
-    $dotaz_fronta = mysql_query($sql);
+    $dotaz_fronta = $conn_mysql->query($sql);
         
-    if( (mysql_num_rows($dotaz_fronta) <= 0) ) {
+    if( ($dotaz_fronta->num_rows <= 0) ) {
       echo "<div stle=\"font-size: 12px; font-family: arial;\">Žádný požadavek v databázi</div>\n";
     }
     else{
@@ -100,7 +100,7 @@ require_once ("include/charset.php");
 	
     }
     
-    while($data = mysql_fetch_array($dotaz_fronta))
+    while($data = $dotaz_fronta->fetch_array())
     {
 	echo "<div style=\"padding-top: 5px; width: 50px; float: left; \" >".$data["number_request"]."</div>\n";
 	echo "<div style=\"padding-top: 5px; width: 600px; float: left; \">"."</span> ".$data["name"]."</div>\n"; 
@@ -155,9 +155,9 @@ require_once ("include/charset.php");
         <b>Vyberte požadovanou akci...</b></div>';
  }
 
- $last_log_rs = mysql_query("SELECT akce FROM archiv_zmen_work ORDER BY id DESC LIMIT 1");
+ $last_log_rs = $conn_mysql->query("SELECT akce FROM archiv_zmen_work ORDER BY id DESC LIMIT 1");
  
- while($data_last_log = mysql_fetch_array($last_log_rs)){
+ while($data_last_log = $last_log_rs->fetch_array()){
  
     echo "<PRE>";
 

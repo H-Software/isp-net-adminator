@@ -817,10 +817,10 @@ function zjisti_fa_text_a_castku($fakturacni_skupina_id,$platit)
 function gen_router_vypis_router($id)
 {
     
-    global $mac;
+    global $mac, $conn_mysql;
     
-    $dotaz_router=mysql_query("SELECT * FROM router_list WHERE id = $id order by id");
-    $dotaz_router_radku=mysql_num_rows($dotaz_router);
+    $dotaz_router=$conn_mysql->query("SELECT * FROM router_list WHERE id = $id order by id");
+    $dotaz_router_radku=$dotaz_router->num_rows;
 
     if ($dotaz_router_radku <> 1 )
     {
@@ -830,7 +830,7 @@ function gen_router_vypis_router($id)
     }
     else
     {
-     while($data=mysql_fetch_array($dotaz_router))
+     while($data=$dotaz_router->fetch_array())
      {
 	$parent_router=$data["parent_router"];
 	
@@ -850,7 +850,7 @@ function gen_router_vypis_router($id)
 	}
 	else
 	{
-	    vypis_router($parent_router);
+	    gen_router_vypis_router($parent_router);
 	}
 
     } // konec while
@@ -865,15 +865,15 @@ function gen_router_vypis_router($id)
 function hierarchy_vypis_router($id,$uroven)
 {
 
-    global $uroven_max;
+    global $uroven_max, $conn_mysql;
     
-    $dotaz_router=mysql_query("SELECT * FROM router_list WHERE id = $id order by id");
-    $dotaz_router_radku=mysql_num_rows($dotaz_router);
+    $dotaz_router=$conn_mysql->query("SELECT * FROM router_list WHERE id = $id order by id");
+    $dotaz_router_radku=$dotaz_router->num_rows;
           
     if ( $dotaz_router_radku > 0 )
     {
                 
-      while($data_router=mysql_fetch_array($dotaz_router))
+      while($data_router=$dotaz_router->fetch_array())
       {
                     
           echo "<tr>";
@@ -894,15 +894,15 @@ function hierarchy_vypis_router($id,$uroven)
             //zde rekurze
             $parent_id=$data_router["id"];
 
-            $dotaz_router_parent=mysql_query("SELECT * FROM router_list WHERE parent_router = $id order by id");
-            $dotaz_router_parent_radku=mysql_num_rows($dotaz_router_parent);
+            $dotaz_router_parent=$conn_mysql->query("SELECT * FROM router_list WHERE parent_router = $id order by id");
+            $dotaz_router_parent_radku=$dotaz_router_parent->num_rows;
                 
             if ( $dotaz_router_parent_radku > 0 )
             {
                 
                 $iterace = 1;
                 
-                while($data_router_parent=mysql_fetch_array($dotaz_router_parent) )
+                while($data_router_parent=$dotaz_router_parent->fetch_array() )
                 {
                 
                     $uroven++;
@@ -911,7 +911,7 @@ function hierarchy_vypis_router($id,$uroven)
                     
                     $id=$data_router_parent["id"];
                     
-                    vypis_router($id,$uroven);
+                    hierarchy_vypis_router($id,$uroven);
                     
                     $iterace++;
                     
