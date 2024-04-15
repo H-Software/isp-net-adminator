@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Core\archivZmen;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -50,11 +51,17 @@ class archivZmenController extends adminatorController {
         
         $this->checkLevel(30);
 
+        $this->smarty->assign("bs_layout_main_col_count", "8");
+
         $this->smarty->assign("page_title","Adminator3 :: Změny :: Archiv změn Work");
 
         $this->header($request, $response);
 
-        $this->smarty->assign("body","T.B.A.");
+        $az = new \App\Core\ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
+
+        $body = $az->archivZmenWork();
+
+        $this->smarty->assign("body",$body);
 
         $this->smarty->display('archiv-zmen/work.tpl');
 

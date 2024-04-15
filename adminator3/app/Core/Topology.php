@@ -6,8 +6,6 @@ class Topology {
     var $conn_mysql;
     var $smarty;
     var $logger;
-    var $auth;
-    var $app;
     
     public function __construct($conn_mysql, $smarty, $logger)
     {

@@ -6,7 +6,7 @@
     <span style="padding-left: 20px; ">
 	<!--<a class="cat2" href="others-board.php">-->Archiv změn<!--</a>--></span>
 
-    <span style="padding-left: 30px; "><a href="/archiv-zmen/work">Archiv - Work (restartování)</a></span>
+    <span style="padding-left: 30px; "><a class="cat2" href="/archiv-zmen/work">Archiv - Work (restartování)</a></span>
 
     <span style="padding-left: 20px; "><a class="cat2" href="/archiv-zmen/ucetni">Změny pro účetní</a></span>
 
