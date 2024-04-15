@@ -108,12 +108,15 @@ class archivZmenController extends adminatorController {
 
         $this->smarty->assign("link_add","/archiv-zmen/ucetni?action=add");
 
-        $zmena = new \zmeny_ucetni($this->conn_mysql);
+        $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger);
 
         if( $action == "add")
         { //rezim pridani
             $this->checkLevel(148);
 
+            $csrf = $this->generateCsrfToken($request, $response, true);
+            // $this->logger->addInfo("adminController\header: csrf generated: ".var_export($csrf, true));
+            
             $update_id = $_POST['update_id'];
             
             if( ( $update_id > 0 ) ){ $update_status=1; }
@@ -179,8 +182,9 @@ class archivZmenController extends adminatorController {
             if( (isset($zmena->error)) or (!isset($zmena->send)) )
             { //zobrazeni formu
 
-                $this->smarty->assign("action",$_SERVER["PHP_SELF"]."?action=add");
-                
+                $this->smarty->assign("action","?action=add");
+                $this->smarty->assign("csrf_html", $csrf[0]);
+
                 $this->smarty->assign("error",$zmena->error);
                 $this->smarty->assign("info",$zmena->info);
 

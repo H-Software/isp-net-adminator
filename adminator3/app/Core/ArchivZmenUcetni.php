@@ -15,12 +15,16 @@ class zmeny_ucetni {
     
     var $writed;
     
-    function __construct($conn_mysql) {
+    var $loggedUserEmail = "";
+
+    function __construct($conn_mysql, $logger) {
       $this->conn_mysql = $conn_mysql;
+      $this->logger = $logger;
+      $this->loggedUserEmail = \App\Auth\Auth::getUserEmail();
     }
 
     function load_sql_result() {
-      global $nick;
+
       $rs_main = array();
 
       $sql = "SELECT az_ucetni.zu_id , az_ucetni.zu_typ, az_ucetni.zu_text, az_ucetni.zu_akceptovano, ";
@@ -34,11 +38,11 @@ class zmeny_ucetni {
       try {
         $qu = $this->conn_mysql->query($sql);
       } catch (Exception $e) {
-        die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+        // die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
       }
 
       while( $rs = $qu->fetch_assoc() ) { 
-          if( ( $rs["zu_vlozeno_kym"] == $nick ) and ($rs["zu_akceptovano"] == 0) )
+          if( ( $rs["zu_vlozeno_kym"] == $this->loggedUserEmail ) and ($rs["zu_akceptovano"] == 0) )
           { 
             $uprava = "<a href=\"".$_SERVER["php_self"]."?action=update";
             $uprava .= "&id=".$rs["zu_id"]."\" >upravit</a>";
@@ -47,7 +51,8 @@ class zmeny_ucetni {
           }
           else
           { 
-            $rs["uprava"] = "<span style=\"color: gray;\" >upravit</span>"; }
+            $rs["uprava"] = "<span style=\"color: gray;\" >upravit</span>"; 
+          }
 
           //globalni presunuti pole do pole :)
           $rs_main[] = $rs; 
@@ -85,24 +90,26 @@ class zmeny_ucetni {
     
     function save_vars_to_db()
     {
-      global $nick;
+
+      $this->logger->addInfo("archivZmenUcetni\save_vars_to_db called");
 
       try {
         $add = $this->conn_mysql->query("INSERT INTO az_ucetni (zu_typ, zu_text, zu_vlozeno_kdy, zu_vlozeno_kym)
-        VALUES ('$this->typ','$this->text',now(),'$nick') ");
+                                          VALUES ('" . $this->typ . "','" . $this->text . "',now(),'" . $this->loggedUserEmail . "') ");
       } catch (Exception $e) {
-        die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+        $this->logger->addInfo("archivZmenUcetni\save_vars_to_db exception: " .var_export($e->getMessage(), true));
+        // die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
       }
-			      
+			
       // pridame to do archivu zmen
       $pole="<b>akce: pridani zmeny pro ucetni; </b><br>";
       $pole .= "[typ_id]=> ".$this->typ.", [text]=> ".$this->text."";
-                  
+      
       if ( $add == 1){ $vysledek_write="1"; }
       try {
-        $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+        $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('" . $pole . "','" . $this->loggedUserEmail . "','" . $vysledek_write . "')");
       } catch (Exception $e) {
-        die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+        // die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
       }
       
       $this->writed = "true";
@@ -114,4 +121,4 @@ class zmeny_ucetni {
 	
     } //save_vars_to_db
     
-} //konec tridy zmeny_ucetni
+}
