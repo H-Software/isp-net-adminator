@@ -448,7 +448,8 @@ require ("include/charset.php");
 		$interval = $paging->interval;
 		       
 		//uprava sql
-		$sql_final = $sql_final . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+		// TODO: fix paging
+		/// $sql_final = $sql_final . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
 		echo "<div>SQL DUMP: ".$sql_final . "</div>";
 		$dotaz_routery=$conn_mysql->query($sql_final);
