@@ -216,7 +216,7 @@ require ("include/charset.php");
     
     if ($radku==0)
     {
-	 echo "<div >Žadné lokality/nody dle hladeného výrazu ( ".$find." ) v databázi neuloženy. </div>";
+	 echo "<div style=\"padding-top: 15px; padding-left: 15px;\">Žadné lokality/nody dle hladeného výrazu ( ".$find." ) v databázi neuloženy. </div>";
 	// echo "<div >debug: sql: ".$sql." </div>";
     }
     else
@@ -613,11 +613,12 @@ require ("include/charset.php");
 	  echo "</tr>";
 
           endwhile;
- }
+ 	}
 
     echo "</table>";
 
     echo "<div style=\"padding-top: 20px; margin-bottom: 20px; \" >";
+	// TODO: fix paging
     echo "<span style=\"margin-top: 5px; margin-bottom: 15px; \">".$listovani->listInterval();
     
     echo "</div>";    //zobrazení stránkovače
