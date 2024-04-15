@@ -6,9 +6,9 @@ global $cesta;
 
 $cesta = "../";
 
+require($cesta."include/main.function.shared.php");
 require_once($cesta."include/config.php"); 
 require_once($cesta."include/check_login.php");
-
 require_once($cesta."include/check_level.php");
 
 if( ($_GET["no_login"] != "yes" ) )
