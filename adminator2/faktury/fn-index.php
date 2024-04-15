@@ -4,6 +4,7 @@ global $cesta;
 
 $cesta = "../";
 
+require($cesta."include/main.function.shared.php");
 include ($cesta."include/config.php"); 
 include ($cesta."include/check_login.php");
 

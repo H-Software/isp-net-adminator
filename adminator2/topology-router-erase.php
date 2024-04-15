@@ -114,8 +114,8 @@ include ("include/charset.php");
 
    echo "<span style=\"font-size: 20px; \">Opravdu chcete odřadit tuto lokalitu / nodu: </span><br><br>";
 
-   $dotaz=mysql_query("SELECT * FROM router_list WHERE id = '$erase_id' ");
-   $dotaz_radku=mysql_num_rows($dotaz);
+   $dotaz=$conn_mysql->query("SELECT * FROM router_list WHERE id = '$erase_id' ");
+   $dotaz_radku=$dotaz->num_rows;
 
    if ( $dotaz_radku == 0 )
    {   echo "<br>Chyba! Nelze nacist puvodni data o routeru! <br>"; }
@@ -124,7 +124,7 @@ include ("include/charset.php");
 
     echo "<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"POST\" >";
 
-     while ($data=mysql_fetch_array($dotaz) )
+     while ($data=$dotaz->fetch_array() )
      {
 	echo "<b>id nodu</b>: ".$data["id"]."<br>";
         echo "<b>jméno</b>: ".$data["nazev"]."<br>";
