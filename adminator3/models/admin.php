@@ -24,17 +24,28 @@ class admin {
 			$output .= '<div style="padding-top: 5px; padding-bottom: 5px;">Výpis levelů stránek</div>';
 						
 			// $output .= '<table class="table table-striped fs-6">';
-			$output .= '<table class="table table-striped fs-6">';
-								
-			$output .= "\n<tr>
-			<th width=\"5%\" scope=\"col\"><b>id:</b></th>
+			$output .= '<table
+							id="level-list"
+							class="table fs-6"
+							>';
+							// data-toggle="table" 
+							// data-pagination="true"
+							// data-side-pagination="client"
+							// data-server-sort="false"			
+			$output .= "\n
+			<thead>
+			<tr>
+			<th width=\"5%\" scope=\"col\">id:</th>
 			<th width=\"30%\" scope=\"col\"><b>Popis: </b></th>
 													
 			<th width=\"20%\" scope=\"col\"><b>Level: </b></th>
 						
 			<th width=\"10%\" scope=\"col\"><b>Úprava: </b></th>
 			<th width=\"10%\" scope=\"col\"><b>Smazání: </b></th>
-			</tr>\n";
+			</tr>
+			</thead>
+			<tbody>
+			\n";
 										
 			while ($zaznam=$vysledek->fetch_array()):
 				$id=$zaznam["id"];
@@ -55,7 +66,7 @@ class admin {
 		
 			  endwhile;
 
-			  $output .= "</table>";
+			  $output .= "<tbody></table>";
 		}
 		return $output;
 	}

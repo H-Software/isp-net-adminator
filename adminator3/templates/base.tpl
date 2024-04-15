@@ -12,8 +12,6 @@
 
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.4/dist/bootstrap-table.min.css">
 
-<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.4/dist/bootstrap-table.min.css">
-
 {if $enable_calendar == 1}
  <script language="JavaScript" src="/plugins/tigra_calendar/calendar_eu.js"></script>
  <link rel="stylesheet" href="/plugins/tigra_calendar/calendar.css">
