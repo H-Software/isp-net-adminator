@@ -37,6 +37,8 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/admin/tarify', \adminController::class . ':adminTarify');
 
     $this->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');
+    $this->map(['GET', 'POST'],'/archiv-zmen/work', \archivZmenController::class . ':archivZmenWork');
+
     $this->map(['GET', 'POST'],'/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
 
     $this->map(['GET', 'POST'],'/others', \othersController::class . ':others');

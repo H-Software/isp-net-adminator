@@ -1,6 +1,6 @@
 {include file="base.tpl"}
 
-{include file="inc.cat.archiv-zmen.tpl"}
+{include file="archiv-zmen/inc.cat.archiv-zmen.tpl"}
 
 <div style="padding-left: 5px;" >
     <div class="zmeny-ucetni-banner-add" >Archiv změn pro účetní - přidání změny</div>

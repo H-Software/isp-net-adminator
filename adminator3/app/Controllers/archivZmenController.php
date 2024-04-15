@@ -38,7 +38,25 @@ class archivZmenController extends adminatorController {
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
-        $this->smarty->display('archiv-zmen-cat.tpl');
+        $this->smarty->display('archiv-zmen/archiv-zmen-cat.tpl');
+
+        return $response;
+    }
+
+    public function archivZmenWork(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("archivZmenController\archivZmenWork called");
+        
+        $this->checkLevel(30);
+
+        $this->smarty->assign("page_title","Adminator3 :: Změny :: Archiv změn Work");
+
+        $this->header($request, $response);
+
+        $this->smarty->assign("body","T.B.A.");
+
+        $this->smarty->display('archiv-zmen/work.tpl');
 
         return $response;
     }
