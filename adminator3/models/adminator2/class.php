@@ -3181,6 +3181,8 @@ class paging_global {
 
     //vyber dat z databaze
     function dbSelect(){
+		
+		global $db_ok2;
 
         if($this->db_type == "mysql")
     	    $listRecord = $this->conn_mysql->query($this->sql);
@@ -3302,4 +3304,3 @@ class paging_global {
         }
     }
 }
-
