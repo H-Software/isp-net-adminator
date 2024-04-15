@@ -208,13 +208,13 @@ require ("include/charset.php");
      $bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
     }
     
-    $vysledek = mysql_query($sql." LIMIT ".$bude_chybet.",".$listovani->interval." ");
+    $vysledek = $conn_mysql->query($sql." LIMIT ".$bude_chybet.",".$listovani->interval." ");
     //$vysledek = mysql_query($sql);
 			     
     echo "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
     
-    $radku=mysql_num_rows($vysledek);
-        
+    $radku=$vysledek->num_rows;
+    
     if ($radku==0)
     {
 	 echo "<div >Žadné lokality/nody dle hladeného výrazu ( ".$find." ) v databázi neuloženy. </div>";
@@ -453,7 +453,7 @@ require ("include/charset.php");
 	echo "<tr>";
 								 
 	echo "\n";
-        while ($zaznam=mysql_fetch_array($vysledek)):
+        while ($zaznam=$vysledek->fetch_array()):
 	
 	 $id=$zaznam["id"];
 	
@@ -516,8 +516,8 @@ require ("include/charset.php");
 	    { $router_nazev="<span style=\"color: red\">nelze zjistit </span>"; $router_ip=""; }
 	    else
 	    {
-		$vysledek_router=mysql_query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
-		while($data_router=mysql_fetch_array($vysledek_router))
+		$vysledek_router=$conn_mysql->query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
+		while($data_router=$vysledek_router->fetch_array())
 		{ $router_nazev = $data_router["nazev"]; $router_ip = $data_router["ip_adresa"]; }
             }
 	    

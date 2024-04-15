@@ -11,8 +11,9 @@ class admin {
 	function levelListDbQuery()
 	{
 		try {
-			$rs= $this->conn_mysql->query("select * from leveling where id > 100 order by level asc");
+			$rs= $this->conn_mysql->query("select * from leveling order by level asc");
 		} catch (Exception $e) {
+			$this->logger->addInfo("admin\LevelList: levelListDbQuery exception: " . var_export($e->getMessage(), true));
 		}
 	
 		$num_rows = $rs->num_rows;
