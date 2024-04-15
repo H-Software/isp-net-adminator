@@ -451,6 +451,8 @@ require ("include/charset.php");
 		$sql_final = $sql_final . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 	
 		$dotaz_routery=$conn_mysql->query($sql_final);
+		echo "<div>SQL DUMP: ".$sql_final . "</div>";
+		
 		$dotaz_routery_radku=$dotaz_routery->num_rows;
 	  	
 	  	//listovani
