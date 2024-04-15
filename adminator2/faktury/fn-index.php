@@ -111,9 +111,9 @@ if ( $razeni2 > 0)
  
 }
 
-$dotaz=mysql_query($sql);
+$dotaz=$conn_mysql->query($sql);
 
-$dotaz_radku=mysql_num_rows($dotaz);
+$dotaz_radku=$dotaz->num_rows;
 
 echo "<div style=\"padding-top: 20px; padding-bottom: 20px;\" >
 	<span style=\"font-size: 20px; font-weight: bold;  \" >
@@ -297,7 +297,7 @@ $i=1;
 
 global $ico;
 
-while ( ( $data=mysql_fetch_array($dotaz) ) )
+while ( ( $data=$dotaz->fetch_array() ) )
 {
 
   $Firma = $data["Firma"];

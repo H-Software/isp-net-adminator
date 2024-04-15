@@ -284,8 +284,8 @@ require ("include/charset.php");
 	  if($typ == 1)
 	  {
 	  
-	    $dotaz_router_main=mysql_query("SELECT * FROM router_list WHERE id = 1 order by id");
-	    $dotaz_router_main_radku=mysql_num_rows($dotaz_router_main);
+	    $dotaz_router_main=$conn_mysql->query("SELECT * FROM router_list WHERE id = 1 order by id");
+	    $dotaz_router_main_radku=$dotaz_router_main->num_rows;
 	  
 	    if( $dotaz_router_main_radku <> 1)
 	    { 
@@ -293,7 +293,7 @@ require ("include/charset.php");
 		exit;    
 	    }
 	  
-	    while( $data_main=mysql_fetch_array($dotaz_router_main) )
+	    while( $data_main=$dotaz_router_main->fetch_array() )
 	    {
 		//pouze erik
 	   
@@ -310,15 +310,15 @@ require ("include/charset.php");
 	  
 		echo "</td>\n</tr>\n";
 	
-		$dotaz_router_1=mysql_query("SELECT * FROM router_list WHERE parent_router = 1 order by id");
-		$dotaz_router_radku_1=mysql_num_rows($dotaz_router_1);
+		$dotaz_router_1=$conn_mysql->query("SELECT * FROM router_list WHERE parent_router = 1 order by id");
+		$dotaz_router_radku_1=$dotaz_router_1->num_rows;
 	    
 		if( $dotaz_router_radku_1 > 0 )
 		{
 	    	    require("./include/hierarchy.php");
 	         
 	    	    //prvni uroven
-	    	    while($data_router_1=mysql_fetch_array($dotaz_router_1))
+	    	    while($data_router_1=$dotaz_router_1->fetch_array())
 	    	    {    
 			global $uroven;
 		
@@ -344,14 +344,14 @@ require ("include/charset.php");
 	  
 	  echo "<tr><td colspan=\"".$uroven_max."\" >Nepřiřazené routery:  </td></tr>";
 	  
-	  $dotaz_routery=mysql_query("SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id");
-	  $dotaz_routery_radku=mysql_num_rows($dotaz_routery);
+	  $dotaz_routery=$conn_mysql->query("SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id");
+	  $dotaz_routery_radku=$dotaz_routery->num_rows;
 	  
 	  if ( $dotaz_routery_radku < 1 )
 	  { echo "<tr><td colspan=\"5\" > Žádné routery v databázi. </td></tr>"; }
 	  else
 	  {
-	    while( $data=mysql_fetch_array($dotaz_routery) ):
+	    while( $data=$dotaz_routery->fetch_array() ):
 	    
 		echo "<tr>";
 	  
@@ -365,9 +365,9 @@ require ("include/charset.php");
 		    echo $data["parent_router"];
 		    
 		    $parent_router=$data["parent_router"];
-		    $dotaz_sec=mysql_query("SELECT * FROM router_list WHERE id = '".intval($parent_router)."' ");
+		    $dotaz_sec=$conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($parent_router)."' ");
 		    
-		    while($data_sec=mysql_fetch_array($dotaz_sec))
+		    while($data_sec=$dotaz_sec->fetch_array())
 		    { echo "<span style=\"color: grey; font-weight: bold;\"> ( ".htmlspecialchars($data_sec["nazev"])." ) </span>"; }
 		    
 		    echo "</td>";
