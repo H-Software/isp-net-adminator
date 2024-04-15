@@ -451,7 +451,7 @@ require ("include/charset.php");
 		// TODO: fix paging
 		/// $sql_final = $sql_final . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-		echo "<div>SQL DUMP: ".$sql_final . "</div>";
+		// echo "<div>SQL DUMP: ".$sql_final . "</div>";
 		$dotaz_routery=$conn_mysql->query($sql_final);
 		
 		$dotaz_routery_radku=$dotaz_routery->num_rows;
