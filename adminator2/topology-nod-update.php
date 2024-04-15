@@ -205,8 +205,8 @@ else
   if(!($id))
   { $id =$_POST["update_id_new"]; }
   
-  $vysledek=mysql_query("select * from nod_list where id=".intval($id)."");
-  $radku=mysql_num_rows($vysledek);
+  $vysledek=$conn_mysql->query("select * from nod_list where id=".intval($id)."");
+  $radku=$vysledek->num_rows;
 	
   if($radku==0)
   { 
@@ -215,7 +215,7 @@ else
   }
   else
   {
-    while ($zaznam=mysql_fetch_array($vysledek)):
+    while ($zaznam=$vysledek->fetch_array()):
 		
       $id=$zaznam["id"];
       $jmeno=$zaznam["jmeno"];
