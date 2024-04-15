@@ -13,13 +13,11 @@ $login=$_POST["login"];
 $password=$_POST["password"];
 $lo=$_GET["lo"];
 
-
-
 If ((IsSet($login)) AND (IsSet($password))): 
 $p = MD5($password); 
-$MSQ = MySQL_Query("SELECT * FROM users WHERE (login LIKE '$login') AND (password LIKE '$p')"); 
+$MSQ = $conn_mysql->query("SELECT * FROM users WHERE (login LIKE '$login') AND (password LIKE '$p')"); 
 
-If (MySQL_Num_Rows($MSQ) <> 1): 
+If ($MSQ->num_rows <> 1): 
 echo "<p>Neautorizovaný přístup. / Chyba přístupu.</p>"; 
 Exit; 
 
@@ -41,7 +39,7 @@ $at = Date("U") - 1800;
 // co budeme ukladat do db ? zahashovany jmeno usera, nejdriv ho ale musime zjistit
 
 
-      $radek = mysql_fetch_array($MSQ);
+      $radek = $MSQ->fetch_array();
       $db_login=$radek["login"];
       $db_nick=$radek["login"];
       $db_level=$radek["level"];
@@ -55,8 +53,7 @@ $_SESSION["db_nick"]=$db_nick;
 
 //force update :)
 
-$MSQ = MySQL_Query("UPDATE autorizace SET date = $time WHERE id = '$db_login_md5'");
-
+$MSQ = $conn_mysql->query("UPDATE autorizace SET date = $time WHERE id = '$db_login_md5'");
 
 Endif; 
 
@@ -161,4 +158,3 @@ td{border-width:0}
 <?Endif;?> 
 </body> 
 </html> 
-<?MySQL_Close($MC);?>
