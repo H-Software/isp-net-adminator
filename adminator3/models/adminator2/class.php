@@ -3152,13 +3152,11 @@ class paging_global {
     var $db_type = "mysql";
     
     //konstruktor...naplni promenne
-    function __construct($conn_mysql = "", $conUrl = "home.php", $conInterval = 10, $conList = 1, $conBefore, $conAfter, $conSql = ""){
+    function __construct($conUrl = "home.php", $conInterval = 10, $conList = 1, $conBefore, $conAfter, $conSql = ""){
 
         $this->errName[1] = "Při volání konstruktoru nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
         // $this->errName[3] = "Nelze zobrazit listov▒n▒, chyba datab▒ze(Num_Rows)!<br>\n";
-
-		$this->conn_mysql = $conn_mysql;
 
 		$this->url = $conUrl;
         $this->interval = $conInterval;
@@ -3176,6 +3174,7 @@ class paging_global {
         }
         else {
             $this->sql = $conSql;
+			$this->conn_mysql = $conSql;
         }
     }
 
