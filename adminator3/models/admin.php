@@ -14,49 +14,48 @@ class admin {
 		try {
 			$vysledek = $this->conn_mysql->query("select * from leveling order by level asc");
 		} catch (Exception $e) {
-			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 		}
 	
 		$radku=$vysledek->num_rows;
 		
-		if ($radku==0) $output .= "Zadné levely v db (divny) ";
+		if ($radku==0) $output .= "<div style=\"padding-top: 5px; padding-bottom: 5px;\">Zadné levely v databazi</div>";
 		else
 		{
-			$output .= '<div style="padding-top: 5px; padding-bottom: 5px;">Výpis levelů stránek: </div>';
+			$output .= '<div style="padding-top: 5px; padding-bottom: 5px;">Výpis levelů stránek</div>';
 						
-			$output .= '<table border="1" width="100%" >';
+			// $output .= '<table class="table table-striped fs-6">';
+			$output .= '<table class="table table-striped fs-6">';
 								
 			$output .= "\n<tr>
-			<td width=\"5%\"><b>id:</b></td>
-			<td width=\"30%\"><b>Popis: </b></td>
+			<th width=\"5%\" scope=\"col\"><b>id:</b></th>
+			<th width=\"30%\" scope=\"col\"><b>Popis: </b></th>
 													
-			<td width=\"20%\"><b>Level: </b></td>
+			<th width=\"20%\" scope=\"col\"><b>Level: </b></th>
 						
-			<td width=\"10%\"><b>Úprava: </b></td>
-			<td width=\"10%\"><b>Smazání: </b></td>
+			<th width=\"10%\" scope=\"col\"><b>Úprava: </b></th>
+			<th width=\"10%\" scope=\"col\"><b>Smazání: </b></th>
 			</tr>\n";
-								
-			$output .= "\n";
-		
+										
 			while ($zaznam=$vysledek->fetch_array()):
 				$id=$zaznam["id"];
 				
-				$output .= "<tr><td>".$zaznam["id"]."</td>\n";
-				$output .= "<td>".$zaznam["popis"]."</td>\n";
-				
-				$output .= "<td>".$zaznam["level"]."</td>\n";
-				
-				$output .= '<td>
-					<form method="POST" action="/admin/level-action">
-						<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">
-						<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">
-						<input type="hidden" name="update_id" value="'.$id.'">
-						<input type="submit" value="update">
-					</form></td>';
-				
-				$output .= "</tr>";
+				$output .= "<tr>"
+							. "<td>".$zaznam["id"]."</td>\n"
+							. "<td>".$zaznam["popis"]."</td>\n"
+							. "<td>".$zaznam["level"]."</td>\n"
+							. '<td>
+								<form method="POST" action="/admin/level-action">
+									<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">
+									<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">
+									<input type="hidden" name="update_id" value="'.$id.'">
+									<input type="submit" value="update">
+								</form>'
+							 . '</td>'
+							. "</tr>";
 		
 			  endwhile;
+
+			  $output .= "</table>";
 		}
 		return $output;
 	}

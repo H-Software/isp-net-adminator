@@ -1,7 +1,7 @@
-{include file="base.tpl"}
+{include file="base-bs.tpl" tpl_include_subcat = 'admin/inc.subcat2'}
 
-{include file="admin/inc.subcat2.tpl"}
+<div class="row">
+{$body}
+</div>
 
-<div class="global-cat-body" >{$body}</div>
-
-{include file="base-end.tpl"}
+{include file="base-bs-end.tpl"}

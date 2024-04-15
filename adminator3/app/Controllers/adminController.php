@@ -68,6 +68,8 @@ class adminController extends adminatorController {
         
         $this->checkLevel(21);
 
+        $this->smarty->assign("bs_layout_main_col_count", "8");
+
         $this->smarty->assign("page_title","Adminator3 :: vypis levelu stranek");
 
         $this->header($request, $response);

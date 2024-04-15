@@ -12,4 +12,4 @@
 <div class="container-sm justify-content-md-center">
     <div class="row">
         <div class="col"></div>
-        <div class="col-10">
+        <div class="col-{$bs_layout_main_col_count|default:'10'}">
