@@ -155,9 +155,9 @@ require_once ("include/charset.php");
         <b>Vyberte požadovanou akci...</b></div>';
  }
 
- $last_log_rs = mysql_query("SELECT akce FROM archiv_zmen_work ORDER BY id DESC LIMIT 1");
+ $last_log_rs = $conn_mysql->query("SELECT akce FROM archiv_zmen_work ORDER BY id DESC LIMIT 1");
  
- while($data_last_log = mysql_fetch_array($last_log_rs)){
+ while($data_last_log = $last_log_rs->fetch_array()){
  
     echo "<PRE>";
 

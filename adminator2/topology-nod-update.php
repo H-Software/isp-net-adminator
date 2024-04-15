@@ -310,10 +310,10 @@ else
 	  
 	  echo "<select name=\"router_id\" size=\"1\" >";
 	  
-	  $dotaz_parent = mysql_query("SELECT * FROM router_list order by nazev");		      
+	  $dotaz_parent = $conn_mysql->query("SELECT * FROM router_list order by nazev");		      
 	  echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>";
 	  
-	  while( $data_parent=mysql_fetch_array($dotaz_parent))
+	  while( $data_parent=$dotaz_parent->fetch_array())
 	  {
 	      echo "<option value=\"".$data_parent["id"]."\" ";      
 	      if ( $data_parent["id"] == $router_id )echo " selected ";
@@ -381,10 +381,10 @@ else
 	  else
 	  { $sql_filtr = "SELECT id,nazev,ip_adresa FROM router_list ORDER BY nazev"; }
 	  
-	  $dotaz_parent = mysql_query($sql_filtr);		      
+	  $dotaz_parent = $conn_mysql->query($sql_filtr);		      
 	  echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
 	  
-	  while( $data_parent = mysql_fetch_array($dotaz_parent))
+	  while( $data_parent = $dotaz_parent->fetch_array())
 	  {
 	      echo "<option value=\"".$data_parent["id"]."\" ";      
 	      if( $data_parent["id"] == $filter_router_id ){ echo " selected "; }
