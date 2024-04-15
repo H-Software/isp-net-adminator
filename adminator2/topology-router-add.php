@@ -383,8 +383,8 @@ require("include/charset.php");
     {
 	// nacteni promennych, pokud se nedna o upravu a neodeslal sem form
 		
-	$dotaz_top=mysql_query("SELECT * FROM router_list WHERE id = '".intval($update_id)."' ");
-        $dotaz_top_radku=mysql_num_rows($dotaz_top);
+	$dotaz_top=$conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($update_id)."' ");
+        $dotaz_top_radku=$dotaz_top->num_rows;
 
         if ( $dotaz_top_radku < 1)
         { echo "<span style=\"color: red; font-size: 16px; font-weight: bold;\">
@@ -392,7 +392,7 @@ require("include/charset.php");
         }
 	else
         {
-            while($data_top=mysql_fetch_array($dotaz_top)):
+            while($data_top=$dotaz_top->fetch_array()):
 	
 		if($nazev == "") 	 $nazev=$data_top["nazev"];
 		if($ip_adresa == "")     $ip_adresa=$data_top["ip_adresa"];
@@ -477,7 +477,7 @@ require("include/charset.php");
 	    	    
 	//klik na pregenerovaní fajlů
 	echo "<span style=\"padding-left: 100px;\">Ruční vynucené přegenerování souborů (pro monitoring2) ".
-	      "<a target=\"_new\" href=\"https://monitoring.simelon.net/mon/www/rb_all.php?ip=".$ip_adresa."&only_create=only_create\">zde</a>".
+	      "<a target=\"_new\" href=\"https://monitoring.adminator.net/mon/www/rb_all.php?ip=".$ip_adresa."&only_create=only_create\">zde</a>".
 	      "</span>";
 	
 	echo "</td>";
