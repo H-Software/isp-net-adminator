@@ -8,7 +8,8 @@
     <form name="form1" method="post" action="{$action}" >
     <input type="hidden" name="send" value="true" >
     <input type="hidden" name="update_id" value="{$update_id}" >
-
+    {$csrf_html}
+    
     <div style="width: 200px; float: left;" >Vyberte typ: </div>
     <div>
       <select size="1" name="typ" >
