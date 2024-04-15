@@ -11,7 +11,6 @@ $app->group('', function () {
 	$this->post('/auth/signin', 'AuthController:postSignIn');
 })->add(new GuestMiddleware($container));
 
-
 $app->group('', function () {
     // $this->get('/', function ($req, $res, $args) {
     //     return $res->withStatus(302)->withHeader('Location', '/home');
@@ -32,7 +31,9 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/admin', \adminController::class . ':admin');
     $this->map(['GET', 'POST'],'/admin/admin', \adminController::class . ':adminMain');
     $this->map(['GET', 'POST'],'/admin/level-list', \adminController::class . ':adminLevelList');
+    $this->map(['GET', 'POST'],'/admin/level-list/json', \adminController::class . ':adminLevelListJson');
     $this->map(['GET', 'POST'],'/admin/level-action', \adminController::class . ':adminLevelAction');
+
     $this->map(['GET', 'POST'],'/admin/tarify', \adminController::class . ':adminTarify');
 
     $this->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');

@@ -23,6 +23,31 @@ class adminatorController extends Controller {
         $this->logger->addInfo("adminatorController\__construct called");
 	}
 
+    public function jsonRender(ServerRequestInterface $request, ResponseInterface $response, $data, $status = 200, $msg = '') {
+        
+        // $this->logger->addInfo("JsonViewer\\render called");
+        // $this->logger->addInfo("JsonViewer\\render response dump: " . var_export($data, true));
+
+        $status = intval($status);
+        $_response = ['code' => $status, 'data' => null, 'msg' => ''];
+        if(200 == $status or 418 == $status){
+            $_response['data'] = $data;
+        }else{
+            $_response['msg'] = $msg;
+        }
+
+        $newResponse = $response->withJson($_response, $status, JSON_PRETTY_PRINT);
+        // $this->logger->addInfo("JsonViewer\\render response dump: " . var_export($newResponse, true));
+
+        return $newResponse;
+    }
+
+    // public function jsonRenderException($status = 0, $msg = '') {
+    //     $status = intval($status);
+    //     $response = ['code' => $status, 'data' => null, 'msg' => $msg];
+    //     $this->_response->withJson($response);
+    // }
+    
     public function renderNoLogin ()
     {
         $this->smarty->assign("page_title","Adminator3 - chybny level");

@@ -3,60 +3,114 @@
 class admin {
 	var $conn_mysql;
 
-	function __construct($conn_mysql) {
+	function __construct($conn_mysql, $logger) {
 		$this->conn_mysql = $conn_mysql;
+		$this->logger = $logger;
+	}
+
+	function levelListDbQuery()
+	{
+		try {
+			$rs= $this->conn_mysql->query("select * from leveling where id > 100 order by level asc");
+		} catch (Exception $e) {
+		}
+	
+		$num_rows = $rs->num_rows;
+
+		if ($num_rows > 0)
+		{
+			$data = $rs->fetch_all(MYSQLI_ASSOC);
+		}
+
+		return array($num_rows, $data);
+	}
+
+	function levelListJson()
+	{
+		$r_data = array();
+		$r_status = 418;
+		$r_msg = "";
+
+        // $r_data = ['username' => 'leego.sir',  'age' => 18];
+
+		list($q_num_rows, $q_data) = $this->levelListDbQuery();
+		// $this->logger->addInfo("admin\LevelList dump q_data: " . var_export($q_data, true));
+
+		if ($q_num_rows==0)
+		{
+			$r_data = array(0 => "Zadné levely v databazi");
+		}
+		else
+		{
+			$r_data = $q_data;
+		}
+
+		return array($r_data, $r_status, $r_msg);
 	}
 
 	function levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value){
 
 		$output  = "";
-
-		try {
-			$vysledek = $this->conn_mysql->query("select * from leveling order by level asc");
-		} catch (Exception $e) {
-			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-		}
-	
-		$radku=$vysledek->num_rows;
 		
-		if ($radku==0) $output .= "Zadné levely v db (divny) ";
-		else
+		if($_POST['search'])
 		{
-			$output .= '<div style="padding-top: 5px; padding-bottom: 5px;">Výpis levelů stránek: </div>';
-						
-			$output .= '<table border="1" width="100%" >';
+			$search_string = $this->conn_mysql->real_escape_string($_POST['search']);
+			$this->logger->addInfo("admin\LevelList search string: " . var_export($search_string, true));
+		}
+
+		list($q_num_rows, $q_data) = $this->levelListDbQuery();
+
+		// $this->logger->addInfo("admin\LevelList dump q_data: " . var_export($q_data, true));
+
+		$output .= '<div style="padding-top: 10px; padding-bottom: 5px;" class="fs-5">Výpis levelů stránek</div>';
+
+		if ($q_num_rows==0) $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Zadné levely v databazi</div>";
+		else
+		{						
+			// $output .= '<table class="table table-striped fs-6">';
+			$output .= '<table
+							id="level-list"
+							class="table table-striped fs-6"
+							data-toggle="table"
+							data-pagination="true"
+							data-side-pagination="client"
+							data-search="true"
+							';
+							
+			$output .= '>';
+
+			$output .= "\n
+			<thead>
+				<tr class=\"table-light\">
+					<th width=\"5%\" scope=\"col\" data-field=\"id\" data-sortable=\"true\">id</th>
+					<th width=\"30%\" scope=\"col\" data-field=\"name\">Popis</th>
+															
+					<th width=\"20%\" scope=\"col\" data-field=\leve\">Level</th>
 								
-			$output .= "\n<tr>
-			<td width=\"5%\"><b>id:</b></td>
-			<td width=\"30%\"><b>Popis: </b></td>
-													
-			<td width=\"20%\"><b>Level: </b></td>
-						
-			<td width=\"10%\"><b>Úprava: </b></td>
-			<td width=\"10%\"><b>Smazání: </b></td>
-			</tr>\n";
-								
-			$output .= "\n";
-		
-			while ($zaznam=$vysledek->fetch_array()):
-				$id=$zaznam["id"];
-				
-				$output .= "<tr><td>".$zaznam["id"]."</td>\n";
-				$output .= "<td>".$zaznam["popis"]."</td>\n";
-				
-				$output .= "<td>".$zaznam["level"]."</td>\n";
-				
-				$output .= '<td>
-					<form method="POST" action="/admin/level-action">
-						<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">
-						<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">
-						<input type="hidden" name="update_id" value="'.$id.'">
-						<input type="submit" value="update">
-					</form></td>';
-				
-				$output .= "</tr>";
-		
-			  endwhile;
+					<th width=\"10%\" scope=\"col\">Úprava</th>
+					<th width=\"10%\" scope=\"col\">Smazání</th>
+				</tr>
+			</thead>
+			<tbody id=\"hidden\"> <!-- hidden is used because of jquery duplicates this element -->
+			\n";
+			
+			foreach ($q_data as $d){
+				$output .= "<tr>"
+							. "<td scope=\"row\">".$d["id"]."</td>\n"
+							. "<td >".$d["popis"]."</td>\n"
+							. "<td>".$d["level"]."</td>\n"
+							. '<td>
+								<form method="POST" action="/admin/level-action" >
+									<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">
+									<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">
+									<input type="hidden" name="update_id" value="'.$d['id'].'">
+									<input type="submit" value="update">
+								</form>'
+							 . '</td>'
+							. "</tr>";
+			}
+
+			$output .= "<tbody></table>";
 		}
 		return $output;
 	}

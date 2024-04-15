@@ -646,15 +646,6 @@ class stb
 
         $uri = $request->getUri();
 
-        // if()
-        // {
-
-        // }
-        // else
-        // {
-
-        // }
-
         $form_id = "stb-action-add";
 
         $form_data['f_open'] = $this->action_form->open($form_id,$form_id, $uri->getPath(), '','',$form_csrf);
