@@ -75,7 +75,7 @@ require ("include/charset.php");
     <span style=\"padding-left: 20px; font-size: 20px; font-weight: bold; \">
     Výpis lokalit / přípojných bodů
     </span>
-    <span style=\"padding-left: 80px; \" ><a href=\"include/export-topology.php\" >export lokalit/nodů</a></span>  
+    <span style=\"padding-left: 80px; \" ><!--<a href=\"include/export-topology.php\" >-->export lokalit/nodů<!--</a>--></span>  
  
     <span style=\"padding-left: 80px; \" >
 	Výpis lokalit/nodů s latencemi ";
@@ -503,7 +503,7 @@ require ("include/charset.php");
 	echo "<tr>";
 	    
 	    echo "<td class=\"tab-topology\" colspan=\"".$colspan_filtrace."\" >
-		<a href=\"archiv-zmen.php?id_nodu=".intval($id)."\" style=\"font-size: 12px; \">H: ".$id."</a>".
+		<a href=\" " .fix_link_to_another_adminator("/archiv-zmen?id_nodu=".intval($id) . "\" style=\"font-size: 12px; \">H: ".$id."</a>".
 		"</td>\n";
 	    	    
 	    echo "<td class=\"tab-topology\" colspan=\"3\">
@@ -536,7 +536,7 @@ require ("include/charset.php");
 	     elseif ( $typ_vysilace == 7 ){ $typ_vysilace2="ap-5.8Ghz-smerovka"; }
 	     elseif ( $typ_vysilace == 8 ){ $typ_vysilace2="jiné"; }
 	     else { $typ_vysilace2=$typ_vysilace; }			
-	     																		       
+	    									       
 	    echo "<td class=\"tab-topology\" colspan=\"".$colspan_typ_vysilace."\" ><span style=\"color: #666666; font-size: 13px; \">".$typ_vysilace2."</span> </td>\n";
 	    
 	     list($a,$b,$c,$d) = split("[.]",$zaznam["ip_rozsah"]);
