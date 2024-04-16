@@ -30,7 +30,7 @@
        echo ' align="center" width="11%"><a class="cat" href="'.$cesta.'work.php" target="_top">Work</a></td>'." \n";
        
       if ( ereg("^.+topology",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else { echo '<td '; }
-       echo ' align="center" width=""><a class="cat" href="'.$cesta.'topology-route-list.php" target="_top" >Topologie</a></td>'." \n";
+       echo ' align="center" width=""><a class="cat" href="'.$cesta.'topology-router-list.php" target="_top" >Topologie</a></td>'." \n";
      
       if ( ereg("^.+admin.+$",$uri_replace ) or ereg("^.+admin-subcat.php$",$_SERVER["REQUEST_URI"]) )
         { echo '<td bgcolor="silver" '; }  else { echo '<td '; }
