@@ -28,11 +28,15 @@ class topologyController extends adminatorController {
 
       $this->checkLevel(5);
 
+      $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
+
       $this->smarty->assign("page_title","Adminator3 :: Topologie");
 
       $this->header($request, $response);
       
-      // $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+      $output = $topology->getNodeList();
+
+      $this->smarty->assign("body", $output);
 
       $this->smarty->display('topology/list.tpl');
 
