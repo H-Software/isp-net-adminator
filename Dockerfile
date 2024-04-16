@@ -89,6 +89,10 @@ RUN cd adminator3 \
         monolog/monolog:^1.27.1 \
         respect/validation:^1.1 \
         formr/formr:^1.4 \
+        jeremykendall/password-validator:3.* \
+        zendframework/zend-authentication:2.* \
+        zendframework/zend-permissions-acl:2.* \
+        zendframework/zend-session:2.* \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require \
         illuminate/database:^5.8
