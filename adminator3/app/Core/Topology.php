@@ -927,7 +927,7 @@ class Topology extends adminator {
                 
                         $id = $data_router_1["id"];	
                     
-                        hierarchy_vypis_router($id,"0");
+                        $output .= hierarchy_vypis_router($id,"0");
                         
                     } // while dotaz_router
                 } // konec if dotaz_router_radku > 0
