@@ -2,9 +2,9 @@
 
 $cesta = "../";
 
-require_once ($cesta."include/config.php"); 
+require ($cesta."include/main.function.shared.php");
+require ($cesta."include/config.php"); 
 require ($cesta."include/check_login.php");
-
 require ($cesta."include/check_level.php");
 
 if( !( check_level($level,75) ) )
@@ -43,7 +43,8 @@ require ($cesta."include/charset.php");
    <?php require ("partner-klienti-cat.php"); ?>
  	
  </td>
- </tr>
+ </tr>
+
   
   <tr>
   <td colspan="2" >
