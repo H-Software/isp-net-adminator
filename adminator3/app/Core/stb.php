@@ -54,7 +54,7 @@ class stb
     {
         // bootstrap -> bootstrap.js
         // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
-        $this->action_form = new Formr\Formr('bootstrap5', 'hush');
+        $this->action_form = new \Formr\Formr('bootstrap5', 'hush');
     }
 
     public function stbListGetBodyContent()

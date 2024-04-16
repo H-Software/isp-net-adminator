@@ -16,6 +16,8 @@ class paging_global {
     var $befError = "<div align=\"center\" style=\"color: maroon;\">";
     var $aftError = "</div>\n";
     
+    var $msqError = "";
+
 	var $conn_mysql;
     var $db_type = "mysql";
     
@@ -171,7 +173,7 @@ class paging_global {
     //vypisovani chybovych hlasek
     function error($errNum = 0){
         if ($errNum != 0){
-            echo $this->befError.$this->errName[$errNum].$this->aftError;
+            $this->msqError = $this->befError.$this->errName[$errNum].$this->aftError;
         }
     }
 }
