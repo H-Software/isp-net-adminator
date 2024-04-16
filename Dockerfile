@@ -38,26 +38,26 @@ RUN apt-get update \
 # PHP MSSQL stuff
 # https://github.com/petersonwsantos/docker-php5.6-mssql/blob/master/Dockerfile
 # https://github.com/Namoshek/docker-php-mssql/blob/master/8.1/fpm/Dockerfile
-# RUN apt-get update && apt-get install -y --no-install-recommends \
-#         libcurl4-openssl-dev \
-#         libedit-dev \
-#         libsqlite3-dev \
-#         libssl-dev \
-#         libxml2-dev \
-#         freetds-dev \
-#         freetds-bin \
-#         freetds-common \
-#         libdbd-freetds \
-#         libsybdb5 \
-#         libqt4-sql-tds \
-#         libqt5sql5-tds \
-#         libqxmlrpc-dev \
-#       && apt-get clean \
-#       && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-#       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
-#       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
-#       && docker-php-ext-install   mssql \
-#       && docker-php-ext-configure mssql
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libcurl4-openssl-dev \
+        libedit-dev \
+        libsqlite3-dev \
+        libssl-dev \
+        libxml2-dev \
+        freetds-dev \
+        freetds-bin \
+        freetds-common \
+        libdbd-freetds \
+        libsybdb5 \
+        libqt4-sql-tds \
+        libqt5sql5-tds \
+        libqxmlrpc-dev \
+      && apt-get clean \
+      && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+      && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
+      && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
+      && docker-php-ext-install   mssql \
+      && docker-php-ext-configure mssql
 
 # apache conf
 RUN a2enmod ssl \
