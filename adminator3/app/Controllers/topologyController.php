@@ -30,7 +30,7 @@ class topologyController extends adminatorController {
 
       $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
-      $this->smarty->assign("page_title","Adminator3 :: Topologie");
+      $this->smarty->assign("page_title","Adminator3 :: Topologie :: Node list");
 
       $this->header($request, $response);
       

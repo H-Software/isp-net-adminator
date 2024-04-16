@@ -81,7 +81,7 @@ class Topology extends adminator {
         }
         
         // "list" header
-        $output .= "<div style=\"padding-top: 10px; padding-bottom: 20px; \" >
+        $output .= "<div style=\"padding-top: 10px; padding-bottom: 20px;\" >
             <span style=\"padding-left: 20px; font-size: 20px; font-weight: bold; \">
             Výpis lokalit / přípojných bodů
             </span>
@@ -104,7 +104,9 @@ class Topology extends adminator {
         $output .= "</span>
         </div>";
 
-        $output .= "<div style=\"padding-left: 20px; \" >
+        // filter/search
+        //
+        $output .= "<div style=\"padding-left: 20px; padding-bottom: 10px;\" >
             <form action=\"".$_SERVER["PHP_SELF"]."\" method=\"GET\" >
                         
                 <input type=\"hidden\" name=\"razeni\" value=\"".$razeni."\" >
@@ -165,7 +167,7 @@ class Topology extends adminator {
             </form>
         </div>
         
-        <div style=\"padding-left: 20px; \" >
+        <div style=\"padding-left: 20px; padding-bottom: 10px; \" >
             <span style=\"font-weight: bold; padding-right: 10px; \">Hledaný výraz:</span> ".$find."
         </div>";
         
@@ -200,7 +202,7 @@ class Topology extends adminator {
         
         $sql="select * from nod_list ".$where." ".$order;
 
-        $sql_source = "./topology-nod-list.php?razeni=".$razeni."&ping=".$ping;
+        $sql_source = "/topology/nod-list?razeni=".$razeni."&ping=".$ping;
         $sql_source .= "&typ_vysilace=".$typ_vysilace."&stav=".$stav."&find=".$find_orez;
         $sql_source .= "&typ_nodu=".$typ_nodu;
         
@@ -227,14 +229,15 @@ class Topology extends adminator {
         
         if ($radku==0)
         {
-            $output .= "<div style=\"padding-top: 15px; padding-left: 15px;\">Žadné lokality/nody dle hladeného výrazu ( ".$find." ) v databázi neuloženy. </div>";
+            $output .= "<div style=\"padding-top: 15px; padding-left: 15px;\" class=\"alert alert-warning\" role=\"alert\">"
+                        . "Žadné lokality/nody dle hladeného výrazu ( ".$find." ) v databázi neuloženy."
+                        . "</div>";
             // $output .= "<div >debug: sql: ".$sql." </div>";
         }
         else
         {
-            
-            // echo '<br>Výpis lokalit/nodů: <span style="color: silver">řazeno dle id: '.$_POST["razeni"].'</span><BR><BR>';
-            
+            // $output .= '<br>Výpis lokalit/nodů: <span style="color: silver">řazeno dle id: '.$_POST["razeni"].'</span><BR><BR>';
+       
             $colspan_id="1";
             $colspan_jmeno="3";
             $colspan_adresa="3";
@@ -265,7 +268,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form1.submit()\">
-                <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
                 $output .= "<form  name=\"form2\" method=\"GET\" action=\"\" > ";
@@ -276,7 +279,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form2.submit()\">";
-                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<img src=\"/img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
             $output .= "</td></tr></table>";
@@ -298,7 +301,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form3.submit()\">
-                <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
                 $output .= "<form  name=\"form4\" method=\"GET\" action=\"\" >";
@@ -309,7 +312,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form4.submit()\">";
-                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<img src=\"/img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
             $output .= "</td></tr></table>";
@@ -332,7 +335,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form5.submit()\">
-                <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
                 $output .= "<form  name=\"form6\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
@@ -343,7 +346,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form6.submit()\">";
-                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<img src=\"/img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
             $output .= "</td></tr></table>";
@@ -365,7 +368,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form7.submit()\">
-                <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
                 $output .= "<form  name=\"form8\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
@@ -376,7 +379,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form8.submit()\">";
-                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<img src=\"/img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
             $output .= "</td></tr></table>";
@@ -402,7 +405,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form9.submit()\">
-                <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
                 $output .= "<form  name=\"form10\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
@@ -413,7 +416,7 @@ class Topology extends adminator {
                 $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
                 $output .= "<a href=\"javascript:self.document.forms.form10.submit()\">";
-                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<img src=\"/img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
             $output .= "</td></tr></table>";
@@ -470,12 +473,12 @@ class Topology extends adminator {
                 // prvni radek
                 $output .= "<tr>";
                     $output .= "<td colspan=\"".$colspan_id."\"><span style=\"font-size: 12px; padding-right: 5px;\" >";
-                        echo $id."</span><a name=\"".$id."\" ></a>";
+                        $output .= $id."</span><a name=\"".$id."\" ></a>";
                     $output .= "</td>\n";
 
                 $output .= "<td colspan=\"".$colspan_jmeno."\">
                         <span style=\"font-weight: bold; font-size: 14px; \">".
-                        "<a href=\"topology-user-list.php?vysilac=".intval($zaznam["id"])."\" >".$zaznam["jmeno"]."</a>".
+                        "<a href=\"/topology/user-list?vysilac=".intval($zaznam["id"])."\" >".$zaznam["jmeno"]."</a>".
                         "</span>\n".
                     "</td>\n";
                 $output .= "<td colspan=\"".$colspan_adresa."\" >".
@@ -514,7 +517,7 @@ class Topology extends adminator {
                 $output .= "<tr>";
                 
                 $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_filtrace."\" >
-                <a href=\" " . fix_link_to_another_adminator("/archiv-zmen?id_nodu=".intval($id)) . "\" style=\"font-size: 12px; \">H: ".$id."</a>".
+                <a href=\"/archiv-zmen?id_nodu=".intval($id). "\" style=\"font-size: 12px; \">H: ".$id."</a>".
                 "</td>\n";
                         
                 $output .= "<td class=\"tab-topology\" colspan=\"3\">
@@ -532,7 +535,7 @@ class Topology extends adminator {
                 }
                 
                 $output .= "<span style=\"color: teal; \">".$router_nazev."</span> ".$router_ip."</span>";
-                $output .= "<a href=\"topology-router-list.php?odeslano=OK&f_search=".$router_ip."&\">link</a>";
+                $output .= "<a href=\"/topology/router-list?odeslano=OK&f_search=".$router_ip."&\">link</a>";
 
                 $output .= "</td>\n";
                 
@@ -601,7 +604,7 @@ class Topology extends adminator {
                 $output .= "<table width=\"100%\" border=\"0\"><tr>";
                 
                 // upraveni 
-                $output .= "<td><form method=\"POST\" action=\"topology-nod-update.php\">
+                $output .= "<td><form method=\"POST\" action=\"/topology/nod-update\">
                 <input type=\"hidden\" name=\"update_id\" value=\"".$id."\">
                 <input type=\"submit\" value=\"update\">
                 </form>
@@ -610,7 +613,7 @@ class Topology extends adminator {
                 //smazani
                 //$output .= "<td class=\"tab-topology\" colspan=\"\" >";
                 
-                $output .= "<td><form action=\"topology-nod-erase.php\" method=\"POST\" >";
+                $output .= "<td><form action=\"/topology/nod-erase\" method=\"POST\" >";
                 $output .= "<input type=\"hidden\" name=\"erase_id\" value=\"".$id."\">";
                 $output .= "<input type=\"submit\" value=\"Smazat\">
                     </form>
