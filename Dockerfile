@@ -79,15 +79,15 @@ RUN mkdir -p /var/www/html/adminator3/
 
 RUN cd adminator3 \
     && composer require \
-        nette/robot-loader:3.1.4 \
-        smarty/smarty:2.6.33 \
+        nette/robot-loader:^3.2 \
+        smarty/smarty:^3.1 \
         slim/slim:3.* \
-        slim/twig-view:^2.5.1 \
-        slim/csrf:^0.6.0 \
-        slim/flash:^0.1.0 \
-        monolog/monolog:^1.17 \
-        respect/validation:^1.0 \
-        formr/formr:1.4.6 \
+        slim/twig-view:^3.0.0\
+        slim/csrf:^1.0 \
+        slim/flash:^0.4.0 \
+        monolog/monolog:^1.27.1 \
+        respect/validation:^1.1 \
+        formr/formr:^1.4 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require\
         illuminate/database:^5.2
