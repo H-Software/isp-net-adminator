@@ -44,9 +44,6 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/others', \othersController::class . ':others');
     $this->map(['GET', 'POST'],'/others/board', \othersController::class . ':board');
 
-    $this->map(['GET', 'POST'],'/vlastnici/cat', \vlastniciController::class . ':cat');
-    $this->map(['GET', 'POST'],'/vlastnici2', \vlastniciController::class . ':vlastnici2');
-
     $this->map(['GET', 'POST'],'/objekty/cat', \objektyController::class . ':cat');
     $this->map(['GET', 'POST'],'/objekty/stb', \objektyController::class . ':stb');
     $this->map(['GET', 'POST'],'/objekty/stb/action', \objektyController::class . ':stbAction');
@@ -54,6 +51,12 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/platby/cat', \platbyController::class . ':cat');
     $this->map(['GET', 'POST'],'/platby/fn', \platbyController::class . ':fn');
     $this->map(['GET', 'POST'],'/platby/fn-kontrola-omezeni', \platbyController::class . ':fnKontrolaOmezeni');
+
+    $this->map(['GET', 'POST'],'/vlastnici/cat', \vlastniciController::class . ':cat');
+    $this->map(['GET', 'POST'],'/vlastnici2', \vlastniciController::class . ':vlastnici2');
+
+    $this->map(['GET', 'POST'],'/topology', \topologyController::class . ':nodList');
+    $this->map(['GET', 'POST'],'/topology/nod-list', \topologyController::class . ':nodList');
 
     $this->map(['GET', 'POST'],'/work', \workController::class . ':work');
 
