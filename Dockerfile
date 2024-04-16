@@ -15,7 +15,7 @@ RUN apt-get update \
         wget \
         zip \
         unzip \
-        zlib1g-dev \
+        zlib1g \
         git \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
