@@ -207,8 +207,15 @@ class Topology extends adminator {
         $sql_source .= "&typ_nodu=".$typ_nodu;
         
         // TODO: fix paging
-        $listovani = new c_listing_topology($this->conn_mysql, $sql_source, 30, $list,
-                        "<center><div class=\"text-listing\">\n", "</div></center>\n",$sql." ; ");
+        $paging = new c_listing_topology(
+                            $this->conn_mysql,
+                            $sql_source,
+                            30,
+                            $list,
+                            "<center><div class=\"text-listing\">\n",
+                            "</div></center>\n",
+                            $sql." ; "
+                        );
                         
         if (($list == "")||($list == "1"))
         {    //pokud není list zadán nebo je první
@@ -216,12 +223,12 @@ class Topology extends adminator {
         }
         else
         {
-            $bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
+            $bude_chybet = (($list-1) * $paging->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
         }
             
-        $vysledek = $this->conn_mysql->query($sql . " LIMIT ".$bude_chybet.",".$listovani->interval." ");
+        $vysledek = $this->conn_mysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
 
-        $output .= "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
+        $output .= "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$paging->listInterval()."</div>";    //zobrazení stránkovače
         
         $radku = $vysledek->num_rows;
         
@@ -630,9 +637,12 @@ class Topology extends adminator {
         $output .= "</table>";
 
         $output .= "<div style=\"padding-top: 20px; margin-bottom: 20px; \" >"
-                    . "<span style=\"margin-top: 5px; margin-bottom: 15px; \">".$listovani->listInterval()
+                    . "<span style=\"margin-top: 5px; margin-bottom: 15px; \">".$paging->listInterval()
                   . "</div>";
         
+        // TODO: show printing error from paging class
+        echo $paging->msqError;
+
         return $output;
     }
 }

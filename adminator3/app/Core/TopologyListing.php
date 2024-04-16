@@ -28,7 +28,8 @@ class c_listing_topology {
     var $errName;
     var $befError = "<div align=\"center\" style=\"color: maroon;\">";
     var $aftError = "</div>";
-    
+    var $msqError = "";
+
     //konstruktor...naplni promenne
     function __construct($conn_mysql, $conUrl = "/topology/nod-list?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
     {
@@ -72,8 +73,10 @@ class c_listing_topology {
     //zobrazi pouze seznam cisel listu
     //napr.:    1 | 2 | 3
     function listNumber(){
+        $output = "";
+
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         for ($i = 1; $i <= $this->numLists; $i++){
             $isLink = 1;
             $spacer = " | ";
@@ -88,20 +91,23 @@ class c_listing_topology {
                 $spacer = "";
             }
             if ($isLink == 0){
-                echo $i." ".$spacer;
+                $output .= $i." ".$spacer;
             }
             if ($isLink == 1){
-                echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$i."</a> ".$spacer;
+                $output .= "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$i."</a> ".$spacer;
             }
         }
-        echo $this->after;
+        $output .= $this->after;
+        return $output;
     }
     
     //zobrazi seznam intervalu v zadanem rozsahu ($interval)
     //napr.:    1-10 | 11-20 | 21-30
     function listInterval(){
+        $output = "";
+        
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         for ($i = 1; $i <= $this->numLists; $i++){
             $isLink = 1;
             $spacer = " | ";
@@ -119,13 +125,16 @@ class c_listing_topology {
                 $spacer = "";
             }
             if ($isLink == 0){
-                echo $from."-".$to." ".$spacer;
+                $output .= $from."-".$to." ".$spacer;
             }
             if ($isLink == 1){
-                echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
+                $output .= "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
             }
         }
-        echo $this->after;
+        
+        $output .= $this->after;
+
+        return $output;
     }
     
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)
@@ -155,7 +164,7 @@ class c_listing_topology {
     //vypisovani chybovych hlasek
     function error($errNum = 0){
         if ($errNum != 0){
-            echo $this->befError.$this->errName[$errNum].$this->aftError;
+            $this->msqError = $this->befError.$this->errName[$errNum].$this->aftError;
         }
     }
 }

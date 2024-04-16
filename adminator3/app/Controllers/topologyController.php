@@ -46,7 +46,7 @@ class topologyController extends adminatorController {
     {
       $this->logger->addInfo("topologyController\\routerList called");
 
-      $this->checkLevel();
+      $this->checkLevel(85);
 
       $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
