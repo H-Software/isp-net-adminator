@@ -64,7 +64,7 @@ class adminator {
         if( ereg("^.+platby.+$",$uri) )
         { $kategorie[2]["barva"] = "silver"; }
 
-        $kategorie[3] = array( "nazev" => "Topologie", "url" => fix_link_to_another_adminator("/topology-nod-list.php"), "align" => "center", "width" => "" );
+        $kategorie[3] = array( "nazev" => "Topologie", "url" => "/topology", "align" => "center", "width" => "" );
 
         if( ereg("^.+topology",$uri) )
         { $kategorie[3]["barva"] = "silver"; }
@@ -154,7 +154,7 @@ class adminator {
 
         return $ret;
     }
-    
+
     function show_stats_faktury_neuhr()
     {
         //
