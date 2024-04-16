@@ -105,6 +105,8 @@ class adminatorController extends Controller {
     function header(ServerRequestInterface $request = null, ResponseInterface $response = null)
     {
 
+        $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+
         $this->logger->addDebug("adminatorController\\header called");
         $this->logger->addDebug("adminatorController\\header: logged user info: " . \App\Auth\Auth::getUserEmail() . " (" . $this->auth->user_level . ")");
 
@@ -116,7 +118,7 @@ class adminatorController extends Controller {
         $uri=$_SERVER["REQUEST_URI"];
         $uri_replace = str_replace ("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka, $mapa) = $this->zobraz_kategorie($uri,$uri_replace);
+        list($kategorie, $kat_2radka, $mapa) = $a->zobraz_kategorie($uri,$uri_replace);
 
         $this->smarty->assign("kategorie",$kategorie);
         $this->smarty->assign("kat_2radka",$kat_2radka);
@@ -175,72 +177,7 @@ class adminatorController extends Controller {
         $this->smarty->assign("subcat_select",0);
     }
 
-    function zobraz_kategorie($uri,$uri_replace)
-    {
 
-        $kategorie = array();
-
-        $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" );
-
-        if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici/cat+",$uri) or ereg("^.+vypovedi",$uri) )
-        { $kategorie[0]["barva"] = "silver"; }
-
-        $kategorie[1] = array( "nazev" => "Služby", "url" => "/objekty/cat", "align" => "center", "width" => "18%" );
-
-        if( ereg("^.+objekty.",$uri) )
-        { $kategorie[1]["barva"] = "silver"; }
-
-        $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby/cat", "align" => "center", "width" => "18%" );
-
-        if( ereg("^.+platby.+$",$uri) )
-        { $kategorie[2]["barva"] = "silver"; }
-
-        $kategorie[3] = array( "nazev" => "Topologie", "url" => fix_link_to_another_adminator("/topology-nod-list.php"), "align" => "center", "width" => "" );
-
-        if( ereg("^.+topology",$uri) )
-        { $kategorie[3]["barva"] = "silver"; }
-
-        $kategorie[4] = array( "nazev" => "Nastavení", "url" => "/admin", "align" => "center", "width" => "" );
-
-        if( ereg("^.+admin.+$",$uri_replace ) )
-        {  $kategorie[4]["barva"] = "silver"; }
-
-        $kategorie[5] = array( "nazev" => "Úvodní strana", "url" => "/home", "align" => "center", "width" => "" );
-        
-        if( ereg("^.+home.php$",$uri) )
-        { $kategorie[5]["barva"] = "silver"; }
-
-        $kat_2radka = array();
-
-        $kat_2radka[0] = array( "nazev" => "Partner program", "url" => fix_link_to_another_adminator("/partner/partner-cat.php"), "width" => "", "align" => "center" );
-
-        if( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) )
-        { $kat_2radka[0]["barva"] = "silver"; }
-
-        $kat_2radka[1] = array( "nazev" => "Změny", "url" => "/archiv-zmen/cat", "width" => "", "align" => "center" );
-
-        if( ereg("^.+archiv-zmen.+$",$uri) )
-        { $kat_2radka[1]["barva"] = "silver"; }
-
-        $kat_2radka[2] = array( "nazev" => "Work", "url" => "/work", "width" => "", "align" => "center" );
-
-        if( ereg("^.+work.+$",$uri) )
-        { $kat_2radka[2]["barva"] = "silver"; }
-
-        $kat_2radka[3] = array( "nazev" => "Ostatní", "url" => "/others", "width" => "", "align" => "center" );
-
-        if( ereg("^.+others.+$",$uri) or ereg("^.+syslog.+$",$uri) or ereg("^.+/mail.php$",$uri) or ereg("^.+opravy.+$",$uri) )
-        { $kat_2radka[3]["barva"] = "silver"; }
-
-        $kat_2radka[4] = array( "nazev" => "O programu", "url" => "/about", "width" => "", "align" => "center" );
-
-        if( ereg("^.+about.+$",$uri) )
-        { $kat_2radka[4]["barva"] = "silver"; }
-        
-        $ret = array( $kategorie, $kat_2radka);
-            
-        return $ret;
-    }
 
     function vypis_prihlasene_uziv()
     {
