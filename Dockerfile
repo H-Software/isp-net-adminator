@@ -84,7 +84,7 @@ RUN cd adminator3 \
         smarty/smarty:^3.1 \
         slim/slim:3.* \
         slim/twig-view:^2.5 \
-        slim/csrf:^1.0 \
+        slim/csrf:^0.8 \
         slim/flash:^0.4.0 \
         monolog/monolog:^1.27.1 \
         respect/validation:^1.1 \
