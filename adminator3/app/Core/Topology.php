@@ -52,7 +52,10 @@ class Topology extends adminator {
 
     public function getNodeList()
     {
+        $output = "";
 
+        // prepare vars
+        //
         $list=$_GET["list"];
         $razeni=$_GET["razeni"];
         
@@ -77,8 +80,8 @@ class Topology extends adminator {
             if( !(ereg("^%.*%$",$find)) ){ $find="%".$find."%"; }
         }
         
-        // jako sem zbytek
-        echo "<div style=\"padding-top: 10px; padding-bottom: 20px; \" >
+        // "list" header
+        $output .= "<div style=\"padding-top: 10px; padding-bottom: 20px; \" >
             <span style=\"padding-left: 20px; font-size: 20px; font-weight: bold; \">
             Výpis lokalit / přípojných bodů
             </span>
@@ -89,19 +92,19 @@ class Topology extends adminator {
             
         if($ping == 1)
         { 
-            echo "<a href=\"".$_SERVER["PHP_SELF"]."?razeni=".$razeni."&ping=&find=".$find_orez;
-            echo "&list=".$list."&typ_nodu=".$typ_nodu."\">vypnout</a>"; 
+            $output .= "<a href=\"".$_SERVER["PHP_SELF"]."?razeni=".$razeni."&ping=&find=".$find_orez;
+            $output .= "&list=".$list."&typ_nodu=".$typ_nodu."\">vypnout</a>"; 
         }
         else
         { 
-            echo "<a href=\"".$_SERVER["PHP_SELF"]."?razeni=".$razeni."&ping=1&find=".$find_orez;
-            echo "&list=".$list."&typ_nodu=".$typ_nodu."\">zapnout</a>"; 
+            $output .= "<a href=\"".$_SERVER["PHP_SELF"]."?razeni=".$razeni."&ping=1&find=".$find_orez;
+            $output .= "&list=".$list."&typ_nodu=".$typ_nodu."\">zapnout</a>"; 
         }
         
-        echo "</span>
+        $output .= "</span>
         </div>";
 
-        echo "<div style=\"padding-left: 20px; \" >
+        $output .= "<div style=\"padding-left: 20px; \" >
             <form action=\"".$_SERVER["PHP_SELF"]."\" method=\"GET\" >
                         
                 <input type=\"hidden\" name=\"razeni\" value=\"".$razeni."\" >
@@ -121,15 +124,15 @@ class Topology extends adminator {
             <span style=\"padding-left: 10px; \" >
                 <select name=\"typ_vysilace\" size=\"1\">
                 <option value=\"0\" class=\"select-nevybrano\" >Nevybráno</option>    
-                <option value=\"1\" "; if( $typ_vysilace == 1){ echo " selected "; } echo ">Metallic</option>    
+                <option value=\"1\" "; if( $typ_vysilace == 1){ $output .= " selected "; } $output .= ">Metallic</option>    
                     
-                <option value=\"2\" "; if( $typ_vysilace == 2){ echo " selected "; } echo ">ap-2,4GHz-OMNI</option>    
-                    <option value=\"3\" "; if( $typ_vysilace == 3){ echo " selected "; } echo ">ap-2,4GHz-sektor</option>    
-                    <option value=\"4\" "; if( $typ_vysilace == 4){ echo " selected "; } echo ">ap-2.4GHz-smerovka</option>    
-                    <option value=\"5\" "; if( $typ_vysilace == 5){ echo " selected "; } echo ">ap-5.8Ghz-OMNI</option>    
-                    <option value=\"6\" "; if( $typ_vysilace == 6){ echo " selected "; } echo ">ap-5.8Ghz-sektor</option>
-                    <option value=\"7\" "; if( $typ_vysilace == 7){ echo " selected "; } echo ">ap-5.8Ghz-smerovka</option>
-                <option value=\"8\" "; if( $typ_vysilace == 8){ echo " selected "; } echo ">jiné</option>
+                <option value=\"2\" "; if( $typ_vysilace == 2){ $output .= " selected "; } $output .= ">ap-2,4GHz-OMNI</option>    
+                    <option value=\"3\" "; if( $typ_vysilace == 3){ $output .= " selected "; } $output .= ">ap-2,4GHz-sektor</option>    
+                    <option value=\"4\" "; if( $typ_vysilace == 4){ $output .= " selected "; } $output .= ">ap-2.4GHz-smerovka</option>    
+                    <option value=\"5\" "; if( $typ_vysilace == 5){ $output .= " selected "; } $output .= ">ap-5.8Ghz-OMNI</option>    
+                    <option value=\"6\" "; if( $typ_vysilace == 6){ $output .= " selected "; } $output .= ">ap-5.8Ghz-sektor</option>
+                    <option value=\"7\" "; if( $typ_vysilace == 7){ $output .= " selected "; } $output .= ">ap-5.8Ghz-smerovka</option>
+                <option value=\"8\" "; if( $typ_vysilace == 8){ $output .= " selected "; } $output .= ">jiné</option>
                     
                 </select>
             </span>
@@ -139,9 +142,9 @@ class Topology extends adminator {
             <span style=\"padding-left: 10px; \" >
                 <select name=\"stav\" size=\"1\" >
                 <option value=\"0\" class=\"select-nevybrano\">Nevybráno</option>
-                <option value=\"1\" "; if( $stav == 1){ echo " selected "; } echo ">V pořádku</option>
-                <option value=\"2\" "; if( $stav == 2){ echo " selected "; } echo ">Vytížen</option>
-                <option value=\"3\" "; if( $stav == 3){ echo " selected "; } echo ">Přetížen</option>
+                <option value=\"1\" "; if( $stav == 1){ $output .= " selected "; } $output .= ">V pořádku</option>
+                <option value=\"2\" "; if( $stav == 2){ $output .= " selected "; } $output .= ">Vytížen</option>
+                <option value=\"3\" "; if( $stav == 3){ $output .= " selected "; } $output .= ">Přetížen</option>
                 </select>
             </span>
             
@@ -149,12 +152,12 @@ class Topology extends adminator {
                 <select name=\"typ_nodu\" size=\"1\" >
                 <option value=\"0\" class=\"select-nevybrano\">Nevybráno</option>
                 <option value=\"1\" style=\"color: #CC0033; \" "; 
-                if( $typ_nodu == 1){ echo " selected "; } 
-                echo ">bezdrátová síť</option>
+                if( $typ_nodu == 1){ $output .= " selected "; } 
+                $output .= ">bezdrátová síť</option>
                 
                 <option value=\"2\" style=\"color: #e37d2b; font-weight: bold;\" ";
-                if( $typ_nodu == 2){ echo " selected "; } 
-                echo ">optická síť</option>
+                if( $typ_nodu == 2){ $output .= " selected "; } 
+                $output .= ">optická síť</option>
                 </select>
             
             <span style=\"padding-left: 30px; \" ><input type=\"submit\" name=\"odeslat\" value=\"OK\" ></span>
@@ -166,12 +169,11 @@ class Topology extends adminator {
             <span style=\"font-weight: bold; padding-right: 10px; \">Hledaný výraz:</span> ".$find."
         </div>";
         
-
         //aby se stihli pingy
         // set_time_limit(0);
             
         // tvoreni dotazu
-            
+        //
         if ( $razeni == 1 ){ $order=" order by id asc"; }
         elseif ( $razeni== 2 ){ $order=" order by id desc"; }
         elseif ( $razeni== 3 ){ $order=" order by jmeno asc"; }
@@ -219,14 +221,14 @@ class Topology extends adminator {
         $vysledek = $this->conn_mysql->query($sql); // $sql . " LIMIT ".$bude_chybet.",".$listovani->interval." ");
 
         // TODO: fix paging
-        // echo "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
+        // $output .= "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$listovani->listInterval()."</div>";    //zobrazení stránkovače
         
         $radku = $vysledek->num_rows;
         
         if ($radku==0)
         {
-            echo "<div style=\"padding-top: 15px; padding-left: 15px;\">Žadné lokality/nody dle hladeného výrazu ( ".$find." ) v databázi neuloženy. </div>";
-            // echo "<div >debug: sql: ".$sql." </div>";
+            $output .= "<div style=\"padding-top: 15px; padding-left: 15px;\">Žadné lokality/nody dle hladeného výrazu ( ".$find." ) v databázi neuloženy. </div>";
+            // $output .= "<div >debug: sql: ".$sql." </div>";
         }
         else
         {
@@ -243,182 +245,182 @@ class Topology extends adminator {
             
             $colspan_celkem = $colspan_id + $colspan_jmeno + $colspan_adresa + $colspan_pozn + $colspan_rozsah_ip + $colspan_umisteni;
             
-            echo "<table border=\"0\" >";
+            $output .= "<table border=\"0\" >";
 
-            // echo "<tr><td colspan=\"".$colspan_celkem."\"><hr></td></tr>";
+            // $output .= "<tr><td colspan=\"".$colspan_celkem."\"><hr></td></tr>";
             
-            echo "\n<tr>
+            $output .= "\n<tr>
                 <td width=\"5%\" colspan=\"".$colspan_id."\"  class=\"tab-topology2 tab-topology-dolni2\" >
                 
                 <table border=\"0\" width=\"\" >
                 <tr>
                     <td><b>id:</b></td>";
                 
-            echo "<td>";
-                echo "<form name=\"form1\" method=\"GET\" action=\"\" > ";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"1\" >";
+            $output .= "<td>";
+                $output .= "<form name=\"form1\" method=\"GET\" action=\"\" > ";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"1\" >";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form1.submit()\">
+                $output .= "<a href=\"javascript:self.document.forms.form1.submit()\">
                 <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
-                echo "<form  name=\"form2\" method=\"GET\" action=\"\" > ";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"2\">";
+                $output .= "<form  name=\"form2\" method=\"GET\" action=\"\" > ";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"2\">";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form2.submit()\">";
-                echo "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<a href=\"javascript:self.document.forms.form2.submit()\">";
+                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
-            echo "</td></tr></table>";
+            $output .= "</td></tr></table>";
             
-            echo "</td>";
+            $output .= "</td>";
             
-            echo "<td width=\"20%\" colspan=\"".$colspan_jmeno."\" class=\"tab-topology2 tab-topology-dolni2\" >
+            $output .= "<td width=\"20%\" colspan=\"".$colspan_jmeno."\" class=\"tab-topology2 tab-topology-dolni2\" >
             
             <table border=\"0\" width=\"100%\" >
             <tr>
                 <td><b>Jméno: </b></td>";
         
-            echo "<td >";
-                echo "<form  name=\"form3\" method=\"GET\" action=\"\" >";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"3\" >";
+            $output .= "<td >";
+                $output .= "<form  name=\"form3\" method=\"GET\" action=\"\" >";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"3\" >";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form3.submit()\">
+                $output .= "<a href=\"javascript:self.document.forms.form3.submit()\">
                 <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
-                echo "<form  name=\"form4\" method=\"GET\" action=\"\" >";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"4\">";
+                $output .= "<form  name=\"form4\" method=\"GET\" action=\"\" >";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"4\">";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form4.submit()\">";
-                echo "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<a href=\"javascript:self.document.forms.form4.submit()\">";
+                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
-            echo "</td></tr></table>";
+            $output .= "</td></tr></table>";
                 
-            echo "</td>";
+            $output .= "</td>";
             
             
-            echo "<td colspan=\"".$colspan_adresa."\" class=\"tab-topology2 tab-topology-dolni2\" >
+            $output .= "<td colspan=\"".$colspan_adresa."\" class=\"tab-topology2 tab-topology-dolni2\" >
             
             <table border=\"0\" width=\"100%\" >
             <tr>
                 <td><b>Adresa: </b></td>";
                 
-            echo "<td>";
-                echo "<form  name=\"form5\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"5\" >";
+            $output .= "<td>";
+                $output .= "<form  name=\"form5\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"5\" >";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form5.submit()\">
+                $output .= "<a href=\"javascript:self.document.forms.form5.submit()\">
                 <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
-                echo "<form  name=\"form6\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"6\">";
+                $output .= "<form  name=\"form6\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"6\">";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form6.submit()\">";
-                echo "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<a href=\"javascript:self.document.forms.form6.submit()\">";
+                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
-            echo "</td></tr></table>";
+            $output .= "</td></tr></table>";
                 
-            echo "</td>";
+            $output .= "</td>";
             
-            echo "<td colspan=\"1\" class=\"tab-topology2 tab-topology-dolni2\" >
+            $output .= "<td colspan=\"1\" class=\"tab-topology2 tab-topology-dolni2\" >
             
             <table border=\"0\" width=\"100%\" >
             <tr>
                 <td><b>Poznámka: </b></td>";
                 
-            echo "<td>";
-                echo "<form  name=\"form7\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"7\" >";
+            $output .= "<td>";
+                $output .= "<form  name=\"form7\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"7\" >";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form7.submit()\">
+                $output .= "<a href=\"javascript:self.document.forms.form7.submit()\">
                 <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
-                echo "<form  name=\"form8\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"8\">";
+                $output .= "<form  name=\"form8\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"8\">";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form8.submit()\">";
-                echo "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<a href=\"javascript:self.document.forms.form8.submit()\">";
+                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
-            echo "</td></tr></table>";
+            $output .= "</td></tr></table>";
             
-            echo "</td>";
+            $output .= "</td>";
         
-            echo "<td colspan=\"1\" width=\"15%\" class=\"tab-topology2 tab-topology-dolni2\" align=\"center\" >
+            $output .= "<td colspan=\"1\" width=\"15%\" class=\"tab-topology2 tab-topology-dolni2\" align=\"center\" >
             <b>Vlan ID</b><br></td>";
             
             
-            echo "<td width=\"10%\" colspan=\"".$colspan_rozsah_ip."\" class=\"tab-topology2 tab-topology-dolni2\" >
+            $output .= "<td width=\"10%\" colspan=\"".$colspan_rozsah_ip."\" class=\"tab-topology2 tab-topology-dolni2\" >
             
             <table border=\"0\" width=\"100%\" >
             <tr>
                 <td><b>Rozsah ip adres: </b></td>";
                 
-            echo "<td>";
-                echo "<form  name=\"form9\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"9\" >";
+            $output .= "<td>";
+                $output .= "<form  name=\"form9\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"9\" >";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form9.submit()\">
+                $output .= "<a href=\"javascript:self.document.forms.form9.submit()\">
                 <img src=\"img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
             
-                echo "<form  name=\"form10\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
-                echo "<input type=\"hidden\" name=\"razeni\" value=\"10\">";
+                $output .= "<form  name=\"form10\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+                $output .= "<input type=\"hidden\" name=\"razeni\" value=\"10\">";
                 
-                echo "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
-                echo "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
-                echo "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
+                $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
+                $output .= "<input type=\"hidden\" name=\"list\" value=\"".$list."\" >";
+                $output .= "<input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >";
                 
-                echo "<a href=\"javascript:self.document.forms.form10.submit()\">";
-                echo "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
+                $output .= "<a href=\"javascript:self.document.forms.form10.submit()\">";
+                $output .= "<img src=\"img2/ses.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
         
-            echo "</td></tr></table>";
+            $output .= "</td></tr></table>";
             
-            echo "</td>";
+            $output .= "</td>";
                 
-            echo "<td width=\"10%\" colspan=\"".$typ_nodu."\" class=\"tab-topology2 tab-topology-dolni2\" >
+            $output .= "<td width=\"10%\" colspan=\"".$typ_nodu."\" class=\"tab-topology2 tab-topology-dolni2\" >
                 <b>Mód nodu</b></td>";
                     
             // bunky druhej radek
@@ -433,7 +435,7 @@ class Topology extends adminator {
             $colspan_uprava="2";
             $colspan_smazani="2";
                 
-            echo "
+            $output .= "
             
             </tr>
             
@@ -453,69 +455,69 @@ class Topology extends adminator {
                 </tr>\n";
 
             //treti radek
-            echo "<tr><td colspan=\"".$colspan_celkem."\"><hr></td></tr>";
+            $output .= "<tr><td colspan=\"".$colspan_celkem."\"><hr></td></tr>";
             
             //vnejsi tabulka
-            echo "</tr>";
+            $output .= "</tr>";
             
-            echo "<tr>";
+            $output .= "<tr>";
                                         
-            echo "\n";
+            $output .= "\n";
             while ($zaznam=$vysledek->fetch_array()):
             
                 $id=$zaznam["id"];
                 
                 // prvni radek
-                echo "<tr>";
-                    echo "<td colspan=\"".$colspan_id."\"><span style=\"font-size: 12px; padding-right: 5px;\" >";
+                $output .= "<tr>";
+                    $output .= "<td colspan=\"".$colspan_id."\"><span style=\"font-size: 12px; padding-right: 5px;\" >";
                         echo $id."</span><a name=\"".$id."\" ></a>";
-                    echo "</td>\n";
+                    $output .= "</td>\n";
 
-                echo "<td colspan=\"".$colspan_jmeno."\">
+                $output .= "<td colspan=\"".$colspan_jmeno."\">
                         <span style=\"font-weight: bold; font-size: 14px; \">".
                         "<a href=\"topology-user-list.php?vysilac=".intval($zaznam["id"])."\" >".$zaznam["jmeno"]."</a>".
                         "</span>\n".
                     "</td>\n";
-                echo "<td colspan=\"".$colspan_adresa."\" >".
+                $output .= "<td colspan=\"".$colspan_adresa."\" >".
                         "<span style=\"font-size: 13px; padding-right: 10px; \">".$zaznam["adresa"]."</span>".
                         "<a href=\"\"><a href=\"http://www.mapy.cz?query=".$zaznam["adresa"]."\" target=\"_blank\" >na mapě</a>".
                     "</td>\n";
                 
                 //if( $_GET["typ_nodu"] == 2 )
                 {
-                echo "<td colspan=\"1\" ><span style=\"font-size: 13px; \">".$zaznam["pozn"]."</span></td>\n";
-                echo "<td colspan=\"1\" align=\"center\">
+                $output .= "<td colspan=\"1\" ><span style=\"font-size: 13px; \">".$zaznam["pozn"]."</span></td>\n";
+                $output .= "<td colspan=\"1\" align=\"center\">
                         <span style=\"font-size: 13px; \">".$zaznam["vlan_id"]."</span>
                     </td>\n";
                 
                 }
-                //else{ echo "<td colspan=\"".$colspan_pozn."\" ><span style=\"font-size: 13px; \">".$zaznam["pozn"]."</span></td>\n";  }
+                //else{ $output .= "<td colspan=\"".$colspan_pozn."\" ><span style=\"font-size: 13px; \">".$zaznam["pozn"]."</span></td>\n";  }
                     
-                echo "<td colspan=\"".$colspan_rozsah_ip."\" ><span style=\"font-size: 13px; \">".$zaznam["ip_rozsah"]."</span></td>\n";
-                echo "<td colspan=\"".$typ_nodu."\" ><span style=\"font-size: 13px; \">";
+                $output .= "<td colspan=\"".$colspan_rozsah_ip."\" ><span style=\"font-size: 13px; \">".$zaznam["ip_rozsah"]."</span></td>\n";
+                $output .= "<td colspan=\"".$typ_nodu."\" ><span style=\"font-size: 13px; \">";
                 if( $zaznam["typ_nodu"] == 0 )
-                { echo "Nezvoleno"; }
+                { $output .= "Nezvoleno"; }
                 elseif( $zaznam["typ_nodu"] == 1 )
-                { echo "<span style=\"color: #CC0033; \">bezdrátová síť</span>"; }
+                { $output .= "<span style=\"color: #CC0033; \">bezdrátová síť</span>"; }
                 elseif( $zaznam["typ_nodu"] == 2 )
-                { echo "<span style=\"color: #e37d2b; font-weight: bold; \" >optická síť</span>"; }
+                { $output .= "<span style=\"color: #e37d2b; font-weight: bold; \" >optická síť</span>"; }
                 
-                echo "</span></td>\n";
+                $output .= "</span></td>\n";
                     
-                echo "<td colspan=\"".$colspan_umisteni."\" rowspan=\"2\" class=\"tab-topology\"><span style=\"font-size: 13px; \">";
+                $output .= "<td colspan=\"".$colspan_umisteni."\" rowspan=\"2\" class=\"tab-topology\"><span style=\"font-size: 13px; \">";
                 
-                echo "</span></td>\n";
+                $output .= "</span></td>\n";
                     
-                echo "</tr>";
+                $output .= "</tr>";
                     
                 // druhej radek
-                echo "<tr>";
+                $output .= "<tr>";
                 
-                echo "<td class=\"tab-topology\" colspan=\"".$colspan_filtrace."\" >
+                $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_filtrace."\" >
                 <a href=\" " . fix_link_to_another_adminator("/archiv-zmen?id_nodu=".intval($id)) . "\" style=\"font-size: 12px; \">H: ".$id."</a>".
                 "</td>\n";
                         
-                echo "<td class=\"tab-topology\" colspan=\"3\">
+                $output .= "<td class=\"tab-topology\" colspan=\"3\">
                 <span style=\"color: #666666; font-size: 13px; padding-right: 10px; \" >";
                     
                 $router_id = $zaznam["router_id"];
@@ -529,10 +531,10 @@ class Topology extends adminator {
                     { $router_nazev = $data_router["nazev"]; $router_ip = $data_router["ip_adresa"]; }
                 }
                 
-                echo "<span style=\"color: teal; \">".$router_nazev."</span> ".$router_ip."</span>";
-                echo "<a href=\"topology-router-list.php?odeslano=OK&f_search=".$router_ip."&\">link</a>";
+                $output .= "<span style=\"color: teal; \">".$router_nazev."</span> ".$router_ip."</span>";
+                $output .= "<a href=\"topology-router-list.php?odeslano=OK&f_search=".$router_ip."&\">link</a>";
 
-                echo "</td>\n";
+                $output .= "</td>\n";
                 
                 $typ_vysilace=$zaznam["typ_vysilace"];
                 
@@ -546,7 +548,7 @@ class Topology extends adminator {
                 elseif ( $typ_vysilace == 8 ){ $typ_vysilace2="jiné"; }
                 else { $typ_vysilace2=$typ_vysilace; }			
                                                         
-                echo "<td class=\"tab-topology\" colspan=\"".$colspan_typ_vysilace."\" ><span style=\"color: #666666; font-size: 13px; \">".$typ_vysilace2."</span> </td>\n";
+                $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_typ_vysilace."\" ><span style=\"color: #666666; font-size: 13px; \">".$typ_vysilace2."</span> </td>\n";
                 
                 list($a,$b,$c,$d) = split("[.]",$zaznam["ip_rozsah"]);
                 
@@ -562,73 +564,75 @@ class Topology extends adminator {
                     $aktivni=exec("/srv/www/htdocs.ssl/adminator2/scripts/ping.sh $ip_akt"); 
                 
                     if ( ( $aktivni > 0 and $aktivni < 50 ) ) 
-                    {  echo "<td ".$akt_par." align=\"center\" bgcolor=\"green\"><span style=\"color: white; font-size: 13px; \">".$aktivni."</span>"; }
+                    {  $output .= "<td ".$akt_par." align=\"center\" bgcolor=\"green\"><span style=\"color: white; font-size: 13px; \">".$aktivni."</span>"; }
                     elseif ( $aktivni > 0)
-                    { echo "<td ".$akt_par." align=\"center\" bgcolor=\"orange\"><span style=\"color: white; font-size: 13px; \">".$aktivni."</span>"; }
-                    else { echo "<td ".$akt_par." align=\"center\" bgcolor=\"red\">"; echo "<br>"; }
+                    { $output .= "<td ".$akt_par." align=\"center\" bgcolor=\"orange\"><span style=\"color: white; font-size: 13px; \">".$aktivni."</span>"; }
+                    else { $output .= "<td ".$akt_par." align=\"center\" bgcolor=\"red\">"; $output .= "<br>"; }
                 }
                 else
-                {	echo "<td ".$akt_par." align=\"center\" ><span style=\"color: #666666; font-size: 13px; \">N/A</span>"; }
+                {	$output .= "<td ".$akt_par." align=\"center\" ><span style=\"color: #666666; font-size: 13px; \">N/A</span>"; }
                 
-                echo "</td>";
+                $output .= "</td>";
                 
                 if ( $zaznam["stav"] == 1)
                 { 
-                    echo "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"green\" align=\"center\" >
+                    $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"green\" align=\"center\" >
                         <span style=\"color: white; font-size: 13px; \"> v pořádku </span></td>"; 
                 }
                 elseif ( $zaznam["stav"] == 2)
                 { 
-                    echo "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"orange\" align=\"center\" >
+                    $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"orange\" align=\"center\" >
                         <span style=\"color: white; font-size: 13px; \"> vytížen </span></td>"; 
                 }
                 elseif( $zaznam["stav"] == 3 )
                 { 
-                    echo "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"red\" align=\"center\" >
+                    $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"red\" align=\"center\" >
                         <span style=\"color: white; font-size: 13px; \"> přetížen </span></td>"; 
                 }
                 else
                 { 
-                    echo "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"silver\" align=\"center\" >
+                    $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"silver\" align=\"center\" >
                         <span style=\"color: black; font-size: 13px; \"> nezvoleno </span></td>"; 
                 }
 
-                echo "<td class=\"tab-topology\" colspan=\"".$colspan_uprava."\" >";
+                $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_uprava."\" >";
                 
                 //vnitrni tabulka
-                echo "<table width=\"100%\" border=\"0\"><tr>";
+                $output .= "<table width=\"100%\" border=\"0\"><tr>";
                 
                 // upraveni 
-                echo "<td><form method=\"POST\" action=\"topology-nod-update.php\">
+                $output .= "<td><form method=\"POST\" action=\"topology-nod-update.php\">
                 <input type=\"hidden\" name=\"update_id\" value=\"".$id."\">
                 <input type=\"submit\" value=\"update\">
                 </form>
                 </td>";
                 
                 //smazani
-                //echo "<td class=\"tab-topology\" colspan=\"\" >";
+                //$output .= "<td class=\"tab-topology\" colspan=\"\" >";
                 
-                echo "<td><form action=\"topology-nod-erase.php\" method=\"POST\" >";
-                echo "<input type=\"hidden\" name=\"erase_id\" value=\"".$id."\">";
-                echo "<input type=\"submit\" value=\"Smazat\">
+                $output .= "<td><form action=\"topology-nod-erase.php\" method=\"POST\" >";
+                $output .= "<input type=\"hidden\" name=\"erase_id\" value=\"".$id."\">";
+                $output .= "<input type=\"submit\" value=\"Smazat\">
                     </form>
                     </td>";
                 
                     //konec vnirni tabulky
-                    echo "</tr></table>";
+                    $output .= "</tr></table>";
                     
-                echo "</td>";
+                $output .= "</td>";
                                     
-                echo "</tr>";
+                $output .= "</tr>";
 
             endwhile;
         }
 
-        echo "</table>";
+        $output .= "</table>";
 
-        echo "<div style=\"padding-top: 20px; margin-bottom: 20px; \" >";
+        $output .= "<div style=\"padding-top: 20px; margin-bottom: 20px; \" >";
             // TODO: fix paging
-            // echo "<span style=\"margin-top: 5px; margin-bottom: 15px; \">".$listovani->listInterval();
-        echo "</div>";    
+            // $output .= "<span style=\"margin-top: 5px; margin-bottom: 15px; \">".$listovani->listInterval();
+        $output .= "</div>";
+        
+        return $output;
     }
 }
