@@ -52,7 +52,7 @@ class objektyController extends adminatorController {
 
         $this->header($request, $response);
 
-        $stb = new \stb($this->conn_mysql,$this->logger);
+        $stb = new \App\Core\stb($this->conn_mysql,$this->logger);
 
         if ($this->container->auth->checkLevel($this->container->logger, 137, false) === true) {
             $stb->enable_modify_action = true;
@@ -82,7 +82,7 @@ class objektyController extends adminatorController {
 
         $this->header($request, $response);
 
-        $stb = new \stb($this->conn_mysql, $this->logger);
+        $stb = new \App\Core\stb($this->conn_mysql, $this->logger);
 
         $csrf = $this->generateCsrfToken($request, $response, false);
 

@@ -864,10 +864,11 @@ function gen_router_vypis_router($id)
 
 function hierarchy_vypis_router($id,$uroven)
 {
-
     global $uroven_max, $conn_mysql;
-    
-    $dotaz_router=$conn_mysql->query("SELECT * FROM router_list WHERE id = $id order by id");
+ 
+    $output = "";
+
+    $dotaz_router=$conn_mysql->query("SELECT * FROM router_list WHERE id = ".intval($id) ." order by id");
     $dotaz_router_radku=$dotaz_router->num_rows;
           
     if ( $dotaz_router_radku > 0 )
@@ -876,20 +877,20 @@ function hierarchy_vypis_router($id,$uroven)
       while($data_router=$dotaz_router->fetch_array())
       {
                     
-          echo "<tr>";
+          $output .= "<tr>";
           
-          for ( $j=0;$j<$uroven; $j++){ echo "<td><br></td>"; }
+          for ( $j=0;$j<$uroven; $j++){ $output .= "<td><br></td>"; }
           
-          echo "<td align=\"center\">|------> </td>";
-          echo "<td>";
+          $output .= "<td align=\"center\">|------> </td>";
+          $output .= "<td>";
                 
-            echo " [".$data_router["id"]."] <b>".$data_router["nazev"]."</b>";
+            $output .= " [".$data_router["id"]."] <b>".$data_router["nazev"]."</b>";
                           
-            echo " <span style=\"color:grey; \">( ".$data_router["ip_adresa"]." ) </span>";
+            $output .= " <span style=\"color:grey; \">( ".$data_router["ip_adresa"]." ) </span>";
                             
-            echo "</td>";
+            $output .= "</td>";
             
-          echo "</tr>";
+          $output .= "</tr>";
 
             //zde rekurze
             $parent_id=$data_router["id"];
@@ -931,6 +932,7 @@ function hierarchy_vypis_router($id,$uroven)
       return false; 
     }
 
+    return $output;
 }
 
 # enf of hierarchy.php
