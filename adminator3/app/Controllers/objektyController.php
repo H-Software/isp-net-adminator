@@ -44,6 +44,10 @@ class objektyController extends adminatorController {
     public function stb(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
+        $csrf_html = $this->generateCsrfToken($request, $response, true);
+        $stb = new \App\Core\stb($this->conn_mysql,$this->logger);
+        $stb->csrf_html = $csrf_html[0];
+
         $this->logger->addInfo("objektyController\\stb called");
         
         $this->checkLevel(135);
@@ -51,8 +55,6 @@ class objektyController extends adminatorController {
         $this->smarty->assign("page_title","Adminator3 :: Objekty STB");
 
         $this->header($request, $response);
-
-        $stb = new \App\Core\stb($this->conn_mysql,$this->logger);
 
         if ($this->container->auth->checkLevel($this->container->logger, 137, false) === true) {
             $stb->enable_modify_action = true;

@@ -1,7 +1,7 @@
 <?php
 
 require "include/main.function.shared.php";
-require "include/config.php";
+require "app/config.php";
 
 $smarty = new Smarty;
 $smarty->compile_check = true;
@@ -108,5 +108,3 @@ $smarty->assign("soubory_reg_form_2012_05",$soubor6);
 
 
 $smarty->display('others/print.tpl');
-
-?>
