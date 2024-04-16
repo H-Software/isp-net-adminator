@@ -30,7 +30,8 @@ class c_listing_topology {
     var $aftError = "</div>";
     
     //konstruktor...naplni promenne
-    function c_listing_topology($conn_mysql, $conUrl = "/topology/nod-list?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+    function __construct($conn_mysql, $conUrl = "/topology/nod-list?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
+    {
 
         $this->conn_mysql = $conn_mysql;
 
