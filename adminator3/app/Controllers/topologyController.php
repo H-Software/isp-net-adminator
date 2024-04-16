@@ -10,18 +10,14 @@ class topologyController extends adminatorController {
     var $conn_mysql;
     var $smarty;
     var $logger;
-    var $auth;
-    var $app;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger)
     {
         $this->container = $container;
 		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
-        $this->auth = $auth;
-        $this->app = $app;
-        
+
         $this->logger->addInfo("topologyController\__construct called");
 	  }
 
@@ -40,5 +36,4 @@ class topologyController extends adminatorController {
       $this->smarty->display('topology/list.tpl');
 
     }
-
 }

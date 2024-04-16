@@ -104,8 +104,8 @@ $container['platbyController'] = function ($c) {
 };
 
 $container['topologyController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\topologyController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+    global $conn_mysql, $smarty, $logger;
+    return new \App\Controllers\topologyController($app->getContainer(),$conn_mysql, $smarty, $logger);
 };
 
 $container['vlastniciController'] = function ($c) {
