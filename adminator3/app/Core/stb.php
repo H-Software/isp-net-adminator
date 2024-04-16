@@ -11,6 +11,8 @@ class stb
 
     var $conn_mysql;
 
+    var $csrf_html;
+
     var $find_id_nodu;		//promenne pro hledani
     var $find_search_string;
     var $find_var_vlastnik;
@@ -1005,10 +1007,12 @@ class stb
                // if( !( check_level($this->level,137) ) )
                if($this->enable_modify_action === true)               
                {
-               $output .= "<form method=\"POST\" action=\"" . $_SERVER['SCRIPT_URL'] . "\" >
-               <input type=\"hidden\" name=\"update_id\" value=\"".intval($data_vypis["id_stb"])."\" >
-               <input class=\"\" type=\"submit\" value=\"update\" >
-               </form>\n";
+               $output .= 
+                "<form method=\"POST\" action=\"/objekty/stb/action\" >\n"
+                    . "<input type=\"hidden\" name=\"update_id\" value=\"".intval($data_vypis["id_stb"])."\" >\n"
+                    . $this->csrf_html ."\n"
+                    . "<input class=\"\" type=\"submit\" value=\"update\" >\n"
+                . "</form>\n";
                }
                else
                { $output .= "<div style=\"\" style=\"".$class_stb_liche."\" >úprava</div>\n"; }
