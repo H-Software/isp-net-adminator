@@ -78,8 +78,6 @@ RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2
 
 RUN mkdir -p /var/www/html/adminator3/
 
-RUN mkdir -p /var/www/html/adminator4/
-
 RUN cd adminator3 \
     && composer require \
         nette/robot-loader:^3.2 \
@@ -93,8 +91,9 @@ RUN cd adminator3 \
         formr/formr:^1.4 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require\
-        illuminate/database:^5.6
-        
+        illuminate/database:^5.6 \
+    && echo "say hello"
+
 #     # && docker-php-ext-enable xdebug \
 
 # app code
