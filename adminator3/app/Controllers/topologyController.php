@@ -39,26 +39,24 @@ class topologyController extends adminatorController {
       $this->smarty->assign("body", $output);
 
       $this->smarty->display('topology/node-list.tpl');
-
     }
 
     public function routerList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->addInfo("topologyController\\routerList called");
+        $this->logger->addInfo("topologyController\\routerList called");
 
-      $this->checkLevel(85);
+        $this->checkLevel(85);
 
-      $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
+        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
-      $this->smarty->assign("page_title","Adminator3 :: Topologie :: Router list");
+        $this->smarty->assign("page_title","Adminator3 :: Topologie :: Router list");
 
-      $this->header($request, $response);
+        $this->header($request, $response);
       
-    //   $output = $topology->getNodeList();
+        $output = $topology->getRouterList();
 
-    //   $this->smarty->assign("body", $output);
+        $this->smarty->assign("body", $output);
 
-      $this->smarty->display('topology/router-list.tpl');
-
+        $this->smarty->display('topology/router-list.tpl');
     }
 }
