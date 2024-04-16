@@ -2,9 +2,9 @@
 
 $cesta = "../";
 
+require ($cesta."include/main.function.shared.php");
 require_once ($cesta."include/config.php");
 require_once ($cesta."include/check_login.php");
-
 require_once ($cesta."include/check_level.php");
 
 if ( !( check_level($level,119) ) )
