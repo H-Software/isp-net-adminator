@@ -11,11 +11,13 @@ RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.
 
 RUN apt-get update \
     && apt-get install -y \
+        zlib1g=1:1.2.8.dfsg-5 \
+    && apt-get install -y \
         libpq-dev \
         wget \
         zip \
         unzip \
-        zlib1g \
+        zlib1g-dev \
         git \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
