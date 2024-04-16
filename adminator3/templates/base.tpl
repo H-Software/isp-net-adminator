@@ -5,8 +5,9 @@
 
 <title>{$page_title}</title>
 
-<link href="/style.css" rel="stylesheet" type="text/css" >
-<link href="/style-board.css" rel="stylesheet" type="text/css" >
+<link href="/public/css/style.css" rel="stylesheet" type="text/css" >
+
+<link href="/public/css/style-board.css" rel="stylesheet" type="text/css" >
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
@@ -16,7 +17,6 @@
  <script language="JavaScript" src="/plugins/tigra_calendar/calendar_eu.js"></script>
  <link rel="stylesheet" href="/plugins/tigra_calendar/calendar.css">
 {/if}
-
 
 {* 
 // TODO: check and fix this
@@ -42,30 +42,35 @@
 
 <body>
 
-  <div id="obsah" >
-  
-  {*uvodni napis a obrazek, s ip a nickem .. *}
-  {include file="inc.intro.banner.tpl"}
+<div class="container-sm justify-content-md-center">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-{$bs_layout_main_col_count|default:'10'}">
 
-  <div style="width: 83%; float: left; " >
+          <div id="obsah" >
+          
+          {*uvodni napis a obrazek, s ip a nickem .. *}
+          {include file="inc.intro.banner.tpl"}
 
-    {* uvodni kategorie *}
-    {include file="inc.intro.category.tpl"}
+          <div style="width: 83%; float: left; " >
 
-  </div>
-   
-  {*zde vypis prihl. uziv. *}
-  {include file="inc.intro.logged.users.tpl"}
+            {* uvodni kategorie *}
+            {include file="inc.intro.category.tpl"}
 
-  {if $show_se_cat eq "1"}
-    <div class="cat-cara-oddelovaci" ></div>
-  {/if}
+          </div>
+          
+          {*zde vypis prihl. uziv. *}
+          {include file="inc.intro.logged.users.tpl"}
 
-  {if $subcat_select eq "1"}   
-   <div class="subcat-main" >
-       {$subkategorie}
-   </div>
-  {/if}
-  
-  <div class="obsah-main" >
-   {* zde ZACATEK vlastniho obsahu ... *}
+          {if $show_se_cat eq "1"}
+            <div class="cat-cara-oddelovaci" ></div>
+          {/if}
+
+          {if $subcat_select eq "1"}   
+          <div class="subcat-main" >
+              {$subkategorie}
+          </div>
+          {/if}
+          
+          <div class="obsah-main" >
+          {* zde ZACATEK vlastniho obsahu ... *}

@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col"></div>
     <div class="col-10">
-        <div class="row head-menu-main">
+        <div class="row head-menu-main" style="margin-left: 0px; margin-right: 0px;">
 
             <div class="col-md-1">&nbsp;
             </div>
