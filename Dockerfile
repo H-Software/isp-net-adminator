@@ -89,7 +89,9 @@ RUN cd adminator3 \
         monolog/monolog:^1.27.1 \
         respect/validation:^1.1 \
         formr/formr:^1.4 \
-    && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
+    && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true
+
+RUN cd adminator3 \
     && composer require\
         illuminate/database:^5.6 \
     && echo "say hello"
