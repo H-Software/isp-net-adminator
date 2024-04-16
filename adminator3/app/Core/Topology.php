@@ -206,7 +206,6 @@ class Topology extends adminator {
         $sql_source .= "&typ_vysilace=".$typ_vysilace."&stav=".$stav."&find=".$find_orez;
         $sql_source .= "&typ_nodu=".$typ_nodu;
         
-        // TODO: fix paging
         $paging = new c_listing_topology(
                             $this->conn_mysql,
                             $sql_source,

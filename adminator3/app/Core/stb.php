@@ -1040,7 +1040,7 @@ class stb
                $output .= "<td style=\"".$class_stb_sude."\" >\n";
                    
                $output .= "<span class=\"objekty-2radka objekty-odkaz\">".
-                                 "<a href=\"". fix_link_to_another_adminator("/topology-nod-list.php?".urlencode("typ_nodu")."=2".urlencode("&find")."=".urlencode($data_vypis["nod_jmeno"])) . "\" >".
+                                 "<a href=\"/topology/node-list?".urlencode("typ_nodu")."=2&".urlencode("find")."=".urlencode($data_vypis["nod_jmeno"]) . "\" >".
                                  $data_vypis["nod_jmeno"]."</a>".
                     "</span>";
                $output .= "</td>\n";
@@ -1050,7 +1050,7 @@ class stb
                
                //id stb (historie)
                $output .= "<td style=\"".$class_stb_sude."\" >H: \n";
-               $output .= "<a href=\"" . fix_link_to_another_adminator("/archiv-zmen.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])) ."\" >".$data_vypis["id_stb"]."</a>\n";
+               $output .= "<a href=\"/archiv-zmen?".urlencode("id_stb")."=".intval($data_vypis["id_stb"]) ."\" >".$data_vypis["id_stb"]."</a>\n";
                $output .= "</td>\n";
                
            //vlastnik - id cloveka
