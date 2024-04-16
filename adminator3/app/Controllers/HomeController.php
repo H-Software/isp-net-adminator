@@ -26,7 +26,7 @@ class HomeController extends adminatorController {
     {            
         $this->logger->addInfo("homeController\home called");
 
-        $this->checkLevel(38);
+        // $this->checkLevel(38);
 
         $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
@@ -56,9 +56,9 @@ class HomeController extends adminatorController {
 
         //tady opravy az se dodelaj
 
-        $this->opravy_a_zavady();
+        // $this->opravy_a_zavady();
 
-        $this->board();
+        // $this->board();
 
         $this->logger->addInfo("homeController\home: end of rendering");
         $this->smarty->display('home.tpl');
