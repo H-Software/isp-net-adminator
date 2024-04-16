@@ -13,58 +13,71 @@
       $uri=$_SERVER["REQUEST_URI"];
       $uri_replace = str_replace ("adminator2", "", $uri);
       
-      if ( ereg("^.+vlastnici.+",$_SERVER["REQUEST_URI"]) or ereg("^.+vlastnici-cat.php+",$_SERVER["REQUEST_URI"]) or ereg("^.+vypovedi",$_SERVER["REQUEST_URI"]) )
-        { echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+      // if ( ereg("^.+vlastnici.+",$_SERVER["REQUEST_URI"]) or ereg("^.+vlastnici-cat.php+",$_SERVER["REQUEST_URI"]) or ereg("^.+vypovedi",$_SERVER["REQUEST_URI"]) )
+      //   { echo '<td bgcolor="silver" '; }  else 
+        { echo '<td '; }
       echo ' align="center" width="11%"><a class="cat" href="'.$cesta.'vlastnici-cat.php" target="_top">Zákazníci</a></td>'." \n";
       
-      if ( ereg("^.+objekty.",$_SERVER["REQUEST_URI"]) or ereg("^.+objekty-subcat.php",$_SERVER["REQUEST_URI"]))
-       { echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+      // if ( ereg("^.+objekty.",$_SERVER["REQUEST_URI"]) or ereg("^.+objekty-subcat.php",$_SERVER["REQUEST_URI"]))
+      //  { echo '<td bgcolor="silver" '; }  else 
+       { echo '<td '; }
       echo ' align="center" width="11%"><a class="cat" href="'.$cesta.'objekty-subcat.php" target="_top">Služby</a></td>'." \n";
       
-      if ( ereg("^.+platby.php$",$_SERVER["REQUEST_URI"]) or ereg("^.+platby-subcat.php$",$_SERVER["REQUEST_URI"]) 
-      or ereg("^.+faktury.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+fn.+$",$_SERVER["REQUEST_URI"]) )
-        { echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+      // if ( ereg("^.+platby.php$",$_SERVER["REQUEST_URI"]) or ereg("^.+platby-subcat.php$",$_SERVER["REQUEST_URI"]) 
+      // or ereg("^.+faktury.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+fn.+$",$_SERVER["REQUEST_URI"]) )
+      //   { echo '<td bgcolor="silver" '; }  else 
+        { echo '<td '; }
       echo ' align="center" width="11%">  <a class="cat" href="'.$cesta.'platby-subcat.php" target="_top" >Platby</a> </td>'." \n";
      
-      if ( ereg("^.+work.php$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+      // if ( ereg("^.+work.php$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
+      { echo '<td '; }
        echo ' align="center" width="11%"><a class="cat" href="'.$cesta.'work.php" target="_top">Work</a></td>'." \n";
        
-      if ( ereg("^.+topology",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+      // if ( ereg("^.+topology",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
+      { echo '<td '; }
        echo ' align="center" width=""><a class="cat" href="'.$cesta.'topology-router-list.php" target="_top" >Topologie</a></td>'." \n";
      
-      if ( ereg("^.+admin.+$",$uri_replace ) or ereg("^.+admin-subcat.php$",$_SERVER["REQUEST_URI"]) )
-        { echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+      // if ( ereg("^.+admin.+$",$uri_replace ) or ereg("^.+admin-subcat.php$",$_SERVER["REQUEST_URI"]) )
+      //   { echo '<td bgcolor="silver" '; }  else 
+        { echo '<td '; }
        echo ' align="center" width=""><a class="cat" href="'.$cesta.'admin-subcat.php" target="_top" >Nastavení </a></td>'." \n";
 
-      if ( ereg("^.+home.php$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+      // if ( ereg("^.+home.php$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
+      { echo '<td '; }
        echo ' align="center" width=""><a class="cat" href="'.$cesta.'home.php" target="_top" >Úvodní strana</a></td>'." \n";
     	
     echo "</tr> \n";
     
     echo "<tr> \n";
 
-    if ( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) ){ echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+    // if ( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) ){ echo '<td bgcolor="silver" '; }  else 
+    { echo '<td '; }
        echo " align=\"center\" colspan=\"1\" width=\"20%\"> <a class=\"cat\" href=\"".$cesta."partner/partner-cat.php\" target=\"_top\" >Partner program </a></td> \n";
 
-    if ( ereg("^.+archiv-zmen.+$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+    // if ( ereg("^.+archiv-zmen.+$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
+    { echo '<td '; }
       echo " align=\"center\" width=\"15%\" colspan=\"1\" ><a class=\"cat\" href=\"".$cesta."archiv-zmen-cat.php\" target=\"_top\" >Změny</a></td> \n";
 
-    if ( ereg("soubory",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+    // if ( ereg("soubory",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
+    { echo '<td '; }
       echo " align=\"center\" width=\"15%\"> <a class=\"cat\" href=\"".$cesta."soubory.php\" target=\"_top\" >Správce souborů</a></td> \n";
 
-    if ( ereg("^.+board.+$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+    // if ( ereg("^.+board.+$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
+    { echo '<td '; }
        echo " align=\"center\" colspan=\"1\" width=\"\"> <a class=\"cat\" href=\"".$cesta."board-header.php\" target=\"_top\" >Nástěnka </a></td> \n";
 
-    if ( ereg("^.+others.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+syslog.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+/mail.php$",$_SERVER["REQUEST_URI"]) 
-    or ereg("^.+opravy.+$",$_SERVER["REQUEST_URI"]) )
-    { echo '<td bgcolor="silver" '; }  else { echo '<td '; }
+    // if ( ereg("^.+others.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+syslog.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+/mail.php$",$_SERVER["REQUEST_URI"]) 
+    // or ereg("^.+opravy.+$",$_SERVER["REQUEST_URI"]) )
+    // { echo '<td bgcolor="silver" '; }  else 
+    { echo '<td '; }
       echo " align=\"center\" colspan=\"1\" width=\"\"> <a class=\"cat\" href=\"".$cesta."others-subcat.php\" target=\"_top\" >Ostatní</a></td> \n";
 
     echo "<td><br></td>\n";
     
-   if ( ereg("^.+map.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+about.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+map.+$",$_SERVER["REQUEST_URI"]))
-   { echo '<td bgcolor="silver" '; }  
-   else { echo '<td '; }
+  //  if ( ereg("^.+map.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+about.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+map.+$",$_SERVER["REQUEST_URI"]))
+  //  { echo '<td bgcolor="silver" '; }  
+  //  else 
+   { echo '<td '; }
       
    echo " align=\"center\" colspan=\"1\" width=\"\" > 
       

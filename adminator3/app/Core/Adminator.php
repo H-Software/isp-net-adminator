@@ -51,60 +51,60 @@ class adminator {
 
         $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" );
 
-        if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici/cat+",$uri) or ereg("^.+vypovedi",$uri) )
-        { $kategorie[0]["barva"] = "silver"; }
+        // if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici/cat+",$uri) or ereg("^.+vypovedi",$uri) )
+        // { $kategorie[0]["barva"] = "silver"; }
 
         $kategorie[1] = array( "nazev" => "Služby", "url" => "/objekty/cat", "align" => "center", "width" => "18%" );
 
-        if( ereg("^.+objekty.",$uri) )
-        { $kategorie[1]["barva"] = "silver"; }
+        // if( ereg("^.+objekty.",$uri) )
+        // { $kategorie[1]["barva"] = "silver"; }
 
         $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby/cat", "align" => "center", "width" => "18%" );
 
-        if( ereg("^.+platby.+$",$uri) )
-        { $kategorie[2]["barva"] = "silver"; }
+        // if( ereg("^.+platby.+$",$uri) )
+        // { $kategorie[2]["barva"] = "silver"; }
 
         $kategorie[3] = array( "nazev" => "Topologie", "url" => "/topology", "align" => "center", "width" => "" );
 
-        if( ereg("^.+topology",$uri) )
-        { $kategorie[3]["barva"] = "silver"; }
+        // if( ereg("^.+topology",$uri) )
+        // { $kategorie[3]["barva"] = "silver"; }
 
         $kategorie[4] = array( "nazev" => "Nastavení", "url" => "/admin", "align" => "center", "width" => "" );
 
-        if( ereg("^.+admin.+$",$uri_replace ) )
-        {  $kategorie[4]["barva"] = "silver"; }
+        // if( ereg("^.+admin.+$",$uri_replace ) )
+        // {  $kategorie[4]["barva"] = "silver"; }
 
         $kategorie[5] = array( "nazev" => "Úvodní strana", "url" => "/home", "align" => "center", "width" => "" );
         
-        if( ereg("^.+home.php$",$uri) )
-        { $kategorie[5]["barva"] = "silver"; }
+        // if( ereg("^.+home.php$",$uri) )
+        // { $kategorie[5]["barva"] = "silver"; }
 
         $kat_2radka = array();
 
         $kat_2radka[0] = array( "nazev" => "Partner program", "url" => fix_link_to_another_adminator("/partner/partner-cat.php"), "width" => "", "align" => "center" );
 
-        if( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) )
-        { $kat_2radka[0]["barva"] = "silver"; }
+        // if( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) )
+        // { $kat_2radka[0]["barva"] = "silver"; }
 
         $kat_2radka[1] = array( "nazev" => "Změny", "url" => "/archiv-zmen/cat", "width" => "", "align" => "center" );
 
-        if( ereg("^.+archiv-zmen.+$",$uri) )
-        { $kat_2radka[1]["barva"] = "silver"; }
+        // if( ereg("^.+archiv-zmen.+$",$uri) )
+        // { $kat_2radka[1]["barva"] = "silver"; }
 
         $kat_2radka[2] = array( "nazev" => "Work", "url" => "/work", "width" => "", "align" => "center" );
 
-        if( ereg("^.+work.+$",$uri) )
-        { $kat_2radka[2]["barva"] = "silver"; }
+        // if( ereg("^.+work.+$",$uri) )
+        // { $kat_2radka[2]["barva"] = "silver"; }
 
         $kat_2radka[3] = array( "nazev" => "Ostatní", "url" => "/others", "width" => "", "align" => "center" );
 
-        if( ereg("^.+others.+$",$uri) or ereg("^.+syslog.+$",$uri) or ereg("^.+/mail.php$",$uri) or ereg("^.+opravy.+$",$uri) )
-        { $kat_2radka[3]["barva"] = "silver"; }
+        // if( ereg("^.+others.+$",$uri) or ereg("^.+syslog.+$",$uri) or ereg("^.+/mail.php$",$uri) or ereg("^.+opravy.+$",$uri) )
+        // { $kat_2radka[3]["barva"] = "silver"; }
 
         $kat_2radka[4] = array( "nazev" => "O programu", "url" => "/about", "width" => "", "align" => "center" );
 
-        if( ereg("^.+about.+$",$uri) )
-        { $kat_2radka[4]["barva"] = "silver"; }
+        // if( ereg("^.+about.+$",$uri) )
+        // { $kat_2radka[4]["barva"] = "silver"; }
         
         $ret = array( $kategorie, $kat_2radka);
             

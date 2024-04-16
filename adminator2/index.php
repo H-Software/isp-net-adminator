@@ -18,7 +18,7 @@ $lo=$_GET["lo"];
 
 if( ( strlen($login) > 0) )
 {
-  if( !(ereg('^([[:alnum:]]+)$',$login)) )
+  if( preg_match('/^[[:alnum:]]+$/',$login) <> 1 )
   {
     echo "</head><body>";
     echo "<p>Chyba prihlasovani! Neplatna vstupni data (jmeno).</p>";
@@ -42,7 +42,7 @@ if((isset($login)) and (isset($password))):
             . "AND (password LIKE '".$conn_mysql->real_escape_string($p)."') "
         );
     } catch (Exception $e) {
-        die ("<h2 style=\"color: red; \">Login Failed: Caught exception: " .  $e->getMessage() . "\n" . "</h2></body></html>\n");
+        // die ("<h2 style=\"color: red; \">Login Failed: Caught exception: " .  $e->getMessage() . "\n" . "</h2></body></html>\n");
     }
 
     if ($MSQ->num_rows <> 1){

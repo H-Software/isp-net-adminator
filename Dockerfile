@@ -1,4 +1,4 @@
-FROM php:5.6-apache
+FROM php:7.1-apache
 
 ENV ACCEPT_EULA=Y
 
@@ -10,6 +10,8 @@ RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.
 #
 
 RUN apt-get update \
+    && apt-get install -y --allow-downgrades \
+        zlib1g=1:1.2.8.dfsg-5 \
     && apt-get install -y \
         libpq-dev \
         wget \
@@ -36,27 +38,26 @@ RUN apt-get update \
 # PHP MSSQL stuff
 # https://github.com/petersonwsantos/docker-php5.6-mssql/blob/master/Dockerfile
 # https://github.com/Namoshek/docker-php-mssql/blob/master/8.1/fpm/Dockerfile
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        libcurl4-openssl-dev \
-        libedit-dev \
-        libsqlite3-dev \
-        libssl-dev \
-        libxml2-dev \
-        zlib1g-dev \
-        freetds-dev \
-        freetds-bin \
-        freetds-common \
-        libdbd-freetds \
-        libsybdb5 \
-        libqt4-sql-tds \
-        libqt5sql5-tds \
-        libqxmlrpc-dev \
-      && apt-get clean \
-      && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-      && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
-      && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
-      && docker-php-ext-install   mssql \
-      && docker-php-ext-configure mssql
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#         libcurl4-openssl-dev \
+#         libedit-dev \
+#         libsqlite3-dev \
+#         libssl-dev \
+#         libxml2-dev \
+#         freetds-dev \
+#         freetds-bin \
+#         freetds-common \
+#         libdbd-freetds \
+#         libsybdb5 \
+#         libqt4-sql-tds \
+#         libqt5sql5-tds \
+#         libqxmlrpc-dev \
+#       && apt-get clean \
+#       && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+#       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
+#       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
+#       && docker-php-ext-install   mssql \
+#       && docker-php-ext-configure mssql
 
 # apache conf
 RUN a2enmod ssl \
@@ -79,19 +80,19 @@ RUN mkdir -p /var/www/html/adminator3/
 
 RUN cd adminator3 \
     && composer require \
-        nette/robot-loader:3.1.4 \
-        smarty/smarty:2.6.33 \
+        nette/robot-loader:^3.4 \
+        smarty/smarty:^3.1 \
         slim/slim:3.* \
-        slim/twig-view:^2.5.1 \
-        slim/csrf:^0.6.0 \
-        slim/flash:^0.1.0 \
-        monolog/monolog:^1.17 \
-        respect/validation:^1.0 \
-        formr/formr:1.4.6 \
+        slim/twig-view:^2.5 \
+        slim/csrf:^0.8 \
+        slim/flash:^0.4.0 \
+        monolog/monolog:^1.27.1 \
+        respect/validation:^1.1 \
+        formr/formr:^1.4 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
-    && composer require\
-        illuminate/database:^5.2
-        
+    && composer require \
+        illuminate/database:^5.8
+
 #     # && docker-php-ext-enable xdebug \
 
 # app code
