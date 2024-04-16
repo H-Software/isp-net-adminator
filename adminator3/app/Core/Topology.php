@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-class Topology {
+class Topology extends adminator {
     var $conn_mysql;
     var $smarty;
     var $logger;

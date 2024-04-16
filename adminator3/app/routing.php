@@ -56,7 +56,7 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/vlastnici2', \vlastniciController::class . ':vlastnici2');
 
     $this->map(['GET', 'POST'],'/topology', \topologyController::class . ':nodeList');
-    $this->map(['GET', 'POST'],'/topology/nod-list', \topologyController::class . ':nodeList');
+    $this->map(['GET', 'POST'],'/topology/node-list', \topologyController::class . ':nodeList');
 
     $this->map(['GET', 'POST'],'/work', \workController::class . ':work');
 
