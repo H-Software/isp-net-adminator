@@ -927,8 +927,15 @@ class Topology extends adminator {
                 
                         $id = $data_router_1["id"];	
                     
-                        $output .= hierarchy_vypis_router($id,"0");
-                        
+                        $rs_hierarchy = hierarchy_vypis_router($id,"0");
+                        if($rs_hierarchy === false)
+                        {
+                            $output .= "<div class=\"alert alert-danger\" role=\"alert\">chyba hiearcheckeho vypisu routeru (no routers found in database)</div>";
+                        }
+                        else
+                        {
+                            $output .= $rs_hierarchy;
+                        }
                     } // while dotaz_router
                 } // konec if dotaz_router_radku > 0
         

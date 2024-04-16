@@ -868,7 +868,7 @@ function hierarchy_vypis_router($id,$uroven)
  
     $output = "";
 
-    $dotaz_router=$conn_mysql->query("SELECT * FROM router_list WHERE id = $id order by id");
+    $dotaz_router=$conn_mysql->query("SELECT * FROM router_list WHERE id = ".intval($id) ." order by id");
     $dotaz_router_radku=$dotaz_router->num_rows;
           
     if ( $dotaz_router_radku > 0 )
