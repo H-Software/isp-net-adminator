@@ -148,7 +148,7 @@ class stb
           
          $this->sql_query = $this->sql_query . " LIMIT ".$interval." OFFSET ".$bude_chybet." "; 
         
-        $output .= "<div id=\"objekty_stb_filter\" style=\"width: 1000px; margin: 10px; display: ".$display."; padding: 10px; border: 1px solid gray; \" >";
+        $output .= "<div id=\"objekty_stb_filter\" style=\"display: ".$display.";\" >";
         
         //vlastnik - bez
         $output .= "<div style=\"width: 150px; float: left;\" >".

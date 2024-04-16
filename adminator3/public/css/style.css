@@ -285,9 +285,6 @@ subcat-spacebody
 
 .odkaz-uroven-vys{ color: #CC3300; }
 
-.select-nevybrano
-{ color: grey; }
-
 .text-listing { font-size: 11px; }
 
 .text-listing2 { font-size: 14px; }
@@ -403,6 +400,26 @@ subcat-spacebody
 .form-add-no-click-ok { color: #0099FF; }
 
 .form-add-fail { color: red; }
+
+.select-nevybrano
+{ color: grey; }
+
+#objekty_stb_filter
+{
+    margin: 10px;
+    padding: 10px;
+    border-top: 1px solid gray; 
+    border-bottom: 1px solid gray;
+}
+
+#routers_filter
+{
+    margin: 10px;
+    padding: 10px;
+    border-top: 1px solid gray; 
+    border-bottom: 1px solid gray;
+    font-size: 14px;
+}
 
 .work-ok { color: green; }
 .work-error { color: red; }

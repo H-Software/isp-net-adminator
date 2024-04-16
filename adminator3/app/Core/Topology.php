@@ -803,10 +803,10 @@ class Topology extends adminator {
         $output .= "<form method=\"GET\" action=\"\" >";
 
         //filtr - hlavni okno
-        $output .= "<div id=\"routers_filter\" style=\"width: 980px; margin: 10px; display: ".$display."; padding: 10px; border: 1px solid gray; \" >";
+        $output .= "<div id=\"routers_filter\" style=\"display: ".$display.";\" >";
 
         //Monitorováno
-        $output .= "<div style=\"width: 150px; float: left;\" >\n".
+        $output .= "<div style=\"width: 150px; float: left;\">\n".
                 "Monitorováno: </div>\n";
 
         $output .= "<div style=\"float: left; \">\n".
@@ -856,7 +856,7 @@ class Topology extends adminator {
         "</div>\n";
 
         //tlacitko
-        $output .= "<div style=\"float: left; padding-left: 100%; width: 250px; text-align: right; padding-left: 10px; \" >\n".
+        $output .= "<div style=\"float: left; text-align: right; padding-left: 50px; \" >\n".
                 "<input type=\"submit\" name=\"odeslano\" value=\"OK\" ></div>\n";
 
         //oddelovac
@@ -874,7 +874,7 @@ class Topology extends adminator {
         "<input type=\"text\" name=\"f_id_routeru\" size=\"3\" value=\"".htmlspecialchars($f_id_routeru)."\" ></div>\n";
 
         //tlacitko
-        $output .= "<div style=\"float: left; padding-left: 10px; \" >".
+        $output .= "<div style=\"float: left; padding-left: 40px; \" >".
                 "<input type=\"submit\" name=\"odeslano\" value=\"OK\" >".
                 "<intpu type=\"hidden\" name=\"list\" value=\"".$list."\" ></div>\n";
 
