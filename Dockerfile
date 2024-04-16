@@ -80,7 +80,7 @@ RUN mkdir -p /var/www/html/adminator3/
 
 RUN cd adminator3 \
     && composer require \
-        nette/robot-loader:^3.2 \
+        nette/robot-loader:^3.4 \
         smarty/smarty:^3.1 \
         slim/slim:3.* \
         slim/twig-view:^2.5 \
