@@ -288,6 +288,16 @@ subcat-spacebody
 .select-nevybrano
 { color: grey; }
 
+.text-listing { font-size: 11px; }
+
+.text-listing2 { font-size: 14px; }
+
+.tab-topology{ border-bottom: 1px solid #C0C0C0 }
+
+.tab-topology2{ border-right: 1px solid #C0C0C0 }
+
+.tab-topology-dolni2{ border-bottom: 1px dashed #C0C0C0 }
+
 .vlastnici-selector-label
 {
     margin-left: 5px; 

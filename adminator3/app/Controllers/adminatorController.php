@@ -105,6 +105,8 @@ class adminatorController extends Controller {
     function header(ServerRequestInterface $request = null, ResponseInterface $response = null)
     {
 
+        $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+
         $this->logger->addDebug("adminatorController\\header called");
         $this->logger->addDebug("adminatorController\\header: logged user info: " . \App\Auth\Auth::getUserEmail() . " (" . $this->auth->user_level . ")");
 
@@ -116,7 +118,7 @@ class adminatorController extends Controller {
         $uri=$_SERVER["REQUEST_URI"];
         $uri_replace = str_replace ("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka, $mapa) = $this->zobraz_kategorie($uri,$uri_replace);
+        list($kategorie, $kat_2radka, $mapa) = $a->zobraz_kategorie($uri,$uri_replace);
 
         $this->smarty->assign("kategorie",$kategorie);
         $this->smarty->assign("kat_2radka",$kat_2radka);
@@ -149,7 +151,7 @@ class adminatorController extends Controller {
         $this->smarty->assign("se_cat_adminator","adminator2");
         $this->smarty->assign("se_cat_adminator_link",$se_cat_adminator_link);
 
-        $prihl_uziv = $this->vypis_prihlasene_uziv();
+        $prihl_uziv = $a->vypis_prihlasene_uziv();
 
         if( $prihl_uziv[100] == true ){
             $this->smarty->assign("pocet_prihl_uziv",0);
@@ -173,116 +175,5 @@ class adminatorController extends Controller {
         $this->smarty->assign("windowleft2","50%");
 
         $this->smarty->assign("subcat_select",0);
-    }
-
-    function zobraz_kategorie($uri,$uri_replace)
-    {
-
-        $kategorie = array();
-
-        $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" );
-
-        if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici/cat+",$uri) or ereg("^.+vypovedi",$uri) )
-        { $kategorie[0]["barva"] = "silver"; }
-
-        $kategorie[1] = array( "nazev" => "Služby", "url" => "/objekty/cat", "align" => "center", "width" => "18%" );
-
-        if( ereg("^.+objekty.",$uri) )
-        { $kategorie[1]["barva"] = "silver"; }
-
-        $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby/cat", "align" => "center", "width" => "18%" );
-
-        if( ereg("^.+platby.+$",$uri) )
-        { $kategorie[2]["barva"] = "silver"; }
-
-        $kategorie[3] = array( "nazev" => "Topologie", "url" => fix_link_to_another_adminator("/topology-nod-list.php"), "align" => "center", "width" => "" );
-
-        if( ereg("^.+topology",$uri) )
-        { $kategorie[3]["barva"] = "silver"; }
-
-        $kategorie[4] = array( "nazev" => "Nastavení", "url" => "/admin", "align" => "center", "width" => "" );
-
-        if( ereg("^.+admin.+$",$uri_replace ) )
-        {  $kategorie[4]["barva"] = "silver"; }
-
-        $kategorie[5] = array( "nazev" => "Úvodní strana", "url" => "/home", "align" => "center", "width" => "" );
-        
-        if( ereg("^.+home.php$",$uri) )
-        { $kategorie[5]["barva"] = "silver"; }
-
-        $kat_2radka = array();
-
-        $kat_2radka[0] = array( "nazev" => "Partner program", "url" => fix_link_to_another_adminator("/partner/partner-cat.php"), "width" => "", "align" => "center" );
-
-        if( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) )
-        { $kat_2radka[0]["barva"] = "silver"; }
-
-        $kat_2radka[1] = array( "nazev" => "Změny", "url" => "/archiv-zmen/cat", "width" => "", "align" => "center" );
-
-        if( ereg("^.+archiv-zmen.+$",$uri) )
-        { $kat_2radka[1]["barva"] = "silver"; }
-
-        $kat_2radka[2] = array( "nazev" => "Work", "url" => "/work", "width" => "", "align" => "center" );
-
-        if( ereg("^.+work.+$",$uri) )
-        { $kat_2radka[2]["barva"] = "silver"; }
-
-        $kat_2radka[3] = array( "nazev" => "Ostatní", "url" => "/others", "width" => "", "align" => "center" );
-
-        if( ereg("^.+others.+$",$uri) or ereg("^.+syslog.+$",$uri) or ereg("^.+/mail.php$",$uri) or ereg("^.+opravy.+$",$uri) )
-        { $kat_2radka[3]["barva"] = "silver"; }
-
-        $kat_2radka[4] = array( "nazev" => "O programu", "url" => "/about", "width" => "", "align" => "center" );
-
-        if( ereg("^.+about.+$",$uri) )
-        { $kat_2radka[4]["barva"] = "silver"; }
-        
-        $ret = array( $kategorie, $kat_2radka);
-            
-        return $ret;
-    }
-
-    function vypis_prihlasene_uziv()
-    {
-        $ret = array();
-
-        $MSQ_USER2 = $this->conn_mysql->query("SELECT nick, level FROM autorizace");
-        $MSQ_USER_COUNT = $MSQ_USER2->num_rows;
-
-        $ret[0] = $MSQ_USER_COUNT;
-
-        //prvne vypisem prihlaseneho
-        $MSQ_USER_NICK = $this->conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '" . \App\Auth\Auth::getUserEmail() . "' ");
-
-        if ($MSQ_USER_NICK->num_rows <> 1)
-        {
-            $ret[100] = true;
-            $ret[101] = "Chyba! Vyber nicku nelze provest.";
-        }
-        else
-        {
-            while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
-            {
-            $ret[1] = $data_user_nick["nick"];
-            $ret[2] = $data_user_nick["level"];
-            }
-        } // konec else
-
-        // ted najilejeme prihlaseny lidi ( vsecky ) do pop-up okna
-        if ( $MSQ_USER_COUNT < 1 )
-        { $obsah_pop_okna .= "Nikdo nepřihlášen. (divny)"; }
-        else
-        {
-
-        while ($data_user2 = $MSQ_USER2->fetch_array())
-        {
-            $obsah_pop_okna .= "jméno: ".$data_user2["nick"].", level: ".$data_user2["level"].", ";
-        } //konec while
-
-        $ret[3] = $obsah_pop_okna;
-
-        } // konec if
-
-        return $ret;
     }
 }
