@@ -92,7 +92,6 @@ RUN cd adminator3 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require\
         illuminate/database:^5.6
-        # ^5.4
         
 #     # && docker-php-ext-enable xdebug \
 
