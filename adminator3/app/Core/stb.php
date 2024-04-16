@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Core;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
