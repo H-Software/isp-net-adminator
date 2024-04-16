@@ -2,6 +2,7 @@
 
 $cesta = "../";
 
+require ($cesta."include/main.function.shared.php");
 require ($cesta."include/config.php"); 
 require ($cesta."include/check_login.php");
 

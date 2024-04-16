@@ -2,14 +2,13 @@
 
 $cesta = "../";
 
-require_once ($cesta."include/config.php"); 
+require ($cesta."include/main.function.shared.php");
+require ($cesta."include/config.php"); 
+require ($cesta."include/check_login.php");
+require ($cesta."include/check_level.php");
+
 require_once ($cesta."include/class.partner.servis.php");
-
 require_once ($cesta."include/class.php");
-
-require_once ($cesta."include/check_login.php");
-
-require_once ($cesta."include/check_level.php");
 
 $level_col = "lvl_partner_servis_add";
 

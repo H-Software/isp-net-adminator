@@ -55,7 +55,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713220106',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713286826',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -178,7 +178,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (5,	10,	'a2: topology-nod-list'),
 (6,	10,	'topolog-user-list'),
 (13,	10,	'a2: vlastnici'),
-(14,	20,	's2: platby'),
+(14,	20,	'a2: platby'),
 (16,	10,	'a2: work'),
 (17,	10,	'a2: admin'),
 (20,	88,	'a2: admin-level-add'),
@@ -401,11 +401,13 @@ CREATE TABLE `users` (
   `lvl_admin_login_iptv` int unsigned NOT NULL DEFAULT '0',
   `lvl_objekty_stb_add_portal` int unsigned NOT NULL DEFAULT '0',
   `lvl_objekty_stb_erase` int unsigned NOT NULL DEFAULT '0',
+  `lvl_partner_servis_add` int unsigned NOT NULL DEFAULT '0',
+  `lvl_partner_servis_list` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`) VALUES
-(1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1);
+INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`) VALUES
+(1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1,	1,	1);
 
 DROP TABLE IF EXISTS `users_slim`;
 CREATE TABLE `users_slim` (
@@ -419,11 +421,12 @@ CREATE TABLE `users_slim` (
   `lvl_admin_login_iptv` int unsigned DEFAULT '0',
   `lvl_objekty_stb_add_portal` int unsigned DEFAULT '0',
   `lvl_objekty_stb_erase` int unsigned DEFAULT '0',
+  `lvl_partner_servis_add` int unsigned DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
-INSERT INTO `users_slim` (`id`, `name`, `email`, `password`, `created_at`, `updated_at`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`) VALUES
-(1,	'admin',	'admin@admin',	'$2y$10$8ccRNXzVcyArzcbiBT813u18fBagOvhEjN9YW8hx98neQKH32h24i',	'2024-04-10 20:26:07',	'2024-04-10 20:26:07',	100,	0,	0,	0);
+INSERT INTO `users_slim` (`id`, `name`, `email`, `password`, `created_at`, `updated_at`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`) VALUES
+(1,	'admin',	'admin@admin',	'$2y$10$8ccRNXzVcyArzcbiBT813u18fBagOvhEjN9YW8hx98neQKH32h24i',	'2024-04-10 20:26:07',	'2024-04-10 20:26:07',	100,	0,	0,	0,	0);
 
 DROP TABLE IF EXISTS `vypovedi`;
 CREATE TABLE `vypovedi` (
@@ -461,4 +464,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-15 22:28:34
+-- 2024-04-16 17:15:55
