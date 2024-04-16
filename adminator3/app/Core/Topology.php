@@ -1145,7 +1145,7 @@ class Topology extends adminator {
 
                         //2.1 - id
                         $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
-                        $output .= "<a href=\"" . fix_link_to_another_adminator("/archiv-zmen?id_routeru=".intval($data["id"]))."\" >H</a>";
+                        $output .= "<a href=\"/archiv-zmen?id_routeru=".intval($data["id"])."\" >H</a>";
                         $output .= "</td>";
 
                         //2.2 - parent router
@@ -1277,7 +1277,7 @@ class Topology extends adminator {
                                                                                                                                         
                                 $output .= "<td class=\"top-router-dolni1\"><span style=\"color: grey; font-size: 12px; \">".$typ_vysilace2."</span></td>";
                                 $output .= "<td class=\"top-router-dolni1\">";
-                                    $output .= "<a href=\"topology-nod-list.php?find=".$data_top["jmeno"]."\">detail nodu </a>";
+                                    $output .= "<a href=\"/topology/nod-list?find=".$data_top["jmeno"]."\">detail nodu </a>";
                                 $output .= "</td>";
                                 
                                 $output .= "</tr>";
