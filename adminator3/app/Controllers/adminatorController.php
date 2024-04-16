@@ -151,7 +151,7 @@ class adminatorController extends Controller {
         $this->smarty->assign("se_cat_adminator","adminator2");
         $this->smarty->assign("se_cat_adminator_link",$se_cat_adminator_link);
 
-        $prihl_uziv = $this->vypis_prihlasene_uziv();
+        $prihl_uziv = $a->vypis_prihlasene_uziv();
 
         if( $prihl_uziv[100] == true ){
             $this->smarty->assign("pocet_prihl_uziv",0);
@@ -175,51 +175,5 @@ class adminatorController extends Controller {
         $this->smarty->assign("windowleft2","50%");
 
         $this->smarty->assign("subcat_select",0);
-    }
-
-
-
-    function vypis_prihlasene_uziv()
-    {
-        $ret = array();
-
-        $MSQ_USER2 = $this->conn_mysql->query("SELECT nick, level FROM autorizace");
-        $MSQ_USER_COUNT = $MSQ_USER2->num_rows;
-
-        $ret[0] = $MSQ_USER_COUNT;
-
-        //prvne vypisem prihlaseneho
-        $MSQ_USER_NICK = $this->conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '" . \App\Auth\Auth::getUserEmail() . "' ");
-
-        if ($MSQ_USER_NICK->num_rows <> 1)
-        {
-            $ret[100] = true;
-            $ret[101] = "Chyba! Vyber nicku nelze provest.";
-        }
-        else
-        {
-            while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
-            {
-            $ret[1] = $data_user_nick["nick"];
-            $ret[2] = $data_user_nick["level"];
-            }
-        } // konec else
-
-        // ted najilejeme prihlaseny lidi ( vsecky ) do pop-up okna
-        if ( $MSQ_USER_COUNT < 1 )
-        { $obsah_pop_okna .= "Nikdo nepřihlášen. (divny)"; }
-        else
-        {
-
-        while ($data_user2 = $MSQ_USER2->fetch_array())
-        {
-            $obsah_pop_okna .= "jméno: ".$data_user2["nick"].", level: ".$data_user2["level"].", ";
-        } //konec while
-
-        $ret[3] = $obsah_pop_okna;
-
-        } // konec if
-
-        return $ret;
     }
 }
