@@ -19,12 +19,10 @@
 
 </div>
 
-{include file="base-end.tpl"}
-
 {if $nastenka_povoleno eq "1"}
-   <div class="container-sm justify-content-md-center">
       {include file="others/inc.board-header.tpl"}
 
       {include file="others/inc.board-listing.tpl"}
-   </div>
 {/if}
+
+{include file="base-end.tpl"}
