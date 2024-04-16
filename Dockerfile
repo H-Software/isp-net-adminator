@@ -83,7 +83,7 @@ RUN cd adminator3 \
         nette/robot-loader:^3.2 \
         smarty/smarty:^3.1 \
         slim/slim:3.* \
-        slim/twig-view:^3.0.0\
+        slim/twig-view:^2.5 \
         slim/csrf:^1.0 \
         slim/flash:^0.4.0 \
         monolog/monolog:^1.27.1 \
