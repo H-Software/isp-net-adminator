@@ -11,9 +11,7 @@ use marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter;
 use \Slim\Http\Request as SlimHttpRequest;
 use \Slim\Http\Response as SlimHttpResponse;
 
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMSetup;
+require __DIR__ ."/bootstrap-doctrine.php";
 
 $container = $app->getContainer();
 
@@ -63,39 +61,16 @@ $container['view'] = function ($container) {
 $acl = new Acl();
 
 $container['router'] = new \marcelbonnet\Slim\Auth\Route\AuthorizableRouter(null, $acl);
-// $container['acl']    = $acl;
-
-// $config = ORMSetup::createAttributeMetadataConfiguration(
-//     array(__DIR__."/src"),
-//     true // isDevMode
-// );
-
-// Create a simple "default" Doctrine ORM configuration for Annotations
-$isDevMode = true;
-$proxyDir = null;
-$cache = null;
-$useSimpleAnnotationReader = false;
-$ormConfig = ORMSetup::createAnnotationMetadataConfiguration(array(__DIR__."/src"), $isDevMode, $proxyDir, $cache);
-// or if you prefer yaml or XML
-//$config = Setup::createXMLMetadataConfiguration(array(__DIR__."/config/xml"), $isDevMode);
-//$config = Setup::createYAMLMetadataConfiguration(array(__DIR__."/config/yaml"), $isDevMode);
-
-$ormConn = array(
-    'driver' => 'pdo_mysql',
-    // 'path' => __DIR__ . '/db.sqlite',
-);
-
-// obtaining the entity manager
-$entityManager = EntityManager::create($ormConn, $ormConfig);
+$container['acl']    = $acl;
 
 $adapterOptions = [];
 $adapter = new marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter(
     NULL,  //LDAP config or NULL if not using LDAP
-    $entityManager, //an Doctrine's Entity Manager instance 
-    "\Your\Project\Dao\Role",    //Role class
+    $em, //an Doctrine's Entity Manager instance 
+    "Role",    //Role class
     "role", //Role's class role attribute
     "user", //Role's class user attribute (the @ManyToOne attrib)
-    "\Your\Project\Dao\User", //User class
+    "User", //User class
     "username", //User name attribute
     "passwordHash", //password (as a hash) attribute
     marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
@@ -109,15 +84,21 @@ $container["authAdapter"] = $adapter;
 $slimAuthProvider = new SlimAuthProvider();
 $slimAuthProvider->register($container);
 
-$app->add(new Authorization( $container["auth"], $acl, new RedirectHandler("auth/notAuthenticated", "auth/notAuthorized") ));
+$app->add(
+        new Authorization( 
+                $container["auth"], 
+                $acl, 
+                new RedirectHandler("auth/notAuthenticated", "auth/notAuthorized") 
+            )
+        );
 
 $container['AuthController'] = function($container) {
 	return new \App\Controllers\Auth\AuthController($container);
 };
 
-$container['PasswordController'] = function($container) {
-	return new \App\Controllers\Auth\PasswordController($container);
-};
+// $container['PasswordController'] = function($container) {
+// 	return new \App\Controllers\Auth\PasswordController($container);
+// };
 
 $container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
