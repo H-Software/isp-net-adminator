@@ -91,7 +91,7 @@ RUN cd adminator3 \
         formr/formr:^1.4 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require \
-        illuminate/database:^5.6
+        illuminate/database:^5.8
 
 #     # && docker-php-ext-enable xdebug \
 
