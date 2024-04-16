@@ -1,4 +1,4 @@
-{include file="base-bs.tpl" tpl_include_subcat = 'archiv-zmen/inc.cat.archiv-zmen'}
+{include file="base-bs.tpl" tpl_include_subcat = 'topology/inc.category'}
 
 {$body}
 
