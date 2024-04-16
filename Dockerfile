@@ -78,7 +78,7 @@ RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2
 
 RUN mkdir -p /var/www/html/adminator3/
 
-RUN mkdir -p /var/www/html/adminator3/
+RUN mkdir -p /var/www/html/adminator4/
 
 RUN cd adminator3 \
     && composer require \
