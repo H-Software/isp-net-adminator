@@ -54,6 +54,9 @@ RUN apt-get update \
 #       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
 #       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
 RUN apt-get update \
+        && apt-get install -y \
+            msodbcsql17 \
+            unixodbc-dev \
         && docker-php-ext-install   mssql \
         && docker-php-ext-configure mssql \
       && apt-get clean \
