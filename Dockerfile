@@ -53,8 +53,11 @@ RUN apt-get update \
 #       && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 #       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
 #       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
-#       && docker-php-ext-install   mssql \
-#       && docker-php-ext-configure mssql
+RUN apt-get update \
+        && docker-php-ext-install   mssql \
+        && docker-php-ext-configure mssql \
+      && apt-get clean \
+      && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # apache conf
 RUN a2enmod ssl \
