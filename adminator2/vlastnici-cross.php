@@ -153,10 +153,12 @@ elseif( $akce == 7 ) //tisk smlouvy
   if( $rs_fs->num_rows == 1 )
   {
     //sluzba INTERNET
-    $ms_tarif->data_seek(0);
-    $ms_tarif_r = $ms_tarif->fetch_row();
-    
-    if(mysql_result($rs_fs, 0, 1) == 1){  //sluzba internet - ANO                
+
+    // TODO: check if its right replacement for mysql_seek
+    $rs_fs->data_seek(0);
+    $rs_fs_r = $rs_fs->fetch_row();
+
+    if($rs_fs_r[1] == 1){  //sluzba internet - ANO                
         
         //zjisteni poctu objektu
         $rs_obj = pg_query("SELECT * FROM objekty WHERE id_cloveka = '".intval($id_cloveka)."' ");
@@ -171,7 +173,7 @@ elseif( $akce == 7 ) //tisk smlouvy
     }
     
     //sluzba IPTV
-    if(mysql_result($rs_fs, 0, 4) == 1){
+    if($rs_fs_r[4] == 1){
 
         //sluzba IPTV - ANO
         print "<input type=\"hidden\" name=\"iptv_sluzba\" value=\"1\" >\n"; 
@@ -183,7 +185,7 @@ elseif( $akce == 7 ) //tisk smlouvy
     
     
     //VOIP
-    if(mysql_result($rs_fs, 0, 6) == 1){
+    if($rs_fs_r[6] == 1){
         print "<input type=\"hidden\" name=\"voip_sluzba\" value=\"1\" >\n"; 
     }
     
