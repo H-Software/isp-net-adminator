@@ -75,24 +75,24 @@ RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2
 
 RUN mkdir -p /var/www/html/adminator3/
 
-RUN cd adminator3 \
-    && composer require \
-        nette/robot-loader:^3.4 \
-        smarty/smarty:^3.1 \
-        slim/slim:3.* \
-        slim/twig-view:^2.5 \
-        slim/csrf:^0.8 \
-        slim/flash:^0.4.0 \
-        monolog/monolog:^1.27.1 \
-        respect/validation:^1.1 \
-        formr/formr:^1.4 \
-        doctrine/orm:^2.11.0 \
-        doctrine/annotations:^1.13.0 \
-        symfony/cache:^4.4 \
-        marcelbonnet/slim-auth:^2.0 \
-    && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
-    && composer require \
-        illuminate/database:^5.8
+# RUN cd adminator3 \
+#     && composer require \
+#         nette/robot-loader:^3.4 \
+#         smarty/smarty:^3.1 \
+#         slim/slim:3.* \
+#         slim/twig-view:^2.5 \
+#         slim/csrf:^0.8 \
+#         slim/flash:^0.4.0 \
+#         monolog/monolog:^1.27.1 \
+#         respect/validation:^1.1 \
+#         formr/formr:^1.4 \
+#         doctrine/orm:^2.11.0 \
+#         doctrine/annotations:^1.13.0 \
+#         symfony/cache:^4.4 \
+#         marcelbonnet/slim-auth:^2.0 \
+#     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
+#     && composer require \
+#         illuminate/database:^5.8
 
 #     # && docker-php-ext-enable xdebug \
 
@@ -115,5 +115,5 @@ RUN cd adminator2 \
 # RUN cd adminator3 \
 #      && composer update
 
-# RUN cd adminator3 \
-#     && composer install
+RUN cd adminator3 \
+    && composer install

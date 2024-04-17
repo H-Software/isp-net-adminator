@@ -51,6 +51,7 @@ class Acl extends SlimAuthAcl
             '/platby/cat',
             '/platby/fn',
             '/platby/fn-kontrola-omezeni',
+            '/archiv-zmen',
             '/archiv-zmen/cat'
         );
 
