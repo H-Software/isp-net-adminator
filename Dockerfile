@@ -5,7 +5,6 @@ ENV ACCEPT_EULA=Y
 #
 # PHP stuff
 #
-
 RUN apt-get update \
     && apt-get install -y \
         libpq-dev \
@@ -29,9 +28,6 @@ RUN apt-get update \
             ldap \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-    # && pecl install apcu \
-    # && docker-php-ext-enable apcu \
-    # && docker-php-ext-install intl 
 
 # PHP MSSQL stuff
 # https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
@@ -45,11 +41,17 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # https://gist.github.com/benrolfe/9ee58c79659a6162ccda7cc50430445f
-RUN pecl install sqlsrv \
-        && pecl install pdo_sqlsrv \
+RUN pecl install sqlsrv-4.1.6.1 \
+        && pecl install pdo_sqlsrv-4.1.6.1 \
         && docker-php-ext-enable \
             sqlsrv \
             pdo_sqlsrv
+
+# Install APCu and APC backward compatibility
+RUN pecl install apcu \
+        && pecl install apcu_bc-1.0.3 \
+        && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
+        && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
 # apache conf
 RUN a2enmod ssl \
