@@ -55,7 +55,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713286826',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713379417',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -106,11 +106,38 @@ INSERT INTO `board` (`id`, `author`, `email`, `from_date`, `to_date`, `subject`,
 (9,	'1',	'',	'2024-04-13',	'2024-04-27',	'test4',	'rffff4'),
 (10,	'1',	'x@xx',	'2024-04-20',	'2024-04-20',	'hu@hu',	'hu');
 
+DROP TABLE IF EXISTS `core__user_roles`;
+CREATE TABLE `core__user_roles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `fk_user_id` int NOT NULL,
+  `role` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `role_idx` (`fk_user_id`,`role`),
+  KEY `IDX_E086BB8D5741EEB9` (`fk_user_id`),
+  CONSTRAINT `FK_E086BB8D5741EEB9` FOREIGN KEY (`fk_user_id`) REFERENCES `core__users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+INSERT INTO `core__user_roles` (`id`, `fk_user_id`, `role`) VALUES
+(1,	1,	'member');
+
+DROP TABLE IF EXISTS `core__users`;
+CREATE TABLE `core__users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `passwordHash` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `level` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username_idx` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+INSERT INTO `core__users` (`id`, `username`, `passwordHash`, `level`) VALUES
+(1,	'admin@admin',	'$2y$10$szvwhvv/2fTa1LQaZNuiI.1LBqBE0YV5em5DFvvI8XhAEmQmaVk5W',	101);
+
 DROP TABLE IF EXISTS `fakturacni_skupiny`;
 CREATE TABLE `fakturacni_skupiny` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nazev` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `typ` tinyint unsigned NOT NULL,
+  `typ` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -177,7 +204,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (4,	10,	'topology-nod-list'),
 (5,	10,	'a2: topology-nod-list'),
 (6,	10,	'topolog-user-list'),
-(13,	10,	'a2: vlastnici'),
+(13,	10,	'vlastnici / vlastnici-gen-xml'),
 (14,	20,	'a2: platby'),
 (16,	10,	'a2: work'),
 (17,	10,	'a2: admin'),
@@ -193,11 +220,14 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (38,	100,	'a3: home.php, vlastnici2'),
 (40,	30,	'vlastnici2: pridani vlastnika'),
 (41,	50,	'platby-soucet'),
+(48,	40,	'vlastnici2-add-obj'),
+(51,	30,	'vlastnici-add-fakt'),
 (63,	40,	'vlastnici export'),
 (75,	10,	'a2: partner-cat'),
 (78,	10,	'a2: vypovedi'),
 (79,	30,	'a2: vypovedi vlozeni'),
 (80,	20,	'vypovedi plaintisk'),
+(81,	80,	'platby-hot-stats'),
 (82,	10,	'a3: vlastnici-archiv'),
 (84,	20,	'a2: opravy'),
 (85,	30,	'topology-router-list'),
@@ -213,6 +243,8 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (99,	10,	'a2: vlastnici2-fakt-skupiny'),
 (101,	10,	'opravy a zavady vypis (homepage)'),
 (102,	10,	'a2: vlastnici hledani'),
+(105,	20,	'opravy-vlastnik'),
+(106,	20,	'opravy-zacit-resit'),
 (107,	10,	'fn.php'),
 (108,	33,	'faktury: fn-index'),
 (110,	20,	'faktury: fn-aut-sms'),
@@ -247,8 +279,13 @@ CREATE TABLE `login_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
-(11,	'admin',	'1713208080',	'172.18.0.1'),
-(12,	'admin',	'1713219349',	'172.18.0.1');
+(13,	'admin',	'1713354954',	'172.18.0.1'),
+(14,	'admin',	'1713371838',	'172.18.0.1'),
+(15,	'admin',	'1713372510',	'172.18.0.1'),
+(16,	'admin',	'1713376215',	'172.18.0.1'),
+(17,	'admin',	'1713376392',	'172.18.0.1'),
+(18,	'admin',	'1713376836',	'172.18.0.1'),
+(19,	'admin',	'1713379304',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -403,30 +440,12 @@ CREATE TABLE `users` (
   `lvl_objekty_stb_erase` int unsigned NOT NULL DEFAULT '0',
   `lvl_partner_servis_add` int unsigned NOT NULL DEFAULT '0',
   `lvl_partner_servis_list` int unsigned NOT NULL DEFAULT '0',
+  `lvl_phd_adresar` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`) VALUES
-(1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1,	1,	1);
-
-DROP TABLE IF EXISTS `users_slim`;
-CREATE TABLE `users_slim` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `password` varchar(255) NOT NULL DEFAULT '',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `level` int unsigned NOT NULL DEFAULT '0',
-  `lvl_admin_login_iptv` int unsigned DEFAULT '0',
-  `lvl_objekty_stb_add_portal` int unsigned DEFAULT '0',
-  `lvl_objekty_stb_erase` int unsigned DEFAULT '0',
-  `lvl_partner_servis_add` int unsigned DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
-INSERT INTO `users_slim` (`id`, `name`, `email`, `password`, `created_at`, `updated_at`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`) VALUES
-(1,	'admin',	'admin@admin',	'$2y$10$8ccRNXzVcyArzcbiBT813u18fBagOvhEjN9YW8hx98neQKH32h24i',	'2024-04-10 20:26:07',	'2024-04-10 20:26:07',	100,	0,	0,	0,	0);
+INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`, `lvl_phd_adresar`) VALUES
+(1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1,	1,	1,	1);
 
 DROP TABLE IF EXISTS `vypovedi`;
 CREATE TABLE `vypovedi` (
@@ -464,4 +483,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-16 17:15:55
+-- 2024-04-17 18:51:28

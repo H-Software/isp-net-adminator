@@ -1,27 +1,31 @@
 <?php
 
+require("include/main.function.shared.php");
+require("include/config.php"); 
+
 echo "<html>
-    <head>
-    </head>
-<body>\n\n";
+	<head>
+	    <title>Vlastníci rozcestník</title>";
+
+require("include/charset.php");
+
+echo "</head>
+    <body>";
 
 $akce = $_GET["akce"];
 $id_cloveka = $_GET["id_cloveka"];
 
-if( !( ereg('^([[:digit:]]+)$',$id_cloveka) ) )
+if( !( preg_match('/^([[:digit:]]+)$/', $id_cloveka) ) )
 {
  echo "Chyba! Nesouhlasi vstupni data. (id cloveka) ";
  exit;
 }
   
-if( !( ereg('^([[:digit:]]+)$',$akce) ) )
+if( !( preg_match('/^([[:digit:]]+)$/', $akce) ) )
 {
  echo "Chyba! Nesouhlasi vstupni data. (akce) ";
  exit;
 }
-
-require_once("include/config.php");
-//include("include/config.pg.php");
 
 if( $akce == 0 or !isset($akce) )
 { 
@@ -75,8 +79,8 @@ elseif( $akce == 7 ) //tisk smlouvy
  while($data = pg_fetch_array($rs_vl1) )
  { $fakturacni_skupina_id = $data["fakturacni_skupina_id"]; }
   
- $rs_fs = mysql_query("SELECT typ_sluzby FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
- while($data = mysql_fetch_array($rs_fs) )
+ $rs_fs = $conn_mysql->query("SELECT typ_sluzby FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
+ while($data = $rs_fs->fetch_array() )
  { $fakturacni_skupina_typ = $data["typ_sluzby"]; }
  
  echo "<input type=\"hidden\" name=\"id_cloveka\" value=\"".intval($id_cloveka)."\" >\n"; 
@@ -141,15 +145,20 @@ elseif( $akce == 7 ) //tisk smlouvy
   }
   
   //FS
-  $rs_fs = mysql_query("SELECT typ_sluzby, sluzba_int, sluzba_int_id_tarifu, nazev, 
+  $rs_fs = $conn_mysql->query("SELECT typ_sluzby, sluzba_int, sluzba_int_id_tarifu, nazev, 
 				sluzba_iptv, sluzba_iptv_id_tarifu, sluzba_voip 
 			    FROM fakturacni_skupiny 
 			    WHERE id = '".intval($data_vl["fakturacni_skupina_id"])."'");
 
-  if( mysql_num_rows($rs_fs) == 1 )
+  if( $rs_fs->num_rows == 1 )
   {
     //sluzba INTERNET
-    if(mysql_result($rs_fs, 0, 1) == 1){  //sluzba internet - ANO                
+
+    // TODO: check if its right replacement for mysql_seek
+    $rs_fs->data_seek(0);
+    $rs_fs_r = $rs_fs->fetch_row();
+
+    if($rs_fs_r[1] == 1){  //sluzba internet - ANO                
         
         //zjisteni poctu objektu
         $rs_obj = pg_query("SELECT * FROM objekty WHERE id_cloveka = '".intval($id_cloveka)."' ");
@@ -164,7 +173,7 @@ elseif( $akce == 7 ) //tisk smlouvy
     }
     
     //sluzba IPTV
-    if(mysql_result($rs_fs, 0, 4) == 1){
+    if($rs_fs_r[4] == 1){
 
         //sluzba IPTV - ANO
         print "<input type=\"hidden\" name=\"iptv_sluzba\" value=\"1\" >\n"; 
@@ -176,7 +185,7 @@ elseif( $akce == 7 ) //tisk smlouvy
     
     
     //VOIP
-    if(mysql_result($rs_fs, 0, 6) == 1){
+    if($rs_fs_r[6] == 1){
         print "<input type=\"hidden\" name=\"voip_sluzba\" value=\"1\" >\n"; 
     }
     
@@ -247,19 +256,18 @@ elseif( $akce == 16 ) // vypis faktur - pohoda SQL
 else
 { $home = "home.php"; }
 
-header("Location: https://".$_SERVER["SERVER_NAME"]."/adminator2/".$stranka);
+//header("Location: https://".$_SERVER["SERVER_NAME"]."/adminator2/".$stranka);
 
-echo "<html>
-	<head>
-	    <title>Vlastníci rozcestník</title>";
+// echo "<html>
+// 	<head>
+// 	    <title>Vlastníci rozcestník</title>";
 
-include("include/charset.php");
+// include("include/charset.php");
 
-echo "</head>
-    <body>";
+// echo "</head>
+//     <body>";
 
-echo $_SERVER["SERVER_NAME"]."/".$stranka; 
+echo "<div><a href=\"" . $_SERVER["SERVER_NAME"] . '/' . $stranka . "\">" . $_SERVER["SERVER_NAME"] . '/' .$stranka . "</a></div>"; 
 
 echo "</body></html>";
  
-?>

@@ -5,7 +5,6 @@ ENV ACCEPT_EULA=Y
 #
 # PHP stuff
 #
-
 RUN apt-get update \
     && apt-get install -y \
         libpq-dev \
@@ -15,6 +14,7 @@ RUN apt-get update \
         zlib1g-dev \
         git \
         libldap2-dev \
+        gnupg \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
@@ -28,33 +28,30 @@ RUN apt-get update \
             ldap \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-    # && pecl install apcu \
-    # && docker-php-ext-enable apcu \
-    # && docker-php-ext-install intl 
 
 # PHP MSSQL stuff
-# https://github.com/petersonwsantos/docker-php5.6-mssql/blob/master/Dockerfile
-# https://github.com/Namoshek/docker-php-mssql/blob/master/8.1/fpm/Dockerfile
-# RUN apt-get update && apt-get install -y --no-install-recommends \
-#         libcurl4-openssl-dev \
-#         libedit-dev \
-#         libsqlite3-dev \
-#         libssl-dev \
-#         libxml2-dev \
-#         freetds-dev \
-#         freetds-bin \
-#         freetds-common \
-#         libdbd-freetds \
-#         libsybdb5 \
-#         libqt4-sql-tds \
-#         libqt5sql5-tds \
-#         libqxmlrpc-dev \
-#       && apt-get clean \
-#       && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-#       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
-#       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
-#       && docker-php-ext-install   mssql \
-#       && docker-php-ext-configure mssql
+# https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
+RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+        && curl -sSL https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+        && apt-get update \
+        && apt-get install -y \
+            msodbcsql18 \
+            unixodbc-dev \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# https://gist.github.com/benrolfe/9ee58c79659a6162ccda7cc50430445f
+RUN pecl install sqlsrv-4.1.6.1 \
+        && pecl install pdo_sqlsrv-4.1.6.1 \
+        && docker-php-ext-enable \
+            sqlsrv \
+            pdo_sqlsrv
+
+# Install APCu and APC backward compatibility
+RUN pecl install apcu \
+        && pecl install apcu_bc-1.0.3 \
+        && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
+        && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
 # apache conf
 RUN a2enmod ssl \
@@ -67,13 +64,27 @@ COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 
 COPY ./configs/php /usr/local/etc/php/conf.d/
 
-# development stuff
+# composer
+#
 RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2.x/composer.phar" \
     && chmod +x /usr/local/bin/composer \
     && mkdir -p /.composer/cache \
     && chmod -R 777 /.composer
 
 RUN mkdir -p /var/www/html/adminator3/
+RUN mkdir -p /var/www/html/adminator2/
+
+COPY adminator2/composer.json /var/www/html/adminator2/
+COPY adminator3/composer.json /var/www/html/adminator3/
+
+RUN cd adminator2 \
+     && composer install
+
+# RUN cd adminator3 \
+#      && composer update
+
+RUN cd adminator3 \
+    && composer install
 
 # RUN cd adminator3 \
 #     && composer require \
@@ -107,13 +118,3 @@ COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/te
 COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator2/templates/inc.home.list-logged-users.tpl
 
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
-
-
-RUN cd adminator2 \
-     && composer install
-
-# RUN cd adminator3 \
-#      && composer update
-
-RUN cd adminator3 \
-    && composer install

@@ -557,7 +557,7 @@ class Topology extends adminator {
                                                         
                 $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_typ_vysilace."\" ><span style=\"color: #666666; font-size: 13px; \">".$typ_vysilace2."</span> </td>\n";
                 
-                list($a,$b,$c,$d) = split("[.]",$zaznam["ip_rozsah"]);
+                list($a,$b,$c,$d) = preg_split("/[.]/",$zaznam["ip_rozsah"]);
                 
                 if ( $c == 0) { $c=1; }
                 
@@ -568,7 +568,7 @@ class Topology extends adminator {
                 
                 if ( ( $_GET["ping"] == 1 ) )
                 { 
-                    $aktivni=exec("/srv/www/htdocs.ssl/adminator2/scripts/ping.sh $ip_akt"); 
+                    $aktivni=exec("../adminator2/scripts/ping.sh $ip_akt"); 
                 
                     if ( ( $aktivni > 0 and $aktivni < 50 ) ) 
                     {  $output .= "<td ".$akt_par." align=\"center\" bgcolor=\"green\"><span style=\"color: white; font-size: 13px; \">".$aktivni."</span>"; }
@@ -1193,7 +1193,7 @@ class Topology extends adminator {
                       //2.6. - soubory
                       $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >\n".
                               "<a href=\"topology-router-mail.php?id=".$data["id"]."\">";
-                      $output .= "<img src=\"img2/icon_files.jpg\" border=\"0\" height=\"20px\" ></a>\n</td>\n";
+                      $output .= "<img src=\"/img2/icon_files.jpg\" border=\"0\" height=\"20px\" ></a>\n</td>\n";
   
                      //uprava
                      $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";

@@ -2,6 +2,9 @@
 
 global $cesta;
 
+// previous name: class.voip.main.php
+// probably not used at the moment
+
 class voip
 {
 

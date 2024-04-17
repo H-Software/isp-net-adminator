@@ -1,9 +1,9 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,105) ) )
 {
@@ -47,9 +47,9 @@ include ("include/charset.php");
 
 $id_vlastnika=$_GET["id_vlastnika"];
 
-$dotaz=mysql_query("SELECT * FROM opravy WHERE ( id_vlastnika = '$id_vlastnika' and id_predchozi_opravy = 0 ) order by id_predchozi_opravy, datum_vlozeni ");
+$dotaz=$conn_mysql->query("SELECT * FROM opravy WHERE ( id_vlastnika = ' " . intval($id_vlastnika) . "' and id_predchozi_opravy = 0 ) order by id_predchozi_opravy, datum_vlozeni ");
 
-$dotaz_radku = mysql_num_rows($dotaz);
+$dotaz_radku = $dotaz->num_rows;
 
 if ( $id_vlastnika < 1)
 { echo "<div style=\"\">Chyba! Nelze vybrat vlastníka! Chyba Vstupních dat. </div>"; }
@@ -103,13 +103,13 @@ if ( $dotaz_radku == 0)
   exit;
 }
     
-while($data=mysql_fetch_array($dotaz) )
+while($data=$dotaz->fetch_array() )
 {
       
  $id_opravy = $data["id_opravy"];
  
- $dotaz2=mysql_query("SELECT * from opravy WHERE id_predchozi_opravy = '$id_opravy' order by datum_vlozeni ");
- $dotaz2_radku=mysql_num_rows($dotaz2);
+ $dotaz2=$conn_mysql->query("SELECT * from opravy WHERE id_predchozi_opravy = '$id_opravy' order by datum_vlozeni ");
+ $dotaz2_radku=$dotaz2->num_rows;
   
  $class = "opravy-tab-line1";
   
@@ -172,7 +172,7 @@ $pocet_bunek2 = $pocet_bunek;
   {
     $class = "opravy-tab-line2";
     
-   while($data2=mysql_fetch_array($dotaz2) )
+   while($data2=$dotaz2->fetch_array() )
    {
     
    echo "<tr>

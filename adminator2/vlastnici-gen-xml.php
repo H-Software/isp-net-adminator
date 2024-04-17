@@ -1,7 +1,7 @@
 <?php
 
+require("include/main.function.shared.php");
 require("include/config.php");
-
 require("include/check_login.php");
 require("include/check_level.php");
 
@@ -71,7 +71,8 @@ while($data = pg_fetch_array($dotaz)){
 // pomoci hlavicky urcime mime typ text/xml
 header('content-type: text/xml');
 
-require 'include/xml/xml_generator.class.php';
+// autoloaded
+// require 'include/xml/xml_generator.class.php';
 
 // vytvorime instanci tridy c_xml_generator
 $xml = new c_xml_generator;
@@ -82,7 +83,7 @@ $root_arr = array();
 
 $root_arr["id"] = "id_klienta_".$id_cloveka;
 $root_arr["ico"] = "26109824";
-$root_arr["application"] = iconv("UTF-8", "Windows-1250", "Simelon-Adminator2");
+$root_arr["application"] = iconv("UTF-8", "Windows-1250", "ISP-Net-Adminator2");
 $root_arr["version"] = "2.0";
 $root_arr["note"] = iconv("UTF-8", "Windows-1250", "Import adresářového záznamu");
 

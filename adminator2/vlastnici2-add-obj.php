@@ -1,23 +1,21 @@
 <?php
 
-include ("include/config.php"); 
+require("include/main.function.shared.php");
+require("include/config.php"); 
 include ("include/check_login.php");
-
 include ("include/check_level.php");
 
 if ( !( check_level($level,48) ) )
 {
-// neni level
+  // neni level
+  $stranka='nolevelpage.php';
+  header("Location: ".$stranka);
 
-$stranka='nolevelpage.php';
- header("Location: ".$stranka);
- 
-   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-      Exit;
+  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
+  exit;
       
-        }
+}
 	
-
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 
       <head> ';
@@ -85,11 +83,11 @@ include ("include/charset.php");
      //pouze wifi objekty k vlastnikumFO ..
      
      //vyber dle tarifu
-     $dotaz_f = mysql_query("SELECT * FROM tarify_int WHERE typ_tarifu = '0' ");
+     $dotaz_f = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '0' ");
     
      $i = 0;
 	
-     while( $data_f = mysql_fetch_array($dotaz_f) )
+     while( $data_f = $dotaz_f->fetch_array() )
      {
         if( $i == 0 ){ $tarif_sql .= "AND ( "; }
         if( $i > 0 ){ $tarif_sql .= " OR "; }
