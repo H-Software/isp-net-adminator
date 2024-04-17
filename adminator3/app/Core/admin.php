@@ -320,7 +320,7 @@ class admin {
 			
 			$output .= "<tr><td colspan=\"14\" ><br></td></tr>";
 		
-			if( ( ereg('^([[:digit:]]+)$',$_GET["id_tarifu"]) ) )
+			if( ( preg_match('/^([[:digit:]]+)$/',$_GET["id_tarifu"]) ) )
 			{
 				$id_tarifu = $_GET["id_tarifu"];
 				
