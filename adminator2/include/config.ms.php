@@ -54,26 +54,10 @@ if($mssql_db_ok == 1)
 		// echo ' MSSQL error: '.sqlsrv_get_last_message()."<br>\n";
 		print_r( sqlsrv_errors(), true);
 
-		if( !($db_mssql_no_exit == 1) ){ exit(); }
+		// TODO: povolit toto, az bude funkcni MSSQL
+		// if( !($db_mssql_no_exit == 1) )
+		// { exit(); }
     }
-
-    // if($mssql_spojeni)
-    // {
-	// 	if(mssql_select_db($mssql_db,$mssql_spojeni))
-	// 	{ 
-	// 		//asi vse OK :)
-		
-	// 		//mssql_query("SET NAMES 'utf-8'");
-	// 		//mssql_query("SET CHARACTER SET utf-8");
-	// 	}
-	// 	else
-	// 	{ 
-	// 		echo "Nejde zmenit databazi na ".$mssql_db."<br>\n";
-	// 		echo "MSSQL error: ". mssql_get_last_message()."<br>\n"; 
-	// 		if( !($db_mssql_no_exit == 1) ){ exit(); }
-		
-	// 	}
-    // }
 }
 
 ?>
