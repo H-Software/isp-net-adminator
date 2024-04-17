@@ -9,11 +9,7 @@
 * You may use, modify and redistribute this software as you wish.              *
 *******************************************************************************/
 
-if(!class_exists('FPDF'))
-{
-define('FPDF_VERSION','1.53');
-
-class FPDF
+class fPDF
 {
 //Private properties
 var $page;               //current page number
@@ -75,7 +71,7 @@ var $PDFVersion;         //PDF version number
 *                               Public methods                                 *
 *                                                                              *
 *******************************************************************************/
-function FPDF($orientation='P',$unit='mm',$format='A4')
+function __construct($orientation='P',$unit='mm',$format='A4')
 {
 	//Some checks
 	$this->_dochecks();
@@ -1642,6 +1638,3 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT']=='contype')
 	header('Content-Type: application/pdf');
 	exit;
 }
-
-}
-?>

@@ -7,11 +7,25 @@ $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-$auth = new auth_service($conn_mysql, $smarty, $logger);
-$auth->page_level_id = 146;
-$auth->check_all();
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 
-$ac = new adminatorController($conn_mysql, $smarty, $logger, $auth);
+$app = new \Slim\App(['settings' => $slim_config]);
+
+require __DIR__ ."/app/bootstrap-doctrine.php";
+
+require "app/dependencies.php";
+
+require "app/routing.php";
+
+$logger = $container->logger;
+
+$logger->addInfo("others-print called");
+        
+$a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
+
+$auth = new auth_service($container, $conn_mysql, $smarty, $logger);
+$auth->checkLevel(146, $a);
 
 $smarty->assign("page_title","Adminator3 :: Ostatní :: Tisk - Reg. Form. 2012-05");
 
@@ -22,7 +36,7 @@ $smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
 $uri=$_SERVER["REQUEST_URI"];
 $uri_replace = str_replace ("adminator3", "", $uri);
 
-list($kategorie, $kat_2radka, $mapa) = $ac->zobraz_kategorie($uri,$uri_replace);
+// list($kategorie, $kat_2radka, $mapa) = $ac->zobraz_kategorie($uri,$uri_replace);
 
 $smarty->assign("kategorie",$kategorie);
 $smarty->assign("kat_2radka",$kat_2radka);
@@ -39,7 +53,7 @@ else
 
 $smarty->assign("show_se_cat",$show_se_cat);
 
-$prihl_uziv = $ac->vypis_prihlasene_uziv();
+// $prihl_uziv = $ac->vypis_prihlasene_uziv();
 
 if( $prihl_uziv[100] == true )
 {
@@ -54,16 +68,16 @@ else
 }
 
 //button na vypis vsech prihl. uziv.
-$smarty->assign("windowtext2",$prihl_uziv[3]);
+// $smarty->assign("windowtext2",$prihl_uziv[3]);
 
-// velikost okna
-$smarty->assign("windowdelka2","170");
-$smarty->assign("windowpadding2","40");	 
-// pozice okna
-$smarty->assign("windowtop2","150");
-$smarty->assign("windowleft2","350");
+// // velikost okna
+// $smarty->assign("windowdelka2","170");
+// $smarty->assign("windowpadding2","40");	 
+// // pozice okna
+// $smarty->assign("windowtop2","150");
+// $smarty->assign("windowleft2","350");
 
-$smarty->assign("subcat_select",0);
+// $smarty->assign("subcat_select",0);
 
 //
 //zacatek vlastniho obsahu

@@ -27,7 +27,7 @@ require($cesta."include/check_login.php");
 
 require($cesta."include/check_level.php");
 
-require("phd_global_function.php");
+// require("phd_global_function.php");
 
 if( !( check_level2($level,$level_col) ) )
 { // neni level

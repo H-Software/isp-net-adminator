@@ -42,6 +42,7 @@ class Acl extends SlimAuthAcl
         );
 
         $app_resources = array(
+            '/auth/password/change',
             '/home',
             '/vlastnici/cat',
             '/vlastnici2',
@@ -62,7 +63,12 @@ class Acl extends SlimAuthAcl
             '/about/changes-old',
             '/about/changes',
             '/topology',
-            '/topology/router-list'
+            '/topology/router-list',
+            '/admin',
+            '/admin/admin',
+            '/admin/level-action',
+            '/admin/level-list',
+            '/admin/tarify'
         );
 
         foreach ($core_resources as $c) {

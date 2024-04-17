@@ -10,18 +10,14 @@ class adminController extends adminatorController {
     var $conn_mysql;
     var $smarty;
     var $logger;
-    var $auth;
-    var $app;
 
     public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
     {
         $this->container = $container;
-		    $this->conn_mysql = $conn_mysql;
+		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->auth = $auth;
-        $this->app = $app;
         
+        $this->logger = $this->container->logger;
         $this->logger->addInfo("adminController\__construct called");
 	}
 
@@ -148,7 +144,8 @@ class adminController extends adminatorController {
 
         // $csrf_html = $this->generateCsrfToken($request, $response, true);
 
-        $rs = \admin::tarifList();
+        $admin = new \admin($this->conn_mysql, $this->logger);
+        $rs = $admin->tarifList();
 
         $this->smarty->assign("body",$rs[0]);
 

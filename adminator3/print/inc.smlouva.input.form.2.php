@@ -1,6 +1,6 @@
 <?php
 
-echo "<form method=\"POST\" action=\"\" name=\"form1\" >\n";
+echo "<form method=\"POST\" name=\"form1\" >\n";
 
 echo "<table border=\"0\" width=\"1000px\">
 
