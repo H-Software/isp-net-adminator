@@ -4,9 +4,13 @@ require("include/main.function.shared.php");
 require("include/config.php"); 
 
 echo "<html>
-    <head>
-    </head>
-<body>\n\n";
+	<head>
+	    <title>Vlastníci rozcestník</title>";
+
+require("include/charset.php");
+
+echo "</head>
+    <body>";
 
 $akce = $_GET["akce"];
 $id_cloveka = $_GET["id_cloveka"];
@@ -253,10 +257,10 @@ else
 // 	<head>
 // 	    <title>Vlastníci rozcestník</title>";
 
-include("include/charset.php");
+// include("include/charset.php");
 
-echo "</head>
-    <body>";
+// echo "</head>
+//     <body>";
 
 echo "<div><a href=\"" . $_SERVER["SERVER_NAME"]."/".$stranka.">" . $_SERVER["SERVER_NAME"]."/".$stranka . "</a></div>"; 
 
