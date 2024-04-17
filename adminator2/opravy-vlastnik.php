@@ -103,13 +103,13 @@ if ( $dotaz_radku == 0)
   exit;
 }
     
-while($data=mysql_fetch_array($dotaz) )
+while($data=$dotaz->fetch_array() )
 {
       
  $id_opravy = $data["id_opravy"];
  
- $dotaz2=mysql_query("SELECT * from opravy WHERE id_predchozi_opravy = '$id_opravy' order by datum_vlozeni ");
- $dotaz2_radku=mysql_num_rows($dotaz2);
+ $dotaz2=$conn_mysql->query("SELECT * from opravy WHERE id_predchozi_opravy = '$id_opravy' order by datum_vlozeni ");
+ $dotaz2_radku=$dotaz2->num_rows;
   
  $class = "opravy-tab-line1";
   
@@ -172,7 +172,7 @@ $pocet_bunek2 = $pocet_bunek;
   {
     $class = "opravy-tab-line2";
     
-   while($data2=mysql_fetch_array($dotaz2) )
+   while($data2=$dotaz2->fetch_array() )
    {
     
    echo "<tr>

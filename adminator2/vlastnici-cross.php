@@ -249,9 +249,9 @@ else
 
 //header("Location: https://".$_SERVER["SERVER_NAME"]."/adminator2/".$stranka);
 
-echo "<html>
-	<head>
-	    <title>Vlastníci rozcestník</title>";
+// echo "<html>
+// 	<head>
+// 	    <title>Vlastníci rozcestník</title>";
 
 include("include/charset.php");
 
