@@ -2,11 +2,20 @@
 
 namespace App\Core;
 
+use App\Models\User;
+use App\Models\PageLevel;
+
 class adminator {
     var $conn_mysql;
     var $smarty;
     var $logger;
     
+    var $userIdentityUsername;
+
+    var $page_level_id;
+
+    var $user_level_id;
+
     public function __construct($conn_mysql, $smarty, $logger)
     {
         $this->conn_mysql = $conn_mysql;
@@ -14,6 +23,85 @@ class adminator {
         $this->logger = $logger;
 
         $this->logger->addInfo("adminator\__construct called");
+    }
+
+	public function getUserLevel()
+	{
+		$rs = User::find(isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0, ['level']);
+		$a = $rs->toArray();
+		return $a['level'];
+	}
+
+	function checkLevel($page_level_id_custom = 0, $display_no_level_page = true)
+    {
+
+        // co mame
+        // v promeny level mame level prihlaseneho uzivatele
+        // databazi levelu pro jednotlivy stranky
+
+        // co chceme
+        // porovnat level uzivatele s prislusnym levelem
+        // stranky podle jejiho id
+
+        $user_level = $this->getUserLevel();
+
+        $this->logger->addInfo("adminator\check_level: called with
+                                    [page_level_id_custom => " . $page_level_id_custom
+                                    . ", page_level_id => " . $this->page_level_id
+                                    . ", user_level => " . $this->user_level_id
+                                    . ", user_name => " . $this->userIdentityUsername
+                                    . "]");
+
+        if(intval($page_level_id_custom) > 0){
+            $pl = $page_level_id_custom;
+        }
+        else{
+            $pl = $this->page_level_id;
+        }
+
+        $page_level_rs = $this->find_page_level($this->logger,$pl);
+        if($page_level_rs === false or !is_int($page_level_rs)){
+            $rs = false;
+        }
+        elseif($user_level >= $page_level_rs){
+            $rs = true; 
+        }
+        else{
+            $rs = false;
+        }
+
+        $this->logger->addInfo("Auth\check_level: find_page_level: pl: " . $pl . ", retval: " . var_export($page_level_rs, true));
+        $this->logger->addInfo("Auth\check_level: result: " . var_export($rs, true));
+
+        if( $rs === false) {
+            // user nema potrebny level
+			return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+	function find_page_level($logger,$page_id)
+    {
+
+        $page_level = 0;
+
+        $rs = PageLevel::find(isset($page_id) ? $page_id : 0, ['level']);
+		if(is_object($rs))
+        {
+            $a = $rs->toArray();
+            $page_level = $a['level'];
+        }
+
+        $logger->addInfo("auth\\find_page_level: find result: " . var_export($page_level, true));
+
+        if($page_level > 0){
+            return $page_level;
+        }
+        else{
+            return false;
+        }
     }
 
     public function getTarifIptvListForForm($show_zero_value = true)

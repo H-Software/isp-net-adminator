@@ -13,12 +13,12 @@ class adminatorController extends Controller {
     var $logger;
     var $auth;
     
-    public function __construct($conn_mysql, $smarty, $logger, $auth)
+    public function __construct($conn_mysql, $smarty, $logger)
     {
 		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
-        $this->auth = $auth;
+        // $this->auth = $auth;
         
         $this->logger->addInfo("adminatorController\__construct called");
 	}
@@ -61,21 +61,26 @@ class adminatorController extends Controller {
     }
     public function checkLevel($page_level_id = 0){
 
+        $auth_identity = $this->container->auth->getIdentity();
+        // $this->logger->addInfo("adminatorController\\check_level getIdentity: ".var_export( $auth_identity['username'], true));
+
         if ($page_level_id == 0){
             $this->renderNoLogin();
             return false;
         }
 
-        $this->container->auth->page_level_id = $page_level_id;
+        $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        $a->page_level_id = $page_level_id;
+        $a->userIdentityUsername = $auth_identity['username'];
 
-        $checkLevel = $this->container->auth->checkLevel($this->container->logger);
+        $checkLevel = $a->checkLevel();
         
         $this->logger->addInfo("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
-        if($checkLevel === false){
-            $this->renderNoLogin();
-            return false;
-        }
+        // if($checkLevel === false){
+        //     $this->renderNoLogin();
+        //     return false;
+        // }
     }
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false){

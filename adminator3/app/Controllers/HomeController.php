@@ -26,8 +26,8 @@ class HomeController extends adminatorController {
     {            
         $this->logger->addInfo("homeController\home called");
 
-        // $this->checkLevel(38);
-
+        $this->checkLevel(38);
+        
         $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
         if ($request->isPost()) {

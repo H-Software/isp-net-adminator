@@ -8,9 +8,6 @@ use marcelbonnet\Slim\Auth\Middleware\Authorization;
 use marcelbonnet\Slim\Auth\Handlers\RedirectHandler;
 use marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter;
 
-// use App\Entity\User;
-// use App\Entity\UserRole;
-
 use Zend\Session\Config\SessionConfig;
 use Zend\Session\SessionManager;
 
@@ -18,6 +15,7 @@ require __DIR__ ."/bootstrap-doctrine.php";
 
 $container = $app->getContainer();
 
+// init sessions
 $sessionConfig = new SessionConfig();
 $sessionConfig->setOptions(array(
     // 'remember_me_seconds' => 5,
@@ -103,9 +101,9 @@ $app->add(
             )
         );
 
-// $container['AuthController'] = function($container) {
-// 	return new \App\Controllers\Auth\AuthController($container);
-// };
+$container['AuthController'] = function($container) {
+	return new \App\Controllers\Auth\AuthController($container);
+};
 
 // $container['PasswordController'] = function($container) {
 // 	return new \App\Controllers\Auth\PasswordController($container);
@@ -121,7 +119,7 @@ $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
 $app->add($container->csrf);
 
-v::with('App\\Validation\\Rules\\');
+// v::with('App\\Validation\\Rules\\');
 
 $container['HomeController'] = function($container) {
     global $conn_mysql, $smarty;
@@ -147,7 +145,6 @@ $container['othersController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
     return new \App\Controllers\othersController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
 };
-
 
 $container['objektyController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
