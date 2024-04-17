@@ -85,7 +85,7 @@ include ("include/charset.php");
     
     if( isset($mod_vypisu) )
     {
-     if( !( ereg('^([[:digit:]])+$',$mod_vypisu) ) )
+     if( !( preg_match('/^([[:digit:]])+$/',$mod_vypisu) ) )
      {
       echo "<div style=\"color: red; font-weight: bold; \" >Chyba! Nesouhlasi vstupni data. (mod vypisu) </div>";
       exit;
@@ -96,7 +96,7 @@ include ("include/charset.php");
     
     if( ( strlen($dns_find) > 0 ) )
     {
-     if( !( ereg('^([[:alnum:]]|_|-|\.|\%)+$',$dns_find) ) )
+     if( !( preg_match('/^([[:alnum:]]|_|-|\.|\%)+$/',$dns_find) ) )
      {
       echo "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v poli \"Hledání dle dns\". (Povolené: a-z,A-Z,0-9,-, _,. )</div>";
       exit;
@@ -107,7 +107,7 @@ include ("include/charset.php");
     
     if( ( strlen($ip_find) > 0 ) )
     {
-     if( !( ereg('^([[:digit:]]|\.|/)+$',$ip_find) ) )
+     if( !( preg_match('/^([[:digit:]]|\.|/)+$/',$ip_find) ) )
      {
       echo "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v poli \"Hledání dle ip adresy\". (Povolené: a-z,A-Z,0-9,-, _,. )</div>";
       exit;
@@ -118,7 +118,7 @@ include ("include/charset.php");
     
     if( ( strlen($es) > 0 ) )
     {
-     if( !( ereg('^([[:digit:]])+$',$es) ) )
+     if( !( preg_match('/^([[:digit:]])+$/',$es) ) )
      {
       echo "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v poli \"Sekundární hledání\". </div>";
       exit;
@@ -129,7 +129,7 @@ include ("include/charset.php");
 
     if( ( strlen($razeni) > 0 ) )
     {
-     if( !( ereg('^([[:digit:]])+$',$razeni) ) )
+     if( !( preg_match('/^([[:digit:]])+$/',$razeni) ) )
      {
       echo "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v promenné \"razeni\". </div>";
       exit;
@@ -140,7 +140,7 @@ include ("include/charset.php");
    
     if( ( strlen($list) > 0 ) )
     {
-     if( !( ereg('^([[:digit:]])+$',$list) ) )
+     if( !( preg_match('/^([[:digit:]])+$/',$list) ) )
      {
       echo "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v promenné \"list\". </div>";
       exit;
