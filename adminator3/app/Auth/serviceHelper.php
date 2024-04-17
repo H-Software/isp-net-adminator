@@ -1,6 +1,6 @@
 <?php
 
-// deprecated and broken stuff
+// obsoleted
 
 class auth_service{
 
