@@ -92,6 +92,7 @@ RUN cd adminator3 \
         doctrine/orm:^2.11.0 \
         doctrine/annotations:^1.13.0 \
         symfony/cache:^4.4 \
+        zendframework/zend-ldap:^2.10 \
         marcelbonnet/slim-auth:^2.0 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require \
