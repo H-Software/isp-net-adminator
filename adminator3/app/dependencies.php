@@ -8,12 +8,27 @@ use marcelbonnet\Slim\Auth\Middleware\Authorization;
 use marcelbonnet\Slim\Auth\Handlers\RedirectHandler;
 use marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter;
 
-use \Slim\Http\Request as SlimHttpRequest;
-use \Slim\Http\Response as SlimHttpResponse;
+// use App\Entity\User;
+// use App\Entity\UserRole;
+
+use Zend\Session\Config\SessionConfig;
+use Zend\Session\SessionManager;
 
 require __DIR__ ."/bootstrap-doctrine.php";
 
 $container = $app->getContainer();
+
+$sessionConfig = new SessionConfig();
+$sessionConfig->setOptions(array(
+    // 'remember_me_seconds' => 5,
+    'name' => 'adminator-auth',
+    // 'cookie_lifetime' => 5
+));
+$sessionManager = new SessionManager();
+$sessionManager->rememberMe();
+$storage = new SessionStorage(null, null, $sessionManager);
+
+$container["authStorage"] = $storage;
 
 $container['logger'] = function($c) {
     $logger = new \Monolog\Logger('my_logger');
@@ -25,10 +40,6 @@ $container['logger'] = function($c) {
 $container['db'] = function ($container) use ($capsule) {
     return $capsule;
 };
-
-// $container['auth'] = function($container) {
-//     return new \App\Auth\Auth;
-// };
 
 $container['flash'] = function($container) {
 	return new \Slim\Flash\Messages;
@@ -67,10 +78,10 @@ $adapterOptions = [];
 $adapter = new marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter(
     NULL,  //LDAP config or NULL if not using LDAP
     $em, //an Doctrine's Entity Manager instance 
-    "Role",    //Role class
+    "App\Entity\UserRole",    //Role class
     "role", //Role's class role attribute
     "user", //Role's class user attribute (the @ManyToOne attrib)
-    "User", //User class
+    "App\Entity\User", //User class
     "username", //User name attribute
     "passwordHash", //password (as a hash) attribute
     marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
@@ -92,9 +103,9 @@ $app->add(
             )
         );
 
-$container['AuthController'] = function($container) {
-	return new \App\Controllers\Auth\AuthController($container);
-};
+// $container['AuthController'] = function($container) {
+// 	return new \App\Controllers\Auth\AuthController($container);
+// };
 
 // $container['PasswordController'] = function($container) {
 // 	return new \App\Controllers\Auth\PasswordController($container);
@@ -104,8 +115,8 @@ $container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
 };
 
-$app->add(new \App\Middleware\ValidationErrorsMiddleware($container));
-$app->add(new \App\Middleware\OldInputMiddleware($container));
+// $app->add(new \App\Middleware\ValidationErrorsMiddleware($container));
+// $app->add(new \App\Middleware\OldInputMiddleware($container));
 $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
 $app->add($container->csrf);

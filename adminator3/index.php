@@ -1,6 +1,7 @@
 <?php
 
-session_start();
+// session_cache_limiter(false);
+// session_start();
 
 require "include/main.function.shared.php";
 require "app/config.php";

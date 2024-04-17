@@ -37,22 +37,22 @@ class HomeController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
-        $this->header($request, $response);
+        // $this->header($request, $response);
 
         //vlozeni prihlasovaci historie
-        list_logged_users_history($this->conn_mysql, $this->smarty);
+        // list_logged_users_history($this->conn_mysql, $this->smarty);
         
-        //informace z modulu neuhrazené faktury
-        //
-        $neuhr_faktury_pole = $a->show_stats_faktury_neuhr();
-        $this->logger->addInfo("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
+        // //informace z modulu neuhrazené faktury
+        // //
+        // $neuhr_faktury_pole = $a->show_stats_faktury_neuhr();
+        // $this->logger->addInfo("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
 
-        $this->smarty->assign("d",$neuhr_faktury_pole[0]);
+        // $this->smarty->assign("d",$neuhr_faktury_pole[0]);
 
-        $this->smarty->assign("count_total", $neuhr_faktury_pole[0]);
-        $this->smarty->assign("count_ignored", $neuhr_faktury_pole[1]);
-        $this->smarty->assign("count_unknown", $neuhr_faktury_pole[2]);
-        $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
+        // $this->smarty->assign("count_total", $neuhr_faktury_pole[0]);
+        // $this->smarty->assign("count_ignored", $neuhr_faktury_pole[1]);
+        // $this->smarty->assign("count_unknown", $neuhr_faktury_pole[2]);
+        // $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
 
         //tady opravy az se dodelaj
 

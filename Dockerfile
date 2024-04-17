@@ -93,6 +93,7 @@ RUN cd adminator3 \
         doctrine/annotations:^1.13.0 \
         symfony/cache:^4.4 \
         marcelbonnet/slim-auth:^2.0 \
+        akrabat/rka-slim-session-middleware:v2.0.0 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require \
         illuminate/database:^5.8

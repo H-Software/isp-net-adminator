@@ -35,7 +35,10 @@ class Acl extends SlimAuthAcl
 		// Application resources == Slim route patterns
 		$this->addResource('/');
 		$this->addResource('/login');
+        $this->addResource('/auth/signin');
+
 		$this->addResource('/logout');
+        $this->addResource('/auth/signout');
 
         $this->addResource('/home');
 		$this->addResource('/auth/notAuthenticated');
@@ -46,11 +49,15 @@ class Acl extends SlimAuthAcl
 		// The third argument is 'privilege'. In Slim Auth privilege == HTTP method
 		$this->allow('guest', '/', $this->defaultPrivilege);
 		$this->allow('guest', '/login', array('GET', 'POST'));
-		$this->allow('guest', '/logout', $this->defaultPrivilege);
+        $this->allow('guest', '/auth/signin', array('GET', 'POST'));
+
+		$this->allow('guest', '/logout', array('GET', 'POST'));
+		$this->allow('guest', '/auth/signout', array('GET', 'POST'));
         
         $this->allow('guest', '/auth/notAuthenticated' , $this->defaultPrivilege);
 		$this->allow('guest', '/auth/notAuthorized' , $this->defaultPrivilege);
         
+        $this->allow('member', '/home', array('GET', 'POST'));
     }
     
     

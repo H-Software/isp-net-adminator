@@ -7,81 +7,98 @@
 use \Slim\Http\Request as SlimHttpRequest;
 use \Slim\Http\Response as SlimHttpResponse;
 
-$app->group('/auth', function() {
-	$this->get('/notAuthenticated', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) {
-        global $app;
-// 		return $response
-// 		->withStatus(401)
-// 		->withHeader('Content-Type', 'text/html;charset=utf-8')
-// 		->write('You are not authenticated.');
+$app->group('/auth', function() use ($app) {
+	$app->get('/notAuthenticated', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) use ($app) {
+      
+        $app->getContainer()["flash"]->addMessage('info', "You are not authenticated");
+
         $route = $app->getContainer()->get('router')->getNamedRoute('login');
 		//redirect:
 		// $route = \Slim\App::object()->getContainer()->get('router')->getNamedRoute('login');
 		$route->setArgument("message" , "You are not authenticated" );
 		$route->run($request, $response );
-	})->setName("notAuthenticated")->allow([Acl::GUEST]);
+	})->setName("notAuthenticated");
 	
-	// Route::get('/notAuthorized', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) {
-	// 	return $response
-	// 	->withStatus(403)
-	// 	->withHeader('Content-Type', 'text/html;charset=utf-8')
-	// 	->write('You are not authorized to this resource.');
-	// })->setName("notAuthorized");
-});
+	$app->get('/notAuthorized', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) {
+		return $response
+		->withStatus(403)
+		->withHeader('Content-Type', 'text/html;charset=utf-8')
+		->write('You are not authorized to this resource.');
+	})->setName("notAuthorized");
 
-$app->map(['GET','POST'], '/login', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) {
-    $username = null;
-    global $app;
-    /*
-     * require: slim/flash
-     * don't know if slim/flash is not stable or I'm a fool
-     */
-//     $app->getContainer()["flash"]->addMessage('error', 'testando novo');
-//     var_dump( $app->getContainer()["flash"]->storage["slimFlash"]["error"] );
-//     var_dump( $app->getContainer()["flash"]->getMessages()["error"] );
-	$message = array_key_exists("message", $args) ? $args["message"] : null;
-    if ($request->isPost()) {
-        $username = $request->getParsedBody()['slimUsername'];
-        $password = $request->getParsedBody()['slimPassword']; //(new PasswordValidator())->rehash($request->getParsedBody()['slimPassword']);
-        $result = $app->getContainer()["authenticator"]->authenticate($username, $password);
-
-        if ($result->isValid()) {
-   			return $app->getContainer()->view->render($response, 'home.html');
-        } else {
-        	$messages = $result->getMessages();
-            $message = $messages[0]; //message to presentation layer
-//             $app->getContainer()["flash"]->addMessage('error', $messages[0]);
-			$logger = $app->getContainer()["logger"];
-        	foreach ($messages as $i => $msg) {
-					$messages[$i] = str_replace("\n", "\n  ", $msg);
-			}
-			
-			$logger->addWarning("Authentication failure for $username .", $messages);
-            
+    $app->map(['GET','POST'], '/signin', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) use ($app) {
+        $username = null;
+        // global $app;
+        /*
+         * require: slim/flash
+         * don't know if slim/flash is not stable or I'm a fool
+         */
+    //     $app->getContainer()["flash"]->addMessage('error', 'testando novo');
+    //     var_dump( $app->getContainer()["flash"]->storage["slimFlash"]["error"] );
+    //     var_dump( $app->getContainer()["flash"]->getMessages()["error"] );
+        $message = array_key_exists("message", $args) ? $args["message"] : null;
+        if ($request->isPost()) {
+            $username = $request->getParsedBody()['slimUsername'];
+            $password = $request->getParsedBody()['slimPassword'];
+            $result = $app->getContainer()["authenticator"]->authenticate($username, $password);
+    
+            if ($result->isValid()) {
+                $url = $this->router->pathFor('home');
+                return $response->withStatus(302)->withHeader('Location', $url);
+            } else {
+                $messages = $result->getMessages();
+                $message = $messages[0]; //message to presentation layer
+                $app->getContainer()["flash"]->addMessage('error', $messages[0]);
+                $logger = $app->getContainer()["logger"];
+                foreach ($messages as $i => $msg) {
+                        $messages[$i] = str_replace("\n", "\n  ", $msg);
+                }
+                $logger->addWarning("Authentication failure for $username .", $messages);
+                $logger->addWarning("Authentication failure error: ".var_export($messages[0], true));
+    
+            }
         }
-    }
-    return $app->getContainer()->view->render($response, 'auth\signin.twig', array('username' => @$username, "message" => $message));
-})->setName('login');
+        return $app->getContainer()->view->render($response, 'auth\signin.twig', array('username' => @$username, "message" => $message));
+    })->setName('login');
 
-$app->group('', function () {
-	$this->get('/auth/signup', 'AuthController:getSignUp')->setName('auth.signup')->allow([Acl::GUEST]);
-	$this->post('/auth/signup', 'AuthController:postSignUp')->allow([Acl::GUEST]);
-	$this->get('/auth/signin', 'AuthController:getSignIn')->setName('auth.signin')->allow([Acl::GUEST]);
-	$this->post('/auth/signin', 'AuthController:postSignIn')->allow([Acl::GUEST]);
+    $app->get('/signout', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) use ($app) {
+        $logger = $app->getContainer()["logger"];
+        $logger->addInfo("route /logout called");
+        $logger->addInfo("route /logout: dump auth->hasIdentity: ".var_export($app->getContainer()["auth"]->hasIdentity(), true));
+        $logger->addInfo("route /logout: before: dump auth->getStorage()->isEmpty(): ".var_export($app->getContainer()["auth"]->getStorage()->isEmpty(), true));
+    
+        if ($app->getContainer()["auth"]->hasIdentity()) {
+            $app->getContainer()["auth"]->clearIdentity();
+        }
+    
+        $logger->addInfo("route /logout: dump auth->getStorage()->isEmpty(): ".var_export($app->getContainer()["auth"]->getStorage()->isEmpty(), true));
+    
+        //redirect:
+        $url = $this->router->pathFor('home');
+        return $response->withStatus(302)->withHeader('Location', $url);
+    })->setName('logout');
 });
+
+
+// $app->group('', function () {
+// 	$this->get('/auth/signup', 'AuthController:getSignUp')->setName('auth.signup')->allow([Acl::GUEST]);
+// 	$this->post('/auth/signup', 'AuthController:postSignUp')->allow([Acl::GUEST]);
+// 	$this->get('/auth/signin', 'AuthController:getSignIn')->setName('auth.signin')->allow([Acl::GUEST]);
+// 	$this->post('/auth/signin', 'AuthController:postSignIn')->allow([Acl::GUEST]);
+// });
 
 $app->group('', function () {
     // $this->get('/', function ($req, $res, $args) {
     //     return $res->withStatus(302)->withHeader('Location', '/home');
     // });
     // $this->get('/', HomeController::class . ':index')->setName('home');
-	$this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout')->allow([Acl::GUEST]);
-	$this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change')->allow([Acl::GUEST]);
-	$this->post('/auth/password/change', 'PasswordController:postChangePassword')->allow([Acl::GUEST]);
+	// $this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
+	$this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
+	$this->post('/auth/password/change', 'PasswordController:postChangePassword');
 });
 
 $app->group('', function () {
-    $this->map(['GET', 'POST'],'/home', HomeController::class . ':home')->setName('home')->allow([Acl::MEMBER]);
+    $this->map(['GET', 'POST'],'/home', HomeController::class . ':home')->setName('home');
 
     // $this->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
     // $this->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
