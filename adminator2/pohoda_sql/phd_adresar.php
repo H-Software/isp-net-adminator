@@ -14,11 +14,11 @@ else
 
 //$id_vlastnika = intval($_GET["id_vlastnika"]);
 
-
 //$mssql_db = "StwPh_26109824_".$rok;
 
 $level_col = "lvl_phd_adresar";
 
+require($cesta."include/main.function.shared.php");
 require_once($cesta."include/config.php"); 
 
 require_once($cesta."include/config.ms.php"); 
