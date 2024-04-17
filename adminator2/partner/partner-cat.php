@@ -1,5 +1,7 @@
 <?php
 
+global $cesta;
+
 $cesta = "../";
 
 require($cesta."include/main.function.shared.php");

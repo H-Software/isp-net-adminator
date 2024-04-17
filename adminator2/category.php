@@ -1,8 +1,5 @@
  <tr>
-<?php 
-  
-  require_once 'smarty/Smarty.class.php';
-  
+<?php   
    echo "<td style=\"\" width=\"80%\" >"; 
 ?>
 
@@ -99,8 +96,12 @@
 
    $smarty_cat->assign("se_cat_adminator","adminator3");
    $smarty_cat->assign("se_cat_adminator_link",$se_cat_adminator_link);
+   $smarty_cat_ext_rendered = $smarty_cat->fetch($cesta . "/inc.intro.category-ext.tpl");
 
-   $smarty_cat_ext_rendered = $smarty_cat->fetch("inc.intro.category-ext.tpl");
+  //  try {
+  //  }
+  //  catch (Exception $e) {
+  //  }
 
    echo $smarty_cat_ext_rendered;
 ?>
