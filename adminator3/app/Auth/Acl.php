@@ -42,6 +42,7 @@ class Acl extends SlimAuthAcl
         );
 
         $app_resources = array(
+            '/auth/password/change',
             '/home',
             '/vlastnici/cat',
             '/vlastnici2',

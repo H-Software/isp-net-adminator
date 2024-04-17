@@ -31,13 +31,16 @@ $app->group('/auth', function() use ($app) {
     $app->get('/signout', AuthController::class . ':signout')->setName('logout');
 });
 
-$app->group('', function () {
+$app->group('', function () use ($app) {
     $this->get('/', function ($req, $res, $args) {
         return $res->withStatus(302)->withHeader('Location', '/home');
     });
 
     // TODO: fix password/change routing
-	// $this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
+	$this->map(['GET', 'POST'], '/auth/password/change', function ($req, $res, $args) use ($app) {
+        // 'PasswordController:getChangePassword'
+        return $app->getContainer()['view']->render($res, 'auth\password\change.twig');
+    })->setName('auth.password.change');
 	// $this->post('/auth/password/change', 'PasswordController:postChangePassword');
 });
 
