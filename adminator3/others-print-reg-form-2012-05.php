@@ -22,7 +22,6 @@ $logger = $container->logger;
 
 $logger->addInfo("others-print called");
         
-// $this->checkLevel(95);
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
@@ -69,16 +68,16 @@ else
 }
 
 //button na vypis vsech prihl. uziv.
-$smarty->assign("windowtext2",$prihl_uziv[3]);
+// $smarty->assign("windowtext2",$prihl_uziv[3]);
 
-// velikost okna
-$smarty->assign("windowdelka2","170");
-$smarty->assign("windowpadding2","40");	 
-// pozice okna
-$smarty->assign("windowtop2","150");
-$smarty->assign("windowleft2","350");
+// // velikost okna
+// $smarty->assign("windowdelka2","170");
+// $smarty->assign("windowpadding2","40");	 
+// // pozice okna
+// $smarty->assign("windowtop2","150");
+// $smarty->assign("windowleft2","350");
 
-$smarty->assign("subcat_select",0);
+// $smarty->assign("subcat_select",0);
 
 //
 //zacatek vlastniho obsahu

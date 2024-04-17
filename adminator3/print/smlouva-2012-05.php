@@ -1,17 +1,33 @@
 <?php
 
-require "../include/main.function.shared.php";
-require "../include/config.php";
+require __DIR__ . "/../include/main.function.shared.php";
+require __DIR__ . "/../app/config.php";
 
 // $smarty = new Smarty;
 // $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-$auth = new auth_service($conn_mysql, $smarty, $logger);
-$auth->page_level_id = 146;
-$auth->check_all();
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
 
-// $ac = new adminatorController($conn_mysql, $smarty, $logger, $auth);
+$app = new \Slim\App(['settings' => $slim_config]);
+
+require __DIR__ ."/../app/bootstrap-doctrine.php";
+
+require __DIR__ ."/../app/dependencies.php";
+
+require __DIR__ ."/../app/routing.php";
+
+$logger = $container->logger;
+
+$logger->addInfo("others-print called");
+        
+// $this->checkLevel(95);
+$a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
+
+$auth = new auth_service($container, $conn_mysql, $smarty, $logger);
+$auth->checkLevel(146, $a);
+
 
 $ec = $_POST["ec"];
 
@@ -227,9 +243,9 @@ if( ( ( strlen($jmeno) < 2 ) or ( !isset($odeslano) ) ) )
 
   <head>
    
-   <link rel="stylesheet" type="text/css" href="/adminator3/plugins/tigra_calendar/tcal.css" />
-   <script type="text/javascript" src="/adminator3/plugins/tigra_calendar/tcal.js"></script>
-   <script type="text/javascript" src="/adminator3/plugins/tigra_calendar/custom-a3-print.js"></script>
+   <link rel="stylesheet" type="text/css" href="/plugins/tigra_calendar/tcal.css" />
+   <script type="text/javascript" src="/plugins/tigra_calendar/tcal.js"></script>
+   <script type="text/javascript" src="/plugins/tigra_calendar/custom-a3-print.js"></script>
    
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
 
@@ -274,7 +290,7 @@ else
  
  // opravdovy zacatek generovani 
  define('FPDF_FONTPATH',"../include/font/");
- require("../include/fpdf.class.php");
+ // require("../include/fpdf.class.php");
 
  require("inc.smlouva.gen.main.2.php");
  

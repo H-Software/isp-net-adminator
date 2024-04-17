@@ -54,7 +54,13 @@ class print_reg_form
 	// require_once("include/fpdf.class.php");
 
 	//zaklad, vytvoreni objektu a pridani stranky
-	$pdf=new FPDF("P","mm","A4");
+	try {
+		$pdf = new \fPDF("P","mm","A4");
+	}
+	catch (Exception $e) {
+		die("cant create class for PDF: ".var_export($e->getMessage(),true));
+	}
+
 	$pdf->Open();
 	$pdf->AddPage();
 
