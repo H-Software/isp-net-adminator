@@ -71,7 +71,8 @@ while($data = pg_fetch_array($dotaz)){
 // pomoci hlavicky urcime mime typ text/xml
 header('content-type: text/xml');
 
-require 'include/xml/xml_generator.class.php';
+// autoloaded
+// require 'include/xml/xml_generator.class.php';
 
 // vytvorime instanci tridy c_xml_generator
 $xml = new c_xml_generator;
