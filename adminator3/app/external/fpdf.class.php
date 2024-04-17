@@ -9,7 +9,13 @@
 * You may use, modify and redistribute this software as you wish.              *
 *******************************************************************************/
 
-if(!class_exists('FPDF'))
+// try {
+// 	$test = class_exists('FPDF');
+// }
+// catch (Exception $e) {
+// }
+
+// if(!$test)
 {
 define('FPDF_VERSION','1.53');
 
@@ -1644,4 +1650,3 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT']=='contype')
 }
 
 }
-?>

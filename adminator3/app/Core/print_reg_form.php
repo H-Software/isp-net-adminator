@@ -51,7 +51,7 @@ class print_reg_form
 	
 	
 	define('FPDF_FONTPATH',"include/font/");
-	require_once("include/fpdf.class.php");
+	// require_once("include/fpdf.class.php");
 
 	//zaklad, vytvoreni objektu a pridani stranky
 	$pdf=new FPDF("P","mm","A4");
@@ -64,7 +64,7 @@ class print_reg_form
 	// autor a podobny hemzy
 
 	//Nastaví autora dokumentu.
-	$pdf->SetAuthor("Simelon Adminator3");
+	$pdf->SetAuthor("ISP Net Adminator3");
 
 	//Nastaví tvůrce dokumentu (většinou název aplikace)
 	$pdf->SetCreator("Registrační formulář");

@@ -1,11 +1,13 @@
-{include file="base.tpl"}
+{* {include file="base.tpl"}
 
 {include file="admin/inc.subcat.tpl"}
 
-<div class="global-cat-body2" >
+{$body}
+
+{include file="base-end.tpl"} *}
+
+{include file="base-bs.tpl" tpl_include_subcat = 'admin/inc.subcat'}
 
 {$body}
 
-</div>
-
-{include file="base-end.tpl"}
+{include file="base-bs-end.tpl"}
