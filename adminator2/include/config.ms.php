@@ -36,18 +36,19 @@ else{
 if($mssql_db_ok == 1)
 {
 
-    if( !function_exists('mssql_connect') or !function_exists('mssql_select_db') or !function_exists('mssql_query'))
-    {
+    // if( !function_exists('mssql_connect') or !function_exists('mssql_select_db') or !function_exists('mssql_query'))
+    if( !function_exists('sqlsrv_connect') or !function_exists('sqlsrv_select_db') or !function_exists('sqlsrv_query'))
+	{
 		echo "<div style=\"color; red; \">Error: Nejsou potrebne funkce pro MSSQL databazi!</div>\n";
 	
 		if( !($db_mssql_no_exit == 1) ){ exit(); }
     }
 
-    $mssql_spojeni = @mssql_connect($mssql_host,$mssql_user,$mssql_pass);
+    $mssql_spojeni = sqlsrv_connect($mssql_host,$mssql_user,$mssql_pass);
 
     if(!$mssql_spojeni) {
 		echo " ERROR: mssql_connect (host: ".$mssql_host.") failed <br>\n";
-		echo ' MSSQL error: '.mssql_get_last_message()."<br>\n";
+		echo ' MSSQL error: '.sqlsrv_get_last_message()."<br>\n";
 		
 		// TODO: enable this section after fix MS SQL
 		// if( !($db_mssql_no_exit == 1) ){ exit(); }
