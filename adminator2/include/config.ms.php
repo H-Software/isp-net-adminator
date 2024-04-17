@@ -37,7 +37,7 @@ if($mssql_db_ok == 1)
 {
 
     // if( !function_exists('mssql_connect') or !function_exists('mssql_select_db') or !function_exists('mssql_query'))
-    if( !function_exists('sqlsrv_connect') or !function_exists('sqlsrv_select_db') or !function_exists('sqlsrv_query'))
+    if( !function_exists('sqlsrv_connect') or !function_exists('sqlsrv_query'))
 	{
 		echo "<div style=\"color; red; \">Error: Nejsou potrebne funkce pro MSSQL databazi!</div>\n";
 	
@@ -52,7 +52,8 @@ if($mssql_db_ok == 1)
     if(!$mssql_spojeni) {
 		echo " ERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db . ") failed <br>\n";
 		// echo ' MSSQL error: '.sqlsrv_get_last_message()."<br>\n";
-		
+		print_r( sqlsrv_errors(), true);
+
 		if( !($db_mssql_no_exit == 1) ){ exit(); }
     }
 
