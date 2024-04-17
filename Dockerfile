@@ -34,27 +34,7 @@ RUN apt-get update \
     # && docker-php-ext-install intl 
 
 # PHP MSSQL stuff
-# https://github.com/Namoshek/docker-php-mssql/blob/master/8.1/fpm/Dockerfile
-# https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017&tabs=debian18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline
-# RUN apt-get update && apt-get install -y --no-install-recommends \
-#         libcurl4-openssl-dev \
-#         libedit-dev \
-#         libsqlite3-dev \
-#         libssl-dev \
-#         libxml2-dev \
-#         freetds-dev \
-#         freetds-bin \
-#         freetds-common \
-#         libdbd-freetds \
-#         libsybdb5 \
-#         libqt4-sql-tds \
-#         libqt5sql5-tds \
-#         libqxmlrpc-dev \
-#   \
-#       && apt-get clean \
-#       && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-#       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
-#       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
+# https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
 RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
         && curl -sSL https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
         && apt-get update \
@@ -64,8 +44,12 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-        # && pecl install sqlsrv \
-        # && pecl install pdo_sqlsrv \
+# https://gist.github.com/benrolfe/9ee58c79659a6162ccda7cc50430445f
+RUN pecl install sqlsrv \
+        && pecl install pdo_sqlsrv \
+        && docker-php-ext-enable \
+            sqlsrv \
+            pdo_sqlsrv
 
 # apache conf
 RUN a2enmod ssl \
