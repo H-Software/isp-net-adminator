@@ -2,16 +2,11 @@ FROM php:7.1-apache
 
 ENV ACCEPT_EULA=Y
 
-# fix dead mirrors
-RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
-
 #
 # PHP stuff
 #
 
 RUN apt-get update \
-    && apt-get install -y --allow-downgrades \
-        zlib1g=1:1.2.8.dfsg-5 \
     && apt-get install -y \
         libpq-dev \
         wget \
