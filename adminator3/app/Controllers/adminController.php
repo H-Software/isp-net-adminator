@@ -144,7 +144,8 @@ class adminController extends adminatorController {
 
         // $csrf_html = $this->generateCsrfToken($request, $response, true);
 
-        $rs = \admin::tarifList();
+        $admin = new \admin($this->conn_mysql, $this->logger);
+        $rs = $admin->tarifList();
 
         $this->smarty->assign("body",$rs[0]);
 

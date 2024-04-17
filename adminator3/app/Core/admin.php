@@ -242,13 +242,13 @@ class admin {
 		
 		if( isset($update_id) )
 		{
-		  if( !( ereg('^([[:digit:]])+$',$update_id) ) )
+		  if( !( preg_match('/^([[:digit:]])+$/',$update_id) ) )
 		  { $error .= "<div>Chyba! Update id není ve správném formátu. </div>"; }
 		}
 	  
 		if( isset($erase_id) )
 		{
-		  if( !( ereg('^([[:digit:]])+$',$erase_id) ) )
+		  if( !( preg_match('/^([[:digit:]])+$/',$erase_id) ) )
 		  { $error .= "<div>Chyba! Erase id není ve správném formátu. </div>"; }
 		}
 		
