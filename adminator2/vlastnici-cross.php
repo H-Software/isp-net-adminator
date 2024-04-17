@@ -153,6 +153,9 @@ elseif( $akce == 7 ) //tisk smlouvy
   if( $rs_fs->num_rows == 1 )
   {
     //sluzba INTERNET
+    $ms_tarif->data_seek(0);
+    $ms_tarif_r = $ms_tarif->fetch_row();
+    
     if(mysql_result($rs_fs, 0, 1) == 1){  //sluzba internet - ANO                
         
         //zjisteni poctu objektu
