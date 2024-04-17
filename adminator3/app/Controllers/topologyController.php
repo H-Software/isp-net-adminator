@@ -20,7 +20,7 @@ class topologyController extends adminatorController {
         $this->logger = $container->logger;
 
         $this->logger->addInfo("topologyController\__construct called");
-	  }
+	}
 
     public function nodeList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {

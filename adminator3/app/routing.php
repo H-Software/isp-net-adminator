@@ -1,28 +1,48 @@
 <?php
 
 // routes
-use App\Middleware\GuestMiddleware;
-use App\Middleware\AuthMiddleware;
+
+// use App\Middleware\GuestMiddleware;
+// use App\Middleware\AuthMiddleware;
+use \Slim\Http\Request as SlimHttpRequest;
+use \Slim\Http\Response as SlimHttpResponse;
+
+$app->group('/auth', function() use ($app) {
+	$app->get('/notAuthenticated', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) use ($app) {
+      
+        $app->getContainer()["flash"]->addMessage('info', "You are not authenticated");
+
+        $route = $app->getContainer()->get('router')->getNamedRoute('login');
+		//redirect:
+		// $route = \Slim\App::object()->getContainer()->get('router')->getNamedRoute('login');
+		$route->setArgument("message" , "You are not authenticated" );
+		$route->run($request, $response );
+	})->setName("notAuthenticated");
+	
+	$app->get('/notAuthorized', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) {
+		return $response
+		->withStatus(403)
+		->withHeader('Content-Type', 'text/html;charset=utf-8')
+		->write('You are not authorized to this resource.');
+	})->setName("notAuthorized");
+
+    $app->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('login');
+
+    $app->get('/signout', AuthController::class . ':signout')->setName('logout');
+});
 
 $app->group('', function () {
-	$this->get('/auth/signup', 'AuthController:getSignUp')->setName('auth.signup');
-	$this->post('/auth/signup', 'AuthController:postSignUp');
-	$this->get('/auth/signin', 'AuthController:getSignIn')->setName('auth.signin');
-	$this->post('/auth/signin', 'AuthController:postSignIn');
-})->add(new GuestMiddleware($container));
+    $this->get('/', function ($req, $res, $args) {
+        return $res->withStatus(302)->withHeader('Location', '/home');
+    });
+
+    // TODO: fix password/change routing
+	// $this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
+	// $this->post('/auth/password/change', 'PasswordController:postChangePassword');
+});
 
 $app->group('', function () {
-    // $this->get('/', function ($req, $res, $args) {
-    //     return $res->withStatus(302)->withHeader('Location', '/home');
-    // });
-    // $this->get('/', HomeController::class . ':index')->setName('home');
-	$this->get('/auth/signout', 'AuthController:getSignOut')->setName('auth.signout');
-	$this->get('/auth/password/change', 'PasswordController:getChangePassword')->setName('auth.password.change');
-	$this->post('/auth/password/change', 'PasswordController:postChangePassword');
-})->add(new AuthMiddleware($container));
-
-$app->group('', function () {
-    $this->map(['GET', 'POST'],'/home', HomeController::class . ':home')->setName('home');;
+    $this->map(['GET', 'POST'],'/home', HomeController::class . ':home')->setName('home');
 
     $this->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
     $this->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
@@ -61,7 +81,7 @@ $app->group('', function () {
 
     $this->map(['GET', 'POST'],'/work', \workController::class . ':work');
 
-})->add(new AuthMiddleware($container));
+});
 
 // $app->map(['GET'],'/others/img/{name}', function ($request, $response, array $args) {
 //     $name = $args['name'];

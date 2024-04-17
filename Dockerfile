@@ -2,16 +2,11 @@ FROM php:7.1-apache
 
 ENV ACCEPT_EULA=Y
 
-# fix dead mirrors
-RUN echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list
-
 #
 # PHP stuff
 #
 
 RUN apt-get update \
-    && apt-get install -y --allow-downgrades \
-        zlib1g=1:1.2.8.dfsg-5 \
     && apt-get install -y \
         libpq-dev \
         wget \
@@ -19,6 +14,7 @@ RUN apt-get update \
         unzip \
         zlib1g-dev \
         git \
+        libldap2-dev \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
@@ -29,6 +25,7 @@ RUN apt-get update \
             zip \
             pdo \
             pdo_mysql \
+            ldap \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     # && pecl install apcu \
@@ -89,6 +86,10 @@ RUN cd adminator3 \
         monolog/monolog:^1.27.1 \
         respect/validation:^1.1 \
         formr/formr:^1.4 \
+        doctrine/orm:^2.11.0 \
+        doctrine/annotations:^1.13.0 \
+        symfony/cache:^4.4 \
+        marcelbonnet/slim-auth:^2.0 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require \
         illuminate/database:^5.8

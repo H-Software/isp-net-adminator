@@ -44,6 +44,13 @@ administration system for Internet Service Provider (ISP)
 #### slim auth
 - https://discourse.slimframework.com/t/slim-framework-3-skeleton-application-has-authentication-mvc-construction/2088
 - https://github.com/HavenShen/slim-born/tree/v1.0.6
+#### slim-auth w zend
+- https://github.com/marcelbonnet/slim-auth
+- https://github.com/marcelbonnet/slim-allinone-template
+- https://packagist.org/packages/marcelbonnet/slim-auth
+#### doctrine
+- https://filip-prochazka.com/blog/doctrine-a-service-vrstva-aneb-takto-mi-to-dava-smysl
+- https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/getting-started.html
 
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html

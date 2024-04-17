@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class User extends Model
 {
-	protected $table = 'users_slim';
+	protected $table = 'core__users'; // 'users_slim';
 
 	public $first_name;
 
@@ -21,58 +21,61 @@ class User extends Model
 	public $email;
 
 	protected $fillable = [
-		'email',
-		'name',
-		'password',
+		// 'email',
+		// 'name',
+		// 'password',
+		'username',
+		'passwordHash',
+		'level'
 	];
 
-	public function setPassword($password)
+	// public function setPassword($password)
+	// {
+	// 	$this->update([
+	// 		'password' => password_hash($password, PASSWORD_DEFAULT)
+	// 	]);
+	// }
+
+	// public function setFirstName($firstName)
+	// {
+	// 	$this->first_name = trim($firstName);
+	// }
+
+	// public function getFirstName()
+	// {
+	// 	return $this->first_name;
+	// }
+
+	// public function setLastName($lastName)
+	// {
+	// 	$this->last_name = trim($lastName);
+	// }
+
+	// public function getLastName()
+	// {
+	// 	return $this->last_name;
+	// }
+
+	// public function setEmail($email)
+	// {
+	// 	$this->email = $email;
+	// }
+
+	public function getUsername()
 	{
-		$this->update([
-			'password' => password_hash($password, PASSWORD_DEFAULT)
-		]);
+		return $this->username;
 	}
 
-	public function setFirstName($firstName)
-	{
-		$this->first_name = trim($firstName);
-	}
+	// public function getFullName()
+	// {
+	// 	return "$this->first_name $this->last_name";
+	// }
 
-	public function getFirstName()
-	{
-		return $this->first_name;
-	}
-
-	public function setLastName($lastName)
-	{
-		$this->last_name = trim($lastName);
-	}
-
-	public function getLastName()
-	{
-		return $this->last_name;
-	}
-
-	public function setEmail($email)
-	{
-		$this->email = $email;
-	}
-
-	public function getEmail()
-	{
-		return $this->email;
-	}
-
-	public function getFullName()
-	{
-		return "$this->first_name $this->last_name";
-	}
-
-	public function getEmailVariables()
-	{
-		return [
-			'full_name' => $this->getFullName(),
-			'email' => $this->getEmail(),
-		];
-	}
+	// public function getEmailVariables()
+	// {
+	// 	return [
+	// 		'full_name' => $this->getFullName(),
+	// 		'email' => $this->getEmail(),
+	// 	];
+	// }
 }
