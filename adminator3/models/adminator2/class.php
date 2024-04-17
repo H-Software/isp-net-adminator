@@ -173,10 +173,10 @@ class objekt_a2
     if ( $mod == 1 ) //wifi sit ...
     {
       //prvne vyberem wifi tarify...
-      $dotaz_f = mysql_query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
+      $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
       
       $i = 0;
-      while( $data_f = mysql_fetch_array($dotaz_f) )
+      while( $data_f = $dotaz_f->fetch_array() )
       {
          if( $i == 0 ){ $tarif_sql .= " AND ( "; }
          if( $i > 0 ){ $tarif_sql .= " OR "; }
@@ -190,10 +190,10 @@ class objekt_a2
     }
     elseif ( $mod == 2 ) //fiber sit ...
     { 
-      $dotaz_f = mysql_query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
+      $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
       
       $i = 0;
-      while( $data_f = mysql_fetch_array($dotaz_f) )
+      while( $data_f = $dotaz_f->fetch_array() )
       {
          if( $i == 0 ){ $tarif_sql .= " AND ( "; }
          if( $i > 0 ){ $tarif_sql .= " OR "; }
@@ -751,7 +751,7 @@ class vlastnik
 
       echo "<table border=\"0\" width=\"100%\" >";
         
-	$objekt->vypis($sql,$co,$id);
+	$objekt->vypis($sql, $co, $id, "");
 
       echo "</table>";
       
@@ -761,7 +761,6 @@ class vlastnik
     
     $pocet_fiber_obj = $objekt->zjistipocet(2,$id);
 
-/*
     if( $pocet_wifi_obj > 0 or $pocet_fiber_obj == 0 )
     {
      //objekty wifi
@@ -772,12 +771,12 @@ class vlastnik
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt_a2::vypis($sql,$co,$id);
+      $objekt->vypis($sql,$co,$id);
 	    
       echo "</table>";
      echo "</td></tr>";
     }
-*/    
+   
     if( $pocet_fiber_obj > 0 )
     {
     
