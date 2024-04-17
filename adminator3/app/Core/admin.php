@@ -86,7 +86,7 @@ class admin {
 					<th width=\"5%\" scope=\"col\" data-field=\"id\" data-sortable=\"true\">id</th>
 					<th width=\"30%\" scope=\"col\" data-field=\"name\">Popis</th>
 															
-					<th width=\"20%\" scope=\"col\" data-field=\leve\">Level</th>
+					<th width=\"20%\" scope=\"col\" data-field=\level\">Level</th>
 								
 					<th width=\"10%\" scope=\"col\">Úprava</th>
 					<th width=\"10%\" scope=\"col\">Smazání</th>
@@ -287,13 +287,20 @@ class admin {
 		else
 		{
 			//mod vypis ...
+			$output .= '<table
+							id="tarif-list"
+							class="table table-striped fs-6"
+							data-toggle="table"
+							data-pagination="true"
+							data-side-pagination="client"
+							data-search="true"
+							>';	
+			// $output .= "<table border=\"0\" width=\"1000px\" >";
 			
-			$output .= "<table border=\"0\" width=\"1000px\" >";
-			
-			$style1 = "border-bottom: 2px solid black; border-right: 1px dashed gray; ";
-			$style2 = "border-bottom: 1px solid gray; border-right: 1px dashed gray; ";
+			$style1 = "margin-bottom: 2px solid black; border-right: 1px dashed gray; ";
+			$style2 = "margin-bottom: 1px solid gray; border-right: 1px dashed gray; ";
 		
-			$output .= "
+			$output .= "<thead>
 			<tr>
 				<td style=\"".$style1."\"><b>id tarifu</b></td>
 				<td style=\"".$style1."\"><b>zkratka</b></td>
@@ -315,10 +322,12 @@ class admin {
 				<td style=\"".$style1."\"><b>úprava</b></td>
 				<td style=\"".$style1."\"><b>smazat</b></td>
 		
-			</tr>
+			</tr></thead>
 			";
 			
-			$output .= "<tr><td colspan=\"14\" ><br></td></tr>";
+			$output .= "<tbody>";
+
+			// $output .= "<tr><td colspan=\"14\" >&nbsp;</td></tr>";
 		
 			if( ( preg_match('/^([[:digit:]]+)$/',$_GET["id_tarifu"]) ) )
 			{
@@ -328,7 +337,7 @@ class admin {
 					$dotaz_tarify = $this->conn_mysql->query(" SELECT * FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ORDER BY id_tarifu");
 					$dotaz_tarify_radku = $dotaz_tarify->num_rows;
 				} catch (Exception $e) {
-					die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+					$output .= "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2>\n";
 				}
 		
 			}
@@ -339,7 +348,7 @@ class admin {
 					$dotaz_tarify = $this->conn_mysql->query(" SELECT * FROM tarify_int ORDER BY id_tarifu");
 					$dotaz_tarify_radku = $dotaz_tarify->num_rows;
 				} catch (Exception $e) {
-					die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+					$output .= "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2>\n";
 				}
 			}
 		
@@ -347,7 +356,7 @@ class admin {
 			{
 				$output .= "
 				<tr>
-					<td colspan=\"6\" >Žádné záznamy v databázi</td>
+					<td colspan=\"12\" ><div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi</div></td>
 				</tr>
 				";
 			}
@@ -418,6 +427,8 @@ class admin {
 			
 			} //konec else if radku == 1
 		
+			$output .= "<tbody>";
+
 			$output .= "</table>";
 		
 	   } // konec hlavniho else ..
