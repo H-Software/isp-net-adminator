@@ -21,6 +21,6 @@ echo "<table border=\"0\" width=\"800px\" align=\"center\" style=\"font-size: 12
 
 // $limit="10";
 
-include("opravy-vypis-inc.php");
+require("opravy-vypis-inc.php");
 
 ?>
