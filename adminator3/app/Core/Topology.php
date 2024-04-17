@@ -557,7 +557,7 @@ class Topology extends adminator {
                                                         
                 $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_typ_vysilace."\" ><span style=\"color: #666666; font-size: 13px; \">".$typ_vysilace2."</span> </td>\n";
                 
-                list($a,$b,$c,$d) = split("[.]",$zaznam["ip_rozsah"]);
+                list($a,$b,$c,$d) = preg_split("/[.]/",$zaznam["ip_rozsah"]);
                 
                 if ( $c == 0) { $c=1; }
                 
@@ -568,7 +568,7 @@ class Topology extends adminator {
                 
                 if ( ( $_GET["ping"] == 1 ) )
                 { 
-                    $aktivni=exec("/srv/www/htdocs.ssl/adminator2/scripts/ping.sh $ip_akt"); 
+                    $aktivni=exec("../adminator2/scripts/ping.sh $ip_akt"); 
                 
                     if ( ( $aktivni > 0 and $aktivni < 50 ) ) 
                     {  $output .= "<td ".$akt_par." align=\"center\" bgcolor=\"green\"><span style=\"color: white; font-size: 13px; \">".$aktivni."</span>"; }
