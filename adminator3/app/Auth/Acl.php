@@ -48,7 +48,8 @@ class Acl extends SlimAuthAcl
             '/objekty/cat',
             '/objekty/stb',
             '/objekty/stb/action',
-            '/platby/cat'
+            '/platby/cat',
+            '/platby/fn'
         );
 
         foreach ($core_resources as $c) {
