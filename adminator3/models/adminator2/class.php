@@ -973,7 +973,7 @@ class vlastnik2_a2
    var $conn_mysql;
 
    var $logger;
-   
+
    var $level;
        
    var $export_povolen;
@@ -2596,7 +2596,7 @@ class vlastnikfind
 	// konec funkce vypis_tab
 	}
 			
-    function vypis ($sql,$dotaz_source,$co)
+    function vypis ($sql,$dotaz_source,$co = "")
     {
     
     if ( $co == 2)
