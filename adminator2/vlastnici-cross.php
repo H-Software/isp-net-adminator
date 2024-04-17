@@ -1,5 +1,8 @@
 <?php
 
+require("include/main.function.shared.php");
+require("include/config.php"); 
+
 echo "<html>
     <head>
     </head>
@@ -8,20 +11,17 @@ echo "<html>
 $akce = $_GET["akce"];
 $id_cloveka = $_GET["id_cloveka"];
 
-if( !( ereg('^([[:digit:]]+)$',$id_cloveka) ) )
+if( !( preg_match('/^([[:digit:]]+)$/', $id_cloveka) ) )
 {
  echo "Chyba! Nesouhlasi vstupni data. (id cloveka) ";
  exit;
 }
   
-if( !( ereg('^([[:digit:]]+)$',$akce) ) )
+if( !( preg_match('/^([[:digit:]]+)$/', $akce) ) )
 {
  echo "Chyba! Nesouhlasi vstupni data. (akce) ";
  exit;
 }
-
-require_once("include/config.php");
-//include("include/config.pg.php");
 
 if( $akce == 0 or !isset($akce) )
 { 
@@ -75,8 +75,8 @@ elseif( $akce == 7 ) //tisk smlouvy
  while($data = pg_fetch_array($rs_vl1) )
  { $fakturacni_skupina_id = $data["fakturacni_skupina_id"]; }
   
- $rs_fs = mysql_query("SELECT typ_sluzby FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
- while($data = mysql_fetch_array($rs_fs) )
+ $rs_fs = $conn_mysql->query("SELECT typ_sluzby FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
+ while($data = $rs_fs->fetch_array() )
  { $fakturacni_skupina_typ = $data["typ_sluzby"]; }
  
  echo "<input type=\"hidden\" name=\"id_cloveka\" value=\"".intval($id_cloveka)."\" >\n"; 
@@ -141,12 +141,12 @@ elseif( $akce == 7 ) //tisk smlouvy
   }
   
   //FS
-  $rs_fs = mysql_query("SELECT typ_sluzby, sluzba_int, sluzba_int_id_tarifu, nazev, 
+  $rs_fs = $conn_mysql->query("SELECT typ_sluzby, sluzba_int, sluzba_int_id_tarifu, nazev, 
 				sluzba_iptv, sluzba_iptv_id_tarifu, sluzba_voip 
 			    FROM fakturacni_skupiny 
 			    WHERE id = '".intval($data_vl["fakturacni_skupina_id"])."'");
 
-  if( mysql_num_rows($rs_fs) == 1 )
+  if( $rs_fs->num_rows == 1 )
   {
     //sluzba INTERNET
     if(mysql_result($rs_fs, 0, 1) == 1){  //sluzba internet - ANO                
