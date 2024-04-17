@@ -63,6 +63,7 @@ function init_mysql($app_name = "adminator") {
       die ($hlaska_connect . 'Caught exception: ' .  $e->getMessage() . "\n" . "</div></div></body></html>\n");
   }
 
+  return $conn_mysql;
 }
 
 function init_postgres($app_name = "adminator") {
