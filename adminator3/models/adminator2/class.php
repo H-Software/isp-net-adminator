@@ -569,7 +569,7 @@ class objekt_a2
     // kdy se objekty pridal
     //prvne to orezem
     $orez= $pridano; 
-    $orezano = split(':', $orez); 
+    $orezano = explode(':', $orez); 
     $pridano_orez=$orezano[0].":".$orezano[1];
     
     echo "<td class=\"tab-objekty\" colspan=\"3\" ><span class=\"objekty-2radka\" >".$pridano_orez."</span></td>
@@ -878,7 +878,7 @@ class vlastnik
 //h
 	    echo "<tr>";
 
-            $orezano = split(':', $data["pridano"]);
+            $orezano = explode(':', $data["pridano"]);
             $pridano=$orezano[0].":".$orezano[1];
 
 
@@ -1076,7 +1076,7 @@ class vlastnik2_a2
 	 
 	if ( (strlen($data["datum_podpisu"]) > 0) )
 	{
-	 list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = split("-",$data["datum_podpisu"]);	 
+	 list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = explode("-",$data["datum_podpisu"]);	 
 	  $datum_podpisu=$datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
 	 echo $datum_podpisu;
 	}
@@ -1123,7 +1123,7 @@ class vlastnik2_a2
 	   elseif( $data["typ_smlouvy"] == 2)
 	   { 
 	    echo "[s min. dobou plnění]"." ( do: ";
-	    list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = split("-",$data["trvani_do"]);
+	    list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = explode("-",$data["trvani_do"]);
 	    $trvani_do=$trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
 	    
 	    echo $trvani_do." )";    
@@ -1800,7 +1800,7 @@ class vlastnikarchiv
 	    
 	    // echo "<td><br></td>";
 	    	    
-	    $orezano = split(':', $data["pridano"]);
+	    $orezano = explode(':', $data["pridano"]);
 	    $pridano=$orezano[0].":".$orezano[1];
 		      
 		          
@@ -2055,7 +2055,7 @@ class objektypridani {
     	    
      if($radku_ip == 1) 
      {
-		while ($data_ip=mysql_fetch_array($vysl_ip) ){
+		while ($data_ip=$vysl_ip->fetch_array() ){
 		
 			$ip_rozsah=$data_ip["ip_rozsah"];
 			
