@@ -9,21 +9,16 @@ use Psr\Http\Message\ServerRequestInterface;
 class workController extends adminatorController {
     var $conn_mysql;
     var $smarty;
-    var $logger;
-    var $auth;
-    var $app;
 
     public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
     {
         $this->container = $container;
 		    $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->auth = $auth;
-        $this->app = $app;
-        
+
+        $this->logger = $this->container->logger;
         $this->logger->addInfo("workController\__construct called");
-	}
+	  }
 
     public function work(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {

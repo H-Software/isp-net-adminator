@@ -75,24 +75,24 @@ RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2
 
 RUN mkdir -p /var/www/html/adminator3/
 
-RUN cd adminator3 \
-    && composer require \
-        nette/robot-loader:^3.4 \
-        smarty/smarty:^3.1 \
-        slim/slim:3.* \
-        slim/twig-view:^2.5 \
-        slim/csrf:^0.8 \
-        slim/flash:^0.4.0 \
-        monolog/monolog:^1.27.1 \
-        respect/validation:^1.1 \
-        formr/formr:^1.4 \
-        doctrine/orm:^2.11.0 \
-        doctrine/annotations:^1.13.0 \
-        symfony/cache:^4.4 \
-        marcelbonnet/slim-auth:^2.0 \
-    && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
-    && composer require \
-        illuminate/database:^5.8
+# RUN cd adminator3 \
+#     && composer require \
+#         nette/robot-loader:^3.4 \
+#         smarty/smarty:^3.1 \
+#         slim/slim:3.* \
+#         slim/twig-view:^2.5 \
+#         slim/csrf:^0.8 \
+#         slim/flash:^0.4.0 \
+#         monolog/monolog:^1.27.1 \
+#         respect/validation:^1.1 \
+#         formr/formr:^1.4 \
+#         doctrine/orm:^2.11.0 \
+#         doctrine/annotations:^1.13.0 \
+#         symfony/cache:^4.4 \
+#         marcelbonnet/slim-auth:^2.0 \
+#     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
+#     && composer require \
+#         illuminate/database:^5.8
 
 #     # && docker-php-ext-enable xdebug \
 
@@ -101,8 +101,6 @@ COPY adminator2/ /var/www/html/adminator2/
 COPY adminator3/ /var/www/html/adminator3/
 
 # shared stuff
-COPY libs/smarty/ /var/www/html/adminator2/smarty/
-# COPY libs/smarty/ /var/www/html/adminator3/smarty/
 COPY adminator3/models/adminator2 /var/www/html/adminator2/include
 
 COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/templates/inc.intro.category-ext.tpl
@@ -111,8 +109,11 @@ COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
 
 
+RUN cd adminator2 \
+     && composer install
+
 # RUN cd adminator3 \
 #      && composer update
 
-# RUN cd adminator3 \
-#     && composer install
+RUN cd adminator3 \
+    && composer install

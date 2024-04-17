@@ -173,7 +173,8 @@ require_once("include/charset.php");
     //prvne vytvorime instanci objektu
      $vlastnik = new vlastnik2_a2;
      $vlastnik->level = $level;
-						      
+	 $vlastnik->conn_mysql = $conn_mysql;
+
     if( check_level($level,40) ) { echo '<a href="vlastnici2-change.php?firma_add=1">Přidání vlastníka</a>'; }
     else 
     { echo "<div style=\"color: grey; font-style: italic\">Přidání vlastníka</div>"; }

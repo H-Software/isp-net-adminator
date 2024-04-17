@@ -3,6 +3,8 @@
 class objekt_a2
 {
 
+	var $conn_mysql;
+
  function vypis_tab($par)
  {
    
@@ -171,10 +173,10 @@ class objekt_a2
     if ( $mod == 1 ) //wifi sit ...
     {
       //prvne vyberem wifi tarify...
-      $dotaz_f = mysql_query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
+      $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
       
       $i = 0;
-      while( $data_f = mysql_fetch_array($dotaz_f) )
+      while( $data_f = $dotaz_f->fetch_array() )
       {
          if( $i == 0 ){ $tarif_sql .= " AND ( "; }
          if( $i > 0 ){ $tarif_sql .= " OR "; }
@@ -188,10 +190,10 @@ class objekt_a2
     }
     elseif ( $mod == 2 ) //fiber sit ...
     { 
-      $dotaz_f = mysql_query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
+      $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
       
       $i = 0;
-      while( $data_f = mysql_fetch_array($dotaz_f) )
+      while( $data_f = $dotaz_f->fetch_array() )
       {
          if( $i == 0 ){ $tarif_sql .= " AND ( "; }
          if( $i > 0 ){ $tarif_sql .= " OR "; }
@@ -211,17 +213,17 @@ class objekt_a2
   
  } //konec funkce zjistipocet
  
- function vypis($sql,$co,$id,$dotaz_final,$conn_mysql)
+ function vypis($sql,$co,$id,$dotaz_final = "")
  {
    global $db_ok2;
     
    $list=$_GET["list"];
 
-    if ( $co==3 ) //wifi sit ...vypis u vlastniku(dalsi pouziti nevim)
+    if ( $co==3 ) //wifi sit ...vypis u vlastniku (dalsi pouziti nevim)
     { 
       //prvne vyberem wifi tarify...
 	  try {
-		$dotaz_f = $conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
+		$dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
 	  } catch (Exception $e) {
 			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 	  }
@@ -246,7 +248,7 @@ class objekt_a2
     elseif ( $co==4 ) //fiber sit ...vypis pouze u vlastniku
     { 
 	  try {
-		$dotaz_f = $conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
+		$dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
 	  } catch (Exception $e) {
 			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 	  }
@@ -369,12 +371,12 @@ class objekt_a2
       
       $id_tarifu = $data["id_tarifu"];
       
-      $dotaz_update = mysql_query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
-      $rs_update = mysql_num_rows($dotaz_update);
+      $dotaz_update = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
+      $rs_update = $dotaz_update->mysql_num_rows;
               
       if( $rs_update <> 1 ){ echo "Chyba! Nelze specifikovat tarif!"; }
       
-      while($data_update = mysql_fetch_array($dotaz_update))
+      while($data_update = $dotaz_update->fetch_array())
       { 
         if( $data_update["typ_tarifu"] == 1 )
 	{ $update_mod_vypisu = 2; }
@@ -630,6 +632,7 @@ class objekt_a2
 
 class vlastnik
 {
+	var $conn_mysql;
 
    function vypis_tab ($par)
     {
@@ -644,7 +647,8 @@ class vlastnik
     function vypis ($sql,$co,$mod,$dotaz_source)
     {
     
-    include("class.voip.main.php");
+		$objekt = new objekt_a2();
+		$objekt->conn_mysql = $this->conn_mysql;
     
     // co - co hledat, 1- podle dns, 2-podle ip , 3 - dle id_vlastnika
 	         
@@ -747,19 +751,16 @@ class vlastnik
 
       echo "<table border=\"0\" width=\"100%\" >";
         
-	objekt_a2::vypis($sql,$co,$id);
+	$objekt->vypis($sql, $co, $id, "");
 
       echo "</table>";
       
     echo "</td></tr>\n\n";
-
-    $objekt = new objekt_a2(); 
     
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
     $pocet_fiber_obj = $objekt->zjistipocet(2,$id);
 
-/*
     if( $pocet_wifi_obj > 0 or $pocet_fiber_obj == 0 )
     {
      //objekty wifi
@@ -770,12 +771,12 @@ class vlastnik
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt_a2::vypis($sql,$co,$id);
+      $objekt->vypis($sql,$co,$id,"");
 	    
       echo "</table>";
      echo "</td></tr>";
     }
-*/    
+   
     if( $pocet_fiber_obj > 0 )
     {
     
@@ -790,7 +791,7 @@ class vlastnik
 	   
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt_a2::vypis($sql,$co,$id);
+      $objekt->vypis($sql,$co,$id);
 	    
       echo "</table>";
     
@@ -969,7 +970,10 @@ class vlastnik
 
 class vlastnik2_a2
 {
-    
+   var $conn_mysql;
+
+   var $logger;
+
    var $level;
        
    var $export_povolen;
@@ -982,11 +986,10 @@ class vlastnik2_a2
     // konec funkce vypis_tab
    }
 
+   // $dotaz_final - for pq_query
    function vypis ($sql,$co,$dotaz_final)
    {
-					
-    require_once("class.voip.main.php");
-    			
+				
     // co - co hledat, 1- podle dns, 2-podle ip					    									    
     $dotaz=pg_query($dotaz_final);
     $radku=pg_num_rows($dotaz);
@@ -1094,13 +1097,13 @@ class vlastnik2_a2
 	 
 	 $fakturacni_skupina_id=$data["fakturacni_skupina_id"];
 	 
-	 $dotaz_fakt_skup=mysql_query("SELECT nazev, typ FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
-	 $dotaz_fakt_skup_radku=mysql_num_rows($dotaz_fakt_skup);
+	 $dotaz_fakt_skup=$this->conn_mysql->query("SELECT nazev, typ FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
+	 $dotaz_fakt_skup_radku=$dotaz_fakt_skup->num_rows;
 		 
 	 if( ( $dotaz_fakt_skup_radku < 1 ) ){ echo " [žádná fakt. skupina] "; }
 	 else
 	 { 
-	   while( $data_fakt_skup=mysql_fetch_array($dotaz_fakt_skup) )
+	   while( $data_fakt_skup=$dotaz_fakt_skup->fetch_array() )
 	   { $nazev_fakt_skup = $data_fakt_skup["nazev"]; $typ_fakt_skup = $data_fakt_skup["typ"]; }  
 	 
 	 echo " [".$nazev_fakt_skup;
@@ -1311,7 +1314,8 @@ class vlastnik2_a2
     if( ( $id_f > 0 ) ){ fakturacni::vypis($id_f,$id_v); }
     
     $objekt = new objekt_a2(); 
-    
+    $objekt->conn_mysql = $this->conn_mysql;
+	
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
     $pocet_fiber_obj = $objekt->zjistipocet(2,$id);
@@ -1326,7 +1330,7 @@ class vlastnik2_a2
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt_a2::vypis($sql,$co,$id);
+      $objekt->vypis($sql,$co,$id);
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -1344,7 +1348,7 @@ class vlastnik2_a2
 	   
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt_a2::vypis($sql,$co,$id);
+      $objekt->vypis($sql, $co, $id);
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -1352,7 +1356,7 @@ class vlastnik2_a2
     
     //stb
     
-    $stb = new stb();
+    $stb = new App\Core\stb($this->conn_mysql, $this->logger);
     
     $stb->level = $this->level;
     
@@ -2592,7 +2596,7 @@ class vlastnikfind
 	// konec funkce vypis_tab
 	}
 			
-    function vypis ($sql,$dotaz_source,$co)
+    function vypis ($sql,$dotaz_source,$co = "")
     {
     
     if ( $co == 2)

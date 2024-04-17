@@ -802,7 +802,7 @@ class stb
     {
        $sql_sloupce = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, pozn, datum_vytvoreni ";
       
-        $dotaz = $this->conn_mysql->mysql_query("SELECT ".$sql_sloupce." FROM objekty_stb WHERE id_cloveka = '".intval($id_cloveka)."' ORDER BY id_stb");
+        $dotaz = $this->conn_mysql->query("SELECT ".$sql_sloupce." FROM objekty_stb WHERE id_cloveka = '".intval($id_cloveka)."' ORDER BY id_stb");
         $dotaz_radku = $dotaz->num_rows;
    
        return $dotaz_radku;

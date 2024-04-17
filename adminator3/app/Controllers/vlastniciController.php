@@ -18,10 +18,8 @@ class vlastniciController extends adminatorController {
         $this->container = $container;
 		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->auth = $auth;
-        $this->app = $app;
-        
+
+        $this->logger = $container->logger;
         $this->logger->addInfo("vlastniciController\__construct called");
 	  }
 

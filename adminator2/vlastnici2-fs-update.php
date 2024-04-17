@@ -57,7 +57,7 @@ include("include/charset.php");
  //hidden prvek, kvuli testovani promenych ..
  $send = $_POST["send"];
 
- if( ( !(ereg('^([[:digit:]])+$',$update_id)) and ( $update_id > 0 ) ) )
+ if( ( !(preg_match('/^([[:digit:]])+$/',$update_id)) and ( $update_id > 0 ) ) )
  {
     echo "<div class=\"vlasnici-add-fail-nick\" style=\"padding-top: 10px; color: red; \">
      <H4>ID fakturační skupiny ( ".$id_fs." ) není ve správnem formátu !!!(Povolené: Čísla v desítkové soustavě.)</H4></div>";    
@@ -70,14 +70,14 @@ include("include/charset.php");
  { 
   //rezim upravy - nacitani predchozich hodnot
   
-  $dotaz_upd = mysql_query("SELECT * FROM fakturacni_skupiny WHERE id = '$update_id' ");
-  $radku_upd = mysql_num_rows($dotaz_upd);
+  $dotaz_upd = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$update_id' ");
+  $radku_upd = $dotaz_upd->num_rows;
  
   if( $radku_upd == 0 )
   { echo "<div style=\"color: red; \" >Chyba! Požadovaná data nelze načíst! </div>"; }
   else
   {
-    while( $data=mysql_fetch_array($dotaz_upd) ):
+    while( $data=$dotaz_upd->fetch_array() ):
     
      $id = $data["id"];	
      $nazev = $data["nazev"];

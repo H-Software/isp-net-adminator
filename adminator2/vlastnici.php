@@ -330,6 +330,7 @@ else
    $listovani->listInterval();
 						     
   $vlastnik = new vlastnik;
+  $vlastnik->conn_mysql = $conn_mysql;
 
   $vlastnik->vypis_tab(1);
 

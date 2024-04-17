@@ -11,18 +11,14 @@ class archivZmenController extends adminatorController {
     var $conn_mysql;
     var $smarty;
     var $logger;
-    var $auth;
-    var $app;
 
     public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
     {
         $this->container = $container;
 		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->auth = $auth;
-        $this->app = $app;
-        
+
+        $this->logger = $this->container->logger;
         $this->logger->addInfo("archivZmenController\__construct called");
 	}
 
@@ -108,7 +104,7 @@ class archivZmenController extends adminatorController {
 
         $this->smarty->assign("link_add","/archiv-zmen/ucetni?action=add");
 
-        $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger);
+        $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger, $this->container->auth);
 
         if( $action == "add")
         { //rezim pridani
@@ -216,7 +212,7 @@ class archivZmenController extends adminatorController {
             $vypis_rs = $zmena->load_sql_result();
             $this->smarty->assign("zmeny",$vypis_rs);
 
-            $this->smarty->assign("link_accept","xxx");
+            $this->smarty->assign("link_accept","/archiv-zmen/ucetni/action-accept/?id=");
 
             $template = "az-ucetni.tpl";
         }

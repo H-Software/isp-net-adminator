@@ -17,10 +17,10 @@ class zmeny_ucetni {
     
     var $loggedUserEmail = "";
 
-    function __construct($conn_mysql, $logger) {
+    function __construct($conn_mysql, $logger, $auth) {
       $this->conn_mysql = $conn_mysql;
       $this->logger = $logger;
-      $this->loggedUserEmail = \App\Auth\Auth::getUserEmail();
+      $this->loggedUserEmail = $auth->getIdentity();
     }
 
     function load_sql_result() {
@@ -80,7 +80,7 @@ class zmeny_ucetni {
 
     function check_inserted_vars()
     {
-      if( !(ereg('^([[:digit:]]+)$',$this->typ)) )
+      if( !(preg_match('/^([[:digit:]]+)$/',$this->typ)) )
       {
         $this->fail = true;
         $this->error .= "<div class=\"form-add-fail\" ><H4>Zadaný typ (".$this->typ." ) není ve  správném formátu!!!</H4></div>";
