@@ -213,13 +213,13 @@ class objekt_a2
   
  } //konec funkce zjistipocet
  
- function vypis($sql,$co,$id,$dotaz_final)
+ function vypis($sql,$co,$id,$dotaz_final = "")
  {
    global $db_ok2;
     
    $list=$_GET["list"];
 
-    if ( $co==3 ) //wifi sit ...vypis u vlastniku(dalsi pouziti nevim)
+    if ( $co==3 ) //wifi sit ...vypis u vlastniku (dalsi pouziti nevim)
     { 
       //prvne vyberem wifi tarify...
 	  try {
@@ -771,7 +771,7 @@ class vlastnik
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       echo "<table border=\"0\" width=\"100%\" >";
         
-      $objekt->vypis($sql,$co,$id);
+      $objekt->vypis($sql,$co,$id,"");
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -1312,7 +1312,8 @@ class vlastnik2_a2
     if( ( $id_f > 0 ) ){ fakturacni::vypis($id_f,$id_v); }
     
     $objekt = new objekt_a2(); 
-    
+    $objekt->$conn_mysql = $this->conn_mysql;
+	
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
     $pocet_fiber_obj = $objekt->zjistipocet(2,$id);
@@ -1327,7 +1328,7 @@ class vlastnik2_a2
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt_a2::vypis($sql,$co,$id);
+      $objekt->vypis($sql,$co,$id);
 	    
       echo "</table>";
      echo "</td></tr>";
@@ -1345,7 +1346,7 @@ class vlastnik2_a2
 	   
       echo "<table border=\"0\" width=\"100%\" >";
         
-      objekt_a2::vypis($sql,$co,$id);
+      $objekt->vypis($sql, $co, $id);
 	    
       echo "</table>";
      echo "</td></tr>";
