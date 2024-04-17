@@ -969,7 +969,8 @@ class vlastnik
 
 class vlastnik2_a2
 {
-    
+   var $conn_mysql;
+
    var $level;
        
    var $export_povolen;
@@ -1094,7 +1095,7 @@ class vlastnik2_a2
 	 
 	 $fakturacni_skupina_id=$data["fakturacni_skupina_id"];
 	 
-	 $dotaz_fakt_skup=$conn_mysql->query("SELECT nazev, typ FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
+	 $dotaz_fakt_skup=$this->conn_mysql->query("SELECT nazev, typ FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
 	 $dotaz_fakt_skup_radku=$dotaz_fakt_skup->num_rows;
 		 
 	 if( ( $dotaz_fakt_skup_radku < 1 ) ){ echo " [žádná fakt. skupina] "; }

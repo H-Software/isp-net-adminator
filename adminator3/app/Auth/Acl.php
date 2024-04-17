@@ -30,32 +30,51 @@ class Acl extends SlimAuthAcl
 		$this->addRole('admin');
 		// APPLICATION RESOURCES
 		// Application resources == Slim route patterns
-		$this->addResource('/');
-		$this->addResource('/login');
-        $this->addResource('/auth/signin');
 
-		$this->addResource('/logout');
-        $this->addResource('/auth/signout');
+        $core_resources = array(
+            '/',
+            '/login',
+            '/auth/signin',
+            '/logout',
+            '/auth/signout',
+            '/auth/notAuthenticated',
+            '/auth/notAuthorized'
+        );
 
-        $this->addResource('/home');
-		$this->addResource('/auth/notAuthenticated');
-		$this->addResource('/auth/notAuthorized');
+        $app_resources = array(
+            '/home',
+            '/vlastnici/cat',
+            '/vlastnici2'
+        );
+
+        foreach ($core_resources as $c) {
+            $this->addResource($c);
+        }
+
+        foreach ($app_resources as $a) {
+            $this->addResource($a);
+        }
 
         // APPLICATION PERMISSIONS
 		// Now we allow or deny a role's access to resources.
 		// The third argument is 'privilege'. In Slim Auth privilege == HTTP method
-		$this->allow('guest', '/', $this->defaultPrivilege);
-		$this->allow('guest', '/login', array('GET', 'POST'));
-        $this->allow('guest', '/auth/signin', array('GET', 'POST'));
 
-		$this->allow('guest', '/logout', array('GET', 'POST'));
-		$this->allow('guest', '/auth/signout', array('GET', 'POST'));
+        foreach ($core_resources as $c) {
+            $this->allow('guest', $c, array('GET', 'POST'));
+        }
+
+        foreach ($app_resources as $a) {
+            $this->allow('member', $a, array('GET', 'POST'));
+        }
+
+		// $this->allow('guest', '/', $this->defaultPrivilege);
+		
+        // $this->allow('guest', '/auth/signin', array('GET', 'POST'));
+
+		// $this->allow('guest', '/logout', array('GET', 'POST'));
+		// $this->allow('guest', '/auth/signout', array('GET', 'POST'));
         
-        $this->allow('guest', '/auth/notAuthenticated' , $this->defaultPrivilege);
-		$this->allow('guest', '/auth/notAuthorized' , $this->defaultPrivilege);
-        
-        $this->allow('member', '/home', array('GET', 'POST'));
+        // $this->allow('guest', '/auth/notAuthenticated' , $this->defaultPrivilege);
+		// $this->allow('guest', '/auth/notAuthorized' , $this->defaultPrivilege);
     }
-    
-    
 }
