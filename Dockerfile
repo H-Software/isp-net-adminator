@@ -101,8 +101,6 @@ COPY adminator2/ /var/www/html/adminator2/
 COPY adminator3/ /var/www/html/adminator3/
 
 # shared stuff
-# COPY libs/smarty/ /var/www/html/adminator2/smarty/
-# COPY libs/smarty/ /var/www/html/adminator3/smarty/
 COPY adminator3/models/adminator2 /var/www/html/adminator2/include
 
 COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/templates/inc.intro.category-ext.tpl

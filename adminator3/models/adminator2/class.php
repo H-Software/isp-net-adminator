@@ -1094,13 +1094,13 @@ class vlastnik2_a2
 	 
 	 $fakturacni_skupina_id=$data["fakturacni_skupina_id"];
 	 
-	 $dotaz_fakt_skup=mysql_query("SELECT nazev, typ FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
-	 $dotaz_fakt_skup_radku=mysql_num_rows($dotaz_fakt_skup);
+	 $dotaz_fakt_skup=$conn_mysql->query("SELECT nazev, typ FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
+	 $dotaz_fakt_skup_radku=$dotaz_fakt_skup->num_rows;
 		 
 	 if( ( $dotaz_fakt_skup_radku < 1 ) ){ echo " [žádná fakt. skupina] "; }
 	 else
 	 { 
-	   while( $data_fakt_skup=mysql_fetch_array($dotaz_fakt_skup) )
+	   while( $data_fakt_skup=$dotaz_fakt_skup->fetch_array() )
 	   { $nazev_fakt_skup = $data_fakt_skup["nazev"]; $typ_fakt_skup = $data_fakt_skup["typ"]; }  
 	 
 	 echo " [".$nazev_fakt_skup;
