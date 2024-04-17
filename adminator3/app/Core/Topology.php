@@ -1193,7 +1193,7 @@ class Topology extends adminator {
                       //2.6. - soubory
                       $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >\n".
                               "<a href=\"topology-router-mail.php?id=".$data["id"]."\">";
-                      $output .= "<img src=\"img2/icon_files.jpg\" border=\"0\" height=\"20px\" ></a>\n</td>\n";
+                      $output .= "<img src=\"/img2/icon_files.jpg\" border=\"0\" height=\"20px\" ></a>\n</td>\n";
   
                      //uprava
                      $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";

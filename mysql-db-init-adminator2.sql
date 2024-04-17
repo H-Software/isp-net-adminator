@@ -55,7 +55,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713371049',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713379417',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -204,7 +204,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (4,	10,	'topology-nod-list'),
 (5,	10,	'a2: topology-nod-list'),
 (6,	10,	'topolog-user-list'),
-(13,	10,	'a2: vlastnici'),
+(13,	10,	'vlastnici / vlastnici-gen-xml'),
 (14,	20,	'a2: platby'),
 (16,	10,	'a2: work'),
 (17,	10,	'a2: admin'),
@@ -220,12 +220,14 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (38,	100,	'a3: home.php, vlastnici2'),
 (40,	30,	'vlastnici2: pridani vlastnika'),
 (41,	50,	'platby-soucet'),
+(48,	40,	'vlastnici2-add-obj'),
 (51,	30,	'vlastnici-add-fakt'),
 (63,	40,	'vlastnici export'),
 (75,	10,	'a2: partner-cat'),
 (78,	10,	'a2: vypovedi'),
 (79,	30,	'a2: vypovedi vlozeni'),
 (80,	20,	'vypovedi plaintisk'),
+(81,	80,	'platby-hot-stats'),
 (82,	10,	'a3: vlastnici-archiv'),
 (84,	20,	'a2: opravy'),
 (85,	30,	'topology-router-list'),
@@ -277,7 +279,13 @@ CREATE TABLE `login_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
-(13,	'admin',	'1713354954',	'172.18.0.1');
+(13,	'admin',	'1713354954',	'172.18.0.1'),
+(14,	'admin',	'1713371838',	'172.18.0.1'),
+(15,	'admin',	'1713372510',	'172.18.0.1'),
+(16,	'admin',	'1713376215',	'172.18.0.1'),
+(17,	'admin',	'1713376392',	'172.18.0.1'),
+(18,	'admin',	'1713376836',	'172.18.0.1'),
+(19,	'admin',	'1713379304',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -432,11 +440,12 @@ CREATE TABLE `users` (
   `lvl_objekty_stb_erase` int unsigned NOT NULL DEFAULT '0',
   `lvl_partner_servis_add` int unsigned NOT NULL DEFAULT '0',
   `lvl_partner_servis_list` int unsigned NOT NULL DEFAULT '0',
+  `lvl_phd_adresar` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`) VALUES
-(1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1,	1,	1);
+INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`, `lvl_phd_adresar`) VALUES
+(1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1,	1,	1,	1);
 
 DROP TABLE IF EXISTS `vypovedi`;
 CREATE TABLE `vypovedi` (
@@ -474,4 +483,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-17 16:27:01
+-- 2024-04-17 18:51:28
