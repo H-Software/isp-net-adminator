@@ -65,7 +65,7 @@ require ($cesta."include/charset.php");
       $dotaz_sql = "SELECT *,DATE_FORMAT(datum_vlozeni, '%d.%m.%Y %H:%i:%s') ".
 		"as datum_vlozeni2 FROM partner_klienti WHERE ( id > 0 ".$filtr." ) ORDER BY id DESC ".$dotaz_limit;
    
-      $listovani = new c_Listing("./partner-pozn-update.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+      $listovani = new c_listing_partner("./partner-pozn-update.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 
       if(($list == "")||($list == "1")){ $bude_chybet = 0; }
       else{ $bude_chybet = (($list-1) * $listovani->interval); }
