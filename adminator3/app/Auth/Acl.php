@@ -54,7 +54,12 @@ class Acl extends SlimAuthAcl
             '/archiv-zmen',
             '/archiv-zmen/cat',
             '/archiv-zmen/work',
-            '/archiv-zmen/ucetni'
+            '/archiv-zmen/ucetni',
+            '/work',
+            '/others',
+            '/others/board',
+            '/about'
+
         );
 
         foreach ($core_resources as $c) {

@@ -80,7 +80,7 @@ class zmeny_ucetni {
 
     function check_inserted_vars()
     {
-      if( !(ereg('^([[:digit:]]+)$',$this->typ)) )
+      if( !(preg_match('/^([[:digit:]]+)$/',$this->typ)) )
       {
         $this->fail = true;
         $this->error .= "<div class=\"form-add-fail\" ><H4>Zadaný typ (".$this->typ." ) není ve  správném formátu!!!</H4></div>";
