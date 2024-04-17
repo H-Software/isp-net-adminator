@@ -57,7 +57,7 @@ include("include/charset.php");
  //hidden prvek, kvuli testovani promenych ..
  $send = $_POST["send"];
 
- if( ( !(ereg('^([[:digit:]])+$',$update_id)) and ( $update_id > 0 ) ) )
+ if( ( !(preg_match('/^([[:digit:]])+$/',$update_id)) and ( $update_id > 0 ) ) )
  {
     echo "<div class=\"vlasnici-add-fail-nick\" style=\"padding-top: 10px; color: red; \">
      <H4>ID fakturační skupiny ( ".$id_fs." ) není ve správnem formátu !!!(Povolené: Čísla v desítkové soustavě.)</H4></div>";    

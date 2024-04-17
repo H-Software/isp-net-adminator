@@ -431,7 +431,7 @@ class ArchivZmen {
                 $id_cloveka_res = "";  
                 $akce = $data["akce"];
 
-                if(ereg("odrazeni objektu", $akce) == true){
+                if(preg_match("/odrazeni objektu/", $akce)){
         
                     $pomocne = explode("[id_komplu]", $akce);    
                     $pomocne2 = explode(" ", $pomocne[1] );	    
@@ -450,7 +450,7 @@ class ArchivZmen {
         
                 }
         
-                if( ereg("id_stb",$akce) == true ){
+                if(preg_match("/id_stb/",$akce)){
         
                     $pm = preg_match("/<b>\[id_stb\]<\/b>/",$akce);
             
@@ -477,7 +477,7 @@ class ArchivZmen {
                     
                 }
         
-                if( ereg("prirazeni objektu k vlastnikovi", $akce) == true )
+                if( preg_match("/prirazeni objektu k vlastnikovi/", $akce))
                 {
                     $pomocne = explode(" ", $akce);
                     $id_komplu_pomocne = ereg_replace(",", "", $pomocne[7]);
@@ -508,11 +508,11 @@ class ArchivZmen {
                     $akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);    
             
                 }
-                elseif( ereg("smazani objektu", $akce) == true )
+                elseif( preg_match("/smazani objektu/", $akce))
                 {
                     //nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole	    
                 }
-                elseif( ereg("pridani objektu do \"nove\" garant. tridy", $akce) == true )
+                elseif( preg_match("/pridani objektu do \"nove\" garant. tridy/", $akce) )
                 {
                     //nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole	    
                     
@@ -531,7 +531,7 @@ class ArchivZmen {
                     
                 }
                 */
-                elseif( ereg("\[id_vlastnika\]", $akce) == true )
+                elseif( preg_match("/\[id_vlastnika\]/", $akce))
                 {
                     $pomocne = explode("[id_vlastnika]", $akce);    
                     $pomocne2 = explode(" ", $pomocne[1] );
@@ -554,7 +554,7 @@ class ArchivZmen {
                     $akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);
             
                 }
-                elseif( ereg("\[id_cloveka\]", $akce) == true )
+                elseif( preg_match("/\[id_cloveka\]/", $akce))
                 {
                     $pomocne = explode("[id_cloveka]", $akce);    
                     $pomocne2 = explode(" ", $pomocne[1] );
@@ -577,7 +577,7 @@ class ArchivZmen {
                     $akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);
 
                 }
-                elseif( (ereg("uprava objektu", $akce) == true) )
+                elseif(preg_match("/uprava objektu/", $akce))
                 {
         
                     $pomocne = explode("[id_komplu]", $akce);    
@@ -594,7 +594,7 @@ class ArchivZmen {
                         
                     $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
                 }
-                elseif( ereg("zakazani netu z duvodu sikany", $akce) == true )
+                elseif(preg_match("/zakazani netu z duvodu sikany/", $akce))
                 {
                     $pomocne = explode("[id_komplu]", $akce);    
                     $pomocne2 = explode(" ", $pomocne[1] );	    
@@ -613,7 +613,7 @@ class ArchivZmen {
                         $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
                     }
                 }
-                elseif( ereg("pridani objektu", $akce) == true )
+                elseif(preg_match("/pridani objektu/", $akce))
                 {
                     $pomocne = explode("[id_komplu]", $akce);    
                     $pomocne2 = explode(" ", $pomocne[1] );	    
@@ -635,7 +635,7 @@ class ArchivZmen {
                     }
             
                 }
-                elseif( ereg("uprava nodu", $akce) == true )
+                elseif(preg_match("/uprava nodu/", $akce))
                 {
                     $pomocne = explode("[id_nodu]", $akce);    
                     $pomocne2 = explode(" ", $pomocne[1] );	    
@@ -655,7 +655,7 @@ class ArchivZmen {
                     $akce = ereg_replace(" ".$id_nodu_pomocne." ", " ".$id_nodu_rs." ", $akce);    
                     }
                 }
-                elseif( ereg("automaticke nastaveni sikany", $akce) == true )
+                elseif(preg_match("/automaticke nastaveni sikany/", $akce))
                 {
                     $pomocne = explode("[id_komplu]", $akce);    
                     $pomocne2 = explode(" ", $pomocne[1] );	    
@@ -672,7 +672,7 @@ class ArchivZmen {
                         
                     $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
                 }
-                elseif( ereg("uprava routeru", $akce) == true ){
+                elseif(preg_match("/uprava routeru/", $akce)){
         
                     $pomocne = explode("[id_routeru]", $akce);    
                     $pomocne2 = explode(">", $pomocne[1] );	    
