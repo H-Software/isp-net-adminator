@@ -1354,7 +1354,7 @@ class vlastnik2_a2
     
     //stb
     
-    $stb = new stb();
+    $stb = new App\Core\stb();
     
     $stb->level = $this->level;
     
