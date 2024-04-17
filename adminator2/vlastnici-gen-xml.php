@@ -83,7 +83,7 @@ $root_arr = array();
 
 $root_arr["id"] = "id_klienta_".$id_cloveka;
 $root_arr["ico"] = "26109824";
-$root_arr["application"] = iconv("UTF-8", "Windows-1250", "Simelon-Adminator2");
+$root_arr["application"] = iconv("UTF-8", "Windows-1250", "ISP-Net-Adminator2");
 $root_arr["version"] = "2.0";
 $root_arr["note"] = iconv("UTF-8", "Windows-1250", "Import adresářového záznamu");
 
