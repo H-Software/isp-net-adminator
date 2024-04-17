@@ -49,14 +49,16 @@ RUN apt-get update \
 #         libqt4-sql-tds \
 #         libqt5sql5-tds \
 #         libqxmlrpc-dev \
+# unixodbc-dev  \
 #       && apt-get clean \
 #       && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 #       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
 #       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
-RUN apt-get update \
+RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+        && curl -sSL https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+        && apt-get update \
         && apt-get install -y \
-            msodbcsql17 \
-            unixodbc-dev \
+            msodbcsql18 \
         && docker-php-ext-install   mssql \
         && docker-php-ext-configure mssql \
       && apt-get clean \
