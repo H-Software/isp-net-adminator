@@ -41,36 +41,38 @@ if($mssql_db_ok == 1)
 	{
 		echo "<div style=\"color; red; \">Error: Nejsou potrebne funkce pro MSSQL databazi!</div>\n";
 	
+		if( !($db_mssql_no_exit == 1) )
+		{ exit(); }
+    }
+
+	$mssqlConnectionInfo = array( "Database"=> $mssql_db, "UID"=>$mssql_user, "PWD"=>$mssql_pass);
+	$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
+    // $mssql_spojeni = sqlsrv_connect($mssql_host,$mssql_user,$mssql_pass);
+
+    if(!$mssql_spojeni) {
+		echo " ERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db . ") failed <br>\n";
+		// echo ' MSSQL error: '.sqlsrv_get_last_message()."<br>\n";
+		
 		if( !($db_mssql_no_exit == 1) ){ exit(); }
     }
 
-    $mssql_spojeni = sqlsrv_connect($mssql_host,$mssql_user,$mssql_pass);
-
-    if(!$mssql_spojeni) {
-		echo " ERROR: mssql_connect (host: ".$mssql_host.") failed <br>\n";
-		echo ' MSSQL error: '.sqlsrv_get_last_message()."<br>\n";
+    // if($mssql_spojeni)
+    // {
+	// 	if(mssql_select_db($mssql_db,$mssql_spojeni))
+	// 	{ 
+	// 		//asi vse OK :)
 		
-		// TODO: enable this section after fix MS SQL
-		// if( !($db_mssql_no_exit == 1) ){ exit(); }
-    }
-
-    if($mssql_spojeni)
-    {
-		if(mssql_select_db($mssql_db,$mssql_spojeni))
-		{ 
-			//asi vse OK :)
+	// 		//mssql_query("SET NAMES 'utf-8'");
+	// 		//mssql_query("SET CHARACTER SET utf-8");
+	// 	}
+	// 	else
+	// 	{ 
+	// 		echo "Nejde zmenit databazi na ".$mssql_db."<br>\n";
+	// 		echo "MSSQL error: ". mssql_get_last_message()."<br>\n"; 
+	// 		if( !($db_mssql_no_exit == 1) ){ exit(); }
 		
-			//mssql_query("SET NAMES 'utf-8'");
-			//mssql_query("SET CHARACTER SET utf-8");
-		}
-		else
-		{ 
-			echo "Nejde zmenit databazi na ".$mssql_db."<br>\n";
-			echo "MSSQL error: ". mssql_get_last_message()."<br>\n"; 
-			if( !($db_mssql_no_exit == 1) ){ exit(); }
-		
-		}
-    }
+	// 	}
+    // }
 }
 
 ?>

@@ -14,7 +14,7 @@ else
 
 //$id_vlastnika = intval($_GET["id_vlastnika"]);
 
-//$mssql_db = "StwPh_26109824_".$rok;
+// $mssql_db = "StwPh_26109824_".$rok;
 
 $level_col = "lvl_phd_adresar";
 
