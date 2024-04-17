@@ -1,8 +1,5 @@
  <tr>
-<?php 
-  
-  require_once 'smarty/Smarty.class.php';
-  
+<?php   
    echo "<td style=\"\" width=\"80%\" >"; 
 ?>
 
@@ -93,13 +90,17 @@
 
    $smarty_cat = new Smarty;
    $smarty_cat->compile_check = true;
-   //$smarty->debugging = true;
+    //  $smarty->debugging = true;
+    $smarty_cat->setTemplateDir($cesta . "templates")
+                ->setCompileDir($cesta . "templates_c")
+                ->setCacheDir($cesta . "cache");
+    
+   // var_dump($smarty_cat->getTemplateDir());
    $se_cat_adminator_link = $_SERVER['HTTP_HOST'];
    $se_cat_adminator_link = str_replace("adminator2", "adminator3", $se_cat_adminator_link);
 
    $smarty_cat->assign("se_cat_adminator","adminator3");
    $smarty_cat->assign("se_cat_adminator_link",$se_cat_adminator_link);
-
    $smarty_cat_ext_rendered = $smarty_cat->fetch("inc.intro.category-ext.tpl");
 
    echo $smarty_cat_ext_rendered;

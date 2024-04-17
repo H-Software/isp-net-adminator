@@ -51,10 +51,10 @@ require ($cesta."include/charset.php");
 
  $ps = new partner_servis();
 
- $ps->klient_hledat = mysql_real_escape_string($_POST["klient_hledat"]);
+ $ps->klient_hledat = $conn_mysql->real_escape_string($_POST["klient_hledat"]);
  $ps->klient_id = intval($_POST["klient_id"]);
 
- $ps->fill_form = mysql_real_escape_string($_POST["fill_form"]);
+ $ps->fill_form = $conn_mysql->real_escape_string($_POST["fill_form"]);
 
  if( (strlen($ps->fill_form) > 4 ) ){
 
@@ -63,17 +63,17 @@ require ($cesta."include/charset.php");
  }
  else {
    
-    $ps->jmeno_klienta = mysql_real_escape_string($_POST["jmeno_klienta"]);
-    $ps->bydliste      = mysql_real_escape_string($_POST["bydliste"]);
-    $ps->email 	       = mysql_real_escape_string($_POST["email"]);
-    $ps->tel 	       = mysql_real_escape_string($_POST["tel"]);
+    $ps->jmeno_klienta = $conn_mysql->real_escape_string($_POST["jmeno_klienta"]);
+    $ps->bydliste      = $conn_mysql->real_escape_string($_POST["bydliste"]);
+    $ps->email 	       = $conn_mysql->real_escape_string($_POST["email"]);
+    $ps->tel 	       = $conn_mysql->real_escape_string($_POST["tel"]);
     
  }
  
- $ps->pozn = mysql_real_escape_string($_POST["pozn"]);
+ $ps->pozn = $conn_mysql->real_escape_string($_POST["pozn"]);
  $ps->prio = intval($_POST["prio"]);
  
- $ps->odeslat = mysql_real_escape_string($_POST["odeslat"]);
+ $ps->odeslat = $conn_mysql->real_escape_string($_POST["odeslat"]);
 
  //kontrola promennych
  $ps->check_insert_value();

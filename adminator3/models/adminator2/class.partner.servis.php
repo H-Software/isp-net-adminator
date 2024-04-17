@@ -406,7 +406,7 @@ class partner_servis {
                  <span style=\"border-bottom: 1px solid grey; \" >Akceptování žádostí o připojení</span>
                 </div>";
         }
-        elseif($udpate == true)
+        elseif($update == true)
         {
     	   echo "  <div style=\"padding-left: 40px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
                  <span style=\"border-bottom: 1px solid grey; \" >Změna poznámky</span>

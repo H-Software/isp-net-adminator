@@ -13,6 +13,8 @@ $listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom
 //definice tridy c_Listing
 
 class c_listing_partner {
+
+    var $conn_mysql;
     var $url;
     var $interval;
     var $sql;
@@ -28,7 +30,8 @@ class c_listing_partner {
    // $select="./objekty.php?";
     
     //konstruktor...naplni promenne
-    function c_listing_partner($conUrl = "./partner.php.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+    function __construct($conn_mysql, $conUrl = "./partner.php.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+        $this->conn_mysql = $conn_mysql;
         $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
         // $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
@@ -50,11 +53,11 @@ class c_listing_partner {
     
     //vyber dat z databaze
     function dbSelect(){
-        $listRecord = @mysql_query($this->sql);
+        $listRecord = $this->conn_mysql->query($this->sql);
         if (!$listRecord){
             $this->error(2);
         }
-        $allRecords = @mysql_num_rows($listRecord);
+        $allRecords = $listRecord->num_rows;
         if (!$allRecords){
             $this->error(3);
         }
@@ -155,5 +158,3 @@ class c_listing_partner {
         }
     }
 }
-
-?>
