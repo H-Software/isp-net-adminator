@@ -36,6 +36,7 @@ RUN apt-get update \
 # PHP MSSQL stuff
 # https://github.com/petersonwsantos/docker-php5.6-mssql/blob/master/Dockerfile
 # https://github.com/Namoshek/docker-php-mssql/blob/master/8.1/fpm/Dockerfile
+# https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017&tabs=debian18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline
 # RUN apt-get update && apt-get install -y --no-install-recommends \
 #         libcurl4-openssl-dev \
 #         libedit-dev \
