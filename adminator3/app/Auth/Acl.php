@@ -60,7 +60,8 @@ class Acl extends SlimAuthAcl
             '/others/board',
             '/about',
             '/about/changes-old',
-            '/about/changes'
+            '/about/changes',
+            '/topology'
         );
 
         foreach ($core_resources as $c) {

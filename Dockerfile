@@ -34,7 +34,6 @@ RUN apt-get update \
     # && docker-php-ext-install intl 
 
 # PHP MSSQL stuff
-# https://github.com/petersonwsantos/docker-php5.6-mssql/blob/master/Dockerfile
 # https://github.com/Namoshek/docker-php-mssql/blob/master/8.1/fpm/Dockerfile
 # https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017&tabs=debian18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline
 # RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -51,7 +50,7 @@ RUN apt-get update \
 #         libqt4-sql-tds \
 #         libqt5sql5-tds \
 #         libqxmlrpc-dev \
-# unixodbc-dev  \
+#   \
 #       && apt-get clean \
 #       && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 #       && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
@@ -61,6 +60,7 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         && apt-get update \
         && apt-get install -y \
             msodbcsql18 \
+            unixodbc-dev \
         && docker-php-ext-install   mssql \
         && docker-php-ext-configure mssql \
       && apt-get clean \
