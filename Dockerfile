@@ -29,6 +29,7 @@ RUN apt-get update \
             zip \
             pdo \
             pdo_mysql \
+            ldap \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
     # && pecl install apcu \
