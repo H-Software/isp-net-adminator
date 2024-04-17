@@ -972,6 +972,8 @@ class vlastnik2_a2
 {
    var $conn_mysql;
 
+   var $logger;
+   
    var $level;
        
    var $export_povolen;
@@ -1354,7 +1356,7 @@ class vlastnik2_a2
     
     //stb
     
-    $stb = new App\Core\stb();
+    $stb = new App\Core\stb($this->conn_mysql, $this->logger);
     
     $stb->level = $this->level;
     
