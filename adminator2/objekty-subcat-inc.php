@@ -1,10 +1,10 @@
 <?
 
-if ( ereg("objekty.php",$_SERVER["REQUEST_URI"]) 
-    or ereg("objekty-add.php",$_SERVER["REQUEST_URI"])
-    or ereg("objekty-lite.php",$_SERVER["REQUEST_URI"])
-    )
-   { echo '<span style="background-color: #a2bfc0; " >'; $back = true; }
+// if ( ereg("objekty.php",$_SERVER["REQUEST_URI"]) 
+//     or ereg("objekty-add.php",$_SERVER["REQUEST_URI"])
+//     or ereg("objekty-lite.php",$_SERVER["REQUEST_URI"])
+//     )
+//    { echo '<span style="background-color: #a2bfc0; " >'; $back = true; }
    	  
 echo '<span style="padding-left: 10px; font-family: georgia; font-style: italic; 
     font-weight: bold; font-size: 16px; " >Internet  ::</span>
@@ -17,11 +17,11 @@ echo '<span style="padding-left: 10px; font-family: georgia; font-style: italic;
 
 if( $back == true ){ echo "</span>"; }
 
-if ( ereg("objekty-stb.php",$_SERVER["REQUEST_URI"]) 
-    or ereg("objekty-stb-add.php",$_SERVER["REQUEST_URI"])
-//    or ereg("objekty-lite.php",$_SERVER["REQUEST_URI"])
-    )
-   { echo '<span style="background-color: #a2bfc0; " >'; $back2 = true; }
+// if ( ereg("objekty-stb.php",$_SERVER["REQUEST_URI"]) 
+//     or ereg("objekty-stb-add.php",$_SERVER["REQUEST_URI"])
+// //    or ereg("objekty-lite.php",$_SERVER["REQUEST_URI"])
+//     )
+//    { echo '<span style="background-color: #a2bfc0; " >'; $back2 = true; }
 
  echo "<span style=\"padding-left: 10px; font-family: georgia; font-style: italic; 
     font-weight: bold; font-size: 16px; \" >IPTV ::</span>";
