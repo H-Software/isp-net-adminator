@@ -61,10 +61,10 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         && apt-get install -y \
             msodbcsql18 \
             unixodbc-dev \
-        && docker-php-ext-install   mssql \
-        && docker-php-ext-configure mssql \
-      && apt-get clean \
-      && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+        && pecl install sqlsrv \
+        && pecl install pdo_sqlsrv \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # apache conf
 RUN a2enmod ssl \
