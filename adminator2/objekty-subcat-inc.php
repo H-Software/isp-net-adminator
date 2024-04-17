@@ -13,7 +13,7 @@ echo '<span style="padding-left: 10px; font-family: georgia; font-style: italic;
 
 <span style="padding-left: 5px; ">( <a href="objekty-add.php">přidání</a></span>
 ,
-<span style="padding-left: 5px; padding-right: 10px; "><a href="objekty-lite.php">omezený režim</a> )</span>';
+<span style="padding-left: 5px; padding-right: 10px; ">omezený režim)</span>';
 
 if( $back == true ){ echo "</span>"; }
 
@@ -36,5 +36,5 @@ if( $back == true ){ echo "</span>"; }
 <span style="padding-left: 10px; font-family: georgia; font-style: italic; 
     font-weight: bold; font-size: 16px; " >VoIP ::</span>
 
-<span style="padding-left: 5px;" ><a href="">čísla</a></span>
+<span style="padding-left: 5px;" >čísla</span>
 
