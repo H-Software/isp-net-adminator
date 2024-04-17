@@ -90,18 +90,13 @@
 
    $smarty_cat = new Smarty;
    $smarty_cat->compile_check = true;
-   //$smarty->debugging = true;
+   $smarty->debugging = true;
    $se_cat_adminator_link = $_SERVER['HTTP_HOST'];
    $se_cat_adminator_link = str_replace("adminator2", "adminator3", $se_cat_adminator_link);
 
    $smarty_cat->assign("se_cat_adminator","adminator3");
    $smarty_cat->assign("se_cat_adminator_link",$se_cat_adminator_link);
-   $smarty_cat_ext_rendered = $smarty_cat->fetch($cesta . "inc.intro.category-ext.tpl");
-
-  //  try {
-  //  }
-  //  catch (Exception $e) {
-  //  }
+   $smarty_cat_ext_rendered = $smarty_cat->fetch("inc.intro.category-ext.tpl");
 
    echo $smarty_cat_ext_rendered;
 ?>
