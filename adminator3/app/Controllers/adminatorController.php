@@ -59,7 +59,16 @@ class adminatorController extends Controller {
         
         exit;
     }
-    public function checkLevel($page_level_id = 0){
+    public function checkLevel($page_level_id = 0, $adminator = null){
+
+        if(is_object($adminator))
+        {
+            $a = $adminator;
+        }
+        else
+        {
+            $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        }
 
         $auth_identity = $this->container->auth->getIdentity();
         // $this->logger->addInfo("adminatorController\\check_level getIdentity: ".var_export( $auth_identity['username'], true));
@@ -69,7 +78,6 @@ class adminatorController extends Controller {
             return false;
         }
 
-        $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         $a->page_level_id = $page_level_id;
         $a->userIdentityUsername = $auth_identity['username'];
 
@@ -77,10 +85,10 @@ class adminatorController extends Controller {
         
         $this->logger->addInfo("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
-        // if($checkLevel === false){
-        //     $this->renderNoLogin();
-        //     return false;
-        // }
+        if($checkLevel === false){
+            $this->renderNoLogin();
+            return false;
+        }
     }
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false){
@@ -107,15 +115,22 @@ class adminatorController extends Controller {
             return $ret;
     }
 
-    function header(ServerRequestInterface $request = null, ResponseInterface $response = null)
+    function header(ServerRequestInterface $request = null, ResponseInterface $response = null, $adminator = null)
     {
 
-        $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        if(is_object($adminator))
+        {
+            $a = $adminator;
+        }
+        else
+        {
+            $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        }
 
         $this->logger->addDebug("adminatorController\\header called");
-        $this->logger->addDebug("adminatorController\\header: logged user info: " . \App\Auth\Auth::getUserEmail() . " (" . $this->auth->user_level . ")");
+        $this->logger->addDebug("adminatorController\\header: logged user info: " . $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
 
-        $this->smarty->assign("nick_a_level", \App\Auth\Auth::getUserEmail() . " (" . $this->auth->user_level . ")");
+        $this->smarty->assign("nick_a_level", $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
         $this->smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
 
         //kategorie
@@ -156,29 +171,29 @@ class adminatorController extends Controller {
         $this->smarty->assign("se_cat_adminator","adminator2");
         $this->smarty->assign("se_cat_adminator_link",$se_cat_adminator_link);
 
-        $prihl_uziv = $a->vypis_prihlasene_uziv();
+        // $prihl_uziv = $a->vypis_prihlasene_uziv();
 
-        if( $prihl_uziv[100] == true ){
-            $this->smarty->assign("pocet_prihl_uziv",0);
-        }
-        else{
-            $this->smarty->assign("pocet_prihl_uziv",$prihl_uziv[0]);
+        // if( $prihl_uziv[100] == true ){
+        //     $this->smarty->assign("pocet_prihl_uziv",0);
+        // }
+        // else{
+        //     $this->smarty->assign("pocet_prihl_uziv",$prihl_uziv[0]);
 
-            $this->smarty->assign("prvni_jmeno",$prihl_uziv[1]);
-            $this->smarty->assign("prvni_level",$prihl_uziv[2]);
-        }
+        //     $this->smarty->assign("prvni_jmeno",$prihl_uziv[1]);
+        //     $this->smarty->assign("prvni_level",$prihl_uziv[2]);
+        // }
 
         //button na vypis vsech prihl. uziv.
-        $this->smarty->assign("windowtext2",$prihl_uziv[3]);
+        // $this->smarty->assign("windowtext2",$prihl_uziv[3]);
 
-        // velikost okna
-        $this->smarty->assign("windowdelka2","170");
-        $this->smarty->assign("windowpadding2","40");
+        // // velikost okna
+        // $this->smarty->assign("windowdelka2","170");
+        // $this->smarty->assign("windowpadding2","40");
             
-        // pozice okna
-        $this->smarty->assign("windowtop2","150px");
-        $this->smarty->assign("windowleft2","50%");
+        // // pozice okna
+        // $this->smarty->assign("windowtop2","150px");
+        // $this->smarty->assign("windowleft2","50%");
 
-        $this->smarty->assign("subcat_select",0);
+        // $this->smarty->assign("subcat_select",0);
     }
 }

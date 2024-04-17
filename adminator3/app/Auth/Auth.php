@@ -11,40 +11,41 @@ use App\Models\PageLevel;
  * @author    Haven Shen <havenshen@gmail.com>
  * @copyright    Copyright (c) Haven Shen
  */
-class Auth
-{
-	var $page_level_id;
 
-	public function user()
-	{
-		return User::find(isset($_SESSION['user']) ? $_SESSION['user'] : 0);
-	}
+// class Auth
+// {
+// 	var $page_level_id;
 
-	public function check()
-	{
-		return isset($_SESSION['user']);
-	}
+// 	public function user()
+// 	{
+// 		return User::find(isset($_SESSION['user']) ? $_SESSION['user'] : 0);
+// 	}
 
-	public function attempt($email, $password)
-	{
-		$user = User::where('email', $email)->first();
+// 	public function check()
+// 	{
+// 		return isset($_SESSION['user']);
+// 	}
 
-		if (! $user) {
-			return false;
-		}
+// 	public function attempt($email, $password)
+// 	{
+// 		$user = User::where('email', $email)->first();
 
-		if (password_verify($password, $user->password)) {
-			$_SESSION['user'] = $user->id;
-			return true;
-		}
+// 		if (! $user) {
+// 			return false;
+// 		}
 
-		return false;
-	}
+// 		if (password_verify($password, $user->password)) {
+// 			$_SESSION['user'] = $user->id;
+// 			return true;
+// 		}
 
-	public function logout()
-	{
-		unset($_SESSION['user']);
-	}
+// 		return false;
+// 	}
+
+// 	public function logout()
+// 	{
+// 		unset($_SESSION['user']);
+// 	}
 
 
-}
+// }

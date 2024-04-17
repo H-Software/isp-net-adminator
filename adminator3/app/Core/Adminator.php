@@ -14,7 +14,7 @@ class adminator {
 
     var $page_level_id;
 
-    var $user_level_id;
+    var $userIdentityLevel;
 
     public function __construct($conn_mysql, $smarty, $logger)
     {
@@ -25,11 +25,28 @@ class adminator {
         $this->logger->addInfo("adminator\__construct called");
     }
 
-	public function getUserLevel()
+    // public function getUserEmail()
+    // {
+    //     $rs = User::find(isset($_SESSION['user']) ? $_SESSION['user'] : 0, ['email']);
+    //     $a = $rs->toArray();
+	// 	return $a['email'];
+    // }
+
+    public function getUserLevel()
 	{
-		$rs = User::find(isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0, ['level']);
-		$a = $rs->toArray();
-		return $a['level'];
+		$rs = User::where(
+                            "username",
+                            isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
+                        )->first(['level']);
+        if(is_object($rs))
+        {
+            // $this->logger->addInfo("adminator\getUserLevel dump db: " . var_export($rs, true));
+            $a = $rs->toArray();
+            return $a['level'];
+        }
+        else{
+            return false;
+        }
 	}
 
 	function checkLevel($page_level_id_custom = 0, $display_no_level_page = true)
@@ -43,13 +60,13 @@ class adminator {
         // porovnat level uzivatele s prislusnym levelem
         // stranky podle jejiho id
 
-        $user_level = $this->getUserLevel();
+        $this->userIdentityLevel = $this->getUserLevel();
 
         $this->logger->addInfo("adminator\check_level: called with
                                     [page_level_id_custom => " . $page_level_id_custom
                                     . ", page_level_id => " . $this->page_level_id
-                                    . ", user_level => " . $this->user_level_id
                                     . ", user_name => " . $this->userIdentityUsername
+                                    . ", user_level => " . $this->userIdentityLevel
                                     . "]");
 
         if(intval($page_level_id_custom) > 0){
@@ -63,15 +80,15 @@ class adminator {
         if($page_level_rs === false or !is_int($page_level_rs)){
             $rs = false;
         }
-        elseif($user_level >= $page_level_rs){
+        elseif($this->userIdentityLevel >= $page_level_rs){
             $rs = true; 
         }
         else{
             $rs = false;
         }
 
-        $this->logger->addInfo("Auth\check_level: find_page_level: pl: " . $pl . ", retval: " . var_export($page_level_rs, true));
-        $this->logger->addInfo("Auth\check_level: result: " . var_export($rs, true));
+        $this->logger->addInfo("adminator\check_level: find_page_level: pl_id: " . $pl . ", level: " . var_export($page_level_rs, true));
+        $this->logger->addInfo("adminator\check_level: result: " . var_export($rs, true));
 
         if( $rs === false) {
             // user nema potrebny level
@@ -94,7 +111,7 @@ class adminator {
             $page_level = $a['level'];
         }
 
-        $logger->addInfo("auth\\find_page_level: find result: " . var_export($page_level, true));
+        $this->logger->addInfo("adminator\\find_page_level: find result: " . var_export($page_level, true));
 
         if($page_level > 0){
             return $page_level;
@@ -209,7 +226,7 @@ class adminator {
         $ret[0] = $MSQ_USER_COUNT;
 
         //prvne vypisem prihlaseneho
-        $MSQ_USER_NICK = $this->conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '" . \App\Auth\Auth::getUserEmail() . "' ");
+        $MSQ_USER_NICK = $this->conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '" . $this->userIdentityUsername . "' ");
 
         if ($MSQ_USER_NICK->num_rows <> 1)
         {
@@ -226,19 +243,19 @@ class adminator {
         } // konec else
 
         // ted najilejeme prihlaseny lidi ( vsecky ) do pop-up okna
-        if ( $MSQ_USER_COUNT < 1 )
-        { $obsah_pop_okna .= "Nikdo nepřihlášen. (divny)"; }
-        else
-        {
+        // if ( $MSQ_USER_COUNT < 1 )
+        // { $obsah_pop_okna .= "Nikdo nepřihlášen. (divny)"; }
+        // else
+        // {
 
-            while ($data_user2 = $MSQ_USER2->fetch_array())
-            {
-                $obsah_pop_okna .= "jméno: ".$data_user2["nick"].", level: ".$data_user2["level"].", ";
-            } //konec while
+        //     while ($data_user2 = $MSQ_USER2->fetch_array())
+        //     {
+        //         $obsah_pop_okna .= "jméno: ".$data_user2["nick"].", level: ".$data_user2["level"].", ";
+        //     } //konec while
 
-            $ret[3] = $obsah_pop_okna;
+        //     $ret[3] = $obsah_pop_okna;
 
-        } // konec if
+        // } // konec if
 
         return $ret;
     }

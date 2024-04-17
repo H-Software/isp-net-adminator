@@ -53,6 +53,11 @@ class User {
 	 * are intended to be taken from LDAP search by username
 	 */
 	
+	 /**
+	 * @ORM\Column(type="integer", length=1, nullable=false, options={"default" : 0})
+	 * @var integer
+	 */
+	protected $level;
 	
 	public function __construct() {
 		$this->userRoles = new ArrayCollection();

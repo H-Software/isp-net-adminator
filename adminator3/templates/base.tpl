@@ -66,11 +66,11 @@
             <div class="cat-cara-oddelovaci" ></div>
           {/if}
 
-          {if $subcat_select eq "1"}   
+          {* {if $subcat_select eq "1"}   
           <div class="subcat-main" >
               {$subkategorie}
           </div>
-          {/if}
+          {/if} *}
           
           <div class="obsah-main" >
           {* zde ZACATEK vlastniho obsahu ... *}

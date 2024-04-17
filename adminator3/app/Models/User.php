@@ -26,6 +26,7 @@ class User extends Model
 		// 'password',
 		'username',
 		'passwordHash',
+		'level'
 	];
 
 	// public function setPassword($password)

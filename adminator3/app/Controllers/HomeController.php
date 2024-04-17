@@ -11,6 +11,7 @@ class HomeController extends adminatorController {
     var $smarty;
     var $logger;
 
+    var $adminator;
 
     public function __construct(ContainerInterface $container, $conn_mysql, $smarty)
     {
@@ -20,15 +21,17 @@ class HomeController extends adminatorController {
 
         $this->logger = $this->container->logger;
         $this->logger->addInfo("homeController\__construct called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+
+
 	}
     
     public function home(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {            
         $this->logger->addInfo("homeController\home called");
 
-        $this->checkLevel(38);
-        
-        $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        $this->checkLevel(38, $this->adminator);
 
         if ($request->isPost()) {
             $data = $request->getParsedBody();
@@ -37,28 +40,26 @@ class HomeController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
-        // $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         //vlozeni prihlasovaci historie
-        // list_logged_users_history($this->conn_mysql, $this->smarty);
+        list_logged_users_history($this->conn_mysql, $this->smarty);
         
-        // //informace z modulu neuhrazené faktury
-        // //
-        // $neuhr_faktury_pole = $a->show_stats_faktury_neuhr();
-        // $this->logger->addInfo("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
+        //informace z modulu neuhrazené faktury
+        //
+        $neuhr_faktury_pole = $this->adminator->show_stats_faktury_neuhr();
+        $this->logger->addInfo("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
 
-        // $this->smarty->assign("d",$neuhr_faktury_pole[0]);
+        $this->smarty->assign("d",$neuhr_faktury_pole[0]);
 
-        // $this->smarty->assign("count_total", $neuhr_faktury_pole[0]);
-        // $this->smarty->assign("count_ignored", $neuhr_faktury_pole[1]);
-        // $this->smarty->assign("count_unknown", $neuhr_faktury_pole[2]);
-        // $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
+        $this->smarty->assign("count_total", $neuhr_faktury_pole[0]);
+        $this->smarty->assign("count_ignored", $neuhr_faktury_pole[1]);
+        $this->smarty->assign("count_unknown", $neuhr_faktury_pole[2]);
+        $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
 
-        //tady opravy az se dodelaj
+        $this->opravy_a_zavady();
 
-        // $this->opravy_a_zavady();
-
-        // $this->board();
+        $this->board();
 
         $this->logger->addInfo("homeController\home: end of rendering");
         $this->smarty->display('home.tpl');
@@ -69,7 +70,7 @@ class HomeController extends adminatorController {
     function board(){
         //generovani zprav z nastenky
 
-        if ($this->container->auth->checkLevel($this->container->logger, 87, false) === true) {
+        if ($this->adminator->checkLevel(87, false) === true) {
             $this->logger->addInfo("homeController\board allowed");
 
             $this->smarty->assign("nastenka_povoleno",1);
@@ -97,7 +98,7 @@ class HomeController extends adminatorController {
         //opravy a zavady vypis
         $pocet_bunek = 11;
 
-        if ($this->container->auth->checkLevel($this->container->logger, 101, false) === true) {
+        if ($this->adminator->checkLevel(101, false) === true) {
             $this->logger->addInfo("homeController\opravy_a_zavady allowed");
 
             $v_reseni_filtr = $_GET["v_reseni_filtr"];
