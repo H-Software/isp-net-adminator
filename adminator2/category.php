@@ -96,7 +96,7 @@
 
    $smarty_cat->assign("se_cat_adminator","adminator3");
    $smarty_cat->assign("se_cat_adminator_link",$se_cat_adminator_link);
-   $smarty_cat_ext_rendered = $smarty_cat->fetch($cesta . "/inc.intro.category-ext.tpl");
+   $smarty_cat_ext_rendered = $smarty_cat->fetch($cesta . "inc.intro.category-ext.tpl");
 
   //  try {
   //  }
