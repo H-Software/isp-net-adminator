@@ -1,0 +1,6 @@
+{
+    "require": {
+        "nette/robot-loader": "^3.4",
+        "smarty/smarty": "^3.1"
+    }
+}

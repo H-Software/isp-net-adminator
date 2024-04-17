@@ -101,7 +101,7 @@ COPY adminator2/ /var/www/html/adminator2/
 COPY adminator3/ /var/www/html/adminator3/
 
 # shared stuff
-COPY libs/smarty/ /var/www/html/adminator2/smarty/
+# COPY libs/smarty/ /var/www/html/adminator2/smarty/
 # COPY libs/smarty/ /var/www/html/adminator3/smarty/
 COPY adminator3/models/adminator2 /var/www/html/adminator2/include
 
@@ -110,6 +110,9 @@ COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator
 
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
 
+
+RUN cd adminator2 \
+     && composer install
 
 # RUN cd adminator3 \
 #      && composer update
