@@ -19,6 +19,7 @@ RUN apt-get update \
         unzip \
         zlib1g-dev \
         git \
+        libldap2-dev \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
