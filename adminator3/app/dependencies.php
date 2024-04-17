@@ -1,6 +1,6 @@
 <?php
 
-use Respect\Validation\Validator as v;
+// use Respect\Validation\Validator as v;
 
 use marcelbonnet\Slim\Auth\ServiceProvider\SlimAuthProvider;
 use Zend\Authentication\Storage\Session as SessionStorage;
@@ -10,8 +10,6 @@ use marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter;
 
 use Zend\Session\Config\SessionConfig;
 use Zend\Session\SessionManager;
-
-require __DIR__ ."/bootstrap-doctrine.php";
 
 $container = $app->getContainer();
 
@@ -52,11 +50,6 @@ $container['view'] = function ($container) {
 		$container->router,
 		$container->request->getUri()
 	));
-
-	// $view->getEnvironment()->addGlobal('auth', [
-	// 	'check' => $container->auth->check(),
-	// 	'user' => $container->auth->user()
-	// ]);
 
 	$view->getEnvironment()->addGlobal('flash', $container->flash);
 
@@ -101,10 +94,6 @@ $app->add(
             )
         );
 
-$container['AuthController'] = function($container) {
-	return new \App\Controllers\Auth\AuthController($container);
-};
-
 // $container['PasswordController'] = function($container) {
 // 	return new \App\Controllers\Auth\PasswordController($container);
 // };
@@ -120,6 +109,10 @@ $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 $app->add($container->csrf);
 
 // v::with('App\\Validation\\Rules\\');
+
+$container['AuthController'] = function($container) {
+	return new \App\Controllers\Auth\AuthController($container);
+};
 
 $container['HomeController'] = function($container) {
     global $conn_mysql, $smarty;

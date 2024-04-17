@@ -26,57 +26,9 @@ $app->group('/auth', function() use ($app) {
 		->write('You are not authorized to this resource.');
 	})->setName("notAuthorized");
 
-    $app->map(['GET','POST'], '/signin', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) use ($app) {
-        $username = null;
-        // global $app;
-        /*
-         * require: slim/flash
-         * don't know if slim/flash is not stable or I'm a fool
-         */
-    //     $app->getContainer()["flash"]->addMessage('error', 'testando novo');
-    //     var_dump( $app->getContainer()["flash"]->storage["slimFlash"]["error"] );
-    //     var_dump( $app->getContainer()["flash"]->getMessages()["error"] );
-        $message = array_key_exists("message", $args) ? $args["message"] : null;
-        if ($request->isPost()) {
-            $username = $request->getParsedBody()['slimUsername'];
-            $password = $request->getParsedBody()['slimPassword'];
-            $result = $app->getContainer()["authenticator"]->authenticate($username, $password);
-    
-            if ($result->isValid()) {
-                $url = $this->router->pathFor('home');
-                return $response->withStatus(302)->withHeader('Location', $url);
-            } else {
-                $messages = $result->getMessages();
-                $message = $messages[0]; //message to presentation layer
-                $app->getContainer()["flash"]->addMessage('error', $messages[0]);
-                $logger = $app->getContainer()["logger"];
-                foreach ($messages as $i => $msg) {
-                        $messages[$i] = str_replace("\n", "\n  ", $msg);
-                }
-                $logger->addWarning("Authentication failure for $username .", $messages);
-                $logger->addWarning("Authentication failure error: ".var_export($messages[0], true));
-    
-            }
-        }
-        return $app->getContainer()->view->render($response, 'auth\signin.twig', array('username' => @$username, "message" => $message));
-    })->setName('login');
+    $app->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('login');
 
-    $app->get('/signout', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) use ($app) {
-        $logger = $app->getContainer()["logger"];
-        $logger->addInfo("route /logout called");
-        $logger->addInfo("route /logout: dump auth->hasIdentity: ".var_export($app->getContainer()["auth"]->hasIdentity(), true));
-        $logger->addInfo("route /logout: before: dump auth->getStorage()->isEmpty(): ".var_export($app->getContainer()["auth"]->getStorage()->isEmpty(), true));
-    
-        if ($app->getContainer()["auth"]->hasIdentity()) {
-            $app->getContainer()["auth"]->clearIdentity();
-        }
-    
-        $logger->addInfo("route /logout: dump auth->getStorage()->isEmpty(): ".var_export($app->getContainer()["auth"]->getStorage()->isEmpty(), true));
-    
-        //redirect:
-        $url = $this->router->pathFor('home');
-        return $response->withStatus(302)->withHeader('Location', $url);
-    })->setName('logout');
+    $app->get('/signout', AuthController::class . ':signout')->setName('logout');
 });
 
 

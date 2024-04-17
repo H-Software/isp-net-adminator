@@ -24,9 +24,9 @@ $loader->register();
 // print_r($res);
 
 // logger init
-$logger = new \Monolog\Logger('my_logger');
-$file_handler = new \Monolog\Handler\StreamHandler(__DIR__ . '/../../a3-logs/app.log');
-$logger->pushHandler($file_handler);
+// $logger = new \Monolog\Logger('my_logger');
+// $file_handler = new \Monolog\Handler\StreamHandler(__DIR__ . '/../../a3-logs/app.log');
+// $logger->pushHandler($file_handler);
 
 // DB init
 
@@ -34,11 +34,11 @@ init_mysql("Adminator3");
 
 init_postgres("Adminator3");
 
-// Slim
+// Slim Config
 $slim_config['displayErrorDetails'] = true;
 $slim_config['addContentLengthHeader'] = false;
 
-
+// ORM init
 $capsule = new Illuminate\Database\Capsule\Manager;
 
 $capsule->addConnection([
