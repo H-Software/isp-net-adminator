@@ -93,18 +93,10 @@ RUN cd adminator3 \
         doctrine/orm:^2.11.0 \
         doctrine/annotations:^1.13.0 \
         symfony/cache:^4.4 \
-        zendframework/zend-ldap:^2.10 \
         marcelbonnet/slim-auth:^2.0 \
     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
     && composer require \
         illuminate/database:^5.8
-
-        # doctrine/dbal:^3.2 \
-        # symfony/yaml:^5.4 \
-# jeremykendall/password-validator:3.* \
-# zendframework/zend-authentication:2.* \
-# zendframework/zend-permissions-acl:2.* \
-# zendframework/zend-session:2.* \
 
 #     # && docker-php-ext-enable xdebug \
 
