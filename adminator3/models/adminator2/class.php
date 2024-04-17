@@ -2703,7 +2703,7 @@ class vlastnikfind
 
     echo "</span></td>";
     
-    $orezano = explore(':', $data["pridano"]);
+    $orezano = explode(':', $data["pridano"]);
     $pridano=$orezano[0].":".$orezano[1];
 
     echo "<td colspan=\"2\" width=\"250px\" >datum přidání: ".$pridano." </td>";
