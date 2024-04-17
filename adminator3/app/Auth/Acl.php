@@ -44,7 +44,9 @@ class Acl extends SlimAuthAcl
         $app_resources = array(
             '/home',
             '/vlastnici/cat',
-            '/vlastnici2'
+            '/vlastnici2',
+            '/objekty/cat',
+            '/objekty/stb'
         );
 
         foreach ($core_resources as $c) {
