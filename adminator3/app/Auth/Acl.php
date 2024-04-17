@@ -52,7 +52,9 @@ class Acl extends SlimAuthAcl
             '/platby/fn',
             '/platby/fn-kontrola-omezeni',
             '/archiv-zmen',
-            '/archiv-zmen/cat'
+            '/archiv-zmen/cat',
+            '/archiv-zmen/work',
+            '/archiv-zmen/ucetni'
         );
 
         foreach ($core_resources as $c) {

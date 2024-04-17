@@ -17,10 +17,10 @@ class zmeny_ucetni {
     
     var $loggedUserEmail = "";
 
-    function __construct($conn_mysql, $logger) {
+    function __construct($conn_mysql, $logger, $auth) {
       $this->conn_mysql = $conn_mysql;
       $this->logger = $logger;
-      $this->loggedUserEmail = \App\Auth\Auth::getUserEmail();
+      $this->loggedUserEmail = $auth->getIdentity();
     }
 
     function load_sql_result() {

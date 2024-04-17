@@ -465,7 +465,7 @@ class ArchivZmen {
                     $pom2 = explode(" ", $pom[1]);
                     
                     //$id_stb = $pom2[1];
-                    $id_stb = ereg_replace(",", "", $pom2["1"]);
+                    $id_stb = preg_replace("/,/", "", $pom2["1"]);
                     $id_stb = trim($id_stb);
             
                     // if( !($id_stb > 0) )
@@ -473,14 +473,14 @@ class ArchivZmen {
                     
                     $id_stb_pom_rs = "<a class=\"fs-6\" href=\"/objekty/stb?id_stb=".$id_stb."\" >".$id_stb."</a>";
                     
-                    $akce = ereg_replace(" ".$id_stb," ".$id_stb_pom_rs, $akce);    
+                    $akce = preg_replace("/ ".$id_stb."/"," ".$id_stb_pom_rs, $akce);    
                     
                 }
         
                 if( preg_match("/prirazeni objektu k vlastnikovi/", $akce))
                 {
                     $pomocne = explode(" ", $akce);
-                    $id_komplu_pomocne = ereg_replace(",", "", $pomocne[7]);
+                    $id_komplu_pomocne = preg_replace("/,/", "", $pomocne[7]);
                     
                     $id_cloveka_pomocne = $pomocne[9];
                     
@@ -742,7 +742,7 @@ class ArchivZmen {
     
         $output .= "</div>"; //konec hlavni divu
         
-        $pocet_check=ereg('^([[:digit:]]+)$',$pocet);
+        $pocet_check=preg_match('/^([[:digit:]]+)$/',$pocet);
         
         $zaklad_sql = "select *,DATE_FORMAT(provedeno_kdy, '%d.%m.%Y %H:%i:%s') as provedeno_kdy2 from archiv_zmen_work ";
         

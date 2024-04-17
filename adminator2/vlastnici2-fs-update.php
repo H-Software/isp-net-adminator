@@ -70,14 +70,14 @@ include("include/charset.php");
  { 
   //rezim upravy - nacitani predchozich hodnot
   
-  $dotaz_upd = mysql_query("SELECT * FROM fakturacni_skupiny WHERE id = '$update_id' ");
-  $radku_upd = mysql_num_rows($dotaz_upd);
+  $dotaz_upd = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$update_id' ");
+  $radku_upd = $dotaz_upd->num_rows;
  
   if( $radku_upd == 0 )
   { echo "<div style=\"color: red; \" >Chyba! Požadovaná data nelze načíst! </div>"; }
   else
   {
-    while( $data=mysql_fetch_array($dotaz_upd) ):
+    while( $data=$dotaz_upd->fetch_array() ):
     
      $id = $data["id"];	
      $nazev = $data["nazev"];
