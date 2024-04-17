@@ -247,7 +247,7 @@ elseif( $akce == 16 ) // vypis faktur - pohoda SQL
 else
 { $home = "home.php"; }
 
-header("Location: https://".$_SERVER["SERVER_NAME"]."/adminator2/".$stranka);
+//header("Location: https://".$_SERVER["SERVER_NAME"]."/adminator2/".$stranka);
 
 echo "<html>
 	<head>
@@ -258,7 +258,7 @@ include("include/charset.php");
 echo "</head>
     <body>";
 
-echo $_SERVER["SERVER_NAME"]."/".$stranka; 
+echo "<div><a href=\"" . $_SERVER["SERVER_NAME"]."/".$stranka.">" . $_SERVER["SERVER_NAME"]."/".$stranka . "</a></div>"; 
 
 echo "</body></html>";
  

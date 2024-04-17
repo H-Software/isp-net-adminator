@@ -47,9 +47,9 @@ include ("include/charset.php");
 
 $id_vlastnika=$_GET["id_vlastnika"];
 
-$dotaz=mysql_query("SELECT * FROM opravy WHERE ( id_vlastnika = '$id_vlastnika' and id_predchozi_opravy = 0 ) order by id_predchozi_opravy, datum_vlozeni ");
+$dotaz=$conn_mysql->query("SELECT * FROM opravy WHERE ( id_vlastnika = ' " . intval($id_vlastnika) . "' and id_predchozi_opravy = 0 ) order by id_predchozi_opravy, datum_vlozeni ");
 
-$dotaz_radku = mysql_num_rows($dotaz);
+$dotaz_radku = $dotaz->num_rows;
 
 if ( $id_vlastnika < 1)
 { echo "<div style=\"\">Chyba! Nelze vybrat vlastníka! Chyba Vstupních dat. </div>"; }
