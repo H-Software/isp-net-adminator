@@ -90,7 +90,8 @@
 
    $smarty_cat = new Smarty;
    $smarty_cat->compile_check = true;
-   $smarty->debugging = true;
+  //  $smarty->debugging = true;
+   var_dump($smarty->getTemplateDir());
    $se_cat_adminator_link = $_SERVER['HTTP_HOST'];
    $se_cat_adminator_link = str_replace("adminator2", "adminator3", $se_cat_adminator_link);
 
