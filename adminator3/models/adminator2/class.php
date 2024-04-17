@@ -1312,7 +1312,7 @@ class vlastnik2_a2
     if( ( $id_f > 0 ) ){ fakturacni::vypis($id_f,$id_v); }
     
     $objekt = new objekt_a2(); 
-    $objekt->$conn_mysql = $this->conn_mysql;
+    $objekt->conn_mysql = $this->conn_mysql;
 	
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
