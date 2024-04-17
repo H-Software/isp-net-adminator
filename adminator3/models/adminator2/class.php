@@ -1403,7 +1403,7 @@ class vlastnik2_a2
 	    echo "<table border=\"0\" width=\"100%\" >";
 	    echo "<tr>";
 
-	    $orezano = split(':', $data["pridano"]);
+	    $orezano = explode(':', $data["pridano"]);
 	    $pridano=$orezano[0].":".$orezano[1];
 		            
 	    echo "<td colspan=\"1\" width=\"250px\" >";

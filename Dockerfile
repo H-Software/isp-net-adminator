@@ -67,13 +67,27 @@ COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 
 COPY ./configs/php /usr/local/etc/php/conf.d/
 
-# development stuff
+# composer
+#
 RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2.x/composer.phar" \
     && chmod +x /usr/local/bin/composer \
     && mkdir -p /.composer/cache \
     && chmod -R 777 /.composer
 
 RUN mkdir -p /var/www/html/adminator3/
+RUN mkdir -p /var/www/html/adminator2/
+
+COPY adminator2/composer.json /var/www/html/adminator2/
+COPY adminator3/composer.json /var/www/html/adminator3/
+
+RUN cd adminator2 \
+     && composer install
+
+# RUN cd adminator3 \
+#      && composer update
+
+RUN cd adminator3 \
+    && composer install
 
 # RUN cd adminator3 \
 #     && composer require \
@@ -107,13 +121,3 @@ COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/te
 COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator2/templates/inc.home.list-logged-users.tpl
 
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
-
-
-RUN cd adminator2 \
-     && composer install
-
-# RUN cd adminator3 \
-#      && composer update
-
-RUN cd adminator3 \
-    && composer install
