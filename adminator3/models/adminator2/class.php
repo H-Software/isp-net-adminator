@@ -2930,11 +2930,20 @@ class Aglobal
     * @copyright Jakub Vrána, http://php.vrana.cz/
     */
     
-    function check_email($email) {
-		$atom = '[-a-z0-9!#$%&\'*+/=?^_`{|}~]'; // znaky tvořící uživatelské jméno
-		$domain = '[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])'; // jedna komponenta domény
-		return preg_match("/^$atom+(\\.$atom+)*@($domain?\\.)+$domain\$/i", $email);
-    }
+    // function check_email($email) {
+	// 	$atom = '[-a-z0-9!#$%&\'*+/=?^_`{|}~]'; // znaky tvořící uživatelské jméno
+	// 	$domain = '[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])'; // jedna komponenta domény
+	// 	return preg_match("/^$atom+(\\.$atom+)*@($domain?\\.)+$domain\$/i", $email);
+    // }
+
+	/* 
+	*	check email by w3s
+	*
+	*   https://www.w3schools.com/php/php_form_url_email.asp
+	*/
+	function check_email($email) {
+		return filter_var($email, FILTER_VALIDATE_EMAIL);
+	}
 
     function pg_last_inserted_id($con, $table){ 
          
