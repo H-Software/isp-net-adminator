@@ -48,7 +48,8 @@ if($mssql_db_ok == 1)
 	$mssqlConnectionInfo = array( 
 							"Database" => $mssql_db,
 							"UID" => $mssql_user,
-							"PWD" => $mssql_pass
+							"PWD" => $mssql_pass,
+							"Driver"=>"ODBC Driver 18 for SQL Server")
 							);
 
 	try {
