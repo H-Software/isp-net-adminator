@@ -51,7 +51,7 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
 
 # Install APCu and APC backward compatibility
 RUN pecl install apcu \
-        && pecl install apcu_bc-1.0.3 \
+        && pecl install apcu_bc-1.0.5 \
         && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
         && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
