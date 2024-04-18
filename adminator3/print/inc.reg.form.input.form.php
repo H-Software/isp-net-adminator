@@ -6,7 +6,7 @@ echo "<table border=\"0\" width=\"1000px\">
 
     <tr>
         <td colspan=\"5\"><span style=\"font-size: 18px; font-weight: bold; \" >
-	Průvodce tiskem regisračního formuláře:
+	Průvodce tiskem registračního formuláře:
 	</span></td>
 
     </tr>

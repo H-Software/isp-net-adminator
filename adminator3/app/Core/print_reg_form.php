@@ -51,17 +51,16 @@ class print_reg_form
 	
 	
 	define('FPDF_FONTPATH',"include/font/");
-	// require_once("include/fpdf.class.php");
 
 	//zaklad, vytvoreni objektu a pridani stranky
 	try {
-		$pdf = new \fPDF("P","mm","A4");
+		$pdf = new FPDF("P","mm","A4");
 	}
 	catch (Exception $e) {
 		die("cant create class for PDF: ".var_export($e->getMessage(),true));
 	}
 
-	$pdf->Open();
+	// $pdf->Open();
 	$pdf->AddPage();
 
 	// ceskej arial
@@ -79,8 +78,9 @@ class print_reg_form
 	$pdf->SetTitle("Reg. Formulář");
 	
 	// vlozeni obrazku na pozadi
-	$img="img2/print/2012-05-form.jpg";
-	$pdf->Image($img,0,0,210);
+	// TODO: fix missing image
+	// $img="img2/print/2012-05-form.jpg";
+	// $pdf->Image($img,0,0,210);
 
 	$pdf->SetFont('Arial','',10);
 

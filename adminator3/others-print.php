@@ -22,7 +22,6 @@ $logger = $container->logger;
 
 $logger->addInfo("others-print called");
         
-// $this->checkLevel(95);
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
@@ -58,17 +57,17 @@ $smarty->assign("show_se_cat",$show_se_cat);
 
 // $prihl_uziv = $ac->vypis_prihlasene_uziv();
 
-if( $prihl_uziv[100] == true )
-{
-  $smarty->assign("pocet_prihl_uziv",0);
-}
-else
-{
-  $smarty->assign("pocet_prihl_uziv",$prihl_uziv[0]);
+// if( $prihl_uziv[100] == true )
+// {
+//   $smarty->assign("pocet_prihl_uziv",0);
+// }
+// else
+// {
+//   $smarty->assign("pocet_prihl_uziv",$prihl_uziv[0]);
 
-  $smarty->assign("prvni_jmeno",$prihl_uziv[1]);
-  $smarty->assign("prvni_level",$prihl_uziv[2]);
-}
+//   $smarty->assign("prvni_jmeno",$prihl_uziv[1]);
+//   $smarty->assign("prvni_level",$prihl_uziv[2]);
+// }
 
 // //button na vypis vsech prihl. uziv.
 // $smarty->assign("windowtext2",$prihl_uziv[3]);
@@ -93,7 +92,7 @@ function nacti_soubory($find_string)
 
  while (false!==($file = readdir($handle))) 
  { 
-    if ( $file!="." && $file!=".." && !is_dir($file) && ereg($find_string,$file) ) 
+    if ( $file!="." && $file!=".." && !is_dir($file) && preg_match('/'.$find_string."/",$file) ) 
     { 
         $soubor[$i]="$file";
         $i++;
