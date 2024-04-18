@@ -1,8 +1,8 @@
 <?php
 
 $mssql_host = "mssql";
-$mssql_user = "admin";
-$mssql_pass = "pass";
+$mssql_user = "SA";
+$mssql_pass = "Password123";
 
 if(!isset($mssql_db)){
  
