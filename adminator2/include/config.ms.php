@@ -58,12 +58,12 @@ if($mssql_db_ok == 1)
 	}						
 	
     if($mssql_spojeni === false) {
-		echo " ERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db . ") failed <br>\n";
-		// echo ' MSSQL error: '.sqlsrv_get_last_message()."<br>\n";
+		echo " ERROR: mssql_connect (host: ".$mssql_host.", connInfo: " . print_r($mssqlConnectionInfo) . ") failed <br>\n";
 		print_r( sqlsrv_errors(), true);
 
 		// TODO: povolit toto, az bude funkcni MSSQL
 		if( !($db_mssql_no_exit == 1) )
 		{ exit(); }
     }
+
 }
