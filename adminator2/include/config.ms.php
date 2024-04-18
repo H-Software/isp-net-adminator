@@ -1,6 +1,6 @@
 <?php
 
-$mssql_host = "mssql";
+$mssql_host = "192.168.1.213";
 $mssql_user = "SA";
 $mssql_pass = "Password123";
 
@@ -45,7 +45,11 @@ if($mssql_db_ok == 1)
 		{ exit(); }
     }
 
-	$mssqlConnectionInfo = array( "Database"=> "192.168.1.213", "UID"=>$mssql_user, "PWD"=>$mssql_pass);
+	$mssqlConnectionInfo = array( 
+							"Database"=> $mssql_db,
+							"UID"=>$mssql_user,
+							"PWD"=>$mssql_pass
+							);
 	$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
 
     if($mssql_spojeni === false) {
