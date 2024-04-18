@@ -69,7 +69,7 @@ require ($cesta."include/charset.php");
  $dotaz_sql = $basic;
 
  if( isset($user) )
- { $dotaz_sql .= " WHERE ( vlozil = '".mysql_real_escape_string($user_plaint)."' ".$filtr." ) "; }
+ { $dotaz_sql .= " WHERE ( vlozil = '".$conn_mysql->real_escape_string($user_plaint)."' ".$filtr." ) "; }
  else
  { $dotaz_sql .= " WHERE ( id > 0 ".$filtr." ) "; }
 

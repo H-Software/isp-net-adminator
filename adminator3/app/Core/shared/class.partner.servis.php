@@ -403,7 +403,7 @@ class partner_servis {
     
     } //end of function
 
-    function list_show_legend($vyrizeni,$update)
+    function list_show_legend($vyrizeni = false, $update = false)
     {
         if($vyrizeni == true)
         {
