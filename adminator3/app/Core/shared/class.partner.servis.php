@@ -557,9 +557,9 @@ class partner_servis {
             	    while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
             	    { $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
 
-            	    if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"/adminator2/vlastnici-archiv.php"; }
-            	    elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"/adminator2/vlastnici2.php"; }
-            	    else{ $id_cloveka_res .= "<a href=\"/adminator2/vlastnici.php"; }
+            	    if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"/vlastnici-archiv.php"; }
+            	    elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"/vlastnici2.php"; }
+            	    else{ $id_cloveka_res .= "<a href=\"/vlastnici.php"; }
 
         	    $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >V:".$id_cloveka_pomocne."</a>";
 
