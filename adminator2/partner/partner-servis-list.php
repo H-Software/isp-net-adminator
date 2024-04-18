@@ -4,7 +4,7 @@ $cesta = "../";
 
 require ($cesta."include/main.function.shared.php");
 require_once ($cesta."include/config.php"); 
-require_once ($cesta."include/class.partner.servis.php");
+// require_once ($cesta."include/class.partner.servis.php");
 require ($cesta."include/check_login.php");
 require ($cesta."include/check_level.php");
 
