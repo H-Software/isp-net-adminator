@@ -6,7 +6,7 @@ echo "<table border=\"0\" width=\"1000px\">
 
     <tr>
         <td colspan=\"5\"><span style=\"font-size: 18px; font-weight: bold; \" >
-	Průvodce tiskem smlouvy - nový typ:
+	Průvodce tiskem smlouvy:
 	</span></td>
 
     </tr>

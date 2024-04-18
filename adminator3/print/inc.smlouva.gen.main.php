@@ -2,7 +2,7 @@
 
 //zaklad, vytvoreni objektu a pridani stranky
 $pdf=new FPDF("P","mm","A4");
-$pdf->Open();
+// $pdf->Open();
 $pdf->AddPage();
 
 // ceskej arial
@@ -20,8 +20,9 @@ $pdf->SetCreator("Smlouva o poskytování služeb");
 $pdf->SetTitle("Smlouva");
 
 // vlozeni obrazku na pozadi
-$img="../img2/print/2011-10-24-smlouva-a-podpis.jpg";
-$pdf->Image($img,0,0,210);
+// TODO: fix missing background image
+// $img="../img2/print/2011-10-24-smlouva-a-podpis.jpg";
+// $pdf->Image($img,0,0,210);
 
 $pdf->SetFont('Arial','',10);
 
@@ -148,9 +149,9 @@ $pdf->Cell(0,34,'',0,1);
  $datum_nz = date('Y-m-d-H-i-s');
 
  if($id_cloveka > 0 )
- { $nazev_souboru = "temp/smlouva-fiber-pdf-id-".$id_cloveka."-".$datum_nz.".pdf"; }
+ { $nazev_souboru = "print/temp/smlouva-fiber-pdf-id-".$id_cloveka."-".$datum_nz.".pdf"; }
  else
- { $nazev_souboru = "temp/smlouva-fiber-pdf-ec-".$ec."-".$datum_nz.".pdf"; }
+ { $nazev_souboru = "print/temp/smlouva-fiber-pdf-ec-".$ec."-".$datum_nz.".pdf"; }
 
  $rs = $pdf->Output($nazev_souboru,"F");
 

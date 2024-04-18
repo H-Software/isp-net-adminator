@@ -20,9 +20,8 @@ require __DIR__ ."/../app/routing.php";
 
 $logger = $container->logger;
 
-$logger->addInfo("others-print called");
-        
-// $this->checkLevel(95);
+$logger->addInfo("others-smlouva-2012-05 called");
+
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
