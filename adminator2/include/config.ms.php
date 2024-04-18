@@ -52,6 +52,10 @@ if($mssql_db_ok == 1)
 							"Driver"=>"ODBC Driver 18 for SQL Server"
 							);
 
+	$mssqlDSN = "sqlsrv:"
+				. "server=" . $mssql_db . ";"
+				. "Driver=ODBC Driver 18 for SQL Server;";
+
 	try {
 		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
 	} catch(Exception $e) {
@@ -69,7 +73,7 @@ if($mssql_db_ok == 1)
 
 	try {
 		// Establish a connection to the SQL Server using PDO
-		$conn = new PDO("sqlsrv:server=mssql", $mssql_user, $mssql_pass);
+		$conn = new PDO($dsn, $mssql_user, $mssql_pass);
 	
 		// Set PDO attributes to enable error reporting and exceptions
 		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -78,7 +82,7 @@ if($mssql_db_ok == 1)
 		$q = $conn->query('SELECT @@VERSION');
 		
 		// Display the SQL Server version
-		// echo 'MSSQL VERSION: ' . $q->fetchColumn() . '<br>';
+		echo 'MSSQL VERSION: ' . $q->fetchColumn() . '<br>';
 	} catch (Exception $e) {
 		// Error message and terminate the script
 		die(print_r($e->getMessage()));
