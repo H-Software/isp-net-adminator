@@ -6,7 +6,7 @@ require_once ("include/class.php");
 require("include/check_login.php");
 require("include/check_level.php");
 
-require("include/c_listing-vlastnici.php");
+// require("include/c_listing-vlastnici.php");
 
 if( !( check_level($level,13) ) )
 {

@@ -5,7 +5,7 @@ require("include/config.php");
 require("include/check_login.php");
 require("include/check_level.php");
 require("include/class.php"); 
-require("include/c_listing-objekty.php");
+// require("include/c_listing-objekty.php");
 
 if ( !( check_level($level,1) ) )
 {

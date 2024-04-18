@@ -50,7 +50,7 @@ require ($cesta."include/charset.php");
 
   <?php
 
-   require($cesta."include/c_listing-partner.php");
+  //  require($cesta."include/c_listing-partner.php");
 
    require("/var/www/html/virtuals/partner/vypis-inc2.php");
 	   
@@ -87,7 +87,7 @@ require ($cesta."include/charset.php");
   $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
   
   //vytvoreni objektu
-  $listovani = new c_Listing("./partner-vypis.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+  $listovani = new c_listing("./partner-vypis.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 		       
   if (($list == "")||($list == "1")){ $bude_chybet = 0; }
   else{ $bude_chybet = (($list-1) * $listovani->interval); }
