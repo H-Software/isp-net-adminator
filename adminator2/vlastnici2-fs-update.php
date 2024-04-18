@@ -191,16 +191,16 @@ include("include/charset.php");
      //prvne stavajici data docasne ulozime 
      $pole3 .= "<b>akce: uprava fakturacni skupiny; </b><br>";
     	 
-     $vysl4 = mysql_query("SELECT * FROM fakturacni_skupiny WHERE id = '$update_id' ");
+     $vysl4 = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '". intval($update_id). "' ");
 
-     if( ( mysql_num_rows($vysl4) <> 1 ) )
+     if( ( $vysl4->num_rows <> 1 ) )
      { 
        echo "<div style=\"color: red; padding-top: 5px; padding-bottom: 5px; \" >";
        echo "Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </div>"; 
      }
      else  
      { 
-       while ($data4=mysql_fetch_array($vysl4) ):
+       while ($data4=$vysl4->fetch_array() ):
 	
 	//tuto tam asi bejt nemusi $pole_puvodni_data["id"] = $data4["id"];		
 	
@@ -229,7 +229,7 @@ include("include/charset.php");
 
 	$fs_upd["fakturacni_text"] = $fakturacni_text;
 
-      $res = mysql_query("UPDATE fakturacni_skupiny SET nazev = '$nazev', typ = '$typ',
+      $res = $conn_mysql->query("UPDATE fakturacni_skupiny SET nazev = '$nazev', typ = '$typ',
     			    sluzba_int = '$sluzba_int', sluzba_int_id_tarifu = '$sluzba_int_id_tarifu', 
 			    sluzba_iptv = '$sluzba_iptv', sluzba_iptv_id_tarifu = '$sluzba_iptv_id_tarifu',
 			    sluzba_voip = '$sluzba_voip', fakturacni_text = '$fakturacni_text',
