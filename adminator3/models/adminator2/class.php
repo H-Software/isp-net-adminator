@@ -3055,7 +3055,7 @@ class Aglobal
 	// test pingu
 	//
 	
-	exec("/var/www/html/htdocs.ssl/adminator2/scripts/ping.sh ".$router_ip, $ping_output, $ping_ret);
+	exec("scripts/ping.sh ".$router_ip, $ping_output, $ping_ret);
 
 	if( !($ping_output[0] > 0) )
 	{

@@ -5,7 +5,7 @@ class partner_servis {
     //
     // variables
     //
-    
+    var $conn_mysql;
     var	$jmeno_klienta;
     var $bydliste;
     var $email;
@@ -25,10 +25,16 @@ class partner_servis {
     var $vyrizeni;
     var $update;
     
+    var $prio;
+
     //
     //  function
     //
-    
+    function __construct($conn_mysql)
+    {
+        $this->conn_mysql = $conn_mysql;
+    }
+
     function show_insert_form(){
     
     echo "  <div style=\"padding-left: 40px; padding-bottom: 10px; padding-top: 10px; font-weight: bold; font-size: 18px; \">
@@ -155,7 +161,7 @@ class partner_servis {
 
     function find_clients($find_string) {
     
-	$fs = "%".mysql_real_escape_string($find_string)."%";
+	$fs = "%".$this->conn_mysql->real_escape_string($find_string)."%";
 	
         $select = " WHERE (nick LIKE '$fs' OR jmeno LIKE '$fs' OR prijmeni LIKE '$fs' ";
         $select .= " OR ulice LIKE '$fs' OR mesto LIKE '$fs' OR poznamka LIKE '$fs' )";                                            
@@ -366,18 +372,18 @@ class partner_servis {
           else
           { $user_plaint = $_SESSION["db_nick"]; }
 
-	  $tel = mysql_real_escape_string($this->tel);
-	  $email = mysql_real_escape_string($this->email);
+	  $tel = $this->conn_mysql->real_escape_string($this->tel);
+	  $email = $this->conn_mysql->real_escape_string($this->email);
 	  
-	  $jmeno_klienta = mysql_real_escape_string($this->jmeno_klienta);
-	  $bydliste = mysql_real_escape_string($this->bydliste);
-	  $pozn = mysql_real_escape_string($this->pozn);
+	  $jmeno_klienta = $this->conn_mysql->real_escape_string($this->jmeno_klienta);
+	  $bydliste = $this->conn_mysql->real_escape_string($this->bydliste);
+	  $pozn = $this->conn_mysql->real_escape_string($this->pozn);
 
 	  $prio = intval($this->prio);
 
-	  $user_plaint = mysql_real_escape_string($user_plaint);   
+	  $user_plaint = $this->conn_mysql->real_escape_string($user_plaint);   
 	  
-          $add = mysql_query("INSERT INTO partner_klienti_servis (tel, jmeno, adresa, email, poznamky, prio, vlozil)
+          $add = $this->conn_mysql->query("INSERT INTO partner_klienti_servis (tel, jmeno, adresa, email, poznamky, prio, vlozil)
                             VALUES ('$tel','$jmeno_klienta','$bydliste','$email','$pozn', '$prio', '$user_plaint') ");
 
     	echo "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";
@@ -389,7 +395,7 @@ class partner_servis {
           else
           {
             echo "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
-            echo "<div style=\"color: grey; \">debug: ".mysql_error()."</div>";
+            // echo "<div style=\"color: grey; \">debug: ".mysql_error()."</div>";
           }
 
         echo "</div>";
@@ -468,7 +474,7 @@ class partner_servis {
 
            //prvne dotaz
 
-           $dotaz = mysql_query($dotaz_sql);
+           $dotaz = $this->conn_mysql->query($dotaz_sql);
 
 	   //if( !$dotaz )
 	   //{ echo "error: mysql_query: ".mysql_error().": sql: ".$dotaz_sql."\n"; }
@@ -719,11 +725,11 @@ class c_listing_partner_servis {
     
     //vyber dat z databaze
     function dbSelect(){
-        $listRecord = @mysql_query($this->sql);
+        $listRecord = $this->conn_mysql->query($this->sql);
         if (!$listRecord){
             $this->error(2);
         }
-        $allRecords = @mysql_num_rows($listRecord);
+        $allRecords = $listRecord->num_rows;
         if (!$allRecords){
             $this->error(3);
         }

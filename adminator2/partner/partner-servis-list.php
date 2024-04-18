@@ -49,7 +49,7 @@ require ($cesta."include/charset.php");
     
 <?php
  
- $ps = new partner_servis();
+ $ps = new partner_servis($conn_mysql);
  
  //priprava form. promennych
  
