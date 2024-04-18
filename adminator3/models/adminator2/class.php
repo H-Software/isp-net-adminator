@@ -2931,9 +2931,9 @@ class Aglobal
     */
     
     function check_email($email) {
-	$atom = '[-a-z0-9!#$%&\'*+/=?^_`{|}~]'; // znaky tvořící uživatelské jméno
-	$domain = '[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])'; // jedna komponenta domény
-	return eregi("^$atom+(\\.$atom+)*@($domain?\\.)+$domain\$", $email);
+		$atom = '[-a-z0-9!#$%&\'*+/=?^_`{|}~]'; // znaky tvořící uživatelské jméno
+		$domain = '[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])'; // jedna komponenta domény
+		return preg_match("/^$atom+(\\.$atom+)*@($domain?\\.)+$domain\$/i", $email);
     }
 
     function pg_last_inserted_id($con, $table){ 
