@@ -125,6 +125,7 @@
 	   if( $sluzba_iptv != 1)
 	   {
 	     echo "<span style=\"color: gray; \" >Není dostupné</span>";
+		 echo "<input type=\"hidden\" name=\"sluzba_iptv_id_tarifu\" value=\"0\" >";
 	   }
 	   else
 	   {

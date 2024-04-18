@@ -253,7 +253,7 @@ include("include/charset.php");
     {
      // rezim pridani
      
-     $res = mysql_query("INSERT INTO fakturacni_skupiny 
+     $res = $conn_mysql->query("INSERT INTO fakturacni_skupiny 
     			    (nazev, typ, sluzba_int, sluzba_int_id_tarifu, sluzba_iptv, sluzba_iptv_id_tarifu, 
 				sluzba_voip, fakturacni_text, typ_sluzby, vlozil_kdo) 
     			 VALUES 
