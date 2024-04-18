@@ -16,6 +16,7 @@ class print_reg_form
     var $input_adresa_tr_byd;
     var $input_pozadovany_tarif;
     
+	var $form_ec;
     
     //
     //  functions
@@ -108,25 +109,7 @@ class print_reg_form
 	
 	$pdf->Cell(77,5); 
 	$pdf->Cell(20,5,iconv("UTF-8","CP1250", $this->input_pozadovany_tarif),0,1);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	//POZNAMKA 2
 	$pdf->Cell(0,10,'',0,1);
 	  
