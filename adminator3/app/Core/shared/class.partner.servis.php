@@ -479,7 +479,7 @@ class partner_servis {
 	   //if( !$dotaz )
 	   //{ echo "error: mysql_query: ".mysql_error().": sql: ".$dotaz_sql."\n"; }
 	   
-           $dotaz_radku = mysql_num_rows($dotaz);
+           $dotaz_radku = $dotaz->num_rows;
 
            if ( $dotaz_radku > 0)
            {
@@ -541,7 +541,7 @@ class partner_servis {
 
               echo "<tr><td colspan=\"8\" ><br></td></tr>";
 
-              while( $data=mysql_fetch_array($dotaz) )
+              while( $data=$dotaz->fetch_array() )
               {
                 $jmeno = htmlspecialchars($data["jmeno"]);
 		
