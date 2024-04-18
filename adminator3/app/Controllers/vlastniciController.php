@@ -88,7 +88,7 @@ class vlastniciController extends adminatorController {
         // $this->smarty->assign("fakt_skupiny",$fakt_skupiny);
         
         
-        // $this->smarty->display('vlastnici/vlastnici2.tpl');
+        $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
 
     }
 

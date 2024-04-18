@@ -8,4 +8,12 @@
 
     <span style="padding-left: 20px; "><a class="cat2" href="/vlastnici2" >Vlastníci2 (s.r.o)</a></span>
 
+    <span style="padding-left: 30px; ">Globální hledání</span>
+
+    <span sstyle="padding-left: 30px; ">Vlastníci - archiv</span>
+
+    <span style="padding-left: 30px; ">Výpovědi smluv</span>
+
+    <span style="padding-left: 30px; "><a href="/vlastnici2/fakturacni-skupiny">Fakturační skupiny </a></span>
+
 </div>
