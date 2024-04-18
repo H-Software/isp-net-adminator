@@ -1,7 +1,7 @@
 <?php
 
 $mssql_host = "mssql";
-$mssql_user = "SAx";
+$mssql_user = "SA";
 $mssql_pass = "Password123";
 
 if(!isset($mssql_db)){
@@ -60,21 +60,18 @@ if($mssql_db_ok == 1)
 
 	// first we try PDO, because there is working error printing
 	try {
-		// Establish a connection to the SQL Server using PDO
 		$mssqlConn = new PDO($mssqlDSN, $mssql_user, $mssql_pass, array("LoginTimeout" => 5));
 	
-		// Set PDO attributes to enable error reporting and exceptions
 		$mssqlConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
-		// Execute a query to get the SQL Server version
 		$mssqlQ = $mssqlConn->query('SELECT @@VERSION');
 		
-		// Display the SQL Server version
-		echo 'MSSQL VERSION: ' . $mssqlQ->fetchColumn() . '<br>';
+		// echo 'MSSQL VERSION: ' . $mssqlQ->fetchColumn() . '<br>';
 	} catch (Exception $e) {
 		// Error message and terminate the script
-		print_r($e->getMessage());
+		print_r($e->getMessage()."<br>\n");
 
+		// TODO: povolit toto, az bude funkcni MSSQL
 		// if( !($db_mssql_no_exit == 1) )
 		// { exit(); }
 	}
@@ -83,6 +80,7 @@ if($mssql_db_ok == 1)
 	$mssqlQ = null;
 	$mssqlConn = null;
 
+	// init "classic" connection
 	try {
 		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
 	} catch(Exception $e) {
@@ -91,14 +89,11 @@ if($mssql_db_ok == 1)
 	}
 	
     if($mssql_spojeni === false) {
-		echo " ERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db. ") failed <br>\n";
+		echo "\nERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db. ") failed <br>\n";
 		print_r( sqlsrv_errors(), true);
 
 		// TODO: povolit toto, az bude funkcni MSSQL
 		// if( !($db_mssql_no_exit == 1) )
 		// { exit(); }
     }
-
-
-
 }
