@@ -72,21 +72,21 @@ if($mssql_db_ok == 1)
 		// { exit(); }
     }
 
-	try {
-		// Establish a connection to the SQL Server using PDO
-		$conn = new PDO($mssqlDSN, $mssql_user, $mssql_pass, $mssqlConnectionInfo);
+	// try {
+	// 	// Establish a connection to the SQL Server using PDO
+	// 	$conn = new PDO($mssqlDSN, $mssql_user, $mssql_pass, $mssqlConnectionInfo);
 	
-		// Set PDO attributes to enable error reporting and exceptions
-		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	// 	// Set PDO attributes to enable error reporting and exceptions
+	// 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
-		// Execute a query to get the SQL Server version
-		$q = $conn->query('SELECT @@VERSION');
+	// 	// Execute a query to get the SQL Server version
+	// 	$q = $conn->query('SELECT @@VERSION');
 		
-		// Display the SQL Server version
-		echo 'MSSQL VERSION: ' . $q->fetchColumn() . '<br>';
-	} catch (Exception $e) {
-		// Error message and terminate the script
-		print_r($e->getMessage());
-	}
+	// 	// Display the SQL Server version
+	// 	echo 'MSSQL VERSION: ' . $q->fetchColumn() . '<br>';
+	// } catch (Exception $e) {
+	// 	// Error message and terminate the script
+	// 	print_r($e->getMessage());
+	// }
 
 }
