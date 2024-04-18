@@ -5,7 +5,7 @@ class fakturacni_skupina
    
  function check_nazev($nazev)
  {
-    $nazev_check = preg_match('/^(\w|-)+$/', $nazev);
+    $nazev_check = preg_match('/^([[:alnum:]]|_|-)+$/', $nazev);
     
     if($nazev_check === false)
     {
