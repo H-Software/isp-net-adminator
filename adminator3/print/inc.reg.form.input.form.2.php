@@ -1,12 +1,12 @@
 <?php
 
-echo "\n\n<form method=\"POST\" action=\"\" name=\"form1\" >\n";
+echo "\n\n<form method=\"POST\" name=\"form1\" >\n";
 
 echo "<table border=\"1\" width=\"1000px\">
 
     <tr>
         <td colspan=\"5\"><span style=\"font-size: 18px; font-weight: bold; \" >
-	Průvodce tiskem regisračního formuláře:
+	Průvodce tiskem registračního formuláře:
 	</span></td>
 
     </tr>

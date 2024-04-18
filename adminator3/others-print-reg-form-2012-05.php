@@ -90,10 +90,10 @@ $button_send = $_POST["send"];
 if( isset($button_send) ){
 
     //check a processing form
-    $rf_r = $rf->load_input_vars();        
+    $rf->load_input_vars();        
     
     //generate pdf file
-    $rf_r = $rf->generate_pdf_file();
+    $rf->generate_pdf_file();
 
     $smarty->assign("file_name",$rf->file_name);
 
@@ -103,7 +103,7 @@ if( isset($button_send) ){
 else{
 
     //check a processing form
-    $rf_r = $rf->load_input_vars();
+    $rf->load_input_vars();
 
     //zobrazeni formu a vyplneni hodnot
     $smarty->assign("form_action","");

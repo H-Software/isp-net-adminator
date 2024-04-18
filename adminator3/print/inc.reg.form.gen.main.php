@@ -2,7 +2,7 @@
 
 //zaklad, vytvoreni objektu a pridani stranky
 $pdf=new FPDF("P","mm","A4");
-$pdf->Open();
+// $pdf->Open();
 $pdf->AddPage();
 
 // ceskej arial
@@ -20,8 +20,9 @@ $pdf->SetCreator("Registrační formulář");
 $pdf->SetTitle("Reg. Formulář");
 
 // vlozeni obrazku na pozadi
-$img="../img2/print/2009_technicka_sekce_01.jpg";
-$pdf->Image($img,0,0,210);
+// TODO: fix missing background image
+// $img="../img2/print/2009_technicka_sekce_01.jpg";
+// $pdf->Image($img,0,0,210);
 
 $pdf->SetFont('Arial','',10);
 
@@ -121,10 +122,8 @@ $pdf->Cell(0,34,'',0,1);
  $datum_nz = date('Y-m-d-H-i-s');
 
  if( $id_cloveka > 0 )
- { $nazev_souboru = "temp/reg-form-pdf-id-".$id_cloveka."-".$datum_nz.".pdf"; }
+ { $nazev_souboru = "print/temp/reg-form-pdf-id-".$id_cloveka."-".$datum_nz.".pdf"; }
  else
- { $nazev_souboru = "temp/reg-form-pdf-ec-".$ec."-".$datum_nz.".pdf"; }
+ { $nazev_souboru = "print/temp/reg-form-pdf-ec-".$ec."-".$datum_nz.".pdf"; }
 
  $rs = $pdf->Output($nazev_souboru,"F");
-
-?>

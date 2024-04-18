@@ -5,7 +5,7 @@
  <div style="padding-left: 5px; padding-top: 10px; height: 100%" >
    <form method="POST" action="{$form_action}" >
 
-     <div style="font-size: 24px; font-weight: bold; padding-bottom: 30px;" >Průvodce tiskem regisračního formuláře 2012-05</div>
+     <div style="font-size: 24px; font-weight: bold; padding-bottom: 30px;" >Průvodce tiskem registračního formuláře 2012-05</div>
     
      {* ram s podklad. obr *}
      <div style="background-image: url('/img2/print/2012-05-form-background.jpg'); width: 960px; height: 1400px;" >

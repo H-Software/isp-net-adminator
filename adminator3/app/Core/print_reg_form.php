@@ -16,6 +16,7 @@ class print_reg_form
     var $input_adresa_tr_byd;
     var $input_pozadovany_tarif;
     
+	var $form_ec;
     
     //
     //  functions
@@ -51,17 +52,16 @@ class print_reg_form
 	
 	
 	define('FPDF_FONTPATH',"include/font/");
-	// require_once("include/fpdf.class.php");
 
 	//zaklad, vytvoreni objektu a pridani stranky
 	try {
-		$pdf = new \fPDF("P","mm","A4");
+		$pdf = new FPDF("P","mm","A4");
 	}
 	catch (Exception $e) {
 		die("cant create class for PDF: ".var_export($e->getMessage(),true));
 	}
 
-	$pdf->Open();
+	// $pdf->Open();
 	$pdf->AddPage();
 
 	// ceskej arial
@@ -79,8 +79,9 @@ class print_reg_form
 	$pdf->SetTitle("Reg. Formulář");
 	
 	// vlozeni obrazku na pozadi
-	$img="img2/print/2012-05-form.jpg";
-	$pdf->Image($img,0,0,210);
+	// TODO: fix missing image
+	// $img="img2/print/2012-05-form.jpg";
+	// $pdf->Image($img,0,0,210);
 
 	$pdf->SetFont('Arial','',10);
 
@@ -108,25 +109,7 @@ class print_reg_form
 	
 	$pdf->Cell(77,5); 
 	$pdf->Cell(20,5,iconv("UTF-8","CP1250", $this->input_pozadovany_tarif),0,1);
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	//POZNAMKA 2
 	$pdf->Cell(0,10,'',0,1);
 	  

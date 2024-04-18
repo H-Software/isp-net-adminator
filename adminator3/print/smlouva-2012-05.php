@@ -3,9 +3,9 @@
 require __DIR__ . "/../include/main.function.shared.php";
 require __DIR__ . "/../app/config.php";
 
-// $smarty = new Smarty;
-// $smarty->compile_check = true;
-//$smarty->debugging = true;
+$smarty = new Smarty;
+$smarty->compile_check = true;
+// $smarty->debugging = true;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
@@ -20,14 +20,14 @@ require __DIR__ ."/../app/routing.php";
 
 $logger = $container->logger;
 
-$logger->addInfo("others-print called");
-        
-// $this->checkLevel(95);
+$logger->addInfo("others-smlouva-2012-05 called");
+
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
 $auth->checkLevel(146, $a);
 
+$smarty->assign("page_title","Adminator3 :: Ostatní :: Tisk - Smlouva 2012-05");
 
 $ec = $_POST["ec"];
 
@@ -284,28 +284,19 @@ if( ( ( strlen($jmeno) < 2 ) or ( !isset($odeslano) ) ) )
 else
 { //budeme generovat
  
- // konverze promennych
- require("inc.smlouva.gen.prepare.vars.2.php");
- // konec pripravy promennych
- 
- // opravdovy zacatek generovani 
- define('FPDF_FONTPATH',"../include/font/");
- // require("../include/fpdf.class.php");
+        // konverze promennych
+        require("inc.smlouva.gen.prepare.vars.2.php");
+        // konec pripravy promennych
+        
+        // opravdovy zacatek generovani 
+        define('FPDF_FONTPATH',"include/font/");
 
- require("inc.smlouva.gen.main.2.php");
- 
- //presmerovani na dpdf soubor
+        require("inc.smlouva.gen.main.2.php");
+        
+        //zobrazeni odkazu dpdf soubor
+        $smarty->assign("file_name","/".$nazev_souboru);
 
- echo '<html>
-        <head>
-            <meta http-equiv="refresh" content="1;url='.$nazev_souboru.'">
-            <title>Tisk smlouvy</title>
-        </head>
-       <body>
-          Vygenerovany soubor je <a href="'.$nazev_souboru.'" >zde</a>.
-       </body>
-      </html>';
-								    
+        //finalni zobrazeni sablony
+        $smarty->display('others/print-smlouva-2012-05.tpl');
+                                            
 } //konec else !isset nazev
-
-?>
