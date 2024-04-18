@@ -1,7 +1,7 @@
 <?php
 
-$mssql_host = "192.168.1.213";
-$mssql_user = "SA";
+$mssql_host = "mssql";
+$mssql_user = "sa";
 $mssql_pass = "Password123";
 
 if(!isset($mssql_db)){
