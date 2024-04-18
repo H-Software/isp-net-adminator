@@ -70,7 +70,7 @@ if($mssql_db_ok == 1)
 		$mssqlQ = $mssqlConn->query('SELECT @@VERSION');
 		
 		// Display the SQL Server version
-		echo 'MSSQL VERSION: ' . $$mssqlQ->fetchColumn() . '<br>';
+		echo 'MSSQL VERSION: ' . $mssqlQ->fetchColumn() . '<br>';
 	} catch (Exception $e) {
 		// Error message and terminate the script
 		print_r($e->getMessage());
