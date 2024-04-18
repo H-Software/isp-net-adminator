@@ -63,6 +63,8 @@ sqlcmd query "SELECT Name from sys.databases;"
 #### doctrine
 - https://filip-prochazka.com/blog/doctrine-a-service-vrstva-aneb-takto-mi-to-dava-smysl
 - https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/getting-started.html
+#### Eloquent
+- https://laravel.com/docs/6.x/eloquent
 
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html
