@@ -54,7 +54,7 @@ if($mssql_db_ok == 1)
 
 	$mssqlDSN = "sqlsrv:"
 				. "server=" . $mssql_db . ";"
-				. "Driver=ODBC Driver 18 for SQL Server;"
+				// . "Driver=ODBC Driver 18 for SQL Server;"
 				;
 
 	try {
