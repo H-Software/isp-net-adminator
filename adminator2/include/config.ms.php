@@ -1,7 +1,7 @@
 <?php
 
 $mssql_host = "mssql";
-$mssql_user = "sa";
+$mssql_user = "SA";
 $mssql_pass = "Password123";
 
 if(!isset($mssql_db)){
@@ -58,7 +58,8 @@ if($mssql_db_ok == 1)
 	try {
 		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
 	} catch(Exception $e) {
-		error_log("$e");
+		// error_log("$e");
+		print_r($e->getMessage());
 	}
 	
     if($mssql_spojeni === false) {
