@@ -48,7 +48,7 @@ if($mssql_db_ok == 1)
 	$mssqlConnectionInfo = array( "Database"=> "192.168.1.213", "UID"=>$mssql_user, "PWD"=>$mssql_pass);
 	$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
 
-    if(!$mssql_spojeni) {
+    if($mssql_spojeni === false) {
 		echo " ERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db . ") failed <br>\n";
 		// echo ' MSSQL error: '.sqlsrv_get_last_message()."<br>\n";
 		print_r( sqlsrv_errors(), true);
