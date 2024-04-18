@@ -49,6 +49,7 @@ if($mssql_db_ok == 1)
 							"Database" => $mssql_db,
 							"UID" => $mssql_user,
 							"PWD" => $mssql_pass,
+							"LoginTimeout" => 5
 							);
 
 	$mssqlDSN = "sqlsrv:"
@@ -85,7 +86,7 @@ if($mssql_db_ok == 1)
 		echo 'MSSQL VERSION: ' . $q->fetchColumn() . '<br>';
 	} catch (Exception $e) {
 		// Error message and terminate the script
-		die(print_r($e->getMessage()));
+		print_r($e->getMessage());
 	}
 
 }
