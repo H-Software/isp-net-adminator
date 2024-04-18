@@ -1,9 +1,8 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+// require_once ("include/class.php"); 
 
 if ( !( check_level($level,141) ) )
 {
@@ -52,7 +51,7 @@ include ("include/charset.php");
     
   $odeslano=$_POST["odeslano"];
   
-  if( !(ereg('^([[:digit:]]+)$',$erase_id)) )
+  if( !(preg_match('/^([[:digit:]]+)$/',$erase_id)) )
   {
     echo "<div style=\"color: red; font-size: 18px; \"> 
 	    CHYBA! Vstupni data maji neodpovidajici format. debug: erase_id: ".$erase_id." </div><br>";
@@ -73,7 +72,7 @@ include ("include/charset.php");
   }
   
   //checkem jestli se macklo na tlacitko "OK" :)
-  if ( ereg("^OK$",$odeslano) ) 
+  if ( preg_match("/^OK$/",$odeslano) ) 
   { 
   
     // zjistime puvodni data pro archiv zmen
