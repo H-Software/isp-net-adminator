@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM php:7.4-apache
 
 ENV ACCEPT_EULA=Y
 
@@ -15,6 +15,7 @@ RUN apt-get update \
         libpng-dev \
         git \
         libldap2-dev \
+        libzip-dev \
         gnupg \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
@@ -34,7 +35,7 @@ RUN apt-get update \
 # PHP MSSQL stuff
 # https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
 RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-        && curl -sSL https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+        && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
         && apt-get update \
         && apt-get install -y \
             msodbcsql17 \
@@ -42,17 +43,18 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pecl install sqlsrv-5.6.1 \
-        && pecl install pdo_sqlsrv-5.6.1 \
+RUN pecl install sqlsrv-5.10.1 \
+        && pecl install pdo_sqlsrv-5.10.1 \
         && docker-php-ext-enable \
             sqlsrv \
             pdo_sqlsrv
 
 # Install APCu and APC backward compatibility
 RUN pecl install apcu \
-        && pecl install apcu_bc-1.0.3 \
-        && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
-        && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
+        && docker-php-ext-enable apcu
+
+# RUN pecl install apcu_bc-1.0.5 \
+        # && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
 # apache conf
 RUN a2enmod ssl \

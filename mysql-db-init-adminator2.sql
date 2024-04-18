@@ -33,7 +33,10 @@ INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysl
 (15,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 19, [mac_adresa]=> 11:22:33:44:55:33, [ip_adresa]=> 10.10.10.12, [puk]=> 1, [popis]=> stb-12, [id_nodu]=> 3, [sw_port]=> 1 [pozn]=> , [id_tarifu]=> 4',	'2024-04-14 22:10:17',	'admin@admin',	1),
 (16,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 20, [mac_adresa]=> 22:22:33:44:55:15, [ip_adresa]=> 10.10.10.15, [puk]=> 15, [popis]=> stb-1t, [id_nodu]=> 3, [sw_port]=> 1 [pozn]=> , [id_tarifu]=> 4',	'2024-04-14 22:32:35',	'admin@admin',	1),
 (17,	'<b>akce: pridani zmeny pro ucetni; </b><br>[typ_id]=> 1, [text]=> NULL',	'2024-04-15 17:16:05',	'admin@admin',	1),
-(18,	'<b>akce: pridani zmeny pro ucetni; </b><br>[typ_id]=> 1, [text]=> ucetni zmena 1',	'2024-04-15 17:16:26',	'admin@admin',	1);
+(18,	'<b>akce: pridani zmeny pro ucetni; </b><br>[typ_id]=> 1, [text]=> ucetni zmena 1',	'2024-04-15 17:16:26',	'admin@admin',	1),
+(19,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 1 diferencialni data: změna pole: <b>fakturacni_text</b> z: <span class=\"az-s1\" ></span> na: <span class=\"az-s2\">text 1</span>, ',	'2024-04-18 17:55:19',	'admin',	1),
+(20,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 1 diferencialni data: změna pole: <b>fakturacni_text</b> z: <span class=\"az-s1\" >text 1</span> na: <span class=\"az-s2\">text fakturace 1</span>, ',	'2024-04-18 17:55:34',	'admin',	1),
+(21,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> fakturacni skupina 2, [typ]=> 1, [sluzba_int]=> 1, [sluzba_int_id_tarifu]=> 1, [sluzba_iptv]=> 1, [sluzba_iptv_id_tarifu]=> 1, [sluzba_voip]=> 0 [fakturacni_text]=> text 2, [typ_sluzby]=> 1',	'2024-04-18 17:57:04',	'admin',	1);
 
 DROP TABLE IF EXISTS `archiv_zmen_work`;
 CREATE TABLE `archiv_zmen_work` (
@@ -55,7 +58,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713436156',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713470922',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -138,11 +141,21 @@ CREATE TABLE `fakturacni_skupiny` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nazev` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `typ` int unsigned NOT NULL DEFAULT '0',
+  `typ_sluzby` int unsigned NOT NULL DEFAULT '0',
+  `fakturacni_text` varchar(4096) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `vlozil_kdo` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `sluzba_int` int NOT NULL DEFAULT '0',
+  `sluzba_int_id_tarifu` int NOT NULL DEFAULT '0',
+  `sluzba_iptv` int NOT NULL DEFAULT '0',
+  `sluzba_iptv_id_tarifu` int NOT NULL DEFAULT '0',
+  `sluzba_voip` int NOT NULL DEFAULT '0',
+  `sluzba_voip_id_tarifu` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `fakturacni_skupiny` (`id`, `nazev`, `typ`) VALUES
-(1,	'fakturacni skupina 1',	1);
+INSERT INTO `fakturacni_skupiny` (`id`, `nazev`, `typ`, `typ_sluzby`, `fakturacni_text`, `vlozil_kdo`, `sluzba_int`, `sluzba_int_id_tarifu`, `sluzba_iptv`, `sluzba_iptv_id_tarifu`, `sluzba_voip`, `sluzba_voip_id_tarifu`) VALUES
+(1,	'fakturacni skupina 1',	1,	0,	'text fakturace 1',	NULL,	0,	0,	0,	0,	0,	0),
+(2,	'fakturacni skupina 2',	1,	1,	'text 2',	'admin',	1,	1,	1,	1,	0,	0);
 
 DROP TABLE IF EXISTS `faktury_neuhrazene`;
 CREATE TABLE `faktury_neuhrazene` (
@@ -245,6 +258,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (99,	10,	'a2: vlastnici2-fakt-skupiny'),
 (101,	10,	'opravy a zavady vypis (homepage)'),
 (102,	10,	'a2: vlastnici hledani'),
+(103,	49,	'stats.php'),
 (105,	20,	'opravy-vlastnik'),
 (106,	20,	'opravy-zacit-resit'),
 (107,	10,	'fn.php'),
@@ -262,6 +276,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (137,	20,	'stb uprava'),
 (139,	10,	'objekty test'),
 (140,	30,	' a2: vlastnici2-fs-update'),
+(141,	20,	'vlastnici2-fs-erase'),
 (142,	2,	'about.php'),
 (143,	10,	'a2: archiv-zmen-cat.php'),
 (144,	10,	'a3: about-changes-old.php'),
@@ -474,14 +489,15 @@ CREATE TABLE `users` (
   `lvl_objekty_stb_erase` int unsigned NOT NULL DEFAULT '0',
   `lvl_partner_servis_add` int unsigned NOT NULL DEFAULT '0',
   `lvl_partner_servis_list` int unsigned NOT NULL DEFAULT '0',
-  `lvl_phd_adresar` int unsigned NOT NULL DEFAULT '0',
   `lvl_partner_servis_accept` int unsigned NOT NULL DEFAULT '0',
   `lvl_partner_servis_pozn_update` int unsigned NOT NULL DEFAULT '0',
+  `lvl_phd_adresar` int unsigned NOT NULL DEFAULT '0',
+  `lvl_phd_list_fa` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`, `lvl_phd_adresar`, `lvl_partner_servis_accept`, `lvl_partner_servis_pozn_update`) VALUES
-(1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1,	1,	1,	1,	1,	1);
+INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`, `lvl_partner_servis_accept`, `lvl_partner_servis_pozn_update`, `lvl_phd_adresar`, `lvl_phd_list_fa`) VALUES
+(1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1,	1,	1,	1,	1,	1,	1);
 
 DROP TABLE IF EXISTS `vypovedi`;
 CREATE TABLE `vypovedi` (
@@ -519,4 +535,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-18 10:32:43
+-- 2024-04-18 20:14:19
