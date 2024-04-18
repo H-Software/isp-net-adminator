@@ -14,7 +14,7 @@
         "monolog/monolog": "^1.27.1",
         "respect/validation": "^2.2",
         "formr/formr": "^1.4",
-        "illuminate/database": "^6.20",
+        "illuminate/database": "^8.83",
         "doctrine/orm": "^2.19.0",
         "doctrine/annotations": "^1.14.0",
         "symfony/cache": "^5.4",

@@ -71,4 +71,25 @@ class vlastniciController extends adminatorController {
         return $response;
     }
 
+    public function fakturacniSkupiny(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("vlastniciController\\fakturacniSkupiny called");
+        
+        $this->checkLevel(99);
+
+        $this->smarty->assign("page_title","Adminator3 :: Zákazníci :: fakturační skupiny");
+
+        $this->header($request, $response);
+
+      
+        // $vlastnik2 = new \vlastnik2($this->conn_mysql);
+        
+        // $this->smarty->assign("fakt_skupiny",$fakt_skupiny);
+        
+        
+        // $this->smarty->display('vlastnici/vlastnici2.tpl');
+
+    }
+
 }
