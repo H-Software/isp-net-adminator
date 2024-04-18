@@ -80,7 +80,7 @@ if($mssql_db_ok == 1)
 	}
 
 	// and now we're done; close it
-	$$mssqlQ = null;
+	$mssqlQ = null;
 	$mssqlConn = null;
 
 	try {
