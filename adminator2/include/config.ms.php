@@ -73,8 +73,8 @@ if($mssql_db_ok == 1)
 		// Error message and terminate the script
 		print_r($e->getMessage());
 
-		if( !($db_mssql_no_exit == 1) )
-		{ exit(); }
+		// if( !($db_mssql_no_exit == 1) )
+		// { exit(); }
 	}
 
 	// and now we're done; close it
