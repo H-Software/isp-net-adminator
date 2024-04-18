@@ -21,6 +21,8 @@ class vlastniciController extends adminatorController {
 
         $this->logger = $container->logger;
         $this->logger->addInfo("vlastniciController\__construct called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	  }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -31,7 +33,7 @@ class vlastniciController extends adminatorController {
 
       $this->smarty->assign("page_title","Adminator3 :: Zákazníci");
 
-      $this->header($request, $response);
+      $this->header($request, $response, $this->adminator);
       
       $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -48,7 +50,7 @@ class vlastniciController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Zákazníci");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         $select = $_GET["select"];
 
@@ -80,7 +82,7 @@ class vlastniciController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Zákazníci :: fakturační skupiny");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
       
         // $vlastnik2 = new \vlastnik2($this->conn_mysql);

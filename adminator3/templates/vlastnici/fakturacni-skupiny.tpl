@@ -3,7 +3,15 @@
 {* zobrazeni subkategorie *}
 {include file="vlastnici/inc.cat.vlastnici.tpl"}
 
-<h2>building this page is in progress :)</h2>
+<div class="row mt-3 mb-3 ml-3">
+    <div class="col " style="font-size: 18px;">
+        Výpis fakturačních skupin
+    </div>
+    <div class="col">
+        <a href="">Přidání</a>
+    </div>
+    <div class="col-6"></div>
+</div>
 
 {* konecny soubor *}
 {include file="base-end.tpl"}
