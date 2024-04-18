@@ -55,15 +55,32 @@ if($mssql_db_ok == 1)
 		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
 	} catch(Exception $e) {
 		error_log("$e");
-	}						
+	}
 	
     if($mssql_spojeni === false) {
-		echo " ERROR: mssql_connect (host: ".$mssql_host.", connInfo: " . print_r($mssqlConnectionInfo) . ") failed <br>\n";
+		echo " ERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db. ") failed <br>\n";
 		print_r( sqlsrv_errors(), true);
 
 		// TODO: povolit toto, az bude funkcni MSSQL
-		if( !($db_mssql_no_exit == 1) )
-		{ exit(); }
+		// if( !($db_mssql_no_exit == 1) )
+		// { exit(); }
     }
+
+	try {
+		// Establish a connection to the SQL Server using PDO
+		$conn = new PDO("sqlsrv:server=mssql", $mssql_user, $mssql_pass);
+	
+		// Set PDO attributes to enable error reporting and exceptions
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	
+		// Execute a query to get the SQL Server version
+		$q = $conn->query('SELECT @@VERSION');
+		
+		// Display the SQL Server version
+		echo 'MSSQL VERSION: ' . $q->fetchColumn() . '<br>';
+	} catch (Exception $e) {
+		// Error message and terminate the script
+		die(print_r($e->getMessage()));
+	}
 
 }
