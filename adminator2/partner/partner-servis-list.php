@@ -80,7 +80,7 @@ require ($cesta."include/charset.php");
   $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
 
   //vytvoreni objektu
-  $listovani = new c_listing_partner_servis("./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+  $listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 
   if(($list == "")||($list == "1")){ $bude_chybet = 0; }
   else{ $bude_chybet = (($list-1) * $listovani->interval); }
