@@ -94,10 +94,12 @@ class vlastniciController extends adminatorController {
             $this->smarty->assign("message_no_items","Nebyly nalezeny žádné fakturační skupiny");
             $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
             return $response;
-        }
-        
-        $this->smarty->assign("fs_items","<pre>" . var_export($fs_items,true). "</pre>");
+        }        
 
+        $this->smarty->assign("fs_items",$fs_items);
+
+        // debug
+        // $this->smarty->assign("fs_items_debug","<pre>" . var_export($fs_items,true). "</pre>");
         $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
 
     }

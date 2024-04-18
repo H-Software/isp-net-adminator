@@ -24,11 +24,70 @@
 </div>
 
 <div class="row">
-    <div class="col">
+    <div class="col-12">
         {* main table *}
         {if $fs_items|@count gt 0}
-        {$fs_items}
+            <table class="table fs-6">
+                <thead>
+                <tr>
+                    <td><b><div class="pl-13">id</b></div></td>
+                    <td><b>název skupiny</b></td>
+                    <td><b>typ</b></td>
+                    <td align="center" ><b>typ služby</b></td>
+            
+                    <td><span style="" >&nbsp;</span></td>
+                    <td>&nbsp;</td>
+            
+                    <td colspan="" ><span style="font-weight: bold; " >Internet</span></td>
+                    <td><span style="font-weight: bold; width: 150px; " >IPTV</span></td>
+                    <td><span style="font-weight: bold; " >VoIP</span></td>
+                    <td><span style="" >&nbsp;</span></td>
+                    <td>&nbsp;</td>
+                
+                    <td><span style="font-weight: bold; " >upravit</td>
+                    <td><span style="font-weight: bold; " >smazat</td>
+                
+                    <td><span style="" >&nbsp;</span></td>
+                    <td>&nbsp;</td>
+                    
+                </tr>
+         
+                <tr>
+                    <td><span style="color: gray;" >lidí</span></td>
+                    <td colspan="3" >Fakturační text</td>
+                    
+                    <td><span style="" >&nbsp;</span></td>
+                    <td>&nbsp;</td>
+            
+                    <td>tarif</td>
+                    <td>tarif</td>
+                    <td></td>
+                
+                    <td><span style="" >&nbsp;</span></td>
+                    <td>&nbsp;</td>
+                    <td colspan="2" >&nbsp;</td>
+            
+                    <td><span style="" >&nbsp;</span></td>
+                    <td>&nbsp;</td>
+            
+                </tr>
+                </thead>
+
+                <tbody>
+                    {foreach $fs_items as $v}
+                        <tr>
+                            <td>{$v.id}</td>
+                            <td>{$v.nazev}</td>
+                            <td>{$v.typ}</td>
+                            <td>{$v.typ_sluzby}</td>
+                        </tr>
+                        <tr>
+                        </td>
+                    {/foreach}
+                </tbody>
+            </table>
         {/if}
+        {$fs_items_debug}
         {* end of main table *}
     </div>
 </div>
