@@ -2,9 +2,8 @@
 
 $cesta = "../";
 
+require ($cesta."include/main.function.shared.php");
 require ($cesta."include/config.php");
-require_once ($cesta."include/class.partner.servis.php");
-
 require ($cesta."include/check_login.php");
 require ($cesta."include/check_level.php");
 
@@ -49,14 +48,14 @@ require ($cesta."include/charset.php");
    
 <?php
    
-   $ps = new partner_servis();
+   $ps = new partner_servis($conn_mysql);
    
    if($_GET["edit"] <> 1)
    {
 
         $list = intval($_GET["list"]);
         $filtr_prio = intval($_GET["filtr_prio"]);
-	$filtr_akceptovano = 1;
+	      $filtr_akceptovano = 1;
 	
         //priprava dotazu
 
@@ -70,7 +69,7 @@ require ($cesta."include/charset.php");
         $dotaz_sql = $basic;
 
         if( isset($user) )
-        { $dotaz_sql .= " WHERE ( vlozil = '".mysql_real_escape_string($user_plaint)."' ".$filtr." ) "; }
+        { $dotaz_sql .= " WHERE ( vlozil = '".$conn_mysql->real_escape_string($user_plaint)."' ".$filtr." ) "; }
         else
         { $dotaz_sql .= " WHERE ( id > 0 ".$filtr." ) "; }
 
@@ -81,7 +80,7 @@ require ($cesta."include/charset.php");
         $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
 
         //vytvoreni objektu
-        $listovani = new c_listing_partner_servis("./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+        $listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 
         if(($list == "")||($list == "1")){ $bude_chybet = 0; }
         else{ $bude_chybet = (($list-1) * $listovani->interval); }
@@ -122,10 +121,10 @@ require ($cesta."include/charset.php");
     {
     //budem ukladat
 	    
-	$pozn = mysql_real_escape_string($_GET["pozn"]);
+	$pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
 	$id = intval($_GET["id"]);
 	
-        $uprava=mysql_query("UPDATE partner_klienti_servis SET akceptovano_pozn = '".$pozn."' WHERE id=".$id." Limit 1 ");
+        $uprava=$conn_mysql->query("UPDATE partner_klienti_servis SET akceptovano_pozn = '".$pozn."' WHERE id=".$id." Limit 1 ");
   
        if($uprava == 1){
     	  echo "<br><H3><div style=\"color: green; padding-left: 20px;\" >Poznámka u zákazníka úspěšně aktualizována.</div></H3><br>\n"; 
@@ -144,9 +143,9 @@ require ($cesta."include/charset.php");
       $id = intval($_GET["id"]);
       
       //nacteme predchozi data
-      $dotaz=mysql_query("SELECT id, akceptovano_pozn FROM partner_klienti_servis WHERE id = '$id' ");
+      $dotaz=$conn_mysql->query("SELECT id, akceptovano_pozn FROM partner_klienti_servis WHERE id = '$id' ");
       
-      while( $data = mysql_fetch_array($dotaz) )
+      while( $data = $dotaz->fetch_array() )
       { $pozn = $data["akceptovano_pozn"]; }
 
       echo "<form action=\"\" method=\"GET\" >";

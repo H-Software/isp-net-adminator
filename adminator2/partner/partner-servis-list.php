@@ -4,7 +4,6 @@ $cesta = "../";
 
 require ($cesta."include/main.function.shared.php");
 require_once ($cesta."include/config.php"); 
-require_once ($cesta."include/class.partner.servis.php");
 require ($cesta."include/check_login.php");
 require ($cesta."include/check_level.php");
 
@@ -49,7 +48,7 @@ require ($cesta."include/charset.php");
     
 <?php
  
- $ps = new partner_servis();
+ $ps = new partner_servis($conn_mysql);
  
  //priprava form. promennych
  
@@ -69,7 +68,7 @@ require ($cesta."include/charset.php");
  $dotaz_sql = $basic;
 
  if( isset($user) )
- { $dotaz_sql .= " WHERE ( vlozil = '".mysql_real_escape_string($user_plaint)."' ".$filtr." ) "; }
+ { $dotaz_sql .= " WHERE ( vlozil = '".$conn_mysql->real_escape_string($user_plaint)."' ".$filtr." ) "; }
  else
  { $dotaz_sql .= " WHERE ( id > 0 ".$filtr." ) "; }
 
@@ -80,7 +79,7 @@ require ($cesta."include/charset.php");
   $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
 
   //vytvoreni objektu
-  $listovani = new c_listing_partner_servis("./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+  $listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 
   if(($list == "")||($list == "1")){ $bude_chybet = 0; }
   else{ $bude_chybet = (($list-1) * $listovani->interval); }

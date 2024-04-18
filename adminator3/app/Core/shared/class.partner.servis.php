@@ -5,7 +5,7 @@ class partner_servis {
     //
     // variables
     //
-    
+    var $conn_mysql;
     var	$jmeno_klienta;
     var $bydliste;
     var $email;
@@ -25,10 +25,16 @@ class partner_servis {
     var $vyrizeni;
     var $update;
     
+    var $prio;
+
     //
     //  function
     //
-    
+    function __construct($conn_mysql)
+    {
+        $this->conn_mysql = $conn_mysql;
+    }
+
     function show_insert_form(){
     
     echo "  <div style=\"padding-left: 40px; padding-bottom: 10px; padding-top: 10px; font-weight: bold; font-size: 18px; \">
@@ -155,7 +161,7 @@ class partner_servis {
 
     function find_clients($find_string) {
     
-	$fs = "%".mysql_real_escape_string($find_string)."%";
+	$fs = "%".$this->conn_mysql->real_escape_string($find_string)."%";
 	
         $select = " WHERE (nick LIKE '$fs' OR jmeno LIKE '$fs' OR prijmeni LIKE '$fs' ";
         $select .= " OR ulice LIKE '$fs' OR mesto LIKE '$fs' OR poznamka LIKE '$fs' )";                                            
@@ -243,7 +249,7 @@ class partner_servis {
         if(strlen($this->tel) > 0)
         {
         
-            if( !(ereg('^([[:digit:]])+$',$this->tel)) )
+            if( !(preg_match('/^([[:digit:]])+$/',$this->tel)) )
     	    {
                  $this->fail = true;
                  $this->error .= "<div style=\"color: red; padding-left: 10px;\">".
@@ -252,9 +258,9 @@ class partner_servis {
                                                          
             if( strlen($this->tel) <> 9 ){
                                                      
-    		$this->fail = true;
-		$this->error .= "<div style=\"color: red; padding-left: 10px; \">".
-				"<H4>Pole \"Telefon\" musí obsahovat 9 číslic. </H4></div>";
+                $this->fail = true;
+                $this->error .= "<div style=\"color: red; padding-left: 10px; \">".
+                "<H4>Pole \"Telefon\" musí obsahovat 9 číslic. </H4></div>";
     	    }
     
         }
@@ -268,9 +274,9 @@ class partner_servis {
         {
             if( strlen($this->pozn) > 500 ){
                                                      
-    		$this->fail = true;
-		$this->error .= "<div style=\"color: red; padding-left: 10px;\">".
-				"<H4>Pole \"Poznámka\" musí obsahovat 9 číslic.</H4></div>";
+    		    $this->fail = true;
+            $this->error .= "<div style=\"color: red; padding-left: 10px;\">".
+                "<H4>Pole \"Poznámka\" musí obsahovat 9 číslic.</H4></div>";
     	    }
     	        
         }
@@ -366,18 +372,18 @@ class partner_servis {
           else
           { $user_plaint = $_SESSION["db_nick"]; }
 
-	  $tel = mysql_real_escape_string($this->tel);
-	  $email = mysql_real_escape_string($this->email);
+	  $tel = $this->conn_mysql->real_escape_string($this->tel);
+	  $email = $this->conn_mysql->real_escape_string($this->email);
 	  
-	  $jmeno_klienta = mysql_real_escape_string($this->jmeno_klienta);
-	  $bydliste = mysql_real_escape_string($this->bydliste);
-	  $pozn = mysql_real_escape_string($this->pozn);
+	  $jmeno_klienta = $this->conn_mysql->real_escape_string($this->jmeno_klienta);
+	  $bydliste = $this->conn_mysql->real_escape_string($this->bydliste);
+	  $pozn = $this->conn_mysql->real_escape_string($this->pozn);
 
 	  $prio = intval($this->prio);
 
-	  $user_plaint = mysql_real_escape_string($user_plaint);   
+	  $user_plaint = $this->conn_mysql->real_escape_string($user_plaint);   
 	  
-          $add = mysql_query("INSERT INTO partner_klienti_servis (tel, jmeno, adresa, email, poznamky, prio, vlozil)
+          $add = $this->conn_mysql->query("INSERT INTO partner_klienti_servis (tel, jmeno, adresa, email, poznamky, prio, vlozil)
                             VALUES ('$tel','$jmeno_klienta','$bydliste','$email','$pozn', '$prio', '$user_plaint') ");
 
     	echo "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";
@@ -389,7 +395,7 @@ class partner_servis {
           else
           {
             echo "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
-            echo "<div style=\"color: grey; \">debug: ".mysql_error()."</div>";
+            // echo "<div style=\"color: grey; \">debug: ".mysql_error()."</div>";
           }
 
         echo "</div>";
@@ -397,7 +403,7 @@ class partner_servis {
     
     } //end of function
 
-    function list_show_legend($vyrizeni,$update)
+    function list_show_legend($vyrizeni = false, $update = false)
     {
         if($vyrizeni == true)
         {
@@ -468,12 +474,12 @@ class partner_servis {
 
            //prvne dotaz
 
-           $dotaz = mysql_query($dotaz_sql);
+           $dotaz = $this->conn_mysql->query($dotaz_sql);
 
 	   //if( !$dotaz )
 	   //{ echo "error: mysql_query: ".mysql_error().": sql: ".$dotaz_sql."\n"; }
 	   
-           $dotaz_radku = mysql_num_rows($dotaz);
+           $dotaz_radku = $dotaz->num_rows;
 
            if ( $dotaz_radku > 0)
            {
@@ -535,7 +541,7 @@ class partner_servis {
 
               echo "<tr><td colspan=\"8\" ><br></td></tr>";
 
-              while( $data=mysql_fetch_array($dotaz) )
+              while( $data=$dotaz->fetch_array() )
               {
                 $jmeno = htmlspecialchars($data["jmeno"]);
 		
@@ -551,13 +557,15 @@ class partner_servis {
             	    while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
             	    { $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
 
-            	    if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"/adminator2/vlastnici-archiv.php"; }
-            	    elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"/adminator2/vlastnici2.php"; }
-            	    else{ $id_cloveka_res .= "<a href=\"/adminator2/vlastnici.php"; }
+            	    if( $archiv_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"/vlastnici-archiv.php"; }
+            	    elseif( $firma_vlastnik == 1 ){ $id_cloveka_res .= "<a href=\"/vlastnici2.php"; }
+            	    else{ $id_cloveka_res .= "<a href=\"/vlastnici.php"; }
 
         	    $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >V:".$id_cloveka_pomocne."</a>";
 
-        	    $jmeno = ereg_replace("V:".$id_cloveka_pomocne, $id_cloveka_res, $jmeno);
+              // TODO: probably wrong switch from ereg
+              // http://php.adamharvey.name/manual/en/function.preg-replace.php
+        	    $jmeno = preg_replace("/V:".$id_cloveka_pomocne."/", $id_cloveka_res, $jmeno);
 		    
 	    	}
 
@@ -671,161 +679,3 @@ class partner_servis {
     } //end of function
                                                              
 } //end of class
-
-//coded by Warden - http://warden.dharma.cz
-
-/*
-priklad vytvareni instance:
-
-$listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
-    "list pro zobrazeni", "formatovani zacatku odkazu strankovani",
-    "formatovani konce odkazu strankovani", "sql dotaz pro vyber vsech zazkamu k vylistovani");
-*/
-
-//definice tridy c_Listing
-
-class c_listing_partner_servis {
-
-    var $url;
-    var $interval;
-    var $sql;
-    var $list;
-    var $before;
-    var $after;
-    var $numLists;
-    var $numRecords;
-    var $errName;
-    var $befError = "<div align=\"center\" style=\"color: maroon;\">";
-    var $aftError = "</div>";
-
-    //konstruktor...naplni promenne
-    function c_listing_partner_servis($conUrl = "./partner-servis.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
-        $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
-        $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
-        // $this->errName[3] = "Nelze zobrazit listov▒n▒, chyba datab▒ze(Num_Rows)!<br>\n";
-        $this->url = $conUrl;
-        $this->interval = $conInterval;
-        $this->list = $conList;
-        $this->before = $conBefore;
-        $this->after = $conAfter;
-
-        if (empty($conSql)){
-            $this->error(1);
-        }
-        else {
-            $this->sql = $conSql;
-        }
-    }
-    
-    //vyber dat z databaze
-    function dbSelect(){
-        $listRecord = @mysql_query($this->sql);
-        if (!$listRecord){
-            $this->error(2);
-        }
-        $allRecords = @mysql_num_rows($listRecord);
-        if (!$allRecords){
-            $this->error(3);
-        }
-        $allLists = ceil($allRecords / $this->interval);
-
-        $this->numLists = $allLists;
-        $this->numRecords = $allRecords;
-
-    }
-
-    //zobrazi pouze seznam cisel listu
-    //napr.:    1 | 2 | 3
-    function listNumber(){
-        $this->dbSelect();
-        echo $this->before;
-        for ($i = 1; $i <= $this->numLists; $i++){
-            $isLink = 1;
-            $spacer = " | ";
-
-            if (empty($this->list)){
-                $this->list = 1;
-            }
-            if ($i == $this->list){
-                $isLink = 0;
-            }
-            if ($i == $this->numLists){
-                $spacer = "";
-            }
-            if ($isLink == 0){
-                echo $i." ".$spacer;
-            }
-            if ($isLink == 1){
-                echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$i."</a> ".$spacer;
-            }
-        }
-        echo $this->after;
-    }
-
-    //zobrazi seznam intervalu v zadanem rozsahu ($interval)
-    //napr.:    1-10 | 11-20 | 21-30
-    function listInterval(){
-        $this->dbSelect();
-        echo $this->before;
-        for ($i = 1; $i <= $this->numLists; $i++){
-            $isLink = 1;
-            $spacer = " | ";
-            $from = ($i*$this->interval)-($this->interval-1);
-            $to = $i*$this->interval;
-
-            if (Empty($this->list)){
-                $this->list = 1;
-            }
-            if ($i == $this->list){
-                $isLink = 0;
-            }
-            if ($i == $this->numLists){
-                $to = $this->numRecords;
-                $spacer = "";
-            }
-            if ($isLink == 0){
-                echo $from."-".$to." ".$spacer;
-            }
-            if ($isLink == 1){
-                echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
-            }
-        }
-        echo $this->after;
-    }
-
-    //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)
-    //napr.:    <<< << 11-20 >> >>>
-    function listPart(){
-        $this->dbSelect();
-        echo $this->before;
-        if (Empty($this->list)){
-                $this->list = 1;
-        }
-        $from = ($this->list*$this->interval)-($this->interval-1);
-        $to = $this->list*$this->interval;
-        $forward = "<a href=\"".$this->url."&list=1\" onFocus=\"blur()\">&lt;&lt;&lt;</a>&nbsp;<a href=\"".$this->url."&list=".($this->list-1)."\" onFocus=\"blur()\">&lt;&lt;</a>&nbsp;";
-        $backward = "&nbsp;<a href=\"".$this->url."&list=".($this->list+1)."\" onFocus=\"blur()\">&gt;&gt;</a>&nbsp;<a href=\"".$this->url."&list=".$this->numLists."\" onFocus=\"blur()\">&gt;&gt;&gt;</a>";
-
-        if ($this->list == 1){
-            $forward = "";
-        }
-        if ($this->list == $this->numLists){
-            $to = $this->numRecords;
-            $backward = "";
-        }
-        echo $forward.$from."-".$to.$backward;
-        echo $this->after;
-    }
-
-    //vypisovani chybovych hlasek
-    function error($errNum = 0){
-        if ($errNum != 0){
-            echo $this->befError.$this->errName[$errNum].$this->aftError;
-        }
-    
-    } //konec funkce
-
-} //end of class
-
-
-?>

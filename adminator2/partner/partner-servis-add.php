@@ -7,7 +7,6 @@ require ($cesta."include/config.php");
 require ($cesta."include/check_login.php");
 require ($cesta."include/check_level.php");
 
-require_once ($cesta."include/class.partner.servis.php");
 require_once ($cesta."include/class.php");
 
 $level_col = "lvl_partner_servis_add";
@@ -49,7 +48,7 @@ require ($cesta."include/charset.php");
     
 <?
 
- $ps = new partner_servis();
+ $ps = new partner_servis($conn_mysql);
 
  $ps->klient_hledat = $conn_mysql->real_escape_string($_POST["klient_hledat"]);
  $ps->klient_id = intval($_POST["klient_id"]);
@@ -91,7 +90,7 @@ require ($cesta."include/charset.php");
 
     if( isset($ps->odeslat) ){ echo $ps->error; }
 
-    $psh = $ps->show_insert_form();
+    $ps->show_insert_form();
 
     echo "</form>";
     
