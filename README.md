@@ -71,7 +71,8 @@ sqlcmd query "SELECT Name from sys.databases;"
 
 ### MSSQL
 - https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker?view=sql-server-linux-2017&preserve-view=true&tabs=cli&pivots=cs1-bash#pullandrun2017
-
+- https://pecl.php.net/package/sqlsrv
+- https://learn.microsoft.com/en-us/sql/connect/php/system-requirements-for-the-php-sql-driver?view=sql-server-ver16#odbc-driver
 
 ## Author
 Patrik Majer
