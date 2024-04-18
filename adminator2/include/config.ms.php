@@ -59,7 +59,7 @@ if($mssql_db_ok == 1)
 	// first we try PDO, because there is working error printing
 	try {
 		// Establish a connection to the SQL Server using PDO
-		$mssqlConn = new PDO($mssqlDSN, $mssql_user, $mssql_pass, $mssqlConnectionInfo);
+		$mssqlConn = new PDO($mssqlDSN, $mssql_user, $mssql_pass);
 	
 		// Set PDO attributes to enable error reporting and exceptions
 		$mssqlConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
