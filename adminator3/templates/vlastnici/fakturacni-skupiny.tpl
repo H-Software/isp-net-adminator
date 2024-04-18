@@ -13,5 +13,24 @@
     <div class="col-6"></div>
 </div>
 
+<div class="row">
+    <div class="col">
+    {if strlen($message_no_items) gt 0}
+        <div class="alert alert-warning" role="alert">
+            {$message_no_items}
+        </div>
+    {/if}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        {* main table *}
+        {if $fs_items|@count gt 0}
+        {$fs_items}
+        {/if}
+        {* end of main table *}
+    </div>
+</div>
 {* konecny soubor *}
 {include file="base-end.tpl"}

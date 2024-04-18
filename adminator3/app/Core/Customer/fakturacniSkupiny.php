@@ -18,12 +18,21 @@ class fakturacniSkupiny extends adminator
 
     function getItems()
     {
-        $items = FakturacniSkupina::all();
+        $items = array();
+
+        $fetch = FakturacniSkupina::all();
         
+        if(!is_object($fetch))
+        {
+            return false;
+        }
+
         // $items = FakturacniSkupina::where('active', 1)
         //     ->orderBy('name')
         //     ->take(10)
         //     ->get();
+
+        return $fetch->toArray();
     }
 
     function checkNazev($nazev)

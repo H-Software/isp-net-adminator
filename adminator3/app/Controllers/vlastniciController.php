@@ -84,12 +84,20 @@ class vlastniciController extends adminatorController {
 
         $this->header($request, $response, $this->adminator);
 
-      
-        // $vlastnik2 = new \vlastnik2($this->conn_mysql);
+        // main login
+        //
+        $fs = new \App\Customer\fakturacniSkupiny($this->conn_mysql);
+        $fs_items = $fs->getItems();
+
+        if(empty($fs_items))
+        {
+            $this->smarty->assign("message_no_items","Nebyly nalezeny žádné fakturační skupiny");
+            $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
+            return $response;
+        }
         
-        // $this->smarty->assign("fakt_skupiny",$fakt_skupiny);
-        
-        
+        $this->smarty->assign("fs_items","<pre>" . var_export($fs_items,true). "</pre>");
+
         $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
 
     }
