@@ -74,7 +74,7 @@ if($mssql_db_ok == 1)
 
 	try {
 		// Establish a connection to the SQL Server using PDO
-		$conn = new PDO($mssqlDSN, $mssql_user, $mssql_pass);
+		$conn = new PDO($mssqlDSN, $mssql_user, $mssql_pass, $mssqlConnectionInfo);
 	
 		// Set PDO attributes to enable error reporting and exceptions
 		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
