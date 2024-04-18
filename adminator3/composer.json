@@ -15,9 +15,9 @@
         "respect/validation": "^2.2",
         "formr/formr": "^1.4",
         "illuminate/database": "^6.20",
-        "doctrine/orm": "^2.11.0",
-        "doctrine/annotations": "^1.13.0",
-        "symfony/cache": "^4.4",
+        "doctrine/orm": "^2.19.0",
+        "doctrine/annotations": "^1.14.0",
+        "symfony/cache": "^5.4",
         "marcelbonnet/slim-auth": "^2.0",
         "setasign/fpdf": "1.8.6"
     }
