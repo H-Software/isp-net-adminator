@@ -100,6 +100,21 @@ function init_postgres($app_name = "adminator") {
   
 }
 
+// MS SQL stuff
+
+function mssql_query($sql)
+{
+  global $mssql_spojeni;
+	return sqlsrv_query($mssql_spojeni, $sql);
+}
+
+function mssql_num_rows($statement)
+{
+	return sqlsrv_num_rows($statement);
+}
+
+// ond of MS SQL stuff
+
 function start_ses()
 {
   global $sid, $level, $nick, $date, $ad, $logger;
