@@ -1,5 +1,7 @@
 <?php
 
+require("include/main.function.shared.php");
+
 include ("include/config.php"); 
 include ("include/check_login.php");
 
@@ -62,7 +64,7 @@ include ("include/charset.php");
 
                  echo "<td>
 
-                 <form action=\"".$_SERVER["PHP_SELF"]."\" method=\"POST\" >
+                 <form method=\"POST\" >
                     <select name=\"rok\" size=\"1\" >
 
                        <option value=\"2006\" "; if ($rok == "2006")echo "selected"; echo " >2006</option>
