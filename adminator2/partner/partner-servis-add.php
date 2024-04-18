@@ -90,7 +90,7 @@ require ($cesta."include/charset.php");
 
     if( isset($ps->odeslat) ){ echo $ps->error; }
 
-    $psh = $ps->show_insert_form();
+    $ps->show_insert_form();
 
     echo "</form>";
     

@@ -46,7 +46,7 @@ require ($cesta."include/charset.php");
 
 <?php
    
-   $ps = new partner_servis();
+   $ps = new partner_servis($conn_mysql);
    
    if($_GET["accept"] <> 1)
    {
@@ -67,7 +67,7 @@ require ($cesta."include/charset.php");
 	$dotaz_sql = $basic;
 
 	if( isset($user) )
-	{ $dotaz_sql .= " WHERE ( vlozil = '".mysql_real_escape_string($user_plaint)."' ".$filtr." ) "; }
+	{ $dotaz_sql .= " WHERE ( vlozil = '".$conn_mysql->real_escape_string($user_plaint)."' ".$filtr." ) "; }
 	else
 	{ $dotaz_sql .= " WHERE ( id > 0 ".$filtr." ) "; }
 
@@ -78,7 +78,7 @@ require ($cesta."include/charset.php");
 	$format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
 
 	//vytvoreni objektu
-	$listovani = new c_listing_partner_servis("./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+	$listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 
 	if(($list == "")||($list == "1")){ $bude_chybet = 0; }
 	else{ $bude_chybet = (($list-1) * $listovani->interval); }
@@ -117,13 +117,13 @@ require ($cesta."include/charset.php");
     
     if( $_GET["odeslat"] == "OK" )
     {
-	//budem ukladat
-	    
-	$pozn = mysql_real_escape_string($_GET["pozn"]);
-	$id = intval($_GET["id"]);
+      //budem ukladat
+          
+      $pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
+      $id = intval($_GET["id"]);
 	
-        $uprava=mysql_query("UPDATE partner_klienti_servis SET akceptovano='1', akceptovano_kym='".
-    			    mysql_real_escape_string($nick)."', akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
+        $uprava=$conn_mysql->query("UPDATE partner_klienti_servis SET akceptovano='1', akceptovano_kym='".
+        $conn_mysql->real_escape_string($nick)."', akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
   
        if ($uprava) { echo "<br><H3><div style=\"color: green; padding-left: 20px;\" >Zákazník úspěšně akceptován.</div></H3><br>\n"; }
        else
