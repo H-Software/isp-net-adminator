@@ -46,12 +46,17 @@ if($mssql_db_ok == 1)
     }
 
 	$mssqlConnectionInfo = array( 
-							"Database"=> $mssql_db,
-							"UID"=>$mssql_user,
-							"PWD"=>$mssql_pass
+							"Database" => $mssql_db,
+							"UID" => $mssql_user,
+							"PWD" => $mssql_pass
 							);
-	$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
 
+	try {
+		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
+	} catch(Exception $e) {
+		error_log("$e");
+	}						
+	
     if($mssql_spojeni === false) {
 		echo " ERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db . ") failed <br>\n";
 		// echo ' MSSQL error: '.sqlsrv_get_last_message()."<br>\n";
