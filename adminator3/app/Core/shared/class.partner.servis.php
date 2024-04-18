@@ -249,7 +249,7 @@ class partner_servis {
         if(strlen($this->tel) > 0)
         {
         
-            if( !(ereg('^([[:digit:]])+$',$this->tel)) )
+            if( !(preg_match('/^([[:digit:]])+$/',$this->tel)) )
     	    {
                  $this->fail = true;
                  $this->error .= "<div style=\"color: red; padding-left: 10px;\">".
@@ -258,9 +258,9 @@ class partner_servis {
                                                          
             if( strlen($this->tel) <> 9 ){
                                                      
-    		$this->fail = true;
-		$this->error .= "<div style=\"color: red; padding-left: 10px; \">".
-				"<H4>Pole \"Telefon\" musí obsahovat 9 číslic. </H4></div>";
+                $this->fail = true;
+                $this->error .= "<div style=\"color: red; padding-left: 10px; \">".
+                "<H4>Pole \"Telefon\" musí obsahovat 9 číslic. </H4></div>";
     	    }
     
         }
@@ -274,9 +274,9 @@ class partner_servis {
         {
             if( strlen($this->pozn) > 500 ){
                                                      
-    		$this->fail = true;
-		$this->error .= "<div style=\"color: red; padding-left: 10px;\">".
-				"<H4>Pole \"Poznámka\" musí obsahovat 9 číslic.</H4></div>";
+    		    $this->fail = true;
+            $this->error .= "<div style=\"color: red; padding-left: 10px;\">".
+                "<H4>Pole \"Poznámka\" musí obsahovat 9 číslic.</H4></div>";
     	    }
     	        
         }
