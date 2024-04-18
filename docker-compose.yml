@@ -109,7 +109,6 @@ services:
       - pgadmin-data:/var/lib/pgadmin
 
   mssql:
-    container_name: sql-server
     image: mcr.microsoft.com/mssql/server:2017-latest
     #image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
     restart: always
