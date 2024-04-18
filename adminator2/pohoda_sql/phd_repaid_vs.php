@@ -17,6 +17,7 @@ $level_col = "lvl_phd_repaid_vs";
 //ini_set("mssql.charset", "UTF-8");
 //set_time_limit(10);
 
+require($cesta."include/main.function.shared.php");
 require_once($cesta."include/config.php"); 
 
 require_once($cesta."include/config.ms.php"); 

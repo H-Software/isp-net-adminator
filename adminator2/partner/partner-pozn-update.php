@@ -56,7 +56,7 @@ require ($cesta."include/charset.php");
    
       $list = intval($_GET["list"]);
       
-      require($cesta."include/c_listing-partner.php");
+      // require($cesta."include/c_listing-partner.php");
 
       $poradek = "filtr_akceptovano=".$filtr_akceptovano."&filtr_pripojeno=".$filtr_pripojeno;
   

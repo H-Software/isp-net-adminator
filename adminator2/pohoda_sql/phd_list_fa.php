@@ -27,6 +27,7 @@ $level_col = "lvl_phd_list_fa";
 
 //ini_set("mssql.charset", "UTF-8");
 
+require($cesta."include/main.function.shared.php");
 require_once($cesta."include/config.php"); 
 
 require_once($cesta."include/config.ms.php"); 

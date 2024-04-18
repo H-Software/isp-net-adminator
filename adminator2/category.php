@@ -32,7 +32,7 @@
        
       // if ( ereg("^.+topology",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
       { echo '<td '; }
-       echo ' align="center" width=""><a class="cat" href="'.$cesta.'topology-router-list.php" target="_top" >Topologie</a></td>'." \n";
+       echo ' align="center" width=""><a class="cat" href="'.$cesta.'topology-user-list.php" target="_top" >Topologie</a></td>'." \n";
      
       // if ( ereg("^.+admin.+$",$uri_replace ) or ereg("^.+admin-subcat.php$",$_SERVER["REQUEST_URI"]) )
       //   { echo '<td bgcolor="silver" '; }  else 
@@ -57,11 +57,11 @@
 
     // if ( ereg("soubory",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
     { echo '<td '; }
-      echo " align=\"center\" width=\"15%\"> <a class=\"cat\" href=\"".$cesta."soubory.php\" target=\"_top\" >Správce souborů</a></td> \n";
+      echo " align=\"center\" width=\"15%\"> <!--<a class=\"cat\" href=\"".$cesta."soubory.php\" target=\"_top\" >-->Správce souborů<!--</a>--></td> \n";
 
     // if ( ereg("^.+board.+$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
     { echo '<td '; }
-       echo " align=\"center\" colspan=\"1\" width=\"\"> <a class=\"cat\" href=\"".$cesta."board-header.php\" target=\"_top\" >Nástěnka </a></td> \n";
+       echo " align=\"center\" colspan=\"1\" width=\"\"><!--<a class=\"cat\" href=\"".$cesta."board-header.php\" target=\"_top\" >-->Nástěnka <!--</a>--></td> \n";
 
     // if ( ereg("^.+others.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+syslog.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+/mail.php$",$_SERVER["REQUEST_URI"]) 
     // or ereg("^.+opravy.+$",$_SERVER["REQUEST_URI"]) )

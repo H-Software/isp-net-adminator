@@ -18,7 +18,7 @@ $fname = tempnam("/export", "export-ucetni.xls");
 
 $workbook = &new writeexcel_workbook($fname);
 
-require_once "export_ucetni.inc.function.php";
+// require_once "export_ucetni.inc.function.php";
 
 #######################################################################
 #

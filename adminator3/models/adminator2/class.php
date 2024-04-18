@@ -2739,7 +2739,7 @@ class fakturacni_skupina
    
  function check_nazev($nazev)
  {
-    $nazev_check = ereg('^([[:alnum:]]|_|-)+$',$nazev);
+    $nazev_check = preg_match('/^([[:alnum:]]|_|-)+$/', $nazev);
     
     if( !($nazev_check) )
     {

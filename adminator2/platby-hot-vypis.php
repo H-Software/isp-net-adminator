@@ -45,14 +45,14 @@ include ("include/charset.php");
   <?
     // sem zbytek
     
-    include "./include/c_listing_platby.php";    //předpokládáme třídu uloženou v externím souboru
+    // include "./include/c_listing_platby.php";    //předpokládáme třídu uloženou v externím souboru
     
 //    include ("include/config.pg.php");
 
     $list=$_GET["list"];
         
     //vytvoreni objektu
-    $listovani = new c_Listing("./platby-hot-vypis.php?menu=1", 30, $list, "<center><div class=\"text-listing\">\n", "</div></center>\n", 
+    $listovani = new c_listing("./platby-hot-vypis.php?menu=1", 30, $list, "<center><div class=\"text-listing\">\n", "</div></center>\n", 
                     "SELECT * FROM platby WHERE hotove='1' ORDER BY id ; ");
 		    
     if (($list == "")||($list == "1")){    //pokud není list zadán nebo je první
