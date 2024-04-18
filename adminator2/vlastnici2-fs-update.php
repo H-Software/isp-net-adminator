@@ -128,15 +128,15 @@ include("include/charset.php");
  {
 
    //zjisti jestli neni duplicitni udaj
-   $MSQ_NAZEV = mysql_query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' ) ");
-   $MSQ_FT = mysql_query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' ) ");
+   $MSQ_NAZEV = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' ) ");
+   $MSQ_FT = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' ) ");
     
-   if( mysql_num_rows($MSQ_NAZEV) > 0 )
+   if( $MSQ_NAZEV->num_rows > 0 )
    { 
     $error .= "<div style=\"color: #CC0066; \" ><h4>Název (".$nazev.") již existuje!</h4></div>"; 
     $fail = "true"; 
    }
-   if( mysql_num_rows($MSQ_FT) > 0 )
+   if( $MSQ_FT->num_rows > 0 )
    { 
     $error .= "<div style=\"color: #CC0066; \" ><h4>Fakturační text (".$fakturacni_text.") již existuje!</h4></div>"; 
     $fail = "true"; 
@@ -149,13 +149,13 @@ include("include/charset.php");
  {
 
    //zjisti jestli neni duplicitni dns, ip
-   $MSQ_NAZEV = mysql_query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' AND id != '$update_id' ) ");
-   $MSQ_FT = mysql_query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' AND id != '$update_id' ) ");
+   $MSQ_NAZEV = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' AND id != '$update_id' ) ");
+   $MSQ_FT = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' AND id != '$update_id' ) ");
     
-   if(mysql_num_rows($MSQ_NAZEV) > 0)
+   if($MSQ_NAZEV->num_rows > 0)
    { $error .= "<div style=\"color: #CC0066;\" ><h4>Název (".$nazev.") již existuje!!!</h4></div>"; $fail = "true"; }
    
-   if(mysql_num_rows($MSQ_FT) > 0)
+   if($MSQ_FT->num_rows > 0)
    { $error .= "<div style=\"color: #CC0066;\" ><h4>Fakturační text (".$fakturacni_text.") již existuje!!!</h4></div>"; $fail = "true"; }
    
  }

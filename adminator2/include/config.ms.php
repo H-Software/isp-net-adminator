@@ -55,7 +55,7 @@ if($mssql_db_ok == 1)
 		print_r( sqlsrv_errors(), true);
 
 		// TODO: povolit toto, az bude funkcni MSSQL
-		// if( !($db_mssql_no_exit == 1) )
-		// { exit(); }
+		if( !($db_mssql_no_exit == 1) )
+		{ exit(); }
     }
 }
