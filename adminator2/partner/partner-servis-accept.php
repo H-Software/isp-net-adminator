@@ -5,10 +5,7 @@ $cesta = "../";
 require ($cesta."include/main.function.shared.php");
 require_once ($cesta."include/config.php"); 
 require_once ($cesta."include/check_login.php");
-
 require_once ($cesta."include/check_level.php");
-
-require_once ($cesta."include/class.partner.servis.php");
 
 $level_col = "lvl_partner_servis_accept";
 

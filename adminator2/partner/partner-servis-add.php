@@ -7,7 +7,6 @@ require ($cesta."include/config.php");
 require ($cesta."include/check_login.php");
 require ($cesta."include/check_level.php");
 
-require_once ($cesta."include/class.partner.servis.php");
 require_once ($cesta."include/class.php");
 
 $level_col = "lvl_partner_servis_add";
