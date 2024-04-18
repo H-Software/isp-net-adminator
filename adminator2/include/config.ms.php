@@ -67,7 +67,7 @@ if($mssql_db_ok == 1)
 		$mssqlConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
 		// Execute a query to get the SQL Server version
-		$mssqlQ = $conn->query('SELECT @@VERSION');
+		$mssqlQ = $mssqlConn->query('SELECT @@VERSION');
 		
 		// Display the SQL Server version
 		echo 'MSSQL VERSION: ' . $$mssqlQ->fetchColumn() . '<br>';
