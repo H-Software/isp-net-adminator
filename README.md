@@ -42,9 +42,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://respect-validation.readthedocs.io/en/1.1/feature-guide/
 
 #### smarty
-- smarty 2.x docs
-  - https://www.smarty.net/docsv2/en/
-
+- https://smarty-php.github.io/smarty/4.x/upgrading/
 - https://github.com/smarty-php/smarty
 - https://smarty-php.github.io/smarty/stable/
 - https://github.com/mathmarques/Smarty-View/tree/1.x
