@@ -37,14 +37,14 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         && curl -sSL https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
         && apt-get update \
         && apt-get install -y \
-            msodbcsql17 \
+            msodbcsql18 \
             unixodbc-dev \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # https://gist.github.com/benrolfe/9ee58c79659a6162ccda7cc50430445f
-RUN pecl install sqlsrv-4.1.6.1 \
-        && pecl install pdo_sqlsrv-4.1.6.1 \
+RUN pecl install sqlsrv \
+        && pecl install pdo_sqlsrv \
         && docker-php-ext-enable \
             sqlsrv \
             pdo_sqlsrv
