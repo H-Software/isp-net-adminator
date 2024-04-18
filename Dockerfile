@@ -15,6 +15,7 @@ RUN apt-get update \
         libpng-dev \
         git \
         libldap2-dev \
+        libzip \
         gnupg \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
