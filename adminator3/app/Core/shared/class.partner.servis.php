@@ -563,7 +563,9 @@ class partner_servis {
 
         	    $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >V:".$id_cloveka_pomocne."</a>";
 
-        	    $jmeno = ereg_replace("V:".$id_cloveka_pomocne, $id_cloveka_res, $jmeno);
+              // TODO: probably wrong switch from ereg
+              // http://php.adamharvey.name/manual/en/function.preg-replace.php
+        	    $jmeno = preg_replace("/V:".$id_cloveka_pomocne."/", $id_cloveka_res, $jmeno);
 		    
 	    	}
 
