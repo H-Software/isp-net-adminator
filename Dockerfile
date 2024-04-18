@@ -43,8 +43,8 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pecl install sqlsrv-5.11.1 \
-        && pecl install pdo_sqlsrv-5.11.1 \
+RUN pecl install sqlsrv-5.10.1 \
+        && pecl install pdo_sqlsrv-5.10.1 \
         && docker-php-ext-enable \
             sqlsrv \
             pdo_sqlsrv
