@@ -49,12 +49,13 @@ if($mssql_db_ok == 1)
 							"Database" => $mssql_db,
 							"UID" => $mssql_user,
 							"PWD" => $mssql_pass,
-							"Driver"=>"ODBC Driver 18 for SQL Server"
+							"Driver" => "ODBC Driver 18 for SQL Server"
 							);
 
 	$mssqlDSN = "sqlsrv:"
 				. "server=" . $mssql_db . ";"
-				. "Driver=ODBC Driver 18 for SQL Server;";
+				. "Driver=ODBC Driver 18 for SQL Server;"
+				;
 
 	try {
 		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
@@ -73,7 +74,7 @@ if($mssql_db_ok == 1)
 
 	try {
 		// Establish a connection to the SQL Server using PDO
-		$conn = new PDO($dsn, $mssql_user, $mssql_pass);
+		$conn = new PDO($mssqlDSN, $mssql_user, $mssql_pass);
 	
 		// Set PDO attributes to enable error reporting and exceptions
 		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
