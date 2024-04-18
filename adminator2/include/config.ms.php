@@ -56,6 +56,31 @@ if($mssql_db_ok == 1)
 				. "server=" . $mssql_db . ";"
 				;
 
+	// first we try PDO, because there is working error printing
+	try {
+		// Establish a connection to the SQL Server using PDO
+		$mssqlConn = new PDO($mssqlDSN, $mssql_user, $mssql_pass, $mssqlConnectionInfo);
+	
+		// Set PDO attributes to enable error reporting and exceptions
+		$mssqlConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	
+		// Execute a query to get the SQL Server version
+		$mssqlQ = $conn->query('SELECT @@VERSION');
+		
+		// Display the SQL Server version
+		echo 'MSSQL VERSION: ' . $$mssqlQ->fetchColumn() . '<br>';
+	} catch (Exception $e) {
+		// Error message and terminate the script
+		print_r($e->getMessage());
+
+		if( !($db_mssql_no_exit == 1) )
+		{ exit(); }
+	}
+
+	// and now we're done; close it
+	$$mssqlQ = null;
+	$mssqlConn = null;
+
 	try {
 		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
 	} catch(Exception $e) {
@@ -72,21 +97,6 @@ if($mssql_db_ok == 1)
 		// { exit(); }
     }
 
-	// try {
-	// 	// Establish a connection to the SQL Server using PDO
-	// 	$conn = new PDO($mssqlDSN, $mssql_user, $mssql_pass, $mssqlConnectionInfo);
-	
-	// 	// Set PDO attributes to enable error reporting and exceptions
-	// 	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	
-	// 	// Execute a query to get the SQL Server version
-	// 	$q = $conn->query('SELECT @@VERSION');
-		
-	// 	// Display the SQL Server version
-	// 	echo 'MSSQL VERSION: ' . $q->fetchColumn() . '<br>';
-	// } catch (Exception $e) {
-	// 	// Error message and terminate the script
-	// 	print_r($e->getMessage());
-	// }
+
 
 }
