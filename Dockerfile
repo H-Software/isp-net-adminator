@@ -12,6 +12,7 @@ RUN apt-get update \
         zip \
         unzip \
         zlib1g-dev \
+        libpng-dev \
         git \
         libldap2-dev \
         gnupg \
