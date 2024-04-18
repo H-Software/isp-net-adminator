@@ -52,14 +52,16 @@ if($mssql_db_ok == 1)
 							"LoginTimeout" => 5
 							);
 
+	// https://www.php.net/manual/en/ref.pdo-sqlsrv.connection.php#refsect1-ref.pdo-sqlsrv.connection-examples
 	$mssqlDSN = "sqlsrv:"
-				. "server=" . $mssql_db . ";"
+				. "Server=" . $mssql_host . ";"
+				. "Database=" . $mssql_db . ";"
 				;
 
 	// first we try PDO, because there is working error printing
 	try {
 		// Establish a connection to the SQL Server using PDO
-		$mssqlConn = new PDO($mssqlDSN, $mssql_user, $mssql_pass);
+		$mssqlConn = new PDO($mssqlDSN, $mssql_user, $mssql_pass, array("LoginTimeout" => 5));
 	
 		// Set PDO attributes to enable error reporting and exceptions
 		$mssqlConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
