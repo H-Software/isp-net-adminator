@@ -37,7 +37,7 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         && curl -sSL https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
         && apt-get update \
         && apt-get install -y \
-            msodbcsql18 \
+            msodbcsql17 \
             unixodbc-dev \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
