@@ -34,6 +34,4 @@
   if ( $res == 1){ $vysledek_write="1"; }
   else{ $vysledek_write="0"; }
   
-  $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write') ");
-	     
-?>
+  $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write') ");

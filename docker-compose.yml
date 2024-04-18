@@ -109,18 +109,17 @@ services:
       - pgadmin-data:/var/lib/pgadmin
 
   mssql:
-    container_name: sql-server
-    image: mcr.microsoft.com/mssql/server:2017-latest
-    #image: mcr.microsoft.com/mssql/server:2017-CU11-ubuntu
+    image: mcr.microsoft.com/mssql/server:2019-latest
     restart: always
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "Password123"
+      MSSQL_SA_PASSWORD: "Password123"
     ports:
       - 1433:1433
     volumes:
       - mssql-data:/var/opt/mssql
-  
+
+
   # otel-collector:
   #   deploy:
   #     resources:

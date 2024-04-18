@@ -1,8 +1,8 @@
 <?php
 
-$mssql_host = "127.0.0.1:1433";
-$mssql_user = "admin";
-$mssql_pass = "pass";
+$mssql_host = "mssql";
+$mssql_user = "SA";
+$mssql_pass = "Password123";
 
 if(!isset($mssql_db)){
  
@@ -45,13 +45,51 @@ if($mssql_db_ok == 1)
 		{ exit(); }
     }
 
-	$mssqlConnectionInfo = array( "Database"=> $mssql_db, "UID"=>$mssql_user, "PWD"=>$mssql_pass);
-	$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
-    // $mssql_spojeni = sqlsrv_connect($mssql_host,$mssql_user,$mssql_pass);
+	$mssqlConnectionInfo = array( 
+							"Database" => $mssql_db,
+							"UID" => $mssql_user,
+							"PWD" => $mssql_pass,
+							"LoginTimeout" => 5
+							);
 
-    if(!$mssql_spojeni) {
-		echo " ERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db . ") failed <br>\n";
-		// echo ' MSSQL error: '.sqlsrv_get_last_message()."<br>\n";
+	// https://www.php.net/manual/en/ref.pdo-sqlsrv.connection.php#refsect1-ref.pdo-sqlsrv.connection-examples
+	$mssqlDSN = "sqlsrv:"
+				. "Server=" . $mssql_host . ";"
+				. "Database=" . $mssql_db . ";"
+				;
+
+	// first we try PDO, because there is working error printing
+	try {
+		$mssqlConn = new PDO($mssqlDSN, $mssql_user, $mssql_pass, array("LoginTimeout" => 5));
+	
+		$mssqlConn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	
+		$mssqlQ = $mssqlConn->query('SELECT @@VERSION');
+		
+		// echo 'MSSQL VERSION: ' . $mssqlQ->fetchColumn() . '<br>';
+	} catch (Exception $e) {
+		// Error message and terminate the script
+		print_r($e->getMessage()."<br>\n");
+
+		// TODO: povolit toto, az bude funkcni MSSQL
+		// if( !($db_mssql_no_exit == 1) )
+		// { exit(); }
+	}
+
+	// and now we're done; close it
+	$mssqlQ = null;
+	$mssqlConn = null;
+
+	// init "classic" connection
+	try {
+		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
+	} catch(Exception $e) {
+		// error_log("$e");
+		print_r($e->getMessage());
+	}
+	
+    if($mssql_spojeni === false) {
+		echo "\nERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db. ") failed <br>\n";
 		print_r( sqlsrv_errors(), true);
 
 		// TODO: povolit toto, az bude funkcni MSSQL

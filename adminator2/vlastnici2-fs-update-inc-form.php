@@ -85,15 +85,15 @@
 	        if($sluzba_int_id_tarifu == 0 or !isset($sluzba_int_id_tarifu) ){ echo " selected "; }
 	      echo " style=\"color: gray; \">Nevybráno</option>";
 	     */							   
-	      $dotaz_tarify_id_tarifu = mysql_query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
+	      $dotaz_tarify_id_tarifu = $conn_mysql->query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
 										
-	      while( $data_tarify = mysql_fetch_array($dotaz_tarify_id_tarifu) )
+	      while( $data_tarify = $dotaz_tarify_id_tarifu->fetch_array() )
 	      {
 	          echo "<option value=\"".$data_tarify["id_tarifu"]."\" ";
 	          if( $sluzba_int_id_tarifu == $data_tarify["id_tarifu"] ){ echo " selected "; }
 	          echo " >".$data_tarify["jmeno_tarifu"]." (".$data_tarify["zkratka_tarifu"].")</option>";
 	      }
-																						                echo "</select>";
+			echo "</select>";
 	    }// konec else if sluzba_int != 1
 	   
 	  ?>
@@ -125,6 +125,7 @@
 	   if( $sluzba_iptv != 1)
 	   {
 	     echo "<span style=\"color: gray; \" >Není dostupné</span>";
+		 echo "<input type=\"hidden\" name=\"sluzba_iptv_id_tarifu\" value=\"0\" >";
 	   }
 	   else
 	   {
@@ -135,9 +136,9 @@
                if($sluzba_iptv_id_tarifu == 0 or !isset($sluzba_iptv_id_tarifu) ){ echo " selected "; }
 	      echo " style=\"color: gray; \">Nevybráno</option>";
 	      
-	      $dotaz_iptv_id_tarifu = mysql_query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");
+	      $dotaz_iptv_id_tarifu = $conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");
 	
-	      while( $data_iptv = mysql_fetch_array($dotaz_iptv_id_tarifu) )
+	      while( $data_iptv = $dotaz_iptv_id_tarifu->fetch_array() )
 	      {
 	         echo "<option value=\"".$data_iptv["id_tarifu"]."\" ";
 	           if( $sluzba_iptv_id_tarifu == $data_iptv["id_tarifu"] ){ echo " selected "; }

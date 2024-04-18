@@ -105,12 +105,22 @@ function init_postgres($app_name = "adminator") {
 function mssql_query($sql)
 {
   global $mssql_spojeni;
-	return sqlsrv_query($mssql_spojeni, $sql);
+
+	$q = sqlsrv_query($mssql_spojeni, $sql);
+  
+  if ($q === false)
+  {
+    echo "<div>Error! SQLSRV Query Failed! " . print_r( sqlsrv_errors(), true) . "</div>";
+    return false;
+  }
+  else{
+    return $q;
+  }
 }
 
 function mssql_num_rows($statement)
 {
-	return sqlsrv_num_rows($statement);
+	return @sqlsrv_num_rows($statement);
 }
 
 // ond of MS SQL stuff
