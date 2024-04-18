@@ -45,9 +45,8 @@ if($mssql_db_ok == 1)
 		{ exit(); }
     }
 
-	$mssqlConnectionInfo = array( "Database"=> $mssql_db, "UID"=>$mssql_user, "PWD"=>$mssql_pass);
+	$mssqlConnectionInfo = array( "Database"=> "192.168.1.213", "UID"=>$mssql_user, "PWD"=>$mssql_pass);
 	$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
-    // $mssql_spojeni = sqlsrv_connect($mssql_host,$mssql_user,$mssql_pass);
 
     if(!$mssql_spojeni) {
 		echo " ERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db . ") failed <br>\n";

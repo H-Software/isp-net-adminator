@@ -1,6 +1,20 @@
 # isp-net-adminator
 administration system for Internet Service Provider (ISP)
 
+## bootstrap
+- docker run docker compose up
+
+### MS SQL
+
+#### test connection and create database
+```
+sqlcmd config add-endpoint --name local --address 192.168.1.213
+sqlcmd config add-user --name sa --username SA --password-encryption none
+sqlcmd config add-context --name local --user sa --endpoint local
+sqlcmd query "create database StwPh_26109824_2024"
+sqlcmd query "SELECT Name from sys.databases;"
+```
+
 ## links
 - https://hub.docker.com/_/php/tags?page=&page_size=&ordering=&name=5.6
 
@@ -58,3 +72,9 @@ administration system for Internet Service Provider (ISP)
 ### MSSQL
 - https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-docker?view=sql-server-linux-2017&preserve-view=true&tabs=cli&pivots=cs1-bash#pullandrun2017
 
+
+## Author
+Patrik Majer
+
+## Licence
+MIT
