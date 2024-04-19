@@ -104,9 +104,9 @@ $app->add(
 // };
 
 // TODO: fix after 8.1 switch
-// $container['csrf'] = function($container) {
-// 	return new \Slim\Csrf\Guard;
-// };
+$container['csrf'] = function($container) {
+	return new \Slim\Csrf\Guard;
+};
 
 // $app->add(new \App\Middleware\ValidationErrorsMiddleware($container));
 // $app->add(new \App\Middleware\OldInputMiddleware($container));
