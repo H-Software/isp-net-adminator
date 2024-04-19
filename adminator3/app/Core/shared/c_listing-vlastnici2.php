@@ -54,14 +54,14 @@ class c_listing_vlastnici2 {
         if($listRecord !== false){
             $allRecords = pg_num_rows($listRecord);
         }
-        
+
         if (!$allRecords){
             $this->error(3);
         }
         try {
             $allLists = ceil($allRecords / $this->interval);
         }
-        catch(Exception $e){
+        catch(DivisionByZeroError $e){
         }
         
         $this->numLists = $allLists;
