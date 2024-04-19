@@ -69,7 +69,7 @@ include ("include/charset.php");
   else
   { $gen_ip_find=$gen_ip_find."/24"; }
   
-  $sql = "SELECT * FROM objekty WHERE ip <<= '$gen_ip_find' order by ip asc";
+  $sql = "SELECT * FROM objekty WHERE ip <<= '" . $gen_ip_find . "' order by ip asc";
   echo "<div>DEBUG SQL: " . $sql . "</div>;"
 
   $msq_check_ip = pg_exec($db_ok2, $sql);
