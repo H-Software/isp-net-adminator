@@ -24,7 +24,7 @@
         "doctrine/orm": "^2.19.0",
         "doctrine/annotations": "^1.14.0",
         "symfony/cache": "^5.4",
-        "marcelbonnet/slim-auth": "dev-master",
+        "h-software/slim-auth": "dev-master",
         "setasign/fpdf": "1.8.6"
     }
 }
