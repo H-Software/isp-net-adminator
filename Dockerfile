@@ -70,7 +70,9 @@ COPY ./configs/php /usr/local/etc/php/conf.d/
 # ssh for composer
 RUN mkdir /root/.ssh/ \
     && touch /root/.ssh/known_hosts \
-    && ssh-keyscan github.com >> /root/.ssh/known_hosts
+    && ssh-keyscan github.com >> /root/.ssh/known_hosts \
+    && git config --global url."https://github.com/".insteadOf git@github.com: \
+    && git config --global url."https://".insteadOf git://
 
 # composer
 #
