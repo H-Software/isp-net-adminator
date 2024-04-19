@@ -16,5 +16,5 @@
       </table>
  </form>
 					      
- <script src="logout_time.js"></script>
+ <script src="/include/js/logout_time.js"></script>
  
