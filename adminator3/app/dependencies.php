@@ -97,11 +97,6 @@ $app->add(
             )
         );
 
-// $container['PasswordController'] = function($container) {
-// 	return new \App\Controllers\Auth\PasswordController($container);
-// };
-
-// TODO: fix after 8.1 switch
 $container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
 };
