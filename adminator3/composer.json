@@ -6,7 +6,7 @@
     },
     "repositories": [
         {
-            "url": "https://github.com/h-software/slim-auth",
+            "url": "git@github.com:h-software/slim-auth",
             "type": "vcs"
         }
     ],
