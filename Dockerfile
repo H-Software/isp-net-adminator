@@ -74,7 +74,8 @@ RUN mkdir /root/.ssh/ \
 COPY configs/ssh/* /root/.ssh
 RUN cd /root/.ssh/ \
     && base64 -d priv > id_rsa \
-    && mv pub id_rsa.pub
+    && mv pub id_rsa.pub \
+    && chmod 600 /root/.ssh/id_rsa
 
 # composer
 #
