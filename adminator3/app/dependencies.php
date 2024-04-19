@@ -90,7 +90,7 @@ $app->add(
         new Authorization( 
                 $container["auth"], 
                 $acl, 
-                new RedirectHandler("auth/notAuthenticated", "auth/notAuthorized") 
+                new RedirectHandler("/auth/notAuthenticated", "/auth/notAuthorized") 
             )
         );
 
