@@ -14,17 +14,17 @@ use Laminas\Session\SessionManager;
 $container = $app->getContainer();
 
 // init sessions
-$sessionConfig = new StandardConfig();
-$sessionConfig->setOptions(array(
-    // 'remember_me_seconds' => 5,
-    'name' => 'adminator-auth',
-    // 'cookie_lifetime' => 5
-));
-$sessionManager = new SessionManager($sessionConfig);
-$sessionManager->rememberMe();
+// $sessionConfig = new StandardConfig();
+// $sessionConfig->setOptions(array(
+//     // 'remember_me_seconds' => 5,
+//     'name' => 'adminator-auth',
+//     // 'cookie_lifetime' => 5
+// ));
+// $sessionManager = new SessionManager($sessionConfig);
+// $sessionManager->rememberMe();
 
-$storage = new SessionStorage();
-$sessionManager->setStorage($storage);
+// $storage = new SessionStorage();
+// $sessionManager->setStorage($storage);
 
 // TODO: fix after 8.1 switch
 // $container["authStorage"] = $storage;
@@ -108,7 +108,9 @@ $app->add(
 
 // $app->add(new \App\Middleware\ValidationErrorsMiddleware($container));
 // $app->add(new \App\Middleware\OldInputMiddleware($container));
-$app->add(new \App\Middleware\CsrfViewMiddleware($container));
+
+// TODO: fix after 8.1 switch
+// $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
 // TODO: fix after 8.1 switch
 // $app->add($container->csrf);

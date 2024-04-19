@@ -96,11 +96,12 @@ class adminatorController extends Controller {
             $ret = array();
 
             // CSRF token name and value for update form
-            $csrf = $this->container->get('csrf');
-            $csrf_nameKey = $csrf->getTokenNameKey();
-            $csrf_valueKey = $csrf->getTokenValueKey();
-            $csrf_name = $request->getAttribute($csrf_nameKey);
-            $csrf_value = $request->getAttribute($csrf_valueKey);
+            // TODO: fix after 8.1 switch
+            // $csrf = $this->container->get('csrf');
+            // $csrf_nameKey = $csrf->getTokenNameKey();
+            // $csrf_valueKey = $csrf->getTokenValueKey();
+            // $csrf_name = $request->getAttribute($csrf_nameKey);
+            // $csrf_value = $request->getAttribute($csrf_valueKey);
 
             if($return_form_html === true)
             {

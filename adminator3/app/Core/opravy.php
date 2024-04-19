@@ -84,10 +84,13 @@ class opravy
             $this->logger->addInfo("opravy\\vypis_opravy: mysql query dotaz_S1: num_rows: " . var_export($dotaz_radku_S1, true));   
 
             // zde zjistit jestli uz se zobrazilo
-            for ($p = 0; $p < count($zobrazene_polozky); ++$p)
+            if(!empty($zobrazene_polozky))
             {
-              if( $zobrazene_polozky[$p] == $id_opravy){ $zobrazeno = "ano"; }
-              else{ $zobrazeno = "ne"; }
+              for ($p = 0; $p < count($zobrazene_polozky); ++$p)
+              {
+                if( $zobrazene_polozky[$p] == $id_opravy){ $zobrazeno = "ano"; }
+                else{ $zobrazeno = "ne"; }
+              }
             }
 
             if( $v_reseni_filtr == 1 )
