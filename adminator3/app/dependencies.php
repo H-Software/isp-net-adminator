@@ -109,10 +109,8 @@ $container['csrf'] = function($container) {
 // $app->add(new \App\Middleware\ValidationErrorsMiddleware($container));
 // $app->add(new \App\Middleware\OldInputMiddleware($container));
 
-// TODO: fix after 8.1 switch
 $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
-// TODO: fix after 8.1 switch
 $app->add($container->csrf);
 
 // v::with('App\\Validation\\Rules\\');
