@@ -44,7 +44,7 @@ services:
       # for nette loader
       - /var/www/html/adminator2/temp:uid=33,gid=33
       - /var/www/html/adminator3/temp:uid=33,gid=33
-      # monolog
+      # monolog + some scripts log files
       - /var/www/html/a3-logs:uid=33,gid=33
       # adminator print
       - /var/www/html/adminator3/print/temp:uid=33,gid=33

@@ -151,7 +151,7 @@ echo "<meta http-equiv=\"Refresh\" content=\"2;url=home.php\">";
 
 
 
-<script src="login_time.js"></script>
+<script src="/public/js/login_time.js"></script>
 
 </p>
 
