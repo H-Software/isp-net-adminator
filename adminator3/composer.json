@@ -7,7 +7,12 @@
     "repositories": [
         {
             "url": "https://github.com/h-software/slim-auth",
-            "type": "vcs"
+            "type": "vcs",
+            "options": {
+                "ssl": {
+                    "verify_peer": false
+                }
+            }
         }
     ],
     "require": {
