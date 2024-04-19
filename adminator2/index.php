@@ -1,8 +1,8 @@
 <?php
 
-init_ses();
-
 require "include/main.function.shared.php";
+
+init_ses();
 
 require ("include/config.php");
 

@@ -2,7 +2,6 @@
 
 require("include/main.function.shared.php");
 require ("include/config.php"); 
-require ("include/config.pg.php"); 
 require ("include/check_level.php");
 require ("include/check_login.php");
 
