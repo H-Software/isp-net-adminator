@@ -67,6 +67,11 @@ COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 
 COPY ./configs/php /usr/local/etc/php/conf.d/
 
+# ssh for composer
+RUN mkdir /root/.ssh/ \
+    && touch /root/.ssh/known_hosts \
+    && ssh-keyscan github.com >> /root/.ssh/known_hosts
+
 # composer
 #
 # RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.7/composer.phar" \
