@@ -58,7 +58,11 @@ class c_listing_vlastnici2 {
         if (!$allRecords){
             $this->error(3);
         }
-        $allLists = ceil($allRecords / $this->interval);
+        try {
+            $allLists = ceil($allRecords / $this->interval);
+        }
+        catch(Exception $e){
+        }
         
         $this->numLists = $allLists;
         $this->numRecords = $allRecords;
