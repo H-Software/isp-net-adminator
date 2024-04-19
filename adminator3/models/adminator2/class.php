@@ -2589,7 +2589,7 @@ class vlastnici2pridani
 class vlastnikfind
 {
 
-   function vypis_tab ($par)
+   public static function vypis_tab ($par)
          {
 	if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
 	elseif ($par == 2) { echo "\n".'</table>'."\n"; }
