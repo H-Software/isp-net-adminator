@@ -14,6 +14,8 @@ use Laminas\Session\SessionManager;
 $container = $app->getContainer();
 
 // init sessions
+
+// TODO: fix after 8.1 switch
 // $sessionConfig = new StandardConfig();
 // $sessionConfig->setOptions(array(
 //     // 'remember_me_seconds' => 5,
@@ -26,7 +28,6 @@ $container = $app->getContainer();
 // $storage = new SessionStorage();
 // $sessionManager->setStorage($storage);
 
-// TODO: fix after 8.1 switch
 // $container["authStorage"] = $storage;
 
 $container['logger'] = function($c) {
