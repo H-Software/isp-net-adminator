@@ -100,6 +100,7 @@ class vlastniciController extends adminatorController {
 
         // debug
         // $this->smarty->assign("fs_items_debug","<pre>" . var_export($fs_items,true). "</pre>");
+        
         $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
 
     }

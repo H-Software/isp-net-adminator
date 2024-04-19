@@ -4,7 +4,7 @@ namespace App\Customer;
 
 use App\Core\adminator;
 use App\Models\FakturacniSkupina;
-
+use Illuminate\Database\Capsule\Manager as DB;
 class fakturacniSkupiny extends adminator
 {
 
@@ -20,19 +20,26 @@ class fakturacniSkupiny extends adminator
     {
         $items = array();
 
-        $fetch = FakturacniSkupina::all();
+        // $items = FakturacniSkupina::where('active', 1)
+        //     ->orderBy('name')
+        //     ->take(10)
+        //     ->get();
+
+        // $fetch = FakturacniSkupina::all();
+        // $items =  $fetch->toArray();
+
+        $fetch = DB::table('fakturacni_skupiny')
+                ->orderBy('id', 'desc')
+                ->get();
         
         if(!is_object($fetch))
         {
             return false;
         }
 
-        // $items = FakturacniSkupina::where('active', 1)
-        //     ->orderBy('name')
-        //     ->take(10)
-        //     ->get();
+        $items = $this->objectToArray($fetch);
 
-        return $fetch->toArray();
+        return $items;
     }
 
     function checkNazev($nazev)

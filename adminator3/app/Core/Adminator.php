@@ -25,6 +25,16 @@ class adminator {
         $this->logger->addInfo("adminator\__construct called");
     }
 
+    function objectToArray($data)
+    {
+        $result = [];
+        foreach ($data as $key => $value)
+        {
+            $result[$key] = (is_array($value) || is_object($value)) ? $this->objectToArray($value) : $value;
+        }
+        return $result;
+    }
+
     // public function getUserEmail()
     // {
     //     $rs = User::find(isset($_SESSION['user']) ? $_SESSION['user'] : 0, ['email']);
