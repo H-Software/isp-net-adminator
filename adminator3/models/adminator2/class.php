@@ -654,9 +654,10 @@ class vlastnik
 	         
     $dotaz=pg_query($dotaz_source);	      
     
-    $radku=pg_num_rows($dotaz); 
+	if($dotaz !== false){
+		$radku=pg_num_rows($dotaz); 
+	}
 	
-        
     if ($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
 	 else
 	   {
@@ -1651,7 +1652,9 @@ class vlastnikarchiv
 						    
     $dotaz=pg_query($dotaz_final);
 
-    $radku=pg_num_rows($dotaz);
+	if($dotaz !== false) {
+		$radku=pg_num_rows($dotaz);
+	}
 
     if ($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
     else
