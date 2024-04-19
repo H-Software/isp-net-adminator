@@ -20,7 +20,7 @@ require_once ("include/charset.php");
 
 <title>Adminátor2 - home</title> 
 
-<link href="board-css.css" rel="stylesheet" type="text/css">
+<!-- <link href="board-css.css" rel="stylesheet" type="text/css"> -->
 
 </head>
 

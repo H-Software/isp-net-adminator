@@ -6,7 +6,7 @@ require "include/config.php";
  $data_s = "/srv/www/htdocs.ssl/reinhard.remote.log";
 
  /* smazem log soubor */
- system("sudo /srv/www/htdocs.ssl/adminator2/scripts/delete.log.pl ".$data_s);
+ system("sudo ../adminator2/scripts/delete.log.pl ".$data_s);
 
  if( $_GET["item"] == 1 )
  { exec("/srv/www/htdocs.ssl/adminator3/scripts/work.pl 1 0 0",$vysl); }

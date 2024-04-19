@@ -31,10 +31,11 @@ class workController extends adminatorController {
 
         $this->header($request, $response);
 
+        // TODO: fix this
         $this->smarty->assign("enable_work",1); //slozeni JS skriptu pro stranku
         $this->smarty->assign("action",$_SERVER['SCRIPT_URL']);
         
-        $data_s = "/srv/www/htdocs.ssl/server.remote.log";
+        $data_s = "../a3-logs/server.remote.log";
         
         /*
         $akce = $_POST["akce"];

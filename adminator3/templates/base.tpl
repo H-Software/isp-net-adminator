@@ -18,16 +18,15 @@
  <link rel="stylesheet" href="/plugins/tigra_calendar/calendar.css">
 {/if}
 
-{* 
-// TODO: check and fix this
+
 {if $enable_work == 1}
- <script language="JavaScript" src="/include/js/work.js" ></script>
+ <script language="JavaScript" src="/public/js/work.js" ></script>
 {/if}
 
+{* // probably unused *}
 {if $enable_fn_check == 1}
- <script language="JavaScript" src="/include/js/fn_check.js" ></script>
+ <script language="JavaScript" src="/public/js/fn_check.js" ></script>
 {/if}
-*}
 
 {* <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> *}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
