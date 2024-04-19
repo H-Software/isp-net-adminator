@@ -36,7 +36,7 @@ RUN apt-get update \
 # PHP MSSQL stuff
 # https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
 RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-        && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+        && curl -sSL https://packages.microsoft.com/config/debian/12/prod.list > /etc/apt/sources.list.d/mssql-release.list \
         && apt-get update \
         && apt-get install -y \
             msodbcsql17 \
