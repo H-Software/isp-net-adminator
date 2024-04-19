@@ -978,7 +978,7 @@ class vlastnik2_a2
        
    var $export_povolen;
 
-   function vypis_tab ($par)
+   public static function vypis_tab ($par)
    {
      if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
      elseif ($par == 2) { echo "\n".'</table>'."\n"; }
@@ -1636,18 +1636,15 @@ class vlastnik2_a2
 class vlastnikarchiv
 {
 
-   function vypis_tab ($par)
-         {
-	if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
-	elseif ($par == 2) { echo "\n".'</table>'."\n"; }
-	else    { echo "chybny vyber"; }
-		  
-			
-	// konec funkce vypis_tab
+   public static function vypis_tab ($par)
+    {
+		if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
+		elseif ($par == 2) { echo "\n".'</table>'."\n"; }
+		else    { echo "chybny vyber"; }				
 	}
 				
 				
-    function vypis ($sql,$co,$dotaz_final)
+    public function vypis ($sql,$co,$dotaz_final)
     {
 					
     // co - co hledat, 1- podle dns, 2-podle ip
