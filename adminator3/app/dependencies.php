@@ -3,18 +3,18 @@
 // use Respect\Validation\Validator as v;
 
 use marcelbonnet\Slim\Auth\ServiceProvider\SlimAuthProvider;
-use Zend\Authentication\Storage\Session as SessionStorage;
 use marcelbonnet\Slim\Auth\Middleware\Authorization;
 use marcelbonnet\Slim\Auth\Handlers\RedirectHandler;
 use marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter;
 
-use Zend\Session\Config\SessionConfig;
-use Zend\Session\SessionManager;
+use Laminas\Session\Storage\SessionStorage;
+use Laminas\Session\Config\StandardConfig;
+use Laminas\Session\SessionManager;
 
 $container = $app->getContainer();
 
 // init sessions
-$sessionConfig = new SessionConfig();
+$sessionConfig = new StandardConfig();
 $sessionConfig->setOptions(array(
     // 'remember_me_seconds' => 5,
     'name' => 'adminator-auth',
@@ -22,7 +22,9 @@ $sessionConfig->setOptions(array(
 ));
 $sessionManager = new SessionManager();
 $sessionManager->rememberMe();
-$storage = new SessionStorage(null, null, $sessionManager);
+
+$storage = new SessionStorage();
+$sessionManager->setStorage($storage);
 
 $container["authStorage"] = $storage;
 

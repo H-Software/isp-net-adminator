@@ -61,6 +61,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/marcelbonnet/slim-auth
 - https://github.com/marcelbonnet/slim-allinone-template
 - https://packagist.org/packages/marcelbonnet/slim-auth
+- https://docs.laminas.dev/laminas-session/
 #### doctrine
 - https://filip-prochazka.com/blog/doctrine-a-service-vrstva-aneb-takto-mi-to-dava-smysl
 - https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/getting-started.html
