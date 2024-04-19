@@ -125,18 +125,37 @@ function mssql_num_rows($statement)
 
 // ond of MS SQL stuff
 
+function is_session_started()
+{
+    if (php_sapi_name() === 'cli')
+        return false;
+
+    if (version_compare(phpversion(), '5.4.0', '>='))
+        return session_status() === PHP_SESSION_ACTIVE;
+
+    return session_id() !== '';
+}
+
+function init_ses()
+{
+    $SN = "autorizace"; 
+    session_name("$SN");
+    session_start();
+}
+
 function start_ses()
 {
   global $sid, $level, $nick, $date, $ad, $logger;
+
   if(is_object($logger))
   {
     $logger->addInfo("start_ses called");
   }
 
-  $SN = "autorizace"; 
-  session_name("$SN"); 
-  
-  session_start(); 
+  // some backwards compatibility attemt
+  if (!is_session_started()) {
+    init_ses();
+  }
 
   $sid = $_SESSION["db_login_md5"];
   $level = $_SESSION["db_level"];

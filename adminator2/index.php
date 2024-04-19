@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+init_ses();
 
 require "include/main.function.shared.php";
 

@@ -1,13 +1,12 @@
 <?
 
-include ("include/config.php"); 
+require("include/main.function.shared.php");
+require ("include/config.php"); 
+require ("include/config.pg.php"); 
+require ("include/check_level.php");
+require ("include/check_login.php");
 
-// include ("include/check_login.php");
-
-session_start();
-
-$SN = "autorizace";
-session_name("$SN");
+init_ses();
 
 $sid = $_SESSION["db_login_md5"];
 $level = $_SESSION["db_level"];
@@ -16,9 +15,6 @@ $nick =$_SESSION["db_nick"];
 
 $date = Date("U");
 $ad = Date("U") - 300;
-
-
-include ("include/check_level.php");
 
 if ( !( check_level($level,27) ) )
 {
@@ -69,9 +65,7 @@ include ("include/charset.php");
   
   <form><INPUT TYPE="button" VALUE="Zavřít toto okno" onClick="window.close();"></form>
   <?
- 
-  include("include/config.pg.php"); 
-  
+   
   $gen_ip_find=$_GET["id_rozsah"];
   
   list($a,$b,$c,$d) = split("[.]",$gen_ip_find);
