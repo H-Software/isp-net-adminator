@@ -1,38 +1,31 @@
 <?
 
-include ("include/config.php"); 
+require("include/main.function.shared.php");
 
-// include ("include/check_login.php");
+init_ses();
 
-session_start();
-
-$SN = "autorizace";
-session_name("$SN");
+require ("include/config.php"); 
+require ("include/check_level.php");
+// require ("include/check_login.php");
 
 $sid = $_SESSION["db_login_md5"];
 $level = $_SESSION["db_level"];
 $nick =$_SESSION["db_nick"];
 
-
 $date = Date("U");
 $ad = Date("U") - 300;
 
-
-include ("include/check_level.php");
-
 if ( !( check_level($level,27) ) )
 {
-// neni level
+  // neni level
+  $stranka='nolevelpage.php';
+  header("Location: ".$stranka);
 
-$stranka='nolevelpage.php';
- header("Location: ".$stranka);
- 
-   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-      Exit;
-      
-        }
+  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
+  exit;
+
+}
 	
-
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 
       <head> ';
@@ -41,7 +34,7 @@ include ("include/charset.php");
 
 ?>
 
-<title>Adminator 2</title> 
+<title>Adminator 2 - vypis IP</title> 
 
 </head> 
 
@@ -51,8 +44,6 @@ include ("include/charset.php");
 // include ("head.php"); 
 ?> 
 
-
- 
  <tr>
  <td colspan="2" height="50"></td>
   </tr>
@@ -69,19 +60,25 @@ include ("include/charset.php");
   
   <form><INPUT TYPE="button" VALUE="Zavřít toto okno" onClick="window.close();"></form>
   <?
- 
-  include("include/config.pg.php"); 
-  
+   
   $gen_ip_find=$_GET["id_rozsah"];
   
-  list($a,$b,$c,$d) = split("[.]",$gen_ip_find);
+  if(empty($gen_ip_find)){
+    echo "<div>Error! Chybne vstupni udaje (chybi id_rozsah)</div>";
+    exit;
+  }
+
+  list($a,$b,$c,$d) = preg_split("/[.]/",$gen_ip_find);
   
   if ($c == 0 ){ $gen_ip_find=$gen_ip_find."/16"; }
   else
   { $gen_ip_find=$gen_ip_find."/24"; }
   
-  $msq_check_ip=pg_exec($db_ok2,"SELECT * FROM objekty WHERE ip <<= '$gen_ip_find' order by ip asc");
-    $msq_check_ip_radku=pg_num_rows($msq_check_ip);
+  $sql = "SELECT * FROM objekty WHERE ip <<= '" . $gen_ip_find . "' order by ip asc";
+  // echo "<div>DEBUG SQL: " . $sql . "</div>";
+
+  $msq_check_ip = pg_exec($db_ok2, $sql);
+  $msq_check_ip_radku=pg_num_rows($msq_check_ip);
 	  
     if ( $msq_check_ip_radku == 0 ) { $d=10; $gen_ip=$a.".".$b.".".$c.".".$d; }
     else {

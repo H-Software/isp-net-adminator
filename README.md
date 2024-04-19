@@ -46,6 +46,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/smarty-php/smarty
 - https://smarty-php.github.io/smarty/stable/
 - https://github.com/mathmarques/Smarty-View/tree/1.x
+- https://smarty-php.github.io/smarty/4.x/designers/language-builtin-functions/language-function-foreach/#iteration
 
 #### slim
 - https://www.slimframework.com/docs/v3/tutorial/first-app.html
@@ -64,7 +65,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://filip-prochazka.com/blog/doctrine-a-service-vrstva-aneb-takto-mi-to-dava-smysl
 - https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/getting-started.html
 #### Eloquent
-- https://laravel.com/docs/6.x/eloquent
+- https://laravel.com/docs/8.x/eloquent
 
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html

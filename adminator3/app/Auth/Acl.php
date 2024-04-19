@@ -46,6 +46,7 @@ class Acl extends SlimAuthAcl
             '/home',
             '/vlastnici/cat',
             '/vlastnici2',
+            '/vlastnici2/fakturacni-skupiny',
             '/objekty/cat',
             '/objekty/stb',
             '/objekty/stb/action',

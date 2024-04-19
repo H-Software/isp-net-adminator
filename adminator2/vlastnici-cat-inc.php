@@ -10,7 +10,7 @@ echo "<span style=\"padding-left: 30px; \"><a href=\"".$cesta."vlastnici-archiv.
 
 echo "<span style=\"padding-left: 30px; \"><a href=\"".$cesta."vypovedi.php\">Výpovědi smluv </a></span>\n\n";
 
-echo "<span style=\"padding-left: 30px; \"><a href=\"".$cesta."vlastnici2-fakt-skupiny.php\"> Fakturační skupiny </a></span>\n\n";
+echo "<span style=\"padding-left: 30px; \">Fakturační skupiny (<a href=\"".$cesta."vlastnici2-fs-update.php\">Přidání</a>)</span>\n\n";
 
 echo "<span style=\"padding-left: 20px; \">\n
     <img src=\"".$cesta."img2/pohoda-sql-2.jpg\" alt=\"pohoda sql\" border=\"0\" style=\"padding-top: 2px; padding-bottom: 0px; \">\n

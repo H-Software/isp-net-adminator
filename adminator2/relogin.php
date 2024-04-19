@@ -1,5 +1,5 @@
 <? 
-Session_start(); 
+init_ses();
 
 require("include/main.function.shared.php");
 require("include/config.php"); 
@@ -20,16 +20,14 @@ $MSQ = $conn_mysql->query("SELECT * FROM users WHERE (login LIKE '$login') AND (
 
 If ($MSQ->num_rows <> 1): 
 echo "<p>Neautorizovaný přístup. / Chyba přístupu.</p>"; 
-Exit; 
+exit; 
 
-Else: 
+else: 
 
 // uzivatel se zalogoval spravne, ted to ulozit do db
 
 
 //hadry okolo session
-$SN = "autorizace"; 
-Session_name("$SN"); 
 // session_register("db_login_md5");
 // session_register("db_level");
 // session_register("db_nick");
@@ -67,12 +65,6 @@ echo "<meta http-equiv=\"Refresh\" content=\"6, URL=home.php\">";
 
 <title>Adminator 2</title> 
 
-<script>
-<!--
- 
-//-->
-</script>
-
 </head> 
 
 <BODY>
@@ -108,7 +100,7 @@ echo "<meta http-equiv=\"Refresh\" content=\"6, URL=home.php\">";
  </p>
 
 <?
-Else: 
+else: 
 
 // prihlasovaci dialog ...
 ?> 

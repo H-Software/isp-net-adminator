@@ -36,7 +36,8 @@ INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysl
 (18,	'<b>akce: pridani zmeny pro ucetni; </b><br>[typ_id]=> 1, [text]=> ucetni zmena 1',	'2024-04-15 17:16:26',	'admin@admin',	1),
 (19,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 1 diferencialni data: změna pole: <b>fakturacni_text</b> z: <span class=\"az-s1\" ></span> na: <span class=\"az-s2\">text 1</span>, ',	'2024-04-18 17:55:19',	'admin',	1),
 (20,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 1 diferencialni data: změna pole: <b>fakturacni_text</b> z: <span class=\"az-s1\" >text 1</span> na: <span class=\"az-s2\">text fakturace 1</span>, ',	'2024-04-18 17:55:34',	'admin',	1),
-(21,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> fakturacni skupina 2, [typ]=> 1, [sluzba_int]=> 1, [sluzba_int_id_tarifu]=> 1, [sluzba_iptv]=> 1, [sluzba_iptv_id_tarifu]=> 1, [sluzba_voip]=> 0 [fakturacni_text]=> text 2, [typ_sluzby]=> 1',	'2024-04-18 17:57:04',	'admin',	1);
+(21,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> fakturacni skupina 2, [typ]=> 1, [sluzba_int]=> 1, [sluzba_int_id_tarifu]=> 1, [sluzba_iptv]=> 1, [sluzba_iptv_id_tarifu]=> 1, [sluzba_voip]=> 0 [fakturacni_text]=> text 2, [typ_sluzby]=> 1',	'2024-04-18 17:57:04',	'admin',	1),
+(22,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> fakt skupina - wifi - FU - sc, [typ]=> 2, [sluzba_int]=> 1, [sluzba_int_id_tarifu]=> 1, [sluzba_iptv]=> 0, [sluzba_iptv_id_tarifu]=> 0, [sluzba_voip]=> 0 [fakturacni_text]=> small city pro fakturacni skupiny, [typ_sluzby]=> 0',	'2024-04-19 09:44:30',	'admin',	1);
 
 DROP TABLE IF EXISTS `archiv_zmen_work`;
 CREATE TABLE `archiv_zmen_work` (
@@ -58,7 +59,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713470922',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713521676',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -150,12 +151,14 @@ CREATE TABLE `fakturacni_skupiny` (
   `sluzba_iptv_id_tarifu` int NOT NULL DEFAULT '0',
   `sluzba_voip` int NOT NULL DEFAULT '0',
   `sluzba_voip_id_tarifu` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nazev` (`nazev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `fakturacni_skupiny` (`id`, `nazev`, `typ`, `typ_sluzby`, `fakturacni_text`, `vlozil_kdo`, `sluzba_int`, `sluzba_int_id_tarifu`, `sluzba_iptv`, `sluzba_iptv_id_tarifu`, `sluzba_voip`, `sluzba_voip_id_tarifu`) VALUES
 (1,	'fakturacni skupina 1',	1,	0,	'text fakturace 1',	NULL,	0,	0,	0,	0,	0,	0),
-(2,	'fakturacni skupina 2',	1,	1,	'text 2',	'admin',	1,	1,	1,	1,	0,	0);
+(2,	'fakturacni skupina 2',	1,	1,	'text 2',	'admin',	1,	1,	1,	1,	0,	0),
+(3,	'fakt skupina - wifi - FU - sc',	2,	0,	'small city pro fakturacni skupiny',	'admin',	1,	1,	0,	0,	0,	0);
 
 DROP TABLE IF EXISTS `faktury_neuhrazene`;
 CREATE TABLE `faktury_neuhrazene` (
@@ -233,6 +236,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (38,	100,	'a3: home.php, vlastnici2'),
 (40,	30,	'vlastnici2: pridani vlastnika'),
 (41,	50,	'platby-soucet'),
+(43,	40,	'stats-objekty'),
 (48,	40,	'vlastnici2-add-obj'),
 (51,	30,	'vlastnici-add-fakt'),
 (63,	40,	'vlastnici export'),
@@ -259,6 +263,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (101,	10,	'opravy a zavady vypis (homepage)'),
 (102,	10,	'a2: vlastnici hledani'),
 (103,	49,	'stats.php'),
+(104,	40,	'stats-vlastnici'),
 (105,	20,	'opravy-vlastnik'),
 (106,	20,	'opravy-zacit-resit'),
 (107,	10,	'fn.php'),
@@ -297,6 +302,15 @@ CREATE TABLE `login_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
+INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
+(24,	'admin',	'1713450780',	'172.18.0.1'),
+(25,	'admin',	'1713452972',	'172.18.0.1'),
+(26,	'admin',	'1713455049',	'172.18.0.1'),
+(27,	'admin',	'1713458206',	'172.18.0.1'),
+(28,	'admin',	'1713461423',	'172.18.0.1'),
+(29,	'admin',	'1713461888',	'172.18.0.1'),
+(30,	'admin',	'1713520214',	'172.18.0.1'),
+(31,	'admin',	'1713521661',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -463,20 +477,23 @@ CREATE TABLE `tarify_int` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `tarify_int` (`id_tarifu`, `typ_tarifu`, `zkratka_tarifu`, `jmeno_tarifu`, `speed_down`, `speed_up`, `gen_poradi`) VALUES
-(1,	0,	'cs',	'small city',	'2048',	'2048',	0);
+(1,	0,	'cs',	'small city',	'2048',	'2048',	0),
+(2,	0,	'mp',	'metropolitni linka',	'',	'',	0);
 
 DROP TABLE IF EXISTS `tarify_iptv`;
 CREATE TABLE `tarify_iptv` (
   `id_tarifu` int NOT NULL AUTO_INCREMENT,
   `jmeno_tarifu` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zkratka_tarifu` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id_tarifu`),
   UNIQUE KEY `id_tarifu_unique` (`id_tarifu`),
-  UNIQUE KEY `jmeno_tarifu` (`jmeno_tarifu`)
+  UNIQUE KEY `jmeno_tarifu` (`jmeno_tarifu`),
+  UNIQUE KEY `zkratka_tarifu` (`zkratka_tarifu`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `tarify_iptv` (`id_tarifu`, `jmeno_tarifu`) VALUES
-(1,	'tarif iptv 1'),
-(4,	'tarif iptv 2');
+INSERT INTO `tarify_iptv` (`id_tarifu`, `jmeno_tarifu`, `zkratka_tarifu`) VALUES
+(1,	'tarif iptv 1',	NULL),
+(4,	'tarif iptv 2',	NULL);
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
@@ -535,4 +552,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-18 20:14:19
+-- 2024-04-19 10:15:11

@@ -1,8 +1,8 @@
 <?php
 
-session_start();
-
 require "include/main.function.shared.php";
+
+init_ses();
 
 require ("include/config.php");
 
@@ -56,12 +56,7 @@ if((isset($login)) and (isset($password))):
     else{
         //
         // uzivatel se zalogoval spravne, ted to ulozit do db
-	    //
-	
-        //hadry okolo session
-        $SN = "autorizace";
-        session_name("$SN");
-  
+	    //  
         $time = date("U");
         $at = date("U") - 1800;
 
@@ -170,10 +165,6 @@ elseif (isset($lo)):
 
     // presmerovani na login
     echo "<meta http-equiv=\"refresh\" content=\"1;url=index.php\" >";
-
-    $SN = "autorizace";
-    session_name("$SN");
-
 
     $sid=$_SESSION["db_login_md5"];
 

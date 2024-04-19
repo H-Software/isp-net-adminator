@@ -21,6 +21,8 @@ class vlastniciController extends adminatorController {
 
         $this->logger = $container->logger;
         $this->logger->addInfo("vlastniciController\__construct called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	  }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -31,7 +33,7 @@ class vlastniciController extends adminatorController {
 
       $this->smarty->assign("page_title","Adminator3 :: Zákazníci");
 
-      $this->header($request, $response);
+      $this->header($request, $response, $this->adminator);
       
       $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -48,7 +50,7 @@ class vlastniciController extends adminatorController {
 
         $this->smarty->assign("page_title","Adminator3 :: Zákazníci");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         $select = $_GET["select"];
 
@@ -69,6 +71,38 @@ class vlastniciController extends adminatorController {
         $this->smarty->display('vlastnici/vlastnici2.tpl');
 
         return $response;
+    }
+
+    public function fakturacniSkupiny(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("vlastniciController\\fakturacniSkupiny called");
+        
+        $this->checkLevel(99);
+
+        $this->smarty->assign("page_title","Adminator3 :: Zákazníci :: fakturační skupiny");
+
+        $this->header($request, $response, $this->adminator);
+
+        // main login
+        //
+        $fs = new \App\Customer\fakturacniSkupiny();
+        $fs_items = $fs->getItems();
+
+        if(empty($fs_items))
+        {
+            $this->smarty->assign("message_no_items","Nebyly nalezeny žádné fakturační skupiny");
+            $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
+            return $response;
+        }        
+
+        $this->smarty->assign("fs_items",$fs_items);
+
+        // debug
+        // $this->smarty->assign("fs_items_debug","<pre>" . var_export($fs_items,true). "</pre>");
+        
+        $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
+
     }
 
 }
