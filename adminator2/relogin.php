@@ -28,8 +28,6 @@ else:
 
 
 //hadry okolo session
-// $SN = "autorizace"; 
-// Session_name("$SN"); 
 // session_register("db_login_md5");
 // session_register("db_level");
 // session_register("db_nick");
