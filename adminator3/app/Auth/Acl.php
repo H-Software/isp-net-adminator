@@ -64,6 +64,7 @@ class Acl extends SlimAuthAcl
             '/about/changes-old',
             '/about/changes',
             '/topology',
+            '/topology/node-list',
             '/topology/router-list',
             '/admin',
             '/admin/admin',
