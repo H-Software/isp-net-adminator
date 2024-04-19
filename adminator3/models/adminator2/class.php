@@ -992,7 +992,10 @@ class vlastnik2_a2
 				
     // co - co hledat, 1- podle dns, 2-podle ip					    									    
     $dotaz=pg_query($dotaz_final);
-    $radku=pg_num_rows($dotaz);
+
+	if($dotaz !== false){
+    	$radku=pg_num_rows($dotaz);
+	}
 
     if($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
     else
