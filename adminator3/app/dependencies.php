@@ -5,7 +5,7 @@
 use czhujer\Slim\Auth\ServiceProvider\SlimAuthProvider;
 use czhujer\Slim\Auth\Middleware\Authorization;
 use czhujer\Slim\Auth\Handlers\RedirectHandler;
-use czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter;
+// use czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter;
 
 use Laminas\Authentication\Storage\Session as SessionStorage;
 
@@ -15,8 +15,6 @@ use Laminas\Session\SessionManager;
 $container = $app->getContainer();
 
 // init sessions
-
-// TODO: fix after 8.1 switch
 $sessionConfig = new SessionConfig();
 $sessionConfig->setOptions(array(
     // 'remember_me_seconds' => 5,
