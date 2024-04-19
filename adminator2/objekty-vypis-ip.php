@@ -69,8 +69,11 @@ include ("include/charset.php");
   else
   { $gen_ip_find=$gen_ip_find."/24"; }
   
-  $msq_check_ip=pg_exec($db_ok2,"SELECT * FROM objekty WHERE ip <<= '$gen_ip_find' order by ip asc");
-    $msq_check_ip_radku=pg_num_rows($msq_check_ip);
+  $sql = "SELECT * FROM objekty WHERE ip <<= '$gen_ip_find' order by ip asc";
+  echo "<div>DEBUG SQL: " . $sql . "</div>;"
+
+  $msq_check_ip = pg_exec($db_ok2, $sql);
+  $msq_check_ip_radku=pg_num_rows($msq_check_ip);
 	  
     if ( $msq_check_ip_radku == 0 ) { $d=10; $gen_ip=$a.".".$b.".".$c.".".$d; }
     else {
