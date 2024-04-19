@@ -63,6 +63,11 @@ include ("include/charset.php");
    
   $gen_ip_find=$_GET["id_rozsah"];
   
+  if(empty($gen_ip_find)){
+    echo "<div>Error! Chybne vstupni udaje (chybi id_rozsah)</div>";
+    exit;
+  }
+
   list($a,$b,$c,$d) = preg_split("/[.]/",$gen_ip_find);
   
   if ($c == 0 ){ $gen_ip_find=$gen_ip_find."/16"; }
