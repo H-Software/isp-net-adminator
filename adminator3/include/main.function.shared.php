@@ -133,10 +133,10 @@ function start_ses()
     $logger->addInfo("start_ses called");
   }
 
-  session_start(); 
-
   $SN = "autorizace"; 
   session_name("$SN"); 
+  
+  session_start(); 
 
   $sid = $_SESSION["db_login_md5"];
   $level = $_SESSION["db_level"];

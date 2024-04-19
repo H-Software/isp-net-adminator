@@ -127,10 +127,18 @@
 
                             <td>
                                 <span style="color: grey; " >
+                                {if $v.sluzba_int_id_tarifu gt '0'}
                                     <a href="/admin/tarify?id_tarifu={$v.sluzba_int_id_tarifu|escape:'url'}">ID {$v.sluzba_int_id_tarifu}</a>
+                                {/if}
                                 </span>
                             </td>
-                            <td><span style="color: grey; " >ID {$v.sluzba_iptv_id_tarifu}</span></td>
+                            <td>
+                                <span style="color: grey; " >
+                                {if $v.sluzba_iptv_id_tarifu gt '0'}
+                                    ID {$v.sluzba_iptv_id_tarifu}
+                                {/if}
+                                </span>
+                            </td>
                             
                             <td>&nbsp;</td>
 
