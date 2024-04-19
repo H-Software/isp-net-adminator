@@ -63,7 +63,7 @@ include ("include/charset.php");
    
   $gen_ip_find=$_GET["id_rozsah"];
   
-  list($a,$b,$c,$d) = split("[.]",$gen_ip_find);
+  list($a,$b,$c,$d) = preg_split(/"[.]/",$gen_ip_find);
   
   if ($c == 0 ){ $gen_ip_find=$gen_ip_find."/16"; }
   else
