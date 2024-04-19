@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.1-apache
 
 ENV ACCEPT_EULA=Y
 
@@ -17,6 +17,7 @@ RUN apt-get update \
         libldap2-dev \
         libzip-dev \
         gnupg \
+        vim \
     && docker-php-ext-install mysqli \
     && docker-php-ext-enable mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
@@ -34,8 +35,8 @@ RUN apt-get update \
 
 # PHP MSSQL stuff
 # https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
-RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-        && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
+        && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
         && apt-get update \
         && apt-get install -y \
             msodbcsql17 \
@@ -43,8 +44,8 @@ RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pecl install sqlsrv-5.10.1 \
-        && pecl install pdo_sqlsrv-5.10.1 \
+RUN pecl install sqlsrv-5.11.1 \
+        && pecl install pdo_sqlsrv-5.11.1 \
         && docker-php-ext-enable \
             sqlsrv \
             pdo_sqlsrv
@@ -67,12 +68,23 @@ COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 
 COPY ./configs/php /usr/local/etc/php/conf.d/
 
+# ssh for composer custom repo(s)
+RUN mkdir /root/.ssh/ \
+    && touch /root/.ssh/known_hosts \
+    && ssh-keyscan github.com >> /root/.ssh/known_hosts
+COPY configs/ssh/* /root/.ssh
+RUN cd /root/.ssh/ \
+    && base64 -d priv > id_rsa \
+    && mv pub id_rsa.pub \
+    && chmod 600 /root/.ssh/id_rsa
+
 # composer
 #
-RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2.x/composer.phar" \
-    && chmod +x /usr/local/bin/composer \
-    && mkdir -p /.composer/cache \
-    && chmod -R 777 /.composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+    && php composer-setup.php \
+    && php -r "unlink('composer-setup.php');" \
+    && mv composer.phar /usr/local/bin/composer
 
 RUN mkdir -p /var/www/html/adminator3/
 RUN mkdir -p /var/www/html/adminator2/
@@ -88,27 +100,6 @@ RUN cd adminator2 \
 
 RUN cd adminator3 \
     && composer install
-
-# RUN cd adminator3 \
-#     && composer require \
-#         nette/robot-loader:^3.4 \
-#         smarty/smarty:^3.1 \
-#         slim/slim:3.* \
-#         slim/twig-view:^2.5 \
-#         slim/csrf:^0.8 \
-#         slim/flash:^0.4.0 \
-#         monolog/monolog:^1.27.1 \
-#         respect/validation:^1.1 \
-#         formr/formr:^1.4 \
-#         doctrine/orm:^2.11.0 \
-#         doctrine/annotations:^1.13.0 \
-#         symfony/cache:^4.4 \
-#         marcelbonnet/slim-auth:^2.0 \
-#     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
-#     && composer require \
-#         illuminate/database:^5.8
-
-#     # && docker-php-ext-enable xdebug \
 
 # app code
 COPY adminator2/ /var/www/html/adminator2/
