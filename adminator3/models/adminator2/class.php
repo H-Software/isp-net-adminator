@@ -634,6 +634,8 @@ class vlastnik
 {
 	var $conn_mysql;
 
+	var $conn_pgsql;
+
    function vypis_tab ($par)
     {
        if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
@@ -652,7 +654,7 @@ class vlastnik
     
     // co - co hledat, 1- podle dns, 2-podle ip , 3 - dle id_vlastnika
 	         
-    $dotaz=pg_query($dotaz_source);	      
+    $dotaz=pg_query($this->conn_pgsql, $dotaz_source);	      
     
 	if($dotaz !== false){
 		$radku=pg_num_rows($dotaz); 

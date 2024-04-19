@@ -331,6 +331,7 @@ else
 						     
   $vlastnik = new vlastnik;
   $vlastnik->conn_mysql = $conn_mysql;
+  $vlastnik->conn_pgsql = $db_ok2;
 
   $vlastnik->vypis_tab(1);
 
