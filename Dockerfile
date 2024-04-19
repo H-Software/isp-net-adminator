@@ -69,7 +69,7 @@ COPY ./configs/php /usr/local/etc/php/conf.d/
 
 # composer
 #
-RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.2.x/composer.phar" \
+RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.7.x/composer.phar" \
     && chmod +x /usr/local/bin/composer \
     && mkdir -p /.composer/cache \
     && chmod -R 777 /.composer
