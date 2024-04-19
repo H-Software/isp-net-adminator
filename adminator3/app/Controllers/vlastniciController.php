@@ -86,7 +86,7 @@ class vlastniciController extends adminatorController {
 
         // main login
         //
-        $fs = new \App\Customer\fakturacniSkupiny($this->conn_mysql);
+        $fs = new \App\Customer\fakturacniSkupiny();
         $fs_items = $fs->getItems();
 
         if(empty($fs_items))

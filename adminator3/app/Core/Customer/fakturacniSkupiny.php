@@ -8,12 +8,9 @@ use Illuminate\Database\Capsule\Manager as DB;
 class fakturacniSkupiny extends adminator
 {
 
-    var $conn_mysql;
 
-
-    function __construct($conn_mysql)
+    function __construct()
     {
-        $this->conn_mysql = $conn_mysql;
     }
 
     function getItems()
