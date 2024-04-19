@@ -7,8 +7,9 @@ use czhujer\Slim\Auth\Middleware\Authorization;
 use czhujer\Slim\Auth\Handlers\RedirectHandler;
 use czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter;
 
-use Laminas\Session\Storage\SessionStorage;
-use Laminas\Session\Config\StandardConfig;
+use Laminas\Authentication\Storage\Session as SessionStorage;
+
+use Laminas\Session\Config\SessionConfig;
 use Laminas\Session\SessionManager;
 
 $container = $app->getContainer();
@@ -16,19 +17,19 @@ $container = $app->getContainer();
 // init sessions
 
 // TODO: fix after 8.1 switch
-// $sessionConfig = new StandardConfig();
-// $sessionConfig->setOptions(array(
-//     // 'remember_me_seconds' => 5,
-//     'name' => 'adminator-auth',
-//     // 'cookie_lifetime' => 5
-// ));
-// $sessionManager = new SessionManager($sessionConfig);
-// $sessionManager->rememberMe();
+$sessionConfig = new SessionConfig();
+$sessionConfig->setOptions(array(
+    // 'remember_me_seconds' => 5,
+    'name' => 'adminator-auth',
+    // 'cookie_lifetime' => 5
+));
+$sessionManager = new SessionManager($sessionConfig);
+$sessionManager->rememberMe();
 
-// $storage = new SessionStorage();
+$storage = new SessionStorage();
 // $sessionManager->setStorage($storage);
 
-// $container["authStorage"] = $storage;
+$container["authStorage"] = $storage;
 
 $container['logger'] = function($c) {
     $logger = new \Monolog\Logger('my_logger');
