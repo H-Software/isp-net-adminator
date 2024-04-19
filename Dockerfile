@@ -80,11 +80,6 @@ RUN cd /root/.ssh/ \
 
 # composer
 #
-# RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.7/composer.phar" \
-#     && chmod +x /usr/local/bin/composer \
-#     && mkdir -p /.composer/cache \
-#     && chmod -R 777 /.composer
-
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
     && php composer-setup.php \
@@ -103,29 +98,8 @@ RUN cd adminator2 \
 # RUN cd adminator3 \
 #      && composer update
 
-# RUN cd adminator3 \
-#     && composer install
-
-# RUN cd adminator3 \
-#     && composer require \
-#         nette/robot-loader:^3.4 \
-#         smarty/smarty:^3.1 \
-#         slim/slim:3.* \
-#         slim/twig-view:^2.5 \
-#         slim/csrf:^0.8 \
-#         slim/flash:^0.4.0 \
-#         monolog/monolog:^1.27.1 \
-#         respect/validation:^1.1 \
-#         formr/formr:^1.4 \
-#         doctrine/orm:^2.11.0 \
-#         doctrine/annotations:^1.13.0 \
-#         symfony/cache:^4.4 \
-#         marcelbonnet/slim-auth:^2.0 \
-#     && composer config --no-plugins allow-plugins.kylekatarnls/update-helper true \
-#     && composer require \
-#         illuminate/database:^5.8
-
-#     # && docker-php-ext-enable xdebug \
+RUN cd adminator3 \
+    && composer install
 
 # app code
 COPY adminator2/ /var/www/html/adminator2/
