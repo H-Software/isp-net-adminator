@@ -1,6 +1,6 @@
 <?php
 
-use \marcelbonnet\Slim\Auth\Acl\SlimAuthAcl;
+use \czhujer\Slim\Auth\Acl\SlimAuthAcl;
 
 class Acl extends SlimAuthAcl
 {

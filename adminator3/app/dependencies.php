@@ -2,10 +2,10 @@
 
 // use Respect\Validation\Validator as v;
 
-use marcelbonnet\Slim\Auth\ServiceProvider\SlimAuthProvider;
-use marcelbonnet\Slim\Auth\Middleware\Authorization;
-use marcelbonnet\Slim\Auth\Handlers\RedirectHandler;
-use marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter;
+use czhujer\Slim\Auth\ServiceProvider\SlimAuthProvider;
+use czhujer\Slim\Auth\Middleware\Authorization;
+use czhujer\Slim\Auth\Handlers\RedirectHandler;
+// use czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter;
 
 use Laminas\Session\Storage\SessionStorage;
 use Laminas\Session\Config\StandardConfig;
@@ -64,11 +64,11 @@ $container['view'] = function ($container) {
 
 $acl = new Acl();
 
-$container['router'] = new \marcelbonnet\Slim\Auth\Route\AuthorizableRouter(null, $acl);
+$container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
 $container['acl']    = $acl;
 
 $adapterOptions = [];
-$adapter = new marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter(
+$adapter = new czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter(
     NULL,  //LDAP config or NULL if not using LDAP
     $em, //an Doctrine's Entity Manager instance 
     "App\Entity\UserRole",    //Role class
@@ -77,7 +77,7 @@ $adapter = new marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter(
     "App\Entity\User", //User class
     "username", //User name attribute
     "passwordHash", //password (as a hash) attribute
-    marcelbonnet\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
+    czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
     10, //a hash factor
     PASSWORD_DEFAULT, //hash algorithm
     $adapterOptions //if needed

@@ -6,7 +6,7 @@
     },
     "repositories": [
         {
-            "url": "git@github.com:h-software/slim-auth",
+            "url": "git@github.com:czhujer/slim-auth",
             "type": "git"
         }
     ],
@@ -24,7 +24,7 @@
         "doctrine/orm": "^2.19.0",
         "doctrine/annotations": "^1.14.0",
         "symfony/cache": "^5.4",
-        "h-software/slim-auth": "dev-master",
+        "czhujer/slim-auth": "dev-dev-master",
         "setasign/fpdf": "1.8.6"
     }
 }
