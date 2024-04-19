@@ -53,7 +53,7 @@
                 </tr>
          
                 <tr class=fs-border">
-                    <td><span style="color: gray;" ><!--lidí--></span></td>
+                    <td><span style="color: gray;" >H</span></td>
                     <td colspan="3" style="color: grey;" >Fakturační text</td>
                     
                     <td><span style="" >&nbsp;</span></td>
@@ -107,22 +107,30 @@
                             <td><span>&nbsp;</span></td>
 			                <td>&nbsp;</td>
 
-                            <td>edit</td>
-                            <td>erase</td>
+                            <td>
+                                <a href="/vlastnici2/fakturacni-skupiny/update?update_id={$v.id|escape:'url'}" >upravit</a>
+                            </td>
+                            <td>
+                                <a href="/vlastnici2/fakturacni-skupiny/erase?erase_id={$v.id|escape:'url'}" >upravit</a>
+                            </td>
 
                             <td><span>&nbsp;</span></td>
 			                <td>&nbsp;</td>
                         </tr>
                         <tr class=fs-border">
-                            <td><span style="color: grey;" ></span></td>
+                            <td><span style="color: grey; " ><a href="/archiv-zmen?id_fs={$v.id|escape:'url'}">H</a></span></td>
 
                             <td colspan="3" ><span style="color: grey;" >{$v.fakturacni_text}</span></td>
 
                             <td><span>&nbsp;</span></td>
 			                <td>&nbsp;</td>
 
-                            <td><span style="color: grey; " >{$v.sluzba_int_id_tarifu}</span></td>
-                            <td><span style="color: grey; " >{$v.sluzba_iptv_id_tarifu}</span></td>
+                            <td>
+                                <span style="color: grey; " >
+                                    <a href="/admin/tarify?id_tarifu={$v.sluzba_int_id_tarifu|escape:'url'}">ID {$v.sluzba_int_id_tarifu}</a>
+                                </span>
+                            </td>
+                            <td><span style="color: grey; " >ID {$v.sluzba_iptv_id_tarifu}</span></td>
                             
                             <td>&nbsp;</td>
 
