@@ -1,33 +1,31 @@
 <?
 
 require("include/main.function.shared.php");
-require ("include/config.php"); 
-require ("include/check_level.php");
-require ("include/check_login.php");
 
 init_ses();
+
+require ("include/config.php"); 
+require ("include/check_level.php");
+// require ("include/check_login.php");
 
 $sid = $_SESSION["db_login_md5"];
 $level = $_SESSION["db_level"];
 $nick =$_SESSION["db_nick"];
-
 
 $date = Date("U");
 $ad = Date("U") - 300;
 
 if ( !( check_level($level,27) ) )
 {
-// neni level
+  // neni level
+  $stranka='nolevelpage.php';
+  header("Location: ".$stranka);
 
-$stranka='nolevelpage.php';
- header("Location: ".$stranka);
- 
-   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-      Exit;
-      
-        }
+  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
+  exit;
+
+}
 	
-
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 
       <head> ';
@@ -36,7 +34,7 @@ include ("include/charset.php");
 
 ?>
 
-<title>Adminator 2</title> 
+<title>Adminator 2 - vypis IP</title> 
 
 </head> 
 
@@ -46,8 +44,6 @@ include ("include/charset.php");
 // include ("head.php"); 
 ?> 
 
-
- 
  <tr>
  <td colspan="2" height="50"></td>
   </tr>
