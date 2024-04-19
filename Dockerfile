@@ -35,20 +35,20 @@ RUN apt-get update \
 
 # PHP MSSQL stuff
 # https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
-# RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-#         && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
-#         && apt-get update \
-#         && apt-get install -y \
-#             msodbcsql17 \
-#             unixodbc-dev \
-#         && apt-get clean \
-#         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+        && curl -sSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+        && apt-get update \
+        && apt-get install -y \
+            msodbcsql17 \
+            unixodbc-dev \
+        && apt-get clean \
+        && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# RUN pecl install sqlsrv-5.10.1 \
-#         && pecl install pdo_sqlsrv-5.10.1 \
-#         && docker-php-ext-enable \
-#             sqlsrv \
-#             pdo_sqlsrv
+RUN pecl install sqlsrv-5.11.1 \
+        && pecl install pdo_sqlsrv-5.11.1 \
+        && docker-php-ext-enable \
+            sqlsrv \
+            pdo_sqlsrv
 
 # Install APCu and APC backward compatibility
 RUN pecl install apcu \
