@@ -5,7 +5,7 @@
 use czhujer\Slim\Auth\ServiceProvider\SlimAuthProvider;
 use czhujer\Slim\Auth\Middleware\Authorization;
 use czhujer\Slim\Auth\Handlers\RedirectHandler;
-// use czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter;
+use czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter;
 
 use Laminas\Session\Storage\SessionStorage;
 use Laminas\Session\Config\StandardConfig;
@@ -20,13 +20,14 @@ $sessionConfig->setOptions(array(
     'name' => 'adminator-auth',
     // 'cookie_lifetime' => 5
 ));
-$sessionManager = new SessionManager();
+$sessionManager = new SessionManager($sessionConfig);
 $sessionManager->rememberMe();
 
 $storage = new SessionStorage();
 $sessionManager->setStorage($storage);
 
-$container["authStorage"] = $storage;
+// TODO: fix after 8.1 switch
+// $container["authStorage"] = $storage;
 
 $container['logger'] = function($c) {
     $logger = new \Monolog\Logger('my_logger');
@@ -100,15 +101,17 @@ $app->add(
 // 	return new \App\Controllers\Auth\PasswordController($container);
 // };
 
-$container['csrf'] = function($container) {
-	return new \Slim\Csrf\Guard;
-};
+// TODO: fix after 8.1 switch
+// $container['csrf'] = function($container) {
+// 	return new \Slim\Csrf\Guard;
+// };
 
 // $app->add(new \App\Middleware\ValidationErrorsMiddleware($container));
 // $app->add(new \App\Middleware\OldInputMiddleware($container));
 $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
-$app->add($container->csrf);
+// TODO: fix after 8.1 switch
+// $app->add($container->csrf);
 
 // v::with('App\\Validation\\Rules\\');
 

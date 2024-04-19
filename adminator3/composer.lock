@@ -81,7 +81,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:czhujer/slim-auth",
-                "reference": "663f6ee3c43ae0b46947c671cbc6ec4574195570"
+                "reference": "0ca89b6ee8e1ba12f7728a3611c3bbc3475bad9f"
             },
             "require": {
                 "doctrine/orm": "^2.5",
@@ -137,7 +137,7 @@
                 "issues": "https://github.com/marcelbonnet/slim-auth/issues",
                 "source": "https://github.com/marcelbonnet/slim-auth"
             },
-            "time": "2024-04-19T19:34:42+00:00"
+            "time": "2024-04-19T21:01:00+00:00"
         },
         {
             "name": "doctrine/annotations",
