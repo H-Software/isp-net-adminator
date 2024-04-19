@@ -99,8 +99,8 @@ RUN cd adminator2 \
 # RUN cd adminator3 \
 #      && composer update
 
-RUN cd adminator3 \
-    && composer install
+# RUN cd adminator3 \
+#     && composer install
 
 # RUN cd adminator3 \
 #     && composer require \
