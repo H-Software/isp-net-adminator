@@ -69,10 +69,15 @@ COPY ./configs/php /usr/local/etc/php/conf.d/
 
 # composer
 #
-RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.7.x/composer.phar" \
-    && chmod +x /usr/local/bin/composer \
-    && mkdir -p /.composer/cache \
-    && chmod -R 777 /.composer
+# RUN wget -O /usr/local/bin/composer "https://getcomposer.org/download/latest-2.7/composer.phar" \
+#     && chmod +x /usr/local/bin/composer \
+#     && mkdir -p /.composer/cache \
+#     && chmod -R 777 /.composer
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+    && php composer-setup.php \
+    && php -r "unlink('composer-setup.php');"
 
 RUN mkdir -p /var/www/html/adminator3/
 RUN mkdir -p /var/www/html/adminator2/
