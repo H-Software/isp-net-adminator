@@ -46,6 +46,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/smarty-php/smarty
 - https://smarty-php.github.io/smarty/stable/
 - https://github.com/mathmarques/Smarty-View/tree/1.x
+- https://smarty-php.github.io/smarty/4.x/designers/language-builtin-functions/language-function-foreach/#iteration
 
 #### slim
 - https://www.slimframework.com/docs/v3/tutorial/first-app.html

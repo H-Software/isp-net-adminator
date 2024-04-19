@@ -27,7 +27,7 @@
     <div class="col-12">
         {* main table *}
         {if $fs_items|@count gt 0}
-            <table class="table fs-6">
+            <table class="fakturacni-skupiny-table" >
                 <thead>
                 <tr>
                     <td><b><div class="pl-13">id</b></div></td>
@@ -52,9 +52,9 @@
                     
                 </tr>
          
-                <tr>
-                    <td><span style="color: gray;" >lidí</span></td>
-                    <td colspan="3" >Fakturační text</td>
+                <tr class=fs-border">
+                    <td><span style="color: gray;" ><!--lidí--></span></td>
+                    <td colspan="3" style="color: grey;" >Fakturační text</td>
                     
                     <td><span style="" >&nbsp;</span></td>
                     <td>&nbsp;</td>
@@ -78,11 +78,62 @@
                         <tr>
                             <td>{$v.id}</td>
                             <td>{$v.nazev}</td>
-                            <td>{$v.typ}</td>
-                            <td>{$v.typ_sluzby}</td>
+
+                            <td>
+                            {if $v.typ eq '1'}
+                                DÚ
+                            {elseif $v.typ eq '2' }
+                                FÚ
+                            {else}
+                                N/A ({$v.typ})
+                            {/if}
+                            </td>
+
+                            {if $v.typ_sluzby eq '0'}
+                                <td align="center" class="" bgcolor="#99FF99" >wifi</td>
+                            {elseif $v.typ_sluzby eq '1' }
+                                <td align="center" class="" bgcolor="#fbbc86" >optika</td>
+                            {else}
+                                <td>N/A ({$v.typ_sluzby})</td>
+                            {/if}
+
+                            <td><span>&nbsp;</span></td>
+			                <td>&nbsp;</td>
+
+                            <td>{include file="global/fs.convert-sluzba-number.tpl" tpl_sluzba_number = {$v.sluzba_int} }</td>
+                            <td>{include file="global/fs.convert-sluzba-number.tpl" tpl_sluzba_number = {$v.sluzba_iptv} }</td>
+                            <td>{include file="global/fs.convert-sluzba-number.tpl" tpl_sluzba_number = {$v.sluzba_voip} }</td>
+
+                            <td><span>&nbsp;</span></td>
+			                <td>&nbsp;</td>
+
+                            <td>edit</td>
+                            <td>erase</td>
+
+                            <td><span>&nbsp;</span></td>
+			                <td>&nbsp;</td>
                         </tr>
-                        <tr>
-                        </td>
+                        <tr class=fs-border">
+                            <td><span style="color: grey;" ></span></td>
+
+                            <td colspan="3" ><span style="color: grey;" >{$v.fakturacni_text}</span></td>
+
+                            <td><span>&nbsp;</span></td>
+			                <td>&nbsp;</td>
+
+                            <td><span style="color: grey; " >{$v.sluzba_int_id_tarifu}</span></td>
+                            <td><span style="color: grey; " >{$v.sluzba_iptv_id_tarifu}</span></td>
+                            
+                            <td>&nbsp;</td>
+
+                            <td><span style="" >&nbsp;</span></td>
+                            <td>&nbsp;</td>
+                        
+                            <td colspan="2" >&nbsp;</td>
+                            
+                            <td><span style="" >&nbsp;</span></td>
+                            <td>&nbsp;</td>
+                        </tr>
                     {/foreach}
                 </tbody>
             </table>

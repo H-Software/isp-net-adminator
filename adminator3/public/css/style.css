@@ -461,3 +461,40 @@ subcat-spacebody
 {
     height: 18px;
 }
+
+
+
+.fakturacni-skupiny-table
+{
+    width: 100%; 
+    margin-bottom: 1rem;
+    vertical-align: top; 
+    font-size: 1rem; 
+    /* border-style: solid; 
+    border-width: 0;
+    border-collapse: collapse; */
+    border-spacing: 2px;
+    font-family: Verdana CE, Arial CE, Verdana, Arial, Helvetica, sans-serif;
+}
+
+.fakturacni-skupiny-table tbody 
+{
+    display: table-row-group;
+}
+
+.fakturacni-skupiny-table tr
+{
+    display: table-row;
+    padding: .5rem .5rem;
+}
+
+.fakturacni-skupiny-table td
+{
+    display: table-cell;
+    padding: .5rem .5rem;
+}
+
+.fakturacni-skupiny-table tbody tr:nth-child(odd)
+{
+    border-top-width: 1px;
+}
