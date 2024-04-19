@@ -67,12 +67,14 @@ COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 
 COPY ./configs/php /usr/local/etc/php/conf.d/
 
-# ssh for composer
+# ssh for composer custom repo(s)
 RUN mkdir /root/.ssh/ \
     && touch /root/.ssh/known_hosts \
-    && ssh-keyscan github.com >> /root/.ssh/known_hosts \
-    && git config --global url."https://github.com/".insteadOf git@github.com: \
-    && git config --global url."https://".insteadOf git://
+    && ssh-keyscan github.com >> /root/.ssh/known_hosts
+COPY configs/ssh/* /root/.ssh
+RUN cd /root/.ssh/ \
+    && base64 -d priv > id_rsa \
+    && mv pub id_rsa.pub
 
 # composer
 #
