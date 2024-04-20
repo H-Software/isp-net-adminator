@@ -26,8 +26,7 @@ class c_listing_vlastnici2 {
     
    // $select="./objekty.php?";
     
-    //konstruktor...naplni promenne
-    function c_listing_vlastnici2($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+    function __construct($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
         $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
         // $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
@@ -47,7 +46,13 @@ class c_listing_vlastnici2 {
     
     //vyber dat z databaze
     function dbSelect(){
-        $listRecord = pg_query($this->sql);
+        try {
+            $listRecord = pg_query($this->sql);
+        }
+        catch (Exception $e) {
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). "</div>");
+        }
+
         if (!$listRecord){
             $this->error(2);
         }
