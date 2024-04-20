@@ -1398,7 +1398,7 @@ class vlastnik2_a2
     
     //stb
     
-    $stb = new App\Core\stb(null, $this->conn_mysql);
+    $stb = new App\Core\stb($this->conn_mysql, $this->logger);
     
     $stb->level = $this->level;
     
