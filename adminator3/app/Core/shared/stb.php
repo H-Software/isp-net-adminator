@@ -553,7 +553,7 @@ class stb extends adminator
 
         $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
-        $this->formInit();
+        $this->action_form = $this->formInit();
 
         // fill $_POST into array for reusing in the form and etc
         $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2');
