@@ -5,6 +5,7 @@ namespace App\Customer;
 use App\Core\adminator;
 use App\Models\FakturacniSkupina;
 use Illuminate\Database\Capsule\Manager as DB;
+use Psr\Container\ContainerInterface;
 
 class fakturacniSkupiny extends adminator
 {
@@ -19,9 +20,11 @@ class fakturacniSkupiny extends adminator
 
     var $action_form;
     
-    function __construct($auth, $conn_mysql = null)
+    function __construct(ContainerInterface $container, $conn_mysql = null)
     {
-        $i = $auth->getIdentity();
+        $this->logger = $container->logger;
+
+        $i = $container->auth->getIdentity();
         $this->loggedUserEmail = $i['username'];
 
         $this->conn_mysql = $conn_mysql;
@@ -95,7 +98,8 @@ class fakturacniSkupiny extends adminator
         if( ( $this->form_update_id > 0 ) ){ 
             // run this code in update mode
             $update_status=1; 
-        
+            $this->logger->addInfo("fakturacniSkupiny\Action: update mode set");
+
             if ($this->adminator_ctl->checkLevel(140, false) === false)
             {
                 $output .= "<div class=\"alert alert-danger\" role=\"alert\">Fakturacni Skupiny nelze upravovat, není dostatečné oprávnění. </div>";
@@ -113,8 +117,13 @@ class fakturacniSkupiny extends adminator
             { $output .= "<div style=\"color: red; \" >Chyba! Požadovaná data nelze načíst! </div>"; }
             else
             {
+                $this->logger->addInfo("fakturacniSkupiny\Action: form_data from DB loaded");
+
                 $form_data = $dotaz_upd->fetch_assoc();
-                // $output .= "<pre>";
+                unset($form_data["id"]);
+                unset($form_data["vlozil_kdo"]);
+                
+                // $output .= "<pre>DB: <br>";
                 // $output .= var_export($form_data, true);
                 // $output .= "</pre>";            
             }
@@ -122,7 +131,16 @@ class fakturacniSkupiny extends adminator
         else
         {
             // rezim pridani, ukladani, reloadu ??
-            $form_data = $this->action_form->validate('nazev, fakturacni_text, typ, typ_sluzby, sluzba_int, sluzba_int_id_tarifu, sluzba_iptv, sluzba_iptv_id_tarifu, sluzba_voip, sluzba_voip_id_tarifu');         
+            $form_data = $this->action_form->validate('nazev, fakturacni_text, '.
+                                                'typ(gte[0]), typ_sluzby(gte[0]), '.
+                                                 'sluzba_int(gte[0]), sluzba_int_id_tarifu(gte[0]), sluzba_iptv(gte[0]), sluzba_iptv_id_tarifu(gte[0]), sluzba_voip(gte[0]), sluzba_voip_id_tarifu(gte[0])');
+
+            /// fix missing zero values in array (some bug in formr ??)
+            $form_data = $this->fillEmptyVarsInArray($form_data);
+
+            // $output .= "<pre>Form: <br>";
+            // $output .= var_export($form_data, true);
+            // $output .= "</pre>";  
         }
                
         //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
@@ -237,11 +255,10 @@ class fakturacniSkupiny extends adminator
                     // pridame to do archivu zmen
                     $pole = "<b> akce: pridani fakt. skupiny; </b><br>";
                 
-                    $pole .= "[nazev]=> ".$nazev.", [typ]=> ".$typ.", [sluzba_int]=> ".$sluzba_int;
-                    $pole .= ", [sluzba_int_id_tarifu]=> ".$sluzba_int_id_tarifu.", [sluzba_iptv]=> ".$sluzba_iptv;
-                    $pole .= ", [sluzba_iptv_id_tarifu]=> ".$sluzba_iptv_id_tarifu.", [sluzba_voip]=> ".$sluzba_voip;
-                    $pole .= " [fakturacni_text]=> ".$fakturacni_text.", [typ_sluzby]=> ".$typ_sluzby;
-                        
+                    foreach ($form_data as $c => $v) {
+                        $pole .= "[$c]=> $v, ";
+                    }
+    
                     if($res === true){ $vysledek_write="1"; }
                 
                     $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$this->loggedUserEmail','$vysledek_write')");
@@ -255,7 +272,7 @@ class fakturacniSkupiny extends adminator
             else {} // konec else ( !(isset(fail) ), musi tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
        
         elseif ( isset($send) ): 
-            $error = "<div class=\"alert alert-warning\" role=\"alert\">Chybí povinné údaje !!! (aktuálně jsou povinné: název FS, Typ, Typ služby) ".
+            $error = "<div class=\"alert alert-warning\" role=\"alert\">Chybí povinné údaje !!! (aktuálně jsou povinné: Název, Typ, Typ služby) ".
                         "(debug: " . $form_data['nazev'] . ", " . $form_data['typ'] . "," . $form_data['typ_sluzby'] . ")</div>"; 
         endif;
        
@@ -268,7 +285,7 @@ class fakturacniSkupiny extends adminator
         if ( (isset($error)) or (!isset($send)) ): 
             $output .= $error;
 
-            $output .= $info;
+            // $output .= $info;
 
             // vlozeni vlastniho formu
             $output .= $this->actionForm($form_data);
@@ -282,7 +299,7 @@ class fakturacniSkupiny extends adminator
             <br>
             fakturační skupina přidána/upravena, zadané údaje:<br><br>
             
-            <b>Název skupiny</b>:' . $nazev . "<br><br>";
+            <b>Název skupiny</b>:' . $form_data['nazev'] . "<br><br>";
     
     //    <b>Typ</b>:  
     //    
@@ -365,7 +382,7 @@ class fakturacniSkupiny extends adminator
         
                 <tr>
                  <td  width="50px" >Název skupiny: </td>
-                 <td><input type="text" name="nazev" size="30"' . "value=\"" . $data['nazev'] . "\"></td>" .
+                 <td><input type="text" name="nazev" size="30" ' . "value=\"" . $data['nazev'] . "\"></td>" .
                 
              '<td width="50px" >&nbsp;</td>
              
@@ -383,8 +400,8 @@ class fakturacniSkupiny extends adminator
                  <td  width="250px" >Typ: </td>
                   <td>
                     <select name="typ" size="1" >
-                        <option value="1" '; if($data['typ'] == 1 or empty($data['typ']) ){ $output .= "selected "; } $output .= ' >DÚ - domácí uživatel</option>
-                        <option value="2" '; if($data['typ'] == 2){ $output .= "selected "; } $output .= ' >FÚ - firemní uživatel</option>
+                        <option value="1" '; if($data['typ'] == 1 or intval($data['typ']) < 1 ){ $output .= " selected "; } $output .= ' >DÚ - domácí uživatel</option>
+                        <option value="2" '; if($data['typ'] == 2){ $output .= " selected "; } $output .= ' >FÚ - firemní uživatel</option>
                     </select>
                  </td>
                 </tr>
@@ -395,8 +412,8 @@ class fakturacniSkupiny extends adminator
                  <td  width="250px" >Typ služby:</td>
                   <td>
                     <select name="typ_sluzby" size="1" >
-                        <option value="0" '; if($data['typ_sluzby'] == 0 or empty($data['typ_sluzby']) ){ $output .= "selected "; } $output .= ' >wifi</option>
-                        <option value="1" '; if($data['typ_sluzby'] == 1){ $output .= "selected "; } $output .= ' >optika</option>
+                        <option value="0" '; if(intval($data['typ_sluzby']) == 0){ $output .= " selected "; } $output .= ' >wifi</option>
+                        <option value="1" '; if($data['typ_sluzby'] == 1){ $output .= " selected "; } $output .= ' >optika</option>
                     </select>
                  </td>
                 </tr>
@@ -411,7 +428,7 @@ class fakturacniSkupiny extends adminator
               <td>    
                 <select name="sluzba_int" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0" ';
-                    if( $data['sluzba_int'] == 0 or !isset($data['sluzba_int']) ){ $output .= " selected "; } 
+                    if( $data['sluzba_int'] == 0 or $data['sluzba_int'] == "" ){ $output .= " selected "; } 
             $output .= ' >Ne</option>
                 <option value="1" ';
                     if( $data['sluzba_int'] == 1){ $output .= " selected "; }
@@ -436,10 +453,10 @@ class fakturacniSkupiny extends adminator
                   //vypis tarifu
                   $output .= "<select name=\"sluzba_int_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
                          
-                 /* $output .= "<option value=\"0\" ";
-                    if($sluzba_int_id_tarifu == 0 or !isset($sluzba_int_id_tarifu) ){ $output .= " selected "; }
+                  $output .= "<option value=\"0\" ";
+                    if(intval($data['sluzba_int_id_tarifu']) == 0 ){ $output .= " selected "; }
                   $output .= " style=\"color: gray; \">Nevybráno</option>";
-                 */							   
+						   
                   $dotaz_tarify_id_tarifu = $this->conn_mysql->query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
                                                 
                   while( $data_tarify = $dotaz_tarify_id_tarifu->fetch_array() )
@@ -465,7 +482,7 @@ class fakturacniSkupiny extends adminator
               <td>    
                 <select name="sluzba_iptv" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0" ';
-                    if( $data['sluzba_iptv'] == 0 or !isset($data['sluzba_iptv']) ){ $output .= " selected "; }
+                    if( intval($data['sluzba_iptv']) == 0 ){ $output .= " selected "; }
         $output .=	' >Ne</option>
                 <option value="1" ';
                     if( $data['sluzba_iptv'] == 1){ $output .= " selected "; }
@@ -491,7 +508,7 @@ class fakturacniSkupiny extends adminator
                   $output .= "<select name=\"sluzba_iptv_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
                               
                   $output .= "<option value=\"0\" ";
-                       if($data['sluzba_iptv_id_tarifu'] == 0 or !isset($data['sluzba_iptv_id_tarifu']) ){ $output .= " selected "; }
+                       if(intval($data['sluzba_iptv_id_tarifu']) == 0){ $output .= " selected "; }
                   $output .= " style=\"color: gray; \">Nevybráno</option>";
                   
                   $dotaz_iptv_id_tarifu = $this->conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");

@@ -86,7 +86,7 @@ class vlastniciController extends adminatorController {
 
         // list logic
         //
-        $fs = new \App\Customer\fakturacniSkupiny($this->container->auth);
+        $fs = new \App\Customer\fakturacniSkupiny($this->container);
         $fs_items = $fs->getItems();
 
         if(empty($fs_items))
@@ -116,7 +116,7 @@ class vlastniciController extends adminatorController {
 
         $this->header($request, $response, $this->adminator);
 
-        $fs = new \App\Customer\fakturacniSkupiny($this->container->auth, $this->conn_mysql);
+        $fs = new \App\Customer\fakturacniSkupiny($this->container, $this->conn_mysql);
         $fs->csrf_html = $this->generateCsrfToken($request, $response, true);
         $fs->adminator_ctl = $this->adminator;
 

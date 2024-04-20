@@ -44,6 +44,18 @@ class adminator {
         return $result;
     }
 
+    function fillEmptyVarsInArray($a)
+    {
+        foreach($a as $key => $val)
+        {
+            if( empty($val) )
+            {
+                $a[$key] = 0;
+            }
+        }
+        return $a;
+    }
+
     // public function getUserEmail()
     // {
     //     $rs = User::find(isset($_SESSION['user']) ? $_SESSION['user'] : 0, ['email']);
