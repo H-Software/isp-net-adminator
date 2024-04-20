@@ -214,10 +214,7 @@ class fakturacniSkupiny extends adminator
                         unset($pole_puvodni_data["id"]);
                         unset($pole_puvodni_data["vlozil_kdo"]);
                     } // konec else if radku <> 1
-                    
-                    //pridavani do pole pro porovnavani z archivu zmen...
-                    $fs_upd = $form_data;                
-            
+                                
                     $affected = DB::table($this->db_table_name)
                                 ->where('id', $this->form_update_id)
                                 ->update($form_data);
@@ -231,12 +228,25 @@ class fakturacniSkupiny extends adminator
             
                     $output .= "<div style=\"font-weight: bold; font-size: 18px; \">Změny je třeba dát vědět účetní!</div>";
                     
+                    if ($res === true){ $vysledek_write="1"; }
+                    else{ $vysledek_write="0"; }
+
                     //ted vlozime do archivu zmen (inkrementarne)
-                    $this->actionArchivZmenDiff($res, $pole_puvodni_data, $fs_upd);
-                    // require("vlastnici2-fs-update-inc-archiv.php");
+                    $params = array(
+                                "itemId" => $this->form_update_id,
+                                "actionResult" => $vysledek_write,
+                                "loggedUserEmail" => $this->loggedUserEmail
+                            );
+
+                    $az = new ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
+                    $azRes = $az->insertItemDiff(2, $pole_puvodni_data, $form_data, $params);
             
+                    if( is_object($azRes) )
+                    { $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n"; } 
+                    else
+                    { $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n"; }	
+
                     $updated="true";
-            
                 }
                 else
                 {
@@ -268,7 +278,6 @@ class fakturacniSkupiny extends adminator
                     
                     // konec else - rezim pridani
                 }
-        
             }
             else {} // konec else ( !(isset(fail) ), musi tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
        
@@ -574,38 +583,4 @@ class fakturacniSkupiny extends adminator
         return $output;
     }
 
-    function actionArchivZmenDiff($res, $pole_puvodni_data, $fs_upd)
-    {
-        $pole3 .= "<b>akce: uprava fakturacni skupiny; </b><br>";
-        $pole3 .= "[id_fs] => ".$this->form_update_id;
-        $pole3 .= " diferencialni data: ";
-        
-        //novy zpusob archivovani dat
-        foreach($pole_puvodni_data as $key => $val)
-        {
-            if( !($fs_upd[$key] == $val) )
-            {
-                if( $key == "pozn" )
-                {
-                $pole3 .= "změna <b>Poznámky</b> z: ";
-                $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$fs_upd[$key]."</span>";
-                $pole3 .= ", ";
-                } //konec key == pozn
-            else
-                { // ostatni mody, nerozpoznane
-                $pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
-                $pole3 .= "na: <span class=\"az-s2\">".$fs_upd[$key]."</span>, ";
-                } //konec else
-            } // konec if key == val
-        } // konec foreach
-
-        $pole .= "".$pole3;
-        
-        if ($res === true){ $vysledek_write="1"; }
-        else{ $vysledek_write="0"; }
-        
-        $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . $this->loggedUserEmail ."','$vysledek_write') ");
-
-        return $add;
-    }
 }
