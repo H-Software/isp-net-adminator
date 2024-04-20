@@ -1,0 +1,657 @@
+<?php
+
+class objekt_a2
+{
+
+	var $conn_mysql;
+
+ function vypis_tab($par)
+ {
+   
+   if ($par == 2) { echo "\n".'</table>'."\n";  }
+   else  { echo "chybny vyber"; }
+   
+   // konec funkce
+ }
+   
+ public static function select($es,$razeni)  
+ {
+  global $db_ok2;
+  // co - co hledat, 1- podle dns, 2-podle ip
+    
+  $ds=pg_query(" SET DATESTYLE TO 'SQL, EUROPEAN' ");
+
+  // prvne vyresime sekundarni select
+  $se_id=$es;
+
+  //global $se;
+  global $order;
+
+  if( $se_id ==1 ){ $se=''; }
+  elseif( $se_id==2 ){ $se=" AND typ LIKE '1' "; }
+  elseif( $se_id==3 ){ $se=" AND typ LIKE '2' "; }
+  elseif( $se_id==4 ){ $se=" AND typ LIKE '3' "; }
+  elseif( $se_id==5 ){ $se=" AND id_tridy > 0 "; }
+  elseif( $se_id==6 ){ $se=" AND verejna !=99 "; }
+  elseif( $se_id==7 ){ $se=" AND id_cloveka is null "; }
+  elseif( $se_id==8 ){ $se=" AND dov_net LIKE 'n' "; }
+  elseif( $se_id==9 ){ $se=" AND sikana_status LIKE 'a' "; }
+
+  // tvoreni dotazu
+  // $order=$_POST["razeni"];
+ 
+  if ( $razeni == 1 ) { $order=" order by dns_jmeno DESC"; }
+  elseif ( $razeni == 2 ){ $order=" order by dns_jmeno ASC"; }
+  elseif ( $razeni == 3 ){ $order=" order by ip DESC"; }
+  elseif ( $razeni == 4 ){ $order=" order by ip ASC"; }
+  elseif ( $razeni == 7 ){ $order=" order by mac DESC"; }
+  elseif ( $razeni == 8 ){ $order=" order by mac ASC"; }
+  //# elseif ( $razeni == 9 ){ $order=" order by typ DESC"; }
+  //# elseif ( $razeni == 10){ $order=" order by typ ASC"; }
+  else { $order=" order by id_komplu ASC "; }	   		
+ 
+  $pole[]=$se;
+  $pole[]=$order;
+  
+  return $pole;
+  
+ } //konec funkce select
+ 
+ //zde funkce export
+ function export_vypis_odkaz()
+ {
+
+    $fp=fopen("export/objekty.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
+     fputs($fp,"<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
+     fputs($fp,"<tr>");   // Zapíšeme do souboru začátek řádky, kde budou názvy sloupců (polí)
+
+     $vysledek_pole=pg_query("SELECT column_name FROM information_schema.columns WHERE table_name ='objekty' ORDER BY ordinal_position ");
+
+     while ($vysledek_array_pole=pg_fetch_row($vysledek_pole) )
+     { fputs($fp,"<td><b> ".$vysledek_array_pole[0]." </b></td> \n"); }
+
+        fputs($fp,"</tr>");   // Zapíšeme do souboru konec řádky, kde jsou názvy sloupců (polí)
+
+        $vysledek = pg_query("SELECT * FROM objekty ORDER BY id_komplu ASC");
+
+        while ($data=pg_fetch_array($vysledek) )
+        {
+          fputs($fp,"\n <tr>");
+
+          fputs($fp,"<td> ".$data["id_komplu"]."</td> ");
+          fputs($fp,"<td> ".$data["id_tridy"]."</td> ");
+          fputs($fp,"<td> ".$data["id_cloveka"]."</td> ");
+          fputs($fp,"<td> ".$data["dns_jmeno"]."</td> ");
+          fputs($fp,"<td> ".$data["ip"]."</td> ");
+          fputs($fp,"<td> ".$data["mac"]."</td> ");
+          fputs($fp,"<td> ".$data["rra"]."</td> ");
+          fputs($fp,"<td> ".$data["vezeni"]."</td> ");
+          fputs($fp,"<td> ".$data["dov_net"]."</td> ");
+          fputs($fp,"<td> ".$data["swz"]."</td> ");
+     //     fputs($fp,"<td> ".$data["sc"]."</td> ");
+          fputs($fp,"<td> ".$data["typ"]."</td> ");
+          fputs($fp,"<td> ".$data["poznamka"]."</td> ");
+          fputs($fp,"<td> ".$data["verejna"]."</td> ");
+          fputs($fp,"<td> ".$data["ftp_update"]."</td> ");
+          fputs($fp,"<td> ".$data["pridano"]."</td> ");
+          fputs($fp,"<td> ".$data["id_nodu"]."</td> ");
+          fputs($fp,"<td> ".$data["rb_mac"]."</td> ");
+          fputs($fp,"<td> ".$data["rb_ip"]."</td> ");
+          fputs($fp,"<td> ".$data["pridal"]."</td> ");
+          fputs($fp,"<td> ".$data["upravil"]."</td> ");
+          fputs($fp,"<td> ".$data["sikana_status"]."</td> ");
+          fputs($fp,"<td> ".$data["sikana_cas"]."</td> ");
+          fputs($fp,"<td> ".$data["sikana_text"]."</td> ");
+          fputs($fp,"<td> ".$data["vip_snat"]."</td> ");
+          fputs($fp,"<td> ".$data["vip_snat_lip"]."</td> ");
+
+          fputs($fp,"</tr> \n ");
+          // echo "vysledek_array: ".$vysledek_array[$i];
+
+        }
+
+        fputs($fp,"</table>");   // Zapíšeme do souboru konec tabulky
+        fclose($fp);   // Zavřeme soubor
+
+        echo "<span style=\"padding-left: 25px; padding-right: 20px; \" >";
+        echo "<a href=\"export\objekty.xls\">export dat zde</a></span>";
+	 
+ 
+ } //konec funkce vypis odkaz
+ 
+ public static function vypis_razeni()
+ {
+ 
+   $input_value="1";
+   $input_value2="2";
+
+ for ($i=1; $i < 6 ; $i++):
+
+    //vnejsi tab
+    echo "<td>";
+
+    //vnitrni tab
+    echo "\n <table><tr><td>";
+
+    if( $i=="3" or $i=="4" ){ echo ""; }
+    else
+    {
+
+      echo "\n\n <input type=\"radio\" ";
+         if ( ($_GET["razeni"]== $input_value) ){ echo " checked "; }
+      echo "name=\"razeni\" value=\"".$input_value."\" onClick=\"form1.submit();\" > ";
+
+     // obr, prvni sestupne -descent
+     echo "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
+      if ($i!=5){ echo " | "; }
+     echo "</td> \n\n <td>";
+
+     echo "<input type=\"radio\" ";
+         if ( ($_GET["razeni"]== $input_value2) ){ echo " checked "; }
+     echo " name=\"razeni\" value=\"".$input_value2."\" onClick=\"form1.submit();\"> \n";
+
+     // obr, druhy vzestupne - asc
+     echo "<img src=\"img2/vzes.png\" alt=\"vzes\" width=\"15px\" height=\"10px\" >";
+
+    }
+
+    // vnitrni tab
+    echo "\n </td></tr></table> \n\n";
+
+    $input_value=$input_value+2;
+    $input_value2=$input_value2+2;
+
+    // konec vnitrni tab
+    echo "</td>";
+
+ endfor;
+ 
+ }
+ 
+ function zjistipocet($mod,$id)
+ {
+    if ( $mod == 1 ) //wifi sit ...
+    {
+      //prvne vyberem wifi tarify...
+      $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
+      
+      $i = 0;
+      while( $data_f = $dotaz_f->fetch_array() )
+      {
+         if( $i == 0 ){ $tarif_sql .= " AND ( "; }
+         if( $i > 0 ){ $tarif_sql .= " OR "; }
+			    
+         $tarif_sql .= " id_tarifu = ".$data_f["id_tarifu"]." ";
+		 
+         $i++;
+      }
+					  
+      if( $i > 0 ){ $tarif_sql .= " ) "; }
+    }
+    elseif ( $mod == 2 ) //fiber sit ...
+    { 
+      $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
+      
+      $i = 0;
+      while( $data_f = $dotaz_f->fetch_array() )
+      {
+         if( $i == 0 ){ $tarif_sql .= " AND ( "; }
+         if( $i > 0 ){ $tarif_sql .= " OR "; }
+			    
+         $tarif_sql .= " id_tarifu = ".$data_f["id_tarifu"]." ";
+		 
+         $i++;
+      }
+					  
+      if( $i > 0 ){ $tarif_sql .= " ) "; }    
+    }
+
+    $dotaz = pg_query("SELECT id_cloveka FROM objekty WHERE ( id_cloveka = '".intval($id)."' ".$tarif_sql." ) ");     
+    $radku = pg_num_rows($dotaz);
+  
+  return $radku;
+  
+ } //konec funkce zjistipocet
+ 
+ function vypis($sql,$co,$id,$dotaz_final = "")
+ {
+   global $db_ok2;
+    
+	if (!$db_ok2) {
+		echo "An error occurred. The connection with pqsql does not exist.\n";
+		exit;
+	}
+
+   $list=$_GET["list"];
+
+    if ( $co==3 ) //wifi sit ...vypis u vlastniku (dalsi pouziti nevim)
+    { 
+      //prvne vyberem wifi tarify...
+	  try {
+		$dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
+	  } catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
+      
+      $i = 0;
+	  
+      while( $data_f = $dotaz_f->fetch_array() )
+      {
+         if( $i == 0 ){ $tarif_sql .= "AND ( "; }
+         if( $i > 0 ){ $tarif_sql .= " OR "; }
+			    
+         $tarif_sql .= " id_tarifu = ".$data_f["id_tarifu"]." ";
+		 
+         $i++;
+      }
+					  
+      if( $i > 0 ){ $tarif_sql .= " ) "; }
+				       
+	  try {
+		$dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+		} 
+	  catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
+
+    
+    }
+    elseif ( $co==4 ) //fiber sit ...vypis pouze u vlastniku
+    { 
+	  try {
+		$dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
+	  } catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
+      
+      $i = 0;
+	  
+      while( $data_f = $dotaz_f->fetch_array() )
+      {
+         if( $i == 0 ){ $tarif_sql .= "AND ( "; }
+         if( $i > 0 ){ $tarif_sql .= " OR "; }
+			    
+         $tarif_sql .= " id_tarifu = ".$data_f["id_tarifu"]." ";
+		 
+         $i++;
+      }
+					  
+      if( $i > 0 ){ $tarif_sql .= " ) "; }
+				  
+	  try {
+		$dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+	  } 
+	  catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
+     
+    
+    }
+    else
+    { 
+		try {
+			$dotaz= pg_query($db_ok2, $dotaz_final); 
+		} 
+		catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		}
+
+	}
+
+if($dotaz !== false){
+	$radku=pg_num_rows($dotaz);
+}
+else{
+	echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+}
+  
+ if ($radku==0) 
+ {
+ 
+  //if( ( ( $co == 3 ) or ( $co == 4 ) ) )
+  
+  if( $co == 3 or $co == 4 )
+  {
+    echo "<tr><td colspan=\"9\" >";
+    echo "<span style=\"color: #555555; \">Žádný objekt není přiřazen. </span></td></tr>";
+  }
+  else
+  {
+   echo "<tr><td colspan=\"8\" ><span style=\"color: red; \">Nenalezeny žádné odpovídající data dle hledaného \"".htmlspecialchars($sql)."\" ";
+   // echo " (dotaz: ".$dotaz_final.") ";
+   echo "</td></tr>";
+  }
+ 
+ }
+ else
+ {
+ 
+   while (  $data=pg_fetch_array($dotaz) ) 
+   {
+    // echo $data[sloupec1]." ".$data[sloupec2]; 
+    // echo "<br />";
+   
+//    if( $data["id_tridy"] > 0 ){ $garant=1; }
+    if( $data["verejna"] <> 99 ){ $verejna=1; }
+   
+/*
+   if ( $garant==1)
+   {
+    $id_tridy=$data["id_tridy"];
+    //zjistime sirku pasma
+    $dotaz_g = pg_exec($db_ok2, "SELECT * FROM tridy WHERE id_tridy = '$id_tridy' ");
+   
+    while (  $data_g=pg_fetch_array($dotaz_g) ) { $sirka=$data_g["sirka"]; }
+   }
+*/
+         
+   //zacatek radny a prvni bunka
+    echo "\n <tr>"."<td class=\"tab-objekty2\">".$data["dns_jmeno"]."</td> \n\n";
+
+     $pridano=$data["pridano"];
+
+    // treti bunka - ip adresa
+    if ($verejna==1)
+    { 
+	if ( $data["vip_snat"] == 1)
+	{ echo "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"orange\" >".$data["ip"]." </td> \n"; }
+	elseif( $data["tunnelling_ip"] == 1)
+	{ echo "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"#00CC33\" >".$data["ip"]." </td> \n"; }
+	else
+	{ echo "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"#FFFF99\" >".$data["ip"]." </td> \n"; }
+    }
+    else
+    { echo "<td colspan=\"2\" class=\"tab-objekty2\">".$data["ip"]."</td> \n"; }
+    
+    // druha bunka - pozn
+    echo "<td class=\"tab-objekty2\" align=\"center\" ><span class=\"pozn\"> <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
+    echo " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." , Vytvořeno: ".$pridano." ');\" ></span></td> \n";
+	       
+    // 4-ta bunka - mac
+    echo "<td class=\"tab-objekty2\">".$data["mac"]."</td> \n";
+    	       
+    // 5-ta typ
+    if ( $data["typ"] == 1 ){ echo "<td class=\"tab-objekty\">"."daně"."</td> \n"; }
+    elseif ( $data["typ"] ==2 ){ echo "<td class=\"tab-objekty\" bgcolor=\"#008000\" ><font color=\"#FFFFFF\">"." free "."</font></td> \n"; }
+    elseif ( $data["typ"] ==3 ){ echo "<td class=\"tab-objekty\" bgcolor=\"yellow\" >"." ap "."</td> \n"; }
+    else { echo "<td class=\"tab-objekty\" >Error </td> \n"; }
+    
+    // rra - client ip -- CISLO portu
+    echo "<td class=\"tab-objekty2\" align=\"center\" ><span style=\"\"> ";
+    
+    global $mod_vypisu; 
+    
+    if( $mod_vypisu == 2)
+    {
+     echo "".$data["port_id"]."";
+    }
+    else
+    { 
+     if( ( strlen($data["client_ap_ip"]) < 1 ) )
+     { echo "&nbsp;"; }
+     else { echo $data["client_ap_ip"]; }
+    }
+    
+    echo "</span></td> \n";
+
+    //oprava a mazani
+    global $update_povolen;
+    
+     $update_mod_vypisu = $_GET["mod_vypisu"];
+      
+      $id_tarifu = $data["id_tarifu"];
+      
+      $dotaz_update = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
+      $rs_update = $dotaz_update->mysql_num_rows;
+              
+      if( $rs_update <> 1 ){ echo "Chyba! Nelze specifikovat tarif!"; }
+      
+      while($data_update = $dotaz_update->fetch_array())
+      { 
+        if( $data_update["typ_tarifu"] == 1 )
+	{ $update_mod_vypisu = 2; }
+	else
+	{ $update_mod_vypisu = 1; }
+      }
+     
+    // 6-ta update
+    if ( !( $update_povolen =="true") )
+    { echo "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Upravit</td> \n"; }
+    else
+    {
+      echo "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"objekty-add.php\" >";
+      echo "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_komplu"]."\" >";
+      
+      
+      echo "<input type=\"hidden\" name=\"mod_objektu\" value=\"".$update_mod_vypisu."\" >";
+      
+      echo "<input class=\"\" type=\"submit\" value=\"update\" >";
+        
+      echo "</td></form> \n";
+    }
+     
+    // 7-ma smazat
+    global $mazani_povoleno;
+     
+    if ( !( $mazani_povoleno =="true") )
+    { echo "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Smazat</td>"; }
+    else
+    { 
+     echo "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"objekty-erase.php\" >";
+     echo "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_komplu"]."\" >";
+     echo "<input class=\"\" type=\"submit\" value=\"smazat\" >";
+    
+     echo "</td> </form> \n";   
+    }
+     
+    // 8-ma typ objektu :)
+    $id=$data["id_komplu"];
+    $class_id=$data["id_tridy"];
+    
+    global $garant_akce;
+    
+    // generovani tridy    
+    if( $data["typ"] == 3){ echo ""; }
+    else 
+    { 
+      {	echo "<td class=\"tab-objekty2\"><font color=\"red\">"." peasant "."</font></td> \n"; }      
+    }
+
+    // prirava promennych pro tresty a odmeny
+    if( $data["dov_net"] =="a" ){ $dov_net="<font color=\"green\">NetA</font>"; }
+    else{ $dov_net="<font color=\"orange\">NetN</font> \n"; }
+    
+    if( preg_match("/a/",$data["sikana_status"]) )
+    { 
+	$sikana_status_s = "<span class=\"obj-link-sikana\" >".
+			    "<a href=\"http://damokles.adminator.net:8009/index.php".
+			    "?sc=".intval($data["sikana_cas"])."&st=".urlencode($data["sikana_text"])."\" target=\"_new\" >".
+			    "Sikana-A (".$data["sikana_cas"].")</a></span>\n"; 
+    
+    } 
+    else{ $sikana_status_s="<span style=\"color: green;\" >Sikana-N</span>"; }
+
+    //tresty a odmeny - 6 bunek
+    if( $data["typ"] == 3 )
+    { echo "<td class=\"tab-objekty2\" colspan=\"5\" bgcolor=\"yellow\" align=\"center\"> ap-čko jaxvine </td> \n"; }
+    else 
+    { 
+      echo "<td class=\"tab-objekty2\" >".$dov_net."</td>";
+     
+      //test objetktu
+      echo "<td class=\"tab-objekty2\" >";
+    
+      if( $update_mod_vypisu == 2 )    
+      {
+	echo "<a href=\"objekty-test.php?id_objektu=".$data["id_komplu"]."\" >test</a>";
+      }
+      else
+      { echo "<br>"; }
+      
+      echo "</td> \n";   
+      //zde tarif 2 gen.
+      echo "<td class=\"tab-objekty2\" >";
+       $id_tarifu = $data["id_tarifu"];
+       
+       //dodelat klikatko pro sc
+       //{ $tarif="<span class=\"tarifsc\"><a href=\"https://trinity.simelon.net/monitoring/data/cat_sc.php?ip=".$data["ip"]."\" target=\"_blank\" >sc</a></span>"; } 
+    
+       $tarif_f = $this->conn_mysql->query("SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
+       $tarif_f_r = $tarif_f->num_rows;
+              
+       if( $tarif_f_r <> 1){ echo "<span style=\"font-weight: bold; color: red;\" >E</span>"; }
+       else
+       {
+        while($data_f = $tarif_f->fetch_array())
+	{ 
+	    echo "<span style=\"color: ".$data_f["barva"]."; \" >";
+	    echo "<a href=\"admin-tarify.php?id_tarifu=".$data_f["id_tarifu"]."\" >".$data_f["zkratka_tarifu"]."</a>";
+	
+	    echo "</span>\n";
+        }	 
+       }
+      echo "</td>\n"; 
+      
+      echo "<td class=\"tab-objekty2\" colspan=\"2\" >".$sikana_status_s."</td>\n";
+    }
+    
+    echo "</tr>\n<tr>\n";
+    
+    // tady uz asi druhej radek :) 
+    echo "<td class=\"tab-objekty\" colspan=\"2\" >"; 
+    
+    $id_nodu=$data["id_nodu"];
+          
+    $vysledek_bod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id='".intval($id_nodu)."' ");
+    $radku_bod = $vysledek_bod->num_rows;
+				      
+     if($radku_bod==0) echo "<span style=\"color: gray; \">přípojný bod nelze zjistit </span>";
+     else
+     {
+       while ($zaznam_bod=$vysledek_bod->fetch_array() )
+       { 
+        //pouze text 
+	//echo "<span class=\"objekty-2radka\">NOD: ".$zaznam_bod["jmeno"]."</span> "; 
+
+	echo "<span class=\"objekty-2radka objekty-odkaz\">NOD: ".
+	     "<a href=\"topology-nod-list.php?find=".$zaznam_bod["jmeno"]."\" >".
+	     $zaznam_bod["jmeno"]."</a></span> "; 
+       }
+     }
+    
+    echo "</td>";
+    
+     // sem historii
+    echo "<td class=\"tab-objekty\" ><span class=\"objekty-2radka\" style=\"\" > H: ";
+    echo "<a href=\"archiv-zmen.php?id=".$id."\" >".$id."</a>";
+    echo " </span>";
+	
+    echo "</td> \n";
+	
+    // id vlastnika
+    echo "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" > \n";
+     
+    $id_cloveka=$data["id_cloveka"];
+    
+    $vlastnik_dotaz=pg_query("SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."'");
+    $vlastnik_radku=pg_num_rows($vlastnik_dotaz);
+    while ($data_vlastnik=pg_fetch_array($vlastnik_dotaz))
+    { $firma_vlastnik=$data_vlastnik["firma"]; $archiv_vlastnik=$data_vlastnik["archiv"]; }
+    
+    if ( $archiv_vlastnik == 1)
+    { echo "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n"; }
+    else
+    { echo "V: <a href=\"vlastnici2.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n"; }    		
+    
+    if( $update_mod_vypisu == 2 )
+    { echo "<td class=\"tab-objekty\" colspan=\"3\" > <br></td>";  }
+    else
+    {
+     if ( !($co==3 ) )
+     {
+      echo "<td class=\"tab-objekty\" colspan=\"2\" > <span class=\"objekty-2radka\" >";
+       //if( (strlen($data["rb_mac"]) > 0) ){ echo $data["rb_mac"]; }
+       echo "&nbsp;";
+      echo "</span></td> \n";
+    
+     //echo "<td><br>b</td>";
+    
+      echo "<td class=\"tab-objekty\" colspan=\"1\" ><span class=\"objekty-2radka\" >";
+       //if( (strlen($data["rb_ip"]) > 0) ){ echo $data["rb_ip"]; }
+       echo "&nbsp;";
+      echo "</span></td> \n";
+     }
+    
+    }
+    // kdo pridal a kdo naposledy upravil 
+    echo "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
+       if( (strlen($data["pridal"]) > 0) ){ echo $data["pridal"]; }
+       else{ echo "<span style=\"color: #CC3366;\" >nezadáno</span>"; }
+     echo "</span></td> \n";
+     
+    echo "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
+       if( (strlen($data["upravil"]) > 0) ){ echo $data["upravil"]; }
+       else{ echo "<span style=\"color: #CC3366;\" >nezadáno</span>"; }
+    echo "</span></td> \n";
+    
+    echo "<td class=\"tab-objekty\" >&nbsp;</td> \n";
+    
+    // kdy se objekty pridal
+    //prvne to orezem
+    $orez= $pridano; 
+    $orezano = explode(':', $orez); 
+    $pridano_orez=$orezano[0].":".$orezano[1];
+    
+    echo "<td class=\"tab-objekty\" colspan=\"3\" ><span class=\"objekty-2radka\" >".$pridano_orez."</span></td>
+    <td class=\"tab-objekty\" >
+     <form method=\"POST\" action=\"/adminator3/print/reg-form-pdf.php\" >
+        <input type=\"hidden\" name=\"id_objektu\" value=\"".intval($data["id_komplu"])."\" >
+	<input type=\"submit\" name=\"odeslano_form\" value=\"R.F.\">
+     </form>
+    </td>\n";
+    
+     global $odendani_povoleno; 
+      
+    //sem odendat
+    if ( $co==3 ) 
+    { 
+    
+     if ( $odendani_povoleno )
+     {
+      echo "<td colspan=\"4\" ><a href=\"vlastnici2-obj-erase.php?id_komplu=".$data["id_komplu"]."\">Odendat</a> </td> \n";
+     }
+     else
+     {
+	echo "<td colspan=\"4\" style=\"font-size: 10px; font-family: arial; color: gray; \">
+	<div style=\"text-align: center; \">odendat</div> </td> \n"; 
+     }
+    
+    }
+    elseif( $co==4 ) //opticky rezim
+    {
+
+     if ( $odendani_povoleno )
+     {
+      echo "<td colspan=\"\" ><a href=\"vlastnici2-obj-erase.php?id_komplu=".$data["id_komplu"]."\">Odendat</a> </td> \n";
+     }
+     else
+     {
+	echo "<td colspan=\"\" style=\"font-size: 10px; font-family: arial; color: gray; \">
+	<div style=\"text-align: center; \">odendat</div> </td> \n"; 
+     }
+    }
+     
+    echo "</span>";
+    // konec druhyho radku
+     echo "</tr> \n";
+     
+     $verejna=0; 
+     $garant=0;
+   
+     } // konec while
+  
+    } //konec else
+   
+   } // konec funkce
+   
+}
