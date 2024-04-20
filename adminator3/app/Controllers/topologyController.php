@@ -19,12 +19,12 @@ class topologyController extends adminatorController {
         // $this->logger = $logger;
         $this->logger = $container->logger;
 
-        $this->logger->addInfo("topologyController\__construct called");
+        $this->logger->info("topologyController\__construct called");
 	}
 
     public function nodeList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->addInfo("topologyController\\nodeList called");
+      $this->logger->info("topologyController\\nodeList called");
 
       $this->checkLevel(5);
 
@@ -43,7 +43,7 @@ class topologyController extends adminatorController {
 
     public function routerList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->addInfo("topologyController\\routerList called");
+        $this->logger->info("topologyController\\routerList called");
 
         $this->checkLevel(85);
 

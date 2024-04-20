@@ -40,7 +40,7 @@ class auth_service{
         }
 
         $auth_identity = $this->container->auth->getIdentity();
-        // $this->logger->addInfo("adminatorController\\check_level getIdentity: ".var_export( $auth_identity['username'], true));
+        // $this->logger->info("adminatorController\\check_level getIdentity: ".var_export( $auth_identity['username'], true));
 
         if ($page_level_id == 0){
             $this->renderNoLogin();
@@ -52,7 +52,7 @@ class auth_service{
 
         $checkLevel = $a->checkLevel();
         
-        $this->logger->addInfo("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
+        $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false){
             $this->renderNoLogin();

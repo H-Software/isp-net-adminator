@@ -51,13 +51,13 @@ class board{
 
 		$start = $this->page*$this->view_number; //první zpráva, která se zobrazí
 
-		$sql = $sql_base." FROM board WHERE ".$this->sql." ORDER BY id DESC LIMIT ".$start.",".$this->view_number;
+		$sql = $sql_base." FROM board2 WHERE ".$this->sql." ORDER BY id DESC LIMIT ".$start.",".$this->view_number;
 
-		try {
+		// try {
 			$message = $this->conn_mysql->query($sql);
-		} catch (Exception $e) {
-			die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-		}
+		// } catch (Exception $e) {
+		// 	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		// }
 
 		//vypíšeme tabulky se zprávami
 		while($entry = $message->fetch_array())

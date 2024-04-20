@@ -15,8 +15,8 @@ class opravy
 
     function vypis_opravy($pocet_bunek)
     {
-        $this->logger->addInfo("opravy\\vypis_opravy called");
-        $this->logger->addInfo("opravy\\vypis_opravy: script_url: ".$_SERVER['SCRIPT_URL']);
+        $this->logger->info("opravy\\vypis_opravy called");
+        $this->logger->info("opravy\\vypis_opravy: script_url: ".$_SERVER['SCRIPT_URL']);
         $ret = array();
         $this->vypis_opravy_content_html = "";
 
@@ -51,7 +51,7 @@ class opravy
           return $ret;
         }
         
-        $this->logger->addInfo("opravy\\vypis_opravy: mysql query dotaz: num_rows: " . var_export($dotaz_radku, true));   
+        $this->logger->info("opravy\\vypis_opravy: mysql query dotaz: num_rows: " . var_export($dotaz_radku, true));   
 
         $zobrazeno_limit="0";
 
@@ -81,7 +81,7 @@ class opravy
                 die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
             }
 
-            $this->logger->addInfo("opravy\\vypis_opravy: mysql query dotaz_S1: num_rows: " . var_export($dotaz_radku_S1, true));   
+            $this->logger->info("opravy\\vypis_opravy: mysql query dotaz_S1: num_rows: " . var_export($dotaz_radku_S1, true));   
 
             // zde zjistit jestli uz se zobrazilo
             if(!empty($zobrazene_polozky))
@@ -201,7 +201,7 @@ class opravy
               $vlastnik_dotaz=pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($id_cloveka) . "'");
               $vlastnik_radku=pg_num_rows($vlastnik_dotaz);
 
-              $this->logger->addInfo("opravy\\vypis_opravy: pq query vlastnik_dotaz: num_rows: " . var_export($vlastnik_radku, true));   
+              $this->logger->info("opravy\\vypis_opravy: pq query vlastnik_dotaz: num_rows: " . var_export($vlastnik_radku, true));   
 
               while ($data_vlastnik=pg_fetch_array($vlastnik_dotaz))
               { 
@@ -275,7 +275,7 @@ class opravy
                 die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
               }
 
-              $this->logger->addInfo("opravy\\vypis_opravy: mysql query dotaz_S2: num_rows: " . var_export($dotaz_S2->num_rows, true));   
+              $this->logger->info("opravy\\vypis_opravy: mysql query dotaz_S2: num_rows: " . var_export($dotaz_S2->num_rows, true));   
 
               while($data_S2=$dotaz_S2->fetch_array() )
               {
@@ -298,7 +298,7 @@ class opravy
                   }
 
                   $dotaz_radku_S3=$dotaz_S3->num_rows;
-                  $this->logger->addInfo("opravy\\vypis_opravy: mysql query dotaz_S3: num_rows: " . var_export($dotaz_radku_S3, true));   
+                  $this->logger->info("opravy\\vypis_opravy: mysql query dotaz_S3: num_rows: " . var_export($dotaz_radku_S3, true));   
 
                   // neni jiste jestli barveni ma bejt zde
 
@@ -406,8 +406,8 @@ class opravy
 
       } // konec while 1
       
-      $this->logger->addInfo("opravy\\vypis_opravy: end of main loop");
-      // $this->logger->addDebug("opravy\\vypis_opravy: content " . var_export($this->vypis_opravy_content_html, true));
+      $this->logger->info("opravy\\vypis_opravy: end of main loop");
+      // $this->logger->debug("opravy\\vypis_opravy: content " . var_export($this->vypis_opravy_content_html, true));
 
       $ret = array("", $this->vypis_opravy_content_html);
 

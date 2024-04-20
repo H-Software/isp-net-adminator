@@ -14,14 +14,14 @@ class platby
     function synchro_db_nf()
     {
         // synchro tabulky neuhr. faktur mezi MySQL a Postgresem :)
-        $this->logger->addInfo("platby\synchro_db_nf called");
+        $this->logger->info("platby\synchro_db_nf called");
 
         global $db_ok2;
 
         $pocet_cyklu=0;
 
         $vymazani_pg_fn = pg_query("DELETE FROM faktury_neuhrazene");
-        $this->logger->addInfo("platby\synchro_db_nf: vymazani_pg_fn query result: ".var_export($vymazani_pg_fn, true));
+        $this->logger->info("platby\synchro_db_nf: vymazani_pg_fn query result: ".var_export($vymazani_pg_fn, true));
 
         try {
             $dotaz_mysql_fn = $this->conn_mysql->query("SELECT * FROM faktury_neuhrazene ORDER BY id");
@@ -30,7 +30,7 @@ class platby
           die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
-        $this->logger->addInfo("platby\synchro_db_nf: dotaz_mysql_fn query: "
+        $this->logger->info("platby\synchro_db_nf: dotaz_mysql_fn query: "
                                 . "result: ".var_export($vymazani_pg_fn, true)
                                 . " num_rows: ".var_export($dotaz_mysql_fn_radku, true));
 
@@ -78,7 +78,7 @@ class platby
             }
             else{
               $res_rows = pg_affected_rows($res);
-              $this->logger->addInfo("platby\synchro_db_nf: pg_insert res: "
+              $this->logger->info("platby\synchro_db_nf: pg_insert res: "
                                       . " result: ".var_export($res, true)
                                       . " affected_rows: ".var_export($res_rows, true)
                                     );
@@ -97,7 +97,7 @@ class platby
         
         global $db_ok2;
 
-        $this->logger->addInfo("platby\\fn_kontrola_omezeni called");
+        $this->logger->info("platby\\fn_kontrola_omezeni called");
 
         $sql_dotaz =
     
@@ -130,7 +130,7 @@ class platby
           return $ret;
        } else{
           $dotaz_vlastnici_num = pg_num_rows($dotaz_vlastnici);
-          $this->logger->addInfo("platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici: "
+          $this->logger->info("platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici: "
                                   . " result: ".var_export($dotaz_vlastnici, true)
                                   . " num_rows: ".var_export($dotaz_vlastnici_num, true));
        }

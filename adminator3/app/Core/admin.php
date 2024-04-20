@@ -13,7 +13,7 @@ class admin {
 		try {
 			$rs= $this->conn_mysql->query("select * from leveling order by level asc");
 		} catch (Exception $e) {
-			$this->logger->addInfo("admin\LevelList: levelListDbQuery exception: " . var_export($e->getMessage(), true));
+			$this->logger->info("admin\LevelList: levelListDbQuery exception: " . var_export($e->getMessage(), true));
 		}
 	
 		$num_rows = $rs->num_rows;
@@ -35,7 +35,7 @@ class admin {
         // $r_data = ['username' => 'leego.sir',  'age' => 18];
 
 		list($q_num_rows, $q_data) = $this->levelListDbQuery();
-		// $this->logger->addInfo("admin\LevelList dump q_data: " . var_export($q_data, true));
+		// $this->logger->info("admin\LevelList dump q_data: " . var_export($q_data, true));
 
 		if ($q_num_rows==0)
 		{
@@ -56,12 +56,12 @@ class admin {
 		if($_POST['search'])
 		{
 			$search_string = $this->conn_mysql->real_escape_string($_POST['search']);
-			$this->logger->addInfo("admin\LevelList search string: " . var_export($search_string, true));
+			$this->logger->info("admin\LevelList search string: " . var_export($search_string, true));
 		}
 
 		list($q_num_rows, $q_data) = $this->levelListDbQuery();
 
-		// $this->logger->addInfo("admin\LevelList dump q_data: " . var_export($q_data, true));
+		// $this->logger->info("admin\LevelList dump q_data: " . var_export($q_data, true));
 
 		$output .= '<div style="padding-top: 10px; padding-left: 10px;" class="fs-5">Výpis levelů stránek</div>';
 

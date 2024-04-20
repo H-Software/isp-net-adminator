@@ -22,14 +22,14 @@ class objektyController extends adminatorController {
         $this->smarty = $smarty;
         
         $this->logger = $container->logger;
-        $this->logger->addInfo("objektyController\__construct called");
+        $this->logger->info("objektyController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	}
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->addInfo("objektyController\cat called");
+      $this->logger->info("objektyController\cat called");
 
       $this->checkLevel(93, $this->adminator);
 
@@ -50,7 +50,7 @@ class objektyController extends adminatorController {
         $stb = new \App\Core\stb($this->container, $this->conn_mysql);
         $stb->csrf_html = $csrf_html[0];
 
-        $this->logger->addInfo("objektyController\\stb called");
+        $this->logger->info("objektyController\\stb called");
         
         $this->checkLevel(135, $this->adminator);
 
@@ -78,7 +78,7 @@ class objektyController extends adminatorController {
     public function stbAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("objektyController\\stbAction called");
+        $this->logger->info("objektyController\\stbAction called");
         
         $this->checkLevel(136, $this->adminator);
 

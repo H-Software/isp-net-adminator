@@ -93,13 +93,13 @@ class zmeny_ucetni {
     function save_vars_to_db()
     {
 
-      $this->logger->addInfo("archivZmenUcetni\save_vars_to_db called");
+      $this->logger->info("archivZmenUcetni\save_vars_to_db called");
 
       try {
         $add = $this->conn_mysql->query("INSERT INTO az_ucetni (zu_typ, zu_text, zu_vlozeno_kdy, zu_vlozeno_kym)
                                           VALUES ('" . $this->typ . "','" . $this->text . "',now(),'" . $this->loggedUserEmail . "') ");
       } catch (Exception $e) {
-        $this->logger->addInfo("archivZmenUcetni\save_vars_to_db exception: " .var_export($e->getMessage(), true));
+        $this->logger->info("archivZmenUcetni\save_vars_to_db exception: " .var_export($e->getMessage(), true));
         // die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
       }
 			

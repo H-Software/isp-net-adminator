@@ -17,13 +17,13 @@ class othersController extends adminatorController {
         $this->smarty = $smarty;
         
         $this->logger = $this->container->logger;
-        $this->logger->addInfo("othersController\__construct called");
+        $this->logger->info("othersController\__construct called");
 	}
 
     public function others(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("othersController\others called");
+        $this->logger->info("othersController\others called");
         
         $this->checkLevel(95);
 
@@ -40,7 +40,7 @@ class othersController extends adminatorController {
 
     public function board(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->addInfo("othersController\board called");
+        $this->logger->info("othersController\board called");
         
         $this->checkLevel(87);
 
@@ -117,7 +117,7 @@ class othersController extends adminatorController {
             { //zobrazujeme formulář
 
                 $csrf = $this->generateCsrfToken($request, $response, true);
-                // $this->logger->addInfo("adminController\header: csrf generated: ".var_export($csrf, true));
+                // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
                 $this->smarty->assign("csrf_html", $csrf[0]);
 
                 $this->smarty->assign("enable_calendar",1); 

@@ -20,7 +20,7 @@ require "app/routing.php";
 
 $logger = $container->logger;
 
-$logger->addInfo("others-print called");
+$logger->info("others-print called");
         
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 

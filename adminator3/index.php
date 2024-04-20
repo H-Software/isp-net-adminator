@@ -1,5 +1,6 @@
 <?php
 
+// init db functions defs
 require "include/main.function.shared.php";
 // autoload, init DB conns, init Illuminate\Database
 require "app/config.php";

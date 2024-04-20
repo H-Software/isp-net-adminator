@@ -20,14 +20,14 @@ class vlastniciController extends adminatorController {
         $this->smarty = $smarty;
 
         $this->logger = $container->logger;
-        $this->logger->addInfo("vlastniciController\__construct called");
+        $this->logger->info("vlastniciController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	  }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->addInfo("vlastniciController\cat called");
+      $this->logger->info("vlastniciController\cat called");
 
       $this->checkLevel(90);
 
@@ -44,7 +44,7 @@ class vlastniciController extends adminatorController {
     public function vlastnici2(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("vlastniciController\\vlastnici2 called");
+        $this->logger->info("vlastniciController\\vlastnici2 called");
         
         $this->checkLevel(38);
 
@@ -76,7 +76,7 @@ class vlastniciController extends adminatorController {
     public function fakturacniSkupiny(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("vlastniciController\\fakturacniSkupiny called");
+        $this->logger->info("vlastniciController\\fakturacniSkupiny called");
         
         $this->checkLevel(99);
 
@@ -108,7 +108,7 @@ class vlastniciController extends adminatorController {
     public function fakturacniSkupinyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("vlastniciController\\fakturacniSkupinyAction called");
+        $this->logger->info("vlastniciController\\fakturacniSkupinyAction called");
         
         $this->checkLevel(301);
 

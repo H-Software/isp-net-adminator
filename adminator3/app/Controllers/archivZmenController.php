@@ -19,13 +19,13 @@ class archivZmenController extends adminatorController {
         $this->smarty = $smarty;
 
         $this->logger = $this->container->logger;
-        $this->logger->addInfo("archivZmenController\__construct called");
+        $this->logger->info("archivZmenController\__construct called");
 	}
 
     public function archivZmenCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("archivZmenController\archivZmenCat called");
+        $this->logger->info("archivZmenController\archivZmenCat called");
         
         $this->checkLevel(30);
 
@@ -43,7 +43,7 @@ class archivZmenController extends adminatorController {
     public function archivZmenWork(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("archivZmenController\archivZmenWork called");
+        $this->logger->info("archivZmenController\archivZmenWork called");
         
         $this->checkLevel(30);
 
@@ -67,7 +67,7 @@ class archivZmenController extends adminatorController {
     public function archivZmenList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("archivZmenController\archivZmenList called");
+        $this->logger->info("archivZmenController\archivZmenList called");
         
         $this->checkLevel(30);
 
@@ -91,7 +91,7 @@ class archivZmenController extends adminatorController {
     public function archivZmenUcetni(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("archivZmenController\archivZmenUcetni called");
+        $this->logger->info("archivZmenController\archivZmenUcetni called");
         
         $this->checkLevel(147);
 
@@ -111,7 +111,7 @@ class archivZmenController extends adminatorController {
             $this->checkLevel(148);
 
             $csrf = $this->generateCsrfToken($request, $response, true);
-            // $this->logger->addInfo("adminController\header: csrf generated: ".var_export($csrf, true));
+            // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             
             $update_id = $_POST['update_id'];
             

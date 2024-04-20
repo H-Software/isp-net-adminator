@@ -148,7 +148,7 @@ function start_ses()
 
   if(is_object($logger))
   {
-    $logger->addInfo("start_ses called");
+    $logger->info("start_ses called");
   }
 
   // some backwards compatibility attemt
@@ -165,7 +165,7 @@ function start_ses()
 
   if(is_object($logger))
   {
-    $logger->addInfo("start_ses: result: "
+    $logger->info("start_ses: result: "
       . "[nick => " . $nick
       . ", level => " . $level
       . ", sid => " . $sid

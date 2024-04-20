@@ -22,7 +22,7 @@ class adminController extends adminatorController {
         $this->smarty = $smarty;
         
         $this->logger = $this->container->logger;
-        $this->logger->addInfo("adminController\__construct called");
+        $this->logger->info("adminController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
@@ -33,7 +33,7 @@ class adminController extends adminatorController {
     public function admin(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("adminController\admin called");
+        $this->logger->info("adminController\admin called");
         
         $this->checkLevel(91, $this->adminator);
 
@@ -51,7 +51,7 @@ class adminController extends adminatorController {
     public function adminMain(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("adminController\adminMain called");
+        $this->logger->info("adminController\adminMain called");
         
         $this->checkLevel(17, $this->adminator);
 
@@ -69,7 +69,7 @@ class adminController extends adminatorController {
     public function adminLevelList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("adminController\adminLevelList called");
+        $this->logger->info("adminController\adminLevelList called");
         
         $this->checkLevel(21, $this->adminator);
 
@@ -82,7 +82,7 @@ class adminController extends adminatorController {
         // CSRF token name and value for update form
         list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
 
-        $this->logger->addInfo("adminController\adminLevelList: csrf generated: ".var_export($csrf_name, true));
+        $this->logger->info("adminController\adminLevelList: csrf generated: ".var_export($csrf_name, true));
 
         // render
         $this->smarty->assign("body",$this->admin->levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value));
@@ -94,13 +94,13 @@ class adminController extends adminatorController {
 
     function adminLevelListJson(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->addInfo("adminController\adminLevelListJson called");
+        $this->logger->info("adminController\adminLevelListJson called");
         
         $this->checkLevel(21, $this->adminator);
 
         list ($data, $status, $msg) = $this->admin->levelListJson();
 
-        // $this->logger->addInfo("adminController\adminLevelListJson response: ". var_export(array($data, $status, $msg), true));
+        // $this->logger->info("adminController\adminLevelListJson response: ". var_export(array($data, $status, $msg), true));
 
         $newResponse = $this->Jsonrender($request, $response, $data, $status, $msg);
         return $newResponse;
@@ -108,7 +108,7 @@ class adminController extends adminatorController {
 
     public function adminLevelAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->addInfo("adminController\adminLevelAction called");
+        $this->logger->info("adminController\adminLevelAction called");
           
         $this->checkLevel(23, $this->adminator);
 
@@ -119,7 +119,7 @@ class adminController extends adminatorController {
         // CSRF token name and value for update form
         list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
 
-        $this->logger->addInfo("adminController\adminLevelAction: csrf generated: ".var_export($csrf_name, true));
+        $this->logger->info("adminController\adminLevelAction: csrf generated: ".var_export($csrf_name, true));
 
         $rs = $this->admin->levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
 
@@ -131,7 +131,7 @@ class adminController extends adminatorController {
 
     public function adminTarify(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->addInfo("adminController\adminTarify called");
+        $this->logger->info("adminController\adminTarify called");
           
         $this->checkLevel(131, $this->adminator);
 

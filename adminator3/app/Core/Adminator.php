@@ -24,7 +24,7 @@ class adminator {
         $this->smarty = $smarty;
         $this->logger = $logger;
 
-        $this->logger->addInfo("adminator\__construct called");
+        $this->logger->info("adminator\__construct called");
     }
 
     public function formInit()
@@ -71,7 +71,7 @@ class adminator {
                         )->first(['level']);
         if(is_object($rs))
         {
-            // $this->logger->addInfo("adminator\getUserLevel dump db: " . var_export($rs, true));
+            // $this->logger->info("adminator\getUserLevel dump db: " . var_export($rs, true));
             $a = $rs->toArray();
             return $a['level'];
         }
@@ -93,7 +93,7 @@ class adminator {
 
         $this->userIdentityLevel = $this->getUserLevel();
 
-        $this->logger->addInfo("adminator\check_level: called with
+        $this->logger->info("adminator\check_level: called with
                                     [page_level_id_custom => " . $page_level_id_custom
                                     . ", page_level_id => " . $this->page_level_id
                                     . ", user_name => " . $this->userIdentityUsername
@@ -118,8 +118,8 @@ class adminator {
             $rs = false;
         }
 
-        $this->logger->addInfo("adminator\check_level: find_page_level: pl_id: " . $pl . ", level: " . var_export($page_level_rs, true));
-        $this->logger->addInfo("adminator\check_level: result: " . var_export($rs, true));
+        $this->logger->info("adminator\check_level: find_page_level: pl_id: " . $pl . ", level: " . var_export($page_level_rs, true));
+        $this->logger->info("adminator\check_level: result: " . var_export($rs, true));
 
         if( $rs === false) {
             // user nema potrebny level
@@ -142,7 +142,7 @@ class adminator {
             $page_level = $a['level'];
         }
 
-        $this->logger->addInfo("adminator\\find_page_level: find result: " . var_export($page_level, true));
+        $this->logger->info("adminator\\find_page_level: find result: " . var_export($page_level, true));
 
         if($page_level > 0){
             return $page_level;
@@ -155,7 +155,7 @@ class adminator {
     public function getTarifIptvListForForm($show_zero_value = true)
     {
 
-        $this->logger->addInfo("adminator\getTarifIptvListForForm called");
+        $this->logger->info("adminator\getTarifIptvListForForm called");
 
         if($show_zero_value === true)
         {

@@ -16,26 +16,24 @@ class HomeController extends adminatorController {
     public function __construct(ContainerInterface $container, $conn_mysql, $smarty)
     {
         $this->container = $container;
-		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
 
+        $this->conn_mysql = $this->container->connMysql;
         $this->logger = $this->container->logger;
-        $this->logger->addInfo("homeController\__construct called");
+        $this->logger->info("homeController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-
-
 	}
     
     public function home(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {            
-        $this->logger->addInfo("homeController\home called");
+        $this->logger->info("homeController\home called");
 
         $this->checkLevel(38, $this->adminator);
 
         if ($request->isPost()) {
             $data = $request->getParsedBody();
-            $this->logger->addDebug("homeController\home post data: ".var_export($data, true));    
+            $this->logger->debug("homeController\home post data: ".var_export($data, true));    
         }
 
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
@@ -48,7 +46,7 @@ class HomeController extends adminatorController {
         //informace z modulu neuhrazené faktury
         //
         $neuhr_faktury_pole = $this->adminator->show_stats_faktury_neuhr();
-        $this->logger->addInfo("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
+        $this->logger->info("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
 
         $this->smarty->assign("d",$neuhr_faktury_pole[0]);
 
@@ -61,7 +59,7 @@ class HomeController extends adminatorController {
 
         $this->board();
 
-        $this->logger->addInfo("homeController\home: end of rendering");
+        $this->logger->info("homeController\home: end of rendering");
         $this->smarty->display('home.tpl');
 
         return $response;
@@ -71,7 +69,7 @@ class HomeController extends adminatorController {
         //generovani zprav z nastenky
 
         if ($this->adminator->checkLevel(87, false) === true) {
-            $this->logger->addInfo("homeController\board allowed");
+            $this->logger->info("homeController\board allowed");
 
             $this->smarty->assign("nastenka_povoleno",1);
             $this->smarty->assign("datum",date("j. m. Y"));
@@ -99,7 +97,7 @@ class HomeController extends adminatorController {
         $pocet_bunek = 11;
 
         if ($this->adminator->checkLevel(101, false) === true) {
-            $this->logger->addInfo("homeController\opravy_a_zavady allowed");
+            $this->logger->info("homeController\opravy_a_zavady allowed");
 
             $v_reseni_filtr = $_GET["v_reseni_filtr"];
             $vyreseno_filtr = $_GET["vyreseno_filtr"];
@@ -124,14 +122,14 @@ class HomeController extends adminatorController {
             $opravy = new \opravy($this->conn_mysql, $this->logger);
          
             $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
-            // $this->logger->addDebug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));    
+            // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));    
 
             if($rs_vypis)
             {
                 if (strlen($rs_vypis[0]) > 0)
                 {
                     // no records in DB
-                    $this->logger->addInfo("homeController\opravy_a_zavady list: no records found in database.");    
+                    $this->logger->info("homeController\opravy_a_zavady list: no records found in database.");    
                     $content_opravy_a_zavady = $rs_vypis[0];
                 }
                 elseif(strlen($rs_vypis[1]) > 0)

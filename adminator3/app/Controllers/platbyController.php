@@ -17,12 +17,12 @@ class platbyController extends adminatorController {
         $this->smarty = $smarty;
 
         $this->logger = $this->container->logger;        
-        $this->logger->addInfo("platbyController\__construct called");
+        $this->logger->info("platbyController\__construct called");
 	  }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->addInfo("platbyController\cat called");
+      $this->logger->info("platbyController\cat called");
 
       $this->checkLevel(92);
 
@@ -44,7 +44,7 @@ class platbyController extends adminatorController {
     public function platby(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("platbyController\\platby called");
+        $this->logger->info("platbyController\\platby called");
         
         $this->checkLevel();
 
@@ -59,7 +59,7 @@ class platbyController extends adminatorController {
     public function fn(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("platbyController\\fn called");
+        $this->logger->info("platbyController\\fn called");
         
         $this->checkLevel(107);
 
@@ -76,7 +76,7 @@ class platbyController extends adminatorController {
 
     public function fnKontrolaOmezeni(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->addInfo("platbyController\\fn called");
+        $this->logger->info("platbyController\\fn called");
         
         $this->checkLevel(149);
 
