@@ -36,12 +36,9 @@ extras/documentation
 /adminator2/export/
 /adminator3/templates_c/
 
-postgres-db-init-adminator-new.sql
-
 adminator3/.php_cs.cache
 a3-logs/
 
 docker-compose.yml
 
 stb copy 2.php
-adminator3/models/adminator2/class.php
