@@ -20,7 +20,9 @@ class zmeny_ucetni {
     function __construct($conn_mysql, $logger, $auth) {
       $this->conn_mysql = $conn_mysql;
       $this->logger = $logger;
-      $this->loggedUserEmail = $auth->getIdentity();
+
+      $i = $auth->getIdentity();
+      $this->loggedUserEmail = $i['username'];
     }
 
     function load_sql_result() {

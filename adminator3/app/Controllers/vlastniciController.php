@@ -84,9 +84,9 @@ class vlastniciController extends adminatorController {
 
         $this->header($request, $response, $this->adminator);
 
-        // main login
+        // list logic
         //
-        $fs = new \App\Customer\fakturacniSkupiny();
+        $fs = new \App\Customer\fakturacniSkupiny($this->container);
         $fs_items = $fs->getItems();
 
         if(empty($fs_items))
@@ -101,8 +101,30 @@ class vlastniciController extends adminatorController {
         // debug
         // $this->smarty->assign("fs_items_debug","<pre>" . var_export($fs_items,true). "</pre>");
         
-        $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
+        $this->smarty->display('vlastnici/fakturacni-skupiny/list.tpl');
 
+    }
+
+    public function fakturacniSkupinyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("vlastniciController\\fakturacniSkupinyAction called");
+        
+        $this->checkLevel(301);
+
+        $this->smarty->assign("page_title","Adminator3 :: . :: fakturační skupiny :: Action");
+
+        $this->header($request, $response, $this->adminator);
+
+        $fs = new \App\Customer\fakturacniSkupiny($this->container, $this->conn_mysql);
+        $fs->csrf_html = $this->generateCsrfToken($request, $response, true);
+        $fs->adminator_ctl = $this->adminator;
+
+        $fs_action_body = $fs->Action();
+
+        $this->smarty->assign("body",$fs_action_body);
+
+        $this->smarty->display('vlastnici/fakturacni-skupiny/action.tpl');
     }
 
 }

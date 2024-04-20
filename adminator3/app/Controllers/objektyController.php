@@ -47,7 +47,7 @@ class objektyController extends adminatorController {
     {
 
         $csrf_html = $this->generateCsrfToken($request, $response, true);
-        $stb = new \App\Core\stb($this->conn_mysql,$this->logger);
+        $stb = new \App\Core\stb($this->container, $this->conn_mysql);
         $stb->csrf_html = $csrf_html[0];
 
         $this->logger->addInfo("objektyController\\stb called");
@@ -86,7 +86,7 @@ class objektyController extends adminatorController {
 
         $this->header($request, $response, $this->adminator);
 
-        $stb = new \App\Core\stb($this->conn_mysql, $this->logger);
+        $stb = new \App\Core\stb($this->container, $this->conn_mysql);
 
         $csrf = $this->generateCsrfToken($request, $response, false);
 

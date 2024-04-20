@@ -25,7 +25,7 @@ class c_listing_platby {
     var $aftError = "</div>";
     
     //konstruktor...naplni promenne
-    function c_listing_platby($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+    function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
         $this->errName[1] = "P�i vol�n� konstruktotu nebyl zad�n SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listov�n�, chyba datab�ze(Query)!<br>\n";
         $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";

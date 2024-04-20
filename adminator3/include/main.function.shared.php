@@ -996,7 +996,7 @@ function generate_fully_fin_index($id_vlastnika)
    if($dotaz_vlastnik_radku <> 1)
    {
        echo "Chyba! Nelze zjistit informace o vlastnikovi! (".$dotaz_vlastnik_radku.")<br> E: ".
-       pg_last_error($db_ok2);
+       pg_last_error();
 
        return false;
    }

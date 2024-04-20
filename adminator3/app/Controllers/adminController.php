@@ -80,11 +80,7 @@ class adminController extends adminatorController {
         $this->header($request, $response, $this->adminator);
 
         // CSRF token name and value for update form
-        $csrf = $this->container->get('csrf');
-        $csrf_nameKey = $csrf->getTokenNameKey();
-        $csrf_valueKey = $csrf->getTokenValueKey();
-        $csrf_name = $request->getAttribute($csrf_nameKey);
-        $csrf_value = $request->getAttribute($csrf_valueKey);
+        list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
 
         $this->logger->addInfo("adminController\adminLevelList: csrf generated: ".var_export($csrf_name, true));
 
@@ -121,11 +117,7 @@ class adminController extends adminatorController {
         $this->header($request, $response, $this->adminator);
 
         // CSRF token name and value for update form
-        $csrf = $this->container->get('csrf');
-        $csrf_nameKey = $csrf->getTokenNameKey();
-        $csrf_valueKey = $csrf->getTokenValueKey();
-        $csrf_name = $request->getAttribute($csrf_nameKey);
-        $csrf_value = $request->getAttribute($csrf_valueKey);
+        list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
 
         $this->logger->addInfo("adminController\adminLevelAction: csrf generated: ".var_export($csrf_name, true));
 

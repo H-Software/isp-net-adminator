@@ -8,7 +8,7 @@
         Výpis fakturačních skupin
     </div>
     <div class="col">
-        <a href="">Přidání</a>
+        <a href="/vlastnici2/fakturacni-skupiny/action">Přidání</a>
     </div>
     <div class="col-6"></div>
 </div>

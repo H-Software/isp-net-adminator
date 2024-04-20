@@ -16,6 +16,8 @@ class adminator {
 
     var $userIdentityLevel;
 
+    var $loggedUserEmail;
+
     public function __construct($conn_mysql, $smarty, $logger)
     {
         $this->conn_mysql = $conn_mysql;
@@ -23,6 +25,13 @@ class adminator {
         $this->logger = $logger;
 
         $this->logger->addInfo("adminator\__construct called");
+    }
+
+    public function formInit()
+    {
+        // bootstrap -> bootstrap.js
+        // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
+        return new \Formr\Formr('bootstrap5', 'hush');
     }
 
     function objectToArray($data)
@@ -33,6 +42,18 @@ class adminator {
             $result[$key] = (is_array($value) || is_object($value)) ? $this->objectToArray($value) : $value;
         }
         return $result;
+    }
+
+    function fillEmptyVarsInArray(array $a, array $exclude = [])
+    {
+        foreach($a as $key => $val)
+        {
+            if( empty($val) and !in_array($key, $exclude))
+            {
+                $a[$key] = 0;
+            }
+        }
+        return $a;
     }
 
     // public function getUserEmail()
