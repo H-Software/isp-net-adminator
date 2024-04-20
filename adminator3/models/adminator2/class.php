@@ -217,6 +217,11 @@ class objekt_a2
  {
    global $db_ok2;
     
+	if (!$db_ok2) {
+		echo "An error occurred. The connection with pqsql does not exist.\n";
+		exit;
+	}
+
    $list=$_GET["list"];
 
     if ( $co==3 ) //wifi sit ...vypis u vlastniku (dalsi pouziti nevim)
