@@ -2,11 +2,15 @@
 
 namespace App\Core;
 
+use App\Models\ArchivZmen as Model;
+
 class ArchivZmen {
 
     var $conn_mysql;
     var $smarty;
     var $logger;
+
+    var $db_table_name = 'archiv_zmen';
 
     public function __construct($conn_mysql, $smarty, $logger)
     {
@@ -14,9 +18,43 @@ class ArchivZmen {
         $this->smarty = $smarty;
         $this->logger = $logger;
         
-        $this->logger->addInfo("topology\__construct called");
+        $this->logger->addInfo("archivZmen\__construct called");
     }
     
+    function getActionType($actionType)
+    {
+        if($actionType == 1){
+            return "<b> akce: pridani fakt. skupiny; </b><br>";
+        }
+        else{
+            return false;
+        }
+    }
+    function insertItem(int $actionType, $actionData, int $actionResult = 0, string $loggedUserEmail = NULL)
+    {
+
+        $actionBody = $this->getActionType($actionType);
+
+        foreach ($actionData as $c => $v) {
+            $actionBody .= "[$c]=> $v, ";
+        }  
+         
+        $this->logger->addInfo("archivZmen\insertItem: dump actionBody: " . var_export($actionBody, true));
+
+        $item = Model::create([
+            'akce' => $actionBody,
+            'vysledek' => $actionResult,
+            'provedeno_kym' => $loggedUserEmail
+        ]);
+
+        return $item;
+    }
+
+    function insertItemDiffed()
+    {
+
+    }
+
     function archivZmenList()
     {
         $output = "";

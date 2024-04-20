@@ -28,8 +28,19 @@ class ArchivZmen extends Model
      */
     protected $attributes = [
 		'akce' => NULL,
-		'provedeno_kdy' => NULL,
+		// 'provedeno_kdy' => 'CURRENT_TIMESTAMP',
 		'provedeno_kym' => NULL,
         'vysledek' => 0
+    ];
+
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'akce',
+        'provedeno_kym',
+        'vysledek' 
     ];
 }
