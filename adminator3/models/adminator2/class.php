@@ -461,7 +461,7 @@ else{
     if( $data["dov_net"] =="a" ){ $dov_net="<font color=\"green\">NetA</font>"; }
     else{ $dov_net="<font color=\"orange\">NetN</font> \n"; }
     
-    if( ereg("a",$data["sikana_status"]) )
+    if( preg_match("/a/",$data["sikana_status"]) )
     { 
 	$sikana_status_s = "<span class=\"obj-link-sikana\" >".
 			    "<a href=\"http://damokles.simelon.net:8009/index.php".
