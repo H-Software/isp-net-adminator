@@ -21,10 +21,17 @@ class ArchivZmen {
         $this->logger->info("archivZmen\__construct called");
     }
     
-    function getActionType($actionType)
+    function getActionType($actionType, $itemId = NULL)
     {
         if($actionType == 1){
             return "<b> akce: pridani fakt. skupiny; </b><br>";
+        }
+        elseif($actionType == 2){
+            $r .= "<b>akce: uprava fakturacni skupiny; </b><br>";
+            $r .= "[id_fs] => " . $itemId;
+            $r .= " diferencialni data: ";
+
+            return $r;
         }
         else{
             return false;
@@ -50,9 +57,36 @@ class ArchivZmen {
         return $item;
     }
 
-    function insertItemDiffed()
+    function insertItemDiff(int $actionType, array $dataOrig, array $dataUpdated, ...$args)
     {
+        $actionBody = $this->getActionType($actionType, $args[0]['itemId']);
+        foreach($dataOrig as $key => $val)
+        {
+            if( !($dataUpdated[$key] == $val) )
+            {
+                if( $key == "pozn" )
+                {
+                    $actionBody .= "změna <b>Poznámky</b> z: ";
+                    $actionBody .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
+                    $actionBody .= ", ";
+                } //konec key == pozn
+                else
+                { // ostatni mody, nerozpoznane
+                    $actionBody .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
+                    $actionBody .= "na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>, ";
+                } //konec else
+            } // konec if key == val
+        } // konec foreach
 
+        $this->logger->info("archivZmen\insertItemDiff: dump actionBody: " . var_export($actionBody, true));
+
+        $item = Model::create([
+            'akce' => $actionBody,
+            'vysledek' => $args[0]['actionResult'],
+            'provedeno_kym' => $args[0]['loggedUserEmail']
+        ]);
+
+        return $item;
     }
 
     function archivZmenList()
