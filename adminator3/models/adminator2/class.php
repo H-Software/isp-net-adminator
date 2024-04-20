@@ -689,7 +689,10 @@ class vlastnik
 	if($dotaz !== false){
 		$radku=pg_num_rows($dotaz); 
 	}
-	
+	else{
+		echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+	}
+
     if ($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
 	 else
 	   {
@@ -1028,6 +1031,9 @@ class vlastnik2_a2
 
 	if($dotaz !== false){
     	$radku=pg_num_rows($dotaz);
+	}
+	else{
+		echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
 	}
 
     if($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
@@ -1686,6 +1692,9 @@ class vlastnikarchiv
 
 	if($dotaz !== false) {
 		$radku=pg_num_rows($dotaz);
+	}
+	else{
+		echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
 	}
 
     if ($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
