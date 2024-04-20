@@ -8,6 +8,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class fakturacniSkupiny extends adminator
 {
+    var $db_table_name = 'fakturacni_skupiny';
     var $conn_mysql;
 
     var $csrf_html;
@@ -38,7 +39,7 @@ class fakturacniSkupiny extends adminator
         // $fetch = FakturacniSkupina::all();
         // $items =  $fetch->toArray();
 
-        $fetch = DB::table('fakturacni_skupiny')
+        $fetch = DB::table($this->db_table_name)
                 ->orderBy('id', 'desc')
                 ->get();
         
@@ -121,7 +122,7 @@ class fakturacniSkupiny extends adminator
         else
         {
             // rezim pridani, ukladani, reloadu ??
-            $form_data = $this->action_form->validate('nazev, fakturacni_text, typ, typ_sluzby, sluzba_int, sluzba_int_id_tarifu, sluzba_iptv, sluzba_iptv_id_tarifu, sluzba_voip');         
+            $form_data = $this->action_form->validate('nazev, fakturacni_text, typ, typ_sluzby, sluzba_int, sluzba_int_id_tarifu, sluzba_iptv, sluzba_iptv_id_tarifu, sluzba_voip, sluzba_voip_id_tarifu');         
         }
                
         //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
@@ -212,21 +213,28 @@ class fakturacniSkupiny extends adminator
                 
                     // $fs_upd["fakturacni_text"] = $fakturacni_text;
                 
-                    $res = $this->conn_mysql->query("UPDATE fakturacni_skupiny SET nazev = '$nazev', typ = '$typ',
-                                sluzba_int = '$sluzba_int', sluzba_int_id_tarifu = '$sluzba_int_id_tarifu', 
-                            sluzba_iptv = '$sluzba_iptv', sluzba_iptv_id_tarifu = '$sluzba_iptv_id_tarifu',
-                            sluzba_voip = '$sluzba_voip', fakturacni_text = '$fakturacni_text',
-                            typ_sluzby = '$typ_sluzby' WHERE id = '$this->form_update_id' Limit 1 ");
+                    // $res = $this->conn_mysql->query("UPDATE fakturacni_skupiny SET nazev = '$nazev', typ = '$typ',
+                    //             sluzba_int = '$sluzba_int', sluzba_int_id_tarifu = '$sluzba_int_id_tarifu', 
+                    //         sluzba_iptv = '$sluzba_iptv', sluzba_iptv_id_tarifu = '$sluzba_iptv_id_tarifu',
+                    //         sluzba_voip = '$sluzba_voip', fakturacni_text = '$fakturacni_text',
+                    //         typ_sluzby = '$typ_sluzby' WHERE id = '$this->form_update_id' Limit 1 ");
                 
             
+                    $affected = DB::table($this->db_table_name)
+                                ->where('id', $this->form_update_id)
+                                ->update($form_data);
                 
+                    if($affected == 1){
+                        $res = true;
+                    }
+
                     if($res){ $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
                     else{ $output .= "<br><H3><div style=\"color: red; \" >Chyba! Data v databázi nelze změnit.</div></h3>\n"; }
             
                     $output .= "<div style=\"font-weight: bold; font-size: 18px; \">Změny je třeba dát vědět účetní!</div>";
-                                
-                    //ted vlozime do archivu zmen inkrementarne
-                    $this->actionArchivZmenDiff($res, $pole_puvodni_data);
+                    
+                    //ted vlozime do archivu zmen (inkrementarne)
+                    $this->actionArchivZmenDiff($res, $pole_puvodni_data, $fs_upd);
                     // require("vlastnici2-fs-update-inc-archiv.php");
             
                     $updated="true";
@@ -542,9 +550,21 @@ class fakturacniSkupiny extends adminator
             $output .= ' >Ano</option>
                 </select>
               </td>
-            </tr>
-            
-            <tr><td colspan="2" ><br></td></tr>
+            </tr>';
+
+         $output .= '<tr>
+            <td>
+              <span style="" >Služba VoIP :: Vyberte tarif:</span>
+            </td>
+            <td>';
+      
+        $output .= "<span style=\"color: gray; \" >Není dostupné</span>";
+        $output .= "<input type=\"hidden\" name=\"sluzba_voip_id_tarifu\" value=\"0\" >";
+    
+        $output .= '</td>
+        </tr>';
+
+        $output .= '<tr><td colspan="2" ><br></td></tr>
             
            <tr><td colspan="4" ><br></td></tr>
                      
@@ -585,10 +605,11 @@ class fakturacniSkupiny extends adminator
 
         $pole .= "".$pole3;
         
-        if ( $res == 1){ $vysledek_write="1"; }
+        if ($res === true){ $vysledek_write="1"; }
         else{ $vysledek_write="0"; }
         
-        $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . $this->loggedUserEmail ."','$vysledek_write') ");
+        $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . $this->loggedUserEmail ."','$vysledek_write') ");
 
+        return $add;
     }
 }
