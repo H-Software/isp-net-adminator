@@ -65,7 +65,7 @@ class c_listing_vlastnici2 {
 
         $allRecords = pg_num_rows($listRecord);
 
-        if (!$allRecords){
+        if ($allRecords < 0){
             $this->error(3);
             echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
 
