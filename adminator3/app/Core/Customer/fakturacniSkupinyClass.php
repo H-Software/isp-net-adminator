@@ -200,25 +200,7 @@ class fakturacniSkupiny extends adminator
                     } // konec else if radku <> 1
                     
                     //pridavani do pole pro porovnavani z archivu zmen...
-                    $fs_upd = $form_data;
-
-                    // $fs_upd["nazev"] = $nazev;		
-                    // $fs_upd["typ"] = $typ;
-                    // $fs_upd["sluzba_int"] = $sluzba_int;		
-                    // $fs_upd["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;		
-                    // $fs_upd["sluzba_iptv"] = $sluzba_iptv;		
-                    // $fs_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
-                    // $fs_upd["sluzba_voip"] = $sluzba_voip;		
-                    // $fs_upd["typ_sluzby"] = $typ_sluzby;		
-                
-                    // $fs_upd["fakturacni_text"] = $fakturacni_text;
-                
-                    // $res = $this->conn_mysql->query("UPDATE fakturacni_skupiny SET nazev = '$nazev', typ = '$typ',
-                    //             sluzba_int = '$sluzba_int', sluzba_int_id_tarifu = '$sluzba_int_id_tarifu', 
-                    //         sluzba_iptv = '$sluzba_iptv', sluzba_iptv_id_tarifu = '$sluzba_iptv_id_tarifu',
-                    //         sluzba_voip = '$sluzba_voip', fakturacni_text = '$fakturacni_text',
-                    //         typ_sluzby = '$typ_sluzby' WHERE id = '$this->form_update_id' Limit 1 ");
-                
+                    $fs_upd = $form_data;                
             
                     $affected = DB::table($this->db_table_name)
                                 ->where('id', $this->form_update_id)
@@ -243,12 +225,9 @@ class fakturacniSkupiny extends adminator
                 else
                 {
                     // rezim pridani
-                    $res = $this->conn_mysql->query("INSERT INTO fakturacni_skupiny 
-                                (nazev, typ, sluzba_int, sluzba_int_id_tarifu, sluzba_iptv, sluzba_iptv_id_tarifu, 
-                            sluzba_voip, fakturacni_text, typ_sluzby, vlozil_kdo) 
-                                VALUES 
-                            ('$nazev','$typ','$sluzba_int','$sluzba_int_id_tarifu','$sluzba_iptv',
-                                '$sluzba_iptv_id_tarifu','$sluzba_voip','$fakturacni_text', '$typ_sluzby', '$this->loggedUserEmail') ");
+                    $form_data = array_merge($form_data, array("vlozil_kdo" => $this->loggedUserEmail));
+
+                    $res = DB::table($this->db_table_name)->insert($form_data);
             
                     if( $res )
                     { $output .= "<br><H3><div style=\"color: green;\" >Fakturační skupina úspěšně přidána do databáze.</div></H3>\n"; } 
@@ -263,7 +242,7 @@ class fakturacniSkupiny extends adminator
                     $pole .= ", [sluzba_iptv_id_tarifu]=> ".$sluzba_iptv_id_tarifu.", [sluzba_voip]=> ".$sluzba_voip;
                     $pole .= " [fakturacni_text]=> ".$fakturacni_text.", [typ_sluzby]=> ".$typ_sluzby;
                         
-                    if( $res == 1){ $vysledek_write="1"; }
+                    if($res === true){ $vysledek_write="1"; }
                 
                     $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$this->loggedUserEmail','$vysledek_write')");
                     
@@ -404,7 +383,7 @@ class fakturacniSkupiny extends adminator
                  <td  width="250px" >Typ: </td>
                   <td>
                     <select name="typ" size="1" >
-                        <option value="1" '; if($data['typ'] == 1){ $output .= "selected "; } $output .= ' >DÚ - domácí uživatel</option>
+                        <option value="1" '; if($data['typ'] == 1 or empty($data['typ']) ){ $output .= "selected "; } $output .= ' >DÚ - domácí uživatel</option>
                         <option value="2" '; if($data['typ'] == 2){ $output .= "selected "; } $output .= ' >FÚ - firemní uživatel</option>
                     </select>
                  </td>
@@ -416,7 +395,7 @@ class fakturacniSkupiny extends adminator
                  <td  width="250px" >Typ služby:</td>
                   <td>
                     <select name="typ_sluzby" size="1" >
-                        <option value="0" '; if($data['typ_sluzby'] == 0){ $output .= "selected "; } $output .= ' >wifi</option>
+                        <option value="0" '; if($data['typ_sluzby'] == 0 or empty($data['typ_sluzby']) ){ $output .= "selected "; } $output .= ' >wifi</option>
                         <option value="1" '; if($data['typ_sluzby'] == 1){ $output .= "selected "; } $output .= ' >optika</option>
                     </select>
                  </td>
