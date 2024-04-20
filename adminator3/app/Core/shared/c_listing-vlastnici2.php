@@ -50,7 +50,7 @@ class c_listing_vlastnici2 {
             $listRecord = pg_query($this->sql. " xxx ");
         }
         catch (Exception $e) {
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). "</div>");
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
         }
 
         if (!$listRecord){
@@ -60,7 +60,7 @@ class c_listing_vlastnici2 {
             $allRecords = pg_num_rows($listRecord);
         }
         else{
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). "</div>");
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
         }
 
         if (!$allRecords){
