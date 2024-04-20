@@ -5,7 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 $loader = new Nette\Loaders\RobotLoader;
 
-$loader->addDirectory(__DIR__ . '/../models');
+// $loader->addDirectory(__DIR__ . '/../models');
 // $loader->addDirectory(__DIR__ . '/../controllers');
 $loader->addDirectory(__DIR__ . '/../app/Middleware');
 $loader->addDirectory(__DIR__ . '/../app/src/dao');
