@@ -61,8 +61,13 @@ class c_listing_objekty {
         if (!$allRecords){
             $this->error(3);
         }
-        $allLists = ceil($allRecords / $this->interval);
-        
+
+        try {
+            $allLists = ceil($allRecords / $this->interval);
+        }
+        catch(DivisionByZeroError $e){
+        }
+
         $this->numLists = $allLists;
         $this->numRecords = $allRecords;
         
