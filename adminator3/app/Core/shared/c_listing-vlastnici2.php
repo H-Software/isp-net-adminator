@@ -55,7 +55,13 @@ class c_listing_vlastnici2 {
 
         if (!$listRecord){
             $this->error(2);
+
+            $this->numLists = 0;
+            $this->numRecords = 0;
+
+            return;
         }
+
         if($listRecord !== false){
             $allRecords = pg_num_rows($listRecord);
         }
@@ -66,13 +72,9 @@ class c_listing_vlastnici2 {
         if (!$allRecords){
             $this->error(3);
         }
-        
-        try {
-            $allLists = ceil($allRecords / $this->interval);
-        }
-        catch(DivisionByZeroError $e){
-        }
-        
+                
+        $allLists = ceil($allRecords / $this->interval);
+
         $this->numLists = $allLists;
         $this->numRecords = $allRecords;
         
