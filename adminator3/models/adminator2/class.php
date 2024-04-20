@@ -119,7 +119,7 @@ class objekt_a2
  
  } //konec funkce vypis odkaz
  
- function vypis_razeni()
+ public static function vypis_razeni()
  {
  
    $input_value="1";
