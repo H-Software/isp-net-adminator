@@ -51,7 +51,7 @@ class board{
 
 		$start = $this->page*$this->view_number; //první zpráva, která se zobrazí
 
-		$sql = $sql_base." FROM board2 WHERE ".$this->sql." ORDER BY id DESC LIMIT ".$start.",".$this->view_number;
+		$sql = $sql_base." FROM board WHERE ".$this->sql." ORDER BY id DESC LIMIT ".$start.",".$this->view_number;
 
 		$message = $this->conn_mysql->query($sql);
 
