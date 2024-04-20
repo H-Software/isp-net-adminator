@@ -668,7 +668,7 @@ class stb
                                                                         'class="btn btn-secondary" ');
 
         $form_data['f_input_ip'] = $this->action_form->text('ip','IP adresa',$data['ip']);
-        $form_data['f_input_id_nodu'] = $this->action_form->select('id_nodu','', $data['id_nodu'], '', 'class="form-select-inline form-select-sm"','','', $node_list);
+        $form_data['f_input_id_nodu'] = $this->action_form->select('id_nodu','', $data['id_nodu'], '', 'class="form-select orm-select-inline form-select-sm"','','', $node_list);
 
         $form_data['f_input_mac'] = $this->action_form->text('mac','mac adresa', $data['mac_adresa']);
         $form_data['f_input_gen_button'] = $this->action_form->input_submit(

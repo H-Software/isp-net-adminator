@@ -237,7 +237,7 @@ require_once("include/charset.php");
 	{
 	     
 	        $sql="%".$sql."%";
-		$select1 = " WHERE ( archiv = 0 or archiv is null ) AND ";
+		$select1 = " WHERE (firma is not NULL) AND ( archiv = 0 or archiv is null ) AND ";
 		$select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";
 		$select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
 		
@@ -312,7 +312,7 @@ require_once("include/charset.php");
 							     
 	  $interval=$listovani->interval;
 
-	  $dotaz_final=$dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+	  $dotaz_final=$dotaz_source." LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
 					   
 //	  $listovani->listInterval();
 	  $listovani->listPart();

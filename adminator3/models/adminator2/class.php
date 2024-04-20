@@ -14,7 +14,7 @@ class objekt_a2
    // konec funkce
  }
    
- function select($es,$razeni)  
+ public static function select($es,$razeni)  
  {
   global $db_ok2;
   // co - co hledat, 1- podle dns, 2-podle ip
@@ -119,7 +119,7 @@ class objekt_a2
  
  } //konec funkce vypis odkaz
  
- function vypis_razeni()
+ public static function vypis_razeni()
  {
  
    $input_value="1";
@@ -217,6 +217,11 @@ class objekt_a2
  {
    global $db_ok2;
     
+	if (!$db_ok2) {
+		echo "An error occurred. The connection with pqsql does not exist.\n";
+		exit;
+	}
+
    $list=$_GET["list"];
 
     if ( $co==3 ) //wifi sit ...vypis u vlastniku (dalsi pouziti nevim)
@@ -242,7 +247,13 @@ class objekt_a2
 					  
       if( $i > 0 ){ $tarif_sql .= " ) "; }
 				       
-     $dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+	  try {
+		$dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+		} 
+	  catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
+
     
     }
     elseif ( $co==4 ) //fiber sit ...vypis pouze u vlastniku
@@ -266,14 +277,33 @@ class objekt_a2
       }
 					  
       if( $i > 0 ){ $tarif_sql .= " ) "; }
-				       
-     $dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+				  
+	  try {
+		$dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+	  } 
+	  catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
+     
     
     }
     else
-    { $dotaz= pg_query($db_ok2, $dotaz_final); }
- 
-  $radku=pg_num_rows($dotaz);
+    { 
+		try {
+			$dotaz= pg_query($db_ok2, $dotaz_final); 
+		} 
+		catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		}
+
+	}
+
+if($dotaz !== false){
+	$radku=pg_num_rows($dotaz);
+}
+else{
+	echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+}
   
  if ($radku==0) 
  {
@@ -431,10 +461,10 @@ class objekt_a2
     if( $data["dov_net"] =="a" ){ $dov_net="<font color=\"green\">NetA</font>"; }
     else{ $dov_net="<font color=\"orange\">NetN</font> \n"; }
     
-    if( ereg("a",$data["sikana_status"]) )
+    if( preg_match("/a/",$data["sikana_status"]) )
     { 
 	$sikana_status_s = "<span class=\"obj-link-sikana\" >".
-			    "<a href=\"http://damokles.simelon.net:8009/index.php".
+			    "<a href=\"http://damokles.adminator.net:8009/index.php".
 			    "?sc=".intval($data["sikana_cas"])."&st=".urlencode($data["sikana_text"])."\" target=\"_new\" >".
 			    "Sikana-A (".$data["sikana_cas"].")</a></span>\n"; 
     
@@ -466,13 +496,13 @@ class objekt_a2
        //dodelat klikatko pro sc
        //{ $tarif="<span class=\"tarifsc\"><a href=\"https://trinity.simelon.net/monitoring/data/cat_sc.php?ip=".$data["ip"]."\" target=\"_blank\" >sc</a></span>"; } 
     
-       $tarif_f = mysql_query("SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
-       $tarif_f_r = mysql_num_rows($tarif_f);
+       $tarif_f = $this->conn_mysql->query("SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
+       $tarif_f_r = $tarif_f->num_rows;
               
        if( $tarif_f_r <> 1){ echo "<span style=\"font-weight: bold; color: red;\" >E</span>"; }
        else
        {
-        while($data_f = mysql_fetch_array($tarif_f))
+        while($data_f = $tarif_f->fetch_array())
 	{ 
 	    echo "<span style=\"color: ".$data_f["barva"]."; \" >";
 	    echo "<a href=\"admin-tarify.php?id_tarifu=".$data_f["id_tarifu"]."\" >".$data_f["zkratka_tarifu"]."</a>";
@@ -492,13 +522,13 @@ class objekt_a2
     
     $id_nodu=$data["id_nodu"];
           
-    $vysledek_bod = mysql_query("SELECT jmeno FROM nod_list WHERE id='".intval($id_nodu)."' ");
-    $radku_bod = mysql_num_rows($vysledek_bod);
+    $vysledek_bod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id='".intval($id_nodu)."' ");
+    $radku_bod = $vysledek_bod->num_rows;
 				      
      if($radku_bod==0) echo "<span style=\"color: gray; \">přípojný bod nelze zjistit </span>";
      else
      {
-       while ($zaznam_bod=mysql_fetch_array($vysledek_bod) )
+       while ($zaznam_bod=$vysledek_bod->fetch_array() )
        { 
         //pouze text 
 	//echo "<span class=\"objekty-2radka\">NOD: ".$zaznam_bod["jmeno"]."</span> "; 
@@ -634,6 +664,8 @@ class vlastnik
 {
 	var $conn_mysql;
 
+	var $conn_pgsql;
+
    function vypis_tab ($par)
     {
        if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
@@ -652,11 +684,15 @@ class vlastnik
     
     // co - co hledat, 1- podle dns, 2-podle ip , 3 - dle id_vlastnika
 	         
-    $dotaz=pg_query($dotaz_source);	      
+    $dotaz=pg_query($this->conn_pgsql, $dotaz_source);	      
     
-    $radku=pg_num_rows($dotaz); 
-	
-        
+	if($dotaz !== false){
+		$radku=pg_num_rows($dotaz); 
+	}
+	else{
+		echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+	}
+
     if ($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
 	 else
 	   {
@@ -978,7 +1014,7 @@ class vlastnik2_a2
        
    var $export_povolen;
 
-   function vypis_tab ($par)
+   public static function vypis_tab ($par)
    {
      if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
      elseif ($par == 2) { echo "\n".'</table>'."\n"; }
@@ -992,7 +1028,13 @@ class vlastnik2_a2
 				
     // co - co hledat, 1- podle dns, 2-podle ip					    									    
     $dotaz=pg_query($dotaz_final);
-    $radku=pg_num_rows($dotaz);
+
+	if($dotaz !== false){
+    	$radku=pg_num_rows($dotaz);
+	}
+	else{
+		echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+	}
 
     if($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
     else
@@ -1633,25 +1675,27 @@ class vlastnik2_a2
 class vlastnikarchiv
 {
 
-   function vypis_tab ($par)
-         {
-	if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
-	elseif ($par == 2) { echo "\n".'</table>'."\n"; }
-	else    { echo "chybny vyber"; }
-		  
-			
-	// konec funkce vypis_tab
+   public static function vypis_tab ($par)
+    {
+		if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
+		elseif ($par == 2) { echo "\n".'</table>'."\n"; }
+		else    { echo "chybny vyber"; }				
 	}
 				
 				
-    function vypis ($sql,$co,$dotaz_final)
+    public function vypis ($sql,$co,$dotaz_final)
     {
 					
     // co - co hledat, 1- podle dns, 2-podle ip
 						    
     $dotaz=pg_query($dotaz_final);
 
-    $radku=pg_num_rows($dotaz);
+	if($dotaz !== false) {
+		$radku=pg_num_rows($dotaz);
+	}
+	else{
+		echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+	}
 
     if ($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
     else
@@ -2586,7 +2630,7 @@ class vlastnici2pridani
 class vlastnikfind
 {
 
-   function vypis_tab ($par)
+   public static function vypis_tab ($par)
          {
 	if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
 	elseif ($par == 2) { echo "\n".'</table>'."\n"; }

@@ -26,11 +26,10 @@ class c_listing_vlastnici2 {
     
    // $select="./objekty.php?";
     
-    //konstruktor...naplni promenne
-    function c_listing_vlastnici2($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+    function __construct($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
         $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
-        // $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
+        $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;
@@ -47,16 +46,37 @@ class c_listing_vlastnici2 {
     
     //vyber dat z databaze
     function dbSelect(){
-        $listRecord = pg_query($this->sql);
+        try {
+            $listRecord = pg_query($this->sql);
+        }
+        catch (Exception $e) {
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
+        }
+
         if (!$listRecord){
             $this->error(2);
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
+
+            $this->numLists = 0;
+            $this->numRecords = 0;
+
+            return;
         }
+
         $allRecords = pg_num_rows($listRecord);
-        if (!$allRecords){
+
+        if ($allRecords < 0){
             $this->error(3);
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
+
+            $this->numLists = 0;
+            $this->numRecords = 0;
+
+            return;
         }
+                
         $allLists = ceil($allRecords / $this->interval);
-        
+
         $this->numLists = $allLists;
         $this->numRecords = $allRecords;
         

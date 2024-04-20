@@ -17,4 +17,4 @@ $conn_mysql = init_mysql("Adminator2");
 
 $db_mysql_link = $conn_mysql;
 
-init_postgres("Adminator2");
+$db_ok2 = init_postgres("Adminator2");

@@ -99,7 +99,7 @@ class objektyController extends adminatorController {
             try {
                 $this->smarty->display($rs[1]);
             }
-            catch (Exception $e) {
+            catch (\Exception $e) {
                 $this->logger->addError("objektyController\\stbAction: smarty display failed: " . var_export($e->getMessage(), true));
             }
 

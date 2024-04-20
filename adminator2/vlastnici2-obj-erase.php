@@ -1,5 +1,6 @@
 <?php
 
+require("include/main.function.shared.php");
 include ("include/config.php"); 
 include ("include/check_login.php");
 
@@ -50,9 +51,9 @@ include ("include/charset.php");
   if ( $send )
   {
   
-     if( !( ereg('^([[:alnum:]]+)$',$id_komplu) ) ){ 
-    	echo " Špatný formát proměnné id_komplu"; 
-	exit; 
+     if( !( preg_match('/^([[:alnum:]]+)$/',$id_komplu) ) ){ 
+    	  echo " Špatný formát proměnné id_komplu"; 
+	      exit; 
      }
      	    
 	$pole3 = "<b>akce: odrazeni objektu; </b><br>";
@@ -75,7 +76,7 @@ include ("include/charset.php");
 	
 	if ( $res == 1){ $vysledek_write="1"; }
 	   
-	$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','$nick','$vysledek_write')");
+	$add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','$nick','$vysledek_write')");
 							      
   }
   else
