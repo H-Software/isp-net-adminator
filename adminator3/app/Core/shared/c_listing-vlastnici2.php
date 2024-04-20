@@ -47,7 +47,7 @@ class c_listing_vlastnici2 {
     //vyber dat z databaze
     function dbSelect(){
         try {
-            $listRecord = pg_query($this->sql. " xxx ");
+            $listRecord = pg_query($this->sql);
         }
         catch (Exception $e) {
             echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
