@@ -16,8 +16,12 @@ class fakturacniSkupiny extends adminator
 
     var $adminator_ctl;
     
-    function __construct($conn_mysql = null)
+    var $loggedUserEmail;
+
+    function __construct($auth, $conn_mysql = null)
     {
+        $this->loggedUserEmail = $auth->getIdentity();
+
         $this->conn_mysql = $conn_mysql;
     }
 
@@ -279,7 +283,7 @@ class fakturacniSkupiny extends adminator
                             sluzba_voip, fakturacni_text, typ_sluzby, vlozil_kdo) 
                                 VALUES 
                             ('$nazev','$typ','$sluzba_int','$sluzba_int_id_tarifu','$sluzba_iptv',
-                                '$sluzba_iptv_id_tarifu','$sluzba_voip','$fakturacni_text', '$typ_sluzby', '$nick') ");
+                                '$sluzba_iptv_id_tarifu','$sluzba_voip','$fakturacni_text', '$typ_sluzby', '$this->loggedUserEmail') ");
             
                     if( $res )
                     { $output .= "<br><H3><div style=\"color: green;\" >Fakturační skupina úspěšně přidána do databáze.</div></H3>\n"; } 
@@ -296,7 +300,7 @@ class fakturacniSkupiny extends adminator
                         
                     if( $res == 1){ $vysledek_write="1"; }
                 
-                    $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+                    $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$this->loggedUserEmail','$vysledek_write')");
                     
                     $writed = "true"; 
                     
