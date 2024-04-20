@@ -30,7 +30,10 @@ $storage = new SessionStorage();
 $container["authStorage"] = $storage;
 
 $container['logger'] = function($c) {
-    $logger = new Monolog\Logger('logger');
+    
+    $settings = $c->get('settings')['logger'];
+
+    $logger = new Monolog\Logger($settings['name']);
     $filename = __DIR__ . '/../../a3-logs/app.log';
 
     // the default date format is "Y-m-d\TH:i:sP"

@@ -27,10 +27,6 @@ $conn_mysql = init_mysql("Adminator3");
 
 $db_ok2 = init_postgres("Adminator3");
 
-// Slim Config
-// $slim_config['displayErrorDetails'] = true;
-$slim_config['addContentLengthHeader'] = false;
-
 // ORM init
 $capsule = new Illuminate\Database\Capsule\Manager;
 
