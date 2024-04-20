@@ -59,7 +59,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713521676',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713600408',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -228,6 +228,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (21,	82,	'a2: admin-level-list'),
 (23,	10,	'admin level action'),
 (25,	50,	'topology-nod-update'),
+(27,	30,	'objekty-vypis-ip'),
 (28,	30,	'soubory'),
 (30,	10,	'a3: archiv-zmen-cat.php, a2: archiv-zmen.php'),
 (31,	10,	'a2: automatika'),
@@ -302,15 +303,6 @@ CREATE TABLE `login_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
-(24,	'admin',	'1713450780',	'172.18.0.1'),
-(25,	'admin',	'1713452972',	'172.18.0.1'),
-(26,	'admin',	'1713455049',	'172.18.0.1'),
-(27,	'admin',	'1713458206',	'172.18.0.1'),
-(28,	'admin',	'1713461423',	'172.18.0.1'),
-(29,	'admin',	'1713461888',	'172.18.0.1'),
-(30,	'admin',	'1713520214',	'172.18.0.1'),
-(31,	'admin',	'1713521661',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -320,17 +312,18 @@ CREATE TABLE `nod_list` (
   `pozn` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ip_rozsah` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `typ_nodu` int unsigned NOT NULL,
+  `typ_vysilace` int unsigned NOT NULL DEFAULT '0',
   `stav` int unsigned NOT NULL,
   `router_id` int unsigned NOT NULL,
   `vlan_id` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `nod_list` (`id`, `jmeno`, `adresa`, `pozn`, `ip_rozsah`, `typ_nodu`, `stav`, `router_id`, `vlan_id`) VALUES
-(1,	'prvni nod',	'u me doma',	'test pozn',	'10.10.10.0/24',	1,	0,	1,	0),
-(2,	'opticky nod 1',	'',	'',	'10.10.100.0/24',	2,	0,	0,	0),
-(3,	'opticky nod 2',	'kdesi 2',	'',	'10.10.200.0/24',	2,	0,	0,	0),
-(370,	'optika - neco special',	'',	'',	'',	2,	0,	0,	0);
+INSERT INTO `nod_list` (`id`, `jmeno`, `adresa`, `pozn`, `ip_rozsah`, `typ_nodu`, `typ_vysilace`, `stav`, `router_id`, `vlan_id`) VALUES
+(1,	'prvni nod',	'u me doma',	'test pozn',	'10.10.10.0/24',	1,	0,	0,	1,	0),
+(2,	'opticky nod 1',	'',	'',	'10.10.100.0/24',	2,	0,	0,	0,	0),
+(3,	'opticky nod 2',	'kdesi 2',	'',	'10.10.200.0/24',	2,	0,	0,	0,	0),
+(370,	'optika - neco special',	'',	'',	'',	2,	0,	0,	0,	0);
 
 DROP TABLE IF EXISTS `objekty_stb`;
 CREATE TABLE `objekty_stb` (
@@ -552,4 +545,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-19 10:15:11
+-- 2024-04-20 08:07:12
