@@ -59,7 +59,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713600408',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713604108',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -215,7 +215,7 @@ CREATE TABLE `leveling` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
-(1,	5,	'a2: objekty'),
+(1,	6,	'a2: objekty'),
 (2,	10,	'a2: objekty-add'),
 (4,	10,	'topology-nod-list'),
 (5,	10,	'a2: topology-nod-list'),
@@ -239,6 +239,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (41,	50,	'platby-soucet'),
 (43,	40,	'stats-objekty'),
 (48,	40,	'vlastnici2-add-obj'),
+(49,	50,	'objekty - odendani od vlastnika'),
 (51,	30,	'vlastnici-add-fakt'),
 (63,	40,	'vlastnici export'),
 (75,	10,	'a2: partner-cat'),
@@ -303,6 +304,8 @@ CREATE TABLE `login_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
+INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
+(34,	'admin',	'1713601589',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -463,15 +466,16 @@ CREATE TABLE `tarify_int` (
   `speed_down` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `speed_up` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `gen_poradi` int NOT NULL DEFAULT '0',
+  `barva` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id_tarifu`),
   UNIQUE KEY `id_tarifu` (`id_tarifu`),
   UNIQUE KEY `zkratka_tarifu` (`zkratka_tarifu`),
   UNIQUE KEY `jmeno_tarifu` (`jmeno_tarifu`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `tarify_int` (`id_tarifu`, `typ_tarifu`, `zkratka_tarifu`, `jmeno_tarifu`, `speed_down`, `speed_up`, `gen_poradi`) VALUES
-(1,	0,	'cs',	'small city',	'2048',	'2048',	0),
-(2,	0,	'mp',	'metropolitni linka',	'',	'',	0);
+INSERT INTO `tarify_int` (`id_tarifu`, `typ_tarifu`, `zkratka_tarifu`, `jmeno_tarifu`, `speed_down`, `speed_up`, `gen_poradi`, `barva`) VALUES
+(1,	0,	'cs',	'small city',	'2048',	'2048',	0,	''),
+(2,	0,	'mp',	'metropolitni linka',	'',	'',	0,	'');
 
 DROP TABLE IF EXISTS `tarify_iptv`;
 CREATE TABLE `tarify_iptv` (
@@ -545,4 +549,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-20 08:07:12
+-- 2024-04-20 09:56:33
