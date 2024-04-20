@@ -111,7 +111,7 @@
                                 <a href="/vlastnici2/fakturacni-skupiny/action?update_id={$v.id|escape:'url'}" >upravit</a>
                             </td>
                             <td>
-                                <a href="/vlastnici2/fakturacni-skupiny/action?erase_id={$v.id|escape:'url'}" >upravit</a>
+                                <a href="/vlastnici2/fakturacni-skupiny/delete?erase_id={$v.id|escape:'url'}" >upravit</a>
                             </td>
 
                             <td><span>&nbsp;</span></td>

@@ -3,6 +3,7 @@
 namespace App\Customer;
 
 use App\Core\adminator;
+use App\Core\ArchivZmen;
 use App\Models\FakturacniSkupina;
 use Illuminate\Database\Capsule\Manager as DB;
 use Psr\Container\ContainerInterface;
@@ -34,24 +35,19 @@ class fakturacniSkupiny extends adminator
     {
         $items = array();
 
-        // $items = FakturacniSkupina::where('active', 1)
-        //     ->orderBy('name')
-        //     ->take(10)
-        //     ->get();
+        $items = FakturacniSkupina::get()
+            ->sortByDesc('id');
 
-        // $fetch = FakturacniSkupina::all();
-        // $items =  $fetch->toArray();
-
-        $fetch = DB::table($this->db_table_name)
-                ->orderBy('id', 'desc')
-                ->get();
+        // $fetch = DB::table($this->db_table_name)
+        //         ->orderBy('id', 'desc')
+        //         ->get();
         
-        if(!is_object($fetch))
-        {
-            return false;
-        }
+        // if(!is_object($fetch))
+        // {
+        //     return false;
+        // }
 
-        $items = $this->objectToArray($fetch);
+        // $items = $this->objectToArray($fetch);
 
         return $items;
     }
@@ -245,6 +241,7 @@ class fakturacniSkupiny extends adminator
                 else
                 {
                     // rezim pridani
+                    //
                     $form_data = array_merge($form_data, array("vlozil_kdo" => $this->loggedUserEmail));
 
                     $res = DB::table($this->db_table_name)->insert($form_data);
@@ -253,18 +250,20 @@ class fakturacniSkupiny extends adminator
                     { $output .= "<br><H3><div style=\"color: green;\" >Fakturační skupina úspěšně přidána do databáze.</div></H3>\n"; } 
                     else
                     { $output .= "<br><H3><div style=\"color: red;\" >Chyba! Fakturační skupinu nelze přidat.</div></H3>\n"; }	
-                
-                    // pridame to do archivu zmen
-                    $pole = "<b> akce: pridani fakt. skupiny; </b><br>";
-                
-                    foreach ($form_data as $c => $v) {
-                        $pole .= "[$c]=> $v, ";
-                    }
-    
+
                     if($res === true){ $vysledek_write="1"; }
-                
-                    $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$this->loggedUserEmail','$vysledek_write')");
+
+                    // pridame to do archivu zmen
+                    $az = new ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
                     
+                    $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
+
+                    if( is_object($azRes) )
+                    { $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n"; } 
+                    else
+                    { $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n"; }	
+
+                    // for form/page control
                     $writed = "true"; 
                     
                     // konec else - rezim pridani
@@ -295,7 +294,7 @@ class fakturacniSkupiny extends adminator
         elseif ( ( isset($writed) or isset($updated) ) ): 
        
             $output .= '<div style="">
-                <a href="vlastnici2-fakt-skupiny.php" >Zpět na "Fakturační skupiny"</a>
+                <a href="/vlastnici2/fakturacni-skupiny" >Zpět na "Fakturační skupiny"</a>
             </div>
             
             <br>
