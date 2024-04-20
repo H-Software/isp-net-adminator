@@ -78,6 +78,7 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/vlastnici/cat', \vlastniciController::class . ':cat');
     $this->map(['GET', 'POST'],'/vlastnici2', \vlastniciController::class . ':vlastnici2');
     $this->map(['GET', 'POST'],'/vlastnici2/fakturacni-skupiny', \vlastniciController::class . ':fakturacniSkupiny');
+    $this->map(['GET', 'POST'],'/vlastnici2/fakturacni-skupiny/action', \vlastniciController::class . ':fakturacniSkupinyAction');
 
     $this->map(['GET', 'POST'],'/topology', \topologyController::class . ':nodeList');
     $this->map(['GET', 'POST'],'/topology/node-list', \topologyController::class . ':nodeList');

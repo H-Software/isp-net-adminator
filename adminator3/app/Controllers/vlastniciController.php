@@ -84,7 +84,7 @@ class vlastniciController extends adminatorController {
 
         $this->header($request, $response, $this->adminator);
 
-        // main login
+        // list logic
         //
         $fs = new \App\Customer\fakturacniSkupiny();
         $fs_items = $fs->getItems();
@@ -101,8 +101,23 @@ class vlastniciController extends adminatorController {
         // debug
         // $this->smarty->assign("fs_items_debug","<pre>" . var_export($fs_items,true). "</pre>");
         
-        $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
+        $this->smarty->display('vlastnici/fakturacni-skupiny/list.tpl');
 
+    }
+
+    public function fakturacniSkupinyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->addInfo("vlastniciController\\fakturacniSkupinyAction called");
+        
+        $this->checkLevel(140);
+
+        $this->smarty->assign("page_title","Adminator3 :: . :: fakturační skupiny :: Action");
+
+        $this->header($request, $response, $this->adminator);
+
+                
+        $this->smarty->display('vlastnici/fakturacni-skupiny/action.tpl');
     }
 
 }

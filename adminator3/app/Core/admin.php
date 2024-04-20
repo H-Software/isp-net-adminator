@@ -63,7 +63,7 @@ class admin {
 
 		// $this->logger->addInfo("admin\LevelList dump q_data: " . var_export($q_data, true));
 
-		$output .= '<div style="padding-top: 10px; padding-bottom: 5px;" class="fs-5">Výpis levelů stránek</div>';
+		$output .= '<div style="padding-top: 10px; padding-left: 10px;" class="fs-5">Výpis levelů stránek</div>';
 
 		if ($q_num_rows==0) $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Zadné levely v databazi</div>";
 		else
