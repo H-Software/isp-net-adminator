@@ -297,8 +297,13 @@ class objekt_a2
 		}
 
 	}
- 
-  $radku=pg_num_rows($dotaz);
+
+if($dotaz !== false){
+	$radku=pg_num_rows($dotaz);
+}
+else{
+	echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+}
   
  if ($radku==0) 
  {
