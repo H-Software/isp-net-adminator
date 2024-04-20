@@ -14,7 +14,7 @@ class objekt_a2
    // konec funkce
  }
    
- function select($es,$razeni)  
+ public static function select($es,$razeni)  
  {
   global $db_ok2;
   // co - co hledat, 1- podle dns, 2-podle ip
