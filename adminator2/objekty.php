@@ -338,12 +338,13 @@ include ("include/charset.php");
 
     $interval=$listovani->interval;
 
-    $dotaz_final=$dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+    $dotaz_final=$dotaz_source." LIMIT ". intval($interval)." OFFSET ".$bude_chybet." ";
   
   $listovani->listInterval();
   
   $objekt = new objekt_a2;
-  $objekt->vypis($sql,$co,0,$dotaz_final,$conn_mysql);
+  $objekt->conn_mysql = $conn_mysql;
+  $objekt->vypis($sql,$co,0,$dotaz_final);
      
   $objekt->vypis_tab(2);  
  
