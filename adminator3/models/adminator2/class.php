@@ -522,13 +522,13 @@ else{
     
     $id_nodu=$data["id_nodu"];
           
-    $vysledek_bod = mysql_query("SELECT jmeno FROM nod_list WHERE id='".intval($id_nodu)."' ");
-    $radku_bod = mysql_num_rows($vysledek_bod);
+    $vysledek_bod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id='".intval($id_nodu)."' ");
+    $radku_bod = $vysledek_bod->num_rows;
 				      
      if($radku_bod==0) echo "<span style=\"color: gray; \">přípojný bod nelze zjistit </span>";
      else
      {
-       while ($zaznam_bod=mysql_fetch_array($vysledek_bod) )
+       while ($zaznam_bod=$vysledek_bod->fetch_array() )
        { 
         //pouze text 
 	//echo "<span class=\"objekty-2radka\">NOD: ".$zaznam_bod["jmeno"]."</span> "; 
