@@ -53,7 +53,11 @@ class c_listing_objekty {
         if (!$listRecord){
             $this->error(2);
         }
-        $allRecords = @pg_num_rows($listRecord);
+
+        if($listRecord !== false){
+            $allRecords = pg_num_rows($listRecord);
+        }
+
         if (!$allRecords){
             $this->error(3);
         }
