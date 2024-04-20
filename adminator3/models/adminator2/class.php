@@ -242,7 +242,13 @@ class objekt_a2
 					  
       if( $i > 0 ){ $tarif_sql .= " ) "; }
 				       
-     $dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+	  try {
+		$dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+		} 
+	  catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
+
     
     }
     elseif ( $co==4 ) //fiber sit ...vypis pouze u vlastniku
@@ -266,12 +272,26 @@ class objekt_a2
       }
 					  
       if( $i > 0 ){ $tarif_sql .= " ) "; }
-				       
-     $dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+				  
+	  try {
+		$dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
+	  } 
+	  catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	  }
+     
     
     }
     else
-    { $dotaz= pg_query($db_ok2, $dotaz_final); }
+    { 
+		try {
+			$dotaz= pg_query($db_ok2, $dotaz_final); 
+		} 
+		catch (Exception $e) {
+			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+		}
+
+	}
  
   $radku=pg_num_rows($dotaz);
   
