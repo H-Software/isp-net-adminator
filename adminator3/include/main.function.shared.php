@@ -67,7 +67,6 @@ function init_mysql($app_name = "adminator") {
 }
 
 function init_postgres($app_name = "adminator") {
-  global $db_ok2;
 
   $hlaska_connect = init_helper_base_html($app_name)."<div style=\"color: black; padding-left: 20px;  \">";
   $hlaska_connect .= "<div style=\"padding-top: 50px; font-size: 18px; \">";
@@ -97,7 +96,7 @@ function init_postgres($app_name = "adminator") {
   if ( !($db_ok2) ){ 
       die ($hlaska_connect.pg_last_error($db_ok2)."</div></div></body></html>");
   }
-  
+  return $db_ok2;
 }
 
 // MS SQL stuff
