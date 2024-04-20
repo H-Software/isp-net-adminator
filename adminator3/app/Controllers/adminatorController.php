@@ -20,13 +20,13 @@ class adminatorController extends Controller {
         $this->logger = $logger;
         // $this->auth = $auth;
         
-        $this->logger->addInfo("adminatorController\__construct called");
+        $this->logger->info("adminatorController\__construct called");
 	}
 
     public function jsonRender(ServerRequestInterface $request, ResponseInterface $response, $data, $status = 200, $msg = '') {
         
-        // $this->logger->addInfo("JsonViewer\\render called");
-        // $this->logger->addInfo("JsonViewer\\render response dump: " . var_export($data, true));
+        // $this->logger->info("JsonViewer\\render called");
+        // $this->logger->info("JsonViewer\\render response dump: " . var_export($data, true));
 
         $status = intval($status);
         $_response = ['code' => $status, 'data' => null, 'msg' => ''];
@@ -37,7 +37,7 @@ class adminatorController extends Controller {
         }
 
         $newResponse = $response->withJson($_response, $status, JSON_PRETTY_PRINT);
-        // $this->logger->addInfo("JsonViewer\\render response dump: " . var_export($newResponse, true));
+        // $this->logger->info("JsonViewer\\render response dump: " . var_export($newResponse, true));
 
         return $newResponse;
     }
@@ -71,7 +71,7 @@ class adminatorController extends Controller {
         }
 
         $auth_identity = $this->container->auth->getIdentity();
-        // $this->logger->addInfo("adminatorController\\check_level getIdentity: ".var_export( $auth_identity['username'], true));
+        // $this->logger->info("adminatorController\\check_level getIdentity: ".var_export( $auth_identity['username'], true));
 
         if ($page_level_id == 0){
             $this->renderNoLogin();
@@ -83,7 +83,7 @@ class adminatorController extends Controller {
 
         $checkLevel = $a->checkLevel();
         
-        $this->logger->addInfo("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
+        $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false){
             $this->renderNoLogin();
@@ -127,8 +127,8 @@ class adminatorController extends Controller {
             $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
 
-        $this->logger->addDebug("adminatorController\\header called");
-        $this->logger->addDebug("adminatorController\\header: logged user info: " . $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
+        $this->logger->debug("adminatorController\\header called");
+        $this->logger->debug("adminatorController\\header: logged user info: " . $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
 
         $this->smarty->assign("nick_a_level", $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
         $this->smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
@@ -145,7 +145,7 @@ class adminatorController extends Controller {
 
         if(is_object($request) and is_object($response)){
             $csrf = $this->generateCsrfToken($request, $response, true);
-            // $this->logger->addInfo("adminController\header: csrf generated: ".var_export($csrf, true));
+            // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             $this->smarty->assign("kat_csrf_html", $csrf[0]);
         }
         else

@@ -17,13 +17,13 @@ class workController extends adminatorController {
         $this->smarty = $smarty;
 
         $this->logger = $this->container->logger;
-        $this->logger->addInfo("workController\__construct called");
+        $this->logger->info("workController\__construct called");
 	  }
 
     public function work(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("workController\work called");
+        $this->logger->info("workController\work called");
         
         $this->checkLevel(16);
 

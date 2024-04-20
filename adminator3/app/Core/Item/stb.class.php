@@ -446,7 +446,7 @@ class stb extends adminator
         // }
 
         $popis = $this->action_form->post('popis','"Popis objektu"','alpha_dash|min[3]|max[20]');
-        // $this->logger->addInfo("stb\\stbActionValidateFormData: popis validation retvat: ".var_export($data, true));
+        // $this->logger->info("stb\\stbActionValidateFormData: popis validation retvat: ".var_export($data, true));
 
         $ip = $this->action_form->post('ip','"IP adresa"', 'ip');
 
@@ -497,7 +497,7 @@ class stb extends adminator
         }
         else
         {
-            // $this->logger->addInfo("stb\\stbActionValidateFormData: data validation failed. dump action_form_validation_errors: ".var_export($this->action_form_validation_errors, true));
+            // $this->logger->info("stb\\stbActionValidateFormData: data validation failed. dump action_form_validation_errors: ".var_export($this->action_form_validation_errors, true));
             return false;
         }
 
@@ -511,7 +511,7 @@ class stb extends adminator
             . $data['popis'] . "','" . $data['id_nodu'] . "','" . $data['port_id'] . "','" . $data['pozn'] . "','"
             . $this->loggedUserEmail . "', '" . $data['id_tarifu'] . "') ";
 
-            $this->logger->addInfo("stb\\stbActionSaveIntoDatabase: sql dump: ".var_export($sql, true));
+            $this->logger->info("stb\\stbActionSaveIntoDatabase: sql dump: ".var_export($sql, true));
 
             $res = $this->conn_mysql->query($sql);
 
@@ -549,7 +549,7 @@ class stb extends adminator
         // 1 field -> name (and path) of smarty template
         $ret = array();
 
-        $this->logger->addInfo("stb\\stbAction called ");
+        $this->logger->info("stb\\stbAction called ");
 
         $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
@@ -618,14 +618,14 @@ class stb extends adminator
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
         
         $node_list = $topology->getNodeListForForm($data['nod_find']);
-        $this->logger->addDebug("stb\\stbAction: node_list data: " . var_export($node_list, true));
+        $this->logger->debug("stb\\stbAction: node_list data: " . var_export($node_list, true));
 
         $tarifs_iptv = $a->getTarifIptvListForForm();
-        $this->logger->addDebug("stb\\stbAction: tarifs iptv list data: " . var_export($tarifs_iptv, true));
+        $this->logger->debug("stb\\stbAction: tarifs iptv list data: " . var_export($tarifs_iptv, true));
 
         // render form
         $form_data = $this->stbActionRenderForm($request, $response, $csrf, $data, $node_list, $tarifs_iptv);
-        // $this->logger->addDebug("stb\\stbAction: form_data: " . var_export($form_data, true));
+        // $this->logger->debug("stb\\stbAction: form_data: " . var_export($form_data, true));
 
         $ret[0] = $form_data;
         $ret[1] = "objekty/stb-action-form.tpl";

@@ -13,12 +13,12 @@ class Topology extends adminator {
         $this->smarty = $smarty;
         $this->logger = $logger;
         
-        $this->logger->addInfo("topology\__construct called");
+        $this->logger->info("topology\__construct called");
     }
 
     public function getNodeListForForm($search_string, $typ_nodu = 2, $show_zero_value = true)
     {
-        $this->logger->addInfo("topology\getNodesFiltered called");
+        $this->logger->info("topology\getNodesFiltered called");
 
         if($show_zero_value === true)
         {

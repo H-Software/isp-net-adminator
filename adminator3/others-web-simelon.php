@@ -20,7 +20,7 @@ require "app/routing.php";
 
 $logger = $container->logger;
 
-$logger->addInfo("others-web-simelon called");
+$logger->info("others-web-simelon called");
         
 // $this->checkLevel(95);
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);

@@ -53,11 +53,7 @@ class board{
 
 		$sql = $sql_base." FROM board WHERE ".$this->sql." ORDER BY id DESC LIMIT ".$start.",".$this->view_number;
 
-		try {
-			$message = $this->conn_mysql->query($sql);
-		} catch (Exception $e) {
-			die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-		}
+		$message = $this->conn_mysql->query($sql);
 
 		//vypíšeme tabulky se zprávami
 		while($entry = $message->fetch_array())

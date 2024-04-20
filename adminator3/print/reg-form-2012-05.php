@@ -20,7 +20,7 @@ require __DIR__ ."/../app/routing.php";
 
 $logger = $container->logger;
 
-$logger->addInfo("others-smlouva-pdf called");
+$logger->info("others-smlouva-pdf called");
 
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 

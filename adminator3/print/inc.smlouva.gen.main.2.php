@@ -188,5 +188,5 @@ $pdf->Cell(0,47,'',0,1);
 
  $rs = $pdf->Output($nazev_souboru,"F");
 
- $logger->addInfo("inc.smlouva.gen.main.2.php: dump var nazev_souboru: ".var_export($nazev_souboru, true));
+ $logger->info("inc.smlouva.gen.main.2.php: dump var nazev_souboru: ".var_export($nazev_souboru, true));
 

@@ -53,7 +53,7 @@
 
     // if ( ereg("^.+archiv-zmen.+$",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
     { echo '<td '; }
-      echo " align=\"center\" width=\"15%\" colspan=\"1\" ><a class=\"cat\" href=\"".$cesta."archiv-zmen-cat.php\" target=\"_top\" >Změny</a></td> \n";
+      echo " align=\"center\" width=\"15%\" colspan=\"1\" ><!--<a class=\"cat\" href=\"".$cesta."archiv-zmen-cat.php\" target=\"_top\" >-->Změny<!--</a>--></td> \n";
 
     // if ( ereg("soubory",$_SERVER["REQUEST_URI"]) ){ echo '<td bgcolor="silver" '; }  else 
     { echo '<td '; }

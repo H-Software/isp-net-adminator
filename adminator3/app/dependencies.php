@@ -30,11 +30,50 @@ $storage = new SessionStorage();
 $container["authStorage"] = $storage;
 
 $container['logger'] = function($c) {
-    $logger = new \Monolog\Logger('my_logger');
-    $file_handler = new \Monolog\Handler\StreamHandler('../a3-logs/app.log');
-    $logger->pushHandler($file_handler);
+    
+    $settings = $c->get('settings')['logger'];
+
+    $logger = new Monolog\Logger($settings['name']);
+    $filename = __DIR__ . '/../../a3-logs/app.log';
+
+    // the default date format is "Y-m-d\TH:i:sP"
+    // $dateFormat = "Y n j, g:i a";
+    $dateFormat = 'Y-m-d\TH:i:s';
+
+    // the default output format is "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n"
+    // we now change the default output format according to our needs.
+    $output = "%datetime% > %level_name% > %message% %context% %extra%\n";
+
+    // finally, create a formatter
+    $formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
+
+    $stream = new Monolog\Handler\StreamHandler($filename, Monolog\Logger::DEBUG);
+    $stream->setFormatter($formatter);
+    $fingersCrossed = new Monolog\Handler\FingersCrossedHandler(
+        $stream, Monolog\Logger::DEBUG
+    );
+    $logger->pushProcessor(new Monolog\Processor\UidProcessor());
+    
+    $handler = new Monolog\ErrorHandler($logger);
+    $handler->registerExceptionHandler();
+    $handler->registerFatalHandler();
+
+    $logger->pushHandler($fingersCrossed);
     return $logger;
 };
+
+// https://www.slimframework.com/docs/v3/handlers/error.html
+$container['errorHandler'] = function ($container) {
+    return new App\Handlers\Error($container['logger']);
+};
+
+$container['phpErrorHandler'] = function ($container) {
+    return $container['errorHandler'];
+};
+
+$container['connMysql'] = $conn_mysql;
+
+$container['connPgsql'] = $db_ok2;
 
 $container['db'] = function ($container) use ($capsule) {
     return $capsule;

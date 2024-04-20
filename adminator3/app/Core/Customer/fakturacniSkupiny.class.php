@@ -94,7 +94,7 @@ class fakturacniSkupiny extends adminator
         if( ( $this->form_update_id > 0 ) ){ 
             // run this code in update mode
             $update_status=1; 
-            $this->logger->addInfo("fakturacniSkupiny\Action: update mode set");
+            $this->logger->info("fakturacniSkupiny\Action: update mode set");
 
             if ($this->adminator_ctl->checkLevel(140, false) === false)
             {
@@ -113,7 +113,7 @@ class fakturacniSkupiny extends adminator
             { $output .= "<div style=\"color: red; \" >Chyba! Požadovaná data nelze načíst! </div>"; }
             else
             {
-                $this->logger->addInfo("fakturacniSkupiny\Action: form_data from DB loaded");
+                $this->logger->info("fakturacniSkupiny\Action: form_data from DB loaded");
 
                 $form_data = $dotaz_upd->fetch_assoc();
                 unset($form_data["id"]);

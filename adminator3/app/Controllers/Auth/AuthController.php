@@ -21,7 +21,7 @@ class AuthController extends Controller
         // $this->logger = $logger;
         $this->logger = $container->logger;
 
-        $this->logger->addInfo("authController\__construct called");
+        $this->logger->info("authController\__construct called");
 	}
 
 	public function signin($request, $response, array $args)
@@ -61,15 +61,15 @@ class AuthController extends Controller
 
 	public function signout($request, $response, array $args)
 	{
-        $this->logger->addInfo("route /logout called");
-        $this->logger->addInfo("route /logout: dump auth->hasIdentity: ".var_export($this->container->auth->hasIdentity(), true));
-        $this->logger->addInfo("route /logout: before: dump auth->getStorage()->isEmpty(): ".var_export($this->container->auth->getStorage()->isEmpty(), true));
+        $this->logger->info("route /logout called");
+        $this->logger->info("route /logout: dump auth->hasIdentity: ".var_export($this->container->auth->hasIdentity(), true));
+        $this->logger->info("route /logout: before: dump auth->getStorage()->isEmpty(): ".var_export($this->container->auth->getStorage()->isEmpty(), true));
     
         if ($this->container->auth->hasIdentity()) {
             $this->container->auth->clearIdentity();
         }
     
-        $this->logger->addInfo("route /logout: dump auth->getStorage()->isEmpty(): ".var_export($this->container->auth->getStorage()->isEmpty(), true));
+        $this->logger->info("route /logout: dump auth->getStorage()->isEmpty(): ".var_export($this->container->auth->getStorage()->isEmpty(), true));
     
         //redirect:
         $url = $this->container->router->pathFor('home');

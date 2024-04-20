@@ -17,13 +17,13 @@ class aboutController extends adminatorController {
         $this->smarty = $smarty;
  
         $this->logger = $this->container->logger;
-        $this->logger->addInfo("aboutController\__construct called");
+        $this->logger->info("aboutController\__construct called");
 	}
 
     public function about(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->addInfo("aboutController\about called");
+        $this->logger->info("aboutController\about called");
         
         $this->checkLevel(142);
 
@@ -40,7 +40,7 @@ class aboutController extends adminatorController {
 
     public function changesOld(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->addInfo("aboutController\changesOld called");
+        $this->logger->info("aboutController\changesOld called");
         
         $this->checkLevel(144);
 
@@ -55,7 +55,7 @@ class aboutController extends adminatorController {
     
     public function changes(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->addInfo("aboutController\changes called");
+        $this->logger->info("aboutController\changes called");
 
         $this->checkLevel(145);
 

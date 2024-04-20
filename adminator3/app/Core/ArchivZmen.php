@@ -18,7 +18,7 @@ class ArchivZmen {
         $this->smarty = $smarty;
         $this->logger = $logger;
         
-        $this->logger->addInfo("archivZmen\__construct called");
+        $this->logger->info("archivZmen\__construct called");
     }
     
     function getActionType($actionType)
@@ -39,7 +39,7 @@ class ArchivZmen {
             $actionBody .= "[$c]=> $v, ";
         }  
          
-        $this->logger->addInfo("archivZmen\insertItem: dump actionBody: " . var_export($actionBody, true));
+        $this->logger->info("archivZmen\insertItem: dump actionBody: " . var_export($actionBody, true));
 
         $item = Model::create([
             'akce' => $actionBody,
