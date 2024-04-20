@@ -10,7 +10,13 @@ class fakturacniSkupiny extends adminator
 {
     var $conn_mysql;
 
-    function __construct($conn_mysql)
+    var $csrf_html;
+
+    var $form_update_id;
+
+    var $adminator_ctl;
+    
+    function __construct($conn_mysql = null)
     {
         $this->conn_mysql = $conn_mysql;
     }
@@ -67,21 +73,33 @@ class fakturacniSkupiny extends adminator
         $odeslano = $_POST["odeslano"];
         //hidden prvek, kvuli testovani promenych ..
         $send = $_POST["send"];
-        
+
         if( ( !(preg_match('/^([[:digit:]])+$/',$update_id)) and ( $update_id > 0 ) ) )
         {
             $output .= "<div class=\"vlasnici-add-fail-nick\" style=\"padding-top: 10px; color: red; \">
             <H4>ID fakturační skupiny ( ".$update_id." ) není ve správnem formátu !!! (Povolené: Čísla v desítkové soustavě.)</H4></div>";    
             exit;
         }
-                
-        if( ( $update_id > 0 ) ){ $update_status=1; }
+        else{
+            $this->form_update_id = $update_id;
+        }
+
+        if( ( $this->form_update_id > 0 ) ){ 
+            // run this code in update mode
+            $update_status=1; 
+        
+            if ($this->adminator_ctl->checkLevel(140, false) === false)
+            {
+                $output .= "<div class=\"alert alert-danger\" role=\"alert\">Fakturacni Skupiny nelze upravovat, není dostatečné oprávnění. </div>";
+                return $output;
+            }
+        }
         
         if( ( $update_status==1 and !( isset($send) ) ) )
         { 
             //rezim upravy - nacitani predchozich hodnot
             
-            $dotaz_upd = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$update_id' ");
+            $dotaz_upd = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$this->form_update_id' ");
             $radku_upd = $dotaz_upd->num_rows;
         
             if( $radku_upd == 0 )
@@ -159,8 +177,8 @@ class fakturacniSkupiny extends adminator
             {
         
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_NAZEV = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' AND id != '$update_id' ) ");
-                $MSQ_FT = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' AND id != '$update_id' ) ");
+                $MSQ_NAZEV = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' AND id != '$this->form_update_id' ) ");
+                $MSQ_FT = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' AND id != '$this->form_update_id' ) ");
                 
                 if($MSQ_NAZEV->num_rows > 0)
                 { $error .= "<div style=\"color: #CC0066;\" ><h4>Název (".$nazev.") již existuje!!!</h4></div>"; $fail = "true"; }
@@ -176,8 +194,8 @@ class fakturacniSkupiny extends adminator
             else
             { 
                 $fail="true"; 
-                $error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko ";
-                $error .= "\"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
+                $error .= "<div ><div class=\"alert alert-info\" role=\"alert\">Data neuloženy, nebylo použito tlačítko ";
+                $error .= "\"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</div></div>";
             }
         
             //ulozeni
@@ -189,19 +207,13 @@ class fakturacniSkupiny extends adminator
                 if( $update_status =="1" )
                 {
             
-                    if( !( check_level($level,140) ) ) 
-                    {
-                        $output .= "<br><div style=\"color: red; font-size: 18px; \" >Fakt. Skupiny nelze upravovat, není dostatečné oprávnění. </div><br>";
-                        exit;
-                    }
-                    else
                     {
                         // rezim upravy
                         
                         //prvne stavajici data docasne ulozime 
                         $pole3 .= "<b>akce: uprava fakturacni skupiny; </b><br>";
                             
-                        $vysl4 = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '". intval($update_id). "' ");
+                        $vysl4 = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '". intval($this->form_update_id). "' ");
                     
                         if( ( $vysl4->num_rows <> 1 ) )
                         { 
@@ -243,7 +255,7 @@ class fakturacniSkupiny extends adminator
                                     sluzba_int = '$sluzba_int', sluzba_int_id_tarifu = '$sluzba_int_id_tarifu', 
                                 sluzba_iptv = '$sluzba_iptv', sluzba_iptv_id_tarifu = '$sluzba_iptv_id_tarifu',
                                 sluzba_voip = '$sluzba_voip', fakturacni_text = '$fakturacni_text',
-                                typ_sluzby = '$typ_sluzby' WHERE id = '$update_id' Limit 1 ");
+                                typ_sluzby = '$typ_sluzby' WHERE id = '$this->form_update_id' Limit 1 ");
                 
                     } // konec else jestli je opravneni
             
@@ -254,7 +266,7 @@ class fakturacniSkupiny extends adminator
                     $output .= "<div style=\"font-weight: bold; font-size: 18px; \">Změny je třeba dát vědět účetní!</div>";
                                 
                     //ted vlozime do archivu zmen
-                    require("vlastnici2-fs-update-inc-archiv.php");
+                    // require("vlastnici2-fs-update-inc-archiv.php");
             
                     $updated="true";
             
@@ -295,7 +307,7 @@ class fakturacniSkupiny extends adminator
             else {} // konec else ( !(isset(fail) ), musi tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
        
         elseif ( isset($send) ): 
-            $error = "<h4>Chybí povinné údaje !!! (aktuálně jsou povinné: název FS, Typ, Typ služby) $nazev $typ $typ_sluzby</H4>"; 
+            $error = "<div class=\"alert alert-warning\" role=\"alert\">Chybí povinné údaje !!! (aktuálně jsou povinné: název FS, Typ, Typ služby) (debug: $nazev, $typ, $typ_sluzby)</div>"; 
         endif;
        
         if($update_status==1)
@@ -392,8 +404,10 @@ class fakturacniSkupiny extends adminator
         $output = "";
 
         $output .= '<form name="form1" method="post" >
-        <input type="hidden" name="send" value="true" >
-        <input type="hidden" name="update_id" value="' . $update_id . '" >
+        <input type="hidden" name="send" value="true" >';
+        $output .= $this->csrf_html[0];
+
+        $output .= '<input type="hidden" name="update_id" value="' . $this->form_update_id . '" >
         
         <table border="0" width="" cellspacing="5" >
         
@@ -556,7 +570,7 @@ class fakturacniSkupiny extends adminator
             <tr>';
               /* sluzba voip */ 
         $output .= '
-              </td>
+              <td>
                 <span style="" ><b>Služba "VoIP":</b></span>
               </td>
               <td>    

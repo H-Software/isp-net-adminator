@@ -117,6 +117,9 @@ class vlastniciController extends adminatorController {
         $this->header($request, $response, $this->adminator);
 
         $fs = new \App\Customer\fakturacniSkupiny($this->conn_mysql);
+        $fs->csrf_html = $this->generateCsrfToken($request, $response, true);
+        $fs->adminator_ctl = $this->adminator;
+        
         $fs_action_body = $fs->Action();
 
         $this->smarty->assign("body",$fs_action_body);
