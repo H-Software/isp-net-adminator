@@ -28,7 +28,8 @@ class c_listing_vlastnici2 {
     
     function __construct($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
         $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
-        $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
+        $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n"
+                                . "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). "</div>";
         // $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
         $this->interval = $conInterval;
