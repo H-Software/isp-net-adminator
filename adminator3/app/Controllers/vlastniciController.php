@@ -110,13 +110,17 @@ class vlastniciController extends adminatorController {
 
         $this->logger->addInfo("vlastniciController\\fakturacniSkupinyAction called");
         
-        $this->checkLevel(140);
+        $this->checkLevel(301);
 
         $this->smarty->assign("page_title","Adminator3 :: . :: fakturační skupiny :: Action");
 
         $this->header($request, $response, $this->adminator);
 
-                
+        $fs = new \App\Customer\fakturacniSkupiny($this->conn_mysql);
+        $fs_action_body = $fs->Action();
+
+        $this->smarty->assign("body",$fs_action_body);
+
         $this->smarty->display('vlastnici/fakturacni-skupiny/action.tpl');
     }
 

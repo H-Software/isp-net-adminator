@@ -7,10 +7,11 @@ use App\Models\FakturacniSkupina;
 use Illuminate\Database\Capsule\Manager as DB;
 class fakturacniSkupiny extends adminator
 {
+    var $conn_mysql;
 
-
-    function __construct()
+    function __construct($conn_mysql)
     {
+        $this->conn_mysql = $conn_mysql;
     }
 
     function getItems()
@@ -68,7 +69,7 @@ class fakturacniSkupiny extends adminator
         if( ( !(preg_match('/^([[:digit:]])+$/',$update_id)) and ( $update_id > 0 ) ) )
         {
             echo "<div class=\"vlasnici-add-fail-nick\" style=\"padding-top: 10px; color: red; \">
-            <H4>ID fakturační skupiny ( ".$id_fs." ) není ve správnem formátu !!!(Povolené: Čísla v desítkové soustavě.)</H4></div>";    
+            <H4>ID fakturační skupiny ( ".$update_id." ) není ve správnem formátu !!! (Povolené: Čísla v desítkové soustavě.)</H4></div>";    
             exit;
         }
                 
@@ -78,7 +79,7 @@ class fakturacniSkupiny extends adminator
         { 
             //rezim upravy - nacitani predchozich hodnot
             
-            $dotaz_upd = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$update_id' ");
+            $dotaz_upd = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$update_id' ");
             $radku_upd = $dotaz_upd->num_rows;
         
             if( $radku_upd == 0 )
@@ -122,11 +123,10 @@ class fakturacniSkupiny extends adminator
         }
        
         //zde generovani nevyplnenych policek ...
-        $fakturacni_skupina = new fakturacni_skupina;
         
         //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
         if( (strlen($nazev) > 0) )
-        { $fakturacni_skupina->check_nazev($nazev); }
+        { $this->checkNazev($nazev); }
                                                
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
         if( ( ($nazev != "") and ($typ != "") and ( $typ_sluzby >= 0 ) ) ):
@@ -136,18 +136,18 @@ class fakturacniSkupiny extends adminator
             {
         
                 //zjisti jestli neni duplicitni udaj
-                $MSQ_NAZEV = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' ) ");
-                $MSQ_FT = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' ) ");
+                $MSQ_NAZEV = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' ) ");
+                $MSQ_FT = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' ) ");
                 
                 if( $MSQ_NAZEV->num_rows > 0 )
                 { 
-                $error .= "<div style=\"color: #CC0066; \" ><h4>Název (".$nazev.") již existuje!</h4></div>"; 
-                $fail = "true"; 
+                    $error .= "<div style=\"color: #CC0066; \" ><h4>Název (".$nazev.") již existuje!</h4></div>"; 
+                    $fail = "true"; 
                 }
                 if( $MSQ_FT->num_rows > 0 )
                 { 
-                $error .= "<div style=\"color: #CC0066; \" ><h4>Fakturační text (".$fakturacni_text.") již existuje!</h4></div>"; 
-                $fail = "true"; 
+                    $error .= "<div style=\"color: #CC0066; \" ><h4>Fakturační text (".$fakturacni_text.") již existuje!</h4></div>"; 
+                    $fail = "true"; 
                 }
             
             }
@@ -157,8 +157,8 @@ class fakturacniSkupiny extends adminator
             {
         
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_NAZEV = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' AND id != '$update_id' ) ");
-                $MSQ_FT = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' AND id != '$update_id' ) ");
+                $MSQ_NAZEV = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '$nazev' AND typ = '$typ' AND id != '$update_id' ) ");
+                $MSQ_FT = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '$fakturacni_text' AND typ = '$typ' AND id != '$update_id' ) ");
                 
                 if($MSQ_NAZEV->num_rows > 0)
                 { $error .= "<div style=\"color: #CC0066;\" ><h4>Název (".$nazev.") již existuje!!!</h4></div>"; $fail = "true"; }
@@ -199,7 +199,7 @@ class fakturacniSkupiny extends adminator
                         //prvne stavajici data docasne ulozime 
                         $pole3 .= "<b>akce: uprava fakturacni skupiny; </b><br>";
                             
-                        $vysl4 = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '". intval($update_id). "' ");
+                        $vysl4 = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '". intval($update_id). "' ");
                     
                         if( ( $vysl4->num_rows <> 1 ) )
                         { 
@@ -237,7 +237,7 @@ class fakturacniSkupiny extends adminator
                     
                         $fs_upd["fakturacni_text"] = $fakturacni_text;
                     
-                        $res = $conn_mysql->query("UPDATE fakturacni_skupiny SET nazev = '$nazev', typ = '$typ',
+                        $res = $this->conn_mysql->query("UPDATE fakturacni_skupiny SET nazev = '$nazev', typ = '$typ',
                                     sluzba_int = '$sluzba_int', sluzba_int_id_tarifu = '$sluzba_int_id_tarifu', 
                                 sluzba_iptv = '$sluzba_iptv', sluzba_iptv_id_tarifu = '$sluzba_iptv_id_tarifu',
                                 sluzba_voip = '$sluzba_voip', fakturacni_text = '$fakturacni_text',
@@ -252,7 +252,7 @@ class fakturacniSkupiny extends adminator
                     echo "<div style=\"font-weight: bold; font-size: 18px; \">Změny je třeba dát vědět účetní!</div>";
                                 
                     //ted vlozime do archivu zmen
-                    include("vlastnici2-fs-update-inc-archiv.php");
+                    require("vlastnici2-fs-update-inc-archiv.php");
             
                     $updated="true";
             
@@ -260,7 +260,7 @@ class fakturacniSkupiny extends adminator
                 else
                 {
                     // rezim pridani
-                    $res = $conn_mysql->query("INSERT INTO fakturacni_skupiny 
+                    $res = $this->conn_mysql->query("INSERT INTO fakturacni_skupiny 
                                 (nazev, typ, sluzba_int, sluzba_int_id_tarifu, sluzba_iptv, sluzba_iptv_id_tarifu, 
                             sluzba_voip, fakturacni_text, typ_sluzby, vlozil_kdo) 
                                 VALUES 
