@@ -136,7 +136,7 @@ class fakturacniSkupiny extends adminator
                                                  'sluzba_int(gte[0]), sluzba_int_id_tarifu(gte[0]), sluzba_iptv(gte[0]), sluzba_iptv_id_tarifu(gte[0]), sluzba_voip(gte[0]), sluzba_voip_id_tarifu(gte[0])');
 
             /// fix missing zero values in array (some bug in formr ??)
-            $form_data = $this->fillEmptyVarsInArray($form_data);
+            $form_data = $this->fillEmptyVarsInArray($form_data, array('nazev', 'fakturacni_text'));
 
             // $output .= "<pre>Form: <br>";
             // $output .= var_export($form_data, true);
@@ -215,6 +215,8 @@ class fakturacniSkupiny extends adminator
                     else  
                     { 
                         $pole_puvodni_data = $vysl4->fetch_assoc();
+                        unset($pole_puvodni_data["id"]);
+                        unset($pole_puvodni_data["vlozil_kdo"]);
                     } // konec else if radku <> 1
                     
                     //pridavani do pole pro porovnavani z archivu zmen...
@@ -297,68 +299,67 @@ class fakturacniSkupiny extends adminator
             </div>
             
             <br>
-            fakturační skupina přidána/upravena, zadané údaje:<br><br>
+            zadané údaje:<br><br>
             
-            <b>Název skupiny</b>:' . $form_data['nazev'] . "<br><br>";
+            <b>Název skupiny</b>: ' . $form_data['nazev'] . "<br><br>";
     
-    //    <b>Typ</b>:  
-    //    
-    //        if( $typ == 1 )
-    //        { $output .= "DÚ - domácí uživatel"; }
-    //        elseif( $typ == 2 )
-    //        { $output .= "FÚ - firemní uživatel"; }
-    //        else
-    //        { $output .= "Typ nelze zjistit"; }
-    //    <br>
+            $output .= '<b>Typ</b>: ';
        
-    //    <b>Typ služby</b>: 
-    //    
-    //        if( $typ_sluzby == 0 )
-    //        { $output .= "wifi"; }
-    //        elseif( $typ_sluzby == 1 )
-    //        { $output .= "optika"; }
-    //        else
-    //        { $output .= "nelze zjistit"; }
+           if( $form_data['typ'] == 1 )
+           { $output .= "DÚ - domácí uživatel"; }
+           elseif( $form_data['typ'] == 2 )
+           { $output .= "FÚ - firemní uživatel"; }
+           else
+           { $output .= "Typ nelze zjistit"; }
+            $output .= '<b><br>';
+            
+            $output .= '<b>Typ služby</b>: ';
+       
+           if( $form_data['typ_sluzby'] == 0 )
+           { $output .= "wifi"; }
+           elseif( $form_data['typ_sluzby'] == 1 )
+           { $output .= "optika"; }
+           else
+           { $output .= "nelze zjistit"; }
            
-    //    <br><br>
+            $output .= '<br><br>';
        
-    //    <b>Služba "Internet"</b>: 
-    //    
-    //        if( $sluzba_int == 0 )
-    //        { $output .= "Ne"; }
-    //        elseif( $sluzba_int == 1 )
-    //        { $output .= "Ano"; }
-    //        else
-    //        { $output .= "Nelze zjistit"; }
+            $output .= '<b>Služba "Internet"</b>: ';
+       
+           if( $form_data['sluzba_int'] == 0 )
+           { $output .= "Ne"; }
+           elseif( $form_data['sluzba_int'] == 1 )
+           { $output .= "Ano"; }
+           else
+           { $output .= "Nelze zjistit"; }
            
-    //    <br>
-    //    <b>Sluzba internet :: tarif</b>: $output .= $sluzba_int_id_tarifu;
-    //    <br><br>
+           $output .= '<br>
+                <b>Sluzba internet :: tarif ID</b>: ' . $form_data['sluzba_int_id_tarifu'] .
+                '<br><br>';
        
-    //    <b>Služba "IPTV"</b>: 
-    //    
-    //        if( $sluzba_iptv == 0 )
-    //        { $output .= "Ne"; }
-    //        elseif( $sluzba_iptv == 1 )
-    //        { $output .= "Ano"; }
-    //        else
-    //        { $output .= "Nelze zjistit"; }
+            $output .= '<b>Služba "IPTV"</b>: ';
        
-    //    <br>
+           if( $form_data['sluzba_iptv'] == 0 )
+           { $output .= "Ne"; }
+           elseif( $form_data['sluzba_iptv'] == 1 )
+           { $output .= "Ano"; }
+           else
+           { $output .= "Nelze zjistit"; }
        
-    //    <b>Sluzba iptv :: tarif</b>: $output .= $sluzba_iptv_id_tarifu;
-    //    <br><br>
-       
-    //    <b>Služba "VoIP"</b>:
-    //  
-    //        if( $sluzba_voip == 0 )
-    //        { $output .= "Ne"; }
-    //        elseif( $sluzba_voip == 1 )
-    //        { $output .= "Ano"; }
-    //        else
-    //        { $output .= "Nelze zjistit"; }
-    //  
-       
+           $output .= '<br>';
+            
+           $output .= '<b>Sluzba iptv :: tarif</b>: ' .  $form_data['sluzba_iptv_id_tarifu'] .
+            '<br><br>';
+            
+            $output .= '<b>Služba "VoIP"</b>: ';
+     
+           if( $form_data['sluzba_voip'] == 0 )
+           { $output .= "Ne"; }
+           elseif( $form_data['sluzba_voip'] == 1 )
+           { $output .= "Ano"; }
+           else
+           { $output .= "Nelze zjistit"; }
+     
         endif; 
         $output .= "<br>";
 

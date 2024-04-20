@@ -44,11 +44,11 @@ class adminator {
         return $result;
     }
 
-    function fillEmptyVarsInArray($a)
+    function fillEmptyVarsInArray(array $a, array $exclude = [])
     {
         foreach($a as $key => $val)
         {
-            if( empty($val) )
+            if( empty($val) and !in_array($key, $exclude))
             {
                 $a[$key] = 0;
             }
