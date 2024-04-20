@@ -34,24 +34,19 @@ class fakturacniSkupiny extends adminator
     {
         $items = array();
 
-        // $items = FakturacniSkupina::where('active', 1)
-        //     ->orderBy('name')
-        //     ->take(10)
-        //     ->get();
+        $items = FakturacniSkupina::get()
+            ->sortByDesc('id');
 
-        // $fetch = FakturacniSkupina::all();
-        // $items =  $fetch->toArray();
-
-        $fetch = DB::table($this->db_table_name)
-                ->orderBy('id', 'desc')
-                ->get();
+        // $fetch = DB::table($this->db_table_name)
+        //         ->orderBy('id', 'desc')
+        //         ->get();
         
-        if(!is_object($fetch))
-        {
-            return false;
-        }
+        // if(!is_object($fetch))
+        // {
+        //     return false;
+        // }
 
-        $items = $this->objectToArray($fetch);
+        // $items = $this->objectToArray($fetch);
 
         return $items;
     }
