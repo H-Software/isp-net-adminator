@@ -26,9 +26,9 @@ class c_Listing {
     
     //konstruktor...naplni promenne
     function c_Listing($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
-        $this->errName[1] = "Pøi volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
-        $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
-        $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
+        $this->errName[1] = "Pï¿½i volï¿½nï¿½ konstruktotu nebyl zadï¿½n SQL dotaz!<br>\n";
+        $this->errName[2] = "Nelze zobrazit listovï¿½nï¿½, chyba databï¿½ze(Query)!<br>\n";
+        $this->errName[3] = "Nelze zobrazit listovï¿½nï¿½, chyba databï¿½ze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;
@@ -52,7 +52,7 @@ class c_Listing {
             $this->error(2);
         }
         $allRecords = @pg_num_rows($listRecord);
-        if (!$allRecords){
+        if ($allRecords < 0){
             $this->error(3);
         }
         $allLists = ceil($allRecords / $this->interval);
