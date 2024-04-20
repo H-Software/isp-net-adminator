@@ -30,7 +30,7 @@ class ArchivZmen {
             return false;
         }
     }
-    function insertItem(int $actionType, $actionData, int $actionResult = 0, string $loggedUserEmail = NULL)
+    function insertItem(int $actionType, array $actionData, int $actionResult = 0, string $loggedUserEmail = NULL)
     {
 
         $actionBody = $this->getActionType($actionType);
