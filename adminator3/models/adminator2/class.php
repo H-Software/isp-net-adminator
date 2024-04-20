@@ -464,7 +464,7 @@ else{
     if( preg_match("/a/",$data["sikana_status"]) )
     { 
 	$sikana_status_s = "<span class=\"obj-link-sikana\" >".
-			    "<a href=\"http://damokles.simelon.net:8009/index.php".
+			    "<a href=\"http://damokles.adminator.net:8009/index.php".
 			    "?sc=".intval($data["sikana_cas"])."&st=".urlencode($data["sikana_text"])."\" target=\"_new\" >".
 			    "Sikana-A (".$data["sikana_cas"].")</a></span>\n"; 
     
@@ -496,13 +496,13 @@ else{
        //dodelat klikatko pro sc
        //{ $tarif="<span class=\"tarifsc\"><a href=\"https://trinity.simelon.net/monitoring/data/cat_sc.php?ip=".$data["ip"]."\" target=\"_blank\" >sc</a></span>"; } 
     
-       $tarif_f = mysql_query("SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
-       $tarif_f_r = mysql_num_rows($tarif_f);
+       $tarif_f = $this->conn_mysql->query("SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
+       $tarif_f_r = $tarif_f->num_rows;
               
        if( $tarif_f_r <> 1){ echo "<span style=\"font-weight: bold; color: red;\" >E</span>"; }
        else
        {
-        while($data_f = mysql_fetch_array($tarif_f))
+        while($data_f = $tarif_f->fetch_array())
 	{ 
 	    echo "<span style=\"color: ".$data_f["barva"]."; \" >";
 	    echo "<a href=\"admin-tarify.php?id_tarifu=".$data_f["id_tarifu"]."\" >".$data_f["zkratka_tarifu"]."</a>";
