@@ -16,11 +16,10 @@ class fakturacniSkupiny extends adminator
 
     var $adminator_ctl;
     
-    var $loggedUserEmail;
-
     function __construct($auth, $conn_mysql = null)
     {
-        $this->loggedUserEmail = $auth->getIdentity();
+        $i = $auth->getIdentity();
+        $this->loggedUserEmail = $i['username'];
 
         $this->conn_mysql = $conn_mysql;
     }

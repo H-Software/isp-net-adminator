@@ -16,6 +16,8 @@ class adminator {
 
     var $userIdentityLevel;
 
+    var $loggedUserEmail;
+
     public function __construct($conn_mysql, $smarty, $logger)
     {
         $this->conn_mysql = $conn_mysql;
@@ -23,6 +25,13 @@ class adminator {
         $this->logger = $logger;
 
         $this->logger->addInfo("adminator\__construct called");
+    }
+
+    function formInit()
+    {
+        // bootstrap -> bootstrap.js
+        // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
+        $this->action_form = new \Formr\Formr('bootstrap5', 'hush');
     }
 
     function objectToArray($data)

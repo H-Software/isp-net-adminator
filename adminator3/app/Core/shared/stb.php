@@ -6,7 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
 
-class stb
+class stb extends adminator
 {
 
     var $conn_mysql;
@@ -46,18 +46,15 @@ class stb
     var $action_form_validation_errors_wrapper_start = '<div class="alert alert-danger" role="alert">';
     var $action_form_validation_errors_wrapper_end = '</div>';
 
-	function __construct($conn_mysql, $logger)
+	function __construct($container, $conn_mysql, $logger = null)
     {
 		$this->conn_mysql = $conn_mysql;
-        $this->logger = $logger;
-	}
+        
+        $this->logger = $container->logger;
 
-    function formInit()
-    {
-        // bootstrap -> bootstrap.js
-        // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
-        $this->action_form = new \Formr\Formr('bootstrap5', 'hush');
-    }
+        $i = $container->auth->getIdentity();
+        $this->loggedUserEmail = $i['username'];
+	}
 
     public function stbListGetBodyContent()
     {
@@ -512,7 +509,7 @@ class stb
             . " (mac_adresa, ip_adresa, puk, popis, id_nodu, sw_port, pozn, vlozil_kdo, id_tarifu)" 
             . " VALUES ('" . $data['mac'] ."','" . $data['ip'] . "','" . $data['puk'] . "','" 
             . $data['popis'] . "','" . $data['id_nodu'] . "','" . $data['port_id'] . "','" . $data['pozn'] . "','"
-            . \App\Auth\Auth::getUserEmail() . "', '" . $data['id_tarifu'] . "') ";
+            . $this->loggedUserEmail . "', '" . $data['id_tarifu'] . "') ";
 
             $this->logger->addInfo("stb\\stbActionSaveIntoDatabase: sql dump: ".var_export($sql, true));
 
@@ -539,7 +536,7 @@ class stb
 
             $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
                 "VALUES ('".$this->conn_mysql->real_escape_string($pole)."',".
-                "'".$this->conn_mysql->real_escape_string(\App\Auth\Auth::getUserEmail())."',".
+                "'".$this->conn_mysql->real_escape_string($this->loggedUserEmail)."',".
                 "'" . $vysledek_write . "')");
 
             // $writed = "true"; 
