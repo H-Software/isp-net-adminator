@@ -325,7 +325,7 @@ else
 					   
    $interval=$listovani->interval;
 					       
-   $dotaz_final=$dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+   $dotaz_final=$dotaz_source." LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
 						   			   
    $listovani->listInterval();
 						     
