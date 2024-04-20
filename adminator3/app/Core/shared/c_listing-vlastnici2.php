@@ -62,7 +62,7 @@ class c_listing_vlastnici2 {
 
             return;
         }
-
+d
         if($listRecord !== false){
             $allRecords = pg_num_rows($listRecord);
         }
