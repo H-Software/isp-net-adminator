@@ -350,8 +350,8 @@ if ( $update_status =="1" )
       echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>\n";
       echo pg_last_error($db_ok2); 
       
-       $res1 = pg_get_result($db_ok2);
-         echo pg_result_error($res1); 
+      //  $res1 = pg_get_result($db_ok2);
+      //    echo pg_result_error($res1); 
       
       echo pg_last_notice($db_ok2);
       
