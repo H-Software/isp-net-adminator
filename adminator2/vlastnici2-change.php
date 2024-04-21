@@ -343,17 +343,17 @@ if ( $update_status =="1" )
 	    $vlast_upd["billing_suspend_stop"] = NULL;
     }
      
-    $vlast_id = array( "id_cloveka" => $update_id ); 		 	  
+    // $vlast_id = array( "id_cloveka" => $update_id ); 		 	  
 
     echo "<pre>" . var_export( $vlast_upd, true ) ."</pre>";
 
-    echo "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
+    // echo "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
 
     // $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
 
     $affected = DB::connection('pgsql')
               ->table('vlastnici')
-              ->where('id_cloveka2', $update_id)
+              ->where('id_cloveka', $update_id)
               ->update($vlast_upd);
 
      if($affected == 1){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . "\n"; }
