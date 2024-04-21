@@ -70,7 +70,7 @@ class vlastnici2pridani
     
     public static function check_splatnost($number)
     {
-    	if ( !(ereg('^([[:digit:]])+$',$number)) )
+    	if ( !(preg_match('/^([[:digit:]])+$/',$number)) )
 	{
 	    global $fail;      $fail="true";
 	    global $error;
@@ -79,26 +79,25 @@ class vlastnici2pridani
     
     } //end of function check_splatnost
 
-    function check_icq($number)
+    public static function check_icq($number)
     {
-    	if ( !(ereg('^([[:digit:]])+$',$number)) )
-	{
-	    global $fail;      $fail="true";
-	    global $error;
-	    $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>ICQ (".$number.") není ve správnem formátu! (pouze čísla)</H4></div>";
-	}
+    	if ( !(preg_match('/^([[:digit:]])+$/',$number)) )
+		{
+			global $fail;      $fail="true";
+			global $error;
+			$error .= "<div class=\"vlasnici-add-fail-nick\"><H4>ICQ (".$number.") není ve správnem formátu! (pouze čísla)</H4></div>";
+		}
     
     } //end of function check_icq
     
-    function check_email($email)
+    public static function check_email($email)
     {
     	if ( !(Aglobal::check_email($email)) )
-	{
-	    global $fail;      $fail="true";
-	    global $error;
-	    $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Emailová adresa (".$email.") není ve správnem formátu!</H4></div>";
-	}
-    
+		{
+			global $fail;      $fail="true";
+			global $error;
+			$error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Emailová adresa (".$email.") není ve správnem formátu!</H4></div>";
+		}
     } //end of function check_icq
     
     function check_tel($number)
