@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use App\Models\ArchivZmen as Model;
+use Psr\Container\ContainerInterface;
 
 class ArchivZmen {
 
@@ -12,7 +13,7 @@ class ArchivZmen {
 
     var $db_table_name = 'archiv_zmen';
 
-    public function __construct($container, $smarty)
+    public function __construct(ContainerInterface $container, $smarty)
     {
         $this->conn_mysql = $container->connMysql;
         $this->logger = $container->logger;

@@ -1,10 +1,15 @@
 <?php
 
+use Psr\Container\ContainerInterface;
+
 class vlastnik2 {
 	var $conn_mysql;
 
-	function __construct($conn_mysql) {
-		$this->conn_mysql = $conn_mysql;
+	var $logger;
+
+	function __construct(ContainerInterface $container) {
+		$this->conn_mysql = $container->connMysql;
+		$this->logger = $container->logger;
 	}
 
 	function show_fakt_skupiny($fu_select) {

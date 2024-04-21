@@ -75,6 +75,8 @@ $container['connMysql'] = $conn_mysql;
 
 $container['connPgsql'] = $db_ok2;
 
+$container['smarty'] = $smarty;
+
 $container['db'] = function ($container) use ($capsule) {
     return $capsule;
 };
@@ -192,7 +194,7 @@ $container['topologyController'] = function ($container) {
 
 $container['vlastniciController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\vlastniciController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\vlastniciController($app->getContainer());
 };
 $container['workController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
