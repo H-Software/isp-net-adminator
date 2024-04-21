@@ -51,7 +51,7 @@ class stb extends adminator
     var $action_form_validation_errors_wrapper_start = '<div class="alert alert-danger" role="alert">';
     var $action_form_validation_errors_wrapper_end = '</div>';
 
-	function __construct(ContainerInterface $container)
+    function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->validator = $container->validator;
@@ -60,7 +60,7 @@ class stb extends adminator
 
         $i = $container->auth->getIdentity();
         $this->loggedUserEmail = $i['username'];
-	}
+    }
 
     public function stbListGetBodyContent()
     {
@@ -109,7 +109,9 @@ class stb extends adminator
          
          $output .= "";
         
-        $rs_select_nod = $this->filter_select_nods();
+        $topologyClass = new Topology($this->conn_mysql, $this->smarty, $this->logger);
+
+        $rs_select_nod = $topologyClass->filter_select_nods();
         
         if( isset($rs_select_nod["error"]) ){
             
@@ -151,6 +153,8 @@ class stb extends adminator
           
          $this->sql_query = $this->sql_query . " LIMIT ".$interval." OFFSET ".$bude_chybet." "; 
         
+         $this->logger->debug("stb\stbListGetBodyContent: dump var this->sql_query: ".var_export($this->sql_query, true));
+
         $output .= "<div id=\"objekty_stb_filter\" style=\"display: ".$display.";\" >";
         
         //vlastnik - bez
@@ -224,8 +228,7 @@ class stb extends adminator
         $output .= "</form>\n";
         
         //listovani
-        // TODO: fix paging for STB
-        // $output .= $paging->listInterval();
+        $output .= $paging->listInterval();
          
         //zacatek tabulky ... popis
         
@@ -425,9 +428,8 @@ class stb extends adminator
          $output .= $this->vypis();
           
          $output .= "</table>\n";
-        
-         // TODO: fix paging for STB
-         // $output .= $paging->listInterval();
+
+         $output .= $paging->listInterval();
         
          $ret = array($output);
 
@@ -449,14 +451,14 @@ class stb extends adminator
             // 'pin2' => v::number(),
             'Číslo portu (ve switchi)#port_id' => v::number(),
             'Tarif#id_tarifu' => v::number()->greaterThan(0),
-		]);
+        ]);
 
-		if ($validation->failed()) {
+        if ($validation->failed()) {
             $valResults = $validation->getErrors();
             foreach ($valResults as $valField => $valError) {
-			    $this->action_form_validation_errors .= $valError;
+                $this->action_form_validation_errors .= $valError;
             }
-		}
+        }
 
         // TODO: add validation optional items (puk, pin1, pin2)
 
@@ -862,50 +864,8 @@ class stb extends adminator
       
     } //konec funkce generujdata
    
-    function checkip($ip)
-    {
-       $ip_check=ereg('^([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})$',$ip);
-       
-       if( !($ip_check) )
-       {
-            $this->action_form_validation_errors .= 
-                            $this->action_form_validation_errors_wrapper_start
-                            . "IP adresa ( ".$ip." ) není ve správném formátu !!!"
-                            . $this->action_form_validation_errors_wrapper_end
-                            ;
-       }
-       
-    } //konec funkce check-ip			 
+
    
-    function checkmac($mac) 
-    {
-       $mac_check=ereg('^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$',$mac);
-       
-       if( !($mac_check) )
-       {
-            $this->action_form_validation_errors .= 
-                    $this->action_form_validation_errors_wrapper_start
-                    . "MAC adresa ( ".$mac." ) není ve správném formátu !!! (Správný formát je: 00:00:64:65:73:74)"
-                    . $this->action_form_validation_errors_wrapper_end
-                    ;
-       }
-       
-     } //konec funkce check-mac
-   
-     function checkcislo($cislo)
-     {
-        $rra_check=ereg('^([[:digit:]]+)$',$cislo);
-        
-        if( !($rra_check) )
-        {
-            $this->action_form_validation_errors .= 
-                    $this->action_form_validation_errors_wrapper_start
-                    . "Zadaný číselný údaj ( ".$cislo." ) není ve  správném formátu!"
-                    . $this->action_form_validation_errors_wrapper_end
-                    ;
-        }		    
-       
-     } // konec funkce check cislo
    
     function zjistipocetobj($id_cloveka)
     {
@@ -949,14 +909,15 @@ class stb extends adminator
                         " GROUP BY objekty_stb.id_stb ".
                         " ORDER BY id_stb";    
        }
-       else{
+       else
+       {
    
            $sql_where = "";
    
            if( $this->find_id_nodu > 0 )
            {
                $sql_where .= " AND (id_nodu = '".intval($this->find_id_nodu)."') ";
-           } 
+           }
            
            if(isset($this->find_par_vlastnik)){
                
@@ -968,30 +929,43 @@ class stb extends adminator
                //chyba :)
                }
            
-           }
+            }
            
-           if( (strlen($this->find_search_string) > 0) ){
-           
-           $find_search_string = "%".$this->conn_mysql->real_escape_string($this->find_search_string)."%";
-           
-               $sql_where .= " AND ( (id_stb = '$find_search_string') OR ".
-                       " (id_cloveka = '$find_search_string') OR ".
-                       " (mac_adresa LIKE '$find_search_string' ) OR ".
-                       " (ip_adresa LIKE '$find_search_string') OR ".
-                       " (puk LIKE '$find_search_string') OR ".
-                       " (popis LIKE '$find_search_string') OR ".
-                       " (objekty_stb.pozn LIKE '$find_search_string') OR ".
-                       " (nod_list.jmeno LIKE '$find_search_string') ".
-               " ) ";
-           
-           }
+            if( (strlen($this->find_search_string) > 0) ){
+            
+                $sql_where .= " AND (  ";
+
+                if(preg_match("/^[0-9]+$/",$this->find_search_string)){
+                    $this->logger->debug("stb\GenerateSqlQuery: search_string is numeric");
+
+                    $find_search_string = "".$this->conn_mysql->real_escape_string($this->find_search_string)."";
+
+                    $sql_where .= " (id_stb = '$find_search_string') OR ".
+                                " (id_cloveka = '$find_search_string') OR ".
+                                " ";
+                }
+
+                $find_search_string = "%".$this->conn_mysql->real_escape_string($this->find_search_string)."%";
+    
+                $sql_where .= 
+                        " (mac_adresa LIKE '$find_search_string' ) OR ".
+                        " (ip_adresa LIKE '$find_search_string') OR ".
+                        " (puk LIKE '$find_search_string') OR ".
+                        " (pin1 LIKE '$find_search_string') OR ".
+                        " (pin2 LIKE '$find_search_string') OR ".
+                        " (popis LIKE '$find_search_string') OR ".
+                        " (objekty_stb.pozn LIKE '$find_search_string') OR ".
+                        " (jmeno_tarifu LIKE '$find_search_string') OR ".
+                        " (nod_list.jmeno LIKE '$find_search_string') ".
+                        " ) ";
+            }
        
-       if( isset($this->id_stb) ){
+            if( isset($this->id_stb) ){
+            
+                $sql_where .= " AND (id_stb = '".intval($this->id_stb)."') ";
+            }
        
-           $sql_where .= " AND (id_stb = '".intval($this->id_stb)."') ";
-       }
-       
-       if($this->order == 1){
+            if($this->order == 1){
                $sql_order = " ORDER BY popis ASC ";
            }
            elseif($this->order == 2){
@@ -1028,7 +1002,9 @@ class stb extends adminator
            
        
        } //end of else if mod == 1
-        
+    
+        $this->logger->debug("stb\GenerateSqlQuery: dump var this->sql_query: ".var_export($this->sql_query, true));
+
     } //end of function generate_sql_query
     
     function vypis($mod = 0, $id_cloveka = 0)
@@ -1042,48 +1018,50 @@ class stb extends adminator
        if(empty($this->sql_query)){
            $this->generate_sql_query();    
        }
-       
+
+        $this->logger->debug("stb\vypis: dump var this->sql_query: ".var_export($this->sql_query, true));
+
         $dotaz_vypis = $this->conn_mysql->query($this->sql_query);
         $dotaz_vypis_radku = $dotaz_vypis->num_rows;
    
        if($this->debug == 1){
    
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-               <div style=\"color: red; font-weight: bold; \" >debug sql: ".$this->sql_query.
-               
-               "<br>var search: ".$this->find_search_string.
-               "</div>
-               </td></tr>\n";
-   
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
+                    <div style=\"color: red; font-weight: bold; \" >debug sql: ".$this->sql_query.
+                    
+                    "<br>var search: ".$this->find_search_string.
+                    "</div>
+                    </td></tr>\n";
+        
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
                    
        }
        
        if(!$dotaz_vypis){
    
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-               <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: "
-            //    . mysql_errno().": ".mysql_error()
-               ."</div>"
-               ."</td></tr>";
-   
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
+                    <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: "
+                    //    . mysql_errno().": ".mysql_error()
+                    ."</div>"
+                    ."</td></tr>";
+        
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
                    
        }
            
        if( ($dotaz_vypis_radku == 0) and ( $mod != 1 ) )
        {
    
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-               <div style=\"color: red; font-weight: bold; \" >Žádný set-top-box nenalezen.</div>
-               </td></tr>";
-   
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
+                    <div style=\"color: red; font-weight: bold; \" >Žádný set-top-box nenalezen.</div>
+                    </td></tr>";
+        
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
        }
        else
        {
-           $class_stb_liche = "border-bottom: 1px dashed gray; font-size: 15px; ";
-       $class_stb_sude = "border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px; ";
+            $class_stb_liche = "border-bottom: 1px dashed gray; font-size: 15px; ";
+            $class_stb_sude = "border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px; ";
          
        while($data_vypis = $dotaz_vypis->fetch_array())
        {
@@ -1243,48 +1221,4 @@ class stb extends adminator
 
       } //konec funkce vypis
    
-      //
-      //funkce pro filtraci vypisu
-      //
-      
-      function filter_select_nods(){
-          
-          $ret = array();
-          
-          //sql 
-          $sql = "SELECT nod_list.id, nod_list.jmeno FROM nod_list, objekty_stb ".
-               " WHERE ( (nod_list.id = objekty_stb.id_nodu) AND (nod_list.typ_nodu = 2) ) ".
-               " group by nod_list.id";
-
-          $rs = $this->conn_mysql->query($sql);
-
-          if(!$rs){    
-               
-               $text = htmlspecialchars("Error message: ". $rs->error);
-               $ret["error"] = array("2" => $text);
-       
-               return $ret;
-          }
-          
-          $rs_num = $rs->num_rows;
-           
-          if( $rs_num == 0){
-       
-               $text = htmlspecialchars("Žádné nody nenalezeny");
-               $ret["error"] = array("1" => $text);
-               
-               return $ret;
-          }
-          
-          while( $data = $rs->fetch_array()){
-               
-               $id = intval($data["id"]);
-               $val = htmlspecialchars($data["jmeno"]);
-               
-               $ret["data"][$id] = $val;
-          }
-          
-          return $ret;
-          
-      } //end of function filter_select_nods
 }

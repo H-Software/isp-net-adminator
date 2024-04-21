@@ -1312,4 +1312,54 @@ class Topology extends adminator {
         return $output;
     }
 
+    function filter_select_nods($typ_nodu = ''){
+          
+        $ret = array();
+        
+        if(empty($typ_nodu)){
+              $sql_filter_nod = " typ_nodu = 2 ";
+        }
+        else{
+              $sql_filter_nod = " typ_nodu = ".intval($typ_nodu)." ";
+        }
+
+        //sql 
+        if(!empty($sql_filter_nod)){
+          $sql_where = " WHERE ".$sql_filter_nod." ";
+        }
+
+        $sql = "SELECT id, jmeno FROM nod_list ".
+              $sql_where.
+             " ORDER BY id";
+
+        $rs = $this->conn_mysql->query($sql);
+
+        if(!$rs){
+             $text = htmlspecialchars("Error message: ". $rs->error);
+             $ret["error"] = array("2" => $text);
+     
+             return $ret;
+        }
+        
+        $rs_num = $rs->num_rows;
+         
+        if( $rs_num == 0){
+     
+             $text = htmlspecialchars("Žádné nody nenalezeny");
+             $ret["error"] = array("1" => $text);
+             
+             return $ret;
+        }
+        
+        while( $data = $rs->fetch_array()){
+             
+             $id = intval($data["id"]);
+             $val = htmlspecialchars($data["jmeno"]);
+             
+             $ret["data"][$id] = $val;
+        }
+        
+        return $ret;
+        
+    } //end of function filter_select_nods
 }
