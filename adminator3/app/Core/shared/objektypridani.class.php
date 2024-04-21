@@ -2,9 +2,9 @@
 
 class objektypridani {
 
-    function checkmac ($mac) 
+    public static function checkmac ($mac) 
     {
-      $mac_check=ereg('^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$',$mac);
+      $mac_check=preg_match('/^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$/',$mac);
       if ( !($mac_check) )
 	{
 	global $fail;	$fail="true";
@@ -14,43 +14,41 @@ class objektypridani {
     //konec funkce check-mac
     }
 
-    function checkSikanaCas($sikanacas) 
+    public static function checkSikanaCas($sikanacas) 
     {
         global $fail, $error;	
 	
-	$sikanacas = intval($sikanacas);
-	
-	if( ($sikanacas > 9) or ($sikanacas < 1) ){
-	
-	    $fail="true";
-	
-	    $error .= "<div class=\"objekty-add-fail-mac\">".
-			"<H4>Do pole \"Šikana - počet dní\" je třeba vyplnit číslo 1 až 9.</H4></div>";	
-	
-	}
-	 
+		$sikanacas = intval($sikanacas);
+		
+		if( ($sikanacas > 9) or ($sikanacas < 1) ){
+		
+			$fail="true";
+		
+			$error .= "<div class=\"objekty-add-fail-mac\">".
+				"<H4>Do pole \"Šikana - počet dní\" je třeba vyplnit číslo 1 až 9.</H4></div>";	
+		}
     } //end of function checkSikanaCas
 
-    function checkSikanaText($sikanatext) 
+    public static function checkSikanaText($sikanatext) 
     {
         global $fail, $error;	
 
-	if( (strlen($sikanatext) > 150) ){
-	
-	    $fail="true";
-	
-	    $error .= "<div class=\"objekty-add-fail-mac\">".
-			"<H4>Do pole \"Šikana - text\" je možno zadat max. 150 znaků. (aktuálně: ".strlen($sikanatext).")</H4></div>";	
-	
-	}
+		if( (strlen($sikanatext) > 150) ){
+		
+			$fail="true";
+		
+			$error .= "<div class=\"objekty-add-fail-mac\">".
+				"<H4>Do pole \"Šikana - text\" je možno zadat max. 150 znaků. (aktuálně: ".strlen($sikanatext).")</H4></div>";	
+		
+		}
 	
     } //end of function checkSikanaText
     
     //function to validate ip address format in php by Roshan Bhattarai(http://roshanbh.com.np)
-    function validateIpAddress($ip_addr)
+    public static function validateIpAddress($ip_addr)
     {
-	//first of all the format of the ip address is matched
-	if(preg_match("/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/",$ip_addr))
+		//first of all the format of the ip address is matched
+		if(preg_match("/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/",$ip_addr))
         {
           //now all the intger values are separated
           $parts=explode(".",$ip_addr);
@@ -68,71 +66,61 @@ class objektypridani {
           return false; //if format of ip address doesn't matches
     }
                                                       
-    function checkip ($ip)
-    {
-     
-      //old
-      //$ip_check=ereg('^([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})$',$ip);
-      
+    public static function checkip ($ip)
+    {      
       if ( !(objektypridani::validateIpAddress($ip)) )
       {
-	global $fail;  $fail="true";
-	global $error; $error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
-
+		global $fail;  $fail="true";
+		global $error; $error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
       }
-
     } //konec funkce check-ip			 			 
     
-    function checkcislo($cislo)
+    public static function checkcislo($cislo)
     {
-     $rra_check=ereg('^([[:digit:]]+)$',$cislo);
+     $rra_check=preg_match('/^([[:digit:]]+)$/',$cislo);
      
      if ( !($rra_check) )
      {
       global $fail;	$fail="true";
       global $error;	$error .= "<H4>Zadaný číselný údaj(e) ( ".$cislo." ) není ve  správném formátu !!! </H4>";
-     }			    
-    
+     }			        
     } //konec funkce check cislo
     
-    function checkdns ($dns)
+    public static function checkdns ($dns)
     {
-    $dns_check=ereg('^([[:alnum:]]|\.|-)+$',$dns);
-    if ( !($dns_check) )
-    {
-     global $fail;	$fail="true";
-     global $error; 	$error .= "<div class=\"objekty-add-fail-dns\"><H4>DNS záznam ( ".$dns." ) není ve správnem formátu !!! </H4></div>";
-    }
-    
+		$dns_check=preg_match('/^([[:alnum:]]|\.|-)+$/',$dns);
+		if ( !($dns_check) )
+		{
+			global $fail;	$fail="true";
+			global $error; 	$error .= "<div class=\"objekty-add-fail-dns\"><H4>DNS záznam ( ".$dns." ) není ve správnem formátu !!! </H4></div>";
+		}
     } // konec funkce check rra
     
     function check_l2tp_cr($cr)
     {
-	$cr_check=ereg('^([[:alnum:]])+$',$cr);
-	
-	if( !($cr_check) )
-	{
-    	    global $fail;	
-	    $fail="true";
-    	
-	    global $error; 	
-	    $error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) není ve správnem formátu !!! </H4></div>";
-	}
+		$cr_check=preg_match('/^([[:alnum:]])+$/',$cr);
+		
+		if( !($cr_check) )
+		{
+			global $fail;	
+			$fail="true";
+			
+			global $error; 	
+			$error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) není ve správnem formátu !!! </H4></div>";
+		}
     
-	if( (strlen($cr) <> 4) )
-	{
-	    global $fail;	
-	    $fail="true";
-    	
-	    global $error; 	
-	    $error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky !!! </H4></div>";
-	
-	}
-	
-	
+		if( (strlen($cr) <> 4) )
+		{
+			global $fail;	
+			$fail="true";
+			
+			global $error; 	
+			$error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky !!! </H4></div>";
+		
+		}
     } //konec funkce check_l2tp_cr
     
-    function generujdata ($selected_nod, $typ_ip, $dns, $conn_mysql)
+    public static function generujdata ($selected_nod, $typ_ip, $dns, $conn_mysql)
     {
      // promenne ktere potrebujem, a ktere budeme ovlivnovat
      global $ip, $mac, $ip_rozsah, $umisteni_aliasu, $tunnel_user, $tunnel_pass, $fail, $error;    
@@ -154,7 +142,7 @@ class objektypridani {
 		
 			$ip_rozsah=$data_ip["ip_rozsah"];
 			
-			list($a,$b,$c,$d) =split("[.]",$ip_rozsah);
+			list($a,$b,$c,$d) =preg_split("/[.]/",$ip_rozsah);
 		}
 	
 	/*
@@ -185,7 +173,7 @@ class objektypridani {
 	      while (  $data_check_ip=pg_fetch_array($msq_check_ip) ) 
 	      { $gen_ip=$data_check_ip["ip"]; }
 	
-	      list($a,$b,$c,$d) = split("[.]",$gen_ip);
+	      list($a,$b,$c,$d) = preg_split("/[.]/",$gen_ip);
 		
 	      $limit=250;
 	      global $ip_error;

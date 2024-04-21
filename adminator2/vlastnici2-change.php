@@ -87,10 +87,10 @@ if( ( $update_status==1 and !( isset($send)) ) )
       $billing_suspend_stop   = $data["billing_suspend_stop"];
             
       //konverze z DB formatu
-      list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$billing_suspend_start);
+      list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = explode("-",$billing_suspend_start);
       $billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-      list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = split("-",$billing_suspend_stop);
+      list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = explode("-",$billing_suspend_stop);
       $billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
 	
     endwhile;
@@ -185,13 +185,13 @@ if( ( $update_status==1 and !( isset($send)) ) )
 	// $trvani_do = "";        
 	if( (strlen($trvani_do) > 0) )
 	{
-    	    list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = split("\-",$trvani_do);
+    	    list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = explode("\-",$trvani_do);
     	    $trvani_do=$trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
 	}
     
 	if( (strlen($datum_podpisu) > 0) )
 	{
-    	    list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = split("\-",$datum_podpisu);
+    	    list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = explode("\-",$datum_podpisu);
     	    $datum_podpisu=$datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
 	}
 
@@ -220,7 +220,7 @@ if( ( $update_status==1 and (isset($odeslano)) ) )
 }
 
 //checkem jestli se macklo na tlacitko "OK" :)
-if ( ereg("^OK$",$odeslano) ) { echo ""; }
+if ( preg_match("/^OK$/",$odeslano) ) { echo ""; }
 else 
 { 
   $fail="true"; 
@@ -367,14 +367,14 @@ if ( $update_status =="1" )
 
     if( (strlen($trvani_do) > 0) )
     {
-	list($trvani_do_den,$trvani_do_mesic,$trvani_do_rok) = split("\.",$trvani_do);
-	$trvani_do=$trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
+      list($trvani_do_den,$trvani_do_mesic,$trvani_do_rok) = preg_split("/\./",$trvani_do);
+      $trvani_do=$trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
     }
 
     if( (strlen($datum_podpisu) > 0) )
     {
-	list($datum_podpisu_den,$datum_podpisu_mesic,$datum_podpisu_rok) = split("\.",$datum_podpisu);
-	$datum_podpisu=$datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
+      list($datum_podpisu_den,$datum_podpisu_mesic,$datum_podpisu_rok) = preg_split("/\./",$datum_podpisu);
+      $datum_podpisu=$datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
     }
     
     
@@ -401,16 +401,16 @@ if ( $update_status =="1" )
 	if($billing_suspend_status == 1)
 	{
 	    $vlastnik_add["billing_suspend_status"] = intval($billing_suspend_status);
-	    $vlastnik_add["billing_suspend_reason"] = mysql_real_escape_string($billing_suspend_reason);
+	    $vlastnik_add["billing_suspend_reason"] = $conn_mysql->real_escape_string($billing_suspend_reason);
 	    
-	    list($b_s_s_den,$b_s_s_mesic,$b_s_s_rok) = split("\.",$billing_suspend_start);
+	    list($b_s_s_den,$b_s_s_mesic,$b_s_s_rok) = preg_split("/\./",$billing_suspend_start);
 	    $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
 
-	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = split("\.",$billing_suspend_stop);
+	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = preg_split("/\./",$billing_suspend_stop);
 	    $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 	    
-	    $vlastnik_add["billing_suspend_start"] = mysql_real_escape_string($billing_suspend_start);    
-	    $vlastnik_addd["billing_suspend_stop"] = mysql_real_escape_string($billing_suspend_stop);
+	    $vlastnik_add["billing_suspend_start"] = $conn_mysql->real_escape_string($billing_suspend_start);    
+	    $vlastnik_addd["billing_suspend_stop"] = $conn_mysql->real_escape_string($billing_suspend_stop);
 	}
 
         $res=pg_insert($db_ok2,'vlastnici', $vlastnik_add);
@@ -427,9 +427,12 @@ if ( $update_status =="1" )
     foreach($vlastnik_add as $key => $val)
     { $pole=$pole." [".$key."] => ".$val."\n"; }
         
-    if ( $res == 1){ $vysledek_write="1"; }
-    
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+    if ( $res == 1){ $vysledek_write=1; }
+    else{
+      $vysledek_write=0;
+    }
+
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
      
     $writed = "true"; 
     
@@ -534,7 +537,7 @@ echo "<br><b>Fakturační skupina: </b> ".$fakt_skupina."<br>";
    echo "[na dobu určitou]";		       
    echo " ( doba trvání do: ";
 
-   list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = split("-",$trvani_do);								       
+   list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = explode("-",$trvani_do);								       
    $trvani_do=$trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
 								   
    echo $trvani_do." )";
@@ -548,7 +551,7 @@ echo "<br><b>Fakturační skupina: </b> ".$fakt_skupina."<br>";
 
  if( (strlen($datum_podpisu) > 0) )
  {
-  list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = split("-",$datum_podpisu);
+  list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = explode("-",$datum_podpisu);
   $datum_podpisu=$datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
  }
 
@@ -599,14 +602,14 @@ echo $datum_podpisu;
     
     if( $billing_suspend_status == 1)
     {
-	list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$billing_suspend_start);
-	$billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
+        list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = explode("-",$billing_suspend_start);
+        $billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-	list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = split("-",$billing_suspend_stop);
-	$billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
+        list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = explode("-",$billing_suspend_stop);
+        $billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
 
-	echo "<b>od kdy</b>: ".$billing_suspend_start."<br>\n";
-	echo "<b>do kdy</b>: ".$billing_suspend_stop."<br>\n";
+        echo "<b>od kdy</b>: ".$billing_suspend_start."<br>\n";
+        echo "<b>do kdy</b>: ".$billing_suspend_stop."<br>\n";
         
         echo "<b>důvod</b>: ".$billing_suspend_reason."<br>\n";
     }

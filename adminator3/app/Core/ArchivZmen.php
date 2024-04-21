@@ -604,25 +604,6 @@ class ArchivZmen {
         
                 $id_cloveka_res = "";  
                 $akce = $data["akce"];
-
-                if(preg_match("/odrazeni objektu/", $akce)){
-        
-                    $pomocne = explode("[id_komplu]", $akce);    
-                    $pomocne2 = explode(" ", $pomocne[1] );	    
-                    $pomocne3 = explode("<br>", $pomocne2[1] );	    
-                    $id_komplu_pomocne = trim($pomocne3[0]);
-                    
-                    $dotaz_id_komplu = pg_query("SELECT dns_jmeno FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
-                        
-                    while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
-                    { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
-                
-                    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
-                    $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
-                        
-                    $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
-        
-                }
         
                 if(preg_match("/id_stb/",$akce)){
         
@@ -705,6 +686,25 @@ class ArchivZmen {
                     
                 }
                 */
+                elseif(preg_match("/odrazeni objektu/", $akce)){
+        
+                    $pomocne = explode("[id_komplu]", $akce);    
+                    $pomocne2 = explode(" ", $pomocne[1] );	    
+                    $pomocne3 = explode("<br>", $pomocne2[1] );	    
+                    $id_komplu_pomocne = trim($pomocne3[0]);
+
+                    $dotaz_id_komplu = pg_query("SELECT dns_jmeno FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+                    
+                    while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
+                    { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
+                
+                    // TODO: fix replacing link for objekt
+                    // $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+                    // $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+                        
+                    // $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);    
+        
+                }
                 elseif( preg_match("/\[id_vlastnika\]/", $akce))
                 {
                     $pomocne = explode("[id_vlastnika]", $akce);    
@@ -725,7 +725,7 @@ class ArchivZmen {
 
                     $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
                         
-                    $akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);
+                    $akce = preg_replace("/".$id_cloveka_pomocne."/", $id_cloveka_res, $akce);
             
                 }
                 elseif( preg_match("/\[id_cloveka\]/", $akce))

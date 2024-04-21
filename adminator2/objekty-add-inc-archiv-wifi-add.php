@@ -15,20 +15,23 @@
                 //pokud v promenne neco, tak teprve resime vlozeni do Archivu zmen
 
                 //nahrazovani na citelné hodnoty
-                if($key == "id_tarifu"){
 
-                    $rs_tarif = mysql_query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
-                    $tarif = mysql_result($rs_tarif,0, 0);
-                    $pole .= " <b>tarif</b> => ".$tarif." ,";
+                // TODO: 8.1, fix removed f
+                // if($key == "id_tarifu"){
 
-                }
-                elseif($key == "id_nodu"){
-                    $rs_nod = mysql_query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
-                    $nod = mysql_result($rs_nod, 0, 0);
-                    $pole .= " <b>přípojný bod</b> => ".$nod." ,";
+                //     $rs_tarif = $conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
+                //     $tarif = mysql_result($rs_tarif,0, 0);
+                //     $pole .= " <b>tarif</b> => ".$tarif." ,";
 
-                }
-                elseif($key == "typ"){
+                // }
+                // elseif($key == "id_nodu"){
+                //     $rs_nod = $conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
+                //     $nod = mysql_result($rs_nod, 0, 0);
+                //     $pole .= " <b>přípojný bod</b> => ".$nod." ,";
+
+                // }
+                // else
+                if($key == "typ"){
 
                     if( $val == 1){ $typ = "poc (platici)"; }
                     elseif($val == 2){ $typ = "poc (free)"; }
@@ -68,12 +71,15 @@
 
         } //end of foreach
 
-        if( !($res === false) ){ $vysledek_write="1"; }
+        if( !($res === false) ){ $vysledek_write=1; }
+        else{
+            $vysledek_write=0;
+        }
 
-        $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-                            "('".mysql_real_escape_string($pole)."',".
-                            "'".mysql_real_escape_string($nick)."',".
-                            "'".intval($vysledek_write)."')");
+        $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+                            "('".$conn_mysql->real_escape_string($pole)."',".
+                            "'".$conn_mysql->real_escape_string($nick)."',".
+                            "'".$vysledek_write."')");
 
         $writed = "true";
 

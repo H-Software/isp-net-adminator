@@ -187,11 +187,11 @@ class Aglobal
 	*
 	*   https://www.w3schools.com/php/php_form_url_email.asp
 	*/
-	function check_email($email) {
+	public static function check_email($email) {
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
-    function pg_last_inserted_id($con, $table){ 
+    public static function pg_last_inserted_id($con, $table){ 
          
          //make the initial query 
          $sql = "SELECT * FROM " . $table; 

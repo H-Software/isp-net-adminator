@@ -51,7 +51,7 @@ if( ( $update_status==1 and !( isset($send) ) ) )
     }
     
     $sikana_status_l=$data["sikana_status"]; 
-    if( ereg("a",$sikana_status_l) ) { $sikana_status=2; } else { $sikana_status=1; }
+    if( preg_match("/a/",$sikana_status_l) ) { $sikana_status=2; } else { $sikana_status=1; }
     $sikana_cas_l=$data["sikana_cas"];
     if( strlen($sikana_cas_l) > 0 ) { $sikana_cas=$sikana_cas_l; }
      
@@ -231,7 +231,7 @@ if( $billing_suspend_status == 1)
 } // konec if jestli id_cloveka > 1 and update == 1
 
 //checkem jestli se macklo na tlacitko "OK" :)
-if( ereg("^OK$",$odeslano) ) { echo ""; }
+if( preg_match("/^OK$/",$odeslano) ) { echo ""; }
 else 
 { 
     $fail="true"; 
@@ -404,9 +404,9 @@ if ( !( isset($fail) ) )
 	     $sql_rows .= ", ";
 	     $sql_values .= ", ";
 	}
-	$sql_rows .= mysql_real_escape_string($key);
+	$sql_rows .= $conn_mysql->real_escape_string($key);
 	
-	$sql_values .= "'".mysql_real_escape_string($val)."'";
+	$sql_values .= "'".$conn_mysql->real_escape_string($val)."'";
 	
 	$obj_add_i++;	
     }
