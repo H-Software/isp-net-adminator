@@ -432,9 +432,18 @@ class stb extends adminator
     function stbActionValidateFormData(array $input_data)
     {
         // first, validation
+
+        // https://respect-validation.readthedocs.io/en/2.3/08-list-of-rules-by-category/
         $validation = $this->validator->validate($input_data, [
             'Popis objektu#popis' => v::noWhitespace()->notEmpty()->alnum("-")->length(3,20),
-            'ip' => v::noWhitespace()->notEmpty()->length(3,5)
+            'IP adresa#ip' => v::noWhitespace()->notEmpty()->ip(),
+            'Přípojný bod#id_nodu' => v::number()->greaterThan(0),
+            'MAC adresa#mac' => v::notEmpty()->macAddress(),
+            'puk' => v::number(),
+            'pin1' => v::number(),
+            'pin2' => v::number(),
+            'Číslo portu (ve switchi)#port_id' => v::number(),
+            'Tarif#id_tarifu' => v::number()->greaterThan(0),
 		]);
 
 		if ($validation->failed()) {
@@ -444,46 +453,24 @@ class stb extends adminator
             }
 		}
 
-        $mac = $this->action_form->post('mac','"MAC adresa"|"MAC adresa" must be a valid MAC address (example: 00:00:64:65:73:74)', 'not_regex[/^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$/]');
-
-        $this->action_form->post('id_nodu','"Přípojný bod"', 'gt[0]');
-
-        $this->action_form->post('puk','"puk"', 'int');
-        $this->action_form->post('pin1','"pin1"', 'int');
-        $this->action_form->post('pin2','"pin2"', 'int');
-        $this->action_form->post('port_id','"Číslo portu (ve switchi)"', 'gt[0]');
-
-        $this->action_form->post('id_tarifu','"Tarif"', 'gt[0]');
-
-        //  //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
-        // $this->checkip($data['ip']); 
-        // $this->checkmac($data['mac']); 
-        // $this->checkcislo($data['puk']);
-        // $this->checkcislo($data['pin1']);
-        // $this->checkcislo($data['pin2']);
-        // $this->checkcislo($data['id_nodu']);
-        // $this->checkcislo($data['port_id']);
-
         // // second, check duplicities
 
-        $MSQ_POPIS = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '" . $popis . "' ");
-        $MSQ_IP = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '". $ip . "' ");
-        $MSQ_MAC = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '" . $mac. "' ");
+        $MSQ_POPIS = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '" . $input_data['popis'] . "' ");
+        $MSQ_IP = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '". $input_data['ip'] . "' ");
+        $MSQ_MAC = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '" . $input_data['mac'] . "' ");
         
         if( $MSQ_POPIS->num_rows > 0 )
         { 
-            $error .= "<div class=\"alert alert-danger\" role=\"alert\">Popis (".$popis." ) již existuje!!!</div>"; 
+            $this->action_form_validation_errors .= "<div class=\"alert alert-danger\" role=\"alert\">Popis (".$input_data['popis']." ) již existuje!!!</div>"; 
         }
         if( $MSQ_IP->num_rows > 0 )
         { 
-            $error .= "<div class=\"alert alert-danger\" role=\"alert\">IP adresa ( ".$ip." ) již existuje!!!</div>"; 
+            $this->action_form_validation_errors .= "<div class=\"alert alert-danger\" role=\"alert\">IP adresa ( ".$input_data['ip']." ) již existuje!!!</div>"; 
         }
         if( $MSQ_MAC->num_rows > 0 )
         { 
-            $error .= "<div class=\"alert alert-danger\" role=\"alert\">MAC adresa ( ".$mac." ) již existuje!!!</div>"; 
+            $this->action_form_validation_errors .= "<div class=\"alert alert-danger\" role=\"alert\">MAC adresa ( ".$input_data['mac']." ) již existuje!!!</div>"; 
         }
- 
-        $this->action_form_validation_errors .= $error;
         
         if(empty($this->action_form_validation_errors))
         {
