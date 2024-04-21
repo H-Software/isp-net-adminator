@@ -51,7 +51,7 @@ if( ( $update_status==1 and !( isset($send) ) ) )
     }
     
     $sikana_status_l=$data["sikana_status"]; 
-    if( ereg("a",$sikana_status_l) ) { $sikana_status=2; } else { $sikana_status=1; }
+    if( preg_match("/a/",$sikana_status_l) ) { $sikana_status=2; } else { $sikana_status=1; }
     $sikana_cas_l=$data["sikana_cas"];
     if( strlen($sikana_cas_l) > 0 ) { $sikana_cas=$sikana_cas_l; }
      

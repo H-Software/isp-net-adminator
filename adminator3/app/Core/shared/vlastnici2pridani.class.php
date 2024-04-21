@@ -117,21 +117,21 @@ class vlastnici2pridani
 	}
     } //end of function check_tel
     
-    function check_datum($date, $desc)
+    public static function check_datum($date, $desc)
     {
-	global $fail, $error;
-	
-	$a_date = explode('.', $date);
-	    
-	$day =   intval($a_date["0"]);
-	$month = intval($a_date["1"]);
-	$year =  intval($a_date["2"]);
-	
-	if( !checkdate($month,$day,$year) )
-	{
-	    $fail="true";
-	    $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Datum ".$desc." (".$date.") není ve správném formátu! (dd.mm.rrrr)</H4></div>";
-	}
+		global $fail, $error;
+		
+		$a_date = explode('.', $date);
+			
+		$day =   intval($a_date["0"]);
+		$month = intval($a_date["1"]);
+		$year =  intval($a_date["2"]);
+		
+		if( !checkdate($month,$day,$year) )
+		{
+			$fail="true";
+			$error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Datum ".$desc." (".$date.") není ve správném formátu! (dd.mm.rrrr)</H4></div>";
+		}
 	
     } //end of function check_datum
     

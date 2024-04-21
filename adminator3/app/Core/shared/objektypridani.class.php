@@ -132,7 +132,7 @@ class objektypridani {
 	
     } //konec funkce check_l2tp_cr
     
-    function generujdata ($selected_nod, $typ_ip, $dns, $conn_mysql)
+    public static function generujdata ($selected_nod, $typ_ip, $dns, $conn_mysql)
     {
      // promenne ktere potrebujem, a ktere budeme ovlivnovat
      global $ip, $mac, $ip_rozsah, $umisteni_aliasu, $tunnel_user, $tunnel_pass, $fail, $error;    
