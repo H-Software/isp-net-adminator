@@ -55,8 +55,8 @@ include ("include/charset.php");
   {
   // tady to ulozime
   
-    if ( !( ereg('^([[:digit:]]+)$',$objekt) ) ){ echo " Špatný formát proměnné objekt"; exit; }
-    if ( !( ereg('^([[:alnum:]]+)$',$id_vlastnika) ) ){ echo " Špatný formát proměnné id_komplu"; exit; }
+    if ( !( preg_match('/^([[:digit:]]+)$/',$objekt) ) ){ echo " Špatný formát proměnné objekt"; exit; }
+    if ( !( preg_match('/^([[:alnum:]]+)$/',$id_vlastnika) ) ){ echo " Špatný formát proměnné id_komplu"; exit; }
   
     $pole3 = "<b>akce: prirazeni objektu k vlastnikovi; </b><br>";
 
