@@ -231,7 +231,7 @@ if( $billing_suspend_status == 1)
 } // konec if jestli id_cloveka > 1 and update == 1
 
 //checkem jestli se macklo na tlacitko "OK" :)
-if( ereg("^OK$",$odeslano) ) { echo ""; }
+if( preg_match("/^OK$/",$odeslano) ) { echo ""; }
 else 
 { 
     $fail="true"; 

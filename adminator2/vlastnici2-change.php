@@ -401,12 +401,12 @@ if ( $update_status =="1" )
 	if($billing_suspend_status == 1)
 	{
 	    $vlastnik_add["billing_suspend_status"] = intval($billing_suspend_status);
-	    $vlastnik_add["billing_suspend_reason"] = mysql_real_escape_string($billing_suspend_reason);
+	    $vlastnik_add["billing_suspend_reason"] = $conn_mysql->real_escape_string($billing_suspend_reason);
 	    
-	    list($b_s_s_den,$b_s_s_mesic,$b_s_s_rok) = split("\.",$billing_suspend_start);
+	    list($b_s_s_den,$b_s_s_mesic,$b_s_s_rok) = preg_split("/\./",$billing_suspend_start);
 	    $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
 
-	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = split("\.",$billing_suspend_stop);
+	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = preg_split("/\./",$billing_suspend_stop);
 	    $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 	    
 	    $vlastnik_add["billing_suspend_start"] = $conn_mysql->real_escape_string($billing_suspend_start);    
