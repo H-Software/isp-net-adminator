@@ -602,14 +602,14 @@ echo $datum_podpisu;
     
     if( $billing_suspend_status == 1)
     {
-	list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$billing_suspend_start);
-	$billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
+        list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = explode("-",$billing_suspend_start);
+        $billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-	list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = split("-",$billing_suspend_stop);
-	$billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
+        list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = explode("-",$billing_suspend_stop);
+        $billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
 
-	echo "<b>od kdy</b>: ".$billing_suspend_start."<br>\n";
-	echo "<b>do kdy</b>: ".$billing_suspend_stop."<br>\n";
+        echo "<b>od kdy</b>: ".$billing_suspend_start."<br>\n";
+        echo "<b>do kdy</b>: ".$billing_suspend_stop."<br>\n";
         
         echo "<b>důvod</b>: ".$billing_suspend_reason."<br>\n";
     }
