@@ -153,6 +153,8 @@ class stb extends adminator
           
          $this->sql_query = $this->sql_query . " LIMIT ".$interval." OFFSET ".$bude_chybet." "; 
         
+         $this->logger->debug("stb\stbListGetBodyContent: dump var this->sql_query: ".var_export($this->sql_query, true));
+
         $output .= "<div id=\"objekty_stb_filter\" style=\"display: ".$display.";\" >";
         
         //vlastnik - bez
@@ -226,8 +228,7 @@ class stb extends adminator
         $output .= "</form>\n";
         
         //listovani
-        // TODO: fix paging for STB
-        // $output .= $paging->listInterval();
+        $output .= $paging->listInterval();
          
         //zacatek tabulky ... popis
         
@@ -427,9 +428,8 @@ class stb extends adminator
          $output .= $this->vypis();
           
          $output .= "</table>\n";
-        
-         // TODO: fix paging for STB
-         // $output .= $paging->listInterval();
+
+         $output .= $paging->listInterval();
         
          $ret = array($output);
 
@@ -943,7 +943,6 @@ class stb extends adminator
                        " (objekty_stb.pozn LIKE '$find_search_string') OR ".
                        " (nod_list.jmeno LIKE '$find_search_string') ".
                " ) ";
-           
            }
        
        if( isset($this->id_stb) ){
@@ -989,6 +988,8 @@ class stb extends adminator
        
        } //end of else if mod == 1
         
+       $this->logger->debug("stb\GenerateSqlQuery: dump var this->sql_query: ".var_export($this->sql_query, true));
+
     } //end of function generate_sql_query
     
     function vypis($mod = 0, $id_cloveka = 0)
@@ -1002,7 +1003,9 @@ class stb extends adminator
        if(empty($this->sql_query)){
            $this->generate_sql_query();    
        }
-       
+
+        $this->logger->debug("stb\vypis: dump var this->sql_query: ".var_export($this->sql_query, true));
+
         $dotaz_vypis = $this->conn_mysql->query($this->sql_query);
         $dotaz_vypis_radku = $dotaz_vypis->num_rows;
    
