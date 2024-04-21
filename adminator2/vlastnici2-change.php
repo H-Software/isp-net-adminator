@@ -322,7 +322,7 @@ if ( $update_status =="1" )
     if($billing_suspend_status == 1)
     {
 	    $vlast_upd["billing_suspend_status"] = intval($billing_suspend_status);
-	    $vlast_upd["billing_suspend_reason"] = mysql_real_escape_string($billing_suspend_reason);
+	    $vlast_upd["billing_suspend_reason"] = $conn_mysql->real_escape_string($billing_suspend_reason);
 	    
 	    list($b_s_s_den,$b_s_s_mesic,$b_s_s_rok) = split("\.",$billing_suspend_start);
 	    $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
@@ -330,8 +330,8 @@ if ( $update_status =="1" )
 	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = split("\.",$billing_suspend_stop);
 	    $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 	    
-	    $vlast_upd["billing_suspend_start"]  = mysql_real_escape_string($billing_suspend_start);    
-	    $vlast_upd["billing_suspend_stop"]   = mysql_real_escape_string($billing_suspend_stop);
+	    $vlast_upd["billing_suspend_start"]  = $conn_mysql->real_escape_string($billing_suspend_start);    
+	    $vlast_upd["billing_suspend_stop"]   = $conn_mysql->real_escape_string($billing_suspend_stop);
     }
     else
     {
@@ -351,7 +351,7 @@ if ( $update_status =="1" )
       echo pg_last_error($db_ok2); 
       
        $res1 = pg_get_result($db_ok2);
-         echo pg_result_error($res1); 
+         echo pg_result_error($db_ok2); 
       
       echo pg_last_notice($db_ok2);
       
