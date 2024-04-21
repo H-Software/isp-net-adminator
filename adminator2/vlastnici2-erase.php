@@ -1,5 +1,6 @@
 <?php
 
+require("include/main.function.shared.php");
 include ("include/config.php"); 
 include ("include/check_login.php");
 
@@ -9,14 +10,13 @@ if ( !( check_level($level,45) ) )
 {
 // neni level
 
-$stranka='nolevelpage.php';
- header("Location: ".$stranka);
+  $stranka='nolevelpage.php';
+  header("Location: ".$stranka);
  
   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-  Exit;
+  exit;
       
  }
-	
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 
@@ -49,12 +49,12 @@ include ("include/charset.php");
   $erase_id=$_POST["erase_id"];
   $odeslano=$_POST["odeslano"];
   
-    $id_check=ereg('^([[:digit:]]+)$',$erase_id);
+    $id_check=preg_match('/^([[:digit:]]+)$/',$erase_id);
     
     if ( !($id_check) )
     {
-    echo "<br> CHYBA! Vstupni data maji neodpovidajici format. debug: erase_id: ".$erase_id." <br><br>";
-    Exit; 
+      echo "<br> CHYBA! Vstupni data maji neodpovidajici format. debug: erase_id: ".$erase_id." <br><br>";
+      exit; 
     }
 	
   echo "<span style=\"color: grey; \">debug: update_id: ".$erase_id." </span>"; 
@@ -83,7 +83,7 @@ include ("include/charset.php");
   {
   
   //checkem jestli se macklo na tlacitko "OK" :)
-  if ( ereg("^OK$",$odeslano) ) 
+  if ( preg_match("/^OK$/",$odeslano) ) 
   { 
   
   // budeme mazat
@@ -127,7 +127,7 @@ include ("include/charset.php");
 
     if ( $res == 1){ $vysledek_write="1"; }
        		   
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write' )");
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write' )");
 		       
   
   }
