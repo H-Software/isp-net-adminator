@@ -345,6 +345,8 @@ if ( $update_status =="1" )
 
     echo "<pre>" . var_export( $vlast_upd, true ) ."</pre>";
 
+    echo "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
+
     $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
 
      if($res){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
