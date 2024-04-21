@@ -100,11 +100,11 @@ class vlastnici2pridani
 		}
     } //end of function check_icq
     
-    function check_tel($number)
+    public static function check_tel($number)
     {
 	global $fail, $error;
 	
-    	if( !(ereg('^([[:digit:]])+$',$number)) )
+    	if( !(preg_match('/^([[:digit:]])+$/',$number)) )
 	{
 	    $fail="true";
 	    $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Telefon (".$number.") není ve správnem formátu! (pouze číslice)</H4></div>";
@@ -135,7 +135,7 @@ class vlastnici2pridani
 	
     } //end of function check_datum
     
-    function check_b_reason($reason)
+    public static function check_b_reason($reason)
     {
     	if( (strlen($reason) > 30) )
 	{

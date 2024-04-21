@@ -2,9 +2,9 @@
 
 class objektypridani {
 
-    function checkmac ($mac) 
+    public static function checkmac ($mac) 
     {
-      $mac_check=ereg('^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$',$mac);
+      $mac_check=preg_match('/^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$/',$mac);
       if ( !($mac_check) )
 	{
 	global $fail;	$fail="true";
@@ -14,43 +14,41 @@ class objektypridani {
     //konec funkce check-mac
     }
 
-    function checkSikanaCas($sikanacas) 
+    public static function checkSikanaCas($sikanacas) 
     {
         global $fail, $error;	
 	
-	$sikanacas = intval($sikanacas);
-	
-	if( ($sikanacas > 9) or ($sikanacas < 1) ){
-	
-	    $fail="true";
-	
-	    $error .= "<div class=\"objekty-add-fail-mac\">".
-			"<H4>Do pole \"Šikana - počet dní\" je třeba vyplnit číslo 1 až 9.</H4></div>";	
-	
-	}
-	 
+		$sikanacas = intval($sikanacas);
+		
+		if( ($sikanacas > 9) or ($sikanacas < 1) ){
+		
+			$fail="true";
+		
+			$error .= "<div class=\"objekty-add-fail-mac\">".
+				"<H4>Do pole \"Šikana - počet dní\" je třeba vyplnit číslo 1 až 9.</H4></div>";	
+		}
     } //end of function checkSikanaCas
 
-    function checkSikanaText($sikanatext) 
+    public static function checkSikanaText($sikanatext) 
     {
         global $fail, $error;	
 
-	if( (strlen($sikanatext) > 150) ){
-	
-	    $fail="true";
-	
-	    $error .= "<div class=\"objekty-add-fail-mac\">".
-			"<H4>Do pole \"Šikana - text\" je možno zadat max. 150 znaků. (aktuálně: ".strlen($sikanatext).")</H4></div>";	
-	
-	}
+		if( (strlen($sikanatext) > 150) ){
+		
+			$fail="true";
+		
+			$error .= "<div class=\"objekty-add-fail-mac\">".
+				"<H4>Do pole \"Šikana - text\" je možno zadat max. 150 znaků. (aktuálně: ".strlen($sikanatext).")</H4></div>";	
+		
+		}
 	
     } //end of function checkSikanaText
     
     //function to validate ip address format in php by Roshan Bhattarai(http://roshanbh.com.np)
     public static function validateIpAddress($ip_addr)
     {
-	//first of all the format of the ip address is matched
-	if(preg_match("/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/",$ip_addr))
+		//first of all the format of the ip address is matched
+		if(preg_match("/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/",$ip_addr))
         {
           //now all the intger values are separated
           $parts=explode(".",$ip_addr);
