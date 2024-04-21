@@ -351,7 +351,7 @@ if ( $update_status =="1" )
       echo pg_last_error($db_ok2); 
       
        $res1 = pg_get_result($db_ok2);
-         echo pg_result_error($db_ok2); 
+         echo pg_result_error($res); 
       
       echo pg_last_notice($db_ok2);
       
