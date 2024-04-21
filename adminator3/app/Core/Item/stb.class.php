@@ -592,7 +592,6 @@ class stb extends adminator
 
                 // TODO: refactor this to ORM way
                 // $az = new ArchivZmen($this->container, $this->smarty);
-
                 // $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
 
                 $pole="<b> akce: pridani stb objektu ; </b><br>";
