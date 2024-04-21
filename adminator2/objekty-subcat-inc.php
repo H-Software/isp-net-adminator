@@ -27,7 +27,7 @@ if( $back == true ){ echo "</span>"; }
     font-weight: bold; font-size: 16px; \" >IPTV ::</span>";
 
  echo "<span style=\"padding-left: 5px; padding-right: 10px; \" >
-	<a href=\"objekty-stb.php\">set-top-boxy</a></span>";
+	<!--<a href=\"objekty-stb.php\">-->set-top-boxy<!--</a>--></span>";
 
  if( $back2 == true ){ echo "</span>"; }
 

@@ -7,10 +7,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
 
+use App\Models\Stb as Model;
+
 class stb extends adminator
 {
 
     var $conn_mysql;
+
+    var $container;
 
     var $csrf_html;
 
@@ -49,6 +53,7 @@ class stb extends adminator
 
 	function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
         $this->validator = $container->validator;
         $this->conn_mysql = $container->connMysql;   
         $this->logger = $container->logger;
@@ -457,9 +462,17 @@ class stb extends adminator
 
         // second, check duplicities
 
-        $MSQ_POPIS = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '" . $input_data['popis'] . "' ");
-        $MSQ_IP = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '". $input_data['ip'] . "' ");
-        $MSQ_MAC = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '" . $input_data['mac'] . "' ");
+        $sql_base = "SELECT * FROM objekty_stb ";
+        $sql_where_update_id = "";
+        if(intval($input_data['update_id']) > 0){
+            $sql_where_update_id = " AND id_stb <> " . $input_data['update_id'] ." ";
+        }
+
+        // echo "<pre>" . var_export($input_data, true) ."</pre>";
+
+        $MSQ_POPIS = $this->conn_mysql->query($sql_base . " WHERE (popis LIKE '" . $input_data['popis'] . "' " . $sql_where_update_id .")");
+        $MSQ_IP    = $this->conn_mysql->query($sql_base . " WHERE (ip_adresa LIKE '" . $input_data['ip'] . "' " . $sql_where_update_id .")");
+        $MSQ_MAC   = $this->conn_mysql->query($sql_base . " WHERE (mac_adresa LIKE '" . $input_data['mac'] . "' " . $sql_where_update_id .")");
         
         if( $MSQ_POPIS->num_rows > 0 )
         { 
@@ -488,41 +501,113 @@ class stb extends adminator
 
     function stbActionSaveIntoDatabase($data)
     {
-            $sql = "INSERT INTO objekty_stb "
-            . " (mac_adresa, ip_adresa, puk, popis, id_nodu, sw_port, pozn, vlozil_kdo, id_tarifu)" 
-            . " VALUES ('" . $data['mac'] ."','" . $data['ip'] . "','" . $data['puk'] . "','" 
-            . $data['popis'] . "','" . $data['id_nodu'] . "','" . $data['port_id'] . "','" . $data['pozn'] . "','"
-            . $this->loggedUserEmail . "', '" . $data['id_tarifu'] . "') ";
+            if($data['update_id']){
 
-            $this->logger->info("stb\\stbActionSaveIntoDatabase: sql dump: ".var_export($sql, true));
+                $update_id = $data['update_id'];
 
-            $res = $this->conn_mysql->query($sql);
+                // mutate columns names back
+                $data['sw_port'] = $data['port_id'];
+                $data['mac_adresa'] = $data['mac'];
+                $data['ip_adresa'] = $data['ip'];
+                unset($data['update_id'], $data['nod_find'], $data['port_id'], $data['mac'], $data['ip']);
+                unset($data['g1'], $data['g2'], $data['odeslano'], $data['formrid']);
 
-            $id_stb = $this->conn_mysql->insert_id;
+                $data['upravil_kdo'] = $this->loggedUserEmail;
 
-            if($res)
-            { $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n"; } 
-            else
-            { 
-                $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit. </div></H3>\n"; 
-                $output .= "res: $res \n";
-            }	
+                // save orig data for diff ArchivZmen
+                $this->id_stb = $update_id;
+                $this->generate_sql_query();   
+    
+                $rs = $this->conn_mysql->query($this->sql_query);
+                $dataOrigDb = $rs->fetch_assoc();
 
-            // pridame to do archivu zmen
-            $pole="<b> akce: pridani stb objektu ; </b><br>";
+                unset($dataOrigDb["id_stb"], $dataOrigDb["id_cloveka"], $dataOrigDb["datum_vytvoreni"]);
+                
+                // db call
+                $affected = Model::where('id_stb', $update_id)
+                            ->update($data);
 
-            $pole .= "[id_stb]=> ".$id_stb.", ";
-            $pole .= "[mac_adresa]=> ".$data['mac'].", [ip_adresa]=> ".$data['ip'].", [puk]=> ".$data['puk'].", [popis]=> ".$data['popis'];
-            $pole .= ", [id_nodu]=> ".$data['id_nodu'].", [sw_port]=> ".$data['port_id']." [pozn]=> ".$data['pozn'].", [id_tarifu]=> ".$data['id_tarifu'];
+                if($affected == 1){
+                    $res = true;
+                }
 
-            if( $res == 1 ){ $vysledek_write="1"; }
+                if($res)
+                { $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n"; } 
+                else
+                { 
+                    $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit ci úprava selhala.</div></H3>\n"; 
+                    $output .= "res: $res \n";
+                }
 
-            $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
-                "VALUES ('".$this->conn_mysql->real_escape_string($pole)."',".
-                "'".$this->conn_mysql->real_escape_string($this->loggedUserEmail)."',".
-                "'" . $vysledek_write . "')");
+                $params = array(
+                    "itemId" => $update_id,
+                    "actionResult" => $affected,
+                    "loggedUserEmail" => $this->loggedUserEmail
+                );
 
-            // $writed = "true"; 
+                $az = new ArchivZmen($this->container, $this->smarty);
+                $azRes = $az->insertItemDiff(3, $dataOrigDb, $data, $params);
+
+                if( is_object($azRes) )
+                { $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n"; } 
+                else
+                { $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n"; }	
+
+            }
+            else{
+                // rezim pridani
+                //
+
+                // TODO: refaktor DB insert to ORM based way
+
+                // $form_data = array_merge($form_data, array("vlozil_kdo" => $this->loggedUserEmail));
+
+                // $item = Model::create([
+                //     'akce' => $actionBody,
+                //     'vysledek' => $actionResult,
+                //     'provedeno_kym' => $loggedUserEmail
+                // ]);
+
+                $sql = "INSERT INTO objekty_stb "
+                . " (mac_adresa, ip_adresa, puk, popis, id_nodu, sw_port, pozn, vlozil_kdo, id_tarifu)" 
+                . " VALUES ('" . $data['mac'] ."','" . $data['ip'] . "','" . $data['puk'] . "','" 
+                . $data['popis'] . "','" . $data['id_nodu'] . "','" . $data['port_id'] . "','" . $data['pozn'] . "','"
+                . $this->loggedUserEmail . "', '" . $data['id_tarifu'] . "') ";
+    
+                $this->logger->debug("stb\\stbActionSaveIntoDatabase: sql dump: ".var_export($sql, true));
+    
+                $res = $this->conn_mysql->query($sql);
+    
+                $id_stb = $this->conn_mysql->insert_id;
+
+                if($res)
+                { $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n"; } 
+                else
+                { 
+                    $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit.</div></H3>\n"; 
+                    $output .= "res: $res \n";
+                }
+    
+                // pridame to do archivu zmen
+
+                // TODO: refactor this to ORM way
+                // $az = new ArchivZmen($this->container, $this->smarty);
+                // $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
+
+                $pole="<b> akce: pridani stb objektu ; </b><br>";
+    
+                $pole .= "[id_stb]=> ".$id_stb.", ";
+                $pole .= "[mac_adresa]=> ".$data['mac'].", [ip_adresa]=> ".$data['ip'].", [puk]=> ".$data['puk'].", [popis]=> ".$data['popis'];
+                $pole .= ", [id_nodu]=> ".$data['id_nodu'].", [sw_port]=> ".$data['port_id']." [pozn]=> ".$data['pozn'].", [id_tarifu]=> ".$data['id_tarifu'];
+    
+                if( $res == 1 ){ $vysledek_write="1"; }
+    
+                $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
+                    "VALUES ('".$this->conn_mysql->real_escape_string($pole)."',".
+                    "'".$this->conn_mysql->real_escape_string($this->loggedUserEmail)."',".
+                    "'" . $vysledek_write . "')");
+            }
+
             return $output;
     }
 
@@ -532,14 +617,14 @@ class stb extends adminator
         // 1 field -> name (and path) of smarty template
         $ret = array();
 
-        $this->logger->info("stb\\stbAction called ");
+        $this->logger->info("stb\\stbAction called");
 
         $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
         $this->action_form = $this->formInit();
 
         // fill $_POST into array for reusing in the form and etc
-        $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2');
+        $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2, update_id');
 
         // required intentionaly setted after validate, because in first render we dont see error "card"
         $this->action_form->required = 'popis,ip,mac,id_nodu,port_id,id_tarifu';
@@ -572,6 +657,31 @@ class stb extends adminator
 
         // prepare data for form
         //
+        if(isset($_POST['update_id']) and empty($this->action_form->post('odeslano')))
+        {
+            // update mode
+            $this->id_stb = intval($_POST['update_id']);
+            $this->generate_sql_query();   
+
+            $rs = $this->conn_mysql->query($this->sql_query);
+            $data = $rs->fetch_assoc();
+
+            unset($data["id_stb"], $data["id_cloveka"]);
+            unset($data["upravil_kdo"], $data["datum_vytvoreni"]);
+
+            // fix columns names
+            $data['ip'] = $data['ip_adresa'];
+            unset($data['ip_adresa']);
+            $data['port_id'] = $data['sw_port'];
+            unset($data['sw_port']);
+
+            $data["update_id"] = $this->id_stb;
+
+            // echo "<pre>".var_export($data, true)."</pre>";
+
+            $this->logger->info("stb\\stbAction: update: fetch data: update_id: ".$this->id_stb.", rs_rows: ".$rs->num_rows);
+        }
+        
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
         
         $node_list = $topology->getNodeListForForm($data['nod_find']);
@@ -601,6 +711,9 @@ class stb extends adminator
         <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
         
         <b>Puk</b>: " . $data['puk'] . "<br>
+        <b>Pin1</b>: " . $data['pin1'] . "<br>
+        <b>Pin2</b>: " . $data['pin2'] . "<br>
+
         <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
         
         <b>Přípojný bod</b>: ";
@@ -643,6 +756,10 @@ class stb extends adminator
         $uri = $request->getUri();
 
         $form_id = "stb-action-add";
+
+        if(intval($data['update_id']) > 0 ) {
+            $form_data['f_input_update_id'] = $this->action_form->hidden('update_id', $data['update_id']);
+        }
 
         $form_data['f_open'] = $this->action_form->open($form_id,$form_id, $uri->getPath(), '','',$form_csrf);
         $form_data['f_close'] = $this->action_form->close();
@@ -813,12 +930,17 @@ class stb extends adminator
        ORDER BY id_stb
        */
        
-       $sql_rows = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, objekty_stb.pozn, datum_vytvoreni, ".
-               " DATE_FORMAT(datum_vytvoreni, '%d.%m.%Y %H:%i:%s') as datum_vytvoreni_f, nod_list.jmeno AS nod_jmeno ".
+       $sql_rows_basic = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, objekty_stb.pozn, datum_vytvoreni ";
+       $sql_rows_extra = $sql_rows_basic . ", pin1, pin2, id_tarifu, upravil_kdo ";
+
+       $sql_rows = $sql_rows_basic .
+               ", DATE_FORMAT(datum_vytvoreni, '%d.%m.%Y %H:%i:%s') as datum_vytvoreni_f, nod_list.jmeno AS nod_jmeno ".
                ", jmeno_tarifu ";
      
-       
-       if($this->listing_mod == 1){
+       if(is_object($this->action_form)){
+            $this->sql_query = "SELECT ".$sql_rows_extra." FROM objekty_stb WHERE id_stb = '".intval($this->id_stb)."'";
+       }
+       elseif($this->listing_mod == 1){
    
         $this->sql_query = "SELECT ".$sql_rows." FROM objekty_stb, nod_list, tarify_iptv ".
                         " WHERE ( (objekty_stb.id_nodu = nod_list.id) ".
@@ -940,9 +1062,10 @@ class stb extends adminator
        if(!$dotaz_vypis){
    
        $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-               <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: ".
-               mysql_errno().": ".mysql_error()."</div>
-               </td></tr>";
+               <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: "
+            //    . mysql_errno().": ".mysql_error()
+               ."</div>"
+               ."</td></tr>";
    
        $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
                    
@@ -1137,7 +1260,7 @@ class stb extends adminator
 
           if(!$rs){    
                
-               $text = htmlspecialchars(mysql_errno() . ": " . mysql_error());
+               $text = htmlspecialchars("Error message: ". $rs->error);
                $ret["error"] = array("2" => $text);
        
                return $ret;
@@ -1164,11 +1287,4 @@ class stb extends adminator
           return $ret;
           
       } //end of function filter_select_nods
-           
-      function filter_select_tarifs(){
-      
-       //dodelat :) 
-       //TODO: add logic for filter tarifs
-   
-      } //end of function filter_select_tarifs    
 }

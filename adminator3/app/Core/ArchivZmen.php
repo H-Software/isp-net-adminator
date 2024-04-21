@@ -22,6 +22,94 @@ class ArchivZmen {
         $this->logger->info("archivZmen\__construct called");
     }
     
+    function mutateStbParams(array $dataOrig, array $dataUpdated)
+    {
+        $pole3 = "";
+
+        foreach($dataOrig as $key => $val)
+        {
+         
+         if( !($dataUpdated[$key] == $val) )
+         {
+           if( !($key == "id_stb") )
+           {
+               if( $key == "ip_adresa" )
+               {
+                 $pole3 .= "změna <b>IP adresy</b> z: ";
+                 $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
+                 $pole3 .= ", ";
+               } //konec key == ip
+               elseif( $key == "mac_adresa" )
+               {
+                 $pole3 .= "změna <b>MAC adresy</b> z: ";
+                 $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
+                 $pole3 .= ", ";
+               } //konec key == mac
+               elseif( $key == "sw_port" )
+               {
+                 $pole3 .= "změna <b>Čísla portu (ve switchi)</b> z: ";
+   
+                 if( $val == "a"){ $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>"; }
+                 elseif( $val == "n"){ $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>"; }
+                 else{ $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>"; }
+   
+                 $pole3 .= ", ";
+               } //konec key == sw_port
+                 elseif($key == "id_nodu")
+               {
+                 $pole3 .= "změna <b>Přípojného bodu</b> z: ";
+   
+                 $vysl_t1=$this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."'");
+                 while ($data_t1=$vysl_t1->fetch_array() )
+                 { $pole3 .= "<span class=\"az-s1\">".$data_t1["jmeno"]."</span>"; }
+   
+                 $pole3 .= " na: ";
+   
+                 $val2 = $dataUpdated[$key];
+   
+                 $vysl_t2=$this->conn_mysql->query("select jmeno FROM nod_list WHERE id = '$val2'" );
+                 while ($data_t2=$vysl_t2->fetch_array() )
+                 { $pole3 .= "<span class=\"az-s2\">".$data_t2["jmeno"]."</span>"; }
+   
+                 $pole3 .= ", ";                                                                                                                 
+               } // konec key == id_nodu
+               elseif( $key == "id_tarifu" ){
+                 $pole3 .= "změna <b>Tarifu</b> z: ";
+   
+                 $vysl_t1=$this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($val)."'");
+                 while ($data_t1=$vysl_t1->fetch_array() )
+                 { $pole3 .= "<span class=\"az-s1\">".$data_t1["jmeno_tarifu"]."</span>"; }
+   
+                 $pole3 .= " na: ";
+   
+                 $val2 = $dataUpdated[$key];
+   
+                 $vysl_t2 = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($val2)."'");
+                 while ($data_t2=$vysl_t2->fetch_array() )
+                 { $pole3 .= "<span class=\"az-s2\">".$data_t2["jmeno_tarifu"]."</span>"; }
+   
+                 $pole3 .= ", ";                                                                                                                 
+               
+               } //konec key == id_tarifu
+               elseif( $key == "pozn" )
+               {
+                    $pole3 .= "změna <b>Poznámky</b> z: ";
+                    $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
+                    $pole3 .= ", ";
+               } //konec key == pozn
+               else
+               { // ostatni mody, nerozpoznane
+                 $pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
+                 $pole3 .= "na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>, ";
+               }
+   
+            } //konec if nejde-li od id_komplu ( to v tom poli neni )
+          } // konec if obj == val
+        } // konec foreach
+
+        return $pole3;
+    }
+
     function getActionType($actionType, $itemId = NULL)
     {
         if($actionType == 1){
@@ -30,6 +118,12 @@ class ArchivZmen {
         elseif($actionType == 2){
             $r .= "<b>akce: uprava fakturacni skupiny; </b><br>";
             $r .= "[id_fs] => " . $itemId;
+            $r .= " diferencialni data: ";
+
+            return $r;
+        }
+        elseif($actionType == 3){
+            $r .= "[id_stb]=> " . $itemId . ",";
             $r .= " diferencialni data: ";
 
             return $r;
@@ -60,24 +154,35 @@ class ArchivZmen {
 
     function insertItemDiff(int $actionType, array $dataOrig, array $dataUpdated, ...$args)
     {
+        $this->logger->info("Archiv-Zmen\insertItemDiff called");
+        $this->logger->info("Archiv-Zmen\insertItemDiff: mode: ". $actionType . "");
+
         $actionBody = $this->getActionType($actionType, $args[0]['itemId']);
-        foreach($dataOrig as $key => $val)
+
+        if($actionType == 3)
         {
-            if( !($dataUpdated[$key] == $val) )
+            $actionBody .= $this->mutateStbParams($dataOrig, $dataUpdated);
+        }
+        else
+        {
+            foreach($dataOrig as $key => $val)
             {
-                if( $key == "pozn" )
+                if( !($dataUpdated[$key] == $val) )
                 {
-                    $actionBody .= "změna <b>Poznámky</b> z: ";
-                    $actionBody .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
-                    $actionBody .= ", ";
-                } //konec key == pozn
-                else
-                { // ostatni mody, nerozpoznane
-                    $actionBody .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
-                    $actionBody .= "na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>, ";
-                } //konec else
-            } // konec if key == val
-        } // konec foreach
+                    if( $key == "pozn" )
+                    {
+                        $actionBody .= "změna <b>Poznámky</b> z: ";
+                        $actionBody .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
+                        $actionBody .= ", ";
+                    } //konec key == pozn
+                    else
+                    { // ostatni mody, nerozpoznane
+                        $actionBody .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
+                        $actionBody .= "na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>, ";
+                    } //konec else
+                } // konec if key == val
+            } // konec foreach
+        }
 
         $this->logger->info("archivZmen\insertItemDiff: dump actionBody: " . var_export($actionBody, true));
 
