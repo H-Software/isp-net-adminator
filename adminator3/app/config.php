@@ -21,13 +21,10 @@ $loader->register();
 // $res = $loader->getIndexedClasses();
 // print_r($res);
 
-// DB init
+// Mysql init
 
 $conn_mysql = init_mysql("Adminator3");
 
-$db_ok2 = init_postgres("Adminator3");
-
-// ORM init
 $capsule = new Illuminate\Database\Capsule\Manager;
 
 $capsule->addConnection([
@@ -44,3 +41,22 @@ $capsule->addConnection([
 
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
+
+// PgSQL init
+$db_ok2 = init_postgres("Adminator3");
+
+// $capsulePg = new Illuminate\Database\Capsule\manager;
+
+// $capsulePg->addConnection([
+//     'driver' => 'pgsql',
+//     'host' => getenv("POSTGRES_SERVER") ? getenv("POSTGRES_SERVER") : "localhost",
+//     'database' => 'adminator.new',
+//     'username' => getenv("POSTGRES_USER") ? getenv("POSTGRES_USER") : "root",
+//     'password' => getenv("POSTGRES_PASSWD") ? getenv("POSTGRES_PASSWD") : "password",
+//     'charset' => 'utf8',
+//     'collation' => 'utf8_unicode_ci',
+//     'prefix' => '',
+// ]);
+
+// $capsulePg->setAsGlobal();
+// $capsulePg->bootEloquent();

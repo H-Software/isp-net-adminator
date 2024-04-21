@@ -68,6 +68,8 @@ class vlastniciController extends adminatorController {
         
         $this->smarty->assign("fakt_skupiny",$fakt_skupiny);
         
+        // $objekty = Capsule::table('objekty')->where('votes', '>', 100)->get();
+
         $this->smarty->display('vlastnici/vlastnici2.tpl');
 
         return $response;

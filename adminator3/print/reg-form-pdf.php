@@ -1,7 +1,12 @@
 <?php
 
+// init db functions defs
 require __DIR__ . "/../include/main.function.shared.php";
+
+// autoload, init DB conns, init Illuminate\Database
 require __DIR__ . "/../app/config.php";
+// slim config
+require  __DIR__ . "/../app/settings.php";
 
 $smarty = new Smarty;
 $smarty->compile_check = true;
@@ -10,7 +15,8 @@ $smarty->compile_check = true;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app = new \Slim\App(['settings' => $slim_config]);
+$app = new \Slim\App($config);
+
 
 require __DIR__ ."/../app/bootstrap-doctrine.php";
 
