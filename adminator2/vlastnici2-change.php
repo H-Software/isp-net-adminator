@@ -6,6 +6,8 @@ require_once ("include/class.php");
 require("include/check_login.php");
 require("include/check_level.php");
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 if( !( check_level($level,40) ) ) 
 {
     header("Location: nolevelpage.php");
@@ -347,12 +349,16 @@ if ( $update_status =="1" )
 
     echo "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
 
-    $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
+    // $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
 
-     if($res){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
+    $res = DB::table('vastnici')
+              ->where('id_cloveka', $update_id)
+              ->update($vlast_upd);
+
+     if($res){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (res: " . $res . "\n"; }
      else 
      { 
-      echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>\n";
+      echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(res: " . $res . "\n";
       echo pg_last_error($db_ok2); 
       
       //  $res1 = pg_get_result($db_ok2);
