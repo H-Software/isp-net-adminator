@@ -68,7 +68,7 @@ class vlastnici2pridani
     
     } //konec funkce check_uc_index
     
-    function check_splatnost($number)
+    public static function check_splatnost($number)
     {
     	if ( !(ereg('^([[:digit:]])+$',$number)) )
 	{

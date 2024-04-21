@@ -1,10 +1,10 @@
 <?php
 
-require("include/main.function.shared.php");
-include ("include/config.php"); 
-include ("include/check_login.php");
+require ("include/main.function.shared.php");
+require ("include/config.php"); 
+require ("include/check_login.php");
 
-include ("include/check_level.php");
+require ("include/check_level.php");
 
 if ( !( check_level($level,45) ) )
 {
