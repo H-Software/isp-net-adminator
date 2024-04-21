@@ -457,9 +457,17 @@ class stb extends adminator
 
         // second, check duplicities
 
-        $MSQ_POPIS = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '" . $input_data['popis'] . "' ");
-        $MSQ_IP = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '". $input_data['ip'] . "' ");
-        $MSQ_MAC = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '" . $input_data['mac'] . "' ");
+        $sql_base = "SELECT * FROM objekty_stb ";
+        $sql_where_update_id = "";
+        if(intval($input_data['update_id']) > 0){
+            $sql_where_update_id = " AND id_stb <> " . $input_data['update_id'] ." ";
+        }
+
+        // echo "<pre>" . var_export($input_data, true) ."</pre>";
+
+        $MSQ_POPIS = $this->conn_mysql->query($sql_base . " WHERE (popis LIKE '" . $input_data['popis'] . "' " . $sql_where_update_id .")");
+        $MSQ_IP    = $this->conn_mysql->query($sql_base . " WHERE (ip_adresa LIKE '" . $input_data['ip'] . "' " . $sql_where_update_id .")");
+        $MSQ_MAC   = $this->conn_mysql->query($sql_base . " WHERE (mac_adresa LIKE '" . $input_data['mac'] . "' " . $sql_where_update_id .")");
         
         if( $MSQ_POPIS->num_rows > 0 )
         { 
@@ -532,14 +540,14 @@ class stb extends adminator
         // 1 field -> name (and path) of smarty template
         $ret = array();
 
-        $this->logger->info("stb\\stbAction called ");
+        $this->logger->info("stb\\stbAction called");
 
         $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
         $this->action_form = $this->formInit();
 
         // fill $_POST into array for reusing in the form and etc
-        $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2');
+        $data = $this->action_form->validate('popis, ip, mac, id_nodu, nod_find, puk, pin1, pin2, port_id, id_tarifu, pozn, odeslano, FormrID, g1, g2, update_id');
 
         // required intentionaly setted after validate, because in first render we dont see error "card"
         $this->action_form->required = 'popis,ip,mac,id_nodu,port_id,id_tarifu';
@@ -572,6 +580,32 @@ class stb extends adminator
 
         // prepare data for form
         //
+        if(isset($_POST['update_id']) and empty($this->action_form->post('odeslano')))
+        {
+            // update mode
+            $this->id_stb = intval($_POST['update_id']);
+            $this->generate_sql_query();   
+
+            $rs = $this->conn_mysql->query($this->sql_query);
+            $data = $rs->fetch_assoc();
+            unset($data["id_stb"]);
+            unset($data["id_cloveka"]);
+            unset($data["upravil_kdo"]);
+            unset($data["datum_vytvoreni"]);
+
+            // fix columns names
+            $data['ip'] = $data['ip_adresa'];
+            unset($data['ip_adresa']);
+            $data['port_id'] = $data['sw_port'];
+            unset($data['sw_port']);
+
+            $data["update_id"] = $this->id_stb;
+
+            // echo "<pre>".var_export($data, true)."</pre>";
+
+            $this->logger->info("stb\\stbAction: update: fetch data: update_id: ".$this->id_stb.", rs_rows: ".$rs->num_rows);
+        }
+        
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
         
         $node_list = $topology->getNodeListForForm($data['nod_find']);
@@ -643,6 +677,10 @@ class stb extends adminator
         $uri = $request->getUri();
 
         $form_id = "stb-action-add";
+
+        if(intval($data['update_id']) > 0 ) {
+            $form_data['f_input_update_id'] = $this->action_form->hidden('update_id', $data['update_id']);
+        }
 
         $form_data['f_open'] = $this->action_form->open($form_id,$form_id, $uri->getPath(), '','',$form_csrf);
         $form_data['f_close'] = $this->action_form->close();
@@ -813,12 +851,17 @@ class stb extends adminator
        ORDER BY id_stb
        */
        
-       $sql_rows = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, objekty_stb.pozn, datum_vytvoreni, ".
-               " DATE_FORMAT(datum_vytvoreni, '%d.%m.%Y %H:%i:%s') as datum_vytvoreni_f, nod_list.jmeno AS nod_jmeno ".
+       $sql_rows_basic = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, objekty_stb.pozn, datum_vytvoreni ";
+       $sql_rows_extra = $sql_rows_basic . ", pin1, pin2, id_tarifu ";
+
+       $sql_rows = $sql_rows_basic .
+               ", DATE_FORMAT(datum_vytvoreni, '%d.%m.%Y %H:%i:%s') as datum_vytvoreni_f, nod_list.jmeno AS nod_jmeno ".
                ", jmeno_tarifu ";
      
-       
-       if($this->listing_mod == 1){
+       if(is_object($this->action_form)){
+            $this->sql_query = "SELECT ".$sql_rows_extra." FROM objekty_stb WHERE id_stb = '".intval($this->id_stb)."'";
+       }
+       elseif($this->listing_mod == 1){
    
         $this->sql_query = "SELECT ".$sql_rows." FROM objekty_stb, nod_list, tarify_iptv ".
                         " WHERE ( (objekty_stb.id_nodu = nod_list.id) ".
@@ -940,9 +983,10 @@ class stb extends adminator
        if(!$dotaz_vypis){
    
        $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-               <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: ".
-               mysql_errno().": ".mysql_error()."</div>
-               </td></tr>";
+               <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: "
+            //    . mysql_errno().": ".mysql_error()
+               ."</div>"
+               ."</td></tr>";
    
        $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
                    
@@ -1137,7 +1181,7 @@ class stb extends adminator
 
           if(!$rs){    
                
-               $text = htmlspecialchars(mysql_errno() . ": " . mysql_error());
+               $text = htmlspecialchars("Error message: ". $rs->error);
                $ret["error"] = array("2" => $text);
        
                return $ret;
@@ -1164,11 +1208,4 @@ class stb extends adminator
           return $ret;
           
       } //end of function filter_select_nods
-           
-      function filter_select_tarifs(){
-      
-       //dodelat :) 
-       //TODO: add logic for filter tarifs
-   
-      } //end of function filter_select_tarifs    
 }

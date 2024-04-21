@@ -5,6 +5,11 @@
 <div style="margin: 5px; ">
 
     {$f_open}
+
+    {if strlen($f_input_update_id) gt 0}
+        {$f_input_update_id}
+    {/if}
+
     <div class="row g-3">
             <div class="col-md-12 card">
                 <div class="card-header bg-secondary text-white">Mód:</div>
