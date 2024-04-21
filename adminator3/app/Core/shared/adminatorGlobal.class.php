@@ -187,7 +187,7 @@ class Aglobal
 	*
 	*   https://www.w3schools.com/php/php_form_url_email.asp
 	*/
-	function check_email($email) {
+	public static function check_email($email) {
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
