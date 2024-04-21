@@ -351,7 +351,8 @@ if ( $update_status =="1" )
 
     // $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
 
-    $res = DB::table('vlastnici')
+    $res = DB::connection('pgsql')
+              ->table('vlastnici')
               ->where('id_cloveka', $update_id)
               ->update($vlast_upd);
 
