@@ -537,7 +537,7 @@ echo "<br><b>Fakturační skupina: </b> ".$fakt_skupina."<br>";
    echo "[na dobu určitou]";		       
    echo " ( doba trvání do: ";
 
-   list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = split("-",$trvani_do);								       
+   list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = explode("-",$trvani_do);								       
    $trvani_do=$trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
 								   
    echo $trvani_do." )";
@@ -551,7 +551,7 @@ echo "<br><b>Fakturační skupina: </b> ".$fakt_skupina."<br>";
 
  if( (strlen($datum_podpisu) > 0) )
  {
-  list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = split("-",$datum_podpisu);
+  list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = explode("-",$datum_podpisu);
   $datum_podpisu=$datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
  }
 
