@@ -67,9 +67,9 @@ $container['errorHandler'] = function ($container) {
     return new App\Handlers\Error($container['logger']);
 };
 
-$container['phpErrorHandler'] = function ($container) {
-    return $container['errorHandler'];
-};
+// $container['phpErrorHandler'] = function ($container) {
+//     return $container['errorHandler'];
+// };
 
 $container['connMysql'] = $conn_mysql;
 
@@ -159,32 +159,31 @@ $container['HomeController'] = function($container) {
 
 $container['aboutController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\aboutController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\aboutController($c,$conn_mysql, $smarty, $logger, $auth, $app);
 };
 
 $container['adminController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\adminController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\adminController($c, $conn_mysql, $smarty, $logger, $auth, $app);
 };
 
 $container['archivZmenController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\archivZmenController($app->getContainer(), $smarty);
+    global $smarty;
+    return new \App\Controllers\archivZmenController($c, $smarty);
 };
 
 $container['othersController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\othersController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\othersController($c,$conn_mysql, $smarty, $logger, $auth, $app);
 };
 
 $container['objektyController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\objektyController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\objektyController($c);
 };
 
 $container['platbyController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\platbyController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\platbyController($c,$conn_mysql, $smarty, $logger, $auth, $app);
 };
 
 $container['topologyController'] = function ($container) {
@@ -193,10 +192,9 @@ $container['topologyController'] = function ($container) {
 };
 
 $container['vlastniciController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\vlastniciController($app->getContainer());
+    return new \App\Controllers\vlastniciController($c);
 };
 $container['workController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\workController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\workController($c,$conn_mysql, $smarty, $logger, $auth, $app);
 };

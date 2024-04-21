@@ -55,18 +55,18 @@ class vlastniciController extends adminatorController {
         $select = $_GET["select"];
 
         $vlastnik2 = new \vlastnik2($this->container);
-        
+        $fs = new \App\Customer\fakturacniSkupiny($this->container);
+
         $this->smarty->assign("select",$select);
         
         if( $select == 2)
         { $fu_select = "2"; } //Pouze FU
         if( $select == 3 )
         { $fu_select = "1"; } //pouze DU
-               
-        $fakt_skupiny = $vlastnik2->show_fakt_skupiny($fu_select);
+        
+        $fakt_skupiny = $fs->show_fakt_skupiny($fu_select);
         
         $this->smarty->assign("fakt_skupiny",$fakt_skupiny);
-        
         
         $this->smarty->display('vlastnici/vlastnici2.tpl');
 
