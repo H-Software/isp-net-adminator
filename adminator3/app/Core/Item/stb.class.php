@@ -51,7 +51,7 @@ class stb extends adminator
     var $action_form_validation_errors_wrapper_start = '<div class="alert alert-danger" role="alert">';
     var $action_form_validation_errors_wrapper_end = '</div>';
 
-	function __construct(ContainerInterface $container)
+    function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->validator = $container->validator;
@@ -60,7 +60,7 @@ class stb extends adminator
 
         $i = $container->auth->getIdentity();
         $this->loggedUserEmail = $i['username'];
-	}
+    }
 
     public function stbListGetBodyContent()
     {
@@ -451,14 +451,14 @@ class stb extends adminator
             // 'pin2' => v::number(),
             'Číslo portu (ve switchi)#port_id' => v::number(),
             'Tarif#id_tarifu' => v::number()->greaterThan(0),
-		]);
+        ]);
 
-		if ($validation->failed()) {
+        if ($validation->failed()) {
             $valResults = $validation->getErrors();
             foreach ($valResults as $valField => $valError) {
-			    $this->action_form_validation_errors .= $valError;
+                $this->action_form_validation_errors .= $valError;
             }
-		}
+        }
 
         // TODO: add validation optional items (puk, pin1, pin2)
 
@@ -1011,42 +1011,42 @@ class stb extends adminator
    
        if($this->debug == 1){
    
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-               <div style=\"color: red; font-weight: bold; \" >debug sql: ".$this->sql_query.
-               
-               "<br>var search: ".$this->find_search_string.
-               "</div>
-               </td></tr>\n";
-   
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
+                    <div style=\"color: red; font-weight: bold; \" >debug sql: ".$this->sql_query.
+                    
+                    "<br>var search: ".$this->find_search_string.
+                    "</div>
+                    </td></tr>\n";
+        
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
                    
        }
        
        if(!$dotaz_vypis){
    
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-               <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: "
-            //    . mysql_errno().": ".mysql_error()
-               ."</div>"
-               ."</td></tr>";
-   
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
+                    <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: "
+                    //    . mysql_errno().": ".mysql_error()
+                    ."</div>"
+                    ."</td></tr>";
+        
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
                    
        }
            
        if( ($dotaz_vypis_radku == 0) and ( $mod != 1 ) )
        {
    
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
-               <div style=\"color: red; font-weight: bold; \" >Žádný set-top-box nenalezen.</div>
-               </td></tr>";
-   
-       $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
+                    <div style=\"color: red; font-weight: bold; \" >Žádný set-top-box nenalezen.</div>
+                    </td></tr>";
+        
+            $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>";
        }
        else
        {
-           $class_stb_liche = "border-bottom: 1px dashed gray; font-size: 15px; ";
-       $class_stb_sude = "border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px; ";
+            $class_stb_liche = "border-bottom: 1px dashed gray; font-size: 15px; ";
+            $class_stb_sude = "border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px; ";
          
        while($data_vypis = $dotaz_vypis->fetch_array())
        {
