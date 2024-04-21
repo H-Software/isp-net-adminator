@@ -342,6 +342,9 @@ if ( $update_status =="1" )
     }
      
     $vlast_id = array( "id_cloveka" => $update_id ); 		 	  
+
+    echo "<pre>" . var_export( $vlast_upd, true ) ."</pre>";
+
     $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
 
      if($res){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
@@ -357,7 +360,8 @@ if ( $update_status =="1" )
       
      }
      
-     require("vlastnici2-change-archiv-zmen-inc.php");
+     // TODO: enable writing into ArchivZmen
+     // require("vlastnici2-change-archiv-zmen-inc.php");
           
      $updated="true";
     }

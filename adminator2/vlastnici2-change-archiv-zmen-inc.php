@@ -85,9 +85,9 @@
 	    {
 	      $pole3 .= "změna <b>Fakturační skupiny</b> z: ";
 	    
-	      $fs_old = mysql_result(mysql_query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($val)."'"), 0);
+	      $fs_old = mysql_result($conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($val)."'"), 0);
 	      
-	      $fs_new = mysql_result(mysql_query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($vlast_upd[$key])."'"), 0);
+	      $fs_new = mysql_result($conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($vlast_upd[$key])."'"), 0);
 	    
 	      if( isset($fs_old) )
 	      { $pole3 .= "<span class=\"az-s1\">".$fs_old."</span> "; }
