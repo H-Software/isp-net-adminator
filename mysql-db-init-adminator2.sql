@@ -37,7 +37,40 @@ INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysl
 (19,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 1 diferencialni data: změna pole: <b>fakturacni_text</b> z: <span class=\"az-s1\" ></span> na: <span class=\"az-s2\">text 1</span>, ',	'2024-04-18 17:55:19',	'admin',	1),
 (20,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 1 diferencialni data: změna pole: <b>fakturacni_text</b> z: <span class=\"az-s1\" >text 1</span> na: <span class=\"az-s2\">text fakturace 1</span>, ',	'2024-04-18 17:55:34',	'admin',	1),
 (21,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> fakturacni skupina 2, [typ]=> 1, [sluzba_int]=> 1, [sluzba_int_id_tarifu]=> 1, [sluzba_iptv]=> 1, [sluzba_iptv_id_tarifu]=> 1, [sluzba_voip]=> 0 [fakturacni_text]=> text 2, [typ_sluzby]=> 1',	'2024-04-18 17:57:04',	'admin',	1),
-(22,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> fakt skupina - wifi - FU - sc, [typ]=> 2, [sluzba_int]=> 1, [sluzba_int_id_tarifu]=> 1, [sluzba_iptv]=> 0, [sluzba_iptv_id_tarifu]=> 0, [sluzba_voip]=> 0 [fakturacni_text]=> small city pro fakturacni skupiny, [typ_sluzby]=> 0',	'2024-04-19 09:44:30',	'admin',	1);
+(22,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> fakt skupina - wifi - FU - sc, [typ]=> 2, [sluzba_int]=> 1, [sluzba_int_id_tarifu]=> 1, [sluzba_iptv]=> 0, [sluzba_iptv_id_tarifu]=> 0, [sluzba_voip]=> 0 [fakturacni_text]=> small city pro fakturacni skupiny, [typ_sluzby]=> 0',	'2024-04-19 09:44:30',	'admin',	1),
+(23,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 21, [mac_adresa]=> 14:22:33:44:55:66, [ip_adresa]=> 10.10.10.41, [puk]=> , [popis]=> pokus-2, [id_nodu]=> 3, [sw_port]=> 1 [pozn]=> test poznamka, [id_tarifu]=> 4',	'2024-04-20 12:13:01',	'admin@admin',	1),
+(24,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 3 diferencialni data: změna pole: <b>id</b> z: <span class=\"az-s1\" >3</span> na: <span class=\"az-s2\"></span>, změna pole: <b>vlozil_kdo</b> z: <span class=\"az-s1\" >admin</span> na: <span class=\"az-s2\"></span>, změna pole: <b>sluzba_int</b> z: <span class=\"az-s1\" >0</span> na: <span class=\"az-s2\">1</span>, změna pole: <b>sluzba_int_id_tarifu</b> z: <span class=\"az-s1\" >0</span> na: <span class=\"az-s2\">1</span>, ',	'2024-04-20 15:42:24',	'admin@admin',	1),
+(25,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 1 diferencialni data: změna pole: <b>sluzba_int</b> z: <span class=\"az-s1\" >0</span> na: <span class=\"az-s2\">1</span>, změna pole: <b>sluzba_int_id_tarifu</b> z: <span class=\"az-s1\" >0</span> na: <span class=\"az-s2\">2</span>, ',	'2024-04-20 16:17:52',	'admin@admin',	1),
+(26,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 1 diferencialni data: změna pole: <b>sluzba_int</b> z: <span class=\"az-s1\" >1</span> na: <span class=\"az-s2\">0</span>, změna pole: <b>sluzba_int_id_tarifu</b> z: <span class=\"az-s1\" >2</span> na: <span class=\"az-s2\">0</span>, ',	'2024-04-20 16:21:06',	'admin@admin',	1),
+(27,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> fakturacni skupina 11, [fakturacni_text]=> text fakturacni skupiny 11, [typ]=> 1, [typ_sluzby]=> 1, [sluzba_int]=> 1, [sluzba_int_id_tarifu]=> 0, [sluzba_iptv]=> 0, [sluzba_iptv_id_tarifu]=> 0, [sluzba_voip]=> 0, [sluzba_voip_id_tarifu]=> 0, [vlozil_kdo]=> admin@admin, ',	'2024-04-20 16:22:50',	'admin@admin',	1),
+(28,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 2 diferencialni data: ',	'2024-04-20 16:28:58',	'admin@admin',	0),
+(29,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 2 diferencialni data: změna pole: <b>fakturacni_text</b> z: <span class=\"az-s1\" >text 2</span> na: <span class=\"az-s2\">text 22</span>, ',	'2024-04-20 16:29:11',	'admin@admin',	1),
+(30,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 4 diferencialni data: ',	'2024-04-20 16:30:11',	'admin@admin',	0),
+(31,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 4 diferencialni data: změna pole: <b>fakturacni_text</b> z: <span class=\"az-s1\" >text fakturacni skupiny 11</span> na: <span class=\"az-s2\">text fakturacni skupiny 111</span>, ',	'2024-04-20 16:30:23',	'admin@admin',	1),
+(32,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 1 diferencialni data: změna pole: <b>sluzba_int</b> z: <span class=\"az-s1\" >0</span> na: <span class=\"az-s2\">1</span>, změna pole: <b>sluzba_int_id_tarifu</b> z: <span class=\"az-s1\" >0</span> na: <span class=\"az-s2\">2</span>, ',	'2024-04-20 17:02:39',	'admin@admin',	1),
+(33,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> test12, [fakturacni_text]=> test12, [typ]=> 1, [typ_sluzby]=> 0, [sluzba_int]=> 0, [sluzba_int_id_tarifu]=> 0, [sluzba_iptv]=> 0, [sluzba_iptv_id_tarifu]=> 0, [sluzba_voip]=> 0, [sluzba_voip_id_tarifu]=> 0, [vlozil_kdo]=> admin@admin, ',	'2024-04-20 18:30:21',	'admin@admin',	1),
+(34,	'<b> akce: pridani fakt. skupiny; </b><br>[nazev]=> test13, [fakturacni_text]=> test13, [typ]=> 1, [typ_sluzby]=> 0, [sluzba_int]=> 0, [sluzba_int_id_tarifu]=> 0, [sluzba_iptv]=> 0, [sluzba_iptv_id_tarifu]=> 0, [sluzba_voip]=> 0, [sluzba_voip_id_tarifu]=> 0, [vlozil_kdo]=> admin@admin, ',	'2024-04-20 18:32:04',	'admin@admin',	1),
+(35,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 15 diferencialni data: změna pole: <b>nazev</b> z: <span class=\"az-s1\" >test13-4</span> na: <span class=\"az-s2\">test13-5</span>, změna pole: <b>fakturacni_text</b> z: <span class=\"az-s1\" >test13-4</span> na: <span class=\"az-s2\">test13-5</span>, změna pole: <b>sluzba_int</b> z: <span class=\"az-s1\" >1</span> na: <span class=\"az-s2\">0</span>, změna pole: <b>sluzba_int_id_tarifu</b> z: <span class=\"az-s1\" >2</span> na: <span class=\"az-s2\">0</span>, ',	'2024-04-20 23:48:53',	'admin@admin',	1),
+(36,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 15 diferencialni data: změna pole: <b>sluzba_int</b> z: <span class=\"az-s1\" >0</span> na: <span class=\"az-s2\">1</span>, změna pole: <b>sluzba_int_id_tarifu</b> z: <span class=\"az-s1\" >0</span> na: <span class=\"az-s2\">1</span>, ',	'2024-04-21 00:02:05',	'admin@admin',	1),
+(37,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 22, [mac_adresa]=> 14:14:33:44:55:66, [ip_adresa]=> 10.10.10.122, [puk]=> , [popis]=> xxx-14, [id_nodu]=> 2, [sw_port]=> 1 [pozn]=> test, [id_tarifu]=> 1',	'2024-04-21 11:56:06',	'admin@admin',	1),
+(38,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 23, [mac_adresa]=> 11:22:33:11:11:11, [ip_adresa]=> 10.10.15.15, [puk]=> , [popis]=> xxx-15, [id_nodu]=> 3, [sw_port]=> 1 [pozn]=> , [id_tarifu]=> 4',	'2024-04-21 12:02:06',	'admin@admin',	1),
+(39,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 24, [mac_adresa]=> 11:23:33:44:33:66, [ip_adresa]=> 10.10.14.15, [puk]=> , [popis]=> stb-16, [id_nodu]=> 3, [sw_port]=> 1 [pozn]=> , [id_tarifu]=> 1',	'2024-04-21 12:02:56',	'admin@admin',	1),
+(40,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 25, [mac_adresa]=> 16:23:33:44:33:66, [ip_adresa]=> 10.10.14.16, [puk]=> , [popis]=> xxx-16, [id_nodu]=> 3, [sw_port]=> 1 [pozn]=> , [id_tarifu]=> 1',	'2024-04-21 12:04:01',	'admin@admin',	1),
+(41,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 26, [mac_adresa]=> 11:22:33:44:17:17, [ip_adresa]=> 10.10.10.17, [puk]=> , [popis]=> xxx-17, [id_nodu]=> 3, [sw_port]=> 1 [pozn]=> , [id_tarifu]=> 1',	'2024-04-21 12:08:00',	'admin@admin',	1),
+(42,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 27, [mac_adresa]=> 11:22:33:44:18:18, [ip_adresa]=> 10.10.10.18, [puk]=> , [popis]=> stb-18, [id_nodu]=> 3, [sw_port]=> 1 [pozn]=> , [id_tarifu]=> 4',	'2024-04-21 12:09:57',	'admin@admin',	1),
+(43,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 28, [mac_adresa]=> 11:22:33:44:19:19, [ip_adresa]=> 10.10.10.19, [puk]=> , [popis]=> stb-19, [id_nodu]=> 3, [sw_port]=> 1 [pozn]=> , [id_tarifu]=> 1',	'2024-04-21 12:12:26',	'admin@admin',	1),
+(44,	'[id_stb]=> 2, diferencialni data: změna pole: <b>id_cloveka</b> z: <span class=\"az-s1\" >0</span> na: <span class=\"az-s2\"></span>, změna pole: <b>datum_vytvoreni</b> z: <span class=\"az-s1\" >2024-04-21 14:44:48</span> na: <span class=\"az-s2\"></span>, ',	'2024-04-21 14:44:48',	'admin@admin',	1),
+(45,	'[id_stb]=> 3, diferencialni data: ',	'2024-04-21 14:47:05',	'admin@admin',	1),
+(46,	'[id_stb]=> 2, diferencialni data: ',	'2024-04-21 14:51:23',	'admin@admin',	1),
+(47,	'[id_stb]=> 2, diferencialni data: ',	'2024-04-21 14:55:14',	'admin@admin',	1),
+(48,	'[id_stb]=> 2, diferencialni data: ',	'2024-04-21 14:57:04',	'admin@admin',	1),
+(49,	'[id_stb]=> 2, diferencialni data: ',	'2024-04-21 14:58:17',	'admin@admin',	1),
+(50,	'[id_stb]=> 2, diferencialni data: změna pole: <b>popis</b> z: <span class=\"az-s1\" >stb-1ac</span> na: <span class=\"az-s2\">stb-1acb</span>, změna <b>Přípojného bodu</b> z: <span class=\"az-s1\">opticky nod 2</span> na: <span class=\"az-s2\">optika - neco special</span>, změna pole: <b>pozn</b> z: <span class=\"az-s1\" >xxx111uac</span> na: <span class=\"az-s2\">xxx111uacb</span>, změna <b>Tarifu</b> z: <span class=\"az-s1\">tarif iptv 2</span> na: <span class=\"az-s2\">tarif iptv 1</span>, ',	'2024-04-21 15:00:43',	'admin@admin',	1),
+(51,	'[id_stb]=> 3, diferencialni data: změna pole: <b>popis</b> z: <span class=\"az-s1\" >stb2-u</span> na: <span class=\"az-s2\">stb2-ua</span>, změna <b>Přípojného bodu</b> z: <span class=\"az-s1\">opticky nod 2</span> na: <span class=\"az-s2\">opticky nod 1</span>, změna <b>Poznámky</b> z: <span class=\"az-s1\">pozn xxx 23</span> na: <span class=\"az-s2\">pozn xxx 23a</span>, změna <b>Tarifu</b> z: <span class=\"az-s1\">tarif iptv 2</span> na: <span class=\"az-s2\">tarif iptv 1</span>, ',	'2024-04-21 15:04:26',	'admin@admin',	1),
+(52,	'[id_stb]=> 2, diferencialni data: změna pole: <b>popis</b> z: <span class=\"az-s1\" >stb-1acb</span> na: <span class=\"az-s2\">stb-1acba</span>, změna <b>Přípojného bodu</b> z: <span class=\"az-s1\">optika - neco special</span> na: <span class=\"az-s2\">opticky nod 1</span>, změna <b>Poznámky</b> z: <span class=\"az-s1\">xxx111uacb</span> na: <span class=\"az-s2\">xxx111uacba</span>, změna <b>Tarifu</b> z: <span class=\"az-s1\">tarif iptv 1</span> na: <span class=\"az-s2\">tarif iptv 2</span>, ',	'2024-04-21 15:04:44',	'admin@admin',	1),
+(53,	'[id_stb]=> 4, diferencialni data: změna pole: <b>popis</b> z: <span class=\"az-s1\" >stb3</span> na: <span class=\"az-s2\">stb3a</span>, změna <b>Přípojného bodu</b> z: <span class=\"az-s1\">opticky nod 1</span> na: <span class=\"az-s2\">opticky nod 2</span>, změna <b>Čísla portu (ve switchi)</b> z: <span class=\"az-s1\">3</span> na: <span class=\"az-s2\">1</span>, změna <b>Poznámky</b> z: <span class=\"az-s1\">pozn 3</span> na: <span class=\"az-s2\">pozn 3a</span>, změna pole: <b>upravil_kdo</b> z: <span class=\"az-s1\" ></span> na: <span class=\"az-s2\">admin@admin</span>, ',	'2024-04-21 15:09:39',	'admin@admin',	1),
+(54,	'[id_stb]=> 2, diferencialni data: změna pole: <b>popis</b> z: <span class=\"az-s1\" >stb-1acba</span> na: <span class=\"az-s2\">stb-1acbaa</span>, změna <b>Tarifu</b> z: <span class=\"az-s1\">tarif iptv 2</span> na: <span class=\"az-s2\">tarif iptv 1</span>, změna pole: <b>upravil_kdo</b> z: <span class=\"az-s1\" >pavel</span> na: <span class=\"az-s2\">admin@admin</span>, ',	'2024-04-21 15:10:10',	'admin@admin',	1),
+(55,	'<b>akce: odrazeni objektu; </b><br> [id_komplu]=> 1 , [id_vlastnika] => 1',	'2024-04-21 16:12:44',	'admin',	1);
 
 DROP TABLE IF EXISTS `archiv_zmen_work`;
 CREATE TABLE `archiv_zmen_work` (
@@ -59,7 +92,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713604108',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713717510',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -156,9 +189,21 @@ CREATE TABLE `fakturacni_skupiny` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `fakturacni_skupiny` (`id`, `nazev`, `typ`, `typ_sluzby`, `fakturacni_text`, `vlozil_kdo`, `sluzba_int`, `sluzba_int_id_tarifu`, `sluzba_iptv`, `sluzba_iptv_id_tarifu`, `sluzba_voip`, `sluzba_voip_id_tarifu`) VALUES
-(1,	'fakturacni skupina 1',	1,	0,	'text fakturace 1',	NULL,	0,	0,	0,	0,	0,	0),
-(2,	'fakturacni skupina 2',	1,	1,	'text 2',	'admin',	1,	1,	1,	1,	0,	0),
-(3,	'fakt skupina - wifi - FU - sc',	2,	0,	'small city pro fakturacni skupiny',	'admin',	1,	1,	0,	0,	0,	0);
+(1,	'fakturacni skupina 1',	1,	0,	'text fakturace 1',	NULL,	1,	2,	0,	0,	0,	0),
+(2,	'fakturacni skupina 2',	1,	1,	'text 22',	'admin',	1,	1,	1,	1,	0,	0),
+(3,	'fakt skupina - wifi - FU - sc',	1,	0,	'small city pro fakturacni skupiny',	'admin',	1,	1,	0,	0,	0,	0),
+(4,	'fakturacni skupina 11',	1,	1,	'text fakturacni skupiny 111',	'admin@admin',	1,	0,	0,	0,	0,	0),
+(5,	'test',	1,	0,	'test',	'admin@admin',	0,	0,	0,	0,	0,	0),
+(6,	'test2',	1,	0,	'test2',	'admin@admin',	0,	0,	1,	0,	0,	0),
+(7,	'test3',	1,	0,	'test3',	'admin@admin',	0,	0,	0,	0,	0,	0),
+(8,	'test4',	1,	0,	'test4',	'admin@admin',	0,	0,	0,	0,	0,	0),
+(9,	'test5',	1,	0,	'test5',	'admin@admin',	0,	0,	0,	0,	0,	0),
+(10,	'test6',	1,	0,	'test6',	'admin@admin',	0,	0,	0,	0,	0,	0),
+(11,	'test7',	1,	0,	'test7',	'admin@admin',	0,	0,	0,	0,	0,	0),
+(12,	'test8',	1,	0,	'test8',	'admin@admin',	0,	0,	0,	0,	0,	0),
+(13,	'test11',	1,	0,	'test11',	'admin@admin',	0,	0,	0,	0,	0,	0),
+(14,	'test12',	1,	0,	'test12',	'admin@admin',	0,	0,	0,	0,	0,	0),
+(15,	'test13-5',	1,	0,	'test13-5',	'admin@admin',	1,	1,	0,	0,	0,	0);
 
 DROP TABLE IF EXISTS `faktury_neuhrazene`;
 CREATE TABLE `faktury_neuhrazene` (
@@ -230,14 +275,18 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (25,	50,	'topology-nod-update'),
 (27,	30,	'objekty-vypis-ip'),
 (28,	30,	'soubory'),
-(30,	10,	'a3: archiv-zmen-cat.php, a2: archiv-zmen.php'),
+(29,	70,	'objekty update'),
+(30,	10,	'archiv-zmen, vlastnici update'),
 (31,	10,	'a2: automatika'),
 (32,	40,	'a2: automatika-sikana-odpocet'),
+(33,	70,	'objekty erase'),
+(34,	80,	'objekty garant akce'),
 (36,	40,	'a2: automatika-sikana-zakazani'),
 (38,	100,	'a3: home.php, vlastnici2'),
 (40,	30,	'vlastnici2: pridani vlastnika'),
 (41,	50,	'platby-soucet'),
 (43,	40,	'stats-objekty'),
+(45,	80,	'vlastnici erase'),
 (48,	40,	'vlastnici2-add-obj'),
 (49,	50,	'objekty - odendani od vlastnika'),
 (51,	30,	'vlastnici-add-fakt'),
@@ -282,7 +331,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (136,	10,	'objekty-stb-add'),
 (137,	20,	'stb uprava'),
 (139,	10,	'objekty test'),
-(140,	30,	' a2: vlastnici2-fs-update'),
+(140,	30,	'vlastnici2-fs-update'),
 (141,	20,	'vlastnici2-fs-erase'),
 (142,	2,	'about.php'),
 (143,	10,	'a2: archiv-zmen-cat.php'),
@@ -293,7 +342,8 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (148,	10,	'a3: archiv-zmen-ucetni.php : add'),
 (149,	10,	'a3: fn-kontrola-omezeni.php'),
 (150,	40,	'objekty stb unpair'),
-(151,	10,	'a3: others-web-simelon');
+(151,	10,	'a3: others-web-simelon'),
+(301,	30,	'fakturacni-skupiny add');
 
 DROP TABLE IF EXISTS `login_log`;
 CREATE TABLE `login_log` (
@@ -305,7 +355,8 @@ CREATE TABLE `login_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
-(34,	'admin',	'1713601589',	'172.18.0.1');
+(34,	'admin',	'1713601589',	'172.18.0.1'),
+(35,	'admin',	'1713715907',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -332,10 +383,12 @@ DROP TABLE IF EXISTS `objekty_stb`;
 CREATE TABLE `objekty_stb` (
   `id_stb` int NOT NULL AUTO_INCREMENT,
   `id_cloveka` int NOT NULL DEFAULT '0',
-  `mac_adresa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `puk` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ip_adresa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `popis` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `mac_adresa` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `puk` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pin1` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pin2` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ip_adresa` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `popis` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `id_nodu` int NOT NULL,
   `sw_port` int NOT NULL,
   `pozn` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -346,26 +399,30 @@ CREATE TABLE `objekty_stb` (
   PRIMARY KEY (`id_stb`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `objekty_stb` (`id_stb`, `id_cloveka`, `mac_adresa`, `puk`, `ip_adresa`, `popis`, `id_nodu`, `sw_port`, `pozn`, `vlozil_kdo`, `upravil_kdo`, `datum_vytvoreni`, `id_tarifu`) VALUES
-(2,	0,	'11:22:33:44:55:66',	'111',	'10.10.10.1',	'stb-1',	2,	1,	'xxx111',	'admin',	'admin',	'2024-04-12 12:29:43',	1),
-(3,	0,	'22:22:33:44:55:66',	'',	'10.10.10.2',	'stb2',	2,	2,	'pozn xxx 2',	'admin',	'admin',	'2024-04-12 12:25:07',	1),
-(4,	0,	'33:22:33:44:55:66',	'',	'10.10.10.3',	'stb3',	2,	3,	'pozn 3',	'admin',	'',	'2024-04-12 09:33:13',	1),
-(5,	0,	'43:22:33:44:55:66',	'',	'10.10.10.4',	'stb4',	2,	4,	'pozn 4',	'admin',	'',	'2024-04-12 09:34:49',	1),
-(6,	0,	'55:22:33:44:55:66',	'5555',	'10.10.10.5',	'stb5',	2,	5,	'pozn 5',	'admin',	'',	'2024-04-12 09:42:30',	1),
-(7,	0,	'66:22:33:44:55:66',	'666',	'10.10.10.6',	'stb6',	2,	6,	'pozn 6',	'admin',	'',	'2024-04-12 09:54:46',	1),
-(8,	0,	'77:22:33:44:55:66',	'777',	'10.10.10.7',	'stb 7',	2,	7,	'pozn 7',	'admin',	'',	'2024-04-12 10:00:24',	1),
-(9,	0,	'88:22:33:44:55:66',	'888',	'10.10.10.8',	'stb 8',	2,	8,	'pozn 8',	'admin',	'',	'2024-04-12 10:03:37',	1),
-(10,	0,	'00:00:64:65:73:74',	'1111',	'1.1.1.1',	'xxxxx',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:51:58',	1),
-(11,	0,	'00:00:64:65:73:73',	'1111',	'1.1.1.1',	'xxxz',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:53:47',	1),
-(12,	0,	'32:22:33:44:55:66',	'111',	'10.10.10.4',	'xxeee',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:56:56',	1),
-(13,	0,	'11:23:33:44:55:66',	'1111',	'10.10.10.5',	'stbx',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:58:06',	1),
-(14,	0,	'11:22:33:44:55:66',	'',	'10.10.10.4',	'xxxx',	0,	1,	'test',	'admin@admin',	NULL,	'2024-04-14 21:14:10',	0),
-(15,	0,	'xx',	'',	'xx',	'xxx',	0,	1,	'test',	'admin@admin',	NULL,	'2024-04-14 21:17:57',	0),
-(16,	0,	'11:22:33:44:55:66',	'1',	'10.10.10.42',	'xxx',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-14 21:59:44',	1),
-(17,	0,	'11:22:33:45:55:66',	'1',	'10.10.10.1',	'xx-5',	2,	1,	'test 1',	'admin@admin',	NULL,	'2024-04-14 22:01:56',	1),
-(18,	0,	'11:22:33:44:55:11',	'1',	'10.10.10.11',	'stb-11',	2,	2,	'test 2',	'admin@admin',	NULL,	'2024-04-14 22:08:15',	4),
-(19,	0,	'11:22:33:44:55:33',	'1',	'10.10.10.12',	'stb-12',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-14 22:10:17',	4),
-(20,	0,	'22:22:33:44:55:15',	'15',	'10.10.10.15',	'stb-1t',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-14 22:32:35',	4);
+INSERT INTO `objekty_stb` (`id_stb`, `id_cloveka`, `mac_adresa`, `puk`, `pin1`, `pin2`, `ip_adresa`, `popis`, `id_nodu`, `sw_port`, `pozn`, `vlozil_kdo`, `upravil_kdo`, `datum_vytvoreni`, `id_tarifu`) VALUES
+(2,	0,	'11:22:33:44:55:66',	'111',	'',	'',	'10.10.10.1',	'stb-1acbaa',	2,	1,	'xxx111uacba',	'admin',	'admin@admin',	'2024-04-21 15:10:10',	1),
+(3,	0,	'33:22:33:44:55:63',	'',	'',	'',	'10.10.10.22',	'stb2-ua',	2,	1,	'pozn xxx 23a',	'admin',	'admin@admin',	'2024-04-21 15:04:26',	1),
+(4,	0,	'33:22:33:44:55:66',	'',	'',	'',	'10.10.10.3',	'stb3a',	3,	1,	'pozn 3a',	'admin',	'admin@admin',	'2024-04-21 15:09:39',	1),
+(5,	0,	'43:22:33:44:55:66',	'',	'',	'',	'10.10.10.4',	'stb4',	2,	4,	'pozn 4',	'admin',	'',	'2024-04-12 09:34:49',	1),
+(6,	0,	'55:22:33:44:55:66',	'5555',	'',	'',	'10.10.10.5',	'stb5',	2,	5,	'pozn 5',	'admin',	'',	'2024-04-12 09:42:30',	1),
+(7,	0,	'66:22:33:44:55:66',	'666',	'',	'',	'10.10.10.6',	'stb6',	2,	6,	'pozn 6',	'admin',	'',	'2024-04-12 09:54:46',	1),
+(8,	0,	'77:22:33:44:55:66',	'777',	'',	'',	'10.10.10.7',	'stb 7',	2,	7,	'pozn 7',	'admin',	'',	'2024-04-12 10:00:24',	1),
+(9,	0,	'88:22:33:44:55:66',	'888',	'',	'',	'10.10.10.8',	'stb 8',	2,	8,	'pozn 8',	'admin',	'',	'2024-04-12 10:03:37',	1),
+(10,	0,	'00:00:64:65:73:74',	'1111',	'',	'',	'1.1.1.1',	'xxxxx',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:51:58',	1),
+(11,	0,	'00:00:64:65:73:73',	'1111',	'',	'',	'1.1.1.1',	'xxxz',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:53:47',	1),
+(12,	0,	'32:22:33:44:55:66',	'111',	'',	'',	'10.10.10.4',	'xxeee',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:56:56',	1),
+(13,	0,	'11:23:33:44:55:66',	'1111',	'',	'',	'10.10.10.5',	'stbx',	1,	1,	'',	'admin@admin',	NULL,	'2024-04-13 20:58:06',	1),
+(18,	0,	'11:22:33:44:55:11',	'1',	'',	'',	'10.10.10.11',	'stb-11',	2,	2,	'test 2',	'admin@admin',	NULL,	'2024-04-14 22:08:15',	4),
+(19,	0,	'11:22:33:44:55:33',	'1',	'',	'',	'10.10.10.12',	'stb-12',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-14 22:10:17',	4),
+(20,	0,	'22:22:33:44:55:15',	'15',	'',	'',	'10.10.10.15',	'stb-1t',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-14 22:32:35',	4),
+(21,	0,	'14:22:33:44:55:66',	'',	'',	'',	'10.10.10.41',	'pokus-2',	3,	1,	'test poznamka',	'admin@admin',	NULL,	'2024-04-20 12:13:01',	4),
+(22,	0,	'14:14:33:44:55:66',	'',	'',	'',	'10.10.10.122',	'xxx-14',	2,	1,	'test',	'admin@admin',	NULL,	'2024-04-21 11:56:06',	1),
+(23,	0,	'11:22:33:11:11:11',	'',	'',	'',	'10.10.15.15',	'xxx-15',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-21 12:02:06',	4),
+(24,	0,	'11:23:33:44:33:66',	'',	'',	'',	'10.10.14.15',	'stb-16',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-21 12:02:56',	1),
+(25,	0,	'16:23:33:44:33:66',	'',	'',	'',	'10.10.14.16',	'xxx-16',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-21 12:04:01',	1),
+(26,	0,	'11:22:33:44:17:17',	'',	'',	'',	'10.10.10.17',	'xxx-17',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-21 12:08:00',	1),
+(27,	0,	'11:22:33:44:18:18',	'',	'',	'',	'10.10.10.18',	'stb-18',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-21 12:09:57',	4),
+(28,	0,	'11:22:33:44:19:19',	'',	'',	'',	'10.10.10.19',	'stb-19',	3,	1,	'',	'admin@admin',	NULL,	'2024-04-21 12:12:26',	1);
 
 DROP TABLE IF EXISTS `opravy`;
 CREATE TABLE `opravy` (
@@ -549,4 +606,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-20 09:56:33
+-- 2024-04-21 16:40:27
