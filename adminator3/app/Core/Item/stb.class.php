@@ -7,6 +7,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
 
+use App\Models\Stb as Model;
+
 class stb extends adminator
 {
 
@@ -496,41 +498,83 @@ class stb extends adminator
 
     function stbActionSaveIntoDatabase($data)
     {
-            $sql = "INSERT INTO objekty_stb "
-            . " (mac_adresa, ip_adresa, puk, popis, id_nodu, sw_port, pozn, vlozil_kdo, id_tarifu)" 
-            . " VALUES ('" . $data['mac'] ."','" . $data['ip'] . "','" . $data['puk'] . "','" 
-            . $data['popis'] . "','" . $data['id_nodu'] . "','" . $data['port_id'] . "','" . $data['pozn'] . "','"
-            . $this->loggedUserEmail . "', '" . $data['id_tarifu'] . "') ";
+            if($data['update_id']){
 
-            $this->logger->info("stb\\stbActionSaveIntoDatabase: sql dump: ".var_export($sql, true));
+                $update_id = $data['update_id'];
+                $data['sw_port'] = $data['port_id'];
+                $data['mac_adresa'] = $data['mac'];
+                $data['ip_adresa'] = $data['ip'];
+                unset($data['update_id'], $data['nod_find'], $data['port_id'], $data['mac'], $data['ip']);
+                unset($data['g1'], $data['g2'], $data['odeslano'], $data['formrid']);
 
-            $res = $this->conn_mysql->query($sql);
+                $data['upravil_kdo'] = $this->loggedUserEmail;
 
-            $id_stb = $this->conn_mysql->insert_id;
+                echo "<pre>".var_export($data, true)."</pre>";
 
-            if($res)
-            { $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n"; } 
-            else
-            { 
-                $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit. </div></H3>\n"; 
-                $output .= "res: $res \n";
-            }	
+                $affected = Model::where('id_stb', $update_id)
+                            ->update($data);
+                
+                //     [
+                //     'akce' => $actionBody,
+                //     'vysledek' => $args[0]['actionResult'],
+                //     'provedeno_kym' => $args[0]['loggedUserEmail']
+                // ]
 
-            // pridame to do archivu zmen
-            $pole="<b> akce: pridani stb objektu ; </b><br>";
+                if($affected == 1){
+                    $res = true;
+                }
 
-            $pole .= "[id_stb]=> ".$id_stb.", ";
-            $pole .= "[mac_adresa]=> ".$data['mac'].", [ip_adresa]=> ".$data['ip'].", [puk]=> ".$data['puk'].", [popis]=> ".$data['popis'];
-            $pole .= ", [id_nodu]=> ".$data['id_nodu'].", [sw_port]=> ".$data['port_id']." [pozn]=> ".$data['pozn'].", [id_tarifu]=> ".$data['id_tarifu'];
+                if($res)
+                { $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n"; } 
+                else
+                { 
+                    $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit.</div></H3>\n"; 
+                    $output .= "res: $res \n";
+                }
 
-            if( $res == 1 ){ $vysledek_write="1"; }
+            }
+            else{
+                // rezim pridani
+                //
+                // $form_data = array_merge($form_data, array("vlozil_kdo" => $this->loggedUserEmail));
 
-            $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
-                "VALUES ('".$this->conn_mysql->real_escape_string($pole)."',".
-                "'".$this->conn_mysql->real_escape_string($this->loggedUserEmail)."',".
-                "'" . $vysledek_write . "')");
+                // $res = DB::table($this->db_table_name)->insert($form_data);
 
-            // $writed = "true"; 
+                $sql = "INSERT INTO objekty_stb "
+                . " (mac_adresa, ip_adresa, puk, popis, id_nodu, sw_port, pozn, vlozil_kdo, id_tarifu)" 
+                . " VALUES ('" . $data['mac'] ."','" . $data['ip'] . "','" . $data['puk'] . "','" 
+                . $data['popis'] . "','" . $data['id_nodu'] . "','" . $data['port_id'] . "','" . $data['pozn'] . "','"
+                . $this->loggedUserEmail . "', '" . $data['id_tarifu'] . "') ";
+    
+                $this->logger->debug("stb\\stbActionSaveIntoDatabase: sql dump: ".var_export($sql, true));
+    
+                $res = $this->conn_mysql->query($sql);
+    
+                $id_stb = $this->conn_mysql->insert_id;
+
+                if($res)
+                { $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n"; } 
+                else
+                { 
+                    $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit.</div></H3>\n"; 
+                    $output .= "res: $res \n";
+                }
+    
+                // pridame to do archivu zmen
+                $pole="<b> akce: pridani stb objektu ; </b><br>";
+    
+                $pole .= "[id_stb]=> ".$id_stb.", ";
+                $pole .= "[mac_adresa]=> ".$data['mac'].", [ip_adresa]=> ".$data['ip'].", [puk]=> ".$data['puk'].", [popis]=> ".$data['popis'];
+                $pole .= ", [id_nodu]=> ".$data['id_nodu'].", [sw_port]=> ".$data['port_id']." [pozn]=> ".$data['pozn'].", [id_tarifu]=> ".$data['id_tarifu'];
+    
+                if( $res == 1 ){ $vysledek_write="1"; }
+    
+                $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
+                    "VALUES ('".$this->conn_mysql->real_escape_string($pole)."',".
+                    "'".$this->conn_mysql->real_escape_string($this->loggedUserEmail)."',".
+                    "'" . $vysledek_write . "')");
+            }
+
             return $output;
     }
 
@@ -635,6 +679,9 @@ class stb extends adminator
         <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
         
         <b>Puk</b>: " . $data['puk'] . "<br>
+        <b>Pin1</b>: " . $data['pin1'] . "<br>
+        <b>Pin2</b>: " . $data['pin2'] . "<br>
+
         <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
         
         <b>Přípojný bod</b>: ";
