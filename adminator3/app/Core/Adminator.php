@@ -168,13 +168,13 @@ class adminator {
         
         if($num_rows < 1)
         {
-        $tarifs[0] =  "nelze zjistit / žádný tarif nenalezen";
-        return $tarifs;
+            $tarifs[0] =  "nelze zjistit / žádný tarif nenalezen";
+            return $tarifs;
         }
         
         while( $data = $q->fetch_array())
         {
-        $tarifs[$data['id_tarifu']] = $data["jmeno_tarifu"];    
+            $tarifs[$data['id_tarifu']] = $data["jmeno_tarifu"];    
         }
 
         return $tarifs;

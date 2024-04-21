@@ -439,9 +439,9 @@ class stb extends adminator
             'IP adresa#ip' => v::noWhitespace()->notEmpty()->ip(),
             'Přípojný bod#id_nodu' => v::number()->greaterThan(0),
             'MAC adresa#mac' => v::notEmpty()->macAddress(),
-            'puk' => v::number(),
-            'pin1' => v::number(),
-            'pin2' => v::number(),
+            // 'puk' => v::number(),
+            // 'pin1' => v::number(),
+            // 'pin2' => v::number(),
             'Číslo portu (ve switchi)#port_id' => v::number(),
             'Tarif#id_tarifu' => v::number()->greaterThan(0),
 		]);
@@ -453,7 +453,9 @@ class stb extends adminator
             }
 		}
 
-        // // second, check duplicities
+        // TODO: add validation optional items (puk, pin1, pin2)
+
+        // second, check duplicities
 
         $MSQ_POPIS = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '" . $input_data['popis'] . "' ");
         $MSQ_IP = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '". $input_data['ip'] . "' ");
@@ -552,42 +554,9 @@ class stb extends adminator
             if($this->action_form->ok() and empty($this->action_form_validation_errors))
             {
                 // go for save into databze
-
-                $rs_s = $this->stbActionSaveIntoDatabase($data);
-                $rs .= $rs_s;
-
-                // TODO: improve showing data from form
-                $rs .= "<br>
-                STB Objekt byl přidán/upraven, zadané údaje:<br><br>
-                <b>Popis objektu</b>: " . $data['popis'] . "<br>
-                <b>IP adresa</b>: " . $data['ip'] . "<br>
-                <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
-                
-                <b>Puk</b>: " . $data['puk'] . "<br>
-                <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
-                
-                <b>Přípojný bod</b>: ";
-
-                $vysledek3=$this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");
-                $radku3=$vysledek3->num_rows;
-                
-                if($radku3==0) $rs .= " Nelze zjistit ";
-                else 
-                {
-                    while( $zaznam3=$vysledek3->fetch_array() )
-                        { $rs .= $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
-                }
-            
-                $rs .= "<br><br>";
-                
-                $rs .= "<b>Poznámka</b>:".htmlspecialchars($data['pozn'])."<br>";
-                
-                $ms_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($data['id_tarifu'])."'");
-                
-                $ms_tarif->data_seek(0);
-                $ms_tarif_r = $ms_tarif->fetch_row();
-                
-                $rs .= "<b>Tarif</b>: ".$ms_tarif_r[0]."<br><br>";
+                //
+                $rs .= $this->stbActionSaveIntoDatabase($data);
+                $rs .= $this->stbActionRenderResults($data);
 
                 $ret[0] = $rs;
                 return $ret;
@@ -598,7 +567,6 @@ class stb extends adminator
                                             //  . ", form messages: " . $this->action_form->messages()
                                             // . ", form val. errors: " . var_export($this->action_form_validation_errors, true)
                                         );
-
             }
         }
 
@@ -622,6 +590,43 @@ class stb extends adminator
 
         return $ret;
 
+    }
+
+    function stbActionRenderResults($data)
+    {
+        $rs .= "<br>
+        STB Objekt byl přidán/upraven, zadané údaje:<br><br>
+        <b>Popis objektu</b>: " . $data['popis'] . "<br>
+        <b>IP adresa</b>: " . $data['ip'] . "<br>
+        <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
+        
+        <b>Puk</b>: " . $data['puk'] . "<br>
+        <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
+        
+        <b>Přípojný bod</b>: ";
+
+        $vysledek3=$this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");
+        $radku3=$vysledek3->num_rows;
+        
+        if($radku3==0) $rs .= " Nelze zjistit ";
+        else 
+        {
+            while( $zaznam3=$vysledek3->fetch_array() )
+            { $rs .= $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
+        }
+
+        $rs .= "<br><br>";
+        
+        $rs .= "<b>Poznámka</b>:".htmlspecialchars($data['pozn'])."<br>";
+        
+        $ms_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($data['id_tarifu'])."'");
+        
+        $ms_tarif->data_seek(0);
+        $ms_tarif_r = $ms_tarif->fetch_row();
+        
+        $rs .= "<b>Tarif</b>: ".$ms_tarif_r[0]."<br><br>";
+
+        return $rs;
     }
 
     function stbActionRenderForm (ServerRequestInterface $request, ResponseInterface $response, $csrf, $data, $node_list, $tarifs_iptv_list)
