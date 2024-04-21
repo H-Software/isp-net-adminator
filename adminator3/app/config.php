@@ -46,7 +46,6 @@ $capsule->addConnection([
 $db_ok2 = init_postgres("Adminator3");
 
 // https://stackoverflow.com/questions/34649181/multiple-database-connection-using-illuminate-database-eloquent-orm-in-codeignit/34650166#34650166
-
 $capsule->addConnection([
     'driver' => 'pgsql',
     'host' => getenv("POSTGRES_SERVER") ? getenv("POSTGRES_SERVER") : "localhost",
