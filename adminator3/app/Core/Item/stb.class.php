@@ -273,7 +273,7 @@ class stb extends adminator
              $output .= "\t<div style=\"font-weight: bold; float: left; \">IP adresa</div>\n";
              
              $output .= "\t<div style=\"float: left; padding-left: 20%; \">".
-                    "<a href=\"?".urlencode("order=")."3".$get_odkazy."\">";
+                    "<a href=\"?".urlencode("order")."=3".$get_odkazy."\">";
                      
                     if($order == 3){
                      $output .= "<img src=\"/img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >"; 	    
@@ -365,7 +365,7 @@ class stb extends adminator
                     "</div>\n";
         
              $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
-                    "<a href=\"?".urlencode("order=")."10".$get_odkazy."\">";
+                    "<a href=\"?".urlencode("order")."=10".$get_odkazy."\">";
                     
                     if($order == 10){
                     $output .= "<img src=\"/img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
