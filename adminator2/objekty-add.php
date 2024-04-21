@@ -59,7 +59,7 @@ $nod_find = $_POST["nod_find"];
 if( ( strlen($nod_find) < 1 ) ){ $nod_find="%"; }
 else
 {
-  if( !(ereg("^%.*%$",$nod_find)) )
+  if( !(preg_match("/^%.*%$/",$nod_find)) )
   { $nod_find="%".$nod_find."%"; }
 }
 

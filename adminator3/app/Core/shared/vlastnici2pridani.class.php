@@ -3,11 +3,11 @@
 class vlastnici2pridani
 {
     
-    function checknick ($nick2)
+    public static function checknick ($nick2)
     {
 	global $fail, $error;
 	
-        $nick_check=ereg('^([[:alnum:]]|_|-)+$',$nick2);
+        $nick_check=preg_match('/^([[:alnum:]]|_|-)+$/',$nick2);
 	if( !($nick_check) ) {
 	    $fail="true";    
 	    $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick2.") není ve správnem formátu!!! (Povoleno alfanumerické znaky, dolní podtržítko, pomlčka)</H4></div>";
@@ -22,13 +22,13 @@ class vlastnici2pridani
 
     function checkvs ($vs)
     {
-	$vs_check=ereg('^([[:digit:]]+)$',$vs);
-	if( !($vs_check) )
-	{
-	  global $fail;      $fail="true";
-	  global $error;
-	  $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Variabilní symbol ( ".$vs." ) není ve správnem formátu!!! (Pouze čísla)</H4></div>";
-	}
+		$vs_check=preg_match('/^([[:digit:]]+)$/',$vs);
+		if( !($vs_check) )
+		{
+			global $fail;      $fail="true";
+			global $error;
+			$error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Variabilní symbol ( ".$vs." ) není ve správnem formátu!!! (Pouze čísla)</H4></div>";
+		}
     } // konec funkce check vs															    
 
     function check_k_platbe ($k_platbe)
