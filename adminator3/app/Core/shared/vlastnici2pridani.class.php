@@ -46,7 +46,7 @@ class vlastnici2pridani
 
     public static function check_uc_index($ucetni_index)
     {
-	   $ui_check=preg_match('^([[:digit:]]|\.)+$',$ucetni_index);
+	   $ui_check=preg_match('/^([[:digit:]]|\.)+$/',$ucetni_index);
 	   
 	   if( !($ui_check) )
 	   {
