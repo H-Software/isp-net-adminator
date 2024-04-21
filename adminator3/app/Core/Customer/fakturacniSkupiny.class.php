@@ -21,8 +21,11 @@ class fakturacniSkupiny extends adminator
 
     var $action_form;
     
+    var $container;
+
     function __construct(ContainerInterface $container, $conn_mysql = null)
     {
+        $this->container = $container;
         $this->logger = $container->logger;
 
         $i = $container->auth->getIdentity();
@@ -238,7 +241,7 @@ class fakturacniSkupiny extends adminator
                                 "loggedUserEmail" => $this->loggedUserEmail
                             );
 
-                    $az = new ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
+                    $az = new ArchivZmen($this->container, $this->smarty);
                     $azRes = $az->insertItemDiff(2, $pole_puvodni_data, $form_data, $params);
             
                     if( is_object($azRes) )
@@ -264,7 +267,7 @@ class fakturacniSkupiny extends adminator
                     if($res === true){ $vysledek_write="1"; }
 
                     // pridame to do archivu zmen
-                    $az = new ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
+                    $az = new ArchivZmen($this->container, $this->smarty);
                     
                     $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
 

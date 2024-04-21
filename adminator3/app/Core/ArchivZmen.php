@@ -12,11 +12,11 @@ class ArchivZmen {
 
     var $db_table_name = 'archiv_zmen';
 
-    public function __construct($conn_mysql, $smarty, $logger)
+    public function __construct($container, $smarty)
     {
-        $this->conn_mysql = $conn_mysql;
+        $this->conn_mysql = $container->connMysql;
+        $this->logger = $container->logger;
         $this->smarty = $smarty;
-        $this->logger = $logger;
         
         $this->logger->info("archivZmen\__construct called");
     }
@@ -421,11 +421,7 @@ class ArchivZmen {
             $sql_result = $sql_result." LIMIT 50";
         }
         
-        try {
-            $vysl = $this->conn_mysql->query($sql_result);
-        } catch (Exception $e) {
-            // die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-        }
+        $vysl = $this->conn_mysql->query($sql_result);
         
         if (!$vysl) {
             $output .= "<div style=\"color: red;\" >Chyba při provádění databázového dotazu </div>";
@@ -828,11 +824,7 @@ class ArchivZmen {
         else
         { $sql=$zaklad_sql." order by id DESC LIMIT 1 "; }
 
-        try {
-            $vysl = $this->conn_mysql->query($sql);
-        } catch (Exception $e) {
-            // die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-        }
+        $vysl = $this->conn_mysql->query($sql);
 
         $radku = $vysl->num_rows;
         

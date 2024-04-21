@@ -12,10 +12,10 @@ class archivZmenController extends adminatorController {
     var $smarty;
     var $logger;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+    public function __construct(ContainerInterface $container, $smarty)
     {
         $this->container = $container;
-		$this->conn_mysql = $conn_mysql;
+		$this->conn_mysql = $this->container->connMysql;
         $this->smarty = $smarty;
 
         $this->logger = $this->container->logger;
@@ -53,7 +53,7 @@ class archivZmenController extends adminatorController {
 
         $this->header($request, $response);
 
-        $az = new \App\Core\ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
+        $az = new \App\Core\ArchivZmen($this->container, $this->smarty);
 
         $body = $az->archivZmenWork();
 
@@ -77,7 +77,7 @@ class archivZmenController extends adminatorController {
 
         $this->header($request, $response);
 
-        $az = new \App\Core\ArchivZmen($this->conn_mysql, $this->smarty, $this->logger);
+        $az = new \App\Core\ArchivZmen($this->container, $this->smarty);
 
         $body = $az->archivZmenList();
 

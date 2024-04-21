@@ -167,7 +167,7 @@ $container['adminController'] = function ($c) {
 
 $container['archivZmenController'] = function ($c) {
     global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\archivZmenController($app->getContainer(),$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\archivZmenController($app->getContainer(), $smarty);
 };
 
 $container['othersController'] = function ($c) {
