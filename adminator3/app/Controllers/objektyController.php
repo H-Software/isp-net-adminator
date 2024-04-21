@@ -47,7 +47,7 @@ class objektyController extends adminatorController {
     {
 
         $csrf_html = $this->generateCsrfToken($request, $response, true);
-        $stb = new \App\Core\stb($this->container, $this->conn_mysql);
+        $stb = new \App\Core\stb($this->container);
         $stb->csrf_html = $csrf_html[0];
 
         $this->logger->info("objektyController\\stb called");
@@ -86,7 +86,7 @@ class objektyController extends adminatorController {
 
         $this->header($request, $response, $this->adminator);
 
-        $stb = new \App\Core\stb($this->container, $this->conn_mysql);
+        $stb = new \App\Core\stb($this->container);
 
         $csrf = $this->generateCsrfToken($request, $response, false);
 
@@ -96,13 +96,7 @@ class objektyController extends adminatorController {
             // view form
             $this->smarty->assign($rs[0]);
 
-            try {
-                $this->smarty->display($rs[1]);
-            }
-            catch (\Exception $e) {
-                $this->logger->addError("objektyController\\stbAction: smarty display failed: " . var_export($e->getMessage(), true));
-            }
-
+            $this->smarty->display($rs[1]);
         }
         else{
             // result view, ..

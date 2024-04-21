@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
@@ -46,9 +47,9 @@ class stb extends adminator
     var $action_form_validation_errors_wrapper_start = '<div class="alert alert-danger" role="alert">';
     var $action_form_validation_errors_wrapper_end = '</div>';
 
-	function __construct($container, $conn_mysql, $logger = null)
+	function __construct(ContainerInterface $container)
     {
-		$this->conn_mysql = $conn_mysql;
+		$this->conn_mysql = $container->connMysql;
         
         $this->logger = $container->logger;
 

@@ -394,25 +394,25 @@ class vlastnik2_a2
     
     //stb
     
-    $stb = new App\Core\stb($this->conn_mysql, $this->logger);
+    // $stb = new App\Core\stb($this->conn_mysql, $this->logger);
     
-    $stb->level = $this->level;
+    // $stb->level = $this->level;
     
-    $pocet_stb = $stb->zjistipocetobj($id);
+    // $pocet_stb = $stb->zjistipocetobj($id);
     
-    if( $pocet_stb > 0 )
-    {
-      echo "<tr>";
-      echo "<td colspan=\"1\" bgcolor=\"#c1feff\" align=\"center\" >S</td>\n";
-      echo "<td colspan=\"10\" bgcolor=\"#c1feff\" valign=\"center\" >\n";
+    // if( $pocet_stb > 0 )
+    // {
+    //   echo "<tr>";
+    //   echo "<td colspan=\"1\" bgcolor=\"#c1feff\" align=\"center\" >S</td>\n";
+    //   echo "<td colspan=\"10\" bgcolor=\"#c1feff\" valign=\"center\" >\n";
 	   
-      echo "<table border=\"0\" width=\"100%\" >\n";
+    //   echo "<table border=\"0\" width=\"100%\" >\n";
         
-      $stb->vypis("1",$id);
+    //   $stb->vypis("1",$id);
 	    
-      echo "</table>\n";
-      echo "</td></tr>\n";
-    }
+    //   echo "</table>\n";
+    //   echo "</td></tr>\n";
+    // }
     
     //tady dalsi radka asi
     /*
