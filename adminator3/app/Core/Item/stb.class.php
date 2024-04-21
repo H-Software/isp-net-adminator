@@ -1137,12 +1137,9 @@ class stb extends adminator
           $sql = "SELECT nod_list.id, nod_list.jmeno FROM nod_list, objekty_stb ".
                " WHERE ( (nod_list.id = objekty_stb.id_nodu) AND (nod_list.typ_nodu = 2) ) ".
                " group by nod_list.id";
-           try {
-               $rs = $this->conn_mysql->query($sql);
-           } catch (Exception $e) {
-               die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-           }
-          
+
+          $rs = $this->conn_mysql->query($sql);
+
           if(!$rs){    
                
                $text = htmlspecialchars(mysql_errno() . ": " . mysql_error());

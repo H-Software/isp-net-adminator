@@ -7,17 +7,17 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class vlastniciController extends adminatorController {
-    var $conn_mysql;
-    var $smarty;
-    var $logger;
-    var $auth;
-    var $app;
+    public $conn_mysql;
+    public $smarty;
+    public $logger;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+    protected $adminator;
+
+    public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-		$this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
+        $this->container = $container; // for adminator class
+		$this->conn_mysql = $container->connMysql;
+        $this->smarty = $container->smarty;
 
         $this->logger = $container->logger;
         $this->logger->info("vlastniciController\__construct called");
@@ -29,7 +29,7 @@ class vlastniciController extends adminatorController {
     {
       $this->logger->info("vlastniciController\cat called");
 
-      $this->checkLevel(90);
+      $this->checkLevel(90, $this->adminator);
 
       $this->smarty->assign("page_title","Adminator3 :: Zákazníci");
 
@@ -46,7 +46,7 @@ class vlastniciController extends adminatorController {
 
         $this->logger->info("vlastniciController\\vlastnici2 called");
         
-        $this->checkLevel(38);
+        $this->checkLevel(38, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Zákazníci");
 
@@ -54,19 +54,19 @@ class vlastniciController extends adminatorController {
 
         $select = $_GET["select"];
 
-        $vlastnik2 = new \vlastnik2($this->conn_mysql);
-        
+        $vlastnik2 = new \vlastnik2($this->container);
+        $fs = new \App\Customer\fakturacniSkupiny($this->container);
+
         $this->smarty->assign("select",$select);
         
         if( $select == 2)
         { $fu_select = "2"; } //Pouze FU
         if( $select == 3 )
         { $fu_select = "1"; } //pouze DU
-               
-        $fakt_skupiny = $vlastnik2->show_fakt_skupiny($fu_select);
+        
+        $fakt_skupiny = $fs->show_fakt_skupiny($fu_select);
         
         $this->smarty->assign("fakt_skupiny",$fakt_skupiny);
-        
         
         $this->smarty->display('vlastnici/vlastnici2.tpl');
 
@@ -78,7 +78,7 @@ class vlastniciController extends adminatorController {
 
         $this->logger->info("vlastniciController\\fakturacniSkupiny called");
         
-        $this->checkLevel(99);
+        $this->checkLevel(99, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Zákazníci :: fakturační skupiny");
 
@@ -110,13 +110,13 @@ class vlastniciController extends adminatorController {
 
         $this->logger->info("vlastniciController\\fakturacniSkupinyAction called");
         
-        $this->checkLevel(301);
+        $this->checkLevel(301, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: . :: fakturační skupiny :: Action");
 
         $this->header($request, $response, $this->adminator);
 
-        $fs = new \App\Customer\fakturacniSkupiny($this->container, $this->conn_mysql);
+        $fs = new \App\Customer\fakturacniSkupiny($this->container);
         $fs->csrf_html = $this->generateCsrfToken($request, $response, true);
         $fs->adminator_ctl = $this->adminator;
 

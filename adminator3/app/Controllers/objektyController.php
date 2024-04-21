@@ -15,11 +15,11 @@ class objektyController extends adminatorController {
 
     var $adminator;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-		$this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
+		$this->conn_mysql = $container->connMysql;
+        $this->smarty = $container->smarty;
         
         $this->logger = $container->logger;
         $this->logger->info("objektyController\__construct called");
