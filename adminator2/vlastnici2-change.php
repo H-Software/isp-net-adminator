@@ -302,7 +302,7 @@ if ( $update_status =="1" )
 	$billing_freq = 0;
     }
     							   
-     $vlast_upd = array( "nick" => $nick2, "jmeno" => $jmeno, "prijmeni" => $prijmeni, "ulice" => $ulice, "mesto" => $mesto, "psc" => $psc,
+     $vlast_upd = array( "nick" => trim($nick2), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
 			 "vs" => $vs, "k_platbe" => $k_platbe, "archiv" => $archiv, "fakturacni_skupina_id" => $fakt_skupina,
 			 "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
 			 "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
