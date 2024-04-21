@@ -933,18 +933,49 @@ class stb extends adminator
            
             if( (strlen($this->find_search_string) > 0) ){
             
+                $sql_where .= " AND (  ";
+
+                if(preg_match("/^[0-9]+$/",$this->find_search_string)){
+                    $this->logger->debug("stb\GenerateSqlQuery: search_string is numeric");
+
+                    $find_search_string = "".$this->conn_mysql->real_escape_string($this->find_search_string)."";
+
+                    $sql_where .= " (id_stb = '$find_search_string') OR ".
+                                " (id_cloveka = '$find_search_string') OR ".
+                                " ";
+                }
+
                 $find_search_string = "%".$this->conn_mysql->real_escape_string($this->find_search_string)."%";
-            
-                $sql_where .= " AND ( (id_stb = '$find_search_string') OR ".
-                        " (id_cloveka = '$find_search_string') OR ".
+    
+                $sql_where .= 
                         " (mac_adresa LIKE '$find_search_string' ) OR ".
                         " (ip_adresa LIKE '$find_search_string') OR ".
                         " (puk LIKE '$find_search_string') OR ".
+                        " (pin1 LIKE '$find_search_string') OR ".
+                        " (pin2 LIKE '$find_search_string') OR ".
                         " (popis LIKE '$find_search_string') OR ".
                         " (objekty_stb.pozn LIKE '$find_search_string') OR ".
+                        " (jmeno_tarifu LIKE '$find_search_string') OR ".
                         " (nod_list.jmeno LIKE '$find_search_string') ".
-                " ) ";
+                        " ) ";
             }
+
+            // if( (strlen($this->find_search_string) > 0) ){
+            
+            //     $find_search_string_orig = $this->conn_mysql->real_escape_string($this->find_search_string);
+
+            //     $find_search_string = "%".$this->conn_mysql->real_escape_string($this->find_search_string)."%";
+            
+            //     $sql_where .= " AND ( (id_stb = '$find_search_string_orig') OR ".
+            //             " (id_cloveka = '$find_search_string_orig') OR ".
+            //             " (mac_adresa LIKE '$find_search_string' ) OR ".
+            //             " (ip_adresa LIKE '$find_search_string') OR ".
+            //             " (puk LIKE '$find_search_string') OR ".
+            //             " (popis LIKE '$find_search_string') OR ".
+            //             " (objekty_stb.pozn LIKE '$find_search_string') OR ".
+            //             " (nod_list.jmeno LIKE '$find_search_string') ".
+            //     " ) ";
+            // }
        
             if( isset($this->id_stb) ){
             
@@ -988,8 +1019,8 @@ class stb extends adminator
            
        
        } //end of else if mod == 1
-        
-       $this->logger->debug("stb\GenerateSqlQuery: dump var this->sql_query: ".var_export($this->sql_query, true));
+    
+        $this->logger->debug("stb\GenerateSqlQuery: dump var this->sql_query: ".var_export($this->sql_query, true));
 
     } //end of function generate_sql_query
     
