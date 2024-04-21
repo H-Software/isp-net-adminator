@@ -367,14 +367,14 @@ if ( $update_status =="1" )
 
     if( (strlen($trvani_do) > 0) )
     {
-	list($trvani_do_den,$trvani_do_mesic,$trvani_do_rok) = split("\.",$trvani_do);
-	$trvani_do=$trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
+      list($trvani_do_den,$trvani_do_mesic,$trvani_do_rok) = preg_split("/\./",$trvani_do);
+      $trvani_do=$trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
     }
 
     if( (strlen($datum_podpisu) > 0) )
     {
-	list($datum_podpisu_den,$datum_podpisu_mesic,$datum_podpisu_rok) = split("\.",$datum_podpisu);
-	$datum_podpisu=$datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
+      list($datum_podpisu_den,$datum_podpisu_mesic,$datum_podpisu_rok) = preg_split("/\./",$datum_podpisu);
+      $datum_podpisu=$datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
     }
     
     
@@ -409,8 +409,8 @@ if ( $update_status =="1" )
 	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = split("\.",$billing_suspend_stop);
 	    $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 	    
-	    $vlastnik_add["billing_suspend_start"] = mysql_real_escape_string($billing_suspend_start);    
-	    $vlastnik_addd["billing_suspend_stop"] = mysql_real_escape_string($billing_suspend_stop);
+	    $vlastnik_add["billing_suspend_start"] = $conn_mysql->real_escape_string($billing_suspend_start);    
+	    $vlastnik_addd["billing_suspend_stop"] = $conn_mysql->real_escape_string($billing_suspend_stop);
 	}
 
         $res=pg_insert($db_ok2,'vlastnici', $vlastnik_add);
@@ -429,7 +429,7 @@ if ( $update_status =="1" )
         
     if ( $res == 1){ $vysledek_write="1"; }
     
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
      
     $writed = "true"; 
     
