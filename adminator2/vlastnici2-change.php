@@ -353,16 +353,16 @@ if ( $update_status =="1" )
 
     $affected = DB::connection('pgsql')
               ->table('vlastnici')
-              ->where('id_cloveka', $update_id)
+              ->where('id_cloveka2', $update_id)
               ->update($vlast_upd);
 
-     if($res == 1){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . "\n"; }
-     else 
+     if($affected == 1){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . "\n"; }
+     else
      { 
       echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(affected: " . $affected . "\n";
       
-      echo pg_last_error($db_ok2); 
-      echo pg_last_notice($db_ok2);
+      // echo pg_last_error($db_ok2); 
+      // echo pg_last_notice($db_ok2);
      }
      
      // TODO: enable writing into ArchivZmen
