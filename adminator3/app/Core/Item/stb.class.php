@@ -514,6 +514,16 @@ class stb extends adminator
 
                 $data['upravil_kdo'] = $this->loggedUserEmail;
 
+                // save orig data for diff ArchivZmen
+                $this->id_stb = $update_id;
+                $this->generate_sql_query();   
+    
+                $rs = $this->conn_mysql->query($this->sql_query);
+                $dataOrigDb = $rs->fetch_assoc();
+
+                unset($dataOrigDb["id_stb"], $dataOrigDb["id_cloveka"], $dataOrigDb["datum_vytvoreni"]);
+                
+                // db call
                 $affected = Model::where('id_stb', $update_id)
                             ->update($data);
 
@@ -528,15 +538,6 @@ class stb extends adminator
                     $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit ci úprava selhala.</div></H3>\n"; 
                     $output .= "res: $res \n";
                 }
-
-                $this->id_stb = $update_id;
-                $this->generate_sql_query();   
-    
-                $rs = $this->conn_mysql->query($this->sql_query);
-                $dataOrigDb = $rs->fetch_assoc();
-
-                unset($dataOrigDb["id_stb"], $dataOrigDb["id_cloveka"] );
-                unset($dataOrigDb["upravil_kdo"], $dataOrigDb["datum_vytvoreni"]);
 
                 $params = array(
                     "itemId" => $update_id,
@@ -666,10 +667,8 @@ class stb extends adminator
             $rs = $this->conn_mysql->query($this->sql_query);
             $data = $rs->fetch_assoc();
 
-            unset($data["id_stb"]);
-            unset($data["id_cloveka"]);
-            unset($data["upravil_kdo"]);
-            unset($data["datum_vytvoreni"]);
+            unset($data["id_stb"], $data["id_cloveka"]);
+            unset($data["upravil_kdo"], $data["datum_vytvoreni"]);
 
             // fix columns names
             $data['ip'] = $data['ip_adresa'];
@@ -933,7 +932,7 @@ class stb extends adminator
        */
        
        $sql_rows_basic = " id_stb, id_cloveka, mac_adresa, puk, ip_adresa, popis, id_nodu, sw_port, objekty_stb.pozn, datum_vytvoreni ";
-       $sql_rows_extra = $sql_rows_basic . ", pin1, pin2, id_tarifu ";
+       $sql_rows_extra = $sql_rows_basic . ", pin1, pin2, id_tarifu, upravil_kdo ";
 
        $sql_rows = $sql_rows_basic .
                ", DATE_FORMAT(datum_vytvoreni, '%d.%m.%Y %H:%i:%s') as datum_vytvoreni_f, nod_list.jmeno AS nod_jmeno ".

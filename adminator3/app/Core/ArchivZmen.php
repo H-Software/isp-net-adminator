@@ -91,6 +91,12 @@ class ArchivZmen {
                  $pole3 .= ", ";                                                                                                                 
                
                } //konec key == id_tarifu
+               elseif( $key == "pozn" )
+               {
+                    $pole3 .= "změna <b>Poznámky</b> z: ";
+                    $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
+                    $pole3 .= ", ";
+               } //konec key == pozn
                else
                { // ostatni mody, nerozpoznane
                  $pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
@@ -148,6 +154,9 @@ class ArchivZmen {
 
     function insertItemDiff(int $actionType, array $dataOrig, array $dataUpdated, ...$args)
     {
+        $this->logger->info("Archiv-Zmen\insertItemDiff called");
+        $this->logger->info("Archiv-Zmen\insertItemDiff: mode: ". $actionType . "");
+
         $actionBody = $this->getActionType($actionType, $args[0]['itemId']);
 
         if($actionType == 3)
