@@ -2,7 +2,7 @@
 
 class objektypridanifiber{
 
-    function generujdata( $selected_nod,$id_tarifu )
+    public static function generujdata( $selected_nod,$id_tarifu )
     {
   
        global $ip;

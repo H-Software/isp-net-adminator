@@ -154,7 +154,7 @@ class objektypridani {
 		
 			$ip_rozsah=$data_ip["ip_rozsah"];
 			
-			list($a,$b,$c,$d) =split("[.]",$ip_rozsah);
+			list($a,$b,$c,$d) =preg_split("/[.]/",$ip_rozsah);
 		}
 	
 	/*
@@ -185,7 +185,7 @@ class objektypridani {
 	      while (  $data_check_ip=pg_fetch_array($msq_check_ip) ) 
 	      { $gen_ip=$data_check_ip["ip"]; }
 	
-	      list($a,$b,$c,$d) = split("[.]",$gen_ip);
+	      list($a,$b,$c,$d) = preg_split("/[.]/",$gen_ip);
 		
 	      $limit=250;
 	      global $ip_error;

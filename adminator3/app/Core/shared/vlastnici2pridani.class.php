@@ -20,7 +20,7 @@ class vlastnici2pridani
 				
     } // konec funkce check nick
 
-    function checkvs ($vs)
+    public static function checkvs ($vs)
     {
 		$vs_check=preg_match('/^([[:digit:]]+)$/',$vs);
 		if( !($vs_check) )
@@ -31,22 +31,22 @@ class vlastnici2pridani
 		}
     } // konec funkce check vs															    
 
-    function check_k_platbe ($k_platbe)
+    public static function check_k_platbe ($k_platbe)
     {
-	$platba_check=ereg('^([[:digit:]]|\.)+$',$k_platbe);
+		$platba_check=preg_match('/^([[:digit:]]|\.)+$/',$k_platbe);
 	   
-	if ( !($platba_check) )
-	{
-	    global $fail;      $fail="true";
-	    global $error;
-	    $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>K_platbe ( ".$k_platbe." ) není ve správnem formátu !!! </H4></div>";
-	}
+		if ( !($platba_check) )
+		{
+			global $fail;      $fail="true";
+			global $error;
+			$error .= "<div class=\"vlasnici-add-fail-nick\"><H4>K_platbe ( ".$k_platbe." ) není ve správnem formátu !!! </H4></div>";
+		}
 	
     } // konec funkce check rra    
 
-    function check_uc_index($ucetni_index)
+    public static function check_uc_index($ucetni_index)
     {
-	   $ui_check=ereg('^([[:digit:]]|\.)+$',$ucetni_index);
+	   $ui_check=preg_match('^([[:digit:]]|\.)+$',$ucetni_index);
 	   
 	   if( !($ui_check) )
 	   {
