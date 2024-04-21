@@ -87,10 +87,10 @@ if( ( $update_status==1 and !( isset($send)) ) )
       $billing_suspend_stop   = $data["billing_suspend_stop"];
             
       //konverze z DB formatu
-      list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$billing_suspend_start);
+      list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = explode("-",$billing_suspend_start);
       $billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-      list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = split("-",$billing_suspend_stop);
+      list($b_s_t_rok,$b_s_t_mesic,$b_s_t_den) = explode("-",$billing_suspend_stop);
       $billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
 	
     endwhile;
@@ -185,13 +185,13 @@ if( ( $update_status==1 and !( isset($send)) ) )
 	// $trvani_do = "";        
 	if( (strlen($trvani_do) > 0) )
 	{
-    	    list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = split("\-",$trvani_do);
+    	    list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = explode("\-",$trvani_do);
     	    $trvani_do=$trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
 	}
     
 	if( (strlen($datum_podpisu) > 0) )
 	{
-    	    list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = split("\-",$datum_podpisu);
+    	    list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = explode("\-",$datum_podpisu);
     	    $datum_podpisu=$datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
 	}
 
