@@ -14,6 +14,8 @@ class stb extends adminator
 
     var $conn_mysql;
 
+    var $container;
+
     var $csrf_html;
 
     var $find_id_nodu;		//promenne pro hledani
@@ -51,6 +53,7 @@ class stb extends adminator
 
 	function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
         $this->validator = $container->validator;
         $this->conn_mysql = $container->connMysql;   
         $this->logger = $container->logger;
@@ -501,6 +504,8 @@ class stb extends adminator
             if($data['update_id']){
 
                 $update_id = $data['update_id'];
+
+                // mutate columns names back
                 $data['sw_port'] = $data['port_id'];
                 $data['mac_adresa'] = $data['mac'];
                 $data['ip_adresa'] = $data['ip'];
@@ -509,16 +514,8 @@ class stb extends adminator
 
                 $data['upravil_kdo'] = $this->loggedUserEmail;
 
-                echo "<pre>".var_export($data, true)."</pre>";
-
                 $affected = Model::where('id_stb', $update_id)
                             ->update($data);
-                
-                //     [
-                //     'akce' => $actionBody,
-                //     'vysledek' => $args[0]['actionResult'],
-                //     'provedeno_kym' => $args[0]['loggedUserEmail']
-                // ]
 
                 if($affected == 1){
                     $res = true;
@@ -528,18 +525,27 @@ class stb extends adminator
                 { $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n"; } 
                 else
                 { 
-                    $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit.</div></H3>\n"; 
+                    $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit ci úprava selhala.</div></H3>\n"; 
                     $output .= "res: $res \n";
                 }
 
-                // $params = array(
-                //     "itemId" => $this->form_update_id,
-                //     "actionResult" => $vysledek_write,
-                //     "loggedUserEmail" => $this->loggedUserEmail
-                // );
+                $this->id_stb = $update_id;
+                $this->generate_sql_query();   
+    
+                $rs = $this->conn_mysql->query($this->sql_query);
+                $dataOrigDb = $rs->fetch_assoc();
+
+                unset($dataOrigDb["id_stb"], $dataOrigDb["id_cloveka"] );
+                unset($dataOrigDb["upravil_kdo"], $dataOrigDb["datum_vytvoreni"]);
+
+                $params = array(
+                    "itemId" => $update_id,
+                    "actionResult" => $affected,
+                    "loggedUserEmail" => $this->loggedUserEmail
+                );
 
                 $az = new ArchivZmen($this->container, $this->smarty);
-                // $azRes = $az->insertItemDiff(2, $pole_puvodni_data, $form_data, $params);
+                $azRes = $az->insertItemDiff(3, $dataOrigDb, $data, $params);
 
                 if( is_object($azRes) )
                 { $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n"; } 
@@ -659,6 +665,7 @@ class stb extends adminator
 
             $rs = $this->conn_mysql->query($this->sql_query);
             $data = $rs->fetch_assoc();
+
             unset($data["id_stb"]);
             unset($data["id_cloveka"]);
             unset($data["upravil_kdo"]);

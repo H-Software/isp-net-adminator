@@ -36,7 +36,7 @@
 
               $pole3 .= ", ";
             } //konec key == sw_port
-	    elseif($key == "id_nodu")
+	          elseif($key == "id_nodu")
             {
               $pole3 .= "změna <b>Přípojného bodu</b> z: ";
 
