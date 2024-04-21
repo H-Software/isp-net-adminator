@@ -220,7 +220,7 @@ if( ( $update_status==1 and (isset($odeslano)) ) )
 }
 
 //checkem jestli se macklo na tlacitko "OK" :)
-if ( ereg("^OK$",$odeslano) ) { echo ""; }
+if ( preg_match("/^OK$/",$odeslano) ) { echo ""; }
 else 
 { 
   $fail="true"; 

@@ -47,7 +47,7 @@ class objektypridani {
     } //end of function checkSikanaText
     
     //function to validate ip address format in php by Roshan Bhattarai(http://roshanbh.com.np)
-    function validateIpAddress($ip_addr)
+    public static function validateIpAddress($ip_addr)
     {
 	//first of all the format of the ip address is matched
 	if(preg_match("/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/",$ip_addr))
@@ -68,7 +68,7 @@ class objektypridani {
           return false; //if format of ip address doesn't matches
     }
                                                       
-    function checkip ($ip)
+    public static function checkip ($ip)
     {      
       if ( !(objektypridani::validateIpAddress($ip)) )
       {
