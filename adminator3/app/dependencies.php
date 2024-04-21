@@ -79,10 +79,6 @@ $container['db'] = function ($container) use ($capsule) {
     return $capsule;
 };
 
-$container['db2'] = function ($container) use ($capsulePg) {
-    return $capsulePg;
-};
-
 $container['validator'] = function ($container) {
 	return new App\Validation\Validator;
 };

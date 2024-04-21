@@ -67,6 +67,8 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/getting-started.html
 #### Eloquent
 - https://laravel.com/docs/8.x/eloquent
+- https://fideloper.com/laravel-multiple-database-connections
+- https://medium.com/@miladev95/how-to-use-multiple-databases-in-laravel-274df382fecd
 
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html

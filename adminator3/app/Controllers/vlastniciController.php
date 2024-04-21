@@ -6,6 +6,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 class vlastniciController extends adminatorController {
     public $conn_mysql;
     public $smarty;
@@ -68,7 +70,10 @@ class vlastniciController extends adminatorController {
         
         $this->smarty->assign("fakt_skupiny",$fakt_skupiny);
         
-        // $objekty = Capsule::table('objekty')->where('votes', '>', 100)->get();
+        $capsulePg = $this->container->db;
+        $rs = $capsulePg->connection("pgsql")->table('objekty')->get();
+
+        echo "<pre>" . var_export($rs, true) . "</pre>";
 
         $this->smarty->display('vlastnici/vlastnici2.tpl');
 
