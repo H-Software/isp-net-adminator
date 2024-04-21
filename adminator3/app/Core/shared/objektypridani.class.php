@@ -69,67 +69,57 @@ class objektypridani {
     }
                                                       
     function checkip ($ip)
-    {
-     
-      //old
-      //$ip_check=ereg('^([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})$',$ip);
-      
+    {      
       if ( !(objektypridani::validateIpAddress($ip)) )
       {
-	global $fail;  $fail="true";
-	global $error; $error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
-
+		global $fail;  $fail="true";
+		global $error; $error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
       }
-
     } //konec funkce check-ip			 			 
     
-    function checkcislo($cislo)
+    public static function checkcislo($cislo)
     {
-     $rra_check=ereg('^([[:digit:]]+)$',$cislo);
+     $rra_check=preg_match('/^([[:digit:]]+)$/',$cislo);
      
      if ( !($rra_check) )
      {
       global $fail;	$fail="true";
       global $error;	$error .= "<H4>Zadaný číselný údaj(e) ( ".$cislo." ) není ve  správném formátu !!! </H4>";
-     }			    
-    
+     }			        
     } //konec funkce check cislo
     
-    function checkdns ($dns)
+    public static function checkdns ($dns)
     {
-    $dns_check=ereg('^([[:alnum:]]|\.|-)+$',$dns);
-    if ( !($dns_check) )
-    {
-     global $fail;	$fail="true";
-     global $error; 	$error .= "<div class=\"objekty-add-fail-dns\"><H4>DNS záznam ( ".$dns." ) není ve správnem formátu !!! </H4></div>";
-    }
-    
+		$dns_check=preg_match('/^([[:alnum:]]|\.|-)+$/',$dns);
+		if ( !($dns_check) )
+		{
+			global $fail;	$fail="true";
+			global $error; 	$error .= "<div class=\"objekty-add-fail-dns\"><H4>DNS záznam ( ".$dns." ) není ve správnem formátu !!! </H4></div>";
+		}
     } // konec funkce check rra
     
     function check_l2tp_cr($cr)
     {
-	$cr_check=ereg('^([[:alnum:]])+$',$cr);
-	
-	if( !($cr_check) )
-	{
-    	    global $fail;	
-	    $fail="true";
-    	
-	    global $error; 	
-	    $error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) není ve správnem formátu !!! </H4></div>";
-	}
+		$cr_check=preg_match('/^([[:alnum:]])+$/',$cr);
+		
+		if( !($cr_check) )
+		{
+			global $fail;	
+			$fail="true";
+			
+			global $error; 	
+			$error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) není ve správnem formátu !!! </H4></div>";
+		}
     
-	if( (strlen($cr) <> 4) )
-	{
-	    global $fail;	
-	    $fail="true";
-    	
-	    global $error; 	
-	    $error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky !!! </H4></div>";
-	
-	}
-	
-	
+		if( (strlen($cr) <> 4) )
+		{
+			global $fail;	
+			$fail="true";
+			
+			global $error; 	
+			$error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky !!! </H4></div>";
+		
+		}
     } //konec funkce check_l2tp_cr
     
     public static function generujdata ($selected_nod, $typ_ip, $dns, $conn_mysql)
