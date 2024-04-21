@@ -49,8 +49,8 @@ class stb extends adminator
 
 	function __construct(ContainerInterface $container)
     {
-		$this->conn_mysql = $container->connMysql;
-        
+        $this->validator = $container->validator;
+        $this->conn_mysql = $container->connMysql;   
         $this->logger = $container->logger;
 
         $i = $container->auth->getIdentity();
@@ -429,38 +429,31 @@ class stb extends adminator
          return $ret;
     }
 
-    function stbActionValidateFormData()
+    function stbActionValidateFormData(array $input_data)
     {
         // first, validation
-        // https://formr.github.io/validation/#validation-rules
+        $validation = $this->validator->validate($input_data, [
+            'Popis objektu#popis' => v::noWhitespace()->notEmpty()->alnum("-")->length(3,20),
+            'ip' => v::noWhitespace()->notEmpty()->length(3,5)
+		]);
 
-        // $popisValidatorMaxLenght = 15;
-        // $popisValidator = v::noWhitespace()->notEmpty()->alnum("-")->length(1,$popisValidatorMaxLenght);
-
-        // if($popisValidator->validate($data['popis']) === false)
-        // {
-        //     $this->action_form_validation_errors .= 
-        //                             $this->action_form_validation_errors_wrapper_start
-        //                             . "\"Popis\" musi obsahovat pouze cisla ci pismena a musi byt maximalne " . $popisValidatorMaxLenght . " znaku dlouhy."
-        //                             . $this->action_form_validation_errors_wrapper_end
-        //                             ;
-        // }
-
-        $popis = $this->action_form->post('popis','"Popis objektu"','alpha_dash|min[3]|max[20]');
-        // $this->logger->info("stb\\stbActionValidateFormData: popis validation retvat: ".var_export($data, true));
-
-        $ip = $this->action_form->post('ip','"IP adresa"', 'ip');
+		if ($validation->failed()) {
+            $valResults = $validation->getErrors();
+            foreach ($valResults as $valField => $valError) {
+			    $this->action_form_validation_errors .= $valError;
+            }
+		}
 
         $mac = $this->action_form->post('mac','"MAC adresa"|"MAC adresa" must be a valid MAC address (example: 00:00:64:65:73:74)', 'not_regex[/^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$/]');
 
-        $this->action_form->post('id_nodu','"Přípojný bod"', 'int|gt[0]');
+        $this->action_form->post('id_nodu','"Přípojný bod"', 'gt[0]');
 
         $this->action_form->post('puk','"puk"', 'int');
         $this->action_form->post('pin1','"pin1"', 'int');
         $this->action_form->post('pin2','"pin2"', 'int');
-        $this->action_form->post('port_id','"Číslo portu (ve switchi)"', 'int|gt[0]');
+        $this->action_form->post('port_id','"Číslo portu (ve switchi)"', 'gt[0]');
 
-        $this->action_form->post('id_tarifu','"Tarif"', 'int|gt[0]');
+        $this->action_form->post('id_tarifu','"Tarif"', 'gt[0]');
 
         //  //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
         // $this->checkip($data['ip']); 
@@ -565,7 +558,8 @@ class stb extends adminator
         if(!empty($this->action_form->post('odeslano')))
         {
             // go for final, but validate data first
-            $this->stbActionValidateFormData();
+            $valRes = $this->stbActionValidateFormData($data);
+            // $this->logger->info("stb\\stbAction validateFromData result: " . var_export($valRes, true));
 
             // if form is OK, go to saving data, otherwise "continue" rendering form (not saving)
             if($this->action_form->ok() and empty($this->action_form_validation_errors))
@@ -611,9 +605,16 @@ class stb extends adminator
                 $ret[0] = $rs;
                 return $ret;
             }
+            else{
+                $this->logger->warning("stb\\stbAction: mode \"odeslano\", but some errors found, still render form. ");
+                $this->logger->warning("stb\\stbAction: --> form OK result: " . var_export($this->action_form->ok(), true)
+                                            //  . ", form messages: " . $this->action_form->messages()
+                                            // . ", form val. errors: " . var_export($this->action_form_validation_errors, true)
+                                        );
+
+            }
         }
 
-        //
         // prepare data for form
         //
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
@@ -625,6 +626,7 @@ class stb extends adminator
         $this->logger->debug("stb\\stbAction: tarifs iptv list data: " . var_export($tarifs_iptv, true));
 
         // render form
+        //
         $form_data = $this->stbActionRenderForm($request, $response, $csrf, $data, $node_list, $tarifs_iptv);
         // $this->logger->debug("stb\\stbAction: form_data: " . var_export($form_data, true));
 

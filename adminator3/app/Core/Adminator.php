@@ -29,7 +29,7 @@ class adminator {
 
     public function formInit()
     {
-        // bootstrap -> bootstrap.js
+        // bootstrap5 -> framework for CSS/JS formatting
         // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
         return new \Formr\Formr('bootstrap5', 'hush');
     }

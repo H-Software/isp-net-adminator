@@ -2,7 +2,7 @@
 
 $config = [
     'settings' => [
-        // 'displayErrorDetails' => true, // solved by custom handler
+        'displayErrorDetails' => true, // solved by custom handler
         'addContentLengthHeader' => false,
 
         'logger' => [
