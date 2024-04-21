@@ -1,6 +1,9 @@
 {
     "require": {
         "nette/robot-loader": "^3.4",
-        "smarty/smarty": "^4.5.2"
+        "smarty/smarty": "^4.5.2",
+        "respect/validation": "^2.2",
+        "formr/formr": "^1.4",
+        "illuminate/database": "^8.83"
     }
 }
