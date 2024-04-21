@@ -109,7 +109,9 @@ class stb extends adminator
          
          $output .= "";
         
-        $rs_select_nod = $this->filter_select_nods();
+        $topologyClass = new Topology($this->conn_mysql, $this->smarty, $this->logger);
+
+        $rs_select_nod = $topologyClass->filter_select_nods();
         
         if( isset($rs_select_nod["error"]) ){
             
@@ -862,50 +864,8 @@ class stb extends adminator
       
     } //konec funkce generujdata
    
-    function checkip($ip)
-    {
-       $ip_check=ereg('^([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})\.([[:digit:]]{1,3})$',$ip);
-       
-       if( !($ip_check) )
-       {
-            $this->action_form_validation_errors .= 
-                            $this->action_form_validation_errors_wrapper_start
-                            . "IP adresa ( ".$ip." ) není ve správném formátu !!!"
-                            . $this->action_form_validation_errors_wrapper_end
-                            ;
-       }
-       
-    } //konec funkce check-ip			 
+
    
-    function checkmac($mac) 
-    {
-       $mac_check=ereg('^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$',$mac);
-       
-       if( !($mac_check) )
-       {
-            $this->action_form_validation_errors .= 
-                    $this->action_form_validation_errors_wrapper_start
-                    . "MAC adresa ( ".$mac." ) není ve správném formátu !!! (Správný formát je: 00:00:64:65:73:74)"
-                    . $this->action_form_validation_errors_wrapper_end
-                    ;
-       }
-       
-     } //konec funkce check-mac
-   
-     function checkcislo($cislo)
-     {
-        $rra_check=ereg('^([[:digit:]]+)$',$cislo);
-        
-        if( !($rra_check) )
-        {
-            $this->action_form_validation_errors .= 
-                    $this->action_form_validation_errors_wrapper_start
-                    . "Zadaný číselný údaj ( ".$cislo." ) není ve  správném formátu!"
-                    . $this->action_form_validation_errors_wrapper_end
-                    ;
-        }		    
-       
-     } // konec funkce check cislo
    
     function zjistipocetobj($id_cloveka)
     {
@@ -1243,48 +1203,4 @@ class stb extends adminator
 
       } //konec funkce vypis
    
-      //
-      //funkce pro filtraci vypisu
-      //
-      
-      function filter_select_nods(){
-          
-          $ret = array();
-          
-          //sql 
-          $sql = "SELECT nod_list.id, nod_list.jmeno FROM nod_list, objekty_stb ".
-               " WHERE ( (nod_list.id = objekty_stb.id_nodu) AND (nod_list.typ_nodu = 2) ) ".
-               " group by nod_list.id";
-
-          $rs = $this->conn_mysql->query($sql);
-
-          if(!$rs){    
-               
-               $text = htmlspecialchars("Error message: ". $rs->error);
-               $ret["error"] = array("2" => $text);
-       
-               return $ret;
-          }
-          
-          $rs_num = $rs->num_rows;
-           
-          if( $rs_num == 0){
-       
-               $text = htmlspecialchars("Žádné nody nenalezeny");
-               $ret["error"] = array("1" => $text);
-               
-               return $ret;
-          }
-          
-          while( $data = $rs->fetch_array()){
-               
-               $id = intval($data["id"]);
-               $val = htmlspecialchars($data["jmeno"]);
-               
-               $ret["data"][$id] = $val;
-          }
-          
-          return $ret;
-          
-      } //end of function filter_select_nods
 }
