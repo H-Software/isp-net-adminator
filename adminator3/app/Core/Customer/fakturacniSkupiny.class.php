@@ -23,7 +23,7 @@ class fakturacniSkupiny extends adminator
     
     var $container;
 
-    function __construct(ContainerInterface $container, $conn_mysql = null)
+    function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->logger = $container->logger;
@@ -31,7 +31,8 @@ class fakturacniSkupiny extends adminator
         $i = $container->auth->getIdentity();
         $this->loggedUserEmail = $i['username'];
 
-        $this->conn_mysql = $conn_mysql;
+        $this->conn_mysql = $container->connMysql;
+
     }
 
     function getItems()
