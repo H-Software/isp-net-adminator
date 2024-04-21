@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
@@ -46,10 +47,10 @@ class stb extends adminator
     var $action_form_validation_errors_wrapper_start = '<div class="alert alert-danger" role="alert">';
     var $action_form_validation_errors_wrapper_end = '</div>';
 
-	function __construct($container, $conn_mysql, $logger = null)
+	function __construct(ContainerInterface $container)
     {
-		$this->conn_mysql = $conn_mysql;
-        
+        $this->validator = $container->validator;
+        $this->conn_mysql = $container->connMysql;   
         $this->logger = $container->logger;
 
         $i = $container->auth->getIdentity();
@@ -428,68 +429,50 @@ class stb extends adminator
          return $ret;
     }
 
-    function stbActionValidateFormData()
+    function stbActionValidateFormData(array $input_data)
     {
         // first, validation
-        // https://formr.github.io/validation/#validation-rules
 
-        // $popisValidatorMaxLenght = 15;
-        // $popisValidator = v::noWhitespace()->notEmpty()->alnum("-")->length(1,$popisValidatorMaxLenght);
+        // https://respect-validation.readthedocs.io/en/2.3/08-list-of-rules-by-category/
+        $validation = $this->validator->validate($input_data, [
+            'Popis objektu#popis' => v::noWhitespace()->notEmpty()->alnum("-")->length(3,20),
+            'IP adresa#ip' => v::noWhitespace()->notEmpty()->ip(),
+            'Přípojný bod#id_nodu' => v::number()->greaterThan(0),
+            'MAC adresa#mac' => v::notEmpty()->macAddress(),
+            // 'puk' => v::number(),
+            // 'pin1' => v::number(),
+            // 'pin2' => v::number(),
+            'Číslo portu (ve switchi)#port_id' => v::number(),
+            'Tarif#id_tarifu' => v::number()->greaterThan(0),
+		]);
 
-        // if($popisValidator->validate($data['popis']) === false)
-        // {
-        //     $this->action_form_validation_errors .= 
-        //                             $this->action_form_validation_errors_wrapper_start
-        //                             . "\"Popis\" musi obsahovat pouze cisla ci pismena a musi byt maximalne " . $popisValidatorMaxLenght . " znaku dlouhy."
-        //                             . $this->action_form_validation_errors_wrapper_end
-        //                             ;
-        // }
+		if ($validation->failed()) {
+            $valResults = $validation->getErrors();
+            foreach ($valResults as $valField => $valError) {
+			    $this->action_form_validation_errors .= $valError;
+            }
+		}
 
-        $popis = $this->action_form->post('popis','"Popis objektu"','alpha_dash|min[3]|max[20]');
-        // $this->logger->info("stb\\stbActionValidateFormData: popis validation retvat: ".var_export($data, true));
+        // TODO: add validation optional items (puk, pin1, pin2)
 
-        $ip = $this->action_form->post('ip','"IP adresa"', 'ip');
+        // second, check duplicities
 
-        $mac = $this->action_form->post('mac','"MAC adresa"|"MAC adresa" must be a valid MAC address (example: 00:00:64:65:73:74)', 'not_regex[/^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$/]');
-
-        $this->action_form->post('id_nodu','"Přípojný bod"', 'int|gt[0]');
-
-        $this->action_form->post('puk','"puk"', 'int');
-        $this->action_form->post('pin1','"pin1"', 'int');
-        $this->action_form->post('pin2','"pin2"', 'int');
-        $this->action_form->post('port_id','"Číslo portu (ve switchi)"', 'int|gt[0]');
-
-        $this->action_form->post('id_tarifu','"Tarif"', 'int|gt[0]');
-
-        //  //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
-        // $this->checkip($data['ip']); 
-        // $this->checkmac($data['mac']); 
-        // $this->checkcislo($data['puk']);
-        // $this->checkcislo($data['pin1']);
-        // $this->checkcislo($data['pin2']);
-        // $this->checkcislo($data['id_nodu']);
-        // $this->checkcislo($data['port_id']);
-
-        // // second, check duplicities
-
-        $MSQ_POPIS = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '" . $popis . "' ");
-        $MSQ_IP = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '". $ip . "' ");
-        $MSQ_MAC = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '" . $mac. "' ");
+        $MSQ_POPIS = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE popis LIKE '" . $input_data['popis'] . "' ");
+        $MSQ_IP = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE ip_adresa LIKE '". $input_data['ip'] . "' ");
+        $MSQ_MAC = $this->conn_mysql->query("SELECT * FROM objekty_stb WHERE mac_adresa LIKE '" . $input_data['mac'] . "' ");
         
         if( $MSQ_POPIS->num_rows > 0 )
         { 
-            $error .= "<div class=\"alert alert-danger\" role=\"alert\">Popis (".$popis." ) již existuje!!!</div>"; 
+            $this->action_form_validation_errors .= "<div class=\"alert alert-danger\" role=\"alert\">Popis (".$input_data['popis']." ) již existuje!!!</div>"; 
         }
         if( $MSQ_IP->num_rows > 0 )
         { 
-            $error .= "<div class=\"alert alert-danger\" role=\"alert\">IP adresa ( ".$ip." ) již existuje!!!</div>"; 
+            $this->action_form_validation_errors .= "<div class=\"alert alert-danger\" role=\"alert\">IP adresa ( ".$input_data['ip']." ) již existuje!!!</div>"; 
         }
         if( $MSQ_MAC->num_rows > 0 )
         { 
-            $error .= "<div class=\"alert alert-danger\" role=\"alert\">MAC adresa ( ".$mac." ) již existuje!!!</div>"; 
+            $this->action_form_validation_errors .= "<div class=\"alert alert-danger\" role=\"alert\">MAC adresa ( ".$input_data['mac']." ) již existuje!!!</div>"; 
         }
- 
-        $this->action_form_validation_errors .= $error;
         
         if(empty($this->action_form_validation_errors))
         {
@@ -564,55 +547,29 @@ class stb extends adminator
         if(!empty($this->action_form->post('odeslano')))
         {
             // go for final, but validate data first
-            $this->stbActionValidateFormData();
+            $valRes = $this->stbActionValidateFormData($data);
+            // $this->logger->info("stb\\stbAction validateFromData result: " . var_export($valRes, true));
 
             // if form is OK, go to saving data, otherwise "continue" rendering form (not saving)
             if($this->action_form->ok() and empty($this->action_form_validation_errors))
             {
                 // go for save into databze
-
-                $rs_s = $this->stbActionSaveIntoDatabase($data);
-                $rs .= $rs_s;
-
-                // TODO: improve showing data from form
-                $rs .= "<br>
-                STB Objekt byl přidán/upraven, zadané údaje:<br><br>
-                <b>Popis objektu</b>: " . $data['popis'] . "<br>
-                <b>IP adresa</b>: " . $data['ip'] . "<br>
-                <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
-                
-                <b>Puk</b>: " . $data['puk'] . "<br>
-                <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
-                
-                <b>Přípojný bod</b>: ";
-
-                $vysledek3=$this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");
-                $radku3=$vysledek3->num_rows;
-                
-                if($radku3==0) $rs .= " Nelze zjistit ";
-                else 
-                {
-                    while( $zaznam3=$vysledek3->fetch_array() )
-                        { $rs .= $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
-                }
-            
-                $rs .= "<br><br>";
-                
-                $rs .= "<b>Poznámka</b>:".htmlspecialchars($data['pozn'])."<br>";
-                
-                $ms_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($data['id_tarifu'])."'");
-                
-                $ms_tarif->data_seek(0);
-                $ms_tarif_r = $ms_tarif->fetch_row();
-                
-                $rs .= "<b>Tarif</b>: ".$ms_tarif_r[0]."<br><br>";
+                //
+                $rs .= $this->stbActionSaveIntoDatabase($data);
+                $rs .= $this->stbActionRenderResults($data);
 
                 $ret[0] = $rs;
                 return $ret;
             }
+            else{
+                $this->logger->warning("stb\\stbAction: mode \"odeslano\", but some errors found, still render form. ");
+                $this->logger->warning("stb\\stbAction: --> form OK result: " . var_export($this->action_form->ok(), true)
+                                            //  . ", form messages: " . $this->action_form->messages()
+                                            // . ", form val. errors: " . var_export($this->action_form_validation_errors, true)
+                                        );
+            }
         }
 
-        //
         // prepare data for form
         //
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
@@ -624,6 +581,7 @@ class stb extends adminator
         $this->logger->debug("stb\\stbAction: tarifs iptv list data: " . var_export($tarifs_iptv, true));
 
         // render form
+        //
         $form_data = $this->stbActionRenderForm($request, $response, $csrf, $data, $node_list, $tarifs_iptv);
         // $this->logger->debug("stb\\stbAction: form_data: " . var_export($form_data, true));
 
@@ -632,6 +590,43 @@ class stb extends adminator
 
         return $ret;
 
+    }
+
+    function stbActionRenderResults($data)
+    {
+        $rs .= "<br>
+        STB Objekt byl přidán/upraven, zadané údaje:<br><br>
+        <b>Popis objektu</b>: " . $data['popis'] . "<br>
+        <b>IP adresa</b>: " . $data['ip'] . "<br>
+        <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
+        
+        <b>Puk</b>: " . $data['puk'] . "<br>
+        <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
+        
+        <b>Přípojný bod</b>: ";
+
+        $vysledek3=$this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");
+        $radku3=$vysledek3->num_rows;
+        
+        if($radku3==0) $rs .= " Nelze zjistit ";
+        else 
+        {
+            while( $zaznam3=$vysledek3->fetch_array() )
+            { $rs .= $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".''; }
+        }
+
+        $rs .= "<br><br>";
+        
+        $rs .= "<b>Poznámka</b>:".htmlspecialchars($data['pozn'])."<br>";
+        
+        $ms_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($data['id_tarifu'])."'");
+        
+        $ms_tarif->data_seek(0);
+        $ms_tarif_r = $ms_tarif->fetch_row();
+        
+        $rs .= "<b>Tarif</b>: ".$ms_tarif_r[0]."<br><br>";
+
+        return $rs;
     }
 
     function stbActionRenderForm (ServerRequestInterface $request, ResponseInterface $response, $csrf, $data, $node_list, $tarifs_iptv_list)

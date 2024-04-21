@@ -1,6 +1,9 @@
 
 {include file="base-bs.tpl" tpl_include_subcat = 'objekty/inc.subcat'}
 
+<div style="background-color: #EEEEEE; ">
+<div style="margin: 5px; ">
+
     {$f_open}
     <div class="row g-3">
             <div class="col-md-12 card">
@@ -87,4 +90,6 @@
     </div>
     {$f_close}
 
+</div>
+</div>
 {include file="base-bs-end.tpl"}

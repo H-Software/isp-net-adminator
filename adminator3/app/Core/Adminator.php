@@ -29,7 +29,7 @@ class adminator {
 
     public function formInit()
     {
-        // bootstrap -> bootstrap.js
+        // bootstrap5 -> framework for CSS/JS formatting
         // hush -> no echoing stuff -> https://github.com/formr/formr/issues/87#issuecomment-769374921
         return new \Formr\Formr('bootstrap5', 'hush');
     }
@@ -168,13 +168,13 @@ class adminator {
         
         if($num_rows < 1)
         {
-        $tarifs[0] =  "nelze zjistit / žádný tarif nenalezen";
-        return $tarifs;
+            $tarifs[0] =  "nelze zjistit / žádný tarif nenalezen";
+            return $tarifs;
         }
         
         while( $data = $q->fetch_array())
         {
-        $tarifs[$data['id_tarifu']] = $data["jmeno_tarifu"];    
+            $tarifs[$data['id_tarifu']] = $data["jmeno_tarifu"];    
         }
 
         return $tarifs;

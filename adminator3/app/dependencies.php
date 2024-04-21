@@ -1,7 +1,5 @@
 <?php
 
-// use Respect\Validation\Validator as v;
-
 use czhujer\Slim\Auth\ServiceProvider\SlimAuthProvider;
 use czhujer\Slim\Auth\Middleware\Authorization;
 use czhujer\Slim\Auth\Handlers\RedirectHandler;
@@ -63,9 +61,9 @@ $container['logger'] = function($c) {
 };
 
 // https://www.slimframework.com/docs/v3/handlers/error.html
-$container['errorHandler'] = function ($container) {
-    return new App\Handlers\Error($container['logger']);
-};
+// $container['errorHandler'] = function ($container) {
+//     return new App\Handlers\Error($container['logger']);
+// };
 
 // $container['phpErrorHandler'] = function ($container) {
 //     return $container['errorHandler'];
@@ -79,6 +77,10 @@ $container['smarty'] = $smarty;
 
 $container['db'] = function ($container) use ($capsule) {
     return $capsule;
+};
+
+$container['validator'] = function ($container) {
+	return new App\Validation\Validator;
 };
 
 $container['flash'] = function($container) {
