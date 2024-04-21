@@ -28,7 +28,7 @@ class stb extends adminator
        
     var $vypis_pocet_sloupcu;	//pocet sloupcu v tabulce
     
-    var $debug = 1; 		//vypis sekudarnich informaci (sql dotazy atd)
+    var $debug = 0; 		//vypis sekudarnich informaci (sql dotazy atd)
     
     var $enable_modify_action = false;
 
@@ -959,23 +959,6 @@ class stb extends adminator
                         " (nod_list.jmeno LIKE '$find_search_string') ".
                         " ) ";
             }
-
-            // if( (strlen($this->find_search_string) > 0) ){
-            
-            //     $find_search_string_orig = $this->conn_mysql->real_escape_string($this->find_search_string);
-
-            //     $find_search_string = "%".$this->conn_mysql->real_escape_string($this->find_search_string)."%";
-            
-            //     $sql_where .= " AND ( (id_stb = '$find_search_string_orig') OR ".
-            //             " (id_cloveka = '$find_search_string_orig') OR ".
-            //             " (mac_adresa LIKE '$find_search_string' ) OR ".
-            //             " (ip_adresa LIKE '$find_search_string') OR ".
-            //             " (puk LIKE '$find_search_string') OR ".
-            //             " (popis LIKE '$find_search_string') OR ".
-            //             " (objekty_stb.pozn LIKE '$find_search_string') OR ".
-            //             " (nod_list.jmeno LIKE '$find_search_string') ".
-            //     " ) ";
-            // }
        
             if( isset($this->id_stb) ){
             
