@@ -532,13 +532,34 @@ class stb extends adminator
                     $output .= "res: $res \n";
                 }
 
+                // $params = array(
+                //     "itemId" => $this->form_update_id,
+                //     "actionResult" => $vysledek_write,
+                //     "loggedUserEmail" => $this->loggedUserEmail
+                // );
+
+                $az = new ArchivZmen($this->container, $this->smarty);
+                // $azRes = $az->insertItemDiff(2, $pole_puvodni_data, $form_data, $params);
+
+                if( is_object($azRes) )
+                { $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n"; } 
+                else
+                { $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n"; }	
+
             }
             else{
                 // rezim pridani
                 //
+
+                // TODO: refaktor DB insert to ORM based way
+
                 // $form_data = array_merge($form_data, array("vlozil_kdo" => $this->loggedUserEmail));
 
-                // $res = DB::table($this->db_table_name)->insert($form_data);
+                // $item = Model::create([
+                //     'akce' => $actionBody,
+                //     'vysledek' => $actionResult,
+                //     'provedeno_kym' => $loggedUserEmail
+                // ]);
 
                 $sql = "INSERT INTO objekty_stb "
                 . " (mac_adresa, ip_adresa, puk, popis, id_nodu, sw_port, pozn, vlozil_kdo, id_tarifu)" 
@@ -561,6 +582,12 @@ class stb extends adminator
                 }
     
                 // pridame to do archivu zmen
+
+                // TODO: refactor this to ORM way
+                // $az = new ArchivZmen($this->container, $this->smarty);
+
+                // $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
+
                 $pole="<b> akce: pridani stb objektu ; </b><br>";
     
                 $pole .= "[id_stb]=> ".$id_stb.", ";
