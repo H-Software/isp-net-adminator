@@ -191,7 +191,7 @@ class Aglobal
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
-    function pg_last_inserted_id($con, $table){ 
+    public static function pg_last_inserted_id($con, $table){ 
          
          //make the initial query 
          $sql = "SELECT * FROM " . $table; 

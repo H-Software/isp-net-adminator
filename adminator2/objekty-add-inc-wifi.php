@@ -404,9 +404,9 @@ if ( !( isset($fail) ) )
 	     $sql_rows .= ", ";
 	     $sql_values .= ", ";
 	}
-	$sql_rows .= mysql_real_escape_string($key);
+	$sql_rows .= $conn_mysql->real_escape_string($key);
 	
-	$sql_values .= "'".mysql_real_escape_string($val)."'";
+	$sql_values .= "'".$conn_mysql->real_escape_string($val)."'";
 	
 	$obj_add_i++;	
     }

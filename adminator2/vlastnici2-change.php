@@ -427,8 +427,11 @@ if ( $update_status =="1" )
     foreach($vlastnik_add as $key => $val)
     { $pole=$pole." [".$key."] => ".$val."\n"; }
         
-    if ( $res == 1){ $vysledek_write="1"; }
-    
+    if ( $res == 1){ $vysledek_write=1; }
+    else{
+      $vysledek_write=0;
+    }
+
     $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
      
     $writed = "true"; 
