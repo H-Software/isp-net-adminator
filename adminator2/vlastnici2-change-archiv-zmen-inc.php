@@ -184,12 +184,11 @@ use Illuminate\Database\Capsule\Manager as DB;
    }
 
    $item = DB::table('archiv_zmen')
-   					->create([
-	'akce' => $pole2,
-	'vysledek' => $vysledek_write,
-	'provedeno_kym' => $nick
-	]);
+   					->insert([
+						'akce' => $pole2,
+						'vysledek' => $vysledek_write,
+						'provedeno_kym' => $nick
+						]);
 
    // $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
  
-?>
