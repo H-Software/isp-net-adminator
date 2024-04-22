@@ -117,8 +117,9 @@ class vlastnikarchiv
 	
 	// $id=$data["id_cloveka"];
 	// print "debug: id: $id";
-	
-	 objekt_a2::vypis($sql,$co,$id);
+	 $objekt_a2 = new objekt_a2;
+
+	 $objekt_a2->vypis($sql,$co,$id);
 
 
 

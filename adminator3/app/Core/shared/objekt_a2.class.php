@@ -213,7 +213,7 @@ class objekt_a2
   
  } //konec funkce zjistipocet
  
- function vypis($sql,$co,$id,$dotaz_final = "")
+ public function vypis($sql,$co,$id,$dotaz_final = "")
  {
    global $db_ok2;
     
