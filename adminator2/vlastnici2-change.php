@@ -435,7 +435,7 @@ if ( $update_status =="1" )
     foreach($vlastnik_add as $key => $val)
     { $pole=$pole." [".$key."] => ".$val."\n"; }
         
-    if ( $res == 1){ $vysledek_write=1; }
+    if ( $res === true ){ $vysledek_write=1; }
     else{
       $vysledek_write=0;
     }
