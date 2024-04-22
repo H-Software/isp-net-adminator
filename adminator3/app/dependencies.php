@@ -160,8 +160,7 @@ $container['HomeController'] = function($container) {
 };
 
 $container['aboutController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\aboutController($c,$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\aboutController($c);
 };
 
 $container['adminController'] = function ($c) {
