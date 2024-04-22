@@ -22,7 +22,9 @@ class vlastnik2_a2
    function vypis ($sql,$co,$dotaz_final)
    {
 				
-    // co - co hledat, 1- podle dns, 2-podle ip					    									    
+    // co - co hledat, 1- podle dns, 2-podle ip		
+	echo "<pre>" . var_export($dotaz_final, true) . "</pre>";
+
     $dotaz=pg_query($dotaz_final);
 
 	if($dotaz !== false){

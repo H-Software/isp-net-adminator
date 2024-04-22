@@ -11,6 +11,10 @@ class vlastnik2 {
 
 	var $listMode; // original local variable "co"
 
+	var $listSql; // original local variable "sql"
+
+	var $istFindId;
+
 	var $dotaz_source;
 
 	function __construct(ContainerInterface $container) {
@@ -51,19 +55,16 @@ class vlastnik2 {
 		$find_id = $_GET["find_id"];
 		$find    = $_GET["find"];
 
-		$list=$_GET["list"];
-
 		// $delka_find_id=strlen($find_id);
 		if( ( strlen($find_id) > 0 ) ) 
-		{ $listMode=3; /* hledani podle id_cloveka */   $sql=intval($find_id);  }
+		{ $this->listMode=3; /* hledani podle id_cloveka */   $sql=intval($find_id);  }
 		elseif( ( strlen($find) > 0 ) )
-		{ $listMode=1;  /* hledani podle cehokoli */  $sql = $find;  }
+		{ $this->listMode=1;  /* hledani podle cehokoli */  $sql = $find;  }
 		else
 		{ /* cokoli dalsiho */ }
 
-		if($listMode == 1)
+		if($this->listMode == 1)
 		{
-			 
 			$sql="%".$sql."%";
 			$select1 = " WHERE (firma is not NULL) AND ( archiv = 0 or archiv is null ) AND ";
 			$select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";
@@ -101,7 +102,7 @@ class vlastnik2 {
 							to_char(billing_suspend_stop,'FMDD. FMMM. YYYY') as billing_suspend_stop_f 
 						 FROM vlastnici ".$select1.$select2.$select3.$select6.$select4;
 		}
-		elseif($listMode == 3){
+		elseif($this->listMode == 3){
 				
 			$this->dotaz_source = "SELECT *, to_char(billing_suspend_start,'FMDD. FMMM. YYYY') as billing_suspend_start_f, ".
 					" to_char(billing_suspend_stop,'FMDD. FMMM. YYYY') as billing_suspend_stop_f ".
@@ -112,6 +113,8 @@ class vlastnik2 {
 			$this->listItemsContent = '<div class="alert alert-warning" role="alert" style="margin-right: 10px" >zadejte výraz k vyhledání....</div>'; 	
 		}
 
+		$this->listFindId = $find_id;
+		$this->listSql = $sql;
 	}
 
 	public function listItems()
@@ -119,7 +122,6 @@ class vlastnik2 {
 		$this->listPrepareVars();
 
 		$vlastnik = new vlastnik2_a2;
-		$vlastnik->level = $level;
 		$vlastnik->conn_mysql = $this->conn_mysql;
 
 		// without find search we dont do anything
@@ -129,6 +131,36 @@ class vlastnik2 {
 
 		$vlastnik->vypis_tab(1);
 
+		$poradek="find=".$find."&find_id=".$this->listFindId."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".
+					$_GET["razeni"]."&razeni2=".$_GET["razeni2"]."&fakt_skupina=".$_GET["fakt_skupina"];
+  
+		// TODO: fix paging
+		// $listovani = new c_listing_vlastnici2("./vlastnici2.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+
+		$list = $_GET["list"];
+		// if(($list == "")||($list == "1")){    //pokud není list zadán nebo je první
+		// 	$bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
+		// }
+		// else{
+		// 	$bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
+		// }
+
+		// $interval=$listovani->interval;
+
+		$dotaz_final = $this->dotaz_source . " LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
+
+		$this->logger->debug("vlastnik2\listItems: dump dotaz_final: " . var_export($dotaz_final, true));
+
+		//	  $listovani->listInterval();
+		// TODO: fix paging
+		// $listovani->listPart();
+
+		$vlastnik->vypis($this->listSql,$this->listMode,$dotaz_final);
+
+		$vlastnik->vypis_tab(2);
+
+		// TODO: fix paging
+		// $listovani->listPart();
 	}
 
 } //konec tridy vlastnik2
