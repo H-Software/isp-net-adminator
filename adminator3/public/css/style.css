@@ -295,25 +295,38 @@ subcat-spacebody
 
 .tab-topology-dolni2{ border-bottom: 1px dashed #C0C0C0 }
 
+.vlastnici-td-black { 
+    color: orange;
+    background-color: black; 
+}
+
 .vlastnici-selector-label
 {
     margin-left: 5px; 
     margin-right: 5px;
 }
 
+.vlastnici2-table table {
+    border-collapse: separate;
+    border: 1px solid #999;
+    font-size: 0.9rem;
+}​
+
+
 .vlastnici2-selectors-line
 {
-    font-size: 0.85rem;
+    font-size: 0.85rem !important;
     vertical-align: middle;
 }
 .vlastnici2-selectors-line select
 {
-    font-size: 0.85rem;
+    font-size: 0.85rem !important;
     vertical-align: middle;
 }
+
 .vlastnici2-selectors-line input
 {
-    font-size: 0.85rem;
+    font-size: 0.85rem !important;;
     vertical-align: middle;
 }
 

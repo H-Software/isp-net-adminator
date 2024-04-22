@@ -20,7 +20,7 @@
 							    
     <span style="padding-left: 5px; padding-right: 5px;" >Fakturační skupina: </span>
 								    
-    <select name="fakt_skupina" size="1" >
+    <select name="fakt_skupina" size="1" style="max-width: 190px;" >
       <option value="0" class="select-nevybrano" >Nevybráno</option>
 	    
 	{section  name="prvek1" loop=$fakt_skupiny }
