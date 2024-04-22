@@ -818,9 +818,9 @@ class ArchivZmen {
                     
                     if( ereg('^([[:digit:]]+)$',$id_nodu_pomocne) )
                     {
-                    $dotaz_id_nodu = mysql_query("SELECT * FROM nod_list WHERE id = '".intval($id_nodu_pomocne)."' ");
+                    $dotaz_id_nodu = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($id_nodu_pomocne)."' ");
                         
-                    while($data_nod = mysql_fetch_array($dotaz_id_nodu) )
+                    while($data_nod = $dotaz_id_nodu->fetch_array() )
                     { $nazev_nodu = $data_nod["jmeno"]; }
                     
                     $id_nodu_rs = "<a href=\"topology-nod-list.php?find=".$nazev_nodu."&typ_nodu=0";

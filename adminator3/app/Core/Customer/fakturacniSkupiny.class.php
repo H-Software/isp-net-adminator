@@ -5,7 +5,7 @@ namespace App\Customer;
 use App\Core\adminator;
 use App\Core\ArchivZmen;
 use App\Models\FakturacniSkupina;
-// use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Capsule\Manager as DB;
 use Psr\Container\ContainerInterface;
 
 class fakturacniSkupiny extends adminator

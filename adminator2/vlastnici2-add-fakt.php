@@ -64,13 +64,13 @@ require("include/charset.php");
   if( isset ($odeslano) ):
   //budeme ukladat ...
   
-  if( !( ereg('^([[:digit:]]+)$',$splatnost) ) )
+  if( !( preg_match('/^([[:digit:]]+)$/',$splatnost) ) )
   {  echo "<span style=\"font-size: 18px; margin: 20px; margin-top: 20px; margin-bottom: 20px; color: red;  \" >
 	Pole splatnost musí obsahovat pouze čísla! </span>"; 
     exit; 
   }
   
-  if ( !( ereg('^([[:digit:]]+)$',$cetnost) ) )
+  if ( !( preg_match('/^([[:digit:]]+)$/',$cetnost) ) )
   {  
     echo "<span style=\"font-size: 18px; margin: 20px; color: red; \">Pole četnost musí obsahovat pouze čísla! </span>"; 
     exit; 
@@ -117,9 +117,9 @@ require("include/charset.php");
     
   //$pole .= " <br> akci provedl: ".$nick." vysledek akce dle databáze: vlastniku: ".$dotaz_v_r." , fakturacni: ".$f_add_r.", datum akce: ".$datum;
        
-  if( ( ($f_add_r == 1) and ($dotaz_v_r == 1) ) ){ $vysledek_write="1"; }
+  if( ( ($f_add_r == 1) and ($dotaz_v_r == 1) ) ){ $vysledek_write=1; }
        
-  $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+  $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
 
     		
   if( $dotaz_v_r ){ echo "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze vlastníků. </div></H3>\n"; }

@@ -115,7 +115,7 @@ else
     $splatnost=$_POST["splatnost"];		$cetnost=$_POST["cetnost"];
     $firma=$_POST["firma"];			$poznamka=$_POST["poznamka"];
     $ucetni_index= $_POST["ucetni_index"];	$archiv=$_POST["archiv"];	
-    $fakt_skupina=$_POST["fakt_skupina"];	$splatnost=$_POST["splatnost"];
+    $fakt_skupina=trim($_POST["fakt_skupina"]);	$splatnost=$_POST["splatnost"];
     
     $typ_smlouvy = intval($_POST["typ_smlouvy"]);
     
@@ -435,12 +435,24 @@ if ( $update_status =="1" )
     foreach($vlastnik_add as $key => $val)
     { $pole=$pole." [".$key."] => ".$val."\n"; }
         
-    if ( $res == 1){ $vysledek_write=1; }
+    if ($res){ $vysledek_write=1; }
     else{
       $vysledek_write=0;
     }
+ 
+    $id = DB::table('archiv_zmen')
+              ->insertGetId([
+             'akce' => $pole,
+             'vysledek' => $vysledek_write,
+             'provedeno_kym' => $nick
+             ]);
+ 
+   if( $id > 0 )
+   { echo "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n"; } 
+   else
+   { echo "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n"; }	
 
-    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+    // $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
      
     $writed = "true"; 
     

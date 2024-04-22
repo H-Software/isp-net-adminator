@@ -267,7 +267,16 @@ else
 // echo "</head>
 //     <body>";
 
-echo "<div><a href=\"" . $_SERVER["SERVER_NAME"] . '/' . $stranka . "\">" . $_SERVER["SERVER_NAME"] . '/' .$stranka . "</a></div>"; 
+if (isset($_SERVER['HTTPS']))
+{
+ $prot = "https://";
+}
+else
+{
+  $prot = "http://";
+}
+
+echo "<div><a href=\"" . $prot . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"]. '/' . $stranka . "\">" . $_SERVER["SERVER_NAME"] . '/' .$stranka . "</a></div>"; 
 
 echo "</body></html>";
  

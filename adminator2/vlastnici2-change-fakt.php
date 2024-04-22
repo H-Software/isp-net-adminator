@@ -1,8 +1,8 @@
 <?php
 
+require("include/main.function.shared.php");
 require_once("include/config.php");
 require_once("include/check_login.php");
-
 require_once("include/check_level.php");
 
 if ( !( check_level($level,68) ) )
@@ -106,7 +106,7 @@ require("include/charset.php");
     
     if( $dotaz_v_r === true){ $vysledek_write = 1; }
     
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
    
     if( $dotaz_v_r ) { 
 	echo "<br><H3><div style=\"color: green; \" >Data úspěšně upraveny.</div></H3>\n"; 

@@ -1,5 +1,6 @@
 <?php
 
+require("include/main.function.shared.php");
 include ("include/config.php"); 
 include ("include/check_login.php");
 
@@ -9,13 +10,13 @@ if ( !( check_level($level,67) ) )
 {
 // neni level
 
-$stranka='nolevelpage.php';
- header("Location: ".$stranka);
- 
-   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-      Exit;
+  $stranka='nolevelpage.php';
+  header("Location: ".$stranka);
+
+  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
+  exit;
       
-        }
+}
 	
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
@@ -51,7 +52,7 @@ include ("include/charset.php");
   
   $id=$_GET["id"];
   
-  if ( ereg('^([[:digit:]]+)$',$id) )
+  if ( preg_match('/^([[:digit:]]+)$/',$id) )
   {
   
    $erase_eq = array( "id" => $id );
@@ -72,8 +73,7 @@ include ("include/charset.php");
     
      $pole .= $pole2.", akci provedl: ".$nick.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
 		 
-    $add=mysql_query("INSERT INTO archiv_zmen (akce) VALUES ('$pole')");
-		     
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce) VALUES ('$pole')");
   
     echo "<br><br>";
     

@@ -57,12 +57,12 @@ include ("include/charset.php");
   {
   // tady to ulozime
   
-    if ( !( ereg('^([[:digit:]]+)$',$objekt) ) ){ echo " Špatný formát proměnné objekt"; exit; }
-    if ( !( ereg('^([[:alnum:]]+)$',$id_vlastnika) ) ){ echo " Špatný formát proměnné id_komplu"; exit; }
+    if ( !( preg_match('/^([[:digit:]]+)$/',$objekt) ) ){ echo " Špatný formát proměnné objekt"; exit; }
+    if ( !( preg_match('/^([[:alnum:]]+)$/',$id_vlastnika) ) ){ echo " Špatný formát proměnné id_komplu"; exit; }
   
     $pole3 = "<b>akce: prirazeni objektu typu STB k vlastnikovi; </b><br>";
 
-    $res = mysql_query("UPDATE objekty_stb SET id_cloveka = '$id_vlastnika' WHERE id_stb = '$objekt' Limit 1 ");
+    $res = $conn_mysql->query("UPDATE objekty_stb SET id_cloveka = '$id_vlastnika' WHERE id_stb = '$objekt' Limit 1 ");
 							      	 
     if( $res ){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
     else { echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>\n"; }
@@ -71,14 +71,14 @@ include ("include/charset.php");
      // $pole3 .= ", akci provedl: ".$nick.", vysledek akce dle postgre: ".$res.", datum provedeni akce: ".$datum;
      
      if( $res == 1){ $vysledek_write="1"; }
-     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','$nick','$vysledek_write')");
+     $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','$nick','$vysledek_write')");
       
   }
   else
   {
     
-    $dotaz = mysql_query("SELECT * FROM objekty_stb WHERE id_cloveka is NULL ORDER BY popis");
-    $dotaz_radku =mysql_num_rows($dotaz);
+    $dotaz = $conn_mysql->query("SELECT * FROM objekty_stb WHERE id_cloveka is NULL ORDER BY popis");
+    $dotaz_radku = $dotaz->num_rows;
   
     if( $dotaz_radku == 0 )
     {
@@ -90,7 +90,7 @@ include ("include/charset.php");
 	echo "Vyberte objekt STB k přiřazení: <br><br>";
 	echo "<select name=\"objekt\" size=\"15\" >";
       
-	while ($data2=mysql_fetch_array($dotaz) )
+	while ($data2=$dotaz->fetch_array() )
 	{
   
 	    echo "<option value=\"".$data2["id_stb"]."\"> ";

@@ -1,8 +1,8 @@
 <?php
 
+require("include/main.function.shared.php");
 require_once("include/config.php");
 require_once("include/check_login.php");
-
 require_once("include/check_level.php");
 
 if ( !( check_level($level,50) ) )
@@ -31,7 +31,7 @@ include ("include/charset.php");
 
  require("include/js.include.1.php");
 
- $windowtext = "Aktuální informace o platbách má účetní ( Ing. Alice Sekyrová, tel: 602 411 970 ). Zde jsou zpožděné informace/platby. ";
+ $windowtext = "Aktuální informace o platbách má účetní. Zde jsou zpožděné informace/platby. ";
 
  // velikost okna
  $windowdelka = 300;
@@ -76,17 +76,24 @@ include ("include/charset.php");
   
   if( isset($id_vlastnika) )
   { 
-    $id_check=ereg('^([[:digit:]]+)$',$id_vlastnika);
+    $id_check=preg_match('/^([[:digit:]]+)$/',$id_vlastnika);
     
     if( !($id_check) )
     { 
-	echo "Chyba! Vstupní data nejsou ve správném formátu! "; 
-	exit;
+		echo "Chyba! Vstupní data nejsou ve správném formátu! "; 
+		exit;
     }
     		 
-    $dotaz=pg_query("SELECT * FROM platby 
-			WHERE ( id_cloveka='".intval($id_vlastnika)."' and zaplaceno_za LIKE '".intval($rok)."%') ");
-    $dotaz_radku=pg_num_rows($dotaz);
+    // $dotaz=pg_query("SELECT * FROM platby 
+	// 		WHERE ( id_cloveka='".intval($id_vlastnika)."' and zaplaceno_za LIKE '".intval($rok)."%') ");
+	
+	// $platby = DB::connection('pgsql')
+	// 			->table('platby')
+	// 			->where('id_cloveka', $id_vlastnika)
+	// 			->where('zaplaceno_za', 'LIKE', intval($rok)."%")
+	// 			->get();
+
+    // $dotaz_radku=pg_num_rows($dotaz);
     
 	echo "<table border=\"0\" width=\"90%\" >";
 	echo "<tr>";
@@ -273,6 +280,12 @@ include ("include/charset.php");
 	
 	 $mesic_long = "0".$i;
 	 
+	//  $platby = DB::connection('pgsql')
+	//  ->table('platby')
+	//  ->where('id_cloveka', $id_vlastnika)
+	//  ->where('zaplaceno_za', 'LIKE', $pozadovane_obdobi)
+	//  ->get();
+
 	$dotaz_platby=pg_query("SELECT * FROM platby WHERE ( id_cloveka='$id_vlastnika' and zaplaceno_za LIKE '$pozadovane_obdobi') ");
 	$dotaz_platby_radku=pg_num_rows($dotaz_platby);
 
