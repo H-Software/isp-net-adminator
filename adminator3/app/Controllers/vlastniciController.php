@@ -73,13 +73,15 @@ class vlastniciController extends adminatorController {
         // test capsule
         //
         // $objekty = DB::connection('pgsql')->select("select * from objekty");
-        $objekty = DB::connection('pgsql')
-                    ->table('objekty')
-                    ->orderBy('id_komplu', 'desc')
-                    ->get();
-        $rs .= "<pre>" . var_export($objekty, true) . "</pre>";
+        // $objekty = DB::connection('pgsql')
+        //             ->table('objekty')
+        //             ->orderBy('id_komplu', 'desc')
+        //             ->get();
+        // $rs .= "<pre>" . var_export($objekty, true) . "</pre>";
 
-        $this->smarty->assign("body", $rs);
+        $bodyContent = $vlastnik2->listItems();
+
+        $this->smarty->assign("body", $bodyContent);
 
         $this->smarty->display('vlastnici/vlastnici2.tpl');
 
