@@ -182,7 +182,7 @@ require_once("include/charset.php");
      $vlastnik = new vlastnik2_a2;
      $vlastnik->level = $level;
 	 $vlastnik->conn_mysql = $conn_mysql;
-	 $vlastnik->conn_pqsql = $db_ok2;
+	 $vlastnik->conn_pgsql = $db_ok2;
 
     if( check_level($level,40) ) { echo '<a href="vlastnici2-change.php?firma_add=1">Přidání vlastníka</a>'; }
     else 

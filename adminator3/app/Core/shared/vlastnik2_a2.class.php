@@ -35,13 +35,12 @@ class vlastnik2_a2
    // $dotaz_final - for pq_query
    function vypis ($sql,$co,$dotaz_final)
    {
-    // co - co hledat, 1- podle dns, 2-podle ip		
-	$db_ok2 = $this->conn_pgsql;
+    // co - co hledat, 1- podle dns, 2-podle ip
 
 	$output = "";
 
-	if (!$db_ok2) {
-		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($db_ok2) . ")");
+	if (!$this->conn_pgsql) {
+		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_pgsql) . ")");
 	}
 
 	if (!$this->conn_mysql) {
@@ -50,13 +49,13 @@ class vlastnik2_a2
 
 	// echo "<pre>" . var_export($dotaz_final, true) . "</pre>";
 
-    $dotaz=pg_query($dotaz_final);
+    $dotaz=pg_query($this->conn_pgsql, $dotaz_final);
 
 	if($dotaz !== false){
     	$radku=pg_num_rows($dotaz);
 	}
 	else{
-		$output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>";
+		$output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($this->conn_pgsql). "</div>";
 	}
 
     if($radku==0) $output .= "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
