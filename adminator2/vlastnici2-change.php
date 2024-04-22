@@ -115,7 +115,7 @@ else
     $splatnost=$_POST["splatnost"];		$cetnost=$_POST["cetnost"];
     $firma=$_POST["firma"];			$poznamka=$_POST["poznamka"];
     $ucetni_index= $_POST["ucetni_index"];	$archiv=$_POST["archiv"];	
-    $fakt_skupina=$_POST["fakt_skupina"];	$splatnost=$_POST["splatnost"];
+    $fakt_skupina=trim($_POST["fakt_skupina"]);	$splatnost=$_POST["splatnost"];
     
     $typ_smlouvy = intval($_POST["typ_smlouvy"]);
     
