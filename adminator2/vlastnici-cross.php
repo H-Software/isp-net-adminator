@@ -267,7 +267,7 @@ else
 // echo "</head>
 //     <body>";
 
-echo "<div><a href=\"" . $_SERVER["SERVER_NAME"] . '/' . $stranka . "\">" . $_SERVER["SERVER_NAME"] . '/' .$stranka . "</a></div>"; 
+echo "<div><a href=\"" . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"]. '/' . $stranka . "\">" . $_SERVER["SERVER_NAME"] . '/' .$stranka . "</a></div>"; 
 
 echo "</body></html>";
  
