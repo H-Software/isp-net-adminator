@@ -637,19 +637,19 @@ class ArchivZmen {
                     $pomocne = explode(" ", $akce);
                     $id_komplu_pomocne = preg_replace("/,/", "", $pomocne[7]);
                     
-                    $id_cloveka_pomocne = $pomocne[9];
-                    
+                    $id_cloveka_pomocne = $pomocne[10];
+
                     if( !($id_cloveka_pomocne > 0) ){
                         $id_cloveka_pomocne = $pomocne[10];
                     }
-            
+
                     $dotaz_id_komplu=pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."'");
                     while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
                     { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
-                    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+                    $id_komplu_pomocne_rs = "<a href=\"" . fix_link_to_another_adminator("/objekty.php")."?dns_find=". $data_kompl_dns;
                     $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
                 
-                    $akce = ereg_replace($id_komplu_pomocne, $id_komplu_pomocne_rs, $akce);    
+                    $akce = preg_replace("/\[id_komplu\]=> (".$id_komplu_pomocne.")/", "id_komplu]=> ".$id_komplu_pomocne_rs, $akce);    
         
                     $dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
                     while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
@@ -660,7 +660,7 @@ class ArchivZmen {
 
                     $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
                 
-                    $akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);    
+                    $akce = preg_replace("/\[id_vlastnika\] => (".$id_cloveka_pomocne.")/", "[id_vlastnika] => ".$id_cloveka_res, $akce);    
             
                 }
                 elseif( preg_match("/smazani objektu/", $akce))
@@ -698,11 +698,10 @@ class ArchivZmen {
                     while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
                     { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
                 
-                    // TODO: fix replacing link for objekt
-                    // $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
-                    // $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+                    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+                    $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
                         
-                    // $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);    
+                    $akce = preg_replace("/\[id_komplu\]=> ".$id_komplu_pomocne."/", "[id_komplu]=> ".$id_komplu_pomocne_rs."", $akce);    
         
                 }
                 elseif( preg_match("/\[id_vlastnika\]/", $akce))
@@ -737,7 +736,9 @@ class ArchivZmen {
                     if( !( $id_cloveka_pomocne > 0 ) )
                     { $id_cloveka_pomocne = $pomocne2[1]; }
                     
-                    $dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
+                    // echo "<pre>" . var_export( $id_cloveka_pomocne, true) . "</pre>";
+
+                    $dotaz_vlastnik_pom = pg_query("SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
                 
                     while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
                     { $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
@@ -747,8 +748,8 @@ class ArchivZmen {
                     else{ $id_cloveka_res .= "<a href=\"vlastnici.php"; }
 
                     $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
-                        
-                    $akce = ereg_replace($id_cloveka_pomocne, $id_cloveka_res, $akce);
+
+                    $akce = preg_replace("/\[id_cloveka\] => ".$id_cloveka_pomocne."/", "[id_cloveka] => " . $id_cloveka_res, $akce);
 
                 }
                 elseif(preg_match("/uprava objektu/", $akce))

@@ -6,6 +6,8 @@ require_once ("include/class.php");
 require("include/check_login.php");
 require("include/check_level.php");
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 if( !( check_level($level,40) ) ) 
 {
     header("Location: nolevelpage.php");
@@ -112,7 +114,7 @@ else
     $ico=$_POST["ico"]; 			$dic=$_POST["dic"]; 		$ucet=$_POST["ucet"];
     $splatnost=$_POST["splatnost"];		$cetnost=$_POST["cetnost"];
     $firma=$_POST["firma"];			$poznamka=$_POST["poznamka"];
-    $ucetni_index=$_POST["ucetni_index"];	$archiv=$_POST["archiv"];	
+    $ucetni_index= $_POST["ucetni_index"];	$archiv=$_POST["archiv"];	
     $fakt_skupina=$_POST["fakt_skupina"];	$splatnost=$_POST["splatnost"];
     
     $typ_smlouvy = intval($_POST["typ_smlouvy"]);
@@ -300,7 +302,7 @@ if ( $update_status =="1" )
 	$billing_freq = 0;
     }
     							   
-     $vlast_upd = array( "nick" => $nick2, "jmeno" => $jmeno, "prijmeni" => $prijmeni, "ulice" => $ulice, "mesto" => $mesto, "psc" => $psc,
+     $vlast_upd = array( "nick" => trim($nick2), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
 			 "vs" => $vs, "k_platbe" => $k_platbe, "archiv" => $archiv, "fakturacni_skupina_id" => $fakt_skupina,
 			 "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
 			 "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
@@ -322,16 +324,16 @@ if ( $update_status =="1" )
     if($billing_suspend_status == 1)
     {
 	    $vlast_upd["billing_suspend_status"] = intval($billing_suspend_status);
-	    $vlast_upd["billing_suspend_reason"] = mysql_real_escape_string($billing_suspend_reason);
+	    $vlast_upd["billing_suspend_reason"] = $conn_mysql->real_escape_string($billing_suspend_reason);
 	    
-	    list($b_s_s_den,$b_s_s_mesic,$b_s_s_rok) = split("\.",$billing_suspend_start);
+	    list($b_s_s_den,$b_s_s_mesic,$b_s_s_rok) = preg_split("/\./",$billing_suspend_start);
 	    $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
 
-	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = split("\.",$billing_suspend_stop);
+	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = preg_split("/\./",$billing_suspend_stop);
 	    $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 	    
-	    $vlast_upd["billing_suspend_start"]  = mysql_real_escape_string($billing_suspend_start);    
-	    $vlast_upd["billing_suspend_stop"]   = mysql_real_escape_string($billing_suspend_stop);
+	    $vlast_upd["billing_suspend_start"]  = $conn_mysql->real_escape_string($billing_suspend_start);    
+	    $vlast_upd["billing_suspend_stop"]   = $conn_mysql->real_escape_string($billing_suspend_stop);
     }
     else
     {
@@ -341,20 +343,26 @@ if ( $update_status =="1" )
 	    $vlast_upd["billing_suspend_stop"] = NULL;
     }
      
-    $vlast_id = array( "id_cloveka" => $update_id ); 		 	  
-    $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
+    // $vlast_id = array( "id_cloveka" => $update_id ); 		 	  
 
-     if($res){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
-     else 
+    echo "<pre>" . var_export( $vlast_upd, true ) ."</pre>";
+
+    // echo "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
+
+    // $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
+
+    $affected = DB::connection('pgsql')
+              ->table('vlastnici')
+              ->where('id_cloveka', $update_id)
+              ->update($vlast_upd);
+
+     if($affected == 1){ echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . "\n"; }
+     else
      { 
-      echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>\n";
-      echo pg_last_error($db_ok2); 
+      echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(affected: " . $affected . "\n";
       
-       $res1 = pg_get_result($db_ok2);
-         echo pg_result_error($res1); 
-      
-      echo pg_last_notice($db_ok2);
-      
+      // echo pg_last_error($db_ok2); 
+      // echo pg_last_notice($db_ok2);
      }
      
      require("vlastnici2-change-archiv-zmen-inc.php");

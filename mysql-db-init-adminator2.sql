@@ -70,7 +70,11 @@ INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysl
 (52,	'[id_stb]=> 2, diferencialni data: změna pole: <b>popis</b> z: <span class=\"az-s1\" >stb-1acb</span> na: <span class=\"az-s2\">stb-1acba</span>, změna <b>Přípojného bodu</b> z: <span class=\"az-s1\">optika - neco special</span> na: <span class=\"az-s2\">opticky nod 1</span>, změna <b>Poznámky</b> z: <span class=\"az-s1\">xxx111uacb</span> na: <span class=\"az-s2\">xxx111uacba</span>, změna <b>Tarifu</b> z: <span class=\"az-s1\">tarif iptv 1</span> na: <span class=\"az-s2\">tarif iptv 2</span>, ',	'2024-04-21 15:04:44',	'admin@admin',	1),
 (53,	'[id_stb]=> 4, diferencialni data: změna pole: <b>popis</b> z: <span class=\"az-s1\" >stb3</span> na: <span class=\"az-s2\">stb3a</span>, změna <b>Přípojného bodu</b> z: <span class=\"az-s1\">opticky nod 1</span> na: <span class=\"az-s2\">opticky nod 2</span>, změna <b>Čísla portu (ve switchi)</b> z: <span class=\"az-s1\">3</span> na: <span class=\"az-s2\">1</span>, změna <b>Poznámky</b> z: <span class=\"az-s1\">pozn 3</span> na: <span class=\"az-s2\">pozn 3a</span>, změna pole: <b>upravil_kdo</b> z: <span class=\"az-s1\" ></span> na: <span class=\"az-s2\">admin@admin</span>, ',	'2024-04-21 15:09:39',	'admin@admin',	1),
 (54,	'[id_stb]=> 2, diferencialni data: změna pole: <b>popis</b> z: <span class=\"az-s1\" >stb-1acba</span> na: <span class=\"az-s2\">stb-1acbaa</span>, změna <b>Tarifu</b> z: <span class=\"az-s1\">tarif iptv 2</span> na: <span class=\"az-s2\">tarif iptv 1</span>, změna pole: <b>upravil_kdo</b> z: <span class=\"az-s1\" >pavel</span> na: <span class=\"az-s2\">admin@admin</span>, ',	'2024-04-21 15:10:10',	'admin@admin',	1),
-(55,	'<b>akce: odrazeni objektu; </b><br> [id_komplu]=> 1 , [id_vlastnika] => 1',	'2024-04-21 16:12:44',	'admin',	1);
+(55,	'<b>akce: odrazeni objektu; </b><br> [id_komplu]=> 1 , [id_vlastnika] => 1',	'2024-04-21 16:12:44',	'admin',	1),
+(56,	'<b>akce: pridani vlastnika ; </b><br> [nick] => nick\n [vs] => 1112\n [k_platbe] => 0\n [jmeno] => x\n [prijmeni] => x\n [ulice] => x\n [mesto] => x\n [psc] => 1\n [ucetni_index] => \n [fakturacni_skupina_id] => 3\n [splatnost] => 15\n [typ_smlouvy] => 2\n [sluzba_int] => 1\n [sluzba_iptv] => 1\n [sluzba_voip] => 0\n [billing_freq] => 0\n [firma] => 1\n [mail] => x@x.x\n [icq] => 1112\n [telefon] => 111222333\n [poznamka] => xxx\n [trvani_do] => 1990-2-1\n [billing_suspend_status] => 1\n [billing_suspend_reason] => test\n [billing_suspend_start] => 1990-1-1\n',	'2024-04-21 17:07:48',	'admin',	0),
+(57,	'<b>akce: pridani vlastnika ; </b><br> [nick] => nick\n [vs] => 1112\n [k_platbe] => 0\n [jmeno] => x\n [prijmeni] => x\n [ulice] => x\n [mesto] => x\n [psc] => 1\n [ucetni_index] => \n [fakturacni_skupina_id] => 3\n [splatnost] => 15\n [typ_smlouvy] => 2\n [sluzba_int] => 1\n [sluzba_iptv] => 1\n [sluzba_voip] => 0\n [billing_freq] => 0\n [firma] => 1\n [mail] => x@x.x\n [icq] => 1112\n [telefon] => 111222333\n [poznamka] => xxx\n [trvani_do] => 1990-2-1\n [billing_suspend_status] => 1\n [billing_suspend_reason] => test\n [billing_suspend_start] => 1990-1-1\n',	'2024-04-21 17:09:05',	'admin',	0),
+(58,	'<b>akce: pridani vlastnika ; </b><br> [nick] => nick\n [vs] => 1112\n [k_platbe] => 0\n [jmeno] => x\n [prijmeni] => x\n [ulice] => x\n [mesto] => x\n [psc] => 1\n [ucetni_index] => \n [fakturacni_skupina_id] => 3\n [splatnost] => 15\n [typ_smlouvy] => 2\n [sluzba_int] => 1\n [sluzba_iptv] => 1\n [sluzba_voip] => 0\n [billing_freq] => 0\n [firma] => 1\n [mail] => x@x.x\n [icq] => 1112\n [telefon] => 111222333\n [poznamka] => xxx\n [trvani_do] => 1990-2-1\n [billing_suspend_status] => 1\n [billing_suspend_reason] => test\n [billing_suspend_start] => 1990-1-1\n',	'2024-04-21 17:10:00',	'admin',	0),
+(59,	'<b>akce: prirazeni objektu k vlastnikovi; </b><br> [id_komplu]=> 1, [id_vlastnika] => 1',	'2024-04-21 22:27:06',	'admin',	1);
 
 DROP TABLE IF EXISTS `archiv_zmen_work`;
 CREATE TABLE `archiv_zmen_work` (
@@ -92,7 +96,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713717510',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713742548',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -330,6 +334,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (135,	20,	'a2: objekty-stb'),
 (136,	10,	'objekty-stb-add'),
 (137,	20,	'stb uprava'),
+(138,	44,	'vlastnici2-add-obj'),
 (139,	10,	'objekty test'),
 (140,	30,	'vlastnici2-fs-update'),
 (141,	20,	'vlastnici2-fs-erase'),
@@ -356,7 +361,8 @@ CREATE TABLE `login_log` (
 
 INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
 (34,	'admin',	'1713601589',	'172.18.0.1'),
-(35,	'admin',	'1713715907',	'172.18.0.1');
+(35,	'admin',	'1713715907',	'172.18.0.1'),
+(36,	'admin',	'1713740348',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -606,4 +612,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-21 16:40:27
+-- 2024-04-21 23:42:38

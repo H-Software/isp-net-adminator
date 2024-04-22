@@ -1,5 +1,6 @@
 <?php
 
+require("include/main.function.shared.php");
 include ("include/config.php"); 
 include ("include/check_login.php");
 

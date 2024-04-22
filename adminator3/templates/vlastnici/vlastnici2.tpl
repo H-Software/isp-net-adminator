@@ -13,5 +13,7 @@ Vlastníci2 - Company, s.r.o.</div>
 
 <h2>building this page is in progress :)</h2>
 
+{$body}
+
 {* konecny soubor *}
 {include file="base-end.tpl"}

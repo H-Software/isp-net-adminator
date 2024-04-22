@@ -77,7 +77,7 @@ class Topology extends adminator {
         { $find="%"; }
         else
         {
-            if( !(ereg("^%.*%$",$find)) ){ $find="%".$find."%"; }
+            if( !(preg_match("/^%.*%$/",$find)) ){ $find="%".$find."%"; }
         }
         
         // "list" header

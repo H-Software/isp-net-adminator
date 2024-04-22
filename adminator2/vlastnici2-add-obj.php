@@ -55,8 +55,8 @@ include ("include/charset.php");
   {
   // tady to ulozime
   
-    if ( !( ereg('^([[:digit:]]+)$',$objekt) ) ){ echo " Špatný formát proměnné objekt"; exit; }
-    if ( !( ereg('^([[:alnum:]]+)$',$id_vlastnika) ) ){ echo " Špatný formát proměnné id_komplu"; exit; }
+    if ( !( preg_match('/^([[:digit:]]+)$/',$objekt) ) ){ echo " Špatný formát proměnné objekt"; exit; }
+    if ( !( preg_match('/^([[:alnum:]]+)$/',$id_vlastnika) ) ){ echo " Špatný formát proměnné id_komplu"; exit; }
   
     $pole3 = "<b>akce: prirazeni objektu k vlastnikovi; </b><br>";
 
@@ -73,7 +73,7 @@ include ("include/charset.php");
      
      if ( $res == 1){ $vysledek_write="1"; }
       
-     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','$nick','$vysledek_write')");
+     $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','$nick','$vysledek_write')");
       
   }
   else

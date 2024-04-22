@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Capsule\Manager as DB;
+
 // $pole3 .= "<br>";
  $pole2 .= " diferencialni data: ";
  
@@ -85,9 +87,14 @@
 	    {
 	      $pole3 .= "změna <b>Fakturační skupiny</b> z: ";
 	    
-	      $fs_old = mysql_result(mysql_query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($val)."'"), 0);
-	      
-	      $fs_new = mysql_result(mysql_query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($vlast_upd[$key])."'"), 0);
+		  $fs_ols_rs = $conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($val)."'");	      
+		  $fs_old_rs->data_seek(0);
+		  list($fs_old) = $fs_old_rs->fetch_row();
+
+		  $fs_new_rs = $conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($vlast_upd[$key])."'");
+
+		  $fs_new_rs->data_seek(0);
+		  list($fs_new) = $fs_new->fetch_row();
 	    
 	      if( isset($fs_old) )
 	      { $pole3 .= "<span class=\"az-s1\">".$fs_old."</span> "; }
@@ -126,27 +133,27 @@
 	    {
 	      $pole3 .= "změna <b>Poz. fakturace - od kdy</b> z: ";
 	    
-	      list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$val);
+	      list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = explode("-",$val);
 	      $val_cz = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 	                                                  
 	      $pole3 .= "<span class=\"az-s1\" >".$val_cz."</span> ";
             
-              list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$vlast_upd[$key]);
+           list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = explode("-",$vlast_upd[$key]);
 	      $val_cz_2 = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 	    
-              $pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
+            $pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
 	                                 
 	    }
 	    elseif($key == "billing_suspend_stop")
 	    {
 	      $pole3 .= "změna <b>Poz. fakturace - do kdy</b> z: ";
 	    
-	      list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$val);
+	      list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = explode("-",$val);
 	      $val_cz = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 	                                                  
 	      $pole3 .= "<span class=\"az-s1\" >".$val_cz."</span> ";
             
-              list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = split("-",$vlast_upd[$key]);
+              list($b_s_s_rok,$b_s_s_mesic,$b_s_s_den) = explode("-",$vlast_upd[$key]);
 	      $val_cz_2 = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 	    
               $pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
@@ -171,7 +178,20 @@
     		   
     $pole2 .= "".$pole3;
 				     
-   if ( $res == 1){ $vysledek_write="1"; }
-   $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
+   if ( $affected == 1){ $vysledek_write=1; }
+   else{ $vysledek_write = 0; }
+
+   $id = DB::table('archiv_zmen')
+   					->insertGetId([
+						'akce' => $pole2,
+						'vysledek' => $vysledek_write,
+						'provedeno_kym' => $nick
+						]);
+
+	if( $id > 0 )
+	{ echo "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n"; } 
+	else
+	{ echo "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n"; }	
+
+   // $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
  
-?>
