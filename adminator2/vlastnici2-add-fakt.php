@@ -64,13 +64,13 @@ require("include/charset.php");
   if( isset ($odeslano) ):
   //budeme ukladat ...
   
-  if( !( ereg('^([[:digit:]]+)$',$splatnost) ) )
+  if( !( preg_match('/^([[:digit:]]+)$/',$splatnost) ) )
   {  echo "<span style=\"font-size: 18px; margin: 20px; margin-top: 20px; margin-bottom: 20px; color: red;  \" >
 	Pole splatnost musí obsahovat pouze čísla! </span>"; 
     exit; 
   }
   
-  if ( !( ereg('^([[:digit:]]+)$',$cetnost) ) )
+  if ( !( preg_match('/^([[:digit:]]+)$/',$cetnost) ) )
   {  
     echo "<span style=\"font-size: 18px; margin: 20px; color: red; \">Pole četnost musí obsahovat pouze čísla! </span>"; 
     exit; 
