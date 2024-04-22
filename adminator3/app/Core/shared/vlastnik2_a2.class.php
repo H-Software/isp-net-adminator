@@ -367,7 +367,9 @@ class vlastnik2_a2
     // tady asi bude generovani fakturacnich udaju	
     if( ( $id_f > 0 ) ){
 		$fakturacni = new fakturacni;
-		$fakturacni->vypis($id_f,$id_v); 
+		$fakturacni->echo = false;
+		$fakturacni->firma = $data['firma'];
+		$output .= $fakturacni->vypis($id_f,$id_v); 
 	}
     
     $objekt = new objekt_a2(); 
