@@ -3,8 +3,8 @@
 class vlastnik2_a2
 {
    var $conn_mysql;
-   
-   var $logger;
+
+   var $container;
 
    var $level;
        
@@ -417,26 +417,26 @@ class vlastnik2_a2
     
     //stb
     if($this-> echo === false){
-		$stb = new App\Core\stb($this->conn_mysql, $this->logger);
+		$stb = new App\Core\stb($this->container);
     
 		$stb->level = $this->level;
 		
 		$pocet_stb = $stb->zjistipocetobj($id);
-	}
 
-    // if( $pocet_stb > 0 )
-    // {
-    //   $output .= "<tr>";
-    //   $output .= "<td colspan=\"1\" bgcolor=\"#c1feff\" align=\"center\" >S</td>\n";
-    //   $output .= "<td colspan=\"10\" bgcolor=\"#c1feff\" valign=\"center\" >\n";
-	   
-    //   $output .= "<table border=\"0\" width=\"100%\" >\n";
-        
-    //   $stb->vypis("1",$id);
-	    
-    //   $output .= "</table>\n";
-    //   $output .= "</td></tr>\n";
-    // }
+		if( $pocet_stb > 0 )
+		{
+			$output .= "<tr>";
+			$output .= "<td colspan=\"1\" bgcolor=\"#c1feff\" align=\"center\" >S</td>\n";
+			$output .= "<td colspan=\"10\" bgcolor=\"#c1feff\" valign=\"center\" >\n";
+			
+			$output .= "<table border=\"0\" width=\"100%\" >\n";
+				
+			$stb->vypis("1",$id);
+				
+			$output .= "</table>\n";
+			$output .= "</td></tr>\n";
+		}
+	}
     
     //tady dalsi radka asi
     /*
