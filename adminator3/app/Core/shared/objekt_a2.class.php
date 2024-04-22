@@ -237,7 +237,7 @@ class objekt_a2
     $output = "";
 
     if (!$db_ok2) {
-      $output .= "An error occurred. The connection with pqsql does not exist.\n";
+      echo "An error occurred. The connection with pqsql does not exist.\n";
       exit;
     }
 
