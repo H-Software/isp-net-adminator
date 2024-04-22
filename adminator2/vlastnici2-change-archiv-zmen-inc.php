@@ -183,12 +183,17 @@ use Illuminate\Database\Capsule\Manager as DB;
 	$vysledek_write = "0";
    }
 
-   $item = DB::table('archiv_zmen')
+   $res = DB::table('archiv_zmen')
    					->insert([
 						'akce' => $pole2,
 						'vysledek' => $vysledek_write,
 						'provedeno_kym' => $nick
 						]);
+
+	if( is_object($res) )
+	{ echo "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n"; } 
+	else
+	{ echo "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n"; }	
 
    // $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
  
