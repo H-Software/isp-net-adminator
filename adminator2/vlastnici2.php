@@ -326,7 +326,6 @@ require_once("include/charset.php");
 //	  $listovani->listInterval();
 	  $listovani->listPart();
     
-	  // TODO: fix
 	  $vlastnik->vypis($sql,$co,$dotaz_final);
 									 
 	  $vlastnik->vypis_tab(2);
