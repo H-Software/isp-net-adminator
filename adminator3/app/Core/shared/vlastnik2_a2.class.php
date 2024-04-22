@@ -36,8 +36,17 @@ class vlastnik2_a2
    function vypis ($sql,$co,$dotaz_final)
    {
     // co - co hledat, 1- podle dns, 2-podle ip		
-	
+	$db_ok2 = $this->conn_pgsql;
+
 	$output = "";
+
+	if (!$db_ok2) {
+		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($db_ok2) . ")");
+	}
+
+	if (!$this->conn_mysql) {
+		die("An error occurred. The connection with mysql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_mysql) . ")");
+	}
 
 	// echo "<pre>" . var_export($dotaz_final, true) . "</pre>";
 
