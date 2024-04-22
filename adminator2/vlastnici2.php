@@ -170,6 +170,10 @@ require_once("include/charset.php");
      
 <?php
 
+	if (!$db_ok2) {
+		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($db_ok2) . ")");
+	}
+
     //prvne vytvorime instanci objektu
      $vlastnik = new vlastnik2_a2;
      $vlastnik->level = $level;
