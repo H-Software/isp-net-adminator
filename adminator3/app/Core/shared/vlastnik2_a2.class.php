@@ -4,7 +4,9 @@ class vlastnik2_a2
 {
    var $conn_mysql;
 
-   var $logger;
+   var $conn_pgsql;
+
+   var $container;
 
    var $level;
        
@@ -33,19 +35,27 @@ class vlastnik2_a2
    // $dotaz_final - for pq_query
    function vypis ($sql,$co,$dotaz_final)
    {
-    // co - co hledat, 1- podle dns, 2-podle ip		
-	
+    // co - co hledat, 1- podle dns, 2-podle ip
+
 	$output = "";
+
+	if (!$this->conn_pgsql) {
+		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_pgsql) . ")");
+	}
+
+	if (!$this->conn_mysql) {
+		die("An error occurred. The connection with mysql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_mysql) . ")");
+	}
 
 	// echo "<pre>" . var_export($dotaz_final, true) . "</pre>";
 
-    $dotaz=pg_query($dotaz_final);
+    $dotaz=pg_query($this->conn_pgsql, $dotaz_final);
 
 	if($dotaz !== false){
     	$radku=pg_num_rows($dotaz);
 	}
 	else{
-		$output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>";
+		$output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($this->conn_pgsql). "</div>";
 	}
 
     if($radku==0) $output .= "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
@@ -374,14 +384,17 @@ class vlastnik2_a2
 	}
     
     $objekt = new objekt_a2(); 
-	$objekt->echo = $this->echo;
+	$objekt->echo = false;
     $objekt->conn_mysql = $this->conn_mysql;
-	
+	$objekt->conn_pqsql = $this->conn_pgsql;
+
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
     $pocet_fiber_obj = $objekt->zjistipocet(2,$id);
     
-    if( $pocet_wifi_obj > 0 or $pocet_fiber_obj == 0 )
+	// echo "<pre>pocty objs: " . $pocet_wifi_obj . " a " . $pocet_fiber_obj . "</pre>";
+
+    if( $pocet_wifi_obj > 0 )
     {
      //objekty wifi
      $co="3";
@@ -391,7 +404,7 @@ class vlastnik2_a2
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       $output .= "<table border=\"0\" width=\"100%\" >";
         
-      $objekt->vypis($sql,$co,$id);
+      $output .= $objekt->vypis($sql,$co,$id);
 	    
       $output .= "</table>";
      $output .= "</td></tr>";
@@ -409,33 +422,34 @@ class vlastnik2_a2
 	   
       $output .= "<table border=\"0\" width=\"100%\" >";
         
-      $objekt->vypis($sql, $co, $id);
+      $output .= $objekt->vypis($sql, $co, $id);
 	    
       $output .= "</table>";
      $output .= "</td></tr>";
     }
     
     //stb
+    if($this-> echo === false){
+		$stb = new App\Core\stb($this->container);
     
-    // $stb = new App\Core\stb($this->conn_mysql, $this->logger);
-    
-    // $stb->level = $this->level;
-    
-    // $pocet_stb = $stb->zjistipocetobj($id);
-    
-    // if( $pocet_stb > 0 )
-    // {
-    //   $output .= "<tr>";
-    //   $output .= "<td colspan=\"1\" bgcolor=\"#c1feff\" align=\"center\" >S</td>\n";
-    //   $output .= "<td colspan=\"10\" bgcolor=\"#c1feff\" valign=\"center\" >\n";
-	   
-    //   $output .= "<table border=\"0\" width=\"100%\" >\n";
-        
-    //   $stb->vypis("1",$id);
-	    
-    //   $output .= "</table>\n";
-    //   $output .= "</td></tr>\n";
-    // }
+		$stb->level = $this->level;
+		
+		$pocet_stb = $stb->zjistipocetobj($id);
+
+		if( $pocet_stb > 0 )
+		{
+			$output .= "<tr>";
+			$output .= "<td colspan=\"1\" bgcolor=\"#c1feff\" align=\"center\" >S</td>\n";
+			$output .= "<td colspan=\"10\" bgcolor=\"#c1feff\" valign=\"center\" >\n";
+			
+			$output .= "<table border=\"0\" width=\"100%\" >\n";
+				
+			$output .= $stb->vypis("1",$id);
+				
+			$output .= "</table>\n";
+			$output .= "</td></tr>\n";
+		}
+	}
     
     //tady dalsi radka asi
     /*

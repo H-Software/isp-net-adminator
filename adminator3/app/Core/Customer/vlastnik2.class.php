@@ -7,6 +7,8 @@ class vlastnik2 {
 
 	var $logger;
 
+	var $container; // for calling stb class over vlastnik2_a2 class
+
 	var $listItemsContent;
 
 	var $listMode; // original local variable "co"
@@ -18,6 +20,7 @@ class vlastnik2 {
 	var $dotaz_source;
 
 	function __construct(ContainerInterface $container) {
+		$this->container = $container;
 		$this->conn_mysql = $container->connMysql;
 		$this->logger = $container->logger;
 	}
@@ -123,6 +126,8 @@ class vlastnik2 {
 
 		$vlastnik = new vlastnik2_a2;
 		$vlastnik->conn_mysql = $this->conn_mysql;
+		$vlastnik->conn_pgsql = $this->container->connPgsql;
+		$vlastnik->container = $this->container;
 		$vlastnik->echo = false;
 
 		// without find search we dont do anything

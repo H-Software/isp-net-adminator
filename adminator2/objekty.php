@@ -263,11 +263,7 @@ include ("include/charset.php");
    
   if( $mod_vypisu == 1 )
   { 
-    try {
-      $dotaz_f = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '0' ");
-    } catch (Exception $e) {
-      die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-    }
+    $dotaz_f = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '0' ");
     
     $i = 0;
     
@@ -344,6 +340,8 @@ include ("include/charset.php");
   
   $objekt = new objekt_a2;
   $objekt->conn_mysql = $conn_mysql;
+  $objekt->conn_pqsql = $db_ok2;
+  
   $objekt->vypis($sql,$co,0,$dotaz_final);
      
   $objekt->vypis_tab(2);  

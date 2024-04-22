@@ -2,7 +2,6 @@
 
 require("include/main.function.shared.php");
 require("include/config.php"); 
-require_once ("include/class.php"); 
 require("include/check_login.php");
 require("include/check_level.php");
 
@@ -45,7 +44,16 @@ require_once("include/charset.php");
   <tr>
   <td colspan="2">
   <!-- zacatek vlastniho obsahu -->
-  
+  <?php
+	if (!$db_ok2) {
+		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($db_ok2) . ")");
+	}
+
+	if (!$conn_mysql) {
+		die("An error occurred. The connection with mysql does not exist.\n <br> (type of handler variable: " . gettype($conn_mysql) . ")");
+	}
+  ?>
+
    <form method="GET" action="">
       
    <div> <hr width="250px" align="left" ></div>
@@ -174,6 +182,7 @@ require_once("include/charset.php");
      $vlastnik = new vlastnik2_a2;
      $vlastnik->level = $level;
 	 $vlastnik->conn_mysql = $conn_mysql;
+	 $vlastnik->conn_pgsql = $db_ok2;
 
     if( check_level($level,40) ) { echo '<a href="vlastnici2-change.php?firma_add=1">Přidání vlastníka</a>'; }
     else 
