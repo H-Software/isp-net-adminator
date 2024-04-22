@@ -1,5 +1,6 @@
 <?php
 
+require("include/main.function.shared.php");
 include ("include/config.php"); 
 include ("include/check_login.php");
 
@@ -9,13 +10,13 @@ if ( !( check_level($level,67) ) )
 {
 // neni level
 
-$stranka='nolevelpage.php';
- header("Location: ".$stranka);
- 
-   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-      Exit;
+  $stranka='nolevelpage.php';
+  header("Location: ".$stranka);
+
+  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
+  exit;
       
-        }
+}
 	
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
