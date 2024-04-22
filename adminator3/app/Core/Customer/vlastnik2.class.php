@@ -128,6 +128,7 @@ class vlastnik2 {
 		$vlastnik->conn_mysql = $this->conn_mysql;
 		$vlastnik->conn_pgsql = $this->container->connPgsql;
 		$vlastnik->container = $this->container;
+		$vlastnik->logger = $this->logger;
 		$vlastnik->echo = false;
 
 		// without find search we dont do anything
