@@ -369,7 +369,13 @@ class vlastnik2_a2
 		$fakturacni = new fakturacni;
 		$fakturacni->echo = $this->echo;
 		$fakturacni->firma = $data['firma'];
-		$output .= $fakturacni->vypis($id_f,$id_v); 
+
+		if($this->echo === true){
+			$fakturacni->vypis($id_f,$id_v); 
+		}
+		else{
+			$output .= $fakturacni->vypis($id_f,$id_v); 
+		}
 	}
     
     $objekt = new objekt_a2(); 

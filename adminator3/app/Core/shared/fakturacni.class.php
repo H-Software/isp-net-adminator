@@ -3,14 +3,14 @@
 class fakturacni{
 	var $echo = true;
 	var $firma;
-	
+
     function vypis($id_f,$id_v)
     {    
 		$output = "";
 
-		$dotaz=pg_query( "SELECT * FROM fakturacni where id='$id_f' ");
+		$dotaz=pg_query( "SELECT * FROM fakturacni where id='" . intval($id_f). "'");
 		$dotaz_radku=pg_num_rows($dotaz);
-			
+		
 		if ( $dotaz_radku==0 )
 		{
 			$output .= "<tr><td> CHYBA! Fakturacni udaje nenalezeny. debug: id=$id_f </td></tr>";

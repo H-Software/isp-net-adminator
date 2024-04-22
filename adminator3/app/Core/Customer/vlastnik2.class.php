@@ -130,7 +130,7 @@ class vlastnik2 {
 			return $this->listItemsContent;
 		}
 
-		$this->listItemsContent .= '<div class="vlastnici2-table">';
+		$this->listItemsContent .= '<div class="vlastnici2-table" style="padding-right: 5px; ">';
 		$this->listItemsContent .= $vlastnik->vypis_tab(1);
 
 		$poradek="find=".$find."&find_id=".$this->listFindId."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".
