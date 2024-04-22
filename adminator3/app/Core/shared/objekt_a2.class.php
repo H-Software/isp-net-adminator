@@ -215,7 +215,7 @@ class objekt_a2
  
  public function vypis($sql,$co,$id,$dotaz_final = "")
  {
-   global $db_ok2;
+   global $db_ok2, $conn_mysql;
     
 	if (!$db_ok2) {
 		echo "An error occurred. The connection with pqsql does not exist.\n";
@@ -228,7 +228,7 @@ class objekt_a2
     { 
       //prvne vyberem wifi tarify...
 	  try {
-		$dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
+		$dotaz_f = $conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
 	  } catch (Exception $e) {
 			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 	  }

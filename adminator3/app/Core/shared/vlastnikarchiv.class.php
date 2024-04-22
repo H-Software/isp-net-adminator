@@ -107,9 +107,8 @@ class vlastnikarchiv
 	
 	if ( ( $id_f > 0 ) )
 	{
-	
-	     fakturacni::vypis($id_f,$id_v);
-	
+		 $fakturacni = new fakturacni;
+	     $fakturacni->vypis($id_f,$id_v);
 	 }
 	
 	// $sql="%";
@@ -224,7 +223,7 @@ class vlastnikarchiv
 						    
 	    echo "<td> ";
 	    //tisk smlouvy
-	    echo "<form method=\"POST\" action=\"https://tisk.simelon.net/smlouva-pdf.php\" >";
+	    echo "<form method=\"POST\" action=\"/smlouva-pdf.php\" >";
 										
 	    echo "<input type=\"hidden\" name=\"ec\" value=\"".$data["vs"]."\" >";
 	    echo "<input type=\"hidden\" name=\"jmeno\" value=\"".$data["jmeno"]." ".$data["prijmeni"]."\" >";
