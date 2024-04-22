@@ -87,11 +87,11 @@ include ("include/charset.php");
     // $dotaz=pg_query("SELECT * FROM platby 
 	// 		WHERE ( id_cloveka='".intval($id_vlastnika)."' and zaplaceno_za LIKE '".intval($rok)."%') ");
 	
-	$platby = DB::connection('pgsql')
-				->table('platby')
-				->where('id_cloveka', $id_vlastnika)
-				->where('zaplaceno_za', 'LIKE', intval($rok)."%")
-				->get();
+	// $platby = DB::connection('pgsql')
+	// 			->table('platby')
+	// 			->where('id_cloveka', $id_vlastnika)
+	// 			->where('zaplaceno_za', 'LIKE', intval($rok)."%")
+	// 			->get();
 
     // $dotaz_radku=pg_num_rows($dotaz);
     
@@ -280,6 +280,12 @@ include ("include/charset.php");
 	
 	 $mesic_long = "0".$i;
 	 
+	//  $platby = DB::connection('pgsql')
+	//  ->table('platby')
+	//  ->where('id_cloveka', $id_vlastnika)
+	//  ->where('zaplaceno_za', 'LIKE', $pozadovane_obdobi)
+	//  ->get();
+
 	$dotaz_platby=pg_query("SELECT * FROM platby WHERE ( id_cloveka='$id_vlastnika' and zaplaceno_za LIKE '$pozadovane_obdobi') ");
 	$dotaz_platby_radku=pg_num_rows($dotaz_platby);
 
