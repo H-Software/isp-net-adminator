@@ -148,15 +148,12 @@ $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
 $app->add($container->csrf);
 
-// v::with('App\\Validation\\Rules\\');
-
 $container['AuthController'] = function($container) {
 	return new \App\Controllers\Auth\AuthController($container);
 };
 
 $container['HomeController'] = function($container) {
-    global $conn_mysql, $smarty;
-	return new \App\Controllers\HomeController($container,$conn_mysql, $smarty);
+	return new \App\Controllers\HomeController($container);
 };
 
 $container['aboutController'] = function ($c) {
@@ -191,6 +188,5 @@ $container['vlastniciController'] = function ($c) {
     return new \App\Controllers\vlastniciController($c);
 };
 $container['workController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\workController($c,$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\workController($c);
 };
