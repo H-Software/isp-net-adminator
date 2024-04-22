@@ -63,7 +63,15 @@
   </div>
  
   {* second line *}
-  <div style="padding-top: 4px; " class="vlastnici2-selectors-line" >
+  <div style="padding-top: 4px; border-bottom: 1px gray solid; width: 20%; "></div>
+
+  <div style="padding-top: 4px; width: 100%;" class="vlastnici2-selectors-line" >
+
+    <span style="padding-right: 20px;" ><input type="submit" value="NAJDI" name="najdi"> </span>
+    <span style="" ><label>Hledání : </label><input type="text" name="find" value="{$form_search_value}" ></span>
   </div>
+
+  {* oddelovaci cara *}
+  <div style="border-bottom: 2px solid black; padding-top: 5px; margin-bottom: 5px; height: 2px; width: 20%; " ></div>
 
 </form>
