@@ -117,7 +117,7 @@ require("include/charset.php");
     
   //$pole .= " <br> akci provedl: ".$nick." vysledek akce dle databáze: vlastniku: ".$dotaz_v_r." , fakturacni: ".$f_add_r.", datum akce: ".$datum;
        
-  if( ( ($f_add_r == 1) and ($dotaz_v_r == 1) ) ){ $vysledek_write="1"; }
+  if( ( ($f_add_r == 1) and ($dotaz_v_r == 1) ) ){ $vysledek_write=1; }
        
   $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
 
