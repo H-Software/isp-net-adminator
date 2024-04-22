@@ -2,7 +2,6 @@
 
 require("include/main.function.shared.php");
 require("include/config.php"); 
-require_once ("include/class.php"); 
 require("include/check_login.php");
 require("include/check_level.php");
 
@@ -322,6 +321,7 @@ require_once("include/charset.php");
 //	  $listovani->listInterval();
 	  $listovani->listPart();
     
+	  // TODO: fix
 	  $vlastnik->vypis($sql,$co,$dotaz_final);
 									 
 	  $vlastnik->vypis_tab(2);
