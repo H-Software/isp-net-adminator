@@ -227,7 +227,7 @@ class objekt_a2
     $output = "";
 
     if (!$db_ok2) {
-      echo "An error occurred. The connection with pqsql does not exist.\n";
+      $output .= "An error occurred. The connection with pqsql does not exist.\n";
       exit;
     }
 
@@ -293,14 +293,14 @@ else{
   
   if( $co == 3 or $co == 4 )
   {
-    echo "<tr><td colspan=\"9\" >";
-    echo "<span style=\"color: #555555; \">Žádný objekt není přiřazen. </span></td></tr>";
+    $output .= "<tr><td colspan=\"9\" >";
+    $output .= "<span style=\"color: #555555; \">Žádný objekt není přiřazen. </span></td></tr>";
   }
   else
   {
-   echo "<tr><td colspan=\"8\" ><span style=\"color: red; \">Nenalezeny žádné odpovídající data dle hledaného \"".htmlspecialchars($sql)."\" ";
-   // echo " (dotaz: ".$dotaz_final.") ";
-   echo "</td></tr>";
+   $output .= "<tr><td colspan=\"8\" ><span style=\"color: red; \">Nenalezeny žádné odpovídající data dle hledaného \"".htmlspecialchars($sql)."\" ";
+   // $output .= " (dotaz: ".$dotaz_final.") ";
+   $output .= "</td></tr>";
   }
  
  }
@@ -309,8 +309,8 @@ else{
  
    while (  $data=pg_fetch_array($dotaz) ) 
    {
-    // echo $data[sloupec1]." ".$data[sloupec2]; 
-    // echo "<br />";
+    // $output .= $data[sloupec1]." ".$data[sloupec2]; 
+    // $output .= "<br />";
    
 //    if( $data["id_tridy"] > 0 ){ $garant=1; }
     if( $data["verejna"] <> 99 ){ $verejna=1; }
@@ -326,8 +326,8 @@ else{
    }
 */
          
-   //zacatek radny a prvni bunka
-    echo "\n <tr>"."<td class=\"tab-objekty2\">".$data["dns_jmeno"]."</td> \n\n";
+   //zacatek rady a prvni bunka
+    $output .= "\n <tr>"."<td class=\"tab-objekty2\">".$data["dns_jmeno"]."</td> \n\n";
 
      $pridano=$data["pridano"];
 
@@ -335,45 +335,45 @@ else{
     if ($verejna==1)
     { 
 	if ( $data["vip_snat"] == 1)
-	{ echo "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"orange\" >".$data["ip"]." </td> \n"; }
+	{ $output .= "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"orange\" >".$data["ip"]." </td> \n"; }
 	elseif( $data["tunnelling_ip"] == 1)
-	{ echo "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"#00CC33\" >".$data["ip"]." </td> \n"; }
+	{ $output .= "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"#00CC33\" >".$data["ip"]." </td> \n"; }
 	else
-	{ echo "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"#FFFF99\" >".$data["ip"]." </td> \n"; }
+	{ $output .= "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"#FFFF99\" >".$data["ip"]." </td> \n"; }
     }
     else
-    { echo "<td colspan=\"2\" class=\"tab-objekty2\">".$data["ip"]."</td> \n"; }
+    { $output .= "<td colspan=\"2\" class=\"tab-objekty2\">".$data["ip"]."</td> \n"; }
     
     // druha bunka - pozn
-    echo "<td class=\"tab-objekty2\" align=\"center\" ><span class=\"pozn\"> <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
-    echo " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." , Vytvořeno: ".$pridano." ');\" ></span></td> \n";
+    $output .= "<td class=\"tab-objekty2\" align=\"center\" ><span class=\"pozn\"> <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
+    $output .= " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." , Vytvořeno: ".$pridano." ');\" ></span></td> \n";
 	       
     // 4-ta bunka - mac
-    echo "<td class=\"tab-objekty2\">".$data["mac"]."</td> \n";
+    $output .= "<td class=\"tab-objekty2\">".$data["mac"]."</td> \n";
     	       
     // 5-ta typ
-    if ( $data["typ"] == 1 ){ echo "<td class=\"tab-objekty\">"."daně"."</td> \n"; }
-    elseif ( $data["typ"] ==2 ){ echo "<td class=\"tab-objekty\" bgcolor=\"#008000\" ><font color=\"#FFFFFF\">"." free "."</font></td> \n"; }
-    elseif ( $data["typ"] ==3 ){ echo "<td class=\"tab-objekty\" bgcolor=\"yellow\" >"." ap "."</td> \n"; }
-    else { echo "<td class=\"tab-objekty\" >Error </td> \n"; }
+    if ( $data["typ"] == 1 ){ $output .= "<td class=\"tab-objekty\">"."daně"."</td> \n"; }
+    elseif ( $data["typ"] ==2 ){ $output .= "<td class=\"tab-objekty\" bgcolor=\"#008000\" ><font color=\"#FFFFFF\">"." free "."</font></td> \n"; }
+    elseif ( $data["typ"] ==3 ){ $output .= "<td class=\"tab-objekty\" bgcolor=\"yellow\" >"." ap "."</td> \n"; }
+    else { $output .= "<td class=\"tab-objekty\" >Error </td> \n"; }
     
     // rra - client ip -- CISLO portu
-    echo "<td class=\"tab-objekty2\" align=\"center\" ><span style=\"\"> ";
+    $output .= "<td class=\"tab-objekty2\" align=\"center\" ><span style=\"\"> ";
     
     global $mod_vypisu; 
     
     if( $mod_vypisu == 2)
     {
-     echo "".$data["port_id"]."";
+     $output .= "".$data["port_id"]."";
     }
     else
     { 
      if( ( strlen($data["client_ap_ip"]) < 1 ) )
-     { echo "&nbsp;"; }
-     else { echo $data["client_ap_ip"]; }
+     { $output .= "&nbsp;"; }
+     else { $output .= $data["client_ap_ip"]; }
     }
     
-    echo "</span></td> \n";
+    $output .= "</span></td> \n";
 
     //oprava a mazani
     global $update_povolen;
@@ -385,7 +385,7 @@ else{
       $dotaz_update = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
       $rs_update = $dotaz_update->mysql_num_rows;
               
-      if( $rs_update <> 1 ){ echo "Chyba! Nelze specifikovat tarif!"; }
+      if( $rs_update <> 1 ){ $output .= "Chyba! Nelze specifikovat tarif!"; }
       
       while($data_update = $dotaz_update->fetch_array())
       { 
@@ -397,32 +397,32 @@ else{
      
     // 6-ta update
     if ( !( $update_povolen =="true") )
-    { echo "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Upravit</td> \n"; }
+    { $output .= "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Upravit</td> \n"; }
     else
     {
-      echo "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"objekty-add.php\" >";
-      echo "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_komplu"]."\" >";
+      $output .= "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"objekty-add.php\" >";
+      $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_komplu"]."\" >";
       
       
-      echo "<input type=\"hidden\" name=\"mod_objektu\" value=\"".$update_mod_vypisu."\" >";
+      $output .= "<input type=\"hidden\" name=\"mod_objektu\" value=\"".$update_mod_vypisu."\" >";
       
-      echo "<input class=\"\" type=\"submit\" value=\"update\" >";
+      $output .= "<input class=\"\" type=\"submit\" value=\"update\" >";
         
-      echo "</td></form> \n";
+      $output .= "</td></form> \n";
     }
      
     // 7-ma smazat
     global $mazani_povoleno;
      
     if ( !( $mazani_povoleno =="true") )
-    { echo "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Smazat</td>"; }
+    { $output .= "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Smazat</td>"; }
     else
     { 
-     echo "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"objekty-erase.php\" >";
-     echo "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_komplu"]."\" >";
-     echo "<input class=\"\" type=\"submit\" value=\"smazat\" >";
+     $output .= "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"objekty-erase.php\" >";
+     $output .= "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_komplu"]."\" >";
+     $output .= "<input class=\"\" type=\"submit\" value=\"smazat\" >";
     
-     echo "</td> </form> \n";   
+     $output .= "</td> </form> \n";   
     }
      
     // 8-ma typ objektu :)
@@ -432,10 +432,10 @@ else{
     global $garant_akce;
     
     // generovani tridy    
-    if( $data["typ"] == 3){ echo ""; }
+    if( $data["typ"] == 3){ $output .= ""; }
     else 
     { 
-      {	echo "<td class=\"tab-objekty2\"><font color=\"red\">"." peasant "."</font></td> \n"; }      
+      {	$output .= "<td class=\"tab-objekty2\"><font color=\"red\">"." peasant "."</font></td> \n"; }      
     }
 
     // prirava promennych pro tresty a odmeny
@@ -454,24 +454,24 @@ else{
 
     //tresty a odmeny - 6 bunek
     if( $data["typ"] == 3 )
-    { echo "<td class=\"tab-objekty2\" colspan=\"5\" bgcolor=\"yellow\" align=\"center\"> ap-čko jaxvine </td> \n"; }
+    { $output .= "<td class=\"tab-objekty2\" colspan=\"5\" bgcolor=\"yellow\" align=\"center\"> ap-čko jaxvine </td> \n"; }
     else 
     { 
-      echo "<td class=\"tab-objekty2\" >".$dov_net."</td>";
+      $output .= "<td class=\"tab-objekty2\" >".$dov_net."</td>";
      
       //test objetktu
-      echo "<td class=\"tab-objekty2\" >";
+      $output .= "<td class=\"tab-objekty2\" >";
     
       if( $update_mod_vypisu == 2 )    
       {
-	echo "<a href=\"objekty-test.php?id_objektu=".$data["id_komplu"]."\" >test</a>";
+	$output .= "<a href=\"objekty-test.php?id_objektu=".$data["id_komplu"]."\" >test</a>";
       }
       else
-      { echo "<br>"; }
+      { $output .= "<br>"; }
       
-      echo "</td> \n";   
+      $output .= "</td> \n";   
       //zde tarif 2 gen.
-      echo "<td class=\"tab-objekty2\" >";
+      $output .= "<td class=\"tab-objekty2\" >";
        $id_tarifu = $data["id_tarifu"];
        
        //dodelat klikatko pro sc
@@ -480,57 +480,57 @@ else{
        $tarif_f = $this->conn_mysql->query("SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
        $tarif_f_r = $tarif_f->num_rows;
               
-       if( $tarif_f_r <> 1){ echo "<span style=\"font-weight: bold; color: red;\" >E</span>"; }
+       if( $tarif_f_r <> 1){ $output .= "<span style=\"font-weight: bold; color: red;\" >E</span>"; }
        else
        {
         while($data_f = $tarif_f->fetch_array())
 	{ 
-	    echo "<span style=\"color: ".$data_f["barva"]."; \" >";
-	    echo "<a href=\"admin-tarify.php?id_tarifu=".$data_f["id_tarifu"]."\" >".$data_f["zkratka_tarifu"]."</a>";
+	    $output .= "<span style=\"color: ".$data_f["barva"]."; \" >";
+	    $output .= "<a href=\"admin-tarify.php?id_tarifu=".$data_f["id_tarifu"]."\" >".$data_f["zkratka_tarifu"]."</a>";
 	
-	    echo "</span>\n";
+	    $output .= "</span>\n";
         }	 
        }
-      echo "</td>\n"; 
+      $output .= "</td>\n"; 
       
-      echo "<td class=\"tab-objekty2\" colspan=\"2\" >".$sikana_status_s."</td>\n";
+      $output .= "<td class=\"tab-objekty2\" colspan=\"2\" >".$sikana_status_s."</td>\n";
     }
     
-    echo "</tr>\n<tr>\n";
+    $output .= "</tr>\n<tr>\n";
     
     // tady uz asi druhej radek :) 
-    echo "<td class=\"tab-objekty\" colspan=\"2\" >"; 
+    $output .= "<td class=\"tab-objekty\" colspan=\"2\" >"; 
     
     $id_nodu=$data["id_nodu"];
           
     $vysledek_bod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id='".intval($id_nodu)."' ");
     $radku_bod = $vysledek_bod->num_rows;
 				      
-     if($radku_bod==0) echo "<span style=\"color: gray; \">přípojný bod nelze zjistit </span>";
+     if($radku_bod==0) $output .= "<span style=\"color: gray; \">přípojný bod nelze zjistit </span>";
      else
      {
        while ($zaznam_bod=$vysledek_bod->fetch_array() )
        { 
         //pouze text 
-	//echo "<span class=\"objekty-2radka\">NOD: ".$zaznam_bod["jmeno"]."</span> "; 
+	//$output .= "<span class=\"objekty-2radka\">NOD: ".$zaznam_bod["jmeno"]."</span> "; 
 
-	echo "<span class=\"objekty-2radka objekty-odkaz\">NOD: ".
+	$output .= "<span class=\"objekty-2radka objekty-odkaz\">NOD: ".
 	     "<a href=\"topology-nod-list.php?find=".$zaznam_bod["jmeno"]."\" >".
 	     $zaznam_bod["jmeno"]."</a></span> "; 
        }
      }
     
-    echo "</td>";
+    $output .= "</td>";
     
      // sem historii
-    echo "<td class=\"tab-objekty\" ><span class=\"objekty-2radka\" style=\"\" > H: ";
-    echo "<a href=\"archiv-zmen.php?id=".$id."\" >".$id."</a>";
-    echo " </span>";
+    $output .= "<td class=\"tab-objekty\" ><span class=\"objekty-2radka\" style=\"\" > H: ";
+    $output .= "<a href=\"archiv-zmen.php?id=".$id."\" >".$id."</a>";
+    $output .= " </span>";
 	
-    echo "</td> \n";
+    $output .= "</td> \n";
 	
     // id vlastnika
-    echo "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" > \n";
+    $output .= "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" > \n";
      
     $id_cloveka=$data["id_cloveka"];
     
@@ -540,42 +540,42 @@ else{
     { $firma_vlastnik=$data_vlastnik["firma"]; $archiv_vlastnik=$data_vlastnik["archiv"]; }
     
     if ( $archiv_vlastnik == 1)
-    { echo "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n"; }
+    { $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n"; }
     else
-    { echo "V: <a href=\"vlastnici2.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n"; }    		
+    { $output .= "V: <a href=\"vlastnici2.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n"; }    		
     
     if( $update_mod_vypisu == 2 )
-    { echo "<td class=\"tab-objekty\" colspan=\"3\" > <br></td>";  }
+    { $output .= "<td class=\"tab-objekty\" colspan=\"3\" > <br></td>";  }
     else
     {
      if ( !($co==3 ) )
      {
-      echo "<td class=\"tab-objekty\" colspan=\"2\" > <span class=\"objekty-2radka\" >";
-       //if( (strlen($data["rb_mac"]) > 0) ){ echo $data["rb_mac"]; }
-       echo "&nbsp;";
-      echo "</span></td> \n";
+      $output .= "<td class=\"tab-objekty\" colspan=\"2\" > <span class=\"objekty-2radka\" >";
+       //if( (strlen($data["rb_mac"]) > 0) ){ $output .= $data["rb_mac"]; }
+       $output .= "&nbsp;";
+      $output .= "</span></td> \n";
     
-     //echo "<td><br>b</td>";
+     //$output .= "<td><br>b</td>";
     
-      echo "<td class=\"tab-objekty\" colspan=\"1\" ><span class=\"objekty-2radka\" >";
-       //if( (strlen($data["rb_ip"]) > 0) ){ echo $data["rb_ip"]; }
-       echo "&nbsp;";
-      echo "</span></td> \n";
+      $output .= "<td class=\"tab-objekty\" colspan=\"1\" ><span class=\"objekty-2radka\" >";
+       //if( (strlen($data["rb_ip"]) > 0) ){ $output .= $data["rb_ip"]; }
+       $output .= "&nbsp;";
+      $output .= "</span></td> \n";
      }
     
     }
     // kdo pridal a kdo naposledy upravil 
-    echo "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
-       if( (strlen($data["pridal"]) > 0) ){ echo $data["pridal"]; }
-       else{ echo "<span style=\"color: #CC3366;\" >nezadáno</span>"; }
-     echo "</span></td> \n";
+    $output .= "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
+       if( (strlen($data["pridal"]) > 0) ){ $output .= $data["pridal"]; }
+       else{ $output .= "<span style=\"color: #CC3366;\" >nezadáno</span>"; }
+     $output .= "</span></td> \n";
      
-    echo "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
-       if( (strlen($data["upravil"]) > 0) ){ echo $data["upravil"]; }
-       else{ echo "<span style=\"color: #CC3366;\" >nezadáno</span>"; }
-    echo "</span></td> \n";
+    $output .= "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
+       if( (strlen($data["upravil"]) > 0) ){ $output .= $data["upravil"]; }
+       else{ $output .= "<span style=\"color: #CC3366;\" >nezadáno</span>"; }
+    $output .= "</span></td> \n";
     
-    echo "<td class=\"tab-objekty\" >&nbsp;</td> \n";
+    $output .= "<td class=\"tab-objekty\" >&nbsp;</td> \n";
     
     // kdy se objekty pridal
     //prvne to orezem
@@ -583,7 +583,7 @@ else{
     $orezano = explode(':', $orez); 
     $pridano_orez=$orezano[0].":".$orezano[1];
     
-    echo "<td class=\"tab-objekty\" colspan=\"3\" ><span class=\"objekty-2radka\" >".$pridano_orez."</span></td>
+    $output .= "<td class=\"tab-objekty\" colspan=\"3\" ><span class=\"objekty-2radka\" >".$pridano_orez."</span></td>
     <td class=\"tab-objekty\" >
      <form method=\"POST\" action=\"/adminator3/print/reg-form-pdf.php\" >
         <input type=\"hidden\" name=\"id_objektu\" value=\"".intval($data["id_komplu"])."\" >
@@ -599,11 +599,11 @@ else{
     
      if ( $odendani_povoleno )
      {
-      echo "<td colspan=\"4\" ><a href=\"vlastnici2-obj-erase.php?id_komplu=".$data["id_komplu"]."\">Odendat</a> </td> \n";
+      $output .= "<td colspan=\"4\" ><a href=\"vlastnici2-obj-erase.php?id_komplu=".$data["id_komplu"]."\">Odendat</a> </td> \n";
      }
      else
      {
-	echo "<td colspan=\"4\" style=\"font-size: 10px; font-family: arial; color: gray; \">
+	$output .= "<td colspan=\"4\" style=\"font-size: 10px; font-family: arial; color: gray; \">
 	<div style=\"text-align: center; \">odendat</div> </td> \n"; 
      }
     
@@ -613,18 +613,18 @@ else{
 
      if ( $odendani_povoleno )
      {
-      echo "<td colspan=\"\" ><a href=\"vlastnici2-obj-erase.php?id_komplu=".$data["id_komplu"]."\">Odendat</a> </td> \n";
+      $output .= "<td colspan=\"\" ><a href=\"vlastnici2-obj-erase.php?id_komplu=".$data["id_komplu"]."\">Odendat</a> </td> \n";
      }
      else
      {
-	echo "<td colspan=\"\" style=\"font-size: 10px; font-family: arial; color: gray; \">
+	$output .= "<td colspan=\"\" style=\"font-size: 10px; font-family: arial; color: gray; \">
 	<div style=\"text-align: center; \">odendat</div> </td> \n"; 
      }
     }
      
-    echo "</span>";
+    $output .= "</span>";
     // konec druhyho radku
-     echo "</tr> \n";
+     $output .= "</tr> \n";
      
      $verejna=0; 
      $garant=0;
