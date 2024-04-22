@@ -1,6 +1,6 @@
 
 <div style="padding-left: 4px; padding-bottom: 5px; padding-top: 5px; ">
-    <span style="color: grey; font-style: italic">Přidání vlastníka</span>
+    <span style="">Přidání vlastníka</span>
 
     <span style="padding-left: 25px; ">
         <!--<a href="\export\vlastnici-sro.xls" >-->export dat zde<!--</a>-->

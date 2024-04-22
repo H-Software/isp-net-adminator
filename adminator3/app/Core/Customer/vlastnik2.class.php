@@ -135,19 +135,21 @@ class vlastnik2 {
 
 		$poradek="find=".$find."&find_id=".$this->listFindId."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".
 					$_GET["razeni"]."&razeni2=".$_GET["razeni2"]."&fakt_skupina=".$_GET["fakt_skupina"];
-  
-		// TODO: fix paging
-		// $listovani = new c_listing_vlastnici2("./vlastnici2.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
 
-		$list = $_GET["list"];
-		// if(($list == "")||($list == "1")){    //pokud není list zadán nebo je první
-		// 	$bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
-		// }
-		// else{
-		// 	$bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
-		// }
+		if(strlen($_GET["list"]) > 0){
+			$list = intval($_GET["list"]);
+		}
 
-		// $interval=$listovani->interval;
+		$listovani = new c_listing_vlastnici2("/vlastnici2?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $this->dotaz_source);
+
+		if(($list == "")||($list == "1")){    //pokud není list zadán nebo je první
+			$bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
+		}
+		else{
+			$bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
+		}
+
+		$interval = $listovani->interval;
 
 		if(intval($interval) > 0 and intval($bude_chybet) > 0){
 			$dotaz_final = $this->dotaz_source . " LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
@@ -159,16 +161,14 @@ class vlastnik2 {
 		$this->logger->debug("vlastnik2\listItems: dump dotaz_final: " . var_export($dotaz_final, true));
 
 		//	  $listovani->listInterval();
-		// TODO: fix paging
-		// $listovani->listPart();
+		$this->listItemsContent .= $listovani->listPart(false);
 
 		$this->listItemsContent .= $vlastnik->vypis($this->listSql,$this->listMode,$dotaz_final);
 
 		$this->listItemsContent .= $vlastnik->vypis_tab(2);
 		$this->listItemsContent .= '</div>';
 
-		// TODO: fix paging
-		// $listovani->listPart();
+		$this->listItemsContent .= $listovani->listPart(false);
 
 		return $this->listItemsContent;
 	}

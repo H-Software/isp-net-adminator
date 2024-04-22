@@ -143,9 +143,11 @@ class c_listing_vlastnici2 {
     
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)
     //napr.:    <<< << 11-20 >> >>>
-    function listPart(){
+    function listPart($echo = true){
+        $output = "";
+
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         if (Empty($this->list)){
                 $this->list = 1;
         }
@@ -161,8 +163,15 @@ class c_listing_vlastnici2 {
             $to = $this->numRecords;
             $backward = "";
         }
-        echo $forward.$from."-".$to.$backward;
-        echo $this->after;
+        $output .= $forward.$from."-".$to.$backward;
+        $output .=$this->after;
+
+        if($echo === true){
+            echo $output;
+        }
+        else{
+            return $output;
+        }
     }
     
     //vypisovani chybovych hlasek
