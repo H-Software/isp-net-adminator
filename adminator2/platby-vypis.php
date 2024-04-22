@@ -84,9 +84,16 @@ include ("include/charset.php");
 		exit;
     }
     		 
-    $dotaz=pg_query("SELECT * FROM platby 
-			WHERE ( id_cloveka='".intval($id_vlastnika)."' and zaplaceno_za LIKE '".intval($rok)."%') ");
-    $dotaz_radku=pg_num_rows($dotaz);
+    // $dotaz=pg_query("SELECT * FROM platby 
+	// 		WHERE ( id_cloveka='".intval($id_vlastnika)."' and zaplaceno_za LIKE '".intval($rok)."%') ");
+	
+	$platby = DB::connection('pgsql')
+				->table('platby')
+				->where('id_cloveka', $id_vlastnika)
+				->where('zaplaceno_za', 'LIKE', intval($rok)."%")
+				->get();
+
+    // $dotaz_radku=pg_num_rows($dotaz);
     
 	echo "<table border=\"0\" width=\"90%\" >";
 	echo "<tr>";

@@ -349,7 +349,10 @@ class vlastnik2_a2
 	 $id_f=$data["fakturacni"];
 	
     // tady asi bude generovani fakturacnich udaju	
-    if( ( $id_f > 0 ) ){ fakturacni::vypis($id_f,$id_v); }
+    if( ( $id_f > 0 ) ){
+		$fakturacni = new fakturacni;
+		$fakturacni->vypis($id_f,$id_v); 
+	}
     
     $objekt = new objekt_a2(); 
     $objekt->conn_mysql = $this->conn_mysql;
