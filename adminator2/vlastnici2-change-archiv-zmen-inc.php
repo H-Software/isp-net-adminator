@@ -83,32 +83,33 @@ use Illuminate\Database\Capsule\Manager as DB;
 										  
 	      $pole3 .= ", ";
 	    }
-	    elseif( $key == "fakturacni_skupina_id" )
-	    {
-	      $pole3 .= "změna <b>Fakturační skupiny</b> z: ";
+		// TODO: fix pretify fakt. skupiny in AZ call
+	    // elseif( $key == "fakturacni_skupina_id" )
+	    // {
+	    //   $pole3 .= "změna <b>Fakturační skupiny</b> z: ";
 	    
-		  $fs_ols_rs = $conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($val)."'");	      
-		  $fs_old_rs->data_seek(0);
-		  list($fs_old) = $fs_old_rs->fetch_row();
+		//   $fs_ols_rs = $conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($val)."'");	      
+		//   $fs_old_rs->data_seek(0);
+		//   list($fs_old) = $fs_old_rs->fetch_row();
 
-		  $fs_new_rs = $conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($vlast_upd[$key])."'");
+		//   $fs_new_rs = $conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($vlast_upd[$key])."'");
 
-		  $fs_new_rs->data_seek(0);
-		  list($fs_new) = $fs_new->fetch_row();
+		//   $fs_new_rs->data_seek(0);
+		//   list($fs_new) = $fs_new->fetch_row();
 	    
-	      if( isset($fs_old) )
-	      { $pole3 .= "<span class=\"az-s1\">".$fs_old."</span> "; }
-	      else
-	      { $pole3 .= "<span class=\"az-s1\">".$val."</span> "; }
+	    //   if( isset($fs_old) )
+	    //   { $pole3 .= "<span class=\"az-s1\">".$fs_old."</span> "; }
+	    //   else
+	    //   { $pole3 .= "<span class=\"az-s1\">".$val."</span> "; }
 	      
-	      if( isset($fs_new) )
-	      { $pole3 .= "na: <span class=\"az-s2\">".$fs_new."</span>"; }
-	      else
-	      { $Pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>"; }
+	    //   if( isset($fs_new) )
+	    //   { $pole3 .= "na: <span class=\"az-s2\">".$fs_new."</span>"; }
+	    //   else
+	    //   { $Pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>"; }
 	      
-	      $pole3 .= ", ";
+	    //   $pole3 .= ", ";
 	      
-	    } //end of elseif fakturacni_skupina_id
+	    // } //end of elseif fakturacni_skupina_id
 	    elseif( $key == "billing_suspend_status" )
 	    {
 	      $pole3 .= "změna <b>Pozastavené fakturace</b> z: ";
