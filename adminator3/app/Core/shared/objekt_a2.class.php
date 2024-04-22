@@ -5,14 +5,21 @@ class objekt_a2
 
 	var $conn_mysql;
 
- function vypis_tab($par)
- {
+  var $echo = true;
+
+  function vypis_tab($par)
+  {
+    $output = "";
+    if ($par == 2) { $output .= "\n".'</table>'."\n";  }
+    else  { $output .= "chybny vyber"; }
    
-   if ($par == 2) { echo "\n".'</table>'."\n";  }
-   else  { echo "chybny vyber"; }
-   
-   // konec funkce
- }
+    if($this->echo === true){
+      echo $output;
+    }
+    else{
+      return $output;
+    }
+  }
    
  public static function select($es,$razeni)  
  {
@@ -215,23 +222,19 @@ class objekt_a2
  
  public function vypis($sql,$co,$id,$dotaz_final = "")
  {
-   global $db_ok2, $conn_mysql;
+    global $db_ok2, $conn_mysql;
     
-	if (!$db_ok2) {
-		echo "An error occurred. The connection with pqsql does not exist.\n";
-		exit;
-	}
+    $output = "";
 
-   $list=$_GET["list"];
+    if (!$db_ok2) {
+      echo "An error occurred. The connection with pqsql does not exist.\n";
+      exit;
+    }
 
     if ( $co==3 ) //wifi sit ...vypis u vlastniku (dalsi pouziti nevim)
     { 
       //prvne vyberem wifi tarify...
-	  try {
-		$dotaz_f = $conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
-	  } catch (Exception $e) {
-			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-	  }
+      $dotaz_f = $conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
       
       $i = 0;
 	  
@@ -246,23 +249,13 @@ class objekt_a2
       }
 					  
       if( $i > 0 ){ $tarif_sql .= " ) "; }
-				       
-	  try {
-		$dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
-		} 
-	  catch (Exception $e) {
-			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-	  }
-
+				     
+      $dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
     
     }
     elseif ( $co==4 ) //fiber sit ...vypis pouze u vlastniku
     { 
-	  try {
-		$dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
-	  } catch (Exception $e) {
-			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-	  }
+      $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
       
       $i = 0;
 	  
@@ -278,25 +271,13 @@ class objekt_a2
 					  
       if( $i > 0 ){ $tarif_sql .= " ) "; }
 				  
-	  try {
-		$dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
-	  } 
-	  catch (Exception $e) {
-			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-	  }
-     
+      $dotaz=pg_query($db_ok2,"SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql); 
     
     }
     else
     { 
-		try {
-			$dotaz= pg_query($db_ok2, $dotaz_final); 
-		} 
-		catch (Exception $e) {
-			die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-		}
-
-	}
+      $dotaz= pg_query($db_ok2, $dotaz_final); 
+	  }
 
 if($dotaz !== false){
 	$radku=pg_num_rows($dotaz);
@@ -652,6 +633,13 @@ else{
   
     } //konec else
    
+    if($this->echo === true){
+			echo $output;
+		}
+		else{
+			return $output;
+		}
+
    } // konec funkce
    
 }
