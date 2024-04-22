@@ -6,6 +6,8 @@ class vlastnik2_a2
 
    var $conn_pgsql;
 
+   var $logger;
+
    var $container;
 
    var $level;
@@ -385,6 +387,7 @@ class vlastnik2_a2
     
     $objekt = new objekt_a2(); 
 	$objekt->echo = false;
+	$objekt->logger = $this->logger;
     $objekt->conn_mysql = $this->conn_mysql;
 	$objekt->conn_pqsql = $this->conn_pgsql;
 

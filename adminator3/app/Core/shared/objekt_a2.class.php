@@ -6,6 +6,8 @@ class objekt_a2
   var $conn_pqsql;
 	var $conn_mysql;
 
+  var $logger;
+
   var $echo = true;
 
   function vypis_tab($par)
@@ -393,18 +395,35 @@ else{
       $id_tarifu = $data["id_tarifu"];
       
       $dotaz_update = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
-      $rs_update = $dotaz_update->mysql_num_rows;
-              
-      if( $rs_update <> 1 ){ $output .= "Chyba! Nelze specifikovat tarif!"; }
-      
-      while($data_update = $dotaz_update->fetch_array())
-      { 
-        if( $data_update["typ_tarifu"] == 1 )
-	{ $update_mod_vypisu = 2; }
-	else
-	{ $update_mod_vypisu = 1; }
+
+      if($dotaz_update === false){
+        if(is_object($this->logger)){
+          $this->logger->info("objekt_a2\\vypis: dump var dotaz_update: " . var_export($dotaz_update, true));
+        }
+
+        $output .= "Chyba! Nelze specifikovat tarif! (query failed)";
       }
-     
+      else{
+
+        $rs_update = $dotaz_update->num_rows;
+
+        if( $rs_update == 1 ){
+          while($data_update = $dotaz_update->fetch_array())
+          { 
+            if( $data_update["typ_tarifu"] == 1 )
+            { $update_mod_vypisu = 2; }
+            else
+            { $update_mod_vypisu = 1; }
+          }
+        }
+        else { 
+          $output .= "Chyba! Nelze specifikovat tarif! (wrong num_rows)";
+          if(is_object($this->logger)){
+            $this->logger->info("objekt_a2\\vypis: dump var rs_update: " . var_export($rs_update, true));
+          } 
+        }
+      }
+  
     // 6-ta update
     if ( !( $update_povolen =="true") )
     { $output .= "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Upravit</td> \n"; }
@@ -474,7 +493,7 @@ else{
     
       if( $update_mod_vypisu == 2 )    
       {
-	$output .= "<a href=\"objekty-test.php?id_objektu=".$data["id_komplu"]."\" >test</a>";
+	        $output .= "<a href=\"objekty-test.php?id_objektu=".$data["id_komplu"]."\" >test</a>";
       }
       else
       { $output .= "<br>"; }
