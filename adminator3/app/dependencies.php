@@ -168,8 +168,7 @@ $container['adminController'] = function ($c) {
 };
 
 $container['archivZmenController'] = function ($c) {
-    global $smarty;
-    return new \App\Controllers\archivZmenController($c, $smarty);
+    return new \App\Controllers\archivZmenController($c);
 };
 
 $container['othersController'] = function ($c) {

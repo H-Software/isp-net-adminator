@@ -12,14 +12,15 @@ class archivZmenController extends adminatorController {
     var $smarty;
     var $logger;
 
-    public function __construct(ContainerInterface $container, $smarty)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
 		$this->conn_mysql = $this->container->connMysql;
-        $this->smarty = $smarty;
-
+        $this->smarty = $this->container->smarty;
         $this->logger = $this->container->logger;
         $this->logger->info("archivZmenController\__construct called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	}
 
     public function archivZmenCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -27,11 +28,11 @@ class archivZmenController extends adminatorController {
 
         $this->logger->info("archivZmenController\archivZmenCat called");
         
-        $this->checkLevel(30);
+        $this->checkLevel(30, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Změny :: kategorie");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -45,13 +46,13 @@ class archivZmenController extends adminatorController {
 
         $this->logger->info("archivZmenController\archivZmenWork called");
         
-        $this->checkLevel(30);
+        $this->checkLevel(30, $this->adminator);
 
         // $this->smarty->assign("bs_layout_main_col_count", "8");
 
         $this->smarty->assign("page_title","Adminator3 :: Změny :: Archiv změn Work");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         $az = new \App\Core\ArchivZmen($this->container, $this->smarty);
 
@@ -69,13 +70,13 @@ class archivZmenController extends adminatorController {
 
         $this->logger->info("archivZmenController\archivZmenList called");
         
-        $this->checkLevel(30);
+        $this->checkLevel(30, $this->adminator);
 
         $this->smarty->assign("bs_layout_main_col_count", "10");
 
         $this->smarty->assign("page_title","Adminator3 :: Změny :: Archiv změn");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         $az = new \App\Core\ArchivZmen($this->container, $this->smarty);
 
@@ -93,11 +94,11 @@ class archivZmenController extends adminatorController {
 
         $this->logger->info("archivZmenController\archivZmenUcetni called");
         
-        $this->checkLevel(147);
+        $this->checkLevel(147, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Změny pro účetní");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
         
         //zacatek vlastniho obsahu
         $action = $_GET["action"];
