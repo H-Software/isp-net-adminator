@@ -827,7 +827,7 @@ class stb extends adminator
        while ($data_nod = $vysl_nod->fetch_array() )
        { $ip_rozsah=$data_nod["ip_rozsah"]; }  
         
-       list($a,$b,$c,$d) =split("[.]",$ip_rozsah);
+       list($a,$b,$c,$d) =preg_split("/[.]/",$ip_rozsah);
                  
        // c-ckova ip	
        $gen_ip_find = $a.".".$b.".".$c.".".$d."/24";
@@ -845,7 +845,7 @@ class stb extends adminator
          while( $data_check_ip = $msq_check_ip->fetch_array() )
          { $gen_ip = $data_check_ip["ip_adresa"]; }
                 
-         list($a,$b,$c,$d) = split("[.]",$gen_ip);
+         list($a,$b,$c,$d) = preg_split("/[.]/",$gen_ip);
                 
          if( $d >= "250") //jsme u stropu, vracime rozsah ...
          { $gen_ip = $a.".".$b.".".$c.".0"; }
@@ -1072,7 +1072,7 @@ class stb extends adminator
                
                //pozn
                $output .= "<td style=\"".$class_stb_liche."\" ><span class=\"pozn\"><img title=\"poznamka\" src=\"/img2/poznamka3.png\" alt=\"poznamka\" ";
-               $output .= " onclick=\"window.alert(' poznámka: ".htmlspecialchars($data_vypis["pozn"])." , Vytvořeno: ".$pridano." ');\" ></span>\n</td>\n";
+               $output .= " onclick=\"window.alert(' poznámka: ".htmlspecialchars($data_vypis["pozn"])." , Vytvořeno: ".$data_vypis["pridano"]." ');\" ></span>\n</td>\n";
    
            //mac adresa
            $output .= "<td style=\"".$class_stb_liche."\" >\n";
@@ -1153,7 +1153,7 @@ class stb extends adminator
            //vlastnik - id cloveka
            $id_cloveka = $data_vypis["id_cloveka"];
            
-           $rs_create_link = ($id_cloveka > 0 ? Aglobal::create_link_to_owner($id_cloveka) : "");
+           $rs_create_link = ($id_cloveka > 0 ? \Aglobal::create_link_to_owner($id_cloveka) : "");
            
            $odkaz_data = ($rs_create_link === false ? "E_1" : $rs_create_link);
            

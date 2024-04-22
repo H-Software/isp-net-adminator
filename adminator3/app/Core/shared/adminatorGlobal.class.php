@@ -222,7 +222,7 @@ class Aglobal
          
     } //end of function pg_last_inserted_id
     
-    function create_link_to_owner($owner_id) {
+    public static function create_link_to_owner($owner_id) {
     
 	$owner_id = intval($owner_id);
 	
