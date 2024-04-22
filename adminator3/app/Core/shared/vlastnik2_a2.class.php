@@ -431,7 +431,7 @@ class vlastnik2_a2
 			
 			$output .= "<table border=\"0\" width=\"100%\" >\n";
 				
-			$stb->vypis("1",$id);
+			$output .= $stb->vypis("1",$id);
 				
 			$output .= "</table>\n";
 			$output .= "</td></tr>\n";
