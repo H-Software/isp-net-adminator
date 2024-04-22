@@ -123,6 +123,7 @@ class vlastnik2 {
 
 		$vlastnik = new vlastnik2_a2;
 		$vlastnik->conn_mysql = $this->conn_mysql;
+		$vlastnik->logger = $this->logger;
 		$vlastnik->echo = false;
 
 		// without find search we dont do anything

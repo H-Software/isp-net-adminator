@@ -3,7 +3,7 @@
 class vlastnik2_a2
 {
    var $conn_mysql;
-
+   
    var $logger;
 
    var $level;
@@ -374,7 +374,7 @@ class vlastnik2_a2
 	}
     
     $objekt = new objekt_a2(); 
-	$objekt->echo = $this->echo;
+	$objekt->echo = false;
     $objekt->conn_mysql = $this->conn_mysql;
 	
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
@@ -391,7 +391,7 @@ class vlastnik2_a2
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
       $output .= "<table border=\"0\" width=\"100%\" >";
         
-      $objekt->vypis($sql,$co,$id);
+      $output .= $objekt->vypis($sql,$co,$id);
 	    
       $output .= "</table>";
      $output .= "</td></tr>";
@@ -409,20 +409,21 @@ class vlastnik2_a2
 	   
       $output .= "<table border=\"0\" width=\"100%\" >";
         
-      $objekt->vypis($sql, $co, $id);
+      $output .= $objekt->vypis($sql, $co, $id);
 	    
       $output .= "</table>";
      $output .= "</td></tr>";
     }
     
     //stb
+    if($this-> echo === false){
+		$stb = new App\Core\stb($this->conn_mysql, $this->logger);
     
-    // $stb = new App\Core\stb($this->conn_mysql, $this->logger);
-    
-    // $stb->level = $this->level;
-    
-    // $pocet_stb = $stb->zjistipocetobj($id);
-    
+		$stb->level = $this->level;
+		
+		$pocet_stb = $stb->zjistipocetobj($id);
+	}
+
     // if( $pocet_stb > 0 )
     // {
     //   $output .= "<tr>";
