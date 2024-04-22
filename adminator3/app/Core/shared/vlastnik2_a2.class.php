@@ -4,6 +4,8 @@ class vlastnik2_a2
 {
    var $conn_mysql;
 
+   var $conn_pgsql;
+
    var $container;
 
    var $level;
@@ -376,7 +378,8 @@ class vlastnik2_a2
     $objekt = new objekt_a2(); 
 	$objekt->echo = false;
     $objekt->conn_mysql = $this->conn_mysql;
-	
+	$objekt->conn_pqsql = $this->conn_pgsql;
+
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
     $pocet_fiber_obj = $objekt->zjistipocet(2,$id);
