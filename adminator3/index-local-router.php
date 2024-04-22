@@ -1,9 +1,16 @@
 <?php
 
-// stolen from https://stackoverflow.com/a/38926070
+// stolen from https://stackoverflow.com/a/38926070 and improved
 
 chdir(__DIR__);
-$filePath = realpath(ltrim($_SERVER["REQUEST_URI"], '/'));
+
+$scriptName = ltrim($_SERVER["REQUEST_URI"], '/');
+ // fix GET in URI
+list($scriptName) = explode('?', $scriptName);
+// echo "filePath: ". $scriptName . "<br>";
+
+$filePath = realpath($scriptName);
+
 if ($filePath && is_dir($filePath)){
     // attempt to find an index file
     foreach (['index.php'] as $indexFile){
