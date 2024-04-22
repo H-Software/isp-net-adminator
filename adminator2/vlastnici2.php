@@ -44,7 +44,16 @@ require_once("include/charset.php");
   <tr>
   <td colspan="2">
   <!-- zacatek vlastniho obsahu -->
-  
+  <?php
+	if (!$db_ok2) {
+		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($db_ok2) . ")");
+	}
+
+	if (!$conn_mysql) {
+		die("An error occurred. The connection with mysql does not exist.\n <br> (type of handler variable: " . gettype($conn_mysql) . ")");
+	}
+  ?>
+
    <form method="GET" action="">
       
    <div> <hr width="250px" align="left" ></div>
@@ -168,10 +177,6 @@ require_once("include/charset.php");
      <td>				     
      
 <?php
-
-	if (!$db_ok2) {
-		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($db_ok2) . ")");
-	}
 
     //prvne vytvorime instanci objektu
      $vlastnik = new vlastnik2_a2;
