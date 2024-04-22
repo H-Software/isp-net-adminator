@@ -1,11 +1,9 @@
 <?php
 
-class fakturacni
-{
+class fakturacni{
 	var $echo = true;
-
 	var $firma;
-
+	
     function vypis($id_f,$id_v)
     {    
 		$output = "";

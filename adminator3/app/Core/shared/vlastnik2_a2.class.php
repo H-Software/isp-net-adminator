@@ -367,12 +367,13 @@ class vlastnik2_a2
     // tady asi bude generovani fakturacnich udaju	
     if( ( $id_f > 0 ) ){
 		$fakturacni = new fakturacni;
-		$fakturacni->echo = false;
+		$fakturacni->echo = $this->echo;
 		$fakturacni->firma = $data['firma'];
 		$output .= $fakturacni->vypis($id_f,$id_v); 
 	}
     
     $objekt = new objekt_a2(); 
+	$objekt->echo = $this->echo;
     $objekt->conn_mysql = $this->conn_mysql;
 	
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
