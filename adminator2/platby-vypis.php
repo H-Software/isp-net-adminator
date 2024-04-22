@@ -31,7 +31,7 @@ include ("include/charset.php");
 
  require("include/js.include.1.php");
 
- $windowtext = "Aktuální informace o platbách má účetní ( Ing. Alice Sekyrová, tel: 602 411 970 ). Zde jsou zpožděné informace/platby. ";
+ $windowtext = "Aktuální informace o platbách má účetní. Zde jsou zpožděné informace/platby. ";
 
  // velikost okna
  $windowdelka = 300;
@@ -76,12 +76,12 @@ include ("include/charset.php");
   
   if( isset($id_vlastnika) )
   { 
-    $id_check=ereg('^([[:digit:]]+)$',$id_vlastnika);
+    $id_check=preg_match('/^([[:digit:]]+)$/',$id_vlastnika);
     
     if( !($id_check) )
     { 
-	echo "Chyba! Vstupní data nejsou ve správném formátu! "; 
-	exit;
+		echo "Chyba! Vstupní data nejsou ve správném formátu! "; 
+		exit;
     }
     		 
     $dotaz=pg_query("SELECT * FROM platby 

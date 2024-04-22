@@ -119,7 +119,7 @@ require("include/charset.php");
        
   if( ( ($f_add_r == 1) and ($dotaz_v_r == 1) ) ){ $vysledek_write="1"; }
        
-  $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+  $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
 
     		
   if( $dotaz_v_r ){ echo "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze vlastníků. </div></H3>\n"; }
