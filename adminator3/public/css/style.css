@@ -301,6 +301,22 @@ subcat-spacebody
     margin-right: 5px;
 }
 
+.vlastnici2-selectors-line
+{
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+.vlastnici2-selectors-line select
+{
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+.vlastnici2-selectors-line input
+{
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
 .zmeny-ucetni-banner
 {
     padding-top: 10px; 

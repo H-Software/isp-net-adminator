@@ -1,7 +1,7 @@
 
 <form method="GET" action="{$action_1}" >
 
-  <div style="padding-top: 4px;" >
+  <div style="padding-top: 4px; " class="vlastnici2-selectors-line" >
   
     <input type="radio" name="select" value="1" {if $select == 1 } checked {/if} >
     <label class="vlastnici-selector-label" >Všichni</label>|
@@ -33,6 +33,37 @@
 	{/section}
     </select>
 									
+  {* razeni *}
+  <span style="padding-left: 5px; ">|</span>
+    
+  <span style="padding-left: 5px; padding-right: 5px; ">Řadit dle:</span>
+
+  <span style="">
+    <select name="razeni" size="1" >
+            <option value="1" > id klienta  </option>
+	    <option value="3"  > jména  </option>
+	    <option value="4"  > Příjmení  </option>
+	    <option value="5"  > Ulice  </option>
+	    <option value="6"  > Město  </option>
+	    <option value="14" > Var. symbol  </option>
+	    <option value="15" > K platbě  </option>
+    </select> 
+  </span>
+      
+  <span style="padding-left: 7px; ">
+
+      <select name="razeni2" size="1" >
+					
+        <option value="1" > vzestupně </option>
+        <option value="2" > sestupně </option>
+									
+      </select>
+  </span>
+
   </div>
  
+  {* second line *}
+  <div style="padding-top: 4px; " class="vlastnici2-selectors-line" >
+  </div>
+
 </form>
