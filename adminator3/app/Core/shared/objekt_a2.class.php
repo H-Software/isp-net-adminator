@@ -182,6 +182,10 @@ class objekt_a2
       //prvne vyberem wifi tarify...
       $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
       
+      if($dotaz_f->num_rows < 1){
+        return 0;
+      }
+      
       $i = 0;
       while( $data_f = $dotaz_f->fetch_array() )
       {
@@ -199,6 +203,10 @@ class objekt_a2
     { 
       $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
       
+      if($dotaz_f->num_rows < 1){
+        return 0;
+      }
+
       $i = 0;
       while( $data_f = $dotaz_f->fetch_array() )
       {

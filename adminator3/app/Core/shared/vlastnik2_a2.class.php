@@ -381,7 +381,9 @@ class vlastnik2_a2
     
     $pocet_fiber_obj = $objekt->zjistipocet(2,$id);
     
-    if( $pocet_wifi_obj > 0 or $pocet_fiber_obj == 0 )
+	// echo "<pre>pocty objs: " . $pocet_wifi_obj . " a " . $pocet_fiber_obj . "</pre>";
+
+    if( $pocet_wifi_obj > 0 )
     {
      //objekty wifi
      $co="3";
