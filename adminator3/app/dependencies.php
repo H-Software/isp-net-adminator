@@ -181,13 +181,11 @@ $container['objektyController'] = function ($c) {
 };
 
 $container['platbyController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\platbyController($c,$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\platbyController($c);
 };
 
 $container['topologyController'] = function ($container) {
-    global $conn_mysql, $smarty;
-    return new \App\Controllers\topologyController($container, $conn_mysql, $smarty);
+    return new \App\Controllers\topologyController($container);
 };
 
 $container['vlastniciController'] = function ($c) {
