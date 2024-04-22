@@ -19,6 +19,7 @@ if ($filePath && is_dir($filePath)){
         }
     }
 }
+
 if ($filePath && is_file($filePath)) {
     // 1. check that file is not outside of this directory for security
     // 2. check for circular reference to router.php
@@ -39,7 +40,19 @@ if ($filePath && is_file($filePath)) {
         header("HTTP/1.1 404 Not Found");
         echo "404 Not Found";
     }
-} else {
-    // rewrite to our index file
-    include __DIR__ . DIRECTORY_SEPARATOR . 'index.php';
+}
+else {
+    if( (preg_match("/^.+(\.php|\.js)$/", $scriptName) == 1)
+            or ($scriptName == "favicon.ico")
+    )
+    {
+        header("HTTP/1.1 404 Not Found");
+        echo "404 Not Found";
+    }
+    else
+    {
+        // echo "filePath: ". $scriptName . "<br>";
+        // rewrite to our index file
+        include __DIR__ . DIRECTORY_SEPARATOR . 'index.php';
+    }
 }

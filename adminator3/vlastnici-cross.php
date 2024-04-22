@@ -307,11 +307,13 @@ else
   $prot = "http://";
 }
 
-$full_url = $prot . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"]. '/' . $stranka . "\">" . $_SERVER["SERVER_NAME"] . '/' .$stranka;
+$full_url = $prot . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"]. '/' . $stranka;
+
+$logger->info("vlastnici-cross: redirecting to URL: " . var_export($full_url, true));
 
 header("Location: ".$full_url);
 
 echo $html_init;
-echo "<div><a href=\"" . $full_url . "</a></div>"; 
+echo "<div><a href=\"" . $full_url . "\" >" . $full_url . "</a></div>"; 
 
 echo "</body></html>";
