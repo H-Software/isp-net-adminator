@@ -493,7 +493,7 @@ else{
     
       if( $update_mod_vypisu == 2 )    
       {
-	$output .= "<a href=\"objekty-test.php?id_objektu=".$data["id_komplu"]."\" >test</a>";
+	        $output .= "<a href=\"objekty-test.php?id_objektu=".$data["id_komplu"]."\" >test</a>";
       }
       else
       { $output .= "<br>"; }
