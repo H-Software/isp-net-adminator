@@ -178,10 +178,8 @@ use Illuminate\Database\Capsule\Manager as DB;
     		   
     $pole2 .= "".$pole3;
 				     
-   if ( $res == 1){ $vysledek_write="1"; }
-   else{
-	$vysledek_write = "0";
-   }
+   if ( $affected == 1){ $vysledek_write=1; }
+   else{ $vysledek_write = 0; }
 
    $id = DB::table('archiv_zmen')
    					->insertGetId([
