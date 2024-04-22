@@ -73,8 +73,7 @@ include ("include/charset.php");
     
      $pole .= $pole2.", akci provedl: ".$nick.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
 		 
-    $add=mysql_query("INSERT INTO archiv_zmen (akce) VALUES ('$pole')");
-		     
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce) VALUES ('$pole')");
   
     echo "<br><br>";
     
