@@ -15,12 +15,11 @@ class adminController extends adminatorController {
 
     var $adminator;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-		$this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-        
+		$this->conn_mysql = $this->container->connMysql;
+        $this->smarty = $this->container->smarty;
         $this->logger = $this->container->logger;
         $this->logger->info("adminController\__construct called");
 

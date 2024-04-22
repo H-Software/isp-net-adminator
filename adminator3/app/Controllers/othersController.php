@@ -10,14 +10,15 @@ class othersController extends adminatorController {
     var $conn_mysql;
     var $smarty;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-		$this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-        
+		$this->conn_mysql = $this->container->connMysql;
+        $this->smarty = $this->container->smarty;
         $this->logger = $this->container->logger;
         $this->logger->info("othersController\__construct called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	}
 
     public function others(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -25,11 +26,11 @@ class othersController extends adminatorController {
 
         $this->logger->info("othersController\others called");
         
-        $this->checkLevel(95);
+        $this->checkLevel(95, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Ostatní");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -42,11 +43,11 @@ class othersController extends adminatorController {
     {
         $this->logger->info("othersController\board called");
         
-        $this->checkLevel(87);
+        $this->checkLevel(87, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Board");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         $nastenka = new \board($this->conn_mysql, $this->logger);
 
