@@ -326,10 +326,10 @@ if ( $update_status =="1" )
 	    $vlast_upd["billing_suspend_status"] = intval($billing_suspend_status);
 	    $vlast_upd["billing_suspend_reason"] = $conn_mysql->real_escape_string($billing_suspend_reason);
 	    
-	    list($b_s_s_den,$b_s_s_mesic,$b_s_s_rok) = split("\.",$billing_suspend_start);
+	    list($b_s_s_den,$b_s_s_mesic,$b_s_s_rok) = preg_split("/\./",$billing_suspend_start);
 	    $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
 
-	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = split("\.",$billing_suspend_stop);
+	    list($b_s_t_den,$b_s_t_mesic,$b_s_t_rok) = preg_split("/\./",$billing_suspend_stop);
 	    $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 	    
 	    $vlast_upd["billing_suspend_start"]  = $conn_mysql->real_escape_string($billing_suspend_start);    
@@ -365,8 +365,7 @@ if ( $update_status =="1" )
       // echo pg_last_notice($db_ok2);
      }
      
-     // TODO: enable writing into ArchivZmen
-     // require("vlastnici2-change-archiv-zmen-inc.php");
+     require("vlastnici2-change-archiv-zmen-inc.php");
           
      $updated="true";
     }
