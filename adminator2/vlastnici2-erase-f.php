@@ -52,7 +52,7 @@ include ("include/charset.php");
   
   $id=$_GET["id"];
   
-  if ( ereg('^([[:digit:]]+)$',$id) )
+  if ( preg_match('/^([[:digit:]]+)$/',$id) )
   {
   
    $erase_eq = array( "id" => $id );
