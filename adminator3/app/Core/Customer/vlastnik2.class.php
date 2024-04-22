@@ -123,13 +123,14 @@ class vlastnik2 {
 
 		$vlastnik = new vlastnik2_a2;
 		$vlastnik->conn_mysql = $this->conn_mysql;
+		$vlastnik->echo = false;
 
 		// without find search we dont do anything
 		if(strlen($this->listItemsContent) > 0){
 			return $this->listItemsContent;
 		}
 
-		$vlastnik->vypis_tab(1);
+		$this->listItemsContent .= $vlastnik->vypis_tab(1);
 
 		$poradek="find=".$find."&find_id=".$this->listFindId."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".
 					$_GET["razeni"]."&razeni2=".$_GET["razeni2"]."&fakt_skupina=".$_GET["fakt_skupina"];
@@ -147,7 +148,12 @@ class vlastnik2 {
 
 		// $interval=$listovani->interval;
 
-		$dotaz_final = $this->dotaz_source . " LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
+		if(intval($interval) > 0 and intval($bude_chybet) > 0){
+			$dotaz_final = $this->dotaz_source . " LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
+		}
+		else{
+			$dotaz_final = $this->dotaz_source;
+		}
 
 		$this->logger->debug("vlastnik2\listItems: dump dotaz_final: " . var_export($dotaz_final, true));
 
@@ -155,12 +161,14 @@ class vlastnik2 {
 		// TODO: fix paging
 		// $listovani->listPart();
 
-		$vlastnik->vypis($this->listSql,$this->listMode,$dotaz_final);
+		$this->listItemsContent .= $vlastnik->vypis($this->listSql,$this->listMode,$dotaz_final);
 
-		$vlastnik->vypis_tab(2);
+		$this->listItemsContent .= $vlastnik->vypis_tab(2);
 
 		// TODO: fix paging
 		// $listovani->listPart();
+
+		return $this->listItemsContent;
 	}
 
 } //konec tridy vlastnik2

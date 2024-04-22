@@ -10,20 +10,34 @@ class vlastnik2_a2
        
    var $export_povolen;
 
-   public static function vypis_tab ($par)
+   var $echo = true;
+
+   public function vypis_tab ($par)
    {
-     if ($par == 1) { echo "\n".'<table border="1" width="100%">'."\n"; }
-     elseif ($par == 2) { echo "\n".'</table>'."\n"; }
-     else    { echo "chybny vyber"; }
+	 $output = "";
+
+     if ($par == 1) { $output .= "\n".'<table border="1" width="100%">'."\n"; }
+     elseif ($par == 2) { $output .= "\n".'</table>'."\n"; }
+     else    { $output .= "chybny vyber"; }
+
+	if($this->echo === true){
+		echo $output;
+	}
+	else{
+		return $output;
+	}
+
     // konec funkce vypis_tab
    }
 
    // $dotaz_final - for pq_query
    function vypis ($sql,$co,$dotaz_final)
    {
-				
     // co - co hledat, 1- podle dns, 2-podle ip		
-	echo "<pre>" . var_export($dotaz_final, true) . "</pre>";
+	
+	$output = "";
+
+	// echo "<pre>" . var_export($dotaz_final, true) . "</pre>";
 
     $dotaz=pg_query($dotaz_final);
 
@@ -31,16 +45,16 @@ class vlastnik2_a2
     	$radku=pg_num_rows($dotaz);
 	}
 	else{
-		echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+		$output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>";
 	}
 
-    if($radku==0) echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
+    if($radku==0) $output .= "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
     else
     {
 
      while( $data=pg_fetch_array($dotaz) ) 
      {
-	    echo "<tr><td colspan=\"16\"> <br> </td> </tr>
+	    $output .= "<tr><td colspan=\"16\"> <br> </td> </tr>
 	    <tr>
 		<td class=\"vlastnici-td-black\"><br></td>
 		 <td class=\"vlastnici-td-black\" colspan=\"3\" width=\"\" >
@@ -51,210 +65,210 @@ class vlastnik2_a2
 	     
 	     if($data["archiv"] == 1)
 	     {
-	        echo "27VYŘ";
+	        $output .= "27VYŘ";
 	     }
 	     elseif(( ($data["billing_freq"] == 1) and ($data["fakturacni"] > 0) ) )
 	     {
-	        echo "37";
+	        $output .= "37";
 	     }
 	     elseif( $data["billing_freq"] == 1 )
 	     { //ctvrtletni fakturace
-	        echo "47";											
+	        $output .= "47";											
 	     }
 	     elseif( ($data["fakturacni"] > 0) )
 	     { //faturacni
-	           echo "27";
+	           $output .= "27";
 	     }
 	     else
 	     {  //domaci uzivatel
-	           echo "27DM";
+	           $output .= "27DM";
 	     }
 	     
-	     echo sprintf("%05d", $data["ucetni_index"]);
+	     $output .=  sprintf("%05d", $data["ucetni_index"]);
 	     
-	     echo "], Splatnost ke dni: [".$data["splatnost"]."]</td>
+	     $output .= "], Splatnost ke dni: [".$data["splatnost"]."]</td>
 	    
 	    <td class=\"vlastnici-td-black\" colspan=\"2\">VS: ".$data["vs"]."</td>
 	
 	    <td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
 	    <td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"\" >";
 	
-	    echo "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
+	    $output .= "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
 	
 	// sem mazani
 	global $vlastnici_erase_povolen;
 	
 	if( ! ( $vlastnici_erase_povolen == "true" ) )
-	{ echo "<span style=\"\" > smazat </span> "; }
+	{ $output .= "<span style=\"\" > smazat </span> "; }
 	else
 	{
-	    echo "<form method=\"POST\" action=\"vlastnici2-erase.php\" >";
-	    echo "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_cloveka"]."\" >";
-	    echo "<input type=\"submit\" value=\"Smazat\" >"."</form> \n";
+	    $output .= "<form method=\"POST\" action=\"vlastnici2-erase.php\" >";
+	    $output .= "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_cloveka"]."\" >";
+	    $output .= "<input type=\"submit\" value=\"Smazat\" >"."</form> \n";
 	}
 	
-	echo "</td>
+	$output .= "</td>
 	<td class=\"vlastnici-td-black\" >";
 	
 	global $vlastnici_update_povolen;
 	// 6-ta update
 	if ( !( $vlastnici_update_povolen =="true") )
-	{ echo "<span style=\"\" >  upravit  </span> \n"; }
+	{ $output .= "<span style=\"\" >  upravit  </span> \n"; }
 	else
 	{
-	 echo " <form method=\"POST\" action=\"vlastnici2-change.php\" >";
-	 echo "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
-	 echo "<input type=\"submit\" value=\"update\" ></form> \n";
+	 $output .= " <form method=\"POST\" action=\"vlastnici2-change.php\" >";
+	 $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
+	 $output .= "<input type=\"submit\" value=\"update\" ></form> \n";
 	}
 	
-	 echo "</td> </tr></table>"; 
-	 echo "</td></tr>";
+	 $output .= "</td> </tr></table>"; 
+	 $output .= "</td></tr>";
 	 
-	 echo "<tr>";
-	 echo "<td class=\"vlastnici-td-black\" ><br></td>";
-	 echo "<td class=\"vlastnici-td-black\" colspan=\"1\">Datum podpisu:  ";
+	 $output .= "<tr>";
+	 $output .= "<td class=\"vlastnici-td-black\" ><br></td>";
+	 $output .= "<td class=\"vlastnici-td-black\" colspan=\"1\">Datum podpisu:  ";
 	 
 	if ( (strlen($data["datum_podpisu"]) > 0) )
 	{
 	 list($datum_podpisu_rok,$datum_podpisu_mesic,$datum_podpisu_den) = explode("-",$data["datum_podpisu"]);	 
 	  $datum_podpisu=$datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
-	 echo $datum_podpisu;
+	  $output .= $datum_podpisu;
 	}
 	  
-	 echo "</td>";
+	 $output .= "</td>";
 	 
-	 echo "<td class=\"vlastnici-td-black\" colspan=\"1\">Četnost Fa: ";
+	 $output .= "<td class=\"vlastnici-td-black\" colspan=\"1\">Četnost Fa: ";
 	    if( $data["billing_freq"] == 0 )
-	    { echo "měsíční"; }
+	    { $output .= "měsíční"; }
 	    elseif( $data["billing_freq"] == 1 )
-	    { echo "čtvrtletní"; }
+	    { $output .= "čtvrtletní"; }
 	    else
-	    { echo "N/A"; }
+	    { $output .= "N/A"; }
 	    
-	 echo "</td>";
+	 $output .= "</td>";
 	 
-	 echo "<td class=\"vlastnici-td-black\" colspan=\"6\">Fakt. skupina: ";
+	 $output .= "<td class=\"vlastnici-td-black\" colspan=\"6\">Fakt. skupina: ";
 	 
 	 $fakturacni_skupina_id=$data["fakturacni_skupina_id"];
 	 
 	 $dotaz_fakt_skup=$this->conn_mysql->query("SELECT nazev, typ FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
 	 $dotaz_fakt_skup_radku=$dotaz_fakt_skup->num_rows;
 		 
-	 if( ( $dotaz_fakt_skup_radku < 1 ) ){ echo " [žádná fakt. skupina] "; }
+	 if( ( $dotaz_fakt_skup_radku < 1 ) ){ $output .= " [žádná fakt. skupina] "; }
 	 else
 	 { 
 	   while( $data_fakt_skup=$dotaz_fakt_skup->fetch_array() )
 	   { $nazev_fakt_skup = $data_fakt_skup["nazev"]; $typ_fakt_skup = $data_fakt_skup["typ"]; }  
 	 
-	 echo " [".$nazev_fakt_skup;
-	   if ( $typ_fakt_skup == 2){ echo " (FÚ) "; }
-	   else{ echo " (DÚ) "; }
-	 echo "] ";
+	 $output .= " [".$nazev_fakt_skup;
+	   if ( $typ_fakt_skup == 2){ $output .= " (FÚ) "; }
+	   else{ $output .= " (DÚ) "; }
+	 $output .= "] ";
 	 
 	 }
 	  
-	 echo " </td>";
-	 echo "<td class=\"vlastnici-td-black\" colspan=\"7\">";
+	 $output .= " </td>";
+	 $output .= "<td class=\"vlastnici-td-black\" colspan=\"7\">";
 	 
-	 echo "Smlouva: ";
+	 $output .= "Smlouva: ";
 	 
-	   if( $data["typ_smlouvy"] == 0){ echo "[nezvoleno]"; }
-	   elseif( $data["typ_smlouvy"] == 1){ echo "[na dobu neurčitou]"; }
+	   if( $data["typ_smlouvy"] == 0){ $output .= "[nezvoleno]"; }
+	   elseif( $data["typ_smlouvy"] == 1){ $output .= "[na dobu neurčitou]"; }
 	   elseif( $data["typ_smlouvy"] == 2)
 	   { 
-	    echo "[s min. dobou plnění]"." ( do: ";
+	    $output .= "[s min. dobou plnění]"." ( do: ";
 	    list($trvani_do_rok,$trvani_do_mesic,$trvani_do_den) = explode("-",$data["trvani_do"]);
 	    $trvani_do=$trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
 	    
-	    echo $trvani_do." )";    
+	    $output .= $trvani_do." )";    
 	   }
-	   else{ echo "[nelze zjistit]"; }
+	   else{ $output .= "[nelze zjistit]"; }
 	 
-	 echo "</td>";
-	 echo "</tr>";
+	 $output .= "</td>";
+	 $output .= "</tr>";
 	
 	 //zde treti radek
-	 echo "<tr>\n";
-	 echo "<td class=\"vlastnici-td-black\" ><br></td>\n";
-	 echo "<td class=\"vlastnici-td-black\" colspan=\"1\">
+	 $output .= "<tr>\n";
+	 $output .= "<td class=\"vlastnici-td-black\" ><br></td>\n";
+	 $output .= "<td class=\"vlastnici-td-black\" colspan=\"1\">
 		<div style=\"float: left; \">Pozastavené fakturace:</div>  ";
 
-	 echo "<div style=\"text-align: right; padding-right: 20px;\">";
+	 $output .= "<div style=\"text-align: right; padding-right: 20px;\">";
 	 
 	 if( $data["billing_suspend_status"] == 1)
-	 { echo "Ano"; }
+	 { $output .= "Ano"; }
 	 elseif( $data["billing_suspend_status"] == 0)
-	 { echo "Ne"; }
+	 { $output .= "Ne"; }
 	 
-	 echo "</div>";
-	 echo "</td>";	
+	 $output .= "</div>";
+	 $output .= "</td>";	
 	
 	 if( $data["billing_suspend_status"] == 1)
 	 {
 	    //dalsi info o pozast. fakturacich
 	    
-	    echo "<td class=\"vlastnici-td-black\">od kdy: <span style=\"padding-left: 20px;\">";
+	    $output .= "<td class=\"vlastnici-td-black\">od kdy: <span style=\"padding-left: 20px;\">";
 		if( (strlen($data["billing_suspend_start"]) > 0) or ($data["billing_suspend_start"] != NULL) )
-		{ echo htmlspecialchars($data["billing_suspend_start_f"]); }
+		{ $output .= htmlspecialchars($data["billing_suspend_start_f"]); }
 		else
-		{ echo "není zadáno"; }
+		{ $output .= "není zadáno"; }
 		
-	    echo "</span></td>";
+	    $output .= "</span></td>";
 	    
 	    //doba
-	    echo "<td class=\"vlastnici-td-black\" colspan=\"3\">do kdy: <span style=\"padding-left: 20px;\">";
+	    $output .= "<td class=\"vlastnici-td-black\" colspan=\"3\">do kdy: <span style=\"padding-left: 20px;\">";
 	    
 	    if( (strlen($data["billing_suspend_stop"]) > 0) or ($data["billing_suspend_stop"] != NULL) )
-	    { echo htmlspecialchars($data["billing_suspend_stop_f"]); }
+	    { $output .= htmlspecialchars($data["billing_suspend_stop_f"]); }
 	    else
-	    { echo " není zadáno "; }
+	    { $output .= " není zadáno "; }
 	 
-	    echo "</span></td>";
+	    $output .= "</span></td>";
 	    
 	    //důvod
-	    echo "<td class=\"vlastnici-td-black\" colspan=\"5\">důvod: <span style=\"padding-left: 20px;\">";
+	    $output .= "<td class=\"vlastnici-td-black\" colspan=\"5\">důvod: <span style=\"padding-left: 20px;\">";
 	    
 	    if( strlen($data["billing_suspend_reason"]) == 0)
-	    { echo "není zadáno"; }
+	    { $output .= "není zadáno"; }
 	    else
-	    { echo htmlspecialchars($data["billing_suspend_reason"]); }
+	    { $output .= htmlspecialchars($data["billing_suspend_reason"]); }
 	     
-	    echo "</span></td>";
+	    $output .= "</span></td>";
 	    
 	 } 
 	 else
 	 {
-	    echo "<td class=\"vlastnici-td-black\" colspan=\"9\">&nbsp;</td>";
+	    $output .= "<td class=\"vlastnici-td-black\" colspan=\"9\">&nbsp;</td>";
 	 }
 	 
-	 echo "</tr>";
+	 $output .= "</tr>";
 	  
-	 echo " 
+	 $output .= " 
 		<tr> 
 		 <td><br></td>
 		 <td colspan=\"3\" >".$data["jmeno"]." ".$data["prijmeni"]."<br>
 		 ".$data["ulice"]." ";
 		     
-	 echo "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
+	 $output .= "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
 	    
-	 echo "<br>".$data["mesto"]." ".$data["psc"]."</td>
+	 $output .= "<br>".$data["mesto"]." ".$data["psc"]."</td>
 	 <td colspan=\"6\" >";
 		 
 	 //druhy sloupec - pomyslny
-	 echo "icq: ".$data["icq"]." <br>
+	 $output .= "icq: ".$data["icq"]." <br>
 	 mail: ".$data["mail"]." <br>
 	 tel: ".$data["telefon"]." </td>";
 		 
 	 //treti sloupec - sluzby
-	 echo "<td colspan=\"\" valign=\"top\" >";
+	 $output .= "<td colspan=\"\" valign=\"top\" >";
 		 
 	  if( $data["sluzba_int"] == 1 )
 	  { 
-	    echo "<div style=\"\" ><span style=\"font-weight: bold; \"><span style=\"color: #ff6600; \" >Služba Internet</span> - aktivní </span>";
+	    $output .= "<div style=\"\" ><span style=\"font-weight: bold; \"><span style=\"color: #ff6600; \" >Služba Internet</span> - aktivní </span>";
 	    if( $data["sluzba_int_id_tarifu"] == 999 )
-	    { echo "<span style=\"color: gray; \" >- tarif nezvolen</span></div>"; }
+	    { $output .= "<span style=\"color: gray; \" >- tarif nezvolen</span></div>"; }
 	    else
-	    { echo " (<a href=\"admin-tarify.php?id_tarifu=".$data["sluzba_int_id_tarifu"]."\" >tarif)</a></div>"; }
+	    { $output .= " (<a href=\"admin-tarify.php?id_tarifu=".$data["sluzba_int_id_tarifu"]."\" >tarif)</a></div>"; }
 	    
 	    $sluzba_int_aktivni = "1"; 
 	  }
@@ -263,13 +277,13 @@ class vlastnik2_a2
 	  
 	  if( $data["sluzba_iptv"] == 1 )
 	  { 
-	    echo "<div style=\"float: left;\" >".
+	    $output .= "<div style=\"float: left;\" >".
 		    "<span style=\"font-weight: bold; \"><span style=\"color: #00cbfc; \" >Služba IPTV</span> - aktivní </span>";
 	    
 	    if( $data["sluzba_iptv_id_tarifu"] == 999 )
-	    { echo "<span style=\"color: gray; \" >- tarif nezvolen</span></div>"; }
+	    { $output .= "<span style=\"color: gray; \" >- tarif nezvolen</span></div>"; }
 	    else
-	    { echo " (<a href=\"admin-tarify-iptv.php?id_tarifu=".$data["sluzba_iptv_id_tarifu"]."\" >tarif)</a></div>"; }
+	    { $output .= " (<a href=\"admin-tarify-iptv.php?id_tarifu=".$data["sluzba_iptv_id_tarifu"]."\" >tarif)</a></div>"; }
 	    
 	    $sluzba_iptv_aktivni = "1"; 
 	  
@@ -277,15 +291,15 @@ class vlastnik2_a2
 	    $mq_prefix = mysql_query("SELECT value FROM settings WHERE name LIKE 'iptv_portal_sub_code_prefix' ");
 	    $iptv_prefix_name = mysql_result($mq_prefix, 0, 0);
 	    
-	    echo "<div style=\"float: left; padding-left: 15px; \" >";
-		echo "<a href=\"http://app01.cho01.iptv.grapesc.cz:9080/admin/admin/provisioning/".
+	    $output .= "<div style=\"float: left; padding-left: 15px; \" >";
+		$output .= "<a href=\"http://app01.cho01.iptv.grapesc.cz:9080/admin/admin/provisioning/".
 		        "subscriber-search.html?type=SUBSCRIBER_CODE&subscriptionNewState=&subscriptionStbAccountState=".
 		    	"&localityId=&offerId=&submit=OK&searchText=".urlencode($iptv_prefix_name.$data["prijmeni"])."\" target=\"_new\" >".
 			"<img src=\"/img2/Letter-P-icon-small.png\" alt=\"letter-p-small\" width=\"20px\" >".
 		    "</a>";
-	    echo "</div>";
+	    $output .= "</div>";
 	    
-	    echo "<div style=\"clear: both; \"></div>";
+	    $output .= "<div style=\"clear: both; \"></div>";
 	  
 	  }
 	  else
@@ -293,12 +307,12 @@ class vlastnik2_a2
 		 
 	  if( $data["sluzba_voip"] == 1 )
 	  { 
-	    echo "<div><span style=\"font-weight: bold;\" ><span style=\"color: #e42222; \" >Služba VoIP</span> - aktivní </span>";
+	    $output .= "<div><span style=\"font-weight: bold;\" ><span style=\"color: #e42222; \" >Služba VoIP</span> - aktivní </span>";
 	    
 	    /*if( $data["sluzba_iptv_id_tarifu"] == 999 )
-	    { echo "<span style=\"color: gray; \" >- tarif nezvolen</span></div>"; }
+	    { $output .= "<span style=\"color: gray; \" >- tarif nezvolen</span></div>"; }
 	    else
-	    { echo " (<a href=\"\" >tarif)</a></div>"; }
+	    { $output .= " (<a href=\"\" >tarif)</a></div>"; }
 	    */
 	    
 	    $sluzba_voip_aktivni = "1"; 
@@ -307,43 +321,43 @@ class vlastnik2_a2
 	  { $sluzba_voip_aktivni = "0"; }
 	  
 	  if( ( $sluzba_int_aktivni != 1 ) and ( $sluzba_iptv_aktivni != 1 ) and ( $sluzba_voip_aktivni != 1 ) )
-	  { echo "<div style=\"color: Navy; font-weight: bold; \" >Žádná služba není aktivovaná</div>"; }
+	  { $output .= "<div style=\"color: Navy; font-weight: bold; \" >Žádná služba není aktivovaná</div>"; }
 	  else{}
 	  
-	  //echo "<hr class=\"cara3\" />";
-	  echo "<div style=\"border-bottom: 1px solid gray; width: 220px; \" ></div>";
+	  //$output .= "<hr class=\"cara3\" />";
+	  $output .= "<div style=\"border-bottom: 1px solid gray; width: 220px; \" ></div>";
 	  
 	  if( ( $sluzba_int_aktivni != 1 ) and ( $sluzba_iptv_aktivni != 1 ) and ( $sluzba_voip_aktivni != 1 ) )
 	  { 
-	   echo "<div style=\"color: #555555; \" >Všechny služby dostupné</div>"; 
+	   $output .= "<div style=\"color: #555555; \" >Všechny služby dostupné</div>"; 
 	  }
 	  else
 	  {
 	   if( $sluzba_int_aktivni != 1 )
 	   { 
-	     echo "<div style=\"\" ><span style=\"color: #ff6600; \" >Služba Internet</span>";
-	     echo "<span style=\"color: #555555; \"> - dostupné </span></div>"; 
+	     $output .= "<div style=\"\" ><span style=\"color: #ff6600; \" >Služba Internet</span>";
+	     $output .= "<span style=\"color: #555555; \"> - dostupné </span></div>"; 
 	   }
 	   else{}
 	   
 	   if( $sluzba_iptv_aktivni != 1 )
 	   { 
-	     echo "<div style=\"\" ><span style=\"color: #27b0db; \" >Služba IPTV</span>";
-	     echo "<span style=\"color: #555555; \"> - dostupné </span></div>"; 
+	     $output .= "<div style=\"\" ><span style=\"color: #27b0db; \" >Služba IPTV</span>";
+	     $output .= "<span style=\"color: #555555; \"> - dostupné </span></div>"; 
 	   }
 	   else{}
 	   
 	   if( $sluzba_voip_aktivni != 1 )
 	   { 
-	     echo "<div style=\"\" ><span style=\"color: #e42222; \" >Služba VoIP</span>";
-	     echo "<span style=\"color: #555555; \"> - dostupné </span></div>"; 
+	     $output .= "<div style=\"\" ><span style=\"color: #e42222; \" >Služba VoIP</span>";
+	     $output .= "<span style=\"color: #555555; \"> - dostupné </span></div>"; 
 	   }
 	   else{}
 	  
 	  }	 
 	  
-	  echo "</td>";	 
-	 echo "</tr>"; //konec radku
+	  $output .= "</td>";	 
+	 $output .= "</tr>"; //konec radku
 		
 	 $id=$data["id_cloveka"];
 	 $id_v=$id;
@@ -368,15 +382,15 @@ class vlastnik2_a2
      //objekty wifi
      $co="3";
 		
-     echo "<tr>
+     $output .= "<tr>
 	    <td colspan=\"1\" bgcolor=\"#99FF99\" align=\"center\" >W
 	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
-      echo "<table border=\"0\" width=\"100%\" >";
+      $output .= "<table border=\"0\" width=\"100%\" >";
         
       $objekt->vypis($sql,$co,$id);
 	    
-      echo "</table>";
-     echo "</td></tr>";
+      $output .= "</table>";
+     $output .= "</td></tr>";
     }
     
     if( $pocet_fiber_obj > 0 )
@@ -385,16 +399,16 @@ class vlastnik2_a2
      //objekty fiber
      $co="4";
 		
-     echo "<tr>";
-     echo "<td colspan=\"1\" bgcolor=\"fbbc86\" align=\"center\" >F</td>";
-     echo "<td colspan=\"10\" bgcolor=\"fbbc86\" >";
+     $output .= "<tr>";
+     $output .= "<td colspan=\"1\" bgcolor=\"fbbc86\" align=\"center\" >F</td>";
+     $output .= "<td colspan=\"10\" bgcolor=\"fbbc86\" >";
 	   
-      echo "<table border=\"0\" width=\"100%\" >";
+      $output .= "<table border=\"0\" width=\"100%\" >";
         
       $objekt->vypis($sql, $co, $id);
 	    
-      echo "</table>";
-     echo "</td></tr>";
+      $output .= "</table>";
+     $output .= "</td></tr>";
     }
     
     //stb
@@ -407,16 +421,16 @@ class vlastnik2_a2
     
     // if( $pocet_stb > 0 )
     // {
-    //   echo "<tr>";
-    //   echo "<td colspan=\"1\" bgcolor=\"#c1feff\" align=\"center\" >S</td>\n";
-    //   echo "<td colspan=\"10\" bgcolor=\"#c1feff\" valign=\"center\" >\n";
+    //   $output .= "<tr>";
+    //   $output .= "<td colspan=\"1\" bgcolor=\"#c1feff\" align=\"center\" >S</td>\n";
+    //   $output .= "<td colspan=\"10\" bgcolor=\"#c1feff\" valign=\"center\" >\n";
 	   
-    //   echo "<table border=\"0\" width=\"100%\" >\n";
+    //   $output .= "<table border=\"0\" width=\"100%\" >\n";
         
     //   $stb->vypis("1",$id);
 	    
-    //   echo "</table>\n";
-    //   echo "</td></tr>\n";
+    //   $output .= "</table>\n";
+    //   $output .= "</td></tr>\n";
     // }
     
     //tady dalsi radka asi
@@ -429,107 +443,107 @@ class vlastnik2_a2
    
     if ( $voip_radku > 0)
     {
-     echo "<tr>";    
-     echo "<td colspan=\"14\" ><div style=\"padding-top: 10px; padding-bottom: 10px; \">";
+     $output .= "<tr>";    
+     $output .= "<td colspan=\"14\" ><div style=\"padding-top: 10px; padding-bottom: 10px; \">";
     
       $voip->vypis_cisla("2");
       
-     echo "</div></td>";
-     echo "</tr>";
+     $output .= "</div></td>";
+     $output .= "</tr>";
     }
     */
         
     //druha radka			
-	    echo "<tr>";
-	    echo "<td colspan=\"14\">";
+	    $output .= "<tr>";
+	    $output .= "<td colspan=\"14\">";
 	
-	    echo "<table border=\"0\" width=\"100%\" >";
-	    echo "<tr>";
+	    $output .= "<table border=\"0\" width=\"100%\" >";
+	    $output .= "<tr>";
 
 	    $orezano = explode(':', $data["pridano"]);
 	    $pridano=$orezano[0].":".$orezano[1];
 		            
-	    echo "<td colspan=\"1\" width=\"250px\" >";
-	      echo "<span style=\"margin: 20px; \">datum přidání: ".$pridano." </span>";
-	    echo "</td>";
+	    $output .= "<td colspan=\"1\" width=\"250px\" >";
+	      $output .= "<span style=\"margin: 20px; \">datum přidání: ".$pridano." </span>";
+	    $output .= "</td>";
 	    
-	    echo "<td align=\"center\" >";
-		echo " <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
-		echo " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." ');\" >";
-	    echo "</td>";
+	    $output .= "<td align=\"center\" >";
+		$output .= " <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
+		$output .= " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." ');\" >";
+	    $output .= "</td>";
 	    
-	    echo "<td>
+	    $output .= "<td>
 		    <span style=\"\">vyberte akci: </span>
 		  </td>";
 		
-	    echo "<td colspan=\"1\">";
+	    $output .= "<td colspan=\"1\">";
 
 	    
-	    echo "<form action=\"vlastnici-cross.php\" method=\"get\" >";
+	    $output .= "<form action=\"vlastnici-cross.php\" method=\"get\" >";
 			
-		      echo "<select name=\"akce\" size=\"1\" >";
+		      $output .= "<select name=\"akce\" size=\"1\" >";
 		    
-		      echo "<option value=\"0\" class=\"select-nevybrano\" >Nevybráno</option>";
+		      $output .= "<option value=\"0\" class=\"select-nevybrano\" >Nevybráno</option>";
 		      
-		       echo "<optgroup label=\"objekty\">";
-		        echo "<option value=\"1\" "; if( $_GET["akce"] == 1 ) echo " selected "; echo " > přiřadit objekt </option>";
-		        echo "<option value=\"15\" "; if( $_GET["akce"] == 15 ) echo " selected "; echo " > přiřadit objekt STB</option>";
+		       $output .= "<optgroup label=\"objekty\">";
+		        $output .= "<option value=\"1\" "; if( $_GET["akce"] == 1 ) $output .= " selected "; $output .= " > přiřadit objekt </option>";
+		        $output .= "<option value=\"15\" "; if( $_GET["akce"] == 15 ) $output .= " selected "; $output .= " > přiřadit objekt STB</option>";
 
-		       echo "</optgroup>";
+		       $output .= "</optgroup>";
 		
-		       echo "<optgroup label=\"fakturacni adresa\">";	
-		        echo "<option value=\"2\" "; if( $_GET["akce"] == 2) echo " selected "; echo " >přidání fakturační adresy </option>";
-		        echo "<option value=\"3\" "; if( $_GET["akce"] == 3) echo " selected "; echo " >smazání fakturační adresy </option>";
-		        echo "<option value=\"4\" "; if( $_GET["akce"] == 4) echo " selected "; echo " >úprava fakturační adresy </option>";
-		       echo "</optgroup>";
+		       $output .= "<optgroup label=\"fakturacni adresa\">";	
+		        $output .= "<option value=\"2\" "; if( $_GET["akce"] == 2) $output .= " selected "; $output .= " >přidání fakturační adresy </option>";
+		        $output .= "<option value=\"3\" "; if( $_GET["akce"] == 3) $output .= " selected "; $output .= " >smazání fakturační adresy </option>";
+		        $output .= "<option value=\"4\" "; if( $_GET["akce"] == 4) $output .= " selected "; $output .= " >úprava fakturační adresy </option>";
+		       $output .= "</optgroup>";
 			
-		       echo "<optgroup label=\"Závady/opravy\" >";
-			echo "<option value=\"5\" "; if( $_GET["akce"] == 5) echo " selected "; echo " >Vložit závadu/opravu</option>";
-			echo "<option value=\"6\" "; if( $_GET["akce"] == 6) echo " selected "; echo " >zobrazit závady/opravy</option>";
-		       echo "</optgroup>";
+		       $output .= "<optgroup label=\"Závady/opravy\" >";
+			$output .= "<option value=\"5\" "; if( $_GET["akce"] == 5) $output .= " selected "; $output .= " >Vložit závadu/opravu</option>";
+			$output .= "<option value=\"6\" "; if( $_GET["akce"] == 6) $output .= " selected "; $output .= " >zobrazit závady/opravy</option>";
+		       $output .= "</optgroup>";
 		    
-		       echo "<optgroup label=\"Smlouvy/výpovědi\" >";
-			echo "<option value=\"7\" "; if( $_GET["akce"] == 7) echo " selected "; echo " >Tisk smlouvy</option>";
-			echo "<option value=\"8\" "; if( $_GET["akce"] == 8) echo " selected "; echo " >Vložit zádost o výpověď</option>";
-		       echo "</optgroup>";
+		       $output .= "<optgroup label=\"Smlouvy/výpovědi\" >";
+			$output .= "<option value=\"7\" "; if( $_GET["akce"] == 7) $output .= " selected "; $output .= " >Tisk smlouvy</option>";
+			$output .= "<option value=\"8\" "; if( $_GET["akce"] == 8) $output .= " selected "; $output .= " >Vložit zádost o výpověď</option>";
+		       $output .= "</optgroup>";
 		    
-		       echo "<optgroup label=\"Platby/faktury\" >";
-		//	echo "<option value=\"9\" "; if( $_GET["akce"] == 9) echo " selected "; echo " >Vložit hotovostní platbu</option>";
-			echo "<option value=\"10\" "; if( $_GET["akce"] == 10) echo " selected "; echo " >Výpis plateb za internet</option>";
-			echo "<option value=\"11\" "; if( $_GET["akce"] == 11) echo " selected "; echo " >Výpis všech neuhrazených faktur</option>";
-		//	echo "<option value=\"12\" "; if( $_GET["akce"] == 12) echo " selected "; echo " >online faktury (XML) - Internet</option>";
-		//	echo "<option value=\"14\" "; if( $_GET["akce"] == 14) echo " selected "; echo " >online faktury (XML) - VoIP (hlas)</option>";        
-			echo "<option value=\"16\" "; if( $_GET["akce"] == 16) echo " selected "; echo " >Výpis faktur/Plateb (Pohoda SQL)</option>";        
+		       $output .= "<optgroup label=\"Platby/faktury\" >";
+		//	$output .= "<option value=\"9\" "; if( $_GET["akce"] == 9) $output .= " selected "; $output .= " >Vložit hotovostní platbu</option>";
+			$output .= "<option value=\"10\" "; if( $_GET["akce"] == 10) $output .= " selected "; $output .= " >Výpis plateb za internet</option>";
+			$output .= "<option value=\"11\" "; if( $_GET["akce"] == 11) $output .= " selected "; $output .= " >Výpis všech neuhrazených faktur</option>";
+		//	$output .= "<option value=\"12\" "; if( $_GET["akce"] == 12) $output .= " selected "; $output .= " >online faktury (XML) - Internet</option>";
+		//	$output .= "<option value=\"14\" "; if( $_GET["akce"] == 14) $output .= " selected "; $output .= " >online faktury (XML) - VoIP (hlas)</option>";        
+			$output .= "<option value=\"16\" "; if( $_GET["akce"] == 16) $output .= " selected "; $output .= " >Výpis faktur/Plateb (Pohoda SQL)</option>";        
 		
-		       echo "</optgroup>";
+		       $output .= "</optgroup>";
 		    
-		       echo "<optgroup label=\"Historie\" >";
-			echo "<option value=\"13\" "; if( $_GET["akce"] == 13) echo " selected "; echo " >Zobrazení historie</option>";
-		       echo "</optgroup>";
+		       $output .= "<optgroup label=\"Historie\" >";
+			$output .= "<option value=\"13\" "; if( $_GET["akce"] == 13) $output .= " selected "; $output .= " >Zobrazení historie</option>";
+		       $output .= "</optgroup>";
 		    
-		      echo "</select>";
+		      $output .= "</select>";
 		      
-		      echo "<span style=\"padding-left: 20px;\" >
+		      $output .= "<span style=\"padding-left: 20px;\" >
 		    	      <input type=\"submit\" name=\"odeslat\" value=\"OK\">
 			    </span>";
 		      
-		      echo "<input type=\"hidden\" name=\"id_cloveka\" value=\"".$data["id_cloveka"]."\">";
+		      $output .= "<input type=\"hidden\" name=\"id_cloveka\" value=\"".$data["id_cloveka"]."\">";
 		      
-		    echo "</form>";
+		    $output .= "</form>";
 
-	    echo "</td>";
-	 echo "</tr></table>";    
+	    $output .= "</td>";
+	 $output .= "</tr></table>";    
 	
-	    echo "</td>";	    
-	    echo "</tr>";
+	    $output .= "</td>";	    
+	    $output .= "</tr>";
 	
 	/*
-	    echo "<tr>";
-		echo "<td colspan=\"10\" >";
+	    $output .= "<tr>";
+		$output .= "<td colspan=\"10\" >";
 		
 		    	
-		echo "</td>";
-	    echo "</tr>";
+		$output .= "</td>";
+	    $output .= "</tr>";
 	*/
 	
 	//konec while
@@ -538,6 +552,13 @@ class vlastnik2_a2
 	// konec else
 	}
 	
+	if($this->echo === true){
+		echo $output;
+	}
+	else{
+		return $output;
+	}
+
 	// konec funkce vypis
 	}
     
