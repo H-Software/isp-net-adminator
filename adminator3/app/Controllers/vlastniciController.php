@@ -81,6 +81,8 @@ class vlastniciController extends adminatorController {
 
         $bodyContent = $vlastnik2->listItems();
 
+        $this->smarty->assign("form_search_value", preg_replace('/^(%)(.*)(%)$/', '\2', $vlastnik2->listSql));
+
         $this->smarty->assign("body", $bodyContent);
 
         $this->smarty->display('vlastnici/vlastnici2.tpl');
