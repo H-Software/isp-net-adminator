@@ -173,8 +173,7 @@ $container['archivZmenController'] = function ($c) {
 };
 
 $container['othersController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\othersController($c,$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\othersController($c);
 };
 
 $container['objektyController'] = function ($c) {
