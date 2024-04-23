@@ -132,7 +132,7 @@ class objektyController extends adminatorController {
         $objekt->dns_find = $dns_find;
         $objekt->ip_find = $ip_find;
 
-        list($output, $errors) = $objekt->objektyListGetBodyContent();
+        list($output, $errors) = $objekt->listGetBodyContent();
 
         if(strlen($errors) > 0){
             $this->smarty->assign("body", $errors);
