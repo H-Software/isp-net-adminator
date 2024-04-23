@@ -10,12 +10,7 @@ class admin {
 
 	function levelListDbQuery()
 	{
-		try {
-			$rs= $this->conn_mysql->query("select * from leveling order by level asc");
-		} catch (Exception $e) {
-			$this->logger->info("admin\LevelList: levelListDbQuery exception: " . var_export($e->getMessage(), true));
-		}
-	
+		$rs= $this->conn_mysql->query("select * from leveling order by level asc");	
 		$num_rows = $rs->num_rows;
 
 		if ($num_rows > 0)

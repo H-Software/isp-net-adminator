@@ -48,6 +48,11 @@ class Validator
 		return $this;
 	}
 
+	public function validatePassword($input, $hash)
+	{
+		return password_verify($input, $hash);
+	}
+
 	public function failed()
 	{
 		return !empty($this->errors);

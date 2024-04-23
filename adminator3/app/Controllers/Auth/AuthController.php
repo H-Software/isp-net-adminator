@@ -51,8 +51,8 @@ class AuthController extends Controller
                 foreach ($messages as $i => $msg) {
                         $messages[$i] = str_replace("\n", "\n  ", $msg);
                 }
-                $this->logger->addWarning("Authentication failure for $username .", $messages);
-                $this->logger->addWarning("Authentication failure error: ".var_export($messages[0], true));
+                $this->logger->warning("Authentication failure for $username .", $messages);
+                $this->logger->warning("Authentication failure error: ".var_export($messages[0], true));
     
             }
         }

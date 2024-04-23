@@ -35,11 +35,13 @@ $app->group('', function () use ($app) {
     });
 
     // TODO: fix password/change routing
-	$this->map(['GET', 'POST'], '/auth/password/change', function ($req, $res, $args) use ($app) {
-        // 'PasswordController:getChangePassword'
-        return $app->getContainer()['view']->render($res, 'auth\password\change.twig');
-    })->setName('auth.password.change');
-	// $this->post('/auth/password/change', 'PasswordController:postChangePassword');
+    $app->get('/auth/password/change', PasswordController::class . ':getChangePassword')->setName('auth.password.change');
+	$app->post('/auth/password/change', PasswordController::class . ':postChangePassword');
+
+	// $this->map(['GET', 'POST'], '/auth/password/change', function ($req, $res, $args) use ($app) {
+    //     // 'PasswordController:getChangePassword'
+    //     return $app->getContainer()['view']->render($res, 'auth\password\change.twig');
+    // })->setName('auth.password.change');
 });
 
 $app->group('', function () {
