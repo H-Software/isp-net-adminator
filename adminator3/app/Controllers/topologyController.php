@@ -11,28 +11,28 @@ class topologyController extends adminatorController {
     var $smarty;
     var $logger;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-		$this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-        // $this->logger = $logger;
-        $this->logger = $container->logger;
-
+		$this->conn_mysql = $this->container->connMysql;
+        $this->smarty = $this->container->smarty;
+        $this->logger = $this->container->logger;   
         $this->logger->info("topologyController\__construct called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	}
 
     public function nodeList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
       $this->logger->info("topologyController\\nodeList called");
 
-      $this->checkLevel(5);
+      $this->checkLevel(5, $this->adminator);
 
       $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
       $this->smarty->assign("page_title","Adminator3 :: Topologie :: Node list");
 
-      $this->header($request, $response);
+      $this->header($request, $response, $this->adminator);
       
       $output = $topology->getNodeList();
 
@@ -45,13 +45,13 @@ class topologyController extends adminatorController {
     {
         $this->logger->info("topologyController\\routerList called");
 
-        $this->checkLevel(85);
+        $this->checkLevel(85, $this->adminator);
 
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
         $this->smarty->assign("page_title","Adminator3 :: Topologie :: Router list");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
       
         $output = $topology->getRouterList();
 

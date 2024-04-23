@@ -10,25 +10,26 @@ class platbyController extends adminatorController {
     var $conn_mysql;
     var $smarty;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-		$this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-
-        $this->logger = $this->container->logger;        
+		$this->conn_mysql = $this->container->connMysql;
+        $this->smarty = $this->container->smarty;
+        $this->logger = $this->container->logger;     
         $this->logger->info("platbyController\__construct called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	  }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
       $this->logger->info("platbyController\cat called");
 
-      $this->checkLevel(92);
+      $this->checkLevel(92, $this->adminator);
 
       $this->smarty->assign("page_title","Adminator3 :: Platby");
 
-      $this->header($request, $response);
+      $this->header($request, $response, $this->adminator);
       
       $body .= "Prosím vyberte z podkategorie výše....";
 
@@ -61,11 +62,11 @@ class platbyController extends adminatorController {
 
         $this->logger->info("platbyController\\fn called");
         
-        $this->checkLevel(107);
+        $this->checkLevel(107, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Faktury Neuhrazene");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
 
@@ -78,11 +79,11 @@ class platbyController extends adminatorController {
     {
         $this->logger->info("platbyController\\fn called");
         
-        $this->checkLevel(149);
+        $this->checkLevel(149, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: N.F. :: Kontrola omezeni vs. platby");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         $platby = new \platby($this->conn_mysql, $this->logger);
 

@@ -148,35 +148,28 @@ $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
 $app->add($container->csrf);
 
-// v::with('App\\Validation\\Rules\\');
-
 $container['AuthController'] = function($container) {
 	return new \App\Controllers\Auth\AuthController($container);
 };
 
 $container['HomeController'] = function($container) {
-    global $conn_mysql, $smarty;
-	return new \App\Controllers\HomeController($container,$conn_mysql, $smarty);
+	return new \App\Controllers\HomeController($container);
 };
 
 $container['aboutController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\aboutController($c,$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\aboutController($c);
 };
 
 $container['adminController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\adminController($c, $conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\adminController($c);
 };
 
 $container['archivZmenController'] = function ($c) {
-    global $smarty;
-    return new \App\Controllers\archivZmenController($c, $smarty);
+    return new \App\Controllers\archivZmenController($c);
 };
 
 $container['othersController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\othersController($c,$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\othersController($c);
 };
 
 $container['objektyController'] = function ($c) {
@@ -184,19 +177,16 @@ $container['objektyController'] = function ($c) {
 };
 
 $container['platbyController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\platbyController($c,$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\platbyController($c);
 };
 
 $container['topologyController'] = function ($container) {
-    global $conn_mysql, $smarty;
-    return new \App\Controllers\topologyController($container, $conn_mysql, $smarty);
+    return new \App\Controllers\topologyController($container);
 };
 
 $container['vlastniciController'] = function ($c) {
     return new \App\Controllers\vlastniciController($c);
 };
 $container['workController'] = function ($c) {
-    global $conn_mysql, $smarty, $logger, $auth, $app;
-    return new \App\Controllers\workController($c,$conn_mysql, $smarty, $logger, $auth, $app);
+    return new \App\Controllers\workController($c);
 };

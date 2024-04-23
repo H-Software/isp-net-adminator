@@ -13,12 +13,11 @@ class HomeController extends adminatorController {
 
     var $adminator;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->smarty = $smarty;
-
         $this->conn_mysql = $this->container->connMysql;
+        $this->smarty = $this->container->smarty;
         $this->logger = $this->container->logger;
         $this->logger->info("homeController\__construct called");
 

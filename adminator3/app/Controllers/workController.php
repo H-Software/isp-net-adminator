@@ -10,14 +10,15 @@ class workController extends adminatorController {
     var $conn_mysql;
     var $smarty;
 
-    public function __construct(ContainerInterface $container, $conn_mysql, $smarty, $logger, $auth, $app)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-		    $this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-
+        $this->conn_mysql = $this->container->connMysql;
+        $this->smarty = $this->container->smarty;
         $this->logger = $this->container->logger;
         $this->logger->info("workController\__construct called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	  }
 
     public function work(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -25,11 +26,11 @@ class workController extends adminatorController {
 
         $this->logger->info("workController\work called");
         
-        $this->checkLevel(16);
+        $this->checkLevel(16, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Work");
 
-        $this->header($request, $response);
+        $this->header($request, $response, $this->adminator);
 
         // TODO: fix this
         $this->smarty->assign("enable_work",1); //slozeni JS skriptu pro stranku
