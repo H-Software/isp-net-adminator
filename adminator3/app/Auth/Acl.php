@@ -72,7 +72,8 @@ class Acl extends SlimAuthAcl
             '/admin/admin',
             '/admin/level-action',
             '/admin/level-list',
-            '/admin/tarify'
+            '/admin/tarify',
+            '/admin/tarify/action'
         );
 
         foreach ($core_resources as $c) {
