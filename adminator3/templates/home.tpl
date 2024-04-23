@@ -2,6 +2,18 @@
 
 <div class="home-main" >
 
+{* slim-flash messages *}
+
+{foreach $flash_messages as $m}
+      {if $m@key eq 'info'}
+            {foreach $m as $i}
+                  <div class="alert alert-info">
+                  {$i}
+                  </div>
+            {/foreach}
+      {/if}
+{/foreach}
+
 {* vypis poslednich prihlasenych *}
 {include file="inc.home.list-logged-users.tpl"}
 
