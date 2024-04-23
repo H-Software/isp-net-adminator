@@ -149,7 +149,7 @@ class adminController extends adminatorController {
     {
         $this->logger->info("adminController\adminTarify called");
           
-        $this->checkLevel(131, $this->adminator);
+        $this->checkLevel(303, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Tarify :: Action");
 
