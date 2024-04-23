@@ -210,9 +210,6 @@ include ("include/charset.php");
  //konec vnejsi tab
  echo "</tr></form>";
  
- //global $order;
- //global $se;
- //global $es;
  
  list($se,$order) = objekt_a2::select($es,$razeni);
 
