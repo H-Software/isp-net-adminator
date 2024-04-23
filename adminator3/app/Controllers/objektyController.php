@@ -106,4 +106,19 @@ class objektyController extends adminatorController {
 
     }
 
+    public function objekty(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->info("objektyController\objekty called");
+        
+        $this->checkLevel(135, $this->adminator);
+
+        $this->smarty->assign("page_title","Adminator3 :: Objekty");
+
+        $this->header($request, $response, $this->adminator);
+      
+        $this->smarty->assign("body","T.B.A.");
+  
+        $this->smarty->display('objekty/list.tpl');
+    }
 }
