@@ -37,16 +37,41 @@ class objekt extends adminator
         $output .= '<td colspan="1">';
         
         // prvni dva
+        $output .= "\n\n <input type=\"radio\" ";
+        if ( ($_GET["razeni"]== 1) ){ $output .= " checked "; }
+        $output .= "name=\"razeni\" value=\"1\" onClick=\"form1.submit();\" > ";
+        $output .= "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
+
+        $output .= " | <input type=\"radio\" ";
+            if ( ($_GET["razeni"]== 2) ){ $output .= " checked "; }
+        $output .= " name=\"razeni\" value=\"2\" onClick=\"form1.submit();\"> \n";
+        $output .= "<img src=\"img2/vzes.png\" alt=\"vzes\" width=\"15px\" height=\"10px\" >";
 
         $output .= '</td>
                     <td colspan="3">';
         
-        // druhy dva
+        $output .= "<input type=\"radio\" ";
+        if ( ($_GET["razeni"]== 3) ){ $output .= " checked "; }
+        $output .= "name=\"razeni\" value=\"3\" onClick=\"form1.submit();\" > ";
+        $output .= "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
+
+        $output .= " | <input type=\"radio\" ";
+            if ( ($_GET["razeni"]== 4) ){ $output .= " checked "; }
+        $output .= " name=\"razeni\" value=\"4\" onClick=\"form1.submit();\"> \n";
+        $output .= "<img src=\"img2/vzes.png\" alt=\"vzes\" width=\"15px\" height=\"10px\" >";
 
         $output .= '</td>
                     <td>';
         
-        // treti dva
+        $output .= "<input type=\"radio\" ";
+        if ( ($_GET["razeni"]== 9) ){ $output .= " checked "; }
+        $output .= "name=\"razeni\" value=\"9\" onClick=\"form1.submit();\" > ";
+        $output .= "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
+
+        $output .= " | <input type=\"radio\" ";
+            if ( ($_GET["razeni"]== 10) ){ $output .= " checked "; }
+        $output .= " name=\"razeni\" value=\"10\" onClick=\"form1.submit();\"> \n";
+        $output .= "<img src=\"img2/vzes.png\" alt=\"vzes\" width=\"15px\" height=\"10px\" >";
 
         $output .= '</td>
         <td></td>';
