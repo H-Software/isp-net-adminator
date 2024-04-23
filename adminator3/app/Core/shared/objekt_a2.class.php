@@ -13,7 +13,7 @@ class objekt_a2
   function vypis_tab($par)
   {
     $output = "";
-    if( $par == 1) { $output .= "<table border=\"0\" width=\"100%\">\n"; }
+    if( $par == 1) { $output .= "<table border=\"0\" width=\"100%\" class=\"objekty-table\" >\n"; }
     elseif ($par == 2) { $output .= "\n".'</table>'."\n";  }
     else  { $output .= "chybny vyber"; }
    
