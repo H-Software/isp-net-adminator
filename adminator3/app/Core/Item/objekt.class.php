@@ -34,31 +34,33 @@ class objekt extends adminator
         $output = "";
 
         $output .= "\n<tr>\n";
-
         $output .= '<td colspan="1">';
         
         // prvni dva
 
-        $output .= "</td>";
-
-        $output .= '<td colspan="3">';
+        $output .= '</td>
+                    <td colspan="3">';
         
         // druhy dva
-        
+
         $output .= '</td>
-        <td><b>mac </b></td>
-        <td><b>typ </b></td>';
+                    <td>';
+        
+        // treti dva
+
+        $output .= '</td>
+        <td></td>';
   
-        $output .= "<td><b>client ap </b></td>";
+        // $output .= "<td><b>client ap </b></td>";
        
-        $output .= '
-            <td align="center" ><b>upravit</b></td>
-            <td align="center" ><b>smazat</b></td>
-            <td><b>třída </b></td>
-        <td><b>Aktivní</b></td>
-        <td><b>Test obj.</b></td>
-        <td><b>Linka </b></td>
-        <td><b>Omezení </b></td>';
+        // $output .= '
+        //     <td align="center" ><b>upravit</b></td>
+        //     <td align="center" ><b>smazat</b></td>
+        //     <td><b>třída </b></td>
+        // <td><b>Aktivní</b></td>
+        // <td><b>Test obj.</b></td>
+        // <td><b>Linka </b></td>
+        // <td><b>Omezení </b></td>';
           
         $output .= "\n</tr>\n";
 
