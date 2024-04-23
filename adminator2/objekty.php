@@ -183,7 +183,7 @@ include ("include/charset.php");
    <td colspan="2" style="border: 0px; " >
     <hr width="16%" align="left"> 
    </td>
-  <td>
+  <tr>
     
   <tr>
   <td colspan="2">
@@ -205,7 +205,7 @@ include ("include/charset.php");
  //vnejsi tab
  echo "\n <tr >";
 
- objekt_a2::vypis_razeni();
+ objekt_a2::vypis_razeni_a2();
 
  //konec vnejsi tab
  echo "</tr></form>";

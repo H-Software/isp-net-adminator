@@ -50,8 +50,6 @@ class objekt_a2
       <td><b>Linka </b></td>
       <td><b>Omezení </b></td>';
 
-          //<td colspan="3" align="center" ><b>Tresty a odměny</b></td> ';
-
       $output .= '</tr>';
 
       $styl = "border-bottom: 1px dashed black; ";
@@ -184,7 +182,7 @@ class objekt_a2
  
  } //konec funkce vypis odkaz
  
- public static function vypis_razeni()
+ public static function vypis_razeni_a2()
  {
  
    $input_value="1";

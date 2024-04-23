@@ -29,6 +29,42 @@ class objekt extends adminator
         $this->loggedUserEmail = $i['username'];
     }
 
+    public function vypis_razeni()
+    {
+        $output = "";
+
+        $output .= "\n<tr>\n";
+
+        $output .= '<td colspan="1">';
+        
+        // prvni dva
+
+        $output .= "</td>";
+
+        $output .= '<td colspan="3">';
+        
+        // druhy dva
+        
+        $output .= '</td>
+        <td><b>mac </b></td>
+        <td><b>typ </b></td>';
+  
+        $output .= "<td><b>client ap </b></td>";
+       
+        $output .= '
+            <td align="center" ><b>upravit</b></td>
+            <td align="center" ><b>smazat</b></td>
+            <td><b>třída </b></td>
+        <td><b>Aktivní</b></td>
+        <td><b>Test obj.</b></td>
+        <td><b>Linka </b></td>
+        <td><b>Omezení </b></td>';
+          
+        $output .= "\n</tr>\n";
+
+        return array($output);
+    }
+
     public function objektyListGetBodyContent()
     {
         $output = "";
@@ -79,7 +115,14 @@ class objekt extends adminator
         
         $output .= $objekt_a2->vypis_tab_first_rows($mod_vypisu);
 
+        list($output_razeni) = $this->vypis_razeni();
+        $output .= $output_razeni;
+
+        // TODO: add a2 list
+
         $output .= $objekt_a2->vypis_tab(2);  
+
+        // TODO: add listing
 
         return array($output, $error);
     }
