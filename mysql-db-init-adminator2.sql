@@ -96,7 +96,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713799665',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713872399',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -353,7 +353,8 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (149,	10,	'a3: fn-kontrola-omezeni.php'),
 (150,	40,	'objekty stb unpair'),
 (151,	10,	'a3: others-web-simelon'),
-(301,	30,	'fakturacni-skupiny add');
+(301,	30,	'fakturacni-skupiny add'),
+(302,	44,	'vlastnici-cross');
 
 DROP TABLE IF EXISTS `login_log`;
 CREATE TABLE `login_log` (
@@ -369,7 +370,8 @@ INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
 (35,	'admin',	'1713715907',	'172.18.0.1'),
 (36,	'admin',	'1713740348',	'172.18.0.1'),
 (37,	'admin',	'1713792013',	'172.18.0.1'),
-(38,	'admin',	'1713798122',	'172.18.0.1');
+(38,	'admin',	'1713798122',	'172.18.0.1'),
+(39,	'admin',	'1713819772',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -533,8 +535,12 @@ CREATE TABLE `tarify_int` (
   `typ_tarifu` int unsigned NOT NULL,
   `zkratka_tarifu` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `jmeno_tarifu` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `speed_down` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `speed_up` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `speed_dwn` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `speed_upl` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `agregace` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `agregace_smlouva` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cena_bez_dph` float NOT NULL DEFAULT '0',
+  `cena_s_dph` float NOT NULL DEFAULT '0',
   `gen_poradi` int NOT NULL DEFAULT '0',
   `barva` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id_tarifu`),
@@ -543,9 +549,9 @@ CREATE TABLE `tarify_int` (
   UNIQUE KEY `jmeno_tarifu` (`jmeno_tarifu`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `tarify_int` (`id_tarifu`, `typ_tarifu`, `zkratka_tarifu`, `jmeno_tarifu`, `speed_down`, `speed_up`, `gen_poradi`, `barva`) VALUES
-(1,	0,	'cs',	'small city',	'2048',	'2048',	0,	''),
-(2,	0,	'mp',	'metropolitni linka',	'',	'',	0,	'');
+INSERT INTO `tarify_int` (`id_tarifu`, `typ_tarifu`, `zkratka_tarifu`, `jmeno_tarifu`, `speed_dwn`, `speed_upl`, `agregace`, `agregace_smlouva`, `cena_bez_dph`, `cena_s_dph`, `gen_poradi`, `barva`) VALUES
+(1,	0,	'cs',	'small city',	'2048',	'2048',	'1:20',	'1:50',	249,	298.5,	0,	''),
+(2,	0,	'mp',	'metropolitni linka',	'',	'',	'',	'',	0,	0,	0,	'');
 
 DROP TABLE IF EXISTS `tarify_iptv`;
 CREATE TABLE `tarify_iptv` (
@@ -619,4 +625,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-22 15:28:00
+-- 2024-04-23 12:35:07
