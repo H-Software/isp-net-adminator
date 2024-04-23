@@ -96,7 +96,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713872399',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1713884322',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -334,7 +334,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (116,	40,	'topology-nod-erase'),
 (119,	20,	'partner-pozn-update'),
 (128,	60,	'topology-router-erase'),
-(131,	40,	'admin tarify'),
+(131,	40,	'admin tarify list'),
 (132,	20,	'topology-router-mail'),
 (135,	20,	'a2: objekty-stb'),
 (136,	10,	'objekty-stb-add'),
@@ -354,7 +354,8 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (150,	40,	'objekty stb unpair'),
 (151,	10,	'a3: others-web-simelon'),
 (301,	30,	'fakturacni-skupiny add'),
-(302,	44,	'vlastnici-cross');
+(302,	44,	'vlastnici-cross'),
+(303,	49,	'admin-tarify action');
 
 DROP TABLE IF EXISTS `login_log`;
 CREATE TABLE `login_log` (
@@ -371,7 +372,8 @@ INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
 (36,	'admin',	'1713740348',	'172.18.0.1'),
 (37,	'admin',	'1713792013',	'172.18.0.1'),
 (38,	'admin',	'1713798122',	'172.18.0.1'),
-(39,	'admin',	'1713819772',	'172.18.0.1');
+(39,	'admin',	'1713819772',	'172.18.0.1'),
+(40,	'admin',	'1713880109',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -625,4 +627,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-23 12:35:07
+-- 2024-04-23 15:06:40
