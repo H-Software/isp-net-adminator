@@ -13,7 +13,8 @@ class objekt_a2
   function vypis_tab($par)
   {
     $output = "";
-    if ($par == 2) { $output .= "\n".'</table>'."\n";  }
+    if( $par == 1) { $output .= "<table border=\"0\" width=\"100%\">\n"; }
+    elseif ($par == 2) { $output .= "\n".'</table>'."\n";  }
     else  { $output .= "chybny vyber"; }
    
     if($this->echo === true){
@@ -24,6 +25,18 @@ class objekt_a2
     }
   }
    
+  function vypis_thead()
+  {
+    $output = "";
+
+    if($this->echo === true){
+      echo $output;
+    }
+    else{
+      return $output;
+    }
+  }
+
  public static function select($es,$razeni)  
  {
   global $db_ok2;

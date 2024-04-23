@@ -194,9 +194,10 @@ include ("include/charset.php");
   if ( ( strlen($dns_find) > 0 ) ){ $co=1; $sql=$dns_find; }  
   if ( ( strlen($ip_find) > 0  ) ){ $co=2; $sql=$ip_find; }
   
-  // objekt_a2::vypis_tab(1);
+  $objekt = new objekt_a2;
 
-      echo "\n".'<table border="0" width="100%">'."\n";
+  $objekt->vypis_tab(1);
+
       echo '<tr>
           <td colspan="1"><b>dns </b></td>
           <td colspan="3"><b>ip adresa </b></td>
@@ -336,7 +337,6 @@ include ("include/charset.php");
   
   $listovani->listInterval();
   
-  $objekt = new objekt_a2;
   $objekt->conn_mysql = $conn_mysql;
   $objekt->conn_pqsql = $db_ok2;
   
