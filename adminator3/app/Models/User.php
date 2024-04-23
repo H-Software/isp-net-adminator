@@ -29,6 +29,13 @@ class User extends Model
 		'level'
 	];
 
+	/**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
 	// public function setPassword($password)
 	// {
 	// 	$this->update([

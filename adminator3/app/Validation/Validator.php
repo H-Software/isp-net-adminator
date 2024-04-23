@@ -26,7 +26,7 @@ class Validator
 						string $errors_wrapper_end = ""
 						)
 	{
-		$errors_wrapper_start = (empty($errors_wrapper_start)) ? $this-> errors_wrapper_start :$errors_wrapper_start;
+		$errors_wrapper_start = (empty($errors_wrapper_start)) ? $this-> errors_wrapper_start : $errors_wrapper_start;
 		$errors_wrapper_end = (empty($errors_wrapper_end)) ? $this-> errors_wrapper_end : $errors_wrapper_end;
 
 		foreach ($rules as $field => $rule) {

@@ -5,11 +5,15 @@ namespace App\Auth;
 use App\Models\User;
 use Psr\Container\ContainerInterface;
 
+use Respect\Validation\Validator as v;
+
 class passwordHelper
 {
     var $requestData;
 
     var $loggedUserData;
+
+    var $errorMessage;
 
 	function __construct(ContainerInterface $container, $requestData) {
         $this->container = $container;
@@ -27,24 +31,31 @@ class passwordHelper
 
         $this->logger->debug("PasswordController\postChangePassword: validationOld for user: " . var_export($this->loggedUserData['userName'], true) . " returned: " . var_export($validationOld,true));
 
-        $validationNew = $this->validator->validate($input_data, [
-            'Popis objektu#popis' => v::noWhitespace()->notEmpty()->alnum("-")->length(3,20),
-            'IP adresa#ip' => v::noWhitespace()->notEmpty()->ip(),
-            'Přípojný bod#id_nodu' => v::number()->greaterThan(0),
-            'MAC adresa#mac' => v::notEmpty()->macAddress(),
-            // 'puk' => v::number(),
-            // 'pin1' => v::number(),
-            // 'pin2' => v::number(),
-            'Číslo portu (ve switchi)#port_id' => v::number(),
-            'Tarif#id_tarifu' => v::number()->greaterThan(0),
-        ]);
+        if ($validationOld === false) {
+            $this->errorMessage = 'Wrong current password.';
+            return false;
+		}
 
-		// if ($validationOld === false) {
-        //     $this->flash->addMessage('error', 'Wrong current password.');
-		// 	return $response->withHeader('Location', $this->router->urlFor('auth.password.change'));
-		// }
+        // https://respect-validation.readthedocs.io/en/2.3/08-list-of-rules-by-category/
+        $validationNew = $this->validator->validate(
+                                    array('password' => $this->requestData['password']), 
+                                    [
+                                        'password' => v::noWhitespace()->notEmpty()->length(7, null),
+                                    ],
+                                    " ",
+                                    " "
+                            );
 
-        return false;
+        if ($validationNew->failed()) {
+            $valResults = $validationNew->getErrors();
+            foreach ($valResults as $valField => $valError) {
+                $this->errorMessage .= $valError;
+            }
+
+            return false;
+        }
+                                    
+        return true;
     }
 
     function changePassword(){
@@ -61,10 +72,21 @@ class passwordHelper
 
         $valRes = $this->validatePassword();
 
-        // if($valRes === true){
-        //     $this->logger->info('');
-        // }
+        if($valRes === false){
+            return false;
+        }
 
-        return false;
+        // update PW in DB
+        $pwHash = password_hash($this->requestData['password'], PASSWORD_DEFAULT, array('cost' => 10));
+
+        $affRows = User::where('username', $auth_identity['username'])
+                ->update(['passwordHash' => $pwHash]);
+
+        if($affRows <> 1){
+            $this->errorMessage = 'Update password failed! Database error.' . "(affected rows: " . $affRows . ")";
+            return false;
+        }
+
+        return true;
     }
 }
