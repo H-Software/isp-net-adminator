@@ -313,18 +313,18 @@ subcat-spacebody
 }​
 
 
-.vlastnici2-selectors-line
+.listing-selectors-line
 {
     font-size: 0.85rem !important;
     vertical-align: middle;
 }
-.vlastnici2-selectors-line select
+.listing-selectors-line select
 {
     font-size: 0.85rem !important;
     vertical-align: middle;
 }
 
-.vlastnici2-selectors-line input
+.listing-selectors-line input
 {
     font-size: 0.85rem !important;;
     vertical-align: middle;

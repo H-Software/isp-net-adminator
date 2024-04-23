@@ -18,48 +18,6 @@
     <input type="radio" name="select" value="5" {if $select == 5 } checked {/if} >
     <label class="vlastnici-selector-label" > Platí </label> |
 							    
-    <span style="padding-left: 5px; padding-right: 5px;" >Fakturační skupina: </span>
-								    
-    <select name="fakt_skupina" size="1" style="max-width: 190px;" >
-      <option value="0" class="select-nevybrano" >Nevybráno</option>
-	    
-	{section  name="prvek1" loop=$fakt_skupiny }
-	    <option value="{$fakt_skupiny[prvek1].id}" >{$fakt_skupiny[prvek1].nazev} 
-	    {if $fakt_skupiny[prvek1].typ == 1 } (DÚ) 
-	    {elseif $fakt_skupiny[prvek1].typ == 2 } (FÚ) {/if}
-	    </option>	
-	{sectionelse}
-	    <option value="0" class="select-nevybrano">Žádné fakturační skupiny nenalezeny</option>
-	{/section}
-    </select>
-									
-  {* razeni *}
-  <span style="padding-left: 5px; ">|</span>
-    
-  <span style="padding-left: 5px; padding-right: 5px; ">Řadit dle:</span>
-
-  <span style="">
-    <select name="razeni" size="1" >
-            <option value="1" > id klienta  </option>
-	    <option value="3"  > jména  </option>
-	    <option value="4"  > Příjmení  </option>
-	    <option value="5"  > Ulice  </option>
-	    <option value="6"  > Město  </option>
-	    <option value="14" > Var. symbol  </option>
-	    <option value="15" > K platbě  </option>
-    </select> 
-  </span>
-      
-  <span style="padding-left: 7px; ">
-
-      <select name="razeni2" size="1" >
-					
-        <option value="1" > vzestupně </option>
-        <option value="2" > sestupně </option>
-									
-      </select>
-  </span>
-
   </div>
  
   {* second line *}
