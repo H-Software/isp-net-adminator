@@ -32,6 +32,7 @@ class objekt extends adminator
     public function objektyListGetBodyContent()
     {
         $output = "";
+        $error = "";
 
         // TODO: fix checking levels for update/erase
         //promena pro update objektu
@@ -52,7 +53,7 @@ class objekt extends adminator
         {
          if( !( preg_match('/^([[:digit:]])+$/',$mod_vypisu) ) )
          {
-          echo "<div style=\"color: red; font-weight: bold; \" >Chyba! Nesouhlasi vstupni data. (mod vypisu) </div>";
+          $error .= "<div style=\"color: red; font-weight: bold; \" >Chyba! Nesouhlasi vstupni data. (mod vypisu) </div>";
           exit;
          }
         }
@@ -80,6 +81,6 @@ class objekt extends adminator
 
         $output .= $objekt_a2->vypis_tab(2);  
 
-        return array($output);
+        return array($output, $error);
     }
 }

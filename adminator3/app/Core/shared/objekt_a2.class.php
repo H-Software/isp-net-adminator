@@ -196,7 +196,7 @@ class objekt_a2
     echo "<td>";
 
     //vnitrni tab
-    echo "\n <table><tr><td>";
+    echo "\n <table border=\"1\"><tr><td>";
 
     if( $i=="3" or $i=="4" ){ echo ""; }
     else

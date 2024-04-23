@@ -71,8 +71,8 @@ include ("include/charset.php");
    if ( check_level($level,34) ) { $garant_akce="true"; }
    if ( check_level($level,59) ) { $export_povolen="true"; }
       
-?> 
-     
+?>
+
  <tr>
     <td colspan="2" style="border: 0px; " >
     
@@ -199,7 +199,6 @@ include ("include/charset.php");
   $objekt->vypis_tab(1);
 
   $objekt->vypis_tab_first_rows($mod_vypisu);
-
 
  //sem řazení
 
