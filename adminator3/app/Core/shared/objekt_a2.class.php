@@ -196,7 +196,7 @@ class objekt_a2
     echo "<td>";
 
     //vnitrni tab
-    // echo "\n <table border=\"1\"><tr><td>";
+    echo "\n <table border=\"1\"><tr><td>";
 
     if( $i=="3" or $i=="4" ){ echo ""; }
     else
@@ -221,7 +221,7 @@ class objekt_a2
     }
 
     // vnitrni tab
-    // echo "\n </td></tr></table> \n\n";
+    echo "\n </td></tr></table> \n\n";
 
     $input_value=$input_value+2;
     $input_value2=$input_value2+2;
