@@ -24,6 +24,8 @@ class c_listing_objekty {
     var $befError = "<div align=\"center\" style=\"color: maroon;\">";
     var $aftError = "</div>";
     
+    var $echo = true;
+
    // $select="./objekty.php?";
     
     //konstruktor...naplni promenne
@@ -55,7 +57,7 @@ class c_listing_objekty {
         }
 
         if($listRecord !== false){
-            $allRecords = pg_num_rows($listRecord);
+            $allRecords = @pg_num_rows($listRecord);
         }
 
         if (!$allRecords){
@@ -104,8 +106,10 @@ class c_listing_objekty {
     //zobrazi seznam intervalu v zadanem rozsahu ($interval)
     //napr.:    1-10 | 11-20 | 21-30
     function listInterval(){
+        $output = "";
+
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         for ($i = 1; $i <= $this->numLists; $i++){
             $isLink = 1;
             $spacer = " | ";
@@ -123,13 +127,20 @@ class c_listing_objekty {
                 $spacer = "";
             }
             if ($isLink == 0){
-                echo $from."-".$to." ".$spacer;
+                $output .= $from."-".$to." ".$spacer;
             }
             if ($isLink == 1){
-                echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
+                $output .= "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
             }
         }
-        echo $this->after;
+        $output .= $this->after;
+
+        if($this->echo === true){
+            echo $output;
+        }
+        else{
+            return $output;
+        }
     }
     
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)

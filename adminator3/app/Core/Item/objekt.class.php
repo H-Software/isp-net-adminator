@@ -306,24 +306,26 @@ class objekt extends adminator
         if($generateSqlRes === false){
             return array("", '<div class="alert alert-danger" role="alert">Chyba! Nepodarilo se vygenerovat SQL dotaz.</div>');
         }
-        // TODO: fix listing
-        // $poradek = "es=".$this->es."&najdi=".$najdi."&odeslano=".$odeslano."&dns_find=".$this->dns_find."&ip_find=".$ip_find."&razeni=".$razeni;
-        // $poradek .= "&mod_vypisu=".$mod_vypisu;
+        // paging
+        //
+        $poradek = "es=".$this->es."&najdi=".$najdi."&odeslano=".$_GET['odeslano']."&dns_find=".$this->dns_find."&ip_find=".$this->ip_find."&razeni=".$_get['razeni'];
+        $poradek .= "&mod_vypisu=".$this->mod_vypisu;
        
         //vytvoreni objektu
-        // $listovani = new c_listing_objekty("./objekty.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
-     
-        // if(($list == "")||($list == "1")){ $bude_chybet = 0;  } //pokud není list zadán nebo je první bude ve výběru sql dotazem chybet 0 záznamů
-        // else
-        // { $bude_chybet = (($list-1) * $listovani->interval); }   //jinak jich bude chybet podle závislosti na listu a intervalu
+        $listovani = new \c_listing_objekty("/objekty?".$poradek."&menu=1", 30, $this->list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $this->dotaz_source);
+        $listovani->echo = false;
+        
+        if(($this->list == "")||($this->list == "1")){ $bude_chybet = 0;  } //pokud není list zadán nebo je první bude ve výběru sql dotazem chybet 0 záznamů
+        else
+        { $bude_chybet = (($this->list-1) * $listovani->interval); }   //jinak jich bude chybet podle závislosti na listu a intervalu
      
         //  $interval=$listovani->interval;
      
-        if(intval($interval) > 0 and intval($bude_chybet) > 0){
-            $this->dotaz_source = $this->dotaz_source . " LIMIT ". intval($interval)." OFFSET ".intval($bude_chybet)." ";
+        if(intval($listovani->interval) > 0 and intval($bude_chybet) > 0) {
+            $this->dotaz_source = $this->dotaz_source . " LIMIT ". intval($listovani->interval)." OFFSET ".intval($bude_chybet)." ";
         }
        
-        // $listovani->listInterval();
+        $output .= $listovani->listInterval();
         
         $this->logger->debug("objekt\listGetBodyContent: dump vars: "
                                 ."dotaz_source: " . var_export($this->dotaz_source, true)
@@ -335,8 +337,8 @@ class objekt extends adminator
 
         $output .= $objekt_a2->vypis_tab(2);  
 
-        // TODO: add listing
-        // $listovani->listInterval(); 
+        // listing
+        $output .= $listovani->listInterval(); 
 
         return array($output, $error);
     }
