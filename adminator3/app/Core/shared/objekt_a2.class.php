@@ -13,7 +13,8 @@ class objekt_a2
   function vypis_tab($par)
   {
     $output = "";
-    if ($par == 2) { $output .= "\n".'</table>'."\n";  }
+    if( $par == 1) { $output .= "<table border=\"0\" width=\"100%\" class=\"objekty-table\" >\n"; }
+    elseif ($par == 2) { $output .= "\n".'</table>'."\n";  }
     else  { $output .= "chybny vyber"; }
    
     if($this->echo === true){
@@ -24,6 +25,58 @@ class objekt_a2
     }
   }
    
+  function vypis_tab_first_rows($mod_vypisu)
+  {
+    $output = "";
+
+    $output .= '<tr>
+      <td colspan="1"><b>dns </b></td>
+      <td colspan="3"><b>ip adresa </b></td>
+      <td><b>mac </b></td>
+      <td><b>typ </b></td>';
+
+
+    if( $mod_vypisu == 2 )
+    { $output .= "<td align=\"center\" ><b>Číslo portu:</b></td>"; }
+    else
+    { $output .= "<td><b>client ap </b></td>"; } 
+     
+      $output .= '
+          <td align="center" ><b>upravit</b></td>
+          <td align="center" ><b>smazat</b></td>
+          <td><b>třída </b></td>
+      <td><b>Aktivní</b></td>
+      <td><b>Test obj.</b></td>
+      <td><b>Linka </b></td>
+      <td><b>Omezení </b></td>';
+
+      $output .= '</tr>';
+
+      $styl = "border-bottom: 1px dashed black; ";
+
+      $output .= "<tr style=\"color: grey; \"  >
+          <td colspan=\"2\" style=\"".$styl."\" ><b>přípojný bod: </b></td>
+          <td colspan=\"1\" style=\"".$styl."\" ><b>historie </b></td>
+      <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>vlastník </b></td>
+          <td colspan=\"2\" style=\"".$styl."\" ><b>mac klienta </b></td>
+          <td colspan=\"1\" style=\"".$styl."\" ><b>ip rb </b></td>
+          
+          <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>přidal</b></td>
+          <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>upravil </b></td>
+      <td style=\"".$styl."\" >&nbsp;</td>
+          <td colspan=\"3\" style=\"".$styl."\" ><b>Datum přidání </b></td>
+          <td colspan=\"1\" style=\"".$styl."\" ><b>Reg. Form </b></td>
+        
+      </tr>";
+
+    if($this->echo === true){
+      echo $output;
+    }
+    else{
+      return $output;
+    }
+  }
+
  public static function select($es,$razeni)  
  {
   global $db_ok2;
@@ -129,7 +182,7 @@ class objekt_a2
  
  } //konec funkce vypis odkaz
  
- public static function vypis_razeni()
+ public static function vypis_razeni_a2()
  {
  
    $input_value="1";
@@ -141,7 +194,7 @@ class objekt_a2
     echo "<td>";
 
     //vnitrni tab
-    echo "\n <table><tr><td>";
+    echo "\n <table border=\"0\"><tr><td>";
 
     if( $i=="3" or $i=="4" ){ echo ""; }
     else

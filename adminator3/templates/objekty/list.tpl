@@ -10,5 +10,4 @@
 
 {$body}
 
-
 {include file="base-end.tpl"}

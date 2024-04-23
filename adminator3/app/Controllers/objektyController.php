@@ -111,22 +111,35 @@ class objektyController extends adminatorController {
 
         $this->logger->info("objektyController\objekty called");
         
-        $this->checkLevel(135, $this->adminator);
+        $this->checkLevel(1, $this->adminator);
 
         $this->smarty->assign("page_title","Adminator3 :: Objekty");
 
         $this->header($request, $response, $this->adminator);
       
         $dns_find = $_GET['dns_find'];
+        $ip_find = $_GET['ip_find'];
+
         if( (strlen($dns_find) ==0 ) ){ $dns_find = "%"; }
 
         $this->smarty->assign("es", $_GET['es']);
         $this->smarty->assign("mod_vypisu", $_GET['mod_vypisu']);
 
         $this->smarty->assign("dns_find", $dns_find);
-        $this->smarty->assign("ip_find", $_GET['ip_find']);
+        $this->smarty->assign("ip_find", $ip_find);
 
-        $this->smarty->assign("body","T.B.A.");
+        $objekt = new \App\Core\objekt($this->container);
+        $objekt->dns_find = $dns_find;
+        $objekt->ip_find = $ip_find;
+
+        list($output, $errors) = $objekt->listGetBodyContent();
+
+        if(strlen($errors) > 0){
+            $this->smarty->assign("body", $errors);
+        }
+        else{
+            $this->smarty->assign("body", $output);
+        }
   
         $this->smarty->display('objekty/list.tpl');
     }

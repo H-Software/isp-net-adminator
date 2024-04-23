@@ -71,8 +71,8 @@ include ("include/charset.php");
    if ( check_level($level,34) ) { $garant_akce="true"; }
    if ( check_level($level,59) ) { $export_povolen="true"; }
       
-?> 
-     
+?>
+
  <tr>
     <td colspan="2" style="border: 0px; " >
     
@@ -183,7 +183,7 @@ include ("include/charset.php");
    <td colspan="2" style="border: 0px; " >
     <hr width="16%" align="left"> 
    </td>
-  <td>
+  <tr>
     
   <tr>
   <td colspan="2">
@@ -194,64 +194,22 @@ include ("include/charset.php");
   if ( ( strlen($dns_find) > 0 ) ){ $co=1; $sql=$dns_find; }  
   if ( ( strlen($ip_find) > 0  ) ){ $co=2; $sql=$ip_find; }
   
-  // objekt_a2::vypis_tab(1);
+  $objekt = new objekt_a2;
 
-      echo "\n".'<table border="0" width="100%">'."\n";
-      echo '<tr>
-          <td colspan="1"><b>dns </b></td>
-          <td colspan="3"><b>ip adresa </b></td>
-          <td><b>mac </b></td>
-          <td><b>typ </b></td>';
-	  
-	  
-       if( $mod_vypisu == 2 )
-       { echo "<td align=\"center\" ><b>Číslo portu:</b></td>"; }
-       else
-       { echo "<td><b>client ap </b></td>"; } 
-       	  
-       echo '
-          <td align="center" ><b>upravit</b></td>
-          <td align="center" ><b>smazat</b></td>
-          <td><b>třída </b></td>
-	  <td><b>Aktivní</b></td>
-	  <td><b>Test obj.</b></td>
-	  <td><b>Linka </b></td>
-	  <td><b>Omezení </b></td>';
-	  
-          //<td colspan="3" align="center" ><b>Tresty a odměny</b></td> ';
+  $objekt->vypis_tab(1);
 
-    echo '</tr>';
-
-    $styl = "border-bottom: 1px dashed black; ";
-    
-    echo "<tr style=\"color: grey; \"  >
-          <td colspan=\"2\" style=\"".$styl."\" ><b>přípojný bod: </b></td>
-          <td colspan=\"1\" style=\"".$styl."\" ><b>historie </b></td>
-	  <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>vlastník </b></td>
-          <td colspan=\"2\" style=\"".$styl."\" ><b>mac klienta </b></td>
-          <td colspan=\"1\" style=\"".$styl."\" ><b>ip rb </b></td>
-          
-          <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>přidal</b></td>
-          <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>upravil </b></td>
-	  <td style=\"".$styl."\" >&nbsp;</td>
-          <td colspan=\"3\" style=\"".$styl."\" ><b>Datum přidání </b></td>
-          <td colspan=\"1\" style=\"".$styl."\" ><b>Reg. Form </b></td>
-         
-	 </tr>";
+  $objekt->vypis_tab_first_rows($mod_vypisu);
 
  //sem řazení
 
  //vnejsi tab
  echo "\n <tr >";
 
- objekt_a2::vypis_razeni();
+ objekt_a2::vypis_razeni_a2();
 
  //konec vnejsi tab
  echo "</tr></form>";
  
- //global $order;
- //global $se;
- //global $es;
  
  list($se,$order) = objekt_a2::select($es,$razeni);
 
@@ -336,7 +294,6 @@ include ("include/charset.php");
   
   $listovani->listInterval();
   
-  $objekt = new objekt_a2;
   $objekt->conn_mysql = $conn_mysql;
   $objekt->conn_pqsql = $db_ok2;
   
