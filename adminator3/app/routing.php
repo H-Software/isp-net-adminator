@@ -2,8 +2,6 @@
 
 // routes
 
-// use App\Middleware\GuestMiddleware;
-// use App\Middleware\AuthMiddleware;
 use \Slim\Http\Request as SlimHttpRequest;
 use \Slim\Http\Response as SlimHttpResponse;
 
@@ -68,6 +66,7 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/others/board', \othersController::class . ':board');
 
     $this->map(['GET', 'POST'],'/objekty/cat', \objektyController::class . ':cat');
+    $this->map(['GET', 'POST'],'/objekty', \objektyController::class . ':objekty');
     $this->map(['GET', 'POST'],'/objekty/stb', \objektyController::class . ':stb');
     $this->map(['GET', 'POST'],'/objekty/stb/action', \objektyController::class . ':stbAction');
 

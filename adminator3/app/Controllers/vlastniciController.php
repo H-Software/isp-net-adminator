@@ -54,31 +54,34 @@ class vlastniciController extends adminatorController {
 
         $this->header($request, $response, $this->adminator);
 
-        $select = $_GET["select"];
-
         $vlastnik2 = new \vlastnik2($this->container);
+        
+        // selectors form
+        //
         $fs = new \App\Customer\fakturacniSkupiny($this->container);
 
-        $this->smarty->assign("select",$select);
-        
+        $select = $_GET["select"];
+
         if( $select == 2)
         { $fu_select = "2"; } //Pouze FU
         if( $select == 3 )
         { $fu_select = "1"; } //pouze DU
-        
+
+        $this->smarty->assign("select",$select);
         $fakt_skupiny = $fs->show_fakt_skupiny($fu_select);
         
         $this->smarty->assign("fakt_skupiny",$fakt_skupiny);
         
+        $this->smarty->assign("fakt_skupiny_selected", $_GET['fakt_skupina']);
+
+        $this->smarty->assign("razeni", $_GET['razeni']);
+        $this->smarty->assign("razeni2", $_GET['razeni2']);
+
         // test capsule
         //
         // $objekty = DB::connection('pgsql')->select("select * from objekty");
-        // $objekty = DB::connection('pgsql')
-        //             ->table('objekty')
-        //             ->orderBy('id_komplu', 'desc')
-        //             ->get();
-        // $rs .= "<pre>" . var_export($objekty, true) . "</pre>";
 
+        // main table
         $bodyContent = $vlastnik2->listItems();
 
         $this->smarty->assign("form_search_value", preg_replace('/^(%)(.*)(%)$/', '\2', $vlastnik2->listSql));

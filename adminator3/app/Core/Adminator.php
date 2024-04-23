@@ -187,13 +187,13 @@ class adminator {
 
         $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" );
 
-        // if( ereg("^.+vlastnici.+",$uri) or ereg("^.+vlastnici/cat+",$uri) or ereg("^.+vypovedi",$uri) )
-        // { $kategorie[0]["barva"] = "silver"; }
+        if( preg_match("/^\/vlastnici.*/", $uri) or preg_match("/^\/vypovedi.*/", $uri) )
+        { $kategorie[0]["barva"] = "silver"; }
 
         $kategorie[1] = array( "nazev" => "Služby", "url" => "/objekty/cat", "align" => "center", "width" => "18%" );
 
-        // if( ereg("^.+objekty.",$uri) )
-        // { $kategorie[1]["barva"] = "silver"; }
+        if( preg_match("/^\/objekty.*/", $uri) )
+        { $kategorie[1]["barva"] = "silver"; }
 
         $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby/cat", "align" => "center", "width" => "18%" );
 
