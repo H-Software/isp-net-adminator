@@ -132,9 +132,14 @@ class objektyController extends adminatorController {
         $objekt->dns_find = $dns_find;
         $objekt->ip_find = $ip_find;
 
-        list($output) = $objekt->objektyListGetBodyContent();
+        list($output, $errors) = $objekt->objektyListGetBodyContent();
 
-        $this->smarty->assign("body", $output);
+        if(strlen($errors) > 0){
+            $this->smarty->assign("body", $errors);
+        }
+        else{
+            $this->smarty->assign("body", $output);
+        }
   
         $this->smarty->display('objekty/list.tpl');
     }

@@ -57,4 +57,5 @@
   {* oddelovaci cara *}
   <div style="border-bottom: 2px solid black; padding-top: 5px; margin-bottom: 5px; height: 2px; width: 20%; " ></div>
 
-</form>
+{* form tag is ending after sorting buttons (not in smarty templates) *}
+{* </form> *}
