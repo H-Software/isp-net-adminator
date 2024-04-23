@@ -72,8 +72,6 @@ class adminController extends adminatorController {
         
         $this->checkLevel(21, $this->adminator);
 
-        // $this->smarty->assign("bs_layout_main_col_count", "8");
-
         $this->smarty->assign("page_title","Adminator3 :: vypis levelu stranek");
 
         $this->header($request, $response, $this->adminator);
@@ -134,7 +132,7 @@ class adminController extends adminatorController {
           
         $this->checkLevel(131, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: Admin :: Tarify");
+        $this->smarty->assign("page_title","Adminator3 :: Tarify");
 
         $this->header($request, $response, $this->adminator);
 
@@ -146,5 +144,24 @@ class adminController extends adminatorController {
 
         $this->smarty->display('admin/tarify.tpl');
     }
-    
+
+    public function adminTarifyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info("adminController\adminTarify called");
+          
+        $this->checkLevel(131, $this->adminator);
+
+        $this->smarty->assign("page_title","Adminator3 :: Tarify :: Action");
+
+        $this->header($request, $response, $this->adminator);
+
+
+        list($rs, $rs_err) = $this->admin->tarifAction();
+
+        //TODO: add showing errors in templates
+
+        $this->smarty->assign("body",$rs[0]);
+
+        $this->smarty->display('admin/tarify.tpl');
+    }
 }

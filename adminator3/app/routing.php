@@ -56,6 +56,7 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/admin/level-action', \adminController::class . ':adminLevelAction');
 
     $this->map(['GET', 'POST'],'/admin/tarify', \adminController::class . ':adminTarify');
+    $this->map(['GET', 'POST'],'/admin/tarify/action', \adminController::class . ':adminTarifyAction');
 
     $this->map(['GET', 'POST'],'/archiv-zmen', \archivZmenController::class . ':archivZmenList');
     $this->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');

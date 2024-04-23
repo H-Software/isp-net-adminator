@@ -491,7 +491,52 @@ subcat-spacebody
     height: 18px;
 }
 
+.tarify-table
+{
+    width: 100%; 
+    margin-bottom: 1rem;
+    vertical-align: top; 
+    font-size: 1rem; 
+    /* border-style: solid; 
+    border-width: 0;
+    border-collapse: collapse; */
+    border-spacing: 2px;
+    font-family: Verdana CE, Arial CE, Verdana, Arial, Helvetica, sans-serif;
+}
 
+.tarify-table tbody 
+{
+    display: table-row-group;
+}
+
+.tarify-table tr
+{
+    display: table-row;
+    padding: .5rem .5rem;
+}
+
+.tarify-table td
+{
+    display: table-cell;
+    padding: .5rem .5rem;
+}
+
+.tarify-table tbody tr:nth-child(odd)
+{
+    border-top-width: 1px;
+}
+
+.tarify-table tbody tr:nth-child(even)
+{
+    color: grey; 
+
+}
+
+.tarify-table thead tr:nth-child(even)
+{
+    color: grey; 
+
+}
 
 .fakturacni-skupiny-table
 {
