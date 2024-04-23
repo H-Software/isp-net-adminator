@@ -55,6 +55,7 @@ class vlastniciController extends adminatorController {
         $this->header($request, $response, $this->adminator);
 
         $select = $_GET["select"];
+        $fakt_skupina = $_GET["fakt_skupina"];
 
         $vlastnik2 = new \vlastnik2($this->container);
         $fs = new \App\Customer\fakturacniSkupiny($this->container);
@@ -69,6 +70,9 @@ class vlastniciController extends adminatorController {
         $fakt_skupiny = $fs->show_fakt_skupiny($fu_select);
         
         $this->smarty->assign("fakt_skupiny",$fakt_skupiny);
+        
+        $this->smarty->assign("fakt_skupiny_selected",$fakt_skupina);
+
         
         // test capsule
         //

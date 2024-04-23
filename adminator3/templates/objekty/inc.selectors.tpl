@@ -1,22 +1,21 @@
-
 <form method="GET" action="{$action_1}" >
 
   <div style="padding-top: 4px; " class="listing-selectors-line" >
   
     <input type="radio" name="select" value="1" {if $select == 1 } checked {/if} >
-    <label class="vlastnici-selector-label" >Všichni</label>|
+    <label class="listing-selector-label" >Všichni</label>|
 	    
     <input type="radio" name="select" value="2" {if $select == 2 } checked {/if} >
-    <label class="vlastnici-selector-label" > FÚ </label> |
+    <label class="listing-selector-label" > FÚ </label> |
 			
     <input type="radio" name="select" value="3" {if $select == 3 } checked {/if} >
-    <label class="vlastnici-selector-label" > DÚ </label> |
+    <label class="listing-selector-label" > DÚ </label> |
 				    
     <input type="radio" name="select" value="4" {if $select == 4 } checked {/if} >
-    <label class="vlastnici-selector-label" > Neplatí(free) </label> |
+    <label class="listing-selector-label" > Neplatí(free) </label> |
 						
     <input type="radio" name="select" value="5" {if $select == 5 } checked {/if} >
-    <label class="vlastnici-selector-label" > Platí </label> |
+    <label class="listing-selector-label" > Platí </label> |
 							    
   </div>
  
