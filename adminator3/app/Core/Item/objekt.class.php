@@ -325,9 +325,13 @@ class objekt extends adminator
        
         // $listovani->listInterval();
         
-        $this->logger->debug("objekt\listGetBodyContent: dump vars: ");
+        $this->logger->debug("objekt\listGetBodyContent: dump vars: "
+                                ."dotaz_source: " . var_export($this->dotaz_source, true)
+                                . ", sql: " . var_export($sql, true)
+                                . ", co: " . var_export($co, true)
+                            );
 
-        $objekt_a2->vypis($sql,$co,0,$this->dotaz_source);
+        $output .= $objekt_a2->vypis($sql,$co,0,$this->dotaz_source);
 
         $output .= $objekt_a2->vypis_tab(2);  
 
