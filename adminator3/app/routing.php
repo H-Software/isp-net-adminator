@@ -34,7 +34,6 @@ $app->group('', function () use ($app) {
         return $res->withStatus(302)->withHeader('Location', '/home');
     });
 
-    // TODO: fix password/change routing
     $app->get('/auth/password/change', PasswordController::class . ':getChangePassword')->setName('auth.password.change');
 	$app->post('/auth/password/change', PasswordController::class . ':postChangePassword');
 
