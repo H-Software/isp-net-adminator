@@ -198,47 +198,8 @@ include ("include/charset.php");
 
   $objekt->vypis_tab(1);
 
-      echo '<tr>
-          <td colspan="1"><b>dns </b></td>
-          <td colspan="3"><b>ip adresa </b></td>
-          <td><b>mac </b></td>
-          <td><b>typ </b></td>';
-	  
-	  
-       if( $mod_vypisu == 2 )
-       { echo "<td align=\"center\" ><b>Číslo portu:</b></td>"; }
-       else
-       { echo "<td><b>client ap </b></td>"; } 
-       	  
-       echo '
-          <td align="center" ><b>upravit</b></td>
-          <td align="center" ><b>smazat</b></td>
-          <td><b>třída </b></td>
-	  <td><b>Aktivní</b></td>
-	  <td><b>Test obj.</b></td>
-	  <td><b>Linka </b></td>
-	  <td><b>Omezení </b></td>';
-	  
-          //<td colspan="3" align="center" ><b>Tresty a odměny</b></td> ';
+  $objekt->vypis_tab_first_rows($mod_vypisu);
 
-    echo '</tr>';
-
-    $styl = "border-bottom: 1px dashed black; ";
-    
-    echo "<tr style=\"color: grey; \"  >
-          <td colspan=\"2\" style=\"".$styl."\" ><b>přípojný bod: </b></td>
-          <td colspan=\"1\" style=\"".$styl."\" ><b>historie </b></td>
-	  <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>vlastník </b></td>
-          <td colspan=\"2\" style=\"".$styl."\" ><b>mac klienta </b></td>
-          <td colspan=\"1\" style=\"".$styl."\" ><b>ip rb </b></td>
-          
-          <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>přidal</b></td>
-          <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>upravil </b></td>
-	  <td style=\"".$styl."\" >&nbsp;</td>
-          <td colspan=\"3\" style=\"".$styl."\" ><b>Datum přidání </b></td>
-          <td colspan=\"1\" style=\"".$styl."\" ><b>Reg. Form </b></td>
-         
-	 </tr>";
 
  //sem řazení
 

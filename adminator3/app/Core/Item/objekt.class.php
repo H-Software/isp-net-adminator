@@ -31,7 +31,7 @@ class objekt extends adminator
 
     public function objektyListGetBodyContent()
     {
-        $output = "T.B.A.";
+        $output = "";
 
         // TODO: fix checking levels for update/erase
         //promena pro update objektu
@@ -44,6 +44,21 @@ class objekt extends adminator
         // if ( $export_povolen == true )
         // { objekt_a2::export_vypis_odkaz(); }	
 
+        // prepare vars
+        //
+        $mod_vypisu = $_GET["mod_vypisu"];
+    
+        if( isset($mod_vypisu) )
+        {
+         if( !( preg_match('/^([[:digit:]])+$/',$mod_vypisu) ) )
+         {
+          echo "<div style=\"color: red; font-weight: bold; \" >Chyba! Nesouhlasi vstupni data. (mod vypisu) </div>";
+          exit;
+         }
+        }
+
+        // detect mode
+        //
         if ( ( strlen($this->dns_find) > 0 ) )
         {
             $co=1;
@@ -56,6 +71,14 @@ class objekt extends adminator
             $sql=$this->ip_find;
         }
 
+        $objekt_a2 = new \objekt_a2;
+        $objekt_a2->echo = false;
+
+        $output .= $objekt_a2->vypis_tab(1);
+        
+        $output .= $objekt_a2->vypis_tab_first_rows($mod_vypisu);
+
+        $output .= $objekt_a2->vypis_tab(2);  
 
         return array($output);
     }
