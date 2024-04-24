@@ -191,7 +191,7 @@ require_once("include/charset.php");
     echo "</td>";
 	    
     if( check_level($level,63) ){ 
-	$vlastnik->export_povolen="true"; 
+		$vlastnik->export_povolen="true"; 
     }
     
     // tafy generovani exportu
@@ -229,13 +229,13 @@ require_once("include/charset.php");
 	{ /* cokoli dalsiho */ }
 	
 	//promena pro update objektu
-	if( check_level($level,29) ) { $update_povolen="true"; }
-	if( check_level($level,33) ) { $mazani_povoleno="true"; }
-	if( check_level($level,34) ) { $garant_akce="true"; }
+	if( check_level($level,29) ) { $vlastnik->objektListAllowedActionUpdate = true; }
+	if( check_level($level,33) ) { $vlastnik->objektListAllowedActionErase = true; }
+	if( check_level($level,34) ) { $vlastnik->objektListAllowedActionGarant = true; }
 	
 	// promeny pro mazani, zmenu vlastniku
-	if( check_level($level,45) ) { $vlastnici_erase_povolen="true"; }
-	if( check_level($level,30) ) { $vlastnici_update_povolen="true"; }
+	if( check_level($level,45) ) { $vlastnik->vlastnici_erase_povolen = true; }
+	if( check_level($level,30) ) { $vlastnik->vlastnici_update_povolen = true; }
 	
 	// odendani objektu od vlastnika
 	if( check_level($level,49) ) { $odendani_povoleno="true"; }
