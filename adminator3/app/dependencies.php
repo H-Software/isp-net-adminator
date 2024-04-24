@@ -10,7 +10,9 @@ use Laminas\Authentication\Storage\Session as SessionStorage;
 use Laminas\Session\Config\SessionConfig;
 use Laminas\Session\SessionManager;
 
-$container = $app->getContainer();
+use Pimple\Container;
+
+// $container = $app->getContainer();
 
 // init sessions
 $sessionConfig = new SessionConfig();
@@ -108,45 +110,46 @@ $container['view'] = function ($container) {
 
 $acl = new Acl();
 
-$container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
-$container['acl']    = $acl;
+// TODO:  Class "Slim\Router" not found
+// $container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
+// $container['acl']    = $acl;
 
-$adapterOptions = [];
-$adapter = new czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter(
-    NULL,  //LDAP config or NULL if not using LDAP
-    $em, //an Doctrine's Entity Manager instance 
-    "App\Entity\UserRole",    //Role class
-    "role", //Role's class role attribute
-    "user", //Role's class user attribute (the @ManyToOne attrib)
-    "App\Entity\User", //User class
-    "username", //User name attribute
-    "passwordHash", //password (as a hash) attribute
-    czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
-    10, //a hash factor
-    PASSWORD_DEFAULT, //hash algorithm
-    $adapterOptions //if needed
-    );
+// $adapterOptions = [];
+// $adapter = new czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter(
+//     NULL,  //LDAP config or NULL if not using LDAP
+//     $em, //an Doctrine's Entity Manager instance 
+//     "App\Entity\UserRole",    //Role class
+//     "role", //Role's class role attribute
+//     "user", //Role's class user attribute (the @ManyToOne attrib)
+//     "App\Entity\User", //User class
+//     "username", //User name attribute
+//     "passwordHash", //password (as a hash) attribute
+//     czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
+//     10, //a hash factor
+//     PASSWORD_DEFAULT, //hash algorithm
+//     $adapterOptions //if needed
+//     );
 
-$container["authAdapter"] = $adapter;
+// $container["authAdapter"] = $adapter;
 
-$slimAuthProvider = new SlimAuthProvider();
-$slimAuthProvider->register($container);
+// $slimAuthProvider = new SlimAuthProvider();
+// $slimAuthProvider->register($container);
 
-$app->add(
-        new Authorization( 
-                $container["auth"], 
-                $acl, 
-                new RedirectHandler("/auth/notAuthenticated", "/auth/notAuthorized") 
-            )
-        );
+// $app->add(
+//         new Authorization( 
+//                 $container["auth"], 
+//                 $acl, 
+//                 new RedirectHandler("/auth/notAuthenticated", "/auth/notAuthorized") 
+//             )
+//         );
 
 $container['csrf'] = function($container) {
 	return new \Slim\Csrf\Guard;
 };
 
-$app->add(new \App\Middleware\CsrfViewMiddleware($container));
+// $app->add(new \App\Middleware\CsrfViewMiddleware($container));
 
-$app->add($container->csrf);
+// $app->add($container->csrf);
 
 $container['AuthController'] = function($container) {
 	return new \App\Controllers\Auth\AuthController($container);

@@ -5,6 +5,9 @@
 use \Slim\Http\Request as SlimHttpRequest;
 use \Slim\Http\Response as SlimHttpResponse;
 
+use Slim\Routing\RouteCollectorProxy;
+
+
 $app->group('/auth', function() use ($app) {
 	$app->get('/notAuthenticated', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) use ($app) {
       
@@ -29,7 +32,7 @@ $app->group('/auth', function() use ($app) {
     $app->get('/signout', AuthController::class . ':signout')->setName('logout');
 });
 
-$app->group('', function () use ($app) {
+$app->group('', function (RouteCollectorProxy $group) use ($app) {
     $this->get('/', function ($req, $res, $args) {
         return $res->withStatus(302)->withHeader('Location', '/home');
     });
