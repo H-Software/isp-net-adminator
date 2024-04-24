@@ -37,10 +37,7 @@ class vlastnik2 {
 	private function listPrepareVars($vlastnik)
 	{
 		// perms for actions/links
-		// if ($this->adminator->checkLevel(40, false) === true) {
-		// 	$vlastnik->pridani_povoleno = "true";
-		// }
-					
+		//					
 		if ($this->adminator->checkLevel(63, false) === true) {
 			$vlastnik->export_povolen = true; 
 		}
@@ -142,7 +139,7 @@ class vlastnik2 {
 		$vlastnik->objektListAllowedActionUpdate = $this->objektListAllowedActionUpdate;
 		$vlastnik->objektListAllowedActionErase = $this->objektListAllowedActionErase;
 		$vlastnik->objektListAllowedActionGarant = $this->objektListAllowedActionGarant;
-		
+
 		// generovani exportu
 		if( $vlastnik->export_povolen )
 		{     

@@ -85,6 +85,10 @@ class vlastniciController extends adminatorController {
             $this->smarty->assign("vlastnici2_export_povolen", "true");
         }
 
+        if ($this->adminator->checkLevel(40, false) === true) {
+            $this->smarty->assign("vlastnici2_pridani_povoleno", "true");
+		}
+
         // main table
         $bodyContent = $vlastnik2->listItems();
 
