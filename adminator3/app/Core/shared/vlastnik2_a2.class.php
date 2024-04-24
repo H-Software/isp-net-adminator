@@ -23,7 +23,7 @@ class vlastnik2_a2
    var $objektListAllowedActionGarant = false;
 
    var $vlastnikAllowedUnassignObject = false;
-   
+
    var $vlastnici_erase_povolen = false;
 
    var $vlastnici_update_povolen = false;
@@ -403,6 +403,7 @@ class vlastnik2_a2
 	$objekt->listAllowedActionUpdate = $this->objektListAllowedActionUpdate;
 	$objekt->listAllowedActionErase = $this->objektListAllowedActionErase;
 	// $objekt-> = $this->objektListAllowedActionGarant;
+	$objekt->allowedUnassignFromVlastnik = $this->vlastnikAllowedUnassignObject;
 
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     

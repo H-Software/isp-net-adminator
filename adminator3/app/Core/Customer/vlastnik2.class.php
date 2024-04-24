@@ -151,7 +151,8 @@ class vlastnik2 {
 
 		$vlastnik->vlastnici_erase_povolen = $this->vlastnici_erase_povolen;
 		$vlastnik->vlastnici_update_povolen = $this->vlastnici_update_povolen;
-
+		$vlastnik->vlastnikAllowedUnassignObject = $this->vlastnikAllowedUnassignObject;
+		
 		$vlastnik->objektListAllowedActionUpdate = $this->objektListAllowedActionUpdate;
 		$vlastnik->objektListAllowedActionErase = $this->objektListAllowedActionErase;
 		$vlastnik->objektListAllowedActionGarant = $this->objektListAllowedActionGarant;
