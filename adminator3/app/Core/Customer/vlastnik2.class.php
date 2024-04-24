@@ -26,6 +26,10 @@ class vlastnik2 {
 
 	var $objektListAllowedActionGarant = false;
 
+	var $vlastnici_erase_povolen = false;
+
+	var $vlastnici_update_povolen = false;
+
 	function __construct(ContainerInterface $container) {
 		$this->container = $container;
 		$this->conn_mysql = $container->connMysql;
@@ -53,10 +57,15 @@ class vlastnik2 {
             $this->objektListAllowedActionGarant = true;
         }
 
-		// // promeny pro mazani, zmenu vlastniku
-		// if( check_level($level,45) ) { $vlastnici_erase_povolen="true"; }
-		// if( check_level($level,30) ) { $vlastnici_update_povolen="true"; }
-		
+		// promeny pro mazani, zmenu vlastniku
+		if ($this->adminator->checkLevel(45, false) === true) {
+			$this->vlastnici_erase_povolen = true;
+		}
+
+		if ($this->adminator->checkLevel(34, false) === true) {
+			$this->vlastnici_update_povolen = true;
+		}
+
 		// // odendani objektu od vlastnika
 		// if( check_level($level,49) ) { $odendani_povoleno="true"; }
 
@@ -135,6 +144,9 @@ class vlastnik2 {
 		$vlastnik->echo = false;
 
 		$this->listPrepareVars($vlastnik);
+
+		$vlastnik->vlastnici_erase_povolen = $this->vlastnici_erase_povolen;
+		$vlastnik->vlastnici_update_povolen = $this->vlastnici_update_povolen;
 
 		$vlastnik->objektListAllowedActionUpdate = $this->objektListAllowedActionUpdate;
 		$vlastnik->objektListAllowedActionErase = $this->objektListAllowedActionErase;

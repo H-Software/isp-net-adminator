@@ -22,6 +22,10 @@ class vlastnik2_a2
 
    var $objektListAllowedActionGarant = false;
 
+   var $vlastnici_erase_povolen = false;
+
+   var $vlastnici_update_povolen = false;
+
    public function vypis_tab ($par)
    {
 	 $output = "";
@@ -113,10 +117,8 @@ class vlastnik2_a2
 	
 	    $output .= "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
 	
-	// sem mazani
-	global $vlastnici_erase_povolen;
-	
-	if( ! ( $vlastnici_erase_povolen == "true" ) )
+	// sem mazani	
+	if( $this->vlastnici_erase_povolen === false )
 	{ $output .= "<span style=\"\" > smazat </span> "; }
 	else
 	{
@@ -128,9 +130,8 @@ class vlastnik2_a2
 	$output .= "</td>
 	<td class=\"vlastnici-td-black\" >";
 	
-	global $vlastnici_update_povolen;
 	// 6-ta update
-	if ( !( $vlastnici_update_povolen =="true") )
+	if( $this->vlastnici_update_povolen === false )
 	{ $output .= "<span style=\"\" >  upravit  </span> \n"; }
 	else
 	{
