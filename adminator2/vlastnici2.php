@@ -238,7 +238,7 @@ require_once("include/charset.php");
 	if( check_level($level,30) ) { $vlastnik->vlastnici_update_povolen = true; }
 	
 	// odendani objektu od vlastnika
-	if( check_level($level,49) ) { $odendani_povoleno="true"; }
+	if( check_level($level,49) ) { $vlastnik->vlastnikAllowedUnassignObject = true; }
 	    
 	$vlastnik->vypis_tab(1);
 	

@@ -26,6 +26,8 @@ class vlastnik2 {
 
 	var $objektListAllowedActionGarant = false;
 
+	var $vlastnikAllowedUnassignObject = false;
+
 	var $vlastnici_erase_povolen = false;
 
 	var $vlastnici_update_povolen = false;
@@ -67,7 +69,9 @@ class vlastnik2 {
 		}
 
 		// // odendani objektu od vlastnika
-		// if( check_level($level,49) ) { $odendani_povoleno="true"; }
+		if ($this->adminator->checkLevel(49, false) === true) {
+			$this->vlastnikAllowedUnassignObject = true;
+		}
 
 		$find_id = $_GET["find_id"];
 		$find    = $_GET["find"];

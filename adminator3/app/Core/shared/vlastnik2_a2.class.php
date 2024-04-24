@@ -22,6 +22,8 @@ class vlastnik2_a2
 
    var $objektListAllowedActionGarant = false;
 
+   var $vlastnikAllowedUnassignObject = false;
+   
    var $vlastnici_erase_povolen = false;
 
    var $vlastnici_update_povolen = false;
