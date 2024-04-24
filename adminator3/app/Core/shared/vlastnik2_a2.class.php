@@ -12,9 +12,21 @@ class vlastnik2_a2
 
    var $level;
        
-   var $export_povolen;
+   var $export_povolen = false;
 
    var $echo = true;
+
+   var $objektListAllowedActionUpdate = false;
+
+   var $objektListAllowedActionErase = false;
+
+   var $objektListAllowedActionGarant = false;
+
+   var $vlastnikAllowedUnassignObject = false;
+
+   var $vlastnici_erase_povolen = false;
+
+   var $vlastnici_update_povolen = false;
 
    public function vypis_tab ($par)
    {
@@ -107,10 +119,8 @@ class vlastnik2_a2
 	
 	    $output .= "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
 	
-	// sem mazani
-	global $vlastnici_erase_povolen;
-	
-	if( ! ( $vlastnici_erase_povolen == "true" ) )
+	// sem mazani	
+	if( $this->vlastnici_erase_povolen === false )
 	{ $output .= "<span style=\"\" > smazat </span> "; }
 	else
 	{
@@ -122,9 +132,8 @@ class vlastnik2_a2
 	$output .= "</td>
 	<td class=\"vlastnici-td-black\" >";
 	
-	global $vlastnici_update_povolen;
 	// 6-ta update
-	if ( !( $vlastnici_update_povolen =="true") )
+	if( $this->vlastnici_update_povolen === false )
 	{ $output .= "<span style=\"\" >  upravit  </span> \n"; }
 	else
 	{
@@ -391,6 +400,11 @@ class vlastnik2_a2
     $objekt->conn_mysql = $this->conn_mysql;
 	$objekt->conn_pqsql = $this->conn_pgsql;
 
+	$objekt->listAllowedActionUpdate = $this->objektListAllowedActionUpdate;
+	$objekt->listAllowedActionErase = $this->objektListAllowedActionErase;
+	// $objekt-> = $this->objektListAllowedActionGarant;
+	$objekt->allowedUnassignFromVlastnik = $this->vlastnikAllowedUnassignObject;
+
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     
     $pocet_fiber_obj = $objekt->zjistipocet(2,$id);
@@ -587,7 +601,7 @@ class vlastnik2_a2
     
 
 	// tafy generovani exportu
-	if( $this->export_povolen )
+	if( $this->export_povolen === true )
 	{
 
     	    $fp=fopen("export/vlastnici-sro.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor

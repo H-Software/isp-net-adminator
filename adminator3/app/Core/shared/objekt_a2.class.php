@@ -14,6 +14,8 @@ class objekt_a2
 
   var $listAllowedActionErase = false;
 
+  var $allowedUnassignFromVlastnik = false;
+
   function vypis_tab($par)
   {
     $output = "";
@@ -678,14 +680,12 @@ else{
 	<input type=\"submit\" name=\"odeslano_form\" value=\"R.F.\">
      </form>
     </td>\n";
-    
-     global $odendani_povoleno; 
-      
+          
     //sem odendat
     if ( $co==3 ) 
     { 
     
-     if ( $odendani_povoleno )
+     if ( $this->allowedUnassignFromVlastnik === true )
      {
       $output .= "<td colspan=\"4\" ><a href=\"vlastnici2-obj-erase.php?id_komplu=".$data["id_komplu"]."\">Odendat</a> </td> \n";
      }
@@ -699,7 +699,7 @@ else{
     elseif( $co==4 ) //opticky rezim
     {
 
-     if ( $odendani_povoleno )
+     if ( $this->allowedUnassignFromVlastnik === true )
      {
       $output .= "<td colspan=\"\" ><a href=\"vlastnici2-obj-erase.php?id_komplu=".$data["id_komplu"]."\">Odendat</a> </td> \n";
      }

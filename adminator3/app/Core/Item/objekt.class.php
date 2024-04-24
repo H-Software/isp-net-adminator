@@ -14,7 +14,7 @@ class objekt extends adminator
 
     var $loggedUserEmail;
 
-    var $adminator; // handler for instace of adminator class
+    var $adminator; // handler for instance of adminator class
 
     var $dns_find;
 
