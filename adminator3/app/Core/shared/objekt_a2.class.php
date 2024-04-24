@@ -180,10 +180,16 @@ class objekt_a2
         fputs($fp,"</table>");   // Zapíšeme do souboru konec tabulky
         fclose($fp);   // Zavřeme soubor
 
-        echo "<span style=\"padding-left: 25px; padding-right: 20px; \" >";
-        echo "<a href=\"export\objekty.xls\">export dat zde</a></span>";
-	 
- 
+        if($this->echo === true ){
+          echo "<span style=\"padding-left: 25px; padding-right: 20px; \" >";
+          echo "<a href=\"export\objekty.xls\">export dat zde</a></span>";
+        }
+        else {
+          $output .= "<span style=\"padding-left: 25px; padding-right: 20px; \" >";
+          $output .= "<a href=\"export\objekty.xls\">export dat zde</a></span>";
+        }
+
+        return $output;
  } //konec funkce vypis odkaz
  
  public static function vypis_razeni_a2()

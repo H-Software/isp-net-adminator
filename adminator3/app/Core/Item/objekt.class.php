@@ -262,6 +262,7 @@ class objekt extends adminator
     public function listGetBodyContent()
     {
         $output = "";
+        $exportLink = "";
         $error = "";
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
@@ -291,7 +292,7 @@ class objekt extends adminator
 
         if ( $export_povolen === true )
         { 
-            $exportRs = $objekt_a2->export_vypis_odkaz(); 
+            $exportLink = $objekt_a2->export_vypis_odkaz(); 
         }	
 
         // prepare vars
@@ -362,6 +363,6 @@ class objekt extends adminator
         // listing
         $output .= $listovani->listInterval(); 
 
-        return array($output, $error);
+        return array($output, $error, $exportLink);
     }
 }
