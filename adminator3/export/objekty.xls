@@ -1,0 +1,20 @@
+<table border='1'> 
+ 
+<tr><td><b> id_komplu </b></td> 
+<td><b> dov_net </b></td> 
+<td><b> sikana_status </b></td> 
+<td><b> sikana_text </b></td> 
+<td><b> id_cloveka </b></td> 
+<td><b> dns_jmeno </b></td> 
+<td><b> id_tarifu </b></td> 
+<td><b> id_nodu </b></td> 
+<td><b> typ </b></td> 
+<td><b> pridano </b></td> 
+<td><b> ip </b></td> 
+<td><b> mac </b></td> 
+<td><b> id_tridy </b></td> 
+<td><b> verejna </b></td> 
+<td><b> barva </b></td> 
+</tr>
+ <tr><td> 1</td> <td> 0</td> <td> 1</td> <td> objekt test 1                                                                                                                                         </td> <td> 1.1.1.1</td> <td> </td> <td> </td> <td> </td> <td> a</td> <td> </td> <td> 2</td> <td> </td> <td> 99</td> <td> </td> <td> </td> <td> 1</td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> <td> </td> </tr> 
+ </table>

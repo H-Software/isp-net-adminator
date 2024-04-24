@@ -125,7 +125,7 @@ class objekt_a2
  } //konec funkce select
  
  //zde funkce export
- public static function export_vypis_odkaz()
+ public function export_vypis_odkaz()
  {
 
     $fp=fopen("export/objekty.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor

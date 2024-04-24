@@ -266,6 +266,11 @@ class objekt extends adminator
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
+        $objekt_a2 = new \objekt_a2;
+        $objekt_a2->echo = false;
+        $objekt_a2->conn_mysql = $this->conn_mysql;
+        $objekt_a2->conn_pqsql = $this->container->connPgsql;
+
         // checking levels for update/erase/..
         if ($this->adminator->checkLevel(29, false) === true) {
             $this->listAllowedActionUpdate = true;
@@ -280,8 +285,14 @@ class objekt extends adminator
             $export_povolen = true;
         }
 
+        $objekt_a2->listAllowedActionUpdate = $this->listAllowedActionUpdate;
+        $objekt_a2->listAllowedActionErase = $this->listAllowedActionErase;
+        $objekt_a2->listAllowedActionGarant = $this->listAllowedActionGarant;
+
         if ( $export_povolen === true )
-        { objekt_a2::export_vypis_odkaz(); }	
+        { 
+            $exportRs = $objekt_a2->export_vypis_odkaz(); 
+        }	
 
         // prepare vars
         //
@@ -303,14 +314,6 @@ class objekt extends adminator
             $co=2;
             $sql=$this->ip_find;
         }
-
-        $objekt_a2 = new \objekt_a2;
-        $objekt_a2->echo = false;
-        $objekt_a2->conn_mysql = $this->conn_mysql;
-        $objekt_a2->conn_pqsql = $this->container->connPgsql;
-        $objekt_a2->listAllowedActionUpdate = $this->listAllowedActionUpdate;
-        $objekt_a2->listAllowedActionErase = $this->listAllowedActionErase;
-        $objekt_a2->listAllowedActionGarant = $this->listAllowedActionGarant;
 
         $output .= $objekt_a2->vypis_tab(1);
         
