@@ -157,7 +157,7 @@ include ("include/charset.php");
 
     // tafy generovani exportu
     if ( $export_povolen == true )
-    { $objekt_a2->export_vypis_odkaz(); }	
+    { $objekt->export_vypis_odkaz(); }	
     
     echo "<span style=\"padding-right: 25px; \" >
 	    <span style=\"padding-right: 15px; \">mód objektů:</span> 
