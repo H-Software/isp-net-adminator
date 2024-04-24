@@ -8,6 +8,7 @@ class vlastnik2 {
 	var $logger;
 
 	var $container; // for calling stb class over vlastnik2_a2 class
+	var $adminator; // handler for instance of adminator class
 
 	var $listItemsContent;
 
@@ -23,17 +24,18 @@ class vlastnik2 {
 		$this->container = $container;
 		$this->conn_mysql = $container->connMysql;
 		$this->logger = $container->logger;
+
+		$this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->smarty, $this->logger);
 	}
 
 	private function listPrepareVars()
 	{
-		// TODO: fix perms for actions/links
-		//
-		// if( check_level($level,40) ) { 
-		// 	$vlastnik->pridani_povoleno="true";
+		// perms for actions/links
+		// if ($this->adminator->checkLevel(40, false) === true) {
+		// 	$vlastnik->pridani_povoleno = "true";
 		// }
 					
-		// if( check_level($level,63) ){ 
+		// if ($this->adminator->checkLevel(63, false) === true) {
 		// 	$vlastnik->export_povolen="true"; 
 		// }
 		
@@ -43,11 +45,17 @@ class vlastnik2 {
 		// 	$vlastnik->export();		
 		// }
 
-		//promena pro update objektu
-		// if( check_level($level,29) ) { $update_povolen="true"; }
-		// if( check_level($level,33) ) { $mazani_povoleno="true"; }
-		// if( check_level($level,34) ) { $garant_akce="true"; }
-		
+		//promenne pro update objektu
+		if ($this->adminator->checkLevel(29, false) === true) {
+            $this->objektListAllowedActionUpdate = true;
+        }
+        if ($this->adminator->checkLevel(33, false) === true) {
+            $this->objektListAllowedActionErase = true;
+        }
+        if ($this->adminator->checkLevel(34, false) === true) {
+            $this->objektListAllowedActionGarant = true;
+        }
+
 		// // promeny pro mazani, zmenu vlastniku
 		// if( check_level($level,45) ) { $vlastnici_erase_povolen="true"; }
 		// if( check_level($level,30) ) { $vlastnici_update_povolen="true"; }
@@ -122,14 +130,14 @@ class vlastnik2 {
 
 	public function listItems()
 	{
-		$this->listPrepareVars();
-
 		$vlastnik = new vlastnik2_a2;
 		$vlastnik->conn_mysql = $this->conn_mysql;
 		$vlastnik->conn_pgsql = $this->container->connPgsql;
 		$vlastnik->container = $this->container;
 		$vlastnik->logger = $this->logger;
 		$vlastnik->echo = false;
+
+		$this->listPrepareVars();
 
 		// without find search we dont do anything
 		if(strlen($this->listItemsContent) > 0){
