@@ -10,6 +10,10 @@ class objekt_a2
 
   var $echo = true;
 
+  var $listAllowedActionUpdate = false;
+
+  var $listAllowedActionErase = false;
+
   function vypis_tab($par)
   {
     $output = "";
@@ -121,7 +125,7 @@ class objekt_a2
  } //konec funkce select
  
  //zde funkce export
- function export_vypis_odkaz()
+ public function export_vypis_odkaz()
  {
 
     $fp=fopen("export/objekty.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
@@ -176,10 +180,15 @@ class objekt_a2
         fputs($fp,"</table>");   // Zapíšeme do souboru konec tabulky
         fclose($fp);   // Zavřeme soubor
 
-        echo "<span style=\"padding-left: 25px; padding-right: 20px; \" >";
-        echo "<a href=\"export\objekty.xls\">export dat zde</a></span>";
-	 
- 
+        if($this->echo === true ){
+          echo "<span style=\"padding-left: 25px; padding-right: 20px; \" >";
+          echo "<a href=\"export\objekty.xls\">export dat</a></span>";
+        }
+        else {
+          $output .= "<a href=\"export\objekty.xls\">export dat</a>";
+        }
+
+        return $output;
  } //konec funkce vypis odkaz
  
  public static function vypis_razeni_a2()
@@ -441,8 +450,7 @@ else{
     $output .= "</span></td> \n";
 
     //oprava a mazani
-    global $update_povolen;
-    
+
      $update_mod_vypisu = $_GET["mod_vypisu"];
       
       $id_tarifu = $data["id_tarifu"];
@@ -478,7 +486,7 @@ else{
       }
   
     // 6-ta update
-    if ( !( $update_povolen =="true") )
+    if ( $this->listAllowedActionUpdate === false )
     { $output .= "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Upravit</td> \n"; }
     else
     {
@@ -493,10 +501,8 @@ else{
       $output .= "</td></form> \n";
     }
      
-    // 7-ma smazat
-    global $mazani_povoleno;
-     
-    if ( !( $mazani_povoleno =="true") )
+    // 7 smazat     
+    if ( $this->listAllowedActionErase === false )
     { $output .= "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Smazat</td>"; }
     else
     { 
