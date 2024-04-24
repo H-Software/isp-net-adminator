@@ -25,7 +25,6 @@
         "doctrine/annotations": "^1.14.0",
         "symfony/cache": "^5.4",
         "czhujer/slim-auth": "dev-dev-master",
-        "laminas/laminas-validator": "^2.53",
         "setasign/fpdf": "1.8.6"
     }
 }
