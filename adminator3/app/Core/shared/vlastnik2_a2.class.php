@@ -16,6 +16,12 @@ class vlastnik2_a2
 
    var $echo = true;
 
+   var $objektListAllowedActionUpdate = false;
+
+   var $objektListAllowedActionErase = false;
+
+   var $objektListAllowedActionGarant = false;
+
    public function vypis_tab ($par)
    {
 	 $output = "";
@@ -390,6 +396,10 @@ class vlastnik2_a2
 	$objekt->logger = $this->logger;
     $objekt->conn_mysql = $this->conn_mysql;
 	$objekt->conn_pqsql = $this->conn_pgsql;
+
+	$objekt->listAllowedActionUpdate = $this->objektListAllowedActionUpdate;
+	$objekt->listAllowedActionErase = $this->objektListAllowedActionErase;
+	// $objekt-> = $this->objektListAllowedActionGarant;
 
     $pocet_wifi_obj = $objekt->zjistipocet(1,$id);
     

@@ -20,6 +20,12 @@ class vlastnik2 {
 
 	var $dotaz_source;
 
+	var $objektListAllowedActionUpdate = false;
+
+	var $objektListAllowedActionErase = false;
+
+	var $objektListAllowedActionGarant = false;
+
 	function __construct(ContainerInterface $container) {
 		$this->container = $container;
 		$this->conn_mysql = $container->connMysql;
@@ -133,10 +139,14 @@ class vlastnik2 {
 
 		$this->listPrepareVars($vlastnik);
 
+		$vlastnik->objektListAllowedActionUpdate = $this->objektListAllowedActionUpdate;
+		$vlastnik->objektListAllowedActionErase = $this->objektListAllowedActionErase;
+		$vlastnik->objektListAllowedActionGarant = $this->objektListAllowedActionGarant;
+		
 		// generovani exportu
 		if( $vlastnik->export_povolen )
 		{     
-			$vlastnik->export();		
+			$vlastnik->export();
 		}
 
 		// without find search we dont do anything
