@@ -81,6 +81,10 @@ class vlastniciController extends adminatorController {
         //
         // $objekty = DB::connection('pgsql')->select("select * from objekty");
 
+        if ($this->adminator->checkLevel(63, false) === true) {
+            $this->smarty->assign("vlastnici2_export_povolen", "true");
+        }
+
         // main table
         $bodyContent = $vlastnik2->listItems();
 

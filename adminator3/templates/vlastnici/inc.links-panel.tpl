@@ -3,7 +3,11 @@
     <span style="">Přidání vlastníka</span>
 
     <span style="padding-left: 25px; ">
-        <!--<a href="\export\vlastnici-sro.xls" >-->export dat zde<!--</a>-->
+        {if $vlastnici2_export_povolen eq "true"}
+            <a href="\export\vlastnici-sro.xls" >export dat</a>
+        {else}
+            export dat (N/A)
+        {/if}
     </span>
 
     <span style="padding-left: 25px; ">
