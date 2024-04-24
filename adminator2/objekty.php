@@ -76,7 +76,10 @@ include ("include/charset.php");
  <tr>
     <td colspan="2" style="border: 0px; " >
     
-    <?
+    <?php
+
+    $objekt = new objekt_a2;
+
     //zde kontrola promennych
     global $mod_vypisu;
     $mod_vypisu = $_GET["mod_vypisu"];
@@ -154,7 +157,7 @@ include ("include/charset.php");
 
     // tafy generovani exportu
     if ( $export_povolen == true )
-    { objekt_a2::export_vypis_odkaz(); }	
+    { $objekt_a2->export_vypis_odkaz(); }	
     
     echo "<span style=\"padding-right: 25px; \" >
 	    <span style=\"padding-right: 15px; \">mód objektů:</span> 
@@ -194,8 +197,6 @@ include ("include/charset.php");
   if ( ( strlen($dns_find) > 0 ) ){ $co=1; $sql=$dns_find; }  
   if ( ( strlen($ip_find) > 0  ) ){ $co=2; $sql=$ip_find; }
   
-  $objekt = new objekt_a2;
-
   $objekt->vypis_tab(1);
 
   $objekt->vypis_tab_first_rows($mod_vypisu);
