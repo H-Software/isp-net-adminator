@@ -14,6 +14,8 @@ class objekt extends adminator
 
     var $loggedUserEmail;
 
+    var $adminator; // handler for instace of adminator class
+
     var $dns_find;
 
     var $ip_find;
@@ -29,6 +31,12 @@ class objekt extends adminator
     var $dotaz_source;
 
     var $listErrors;
+
+    var $listAllowedActionUpdate = false;
+
+    var $listAllowedActionErase = false;
+
+    var $listAllowedActionGarant = false;
 
     function __construct(ContainerInterface $container)
     {
@@ -256,16 +264,24 @@ class objekt extends adminator
         $output = "";
         $error = "";
 
-        // TODO: fix checking levels for update/erase
-        //promena pro update objektu
-        // if ( check_level($level,29) ) { $update_povolen="true"; }
-        // if ( check_level($level,33) ) { $mazani_povoleno="true"; }
-        // if ( check_level($level,34) ) { $garant_akce="true"; }
-        // if ( check_level($level,59) ) { $export_povolen="true"; }
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
-        // TODO: fix export
-        // if ( $export_povolen == true )
-        // { objekt_a2::export_vypis_odkaz(); }	
+        // checking levels for update/erase/..
+        if ($this->adminator->checkLevel(29, false) === true) {
+            $this->listAllowedActionUpdate = true;
+        }
+        if ($this->adminator->checkLevel(33, false) === true) {
+            $this->listAllowedActionErase = true;
+        }
+        if ($this->adminator->checkLevel(34, false) === true) {
+            $this->listAllowedActionGarant = true;
+        }
+        if ($this->adminator->checkLevel(59, false) === true) {
+            $export_povolen = true;
+        }
+
+        if ( $export_povolen === true )
+        { objekt_a2::export_vypis_odkaz(); }	
 
         // prepare vars
         //
@@ -292,6 +308,9 @@ class objekt extends adminator
         $objekt_a2->echo = false;
         $objekt_a2->conn_mysql = $this->conn_mysql;
         $objekt_a2->conn_pqsql = $this->container->connPgsql;
+        $objekt_a2->listAllowedActionUpdate = $this->listAllowedActionUpdate;
+        $objekt_a2->listAllowedActionErase = $this->listAllowedActionErase;
+        $objekt_a2->listAllowedActionGarant = $this->listAllowedActionGarant;
 
         $output .= $objekt_a2->vypis_tab(1);
         

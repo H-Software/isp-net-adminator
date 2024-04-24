@@ -1,9 +1,11 @@
+# export MYSQL_SERVER=192.168.1.213
+export MYSQL_SERVER=127.0.0.1
 
-export MYSQL_SERVER=192.168.1.213
 export MYSQL_USER=root
 export MYSQL_PASSWD=isp-net-passwd
 
-export POSTGRES_SERVER=192.168.1.213
+# export POSTGRES_SERVER=192.168.1.213
+export POSTGRES_SERVER=127.0.0.1
 export POSTGRES_USER=adminator
 export POSTGRES_PASSWD=isp-net-passwd
 export POSTGRES_DB=adminator.new

@@ -10,6 +10,10 @@ class objekt_a2
 
   var $echo = true;
 
+  var $listAllowedActionUpdate = false;
+
+  var $listAllowedActionErase = false;
+
   function vypis_tab($par)
   {
     $output = "";
@@ -121,7 +125,7 @@ class objekt_a2
  } //konec funkce select
  
  //zde funkce export
- function export_vypis_odkaz()
+ public static function export_vypis_odkaz()
  {
 
     $fp=fopen("export/objekty.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
@@ -441,8 +445,7 @@ else{
     $output .= "</span></td> \n";
 
     //oprava a mazani
-    global $update_povolen;
-    
+
      $update_mod_vypisu = $_GET["mod_vypisu"];
       
       $id_tarifu = $data["id_tarifu"];
@@ -478,7 +481,7 @@ else{
       }
   
     // 6-ta update
-    if ( !( $update_povolen =="true") )
+    if ( $this->listAllowedActionUpdate === false )
     { $output .= "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Upravit</td> \n"; }
     else
     {
@@ -493,10 +496,8 @@ else{
       $output .= "</td></form> \n";
     }
      
-    // 7-ma smazat
-    global $mazani_povoleno;
-     
-    if ( !( $mazani_povoleno =="true") )
+    // 7 smazat     
+    if ( $this->listAllowedActionErase === false )
     { $output .= "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Smazat</td>"; }
     else
     { 
