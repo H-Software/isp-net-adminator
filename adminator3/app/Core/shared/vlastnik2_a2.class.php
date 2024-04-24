@@ -12,7 +12,7 @@ class vlastnik2_a2
 
    var $level;
        
-   var $export_povolen;
+   var $export_povolen = false;
 
    var $echo = true;
 
@@ -587,7 +587,7 @@ class vlastnik2_a2
     
 
 	// tafy generovani exportu
-	if( $this->export_povolen )
+	if( $this->export_povolen === true )
 	{
 
     	    $fp=fopen("export/vlastnici-sro.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor

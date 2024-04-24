@@ -28,23 +28,17 @@ class vlastnik2 {
 		$this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->smarty, $this->logger);
 	}
 
-	private function listPrepareVars()
+	private function listPrepareVars($vlastnik)
 	{
 		// perms for actions/links
 		// if ($this->adminator->checkLevel(40, false) === true) {
 		// 	$vlastnik->pridani_povoleno = "true";
 		// }
 					
-		// if ($this->adminator->checkLevel(63, false) === true) {
-		// 	$vlastnik->export_povolen="true"; 
-		// }
+		if ($this->adminator->checkLevel(63, false) === true) {
+			$vlastnik->export_povolen = true; 
+		}
 		
-		// // tafy generovani exportu
-		// if( $vlastnik->export_povolen )
-		// {     
-		// 	$vlastnik->export();		
-		// }
-
 		//promenne pro update objektu
 		if ($this->adminator->checkLevel(29, false) === true) {
             $this->objektListAllowedActionUpdate = true;
@@ -137,7 +131,13 @@ class vlastnik2 {
 		$vlastnik->logger = $this->logger;
 		$vlastnik->echo = false;
 
-		$this->listPrepareVars();
+		$this->listPrepareVars($vlastnik);
+
+		// generovani exportu
+		if( $vlastnik->export_povolen )
+		{     
+			$vlastnik->export();		
+		}
 
 		// without find search we dont do anything
 		if(strlen($this->listItemsContent) > 0){
