@@ -182,11 +182,10 @@ class objekt_a2
 
         if($this->echo === true ){
           echo "<span style=\"padding-left: 25px; padding-right: 20px; \" >";
-          echo "<a href=\"export\objekty.xls\">export dat zde</a></span>";
+          echo "<a href=\"export\objekty.xls\">export dat</a></span>";
         }
         else {
-          $output .= "<span style=\"padding-left: 25px; padding-right: 20px; \" >";
-          $output .= "<a href=\"export\objekty.xls\">export dat zde</a></span>";
+          $output .= "<a href=\"export\objekty.xls\">export dat</a>";
         }
 
         return $output;

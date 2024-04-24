@@ -52,6 +52,10 @@
       <span style="padding-left: 10px;"></span>
       <label class="listing-selector-label" > Hledání podle ip: </label><input type="text" name="ip_find" value="{$ip_find}" >
     </span>
+
+    <span style="padding-left: 15px; padding-right: 5px;" >
+      {$export_link}
+    </span>
   </div>
 
   {* oddelovaci cara *}
