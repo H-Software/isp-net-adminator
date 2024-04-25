@@ -170,9 +170,10 @@ class objektyController extends adminatorController {
         }
         else
         {
-            $objekt->actionWifi();
+            $output = $objekt->actionWifi();
         }
 
+        $this->smarty->assign("body", $output);
         $this->smarty->display('objekty/action.tpl');
 
     }
