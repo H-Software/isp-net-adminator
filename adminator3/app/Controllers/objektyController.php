@@ -144,4 +144,18 @@ class objektyController extends adminatorController {
   
         $this->smarty->display('objekty/list.tpl');
     }
+
+    public function objektyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->info("objektyController\objektyAction called");
+        
+        $this->checkLevel(1, $this->adminator);
+
+        $this->smarty->assign("page_title","Adminator3 :: Objekty :: Action");
+
+        $this->header($request, $response, $this->adminator);
+
+        
+    }
 }
