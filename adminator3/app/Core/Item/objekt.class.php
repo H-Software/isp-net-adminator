@@ -564,12 +564,8 @@ class objekt extends adminator
             }
 
             // checknem stav vysilace a filtraci
-            try {
-            $msq_stav_nodu = $conn_mysql->query("SELECT stav, router_id FROM nod_list WHERE id= '".intval($selected_nod)."' ");
+            $msq_stav_nodu = $this->conn_mysql->query("SELECT stav, router_id FROM nod_list WHERE id= '".intval($selected_nod)."' ");
             $msq_stav_nodu_radky = $msq_stav_nodu->num_rows;
-            } catch (Exception $e) {
-            die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-            }
 
             while ($data=$msq_stav_nodu->fetch_array() )
             { $stav_nodu = $data["stav"]; $router_id = $data["router_id"]; }
@@ -796,9 +792,9 @@ class objekt extends adminator
                     $sql_rows .= ", ";
                     $sql_values .= ", ";
                 }
-                $sql_rows .= $conn_mysql->real_escape_string($key);
+                $sql_rows .= $this->conn_mysql->real_escape_string($key);
                 
-                $sql_values .= "'".$conn_mysql->real_escape_string($val)."'";
+                $sql_values .= "'".$this->conn_mysql->real_escape_string($val)."'";
                 
                 $obj_add_i++;	
                 }
@@ -872,7 +868,7 @@ class objekt extends adminator
             echo '<br> 
                  <b>Linka</b>: ';
 
-            $vysledek4 = $conn_mysql->query("SELECT jmeno_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu='".intval($id_tarifu)."' ");
+            $vysledek4 = $this->conn_mysql->query("SELECT jmeno_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu='".intval($id_tarifu)."' ");
             $radku4 = $vysledek4->num_rows;
         
             if($radku4==0) echo "Nelze zjistit tarif";
@@ -892,7 +888,7 @@ class objekt extends adminator
             <b>Poznámka</b>: ' . $pozn . '<br>
             <b>Přípojný bod</b>:';
 
-            $vysledek3 = $conn_mysql->query("SELECT jmeno,id FROM nod_list WHERE id='".intval($selected_nod)."'");
+            $vysledek3 = $this->conn_mysql->query("SELECT jmeno,id FROM nod_list WHERE id='".intval($selected_nod)."'");
             $radku3 = $vysledek3->num_rows;
 
             if($radku3==0) echo "Nelze zjistit ";
