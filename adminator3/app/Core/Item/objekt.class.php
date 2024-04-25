@@ -28,6 +28,8 @@ class objekt extends adminator
 
     var $list;
 
+    var $nod_find;
+
     var $dotaz_source;
 
     var $listErrors;
@@ -364,5 +366,27 @@ class objekt extends adminator
         $output .= $listovani->listInterval(); 
 
         return array($output, $error, $exportLink);
+    }
+
+    public function actionPrepareVars()
+    {
+        $nod_find = $_POST["nod_find"];
+
+        if( ( strlen($nod_find) < 1 ) ){ $nod_find="%"; }
+        else
+        {
+          // TODO: add validation of nod_find
+
+          if( !(preg_match("/^%.*%$/",$nod_find)) )
+          { $nod_find="%".$nod_find."%"; }
+        }
+
+        $this->nod_find = $nod_find;
+
+        // TODO: add validation fo control vars
+        
+        $update_id=$_POST["update_id"];
+        $odeslano=$_POST["odeslano"];
+        $send = $_POST["send"];
     }
 }
