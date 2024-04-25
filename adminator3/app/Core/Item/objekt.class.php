@@ -31,7 +31,7 @@ class objekt extends adminator
     var $nod_find;
 
     var $sql_nod;
-    
+
     var $update_id;
     var $odeslano;
     var $send;
@@ -509,8 +509,8 @@ class objekt extends adminator
 
         if( $typ_ip == 4 )
         {
-            if( (strlen($tunnel_user) > 0 ) ){ objektypridani::check_l2tp_cr($tunnel_user); }
-            if( (strlen($tunnel_pass) > 0 ) ){ objektypridani::check_l2tp_cr($tunnel_pass); }
+            if( (strlen($tunnel_user) > 0 ) ){ \objektypridani::check_l2tp_cr($tunnel_user); }
+            if( (strlen($tunnel_pass) > 0 ) ){ \objektypridani::check_l2tp_cr($tunnel_pass); }
         }
 
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
@@ -518,54 +518,52 @@ class objekt extends adminator
 
             if( ( $update_status!=1 ) )
             {
-            $ip_find=$ip."/32";
+                $ip_find=$ip."/32";
 
-            //zjisti jestli neni duplicitni dns, ip
-            $MSQ_DNS = pg_query("SELECT ip FROM objekty WHERE dns_jmeno LIKE '$dns' ");
-            $MSQ_IP = pg_query("SELECT ip FROM objekty WHERE ip <<= '$ip_find' ");
-                
-            if (pg_num_rows($MSQ_DNS) > 0){ $error .= "<h4>Dns záznam ( ".$dns." ) již existuje!!!</h4>"; $fail = "true"; }
-            if (pg_num_rows($MSQ_IP) > 0){ $error .= "<h4>IP adresa ( ".$ip." ) již existuje!!!</h4>"; $fail = "true"; }
+                //zjisti jestli neni duplicitni dns, ip
+                $MSQ_DNS = pg_query("SELECT ip FROM objekty WHERE dns_jmeno LIKE '$dns' ");
+                $MSQ_IP = pg_query("SELECT ip FROM objekty WHERE ip <<= '$ip_find' ");
+                    
+                if (pg_num_rows($MSQ_DNS) > 0){ $error .= "<h4>Dns záznam ( ".$dns." ) již existuje!!!</h4>"; $fail = "true"; }
+                if (pg_num_rows($MSQ_IP) > 0){ $error .= "<h4>IP adresa ( ".$ip." ) již existuje!!!</h4>"; $fail = "true"; }
 
-            //duplicitni tunnel_pass/user
-            if($typ_ip==4)
-            {
-            $MSQ_TUNNEL_USER = pg_query("SELECT tunnel_user FROM objekty WHERE tunnel_user LIKE '$tunnel_user' ");
-            $MSQ_TUNNEL_PASS = pg_query("SELECT tunnel_pass FROM objekty WHERE tunnel_pass LIKE '$tunnel_pass' ");
-            
-            if(pg_num_rows($MSQ_TUNNEL_USER) > 0)
-            { $error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>"; $fail = "true"; }
-            if(pg_num_rows($MSQ_TUNNEL_PASS) > 0)
-            { $error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>"; $fail = "true"; }  
-            }
+                //duplicitni tunnel_pass/user
+                if($typ_ip==4)
+                {
+                    $MSQ_TUNNEL_USER = pg_query("SELECT tunnel_user FROM objekty WHERE tunnel_user LIKE '$tunnel_user' ");
+                    $MSQ_TUNNEL_PASS = pg_query("SELECT tunnel_pass FROM objekty WHERE tunnel_pass LIKE '$tunnel_pass' ");
+                    
+                    if(pg_num_rows($MSQ_TUNNEL_USER) > 0)
+                    { $error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>"; $fail = "true"; }
+                    if(pg_num_rows($MSQ_TUNNEL_PASS) > 0)
+                    { $error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>"; $fail = "true"; }  
+                }
             
             }
 
             // check v modu uprava
             if ( ( $update_status==1 and (isset($odeslano)) ) )
             {
-            $ip_find=$ip."/32";
-            
-            //zjisti jestli neni duplicitni dns, ip
-            $MSQ_DNS2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$dns' AND id_komplu != '".intval($update_id)."' ) ");
-            $MSQ_IP2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( ip <<= '$ip_find' AND id_komplu != '".intval($update_id)."' ) ");
+                $ip_find=$ip."/32";
+                
+                //zjisti jestli neni duplicitni dns, ip
+                $MSQ_DNS2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$dns' AND id_komplu != '".intval($this->update_id)."' ) ");
+                $MSQ_IP2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( ip <<= '$ip_find' AND id_komplu != '".intval($this->update_id)."' ) ");
 
-            if(pg_num_rows($MSQ_DNS2) > 0){ $error .= "<h4>Dns záznam ( ".$dns." ) již existuje!!!</h4>"; $fail = "true"; }
-            if(pg_num_rows($MSQ_IP2) > 0){ $error .= "<h4>IP adresa ( ".$ip." ) již existuje!!!</h4>"; $fail = "true"; }
+                if(pg_num_rows($MSQ_DNS2) > 0){ $error .= "<h4>Dns záznam ( ".$dns." ) již existuje!!!</h4>"; $fail = "true"; }
+                if(pg_num_rows($MSQ_IP2) > 0){ $error .= "<h4>IP adresa ( ".$ip." ) již existuje!!!</h4>"; $fail = "true"; }
 
-
-            //duplicitni tunnel_pass/user
-            if($typ_ip==4)
-            {
-            $MSQ_TUNNEL_USER = pg_query("SELECT tunnel_user FROM objekty WHERE ( tunnel_user LIKE '$tunnel_user' AND id_komplu != '".intval($update_id)."' ) ");
-            $MSQ_TUNNEL_PASS = pg_query("SELECT tunnel_pass FROM objekty WHERE ( tunnel_pass LIKE '$tunnel_pass' AND id_komplu != '".intval($update_id)."' ) ");
-            
-            if(pg_num_rows($MSQ_TUNNEL_USER) > 0)
-            { $error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>"; $fail = "true"; }
-            if(pg_num_rows($MSQ_TUNNEL_PASS) > 0)
-            { $error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>"; $fail = "true"; }  
-            }
-            
+                //duplicitni tunnel_pass/user
+                if($typ_ip==4)
+                {
+                    $MSQ_TUNNEL_USER = pg_query("SELECT tunnel_user FROM objekty WHERE ( tunnel_user LIKE '$tunnel_user' AND id_komplu != '".intval($this->update_id)."' ) ");
+                    $MSQ_TUNNEL_PASS = pg_query("SELECT tunnel_pass FROM objekty WHERE ( tunnel_pass LIKE '$tunnel_pass' AND id_komplu != '".intval($this->update_id)."' ) ");
+                    
+                    if(pg_num_rows($MSQ_TUNNEL_USER) > 0)
+                    { $error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>"; $fail = "true"; }
+                    if(pg_num_rows($MSQ_TUNNEL_PASS) > 0)
+                    { $error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>"; $fail = "true"; }  
+                }
             }
 
             // checknem stav vysilace a filtraci
@@ -587,39 +585,38 @@ class objekt extends adminator
             $poz_fakt_clovek_radku=pg_num_rows($poz_fakt_clovek);
 
             while ($data_poz_f_clovek=pg_fetch_array($poz_fakt_clovek))
-            { $id_cloveka=$data_poz_f_clovek["id_cloveka"]; 
+            {
+                $id_cloveka=$data_poz_f_clovek["id_cloveka"]; 
                 $dov_net_puvodni=$data_poz_f_clovek["dov_net"];
             }
 
             if ( ( ($id_cloveka > 1) and ( $update_status==1 ) ) )
             {
 
-            $pozastavene_fakt=pg_query("SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
-            $pozastavene_fakt_radku=pg_num_rows($pozastavene_fakt);
+                $pozastavene_fakt=pg_query("SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
+                $pozastavene_fakt_radku=pg_num_rows($pozastavene_fakt);
 
-            if ( $pozastavene_fakt_radku == 1)
-            {
-            while ( $data_poz_fakt=pg_fetch_array($pozastavene_fakt) )
-            { $billing_suspend_status = intval($data_poz_fakt["billing_suspend_status"]); }
-            }
-            else
-            { $output .= "Chyba! nelze vybrat vlastníka."; }
+                if ( $pozastavene_fakt_radku == 1)
+                {
+                    while ( $data_poz_fakt=pg_fetch_array($pozastavene_fakt) )
+                    { $billing_suspend_status = intval($data_poz_fakt["billing_suspend_status"]); }
+                }
+                else
+                { $output .= "Chyba! nelze vybrat vlastníka."; }
 
-            // $output .= "debug: id_fakturacni_skupiny: ".$pozastavene_fakturace_id." id_cloveka: $id_cloveka ,dov_net-puvodni: $dov_net_puvodni , povolen inet: $dov_net";
+                // $output .= "debug: id_fakturacni_skupiny: ".$pozastavene_fakturace_id." id_cloveka: $id_cloveka ,dov_net-puvodni: $dov_net_puvodni , povolen inet: $dov_net";
 
-            if( $billing_suspend_status == 1)
-            {
-            // budeme zli
-            // prvne zjisteni predchoziho stavu
+                if( $billing_suspend_status == 1)
+                {
+                    // budeme zli
+                    // prvne zjisteni predchoziho stavu
             
-
-            if( ( ($dov_net_puvodni == "n") and ($dov_net == 2 ) ) )
-            {
-                $fail="true"; 
-                $error.="<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka pole \"Pozastavené fakturace\". </div>"; 
-            }
-            
-            }
+                    if( ( ($dov_net_puvodni == "n") and ($dov_net == 2 ) ) )
+                    {
+                        $fail="true"; 
+                        $error.="<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka pole \"Pozastavené fakturace\". </div>"; 
+                    }
+                }
 
             } // konec if jestli id_cloveka > 1 and update == 1
 
@@ -634,200 +631,200 @@ class objekt extends adminator
             //ulozeni
             if ( !( isset($fail) ) ) 
             { 
-            // priprava promennych
-            
-            if ( $dov_net == 2 ) 
-            { $dov_net_w ="a"; } 
-            else { $dov_net_w="n"; }
-            
-            if ( $typ == 3 ) { $dov_net_w="a"; }
-            
-            if ($typ_ip == 1)
-            { $verejna_w="99"; } 
-            elseif( $typ_ip == 3 )
-            { 
-                $verejna_w=$vip_rozsah;
-                //$vip_snat="1";    
-            }
-            elseif( $typ_ip == 4 )
-            {
-            //tunelovane ip adresy
-            $tunnelling_ip=1; //flag pro selekci tunelovanych ip
-            $verejna_w=$vip_rozsah; //flag ze je jedna o verejnou (asi jen pro DNS)
-            
-            $tunnel_user_w = $tunnel_user;
-            $tunnel_pass_w = $tunnel_pass;
+                // priprava promennych
                 
-            }
-            else
-            {
-            //obyc verejka 
-                $verejna_w=$vip_rozsah; 
-                $tunnelling_ip="0"; 
-            }
-            
-            if( $sikana_status =="2" )
-            { $sikana_status_w='a'; } 
-            else
-            { $sikana_status_w='n'; }
+                if ( $dov_net == 2 ) 
+                { $dov_net_w ="a"; } 
+                else { $dov_net_w="n"; }
                 
-            $sikana_cas = intval($sikana_cas);
-            
-            if($update_status =="1")
-            {
-                // rezim upravy
+                if ( $typ == 3 ) { $dov_net_w="a"; }
                 
-                if( !(check_level($level,29) ) ) 
+                if ($typ_ip == 1)
+                { $verejna_w="99"; } 
+                elseif( $typ_ip == 3 )
+                { 
+                    $verejna_w=$vip_rozsah;
+                    //$vip_snat="1";    
+                }
+                elseif( $typ_ip == 4 )
                 {
-                $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
-                    exit;
+                    //tunelovane ip adresy
+                    $tunnelling_ip=1; //flag pro selekci tunelovanych ip
+                    $verejna_w=$vip_rozsah; //flag ze je jedna o verejnou (asi jen pro DNS)
+                    
+                    $tunnel_user_w = $tunnel_user;
+                    $tunnel_pass_w = $tunnel_pass;
+                    
                 }
                 else
                 {
-                //prvne stavajici data docasne ulozime 
-                $pole2 .= "<b>akce: uprava objektu; </b><br>";
+                    //obyc verejka 
+                    $verejna_w=$vip_rozsah; 
+                    $tunnelling_ip="0"; 
+                }
+                
+                if( $sikana_status =="2" )
+                { $sikana_status_w='a'; } 
+                else
+                { $sikana_status_w='n'; }
                     
-                $sql_rows = "id_komplu, dns_jmeno, ip, mac, client_ap_ip, dov_net, id_tarifu, typ, poznamka, verejna, ";
-                $sql_rows .= "sikana_status, sikana_cas, sikana_text, upravil, id_nodu, ";
-                $sql_rows .= "tunnelling_ip, tunnel_user, tunnel_pass";
-                
-                $vysl4=pg_query("SELECT ".$sql_rows." FROM objekty WHERE id_komplu='".intval($update_id)."' ");
+                $sikana_cas = intval($sikana_cas);
+            
+                if($update_status =="1")
+                {
+                    // rezim upravy
+                    
+                    if( !(check_level($level,29) ) ) 
+                    {
+                        $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
+                        exit;
+                    }
+                    else
+                    {
+                        //prvne stavajici data docasne ulozime 
+                        $pole2 .= "<b>akce: uprava objektu; </b><br>";
+                            
+                        $sql_rows = "id_komplu, dns_jmeno, ip, mac, client_ap_ip, dov_net, id_tarifu, typ, poznamka, verejna, ";
+                        $sql_rows .= "sikana_status, sikana_cas, sikana_text, upravil, id_nodu, ";
+                        $sql_rows .= "tunnelling_ip, tunnel_user, tunnel_pass";
+                        
+                        $vysl4=pg_query("SELECT ".$sql_rows." FROM objekty WHERE id_komplu='".intval($update_id)."' ");
 
-                if( ( pg_num_rows($vysl4) <> 1 ) )
-                { $output .= "<div>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </div>"; }
-                else  
-                { 
-                        while ($data4=pg_fetch_array($vysl4) ){
-                
-                    $pole_puvodni_data["id_komplu"]=$data4["id_komplu"];		
-                    $pole_puvodni_data["dns_jmeno"]=$data4["dns_jmeno"];	
-                    $pole_puvodni_data["ip"]=$data4["ip"];
-                    $pole_puvodni_data["mac"]=$data4["mac"];		
-                    $pole_puvodni_data["client_ap_ip"]=$data4["client_ap_ip"];	
-                    $pole_puvodni_data["dov_net"]=$data4["dov_net"];	
-                    $pole_puvodni_data["id_tarifu"]=$data4["id_tarifu"];
-                    $pole_puvodni_data["typ"]=$data4["typ"];
-                    $pole_puvodni_data["poznamka"]=$data4["poznamka"];	
-                    $pole_puvodni_data["verejna"]=$data4["verejna"];
-                    $pole_puvodni_data["sikana_status"]=$data4["sikana_status"];	
-                    $pole_puvodni_data["sikana_cas"]=$data4["sikana_cas"];
-                    $pole_puvodni_data["sikana_text"]=$data4["sikana_text"];
-                    $pole_puvodni_data["upravil"]=trim($data4["upravil"]);	
-                    $pole_puvodni_data["id_nodu"]=$data4["id_nodu"];
-                
-                    $pole_puvodni_data["tunnelling_ip"]=$data4["tunnelling_ip"];	
-                    $pole_puvodni_data["tunnel_user"]=$data4["tunnel_user"];
-                    $pole_puvodni_data["tunnel_pass"]=$data4["tunnel_pass"];	
-                
+                        if( ( pg_num_rows($vysl4) <> 1 ) )
+                        { $output .= "<div>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </div>"; }
+                        else  
+                        { 
+                            while ($data4=pg_fetch_array($vysl4) ){
+                        
+                                $pole_puvodni_data["id_komplu"]=$data4["id_komplu"];		
+                                $pole_puvodni_data["dns_jmeno"]=$data4["dns_jmeno"];	
+                                $pole_puvodni_data["ip"]=$data4["ip"];
+                                $pole_puvodni_data["mac"]=$data4["mac"];		
+                                $pole_puvodni_data["client_ap_ip"]=$data4["client_ap_ip"];	
+                                $pole_puvodni_data["dov_net"]=$data4["dov_net"];	
+                                $pole_puvodni_data["id_tarifu"]=$data4["id_tarifu"];
+                                $pole_puvodni_data["typ"]=$data4["typ"];
+                                $pole_puvodni_data["poznamka"]=$data4["poznamka"];	
+                                $pole_puvodni_data["verejna"]=$data4["verejna"];
+                                $pole_puvodni_data["sikana_status"]=$data4["sikana_status"];	
+                                $pole_puvodni_data["sikana_cas"]=$data4["sikana_cas"];
+                                $pole_puvodni_data["sikana_text"]=$data4["sikana_text"];
+                                $pole_puvodni_data["upravil"]=trim($data4["upravil"]);	
+                                $pole_puvodni_data["id_nodu"]=$data4["id_nodu"];
+                            
+                                $pole_puvodni_data["tunnelling_ip"]=$data4["tunnelling_ip"];	
+                                $pole_puvodni_data["tunnel_user"]=$data4["tunnel_user"];
+                                $pole_puvodni_data["tunnel_pass"]=$data4["tunnel_pass"];	
+                        
+                            }
+                            
+                        } // konec else if radku <> 1
+
+                        $obj_upd = array( "dns_jmeno" => $dns, "ip" => $ip,
+                                "client_ap_ip" => $client_ap_ip, "dov_net" => $dov_net_w,"id_tarifu" => $id_tarifu,
+                            "typ" => $typ, "poznamka" => $pozn, "verejna" => $verejna_w,
+                            "mac" => $mac, "upravil" => $nick, "sikana_status" => $sikana_status_w,
+                        "sikana_cas" => $sikana_cas, "sikana_text" => $sikana_text, "id_nodu" => $selected_nod );
+                                    
+                        if( $typ_ip == 4)
+                        {
+                                $obj_upd["tunnelling_ip"] = $tunnelling_ip; 
+
+                                $obj_upd["tunnel_user"] = $tunnel_user_w;
+                                $obj_upd["tunnel_pass"] = $tunnel_pass_w;
+                        }   
+                        else
+                        { 
+                                $obj_upd["tunnelling_ip"] = "0"; 
                         }
                     
-                } // konec else if radku <> 1
+                        $obj_id = array( "id_komplu" => $update_id );
+                        $res = pg_update($db_ok2, 'objekty', $obj_upd, $obj_id);
 
-                    $obj_upd = array( "dns_jmeno" => $dns, "ip" => $ip,
-                            "client_ap_ip" => $client_ap_ip, "dov_net" => $dov_net_w,"id_tarifu" => $id_tarifu,
-                        "typ" => $typ, "poznamka" => $pozn, "verejna" => $verejna_w,
-                        "mac" => $mac, "upravil" => $nick, "sikana_status" => $sikana_status_w,
-                    "sikana_cas" => $sikana_cas, "sikana_text" => $sikana_text, "id_nodu" => $selected_nod );
-                                
-                if( $typ_ip == 4)
+                    } // konec else jestli je opravneni
+                    
+                    if($res){ $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
+                    else{ 
+                        $output .= "<br><H3><div style=\"color: red; \">".
+                        "Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($db_ok2); 
+                    }
+                        
+                    //ted zvlozime do archivu zmen
+                    require("objekty-add-inc-archiv.php");				     
+
+                    $updated="true";
+                    
+                }
+                else
                 {
-                        $obj_upd["tunnelling_ip"] = $tunnelling_ip; 
-
-                        $obj_upd["tunnel_user"] = $tunnel_user_w;
-                        $obj_upd["tunnel_pass"] = $tunnel_pass_w;
-                }   
-                else
-                { 
-                        $obj_upd["tunnelling_ip"] = "0"; 
-                }
-                
-                $obj_id = array( "id_komplu" => $update_id );
-                $res = pg_update($db_ok2, 'objekty', $obj_upd, $obj_id);
-
-                } // konec else jestli je opravneni
-                
-                if($res){ $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
-                else{ 
-                    $output .= "<br><H3><div style=\"color: red; \">".
-                    "Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($db_ok2); 
-                }
+                    // rezim pridani
                     
-                //ted zvlozime do archivu zmen
-                require("objekty-add-inc-archiv.php");				     
+                    $sql_rows = "";
+                    $sql_values = "";
+                    
+                    $obj_add_i = 1;
+                    
+                //    $sql_rows = "dns_jmeno, ip, id_tarifu, dov_net, typ, poznamka, verejna, pridal, id_nodu, ".
+                //		    "sikana_status, sikana_cas, sikana_text ";
 
-                $updated="true";
-                
-            }
-            else
-            {
-                // rezim pridani
-                
-                $sql_rows = "";
-                $sql_values = "";
-                
-                $obj_add_i = 1;
-                
-            //    $sql_rows = "dns_jmeno, ip, id_tarifu, dov_net, typ, poznamka, verejna, pridal, id_nodu, ".
-            //		    "sikana_status, sikana_cas, sikana_text ";
+                    $obj_add = array( "dns_jmeno" => $dns, "ip" => $ip, "id_tarifu" => $id_tarifu, "dov_net" => $dov_net_w, 
+                            "typ" => $typ, "poznamka" => $pozn, "verejna" => $verejna_w, "pridal" => $nick, "id_nodu" => $selected_nod,
+                                    "sikana_status" => $sikana_status_w, "sikana_cas" => $sikana_cas, "sikana_text" => $sikana_text );
 
-                $obj_add = array( "dns_jmeno" => $dns, "ip" => $ip, "id_tarifu" => $id_tarifu, "dov_net" => $dov_net_w, 
-                        "typ" => $typ, "poznamka" => $pozn, "verejna" => $verejna_w, "pridal" => $nick, "id_nodu" => $selected_nod,
-                                "sikana_status" => $sikana_status_w, "sikana_cas" => $sikana_cas, "sikana_text" => $sikana_text );
-
-                if($typ_ip == 4){
-                    $obj_add["tunnelling_ip"] = $tunnelling_ip;
-                    
-                    $obj_add["tunnel_user"] = $tunnel_user_w;
-                    $obj_add["tunnel_pass"] = $tunnel_pass_w;
-                                                    
-                }
-                    
-                if( (strlen($client_ap_ip) > 0) ){
-                $obj_add["client_ap_ip"] = $client_ap_ip;
-                }
-                
-                if( (strlen($mac) > 0) ){
-                $obj_add["mac"] = $mac;
-                }
-                    
-                                                                                    
-                foreach ($obj_add as $key => $val) {
-                
-                if($obj_add_i > 1){
-                    $sql_rows .= ", ";
-                    $sql_values .= ", ";
-                }
-                $sql_rows .= $this->conn_mysql->real_escape_string($key);
-                
-                $sql_values .= "'".$this->conn_mysql->real_escape_string($val)."'";
-                
-                $obj_add_i++;	
-                }
-
-                $sql = "INSERT INTO objekty (".$sql_rows.") VALUES (".$sql_values.") ";
-                    
-                $res = pg_query($sql);
-                    
-                if( !($res === false) ) 
-                { 
-                $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; 
-                } 
-                else
-                { 
-                        $output .= "<H3><div style=\"color: red; padding-top: 20px; padding-left: 5px; \">".
-                            "Chyba! Data do databáze nelze uložit. </div></H3>\n";
+                    if($typ_ip == 4){
+                        $obj_add["tunnelling_ip"] = $tunnelling_ip;
                         
-                        $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
-                        pg_last_error($db_ok2).
-                            "</div>";
+                        $obj_add["tunnel_user"] = $tunnel_user_w;
+                        $obj_add["tunnel_pass"] = $tunnel_pass_w;
+                                                        
+                    }
                         
-                        $output .= "<div style=\"padding-left: 5px; \">sql: ".$sql."</div>";
-                }
-                
-                // pridame to do archivu zmen
-                require("objekty-add-inc-archiv-wifi-add.php");
-                
-            } // konec else - rezim pridani
+                    if( (strlen($client_ap_ip) > 0) ){
+                    $obj_add["client_ap_ip"] = $client_ap_ip;
+                    }
+                    
+                    if( (strlen($mac) > 0) ){
+                    $obj_add["mac"] = $mac;
+                    }
+                        
+                                                                                        
+                    foreach ($obj_add as $key => $val) {
+                    
+                    if($obj_add_i > 1){
+                        $sql_rows .= ", ";
+                        $sql_values .= ", ";
+                    }
+                    $sql_rows .= $this->conn_mysql->real_escape_string($key);
+                    
+                    $sql_values .= "'".$this->conn_mysql->real_escape_string($val)."'";
+                    
+                    $obj_add_i++;	
+                    }
+
+                    $sql = "INSERT INTO objekty (".$sql_rows.") VALUES (".$sql_values.") ";
+                        
+                    $res = pg_query($sql);
+                        
+                    if( !($res === false) ) 
+                    { 
+                    $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; 
+                    } 
+                    else
+                    { 
+                            $output .= "<H3><div style=\"color: red; padding-top: 20px; padding-left: 5px; \">".
+                                "Chyba! Data do databáze nelze uložit. </div></H3>\n";
+                            
+                            $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
+                            pg_last_error($db_ok2).
+                                "</div>";
+                            
+                            $output .= "<div style=\"padding-left: 5px; \">sql: ".$sql."</div>";
+                    }
+                    
+                    // pridame to do archivu zmen
+                    require("objekty-add-inc-archiv-wifi-add.php");
+                    
+                } // konec else - rezim pridani
 
             }
             else {} // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
@@ -999,7 +996,7 @@ class objekt extends adminator
             </td>
                 
             <td><label> Přípojný bod: </label></td>
-                <td>';
+            <td>';
             
             $this->sql_nod = "SELECT * from nod_list WHERE ( jmeno LIKE '%$this->nod_find%' ";
             $this->sql_nod .= " OR ip_rozsah LIKE '%$this->nod_find%' OR adresa LIKE '%$this->nod_find%' ";
@@ -1025,12 +1022,12 @@ class objekt extends adminator
                 $output .= ' > Není vybráno</option>';
 
                 while ($zaznam2=$vysledek->fetch_array() )
-                    {
-                        $output .= '<option value="'.$zaznam2["id"].'"';
-                        if ( ( $selected_nod == $zaznam2["id"]) ){ $output .= " selected "; }
-                        $output .= '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
-                    } //konec while
-                } //konec else
+                {
+                    $output .= '<option value="'.$zaznam2["id"].'"';
+                    if ( ( $selected_nod == $zaznam2["id"]) ){ $output .= " selected "; }
+                    $output .= '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
+                } //konec while
+            } //konec else
                 
             $output .= '</select>';
                                                                                                                                                                 
@@ -1114,7 +1111,6 @@ class objekt extends adminator
                 $output .= '
                 </td>
             </tr>
-                        
             
             <tr><td colspan="4" ><br></td></tr>
             
@@ -1126,6 +1122,7 @@ class objekt extends adminator
                 { $output .= "<span style=\"color: gray; \" >Není dostupné </span>"; }
                 else
                 { $output .= "<input type=\"text\" name=\"mac\" maxlength=\"17\" value=\"".$mac."\">"; }
+
             $output .= '
                 </td>
             
@@ -1205,17 +1202,17 @@ class objekt extends adminator
                 
             if( !isset($id_tarifu) )
             {
-            if( $typ==3 ){ $find_tarif = "2"; } //ap-cko ...
-            elseif( $typ_ip==3 ) //snat/dnat verejka ...
-            { $find_tarif = "2"; }
-            elseif( $garant == 2 ) //garant linka ...
-            { } //.
-            elseif( $tarif == 1 )  // asi SmallCity
-            {  $find_tarif = "1"; }
-            elseif( $tarif == 2 )  // Mp linka
-            { $find_tarif = "0"; }
-            else
-            { $find_tarif = "0"; }
+                if( $typ==3 ){ $find_tarif = "2"; } //ap-cko ...
+                elseif( $typ_ip==3 ) //snat/dnat verejka ...
+                { $find_tarif = "2"; }
+                elseif( $garant == 2 ) //garant linka ...
+                { } //.
+                elseif( $tarif == 1 )  // asi SmallCity
+                {  $find_tarif = "1"; }
+                elseif( $tarif == 2 )  // Mp linka
+                { $find_tarif = "0"; }
+                else
+                { $find_tarif = "0"; }
             }
             
             $output .= "<select name=\"id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
@@ -1225,17 +1222,17 @@ class objekt extends adminator
             
             while( $data_t2 = $dotaz_t2->fetch_array() )
             { 
-            $output .= "<option value=\"".$data_t2["id_tarifu"]."\" ";
-                    
-            if( isset($find_tarif) )
-            { if( ( $find_tarif == $data_t2["id_tarifu"] ) ){ $output .= " SELECTED "; } }
-            else
-            { 
-                if( $id_tarifu == $data_t2["id_tarifu"] ){ $output .= " SELECTED "; } 
-            }
+                $output .= "<option value=\"".$data_t2["id_tarifu"]."\" ";
+                        
+                if( isset($find_tarif) )
+                { if( ( $find_tarif == $data_t2["id_tarifu"] ) ){ $output .= " SELECTED "; } }
+                else
+                { 
+                    if( $id_tarifu == $data_t2["id_tarifu"] ){ $output .= " SELECTED "; } 
+                }
             
-            $output .= " >".$data_t2["zkratka_tarifu"];
-            $output .= " (".$data_t2["jmeno_tarifu"]." :: ".$data_t2["speed_dwn"]."/".$data_t2["speed_upl"]." )</option> \n"; 
+                $output .= " >".$data_t2["zkratka_tarifu"];
+                $output .= " (".$data_t2["jmeno_tarifu"]." :: ".$data_t2["speed_dwn"]."/".$data_t2["speed_upl"]." )</option> \n"; 
             }      
             
             $output .= "</select>";
