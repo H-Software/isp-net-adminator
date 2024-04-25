@@ -576,7 +576,7 @@ else{
         while($data_f = $tarif_f->fetch_array())
 	{ 
 	    $output .= "<span style=\"color: ".$data_f["barva"]."; \" >";
-	    $output .= "<a href=\"admin-tarify.php?id_tarifu=".$data_f["id_tarifu"]."\" >".$data_f["zkratka_tarifu"]."</a>";
+	    $output .= "<a href=\"/admin/tarify?id_tarifu=".$data_f["id_tarifu"]."\" >".$data_f["zkratka_tarifu"]."</a>";
 	
 	    $output .= "</span>\n";
         }	 
@@ -605,7 +605,7 @@ else{
 	//$output .= "<span class=\"objekty-2radka\">NOD: ".$zaznam_bod["jmeno"]."</span> "; 
 
 	$output .= "<span class=\"objekty-2radka objekty-odkaz\">NOD: ".
-	     "<a href=\"topology-nod-list.php?find=".$zaznam_bod["jmeno"]."\" >".
+	     "<a href=\"/topology/node-list?find=".urlencode($zaznam_bod["jmeno"])."\" >".
 	     $zaznam_bod["jmeno"]."</a></span> "; 
        }
      }
@@ -614,7 +614,7 @@ else{
     
      // sem historii
     $output .= "<td class=\"tab-objekty\" ><span class=\"objekty-2radka\" style=\"\" > H: ";
-    $output .= "<a href=\"archiv-zmen.php?id=".$id."\" >".$id."</a>";
+    $output .= "<a href=\"/archiv-zmen?id=".$id."\" >".$id."</a>";
     $output .= " </span>";
 	
     $output .= "</td> \n";
@@ -632,7 +632,7 @@ else{
     if ( $archiv_vlastnik == 1)
     { $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n"; }
     else
-    { $output .= "V: <a href=\"vlastnici2.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n"; }    		
+    { $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n"; }    		
     
     if( $update_mod_vypisu == 2 )
     { $output .= "<td class=\"tab-objekty\" colspan=\"3\" > <br></td>";  }
@@ -675,7 +675,7 @@ else{
     
     $output .= "<td class=\"tab-objekty\" colspan=\"3\" ><span class=\"objekty-2radka\" >".$pridano_orez."</span></td>
     <td class=\"tab-objekty\" >
-     <form method=\"POST\" action=\"/adminator3/print/reg-form-pdf.php\" >
+     <form method=\"POST\" action=\"/print/reg-form-pdf.php\" >
         <input type=\"hidden\" name=\"id_objektu\" value=\"".intval($data["id_komplu"])."\" >
 	<input type=\"submit\" name=\"odeslano_form\" value=\"R.F.\">
      </form>
