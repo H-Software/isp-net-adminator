@@ -155,25 +155,23 @@ class objektyController extends adminatorController {
         $this->smarty->assign("page_title","Adminator3 :: Objekty :: Action");
 
         $this->header($request, $response, $this->adminator);
-
-        $mod_objektu = $_POST["mod_objektu"];        
         
         $objekt = new \App\Core\objekt($this->container);
-        $objekt->mod_vypisu = intval($mod_objektu);
+        $objekt->mod_objektu = intval($_POST["mod_objektu"]);
 
         // $objekt->dns_find = $dns_find;
         // $objekt->ip_find = $ip_find;
         
         $objekt->actionPrepareVars();
 
-        // if($mod_objektu == 2)
-        // {
+        if($objekt->mod_objektu == 2)
+        {
         //   require("objekty-add-inc-fiber.php");
-        // }
-        // else
-        // {
-        //   require("objekty-add-inc-wifi.php");
-        // }
+        }
+        else
+        {
+            $objekt->actionWifi();
+        }
 
         $this->smarty->display('objekty/action.tpl');
 
