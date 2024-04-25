@@ -167,7 +167,7 @@ class objektyController extends adminatorController {
 
         if($objekt->mod_objektu == 2)
         {
-        //   require("objekty-add-inc-fiber.php");
+            $output = $objekt->actionFiber();
         }
         else
         {
