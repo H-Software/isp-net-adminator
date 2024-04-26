@@ -11,7 +11,7 @@ echo '<span style="padding-left: 10px; font-family: georgia; font-style: italic;
 
 <span style="padding-left: 5px;" ><a href="objekty.php">objekty</a></span>
 
-<span style="padding-left: 5px; ">( <a href="objekty-add.php">přidání</a></span>
+<span style="padding-left: 5px; ">( <!--<a href="objekty-add.php">-->přidání<!--</a>--></span>
 ,
 <span style="padding-left: 5px; padding-right: 10px; ">omezený režim)</span>';
 

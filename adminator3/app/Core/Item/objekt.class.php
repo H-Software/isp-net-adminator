@@ -926,7 +926,6 @@ class objekt extends adminator
 
     public function actionFiber()
     {
-
         $output = "";
         $db_ok2 = $this->conn_pqsql;
 
@@ -940,7 +939,7 @@ class objekt extends adminator
             $dotaz_upd = pg_query("SELECT * FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
             $radku_upd=pg_num_rows($dotaz_upd);
         
-            if ( $radku_upd==0 ) echo "Chyba! Požadovaná data nelze načíst! ";
+            if ( $radku_upd==0 ) $output .= "Chyba! Požadovaná data nelze načíst! ";
             else
             {
                 
@@ -1091,7 +1090,7 @@ class objekt extends adminator
                     { $billing_suspend_status = intval($data_poz_fakt["billing_suspend_status"]); }
                 }
                 else
-                { echo "Chyba! nelze vybrat vlastníka."; }
+                { $output .= "Chyba! nelze vybrat vlastníka."; }
 
                 if( $billing_suspend_status == 1 ) 
                 {
@@ -1109,7 +1108,7 @@ class objekt extends adminator
             } // konec if jestli id_cloveka > 1 and update == 1
 
             //checkem jestli se macklo na tlacitko "OK" :)
-            if( ereg("^OK*",$this->odeslano) ) { echo ""; }
+            if( ereg("^OK*",$this->odeslano) ) { $output .= ""; }
             else { $fail="true"; $error.="<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>"; }
 
             //ukladani udaju ...
@@ -1136,7 +1135,7 @@ class objekt extends adminator
                     
                     if ( !( check_level($level,29) ) ) 
                     {
-                        echo "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
+                        $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                         exit;
                     }
                     
@@ -1147,7 +1146,7 @@ class objekt extends adminator
                         
                     $vysl4=pg_query("select * from objekty WHERE id_komplu='$this->update_id' ");
 
-                    if( ( pg_num_rows($vysl4) <> 1 ) ){ echo "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>"; }
+                    if( ( pg_num_rows($vysl4) <> 1 ) ){ $output .= "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>"; }
                     else  
                     { 
                         while ($data4=pg_fetch_array($vysl4) ):
@@ -1193,8 +1192,8 @@ class objekt extends adminator
                     $obj_id = array( "id_komplu" => $this->update_id );
                     $res = pg_update($db_ok2, 'objekty', $obj_upd, $obj_id);
                     
-                    if($res) { echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
-                    else{ echo "<br><H3><div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($db_ok2); }
+                    if($res) { $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
+                    else{ $output .= "<br><H3><div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($db_ok2); }
                         
                     //ted zvlozime do archivu zmen
                     
@@ -1220,9 +1219,9 @@ class objekt extends adminator
                     //zjistit, krz kterého reinharda jde objekt
                     $inserted_id = \Aglobal::pg_last_inserted_id($db_ok2, "objekty");
                                     
-                    if ($res) { echo "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
+                    if ($res) { $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
                     else
-                    { echo "<br><H3><div style=\"color: red; \">Chyba! Data do databáze nelze uložit. </div></H3>\n"; }	
+                    { $output .= "<br><H3><div style=\"color: red; \">Chyba! Data do databáze nelze uložit. </div></H3>\n"; }	
                     
                     // pridame to do archivu zmen
                     $pole="<b> akce: pridani objektu ; </b><br>";
@@ -1309,15 +1308,15 @@ class objekt extends adminator
         endif; 
 
         if ($update_status==1)
-        { echo '<h3 align="center">Úprava objektu</h3>'; } 
+        { $output .= '<h3 align="center">Úprava objektu</h3>'; } 
         else 
-        { echo '<h3 align="center">Přidání nového objektu</h3>'; }
+        { $output .= '<h3 align="center">Přidání nového objektu</h3>'; }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
         if ( (isset($error)) or (!isset($this->send)) ): 
-            echo $error; 
+            $output .= $error; 
 
-            echo $info;
+            $output .= $info;
 
             // vlozeni vlastniho formu
             // require ("objekty-add-inc-form-fiber.php");
@@ -1325,7 +1324,7 @@ class objekt extends adminator
 
         elseif ( ( isset($writed) or isset($updated) ) ):
 
-            echo '<table border="0" width="50%" >
+            $output .= '<table border="0" width="50%" >
                 <tr>
                 <td align="right">Zpět na objekty </td>
                 <td><form action="objekty.php" method="GET" >
@@ -1349,60 +1348,60 @@ class objekt extends adminator
             <b>Dns záznam</b>: ' .  $dns . '<br> 
             <b>IP adresa</b>: ' . $ip . '<br>'; 
 
-            echo "<br><b>Typ objektu </b>:";
+            $output .= "<br><b>Typ objektu </b>:";
             
-            if ($typ == 1) { echo "platiči"; } elseif ($typ == 2) { echo "Free"; } elseif ($typ == 3) { echo "AP"; }
-            else { echo "chybný výběr"; }
+            if ($typ == 1) { $output .= "platiči"; } elseif ($typ == 2) { $output .= "Free"; } elseif ($typ == 3) { $output .= "AP"; }
+            else { $output .= "chybný výběr"; }
                 
-            echo '<br> 
+            $output .= '<br> 
 
             <b>Linka</b>:'; 
             
-            echo "id tarifu: ".$id_tarifu; 
-            //if ( $tarif == 2 ) { echo "Metropolitní"; } else { echo "Small city"; } 
+            $output .= "id tarifu: ".$id_tarifu; 
+            //if ( $tarif == 2 ) { $output .= "Metropolitní"; } else { $output .= "Small city"; } 
             
-            echo '<br>
-            <b>Povolet NET</b>: '; if ($dov_net == 2 ) { echo "Ano"; } else { echo "Ne"; } echo '<br>
+            $output .= '<br>
+            <b>Povolet NET</b>: '; if ($dov_net == 2 ) { $output .= "Ano"; } else { $output .= "Ne"; } $output .= '<br>
             <br>
             <b>Poznámka</b>: ' . $pozn . '<br>
             <b>Přípojný bod</b>:';
 
             $vysledek3 = $this->conn_mysql->query("select * from nod_list WHERE id=".intval($selected_nod));
             $radku3 = $vysledek3->num_rows;
-            if($radku3==0) echo "Nelze zjistit ";
+            if($radku3==0) $output .= "Nelze zjistit ";
             else
             {
                 while ($zaznam3=$vysledek3->fetch_array() )
-                { echo $zaznam3["jmeno"]." (".$zaznam3["id"].") ".''; }
+                { $output .= $zaznam3["jmeno"]." (".$zaznam3["id"].") ".''; }
             }
             
-            // echo "data nejak upravena";
+            // $output .= "data nejak upravena";
 
-            echo "<br><br><b>Šikana: </b>"; 
+            $output .= "<br><br><b>Šikana: </b>"; 
             if( $sikana_status==2) 
             { 
-                echo "Ano"; 
+                $output .= "Ano"; 
 
-                echo "<br><b>Šikana - počet dní: </b>".$sikana_cas;
-                echo "<br><b>Šikana - text: </b>".$sikana_text;
+                $output .= "<br><b>Šikana - počet dní: </b>".$sikana_cas;
+                $output .= "<br><b>Šikana - text: </b>".$sikana_text;
             }
-            elseif($sikana_status==1){ echo "Ne"; }
-            else{ echo "Nelze zjistit"; }
+            elseif($sikana_status==1){ $output .= "Ne"; }
+            else{ $output .= "Nelze zjistit"; }
 
-            echo "<br><b>Číslo portu (ve switchi)</b>: ".$port_id."<br>";
+            $output .= "<br><b>Číslo portu (ve switchi)</b>: ".$port_id."<br>";
 
-            echo "<br><b>Typ IP adresy</b>: ";
-            if( $typ_ip == "2") echo "Veřejná";
-            elseif( $typ_ip == "1") echo "Neveřejná";
-            else echo "Nelze zjistit";
+            $output .= "<br><b>Typ IP adresy</b>: ";
+            if( $typ_ip == "2") $output .= "Veřejná";
+            elseif( $typ_ip == "1") $output .= "Neveřejná";
+            else $output .= "Nelze zjistit";
 
-            echo "<br><b>Přílušnost MAC k jiné vlaně (ve domov. switchi)</b>: ";
+            $output .= "<br><b>Přílušnost MAC k jiné vlaně (ve domov. switchi)</b>: ";
             if( ($another_vlan_id == "NULL") or ($another_vlan_id == "") )
-            { echo "Vypnuto"; }
+            { $output .= "Vypnuto"; }
             else
-            { echo "vlan id: ".$another_vlan_id; }
+            { $output .= "vlan id: ".$another_vlan_id; }
             
-            echo "<br>";
+            $output .= "<br>";
 
         endif; 
 
@@ -1849,7 +1848,7 @@ class objekt extends adminator
                 $vysledek = $this->conn_mysql->query($this->sql_nod);
                 $radku = $vysledek->num_rows;
 
-                print '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
+                $output .= '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
 
                 if( ($radku==0) )
                 { 
@@ -1867,7 +1866,7 @@ class objekt extends adminator
                         if ( ( $selected_nod == $zaznam2["id"]) ){ $output .= " selected "; }
                         $output .= '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
                     } //konec while
-                    } //konec else
+                } //konec else
                     
                 $output .= '</select>';
 
@@ -1906,7 +1905,9 @@ class objekt extends adminator
                     $output .= "<option value=\"".$data_t2["id_tarifu"]."\" ";
                             
                     if( isset($find_tarif) )
-                    { if( ( $find_tarif == $data_t2["id_tarifu"] ) ){ $output .= " SELECTED "; } }
+                    { 
+                        if( ( $find_tarif == $data_t2["id_tarifu"] ) ){ $output .= " SELECTED "; } 
+                    }
                     else
                     { 
                         if( $id_tarifu == $data_t2["id_tarifu"] ){ $output .= " SELECTED "; } 
@@ -2040,7 +2041,7 @@ class objekt extends adminator
             <tr>
                 <td><label> poznámka:  </label></td>
                 <td>
-                    <textarea name="pozn" cols="30" rows="6" wrap="soft" >' . $pozn . '></textarea>
+                    <textarea name="pozn" cols="30" rows="6" wrap="soft" >' . $pozn . '</textarea>
                 </td>
                 
                 <td><label>Šikana - text: </label></td>
@@ -2114,5 +2115,7 @@ class objekt extends adminator
                 
             </table>
             </form>';
+
+            return $output;
     }
 }
