@@ -1321,7 +1321,7 @@ class objekt extends adminator
 
             // vlozeni vlastniho formu
             // require ("objekty-add-inc-form-fiber.php");
-            $this->actionFormFiber();
+            $output .= $this->actionFormFiber();
 
         elseif ( ( isset($writed) or isset($updated) ) ):
 
@@ -1406,6 +1406,7 @@ class objekt extends adminator
 
         endif; 
 
+        return $output;
     }
 
     private function actionFormWifi()
@@ -1790,23 +1791,25 @@ class objekt extends adminator
 
     public function actionFormFiber()
     {
-        echo '
+        $output = "";
+
+        $output .= '
             <form name="form1" method="post" action="" >
             <input type="hidden" name="send" value="true" >
             <input type="hidden" name="update_id" value="'.$this->update_id.'" >';
 
-        echo $this->csrf_html[0];
+        $output .= $this->csrf_html[0];
 
-        echo '<table border="0" width="100%" cellspacing="5" >
+        $output .= '<table border="0" width="100%" cellspacing="5" >
                 
                 <tr>
                 <td><span style="font-weight: bold; font-size: 18px; color: teal;" >Mód:</span></td>
                 <td >
                 <select size="1" name="mod_objektu" onChange="self.document.forms.form1.submit()" >
                     <option value="1" style="color: #CC0033;" ';
-                    if($this->mod_objektu == 1) echo " selected "; echo ' >Bezdrátová síť</option>
+                    if($this->mod_objektu == 1) $output .= " selected "; $output .= ' >Bezdrátová síť</option>
                     <option value="2" style="color: #e37d2b; font-weight: bold;" ';
-                    if($this->mod_objektu == 2) echo " selected "; echo ' >Optická síť</option>
+                    if($this->mod_objektu == 2) $output .= " selected "; $output .= ' >Optická síť</option>
                 </select>  
                 </td>
                 </tr>
@@ -1828,11 +1831,11 @@ class objekt extends adminator
                 <td>typ ip adresy:</td>
                 <td>
                     <input type="radio" name="typ_ip" onChange="self.document.forms.form1.submit()" value="1" ';
-                    if ( ( $typ_ip==1 or (!isset($typ_ip)) ) ) { echo "checked"; } echo ' >
+                    if ( ( $typ_ip==1 or (!isset($typ_ip)) ) ) { $output .= "checked"; } $output .= ' >
                     <label>Neveřejná | </label>
                     
                     <input type="radio" name="typ_ip" onchange="self.document.forms.form1.submit()" value="2" ';
-                        if ($typ_ip==2 ) { echo " checked "; } echo ' >
+                        if ($typ_ip==2 ) { $output .= " checked "; } $output .= ' >
                     <label>Veřejná </label>
                 </td>
                     
@@ -1850,26 +1853,26 @@ class objekt extends adminator
 
                 if( ($radku==0) )
                 { 
-                    echo "<option value=\"0\" style=\"color: gray; \" selected >nelze zjistit / žádný nod nenalezen </option>"; 
+                    $output .= "<option value=\"0\" style=\"color: gray; \" selected >nelze zjistit / žádný nod nenalezen </option>"; 
                 }
                 else
                 {
-                    echo '<option value="0" style="color: gray; font-style: bold; "';
-                    if( (!isset($selected_nod)) ){ echo "selected"; }
-                    echo ' > Není vybráno</option>';
+                    $output .= '<option value="0" style="color: gray; font-style: bold; "';
+                    if( (!isset($selected_nod)) ){ $output .= "selected"; }
+                    $output .= ' > Není vybráno</option>';
 
                     while ($zaznam2=$vysledek->fetch_array() )
                     {
-                        echo '<option value="'.$zaznam2["id"].'"';
-                        if ( ( $selected_nod == $zaznam2["id"]) ){ echo " selected "; }
-                        echo '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
+                        $output .= '<option value="'.$zaznam2["id"].'"';
+                        if ( ( $selected_nod == $zaznam2["id"]) ){ $output .= " selected "; }
+                        $output .= '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
                     } //konec while
                     } //konec else
                     
-                echo '</select>';
+                $output .= '</select>';
 
                 
-                echo '<input type="button" value="Hledat (nody)" name="G" onClick="self.document.forms.form1.submit()" >
+                $output .= '<input type="button" value="Hledat (nody)" name="G" onClick="self.document.forms.form1.submit()" >
                     </td>
                 </tr>
                 
@@ -1881,10 +1884,10 @@ class objekt extends adminator
                     
                     if ($ip_error == 1) 
                     { 
-                    echo "<img title=\"error\" width=\"20px\" src=\"img2/warning.gif\" align=\"middle\" ";
-                    echo "onclick=\" window.open('objekty-vypis-ip.php?id_rozsah=".$ip_rozsah."'); "."\">";
+                    $output .= "<img title=\"error\" width=\"20px\" src=\"img2/warning.gif\" align=\"middle\" ";
+                    $output .= "onclick=\" window.open('objekty-vypis-ip.php?id_rozsah=".$ip_rozsah."'); "."\">";
                     } 
-                echo '
+                $output .= '
                     </td>
                     <td>Linka: </td>
                     
@@ -1892,36 +1895,36 @@ class objekt extends adminator
                 
                 if( !isset($id_tarifu) ){ $id_tarifu = "0"; }
                 
-                echo "<select name=\"id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
+                $output .= "<select name=\"id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
 
-                //echo "<option value=\"\" class=\"select-nevybrano\" >Nevybráno</option>";
+                //$output .= "<option value=\"\" class=\"select-nevybrano\" >Nevybráno</option>";
                 
                 $dotaz_t2 = $this->conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ORDER BY gen_poradi ");
                 
                 while( $data_t2 = $dotaz_t2->fetch_array() )
                 { 
-                    echo "<option value=\"".$data_t2["id_tarifu"]."\" ";
+                    $output .= "<option value=\"".$data_t2["id_tarifu"]."\" ";
                             
                     if( isset($find_tarif) )
-                    { if( ( $find_tarif == $data_t2["id_tarifu"] ) ){ echo " SELECTED "; } }
+                    { if( ( $find_tarif == $data_t2["id_tarifu"] ) ){ $output .= " SELECTED "; } }
                     else
                     { 
-                        if( $id_tarifu == $data_t2["id_tarifu"] ){ echo " SELECTED "; } 
+                        if( $id_tarifu == $data_t2["id_tarifu"] ){ $output .= " SELECTED "; } 
                     }
                     
-                    echo " >".$data_t2["zkratka_tarifu"];
-                    echo " (".$data_t2["jmeno_tarifu"]." :: ".$data_t2["speed_dwn"]."/".$data_t2["speed_upl"]." )</option> \n"; 
+                    $output .= " >".$data_t2["zkratka_tarifu"];
+                    $output .= " (".$data_t2["jmeno_tarifu"]." :: ".$data_t2["speed_dwn"]."/".$data_t2["speed_upl"]." )</option> \n"; 
                 }      
                 
-                echo "</select>";
-                echo "</td>";
+                $output .= "</select>";
+                $output .= "</td>";
 
                     
-                echo '    
+                $output .= '    
                 </td>
                 </tr>';	 
                 
-                echo '<tr><td colspan="4" ><br></td></tr>
+                $output .= '<tr><td colspan="4" ><br></td></tr>
 
                 <tr>
                 <td>mac adresa:</td>
@@ -1939,8 +1942,8 @@ class objekt extends adminator
                 <td>
                     
                 <select name="typ" onChange="self.document.forms.form1.submit()" >
-                        <option value="1" '; if ( $typ == 1) { echo " selected "; } echo ' >poc (platici)</option>
-                        <option value="2" '; if ( $typ == 2) { echo " selected "; } echo ' >poc (free)</option>
+                        <option value="1" '; if ( $typ == 1) { $output .= " selected "; } $output .= ' >poc (platici)</option>
+                        <option value="2" '; if ( $typ == 2) { $output .= " selected "; } $output .= ' >poc (free)</option>
                 </select>
                 
                 </td>
@@ -1950,22 +1953,22 @@ class objekt extends adminator
 
                 if( ($typ==3) or ($typ_ip == 3) )
                 { 
-                if( $typ_ip ==3){ echo "<input type=\"hidden\" name=\"dov_net\" value=\"2\" >"; }
-                echo "<div class=\"objekty-not-allow\">není dostupné</div>"; 
+                if( $typ_ip ==3){ $output .= "<input type=\"hidden\" name=\"dov_net\" value=\"2\" >"; }
+                $output .= "<div class=\"objekty-not-allow\">není dostupné</div>"; 
                 }
                 else
                 {
                 
-                echo "<input type=\"radio\" name=\"dov_net\" value=\"2\""; if ( ( $dov_net==2 or (!isset($dov_net)) ) ) { echo "checked"; } echo ">";
-                echo "<label>Ano | </label>";
+                $output .= "<input type=\"radio\" name=\"dov_net\" value=\"2\""; if ( ( $dov_net==2 or (!isset($dov_net)) ) ) { $output .= "checked"; } $output .= ">";
+                $output .= "<label>Ano | </label>";
                                 
-                echo "<input type=\"radio\" name=\"dov_net\" value=\"1\""; if ( $dov_net==1 ) { echo "checked"; } echo ">";
-                echo "<label> Ne</label>";
+                $output .= "<input type=\"radio\" name=\"dov_net\" value=\"1\""; if ( $dov_net==1 ) { $output .= "checked"; } $output .= ">";
+                $output .= "<label> Ne</label>";
                             
                 }
-                echo "</td>";
+                $output .= "</td>";
                     
-                echo '  
+                $output .= '  
                 </tr>
                 
                 <tr><td colspan="4" ><br></td></tr>
@@ -1980,14 +1983,14 @@ class objekt extends adminator
                 
                 for($i=1;$i<=$pocet_portu;$i++)
                 {
-                    echo "<option value=\"".$i."\" ";
+                    $output .= "<option value=\"".$i."\" ";
                     
-                    if( $port_id == $i){ echo " selected "; }
+                    if( $port_id == $i){ $output .= " selected "; }
                     
-                    echo " >".$i."</option>";
+                    $output .= " >".$i."</option>";
                 }
                 
-                echo '
+                $output .= '
                 </select>
                 </td>
                 
@@ -1996,19 +1999,19 @@ class objekt extends adminator
                 
                 if ($typ==3 or $typ_ip==3 )
                 { 
-                    echo "<div class=\"objekty-not-allow\">není dostupné</div>"; 
+                    $output .= "<div class=\"objekty-not-allow\">není dostupné</div>"; 
                 }
                 else
                 {
-                    echo "<select name=\"sikana_status\" size=\"1\" onChange=\"self.document.forms.form1.submit()\"> \n";
-                    echo "<option value=\"1\" "; if ( ( $sikana_status==1 or (!isset($sikana_status) ) ) ) { echo " selected "; } echo ">Ne</option> \n";	    
-                    echo "<option value=\"2\" "; if ( $sikana_status==2 ) { echo " selected "; } echo ">Ano</option> \n";
-                    echo "</select>";
+                    $output .= "<select name=\"sikana_status\" size=\"1\" onChange=\"self.document.forms.form1.submit()\"> \n";
+                    $output .= "<option value=\"1\" "; if ( ( $sikana_status==1 or (!isset($sikana_status) ) ) ) { $output .= " selected "; } $output .= ">Ne</option> \n";	    
+                    $output .= "<option value=\"2\" "; if ( $sikana_status==2 ) { $output .= " selected "; } $output .= ">Ano</option> \n";
+                    $output .= "</select>";
                 }
                 
-                echo "</td>";
+                $output .= "</td>";
 
-                echo '
+                $output .= '
                 </tr>
 
                 <tr><td colspan="4" ><br></td></tr>
@@ -2018,17 +2021,17 @@ class objekt extends adminator
                 <td> </td>
                 <td> </td>';
                     
-                echo "<td>Šikana - počet dní: </td><td>";
+                $output .= "<td>Šikana - počet dní: </td><td>";
                 
                 if( ( $typ==3 or ($sikana_status!=2) ) )
                 {
-                    echo "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
-                    echo "<input type=\"hidden\" name=\"sikana_cas\" value=\"".$sikana_cas."\">";
+                    $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
+                    $output .= "<input type=\"hidden\" name=\"sikana_cas\" value=\"".$sikana_cas."\">";
                 }
                 else
-                { echo "<input type=\"text\" name=\"sikana_cas\" size=\"5\" value=\"".$sikana_cas."\" >"; }
+                { $output .= "<input type=\"text\" name=\"sikana_cas\" size=\"5\" value=\"".$sikana_cas."\" >"; }
 
-                echo '
+                $output .= '
                 </td>
             </tr>
 
@@ -2045,13 +2048,13 @@ class objekt extends adminator
                 
                 if( ( $typ ==3 or ($sikana_status!=2) ) ) 
                 { 
-                echo "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
-                echo "<input type=\"hidden\" name=\"sikana_text\" value=\"".$sikana_text."\" >";
+                $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
+                $output .= "<input type=\"hidden\" name=\"sikana_text\" value=\"".$sikana_text."\" >";
                 }
                 else 
-                { echo "<textarea name=\"sikana_text\" cols=\"30\" rows=\"4\" wrap=\"soft\" >".$sikana_text."</textarea>";  }
+                { $output .= "<textarea name=\"sikana_text\" cols=\"30\" rows=\"4\" wrap=\"soft\" >".$sikana_text."</textarea>";  }
 
-            echo '
+            $output .= '
                 </td>
             </tr>
 
@@ -2062,18 +2065,18 @@ class objekt extends adminator
                 <td colspan="2">
                 <select name="another_vlan_id" size="1">';
                 
-                echo "<option value=\"0\" style=\"color: grey;\">Nevybráno</option>";
+                $output .= "<option value=\"0\" style=\"color: grey;\">Nevybráno</option>";
 
                 $dotaz_a_vlan = $this->conn_mysql->query("SELECT jmeno, vlan_id FROM nod_list WHERE typ_nodu = '2' ORDER BY vlan_id ");
 
                 while( $data_vlan = $dotaz_a_vlan->fetch_array() )
                 {	 
-                    echo "<option value=\"".$data_vlan["vlan_id"]."\" ";
+                    $output .= "<option value=\"".$data_vlan["vlan_id"]."\" ";
 
-                    if( $another_vlan_id == $data_vlan["vlan_id"] ){ echo " SELECTED "; }
+                    if( $another_vlan_id == $data_vlan["vlan_id"] ){ $output .= " SELECTED "; }
                 
-                    echo " >".$data_vlan["jmeno"];
-                    echo " ( vlan_id: ".$data_vlan["vlan_id"]." )		
+                    $output .= " >".$data_vlan["jmeno"];
+                    $output .= " ( vlan_id: ".$data_vlan["vlan_id"]." )		
                         </option>";
                 }
                 
@@ -2082,21 +2085,21 @@ class objekt extends adminator
                 
                 while( $data_t2 = mysql_fetch_array($dotaz_t2) )
                 { 
-                echo "<option value=\"".$data_t2["id_tarifu"]."\" ";
+                $output .= "<option value=\"".$data_t2["id_tarifu"]."\" ";
                         
                 if( isset($find_tarif) )
-                { if( ( $find_tarif == $data_t2["id_tarifu"] ) ){ echo " SELECTED "; } }
+                { if( ( $find_tarif == $data_t2["id_tarifu"] ) ){ $output .= " SELECTED "; } }
                 else
                 { 
-                    if( $id_tarifu == $data_t2["id_tarifu"] ){ echo " SELECTED "; } 
+                    if( $id_tarifu == $data_t2["id_tarifu"] ){ $output .= " SELECTED "; } 
                 }
                 
-                echo " >".$data_t2["zkratka_tarifu"];
-                echo " (".$data_t2["jmeno_tarifu"]." :: ".$data_t2["speed_dwn"]."/".$data_t2["speed_upl"]." )</option> \n"; 
+                $output .= " >".$data_t2["zkratka_tarifu"];
+                $output .= " (".$data_t2["jmeno_tarifu"]." :: ".$data_t2["speed_dwn"]."/".$data_t2["speed_upl"]." )</option> \n"; 
                 }      
                 */
                     
-                echo '
+                $output .= '
                 </select>
                 </td>
 
