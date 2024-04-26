@@ -1043,7 +1043,7 @@ class objekt extends adminator
             }
 
             // check v modu uprava
-            if( ( $update_status==1 and (isset($odeslano)) ) )
+            if( ( $update_status==1 and (isset($this->odeslano)) ) )
             {
                 $ip_find=$ip."/32";
                 
@@ -1070,7 +1070,7 @@ class objekt extends adminator
             { $fail="true"; $error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";  }
 
             // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
-            $poz_fakt_clovek=pg_query("SELECT * FROM objekty WHERE id_komplu = '$update_id' ");
+            $poz_fakt_clovek=pg_query("SELECT * FROM objekty WHERE id_komplu = '$this->update_id' ");
             $poz_fakt_clovek_radku=pg_num_rows($poz_fakt_clovek);
 
             while($data_poz_f_clovek=pg_fetch_array($poz_fakt_clovek))
@@ -1816,7 +1816,7 @@ class objekt extends adminator
                 <td width="" ><input type="Text" name="dns" size="30" maxlength="50" value="'.$dns.'" ></td>
 
                 <td width="" >Přípojný bod - hledání:</td>
-                <td width="" ><input type="Text" name="nod_find" size="30" value="'.$nod_find.'" ></td>
+                <td width="" ><input type="Text" name="nod_find" size="30" value="'.$this->nod_find.'" ></td>
 
                 </tr>
 
@@ -1837,11 +1837,11 @@ class objekt extends adminator
                 <td><label> Přípojný bod: </label></td>
                     <td>';
 
-                $sql_nod = "SELECT * from nod_list WHERE ( jmeno LIKE '%$nod_find%' ";
-                $sql_nod .= " OR ip_rozsah LIKE '%$nod_find%' OR adresa LIKE '%$nod_find%' ";
-                $sql_nod .= " OR pozn LIKE '%$nod_find%' ) AND ( typ_nodu = '2' ) ORDER BY jmeno ASC ";
+                $this->sql_nod = "SELECT * from nod_list WHERE ( jmeno LIKE '%$this->nod_find%' ";
+                $this->sql_nod .= " OR ip_rozsah LIKE '%$this->nod_find%' OR adresa LIKE '%$this->nod_find%' ";
+                $this->sql_nod .= " OR pozn LIKE '%$this->nod_find%' ) AND ( typ_nodu = '2' ) ORDER BY jmeno ASC ";
 
-                $vysledek = $conn_mysql->query($sql_nod);
+                $vysledek = $conn_mysql->query($this->sql_nod);
                 $radku = $vysledek->num_rows;
 
                 print '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
