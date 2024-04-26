@@ -96,7 +96,7 @@ class objektypridani {
 		}
     } // konec funkce check rra
     
-    function check_l2tp_cr($cr)
+    public static function check_l2tp_cr($cr)
     {
 		$cr_check=preg_match('/^([[:alnum:]])+$/',$cr);
 		

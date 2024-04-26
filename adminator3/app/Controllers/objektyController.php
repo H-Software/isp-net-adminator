@@ -144,4 +144,38 @@ class objektyController extends adminatorController {
   
         $this->smarty->display('objekty/list.tpl');
     }
+
+    public function objektyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->info("objektyController\objektyAction called");
+        
+        $this->checkLevel(2, $this->adminator);
+
+        $this->smarty->assign("page_title","Adminator3 :: Objekty :: Action");
+
+        $this->header($request, $response, $this->adminator);
+        
+        $objekt = new \App\Core\objekt($this->container);
+        $objekt->mod_objektu = intval($_POST["mod_objektu"]);
+        $objekt->csrf_html = $this->generateCsrfToken($request, $response, true);
+
+        // $objekt->dns_find = $dns_find;
+        // $objekt->ip_find = $ip_find;
+        
+        $objekt->actionPrepareVars();
+
+        if($objekt->mod_objektu == 2)
+        {
+            $output = $objekt->actionFiber();
+        }
+        else
+        {
+            $output = $objekt->actionWifi();
+        }
+
+        $this->smarty->assign("body", $output);
+        $this->smarty->display('objekty/action.tpl');
+
+    }
 }
