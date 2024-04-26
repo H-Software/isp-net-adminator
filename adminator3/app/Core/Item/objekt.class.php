@@ -989,15 +989,15 @@ class objekt extends adminator
         {
             // rezim pridani, nacitame z POSTu
 
-            $dns=$_POST["dns"];	
+            $this->form_dns=$_POST["dns"];	
             $ip=$_POST["ip"];
                 
-            $typ_ip = $_POST["typ_ip"];
+            $this->form_typ_ip = $_POST["typ_ip"];
             $selected_nod = $_POST["selected_nod"];
             
             $id_tarifu = $_POST["id_tarifu"];
             
-            $mac = $_POST["mac"];
+            $this->form_mac = $_POST["mac"];
             $typ = $_POST["typ"];
             $dov_net = $_POST["dov_net"];
             
@@ -1021,13 +1021,13 @@ class objekt extends adminator
         if( (strlen($ip) > 0) ){ \objektypridani::checkip($ip); }
 
         if( ( strlen($dns) > 0 ) ){ \objektypridani::checkdns($dns); }
-        if( ( strlen($mac) > 0 ) ){ \objektypridani::checkmac($mac); }
+        if( ( strlen($this->form_mac) > 0 ) ){ \objektypridani::checkmac($this->form_mac); }
 
         if( (strlen($sikana_cas) > 0 ) ){ \objektypridani::checkcislo($sikana_cas); }
         //if( (strlen($selected_nod) > 0 ) ){ \objektypridani::checkcislo($selected_nod); }
             
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
-        if( ( ($dns != "") and ($ip != "") ) and ( $selected_nod > 0 ) and ( ($id_tarifu >= 0) ) and ($mac != "") ):
+        if( ( ($this->form_dns != "") and ($ip != "") ) and ( $selected_nod > 0 ) and ( ($id_tarifu >= 0) ) and ($this->form_mac != "") ):
 
             //kontrola dulplicitnich udaju
             if ( ( $update_status!=1 ) )
@@ -1035,8 +1035,8 @@ class objekt extends adminator
                 $ip_find=$ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS = pg_exec($db_ok2, "SELECT * FROM objekty WHERE dns_jmeno LIKE '$dns' ");
-                $MSQ_IP = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ip <<= '$ip_find' ");
+                $MSQ_DNS = pg_exec($db_ok2, "SELECT * FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
+                $MSQ_IP = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ip <<= '$this->ip_find' ");
                     
                 if (pg_num_rows($MSQ_DNS) > 0){ $error .= "<h4>Dns záznam ( ".$dns." ) již existuje!!!</h4>"; $fail = "true"; }
                 if (pg_num_rows($MSQ_IP) > 0){ $error .= "<h4>IP adresa ( ".$ip." ) již existuje!!!</h4>"; $fail = "true"; }
@@ -1048,18 +1048,18 @@ class objekt extends adminator
                 $ip_find=$ip."/32";
                 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$dns' AND id_komplu != '$this->update_id' ) ");
-                $MSQ_IP2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( ip <<= '$ip_find' AND id_komplu != '$this->update_id' ) ");
+                $MSQ_DNS2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
+                $MSQ_IP2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '$this->update_id' ) ");
 
-                if(pg_num_rows($MSQ_DNS2) > 0){ $error .= "<h4>Dns záznam ( ".$dns." ) již existuje!!!</h4>"; $fail = "true"; }
+                if(pg_num_rows($MSQ_DNS2) > 0){ $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>"; $fail = "true"; }
                 if(pg_num_rows($MSQ_IP2) > 0){ $error .= "<h4>IP adresa ( ".$ip." ) již existuje!!!</h4>"; $fail = "true"; }
             }
 
             // checknem stav vysilace a filtraci
-            $msq_stav_nodu=mysql_query("SELECT * FROM nod_list WHERE id= '$selected_nod' ");
-            $msq_stav_nodu_radky=mysql_num_rows($msq_stav_nodu);
+            $msq_stav_nodu=$this->conn_mysql->query("SELECT * FROM nod_list WHERE id= '$selected_nod' ");
+            $msq_stav_nodu_radky=$msq_stav_nodu->num_rows;
             
-            while ($data=mysql_fetch_array($msq_stav_nodu) )
+            while ($data=$msq_stav_nodu->fetch_array() )
             { $stav_nodu = $data["stav"]; $router_id = $data["router_id"]; }
 
             if ( $stav_nodu == 2 )
@@ -1114,7 +1114,7 @@ class objekt extends adminator
 
             //ukladani udaju ...
             if( !( isset($fail) ) ) 
-            { 
+            {
                 // priprava promennych
             
                 if( $dov_net == 2 ) { $dov_net_w ="a"; } else { $dov_net_w="n"; }
@@ -1201,8 +1201,7 @@ class objekt extends adminator
                     //workaround
                     $obj_upd["typ_ip"] = $typ_ip;
                     
-                    // require("objekty-add-inc-archiv-fiber.php");				     
-                    $this->actionFormFiber();
+                    require("objekty-add-inc-archiv-fiber.php");				     
 
                     $updated="true";
                     
@@ -1282,7 +1281,7 @@ class objekt extends adminator
                     
                     if( $res == 1){ $vysledek_write="1"; }
                     
-                    $add=$this->$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+                    $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
                             "('".$this->conn_mysql->real_escape_string($pole)."','".
                             $this->conn_mysql->real_escape_string($this->loggedUserEmail)."','".
                             $this->conn_mysql->real_escape_string($vysledek_write)."') ");
@@ -1321,7 +1320,8 @@ class objekt extends adminator
             echo $info;
 
             // vlozeni vlastniho formu
-            include ("objekty-add-inc-form-fiber.php");
+            // require ("objekty-add-inc-form-fiber.php");
+            $this->actionFormFiber();
 
         elseif ( ( isset($writed) or isset($updated) ) ):
 
@@ -1367,7 +1367,7 @@ class objekt extends adminator
             <b>Poznámka</b>: ' . $pozn . '<br>
             <b>Přípojný bod</b>:';
 
-            $vysledek3 = $this->$conn_mysql->query("select * from nod_list WHERE id=".intval($selected_nod));
+            $vysledek3 = $this->conn_mysql->query("select * from nod_list WHERE id=".intval($selected_nod));
             $radku3 = $vysledek3->num_rows;
             if($radku3==0) echo "Nelze zjistit ";
             else
@@ -1795,7 +1795,9 @@ class objekt extends adminator
             <input type="hidden" name="send" value="true" >
             <input type="hidden" name="update_id" value="'.$this->update_id.'" >';
 
-            echo '<table border="0" width="100%" cellspacing="5" >
+        echo $this->csrf_html[0];
+
+        echo '<table border="0" width="100%" cellspacing="5" >
                 
                 <tr>
                 <td><span style="font-weight: bold; font-size: 18px; color: teal;" >Mód:</span></td>
@@ -1841,7 +1843,7 @@ class objekt extends adminator
                 $this->sql_nod .= " OR ip_rozsah LIKE '%$this->nod_find%' OR adresa LIKE '%$this->nod_find%' ";
                 $this->sql_nod .= " OR pozn LIKE '%$this->nod_find%' ) AND ( typ_nodu = '2' ) ORDER BY jmeno ASC ";
 
-                $vysledek = $conn_mysql->query($this->sql_nod);
+                $vysledek = $this->conn_mysql->query($this->sql_nod);
                 $radku = $vysledek->num_rows;
 
                 print '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
@@ -1894,7 +1896,7 @@ class objekt extends adminator
 
                 //echo "<option value=\"\" class=\"select-nevybrano\" >Nevybráno</option>";
                 
-                $dotaz_t2 = $conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ORDER BY gen_poradi ");
+                $dotaz_t2 = $this->conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ORDER BY gen_poradi ");
                 
                 while( $data_t2 = $dotaz_t2->fetch_array() )
                 { 
@@ -2062,7 +2064,7 @@ class objekt extends adminator
                 
                 echo "<option value=\"0\" style=\"color: grey;\">Nevybráno</option>";
 
-                $dotaz_a_vlan = $conn_mysql->query("SELECT jmeno, vlan_id FROM nod_list WHERE typ_nodu = '2' ORDER BY vlan_id ");
+                $dotaz_a_vlan = $this->conn_mysql->query("SELECT jmeno, vlan_id FROM nod_list WHERE typ_nodu = '2' ORDER BY vlan_id ");
 
                 while( $data_vlan = $dotaz_a_vlan->fetch_array() )
                 {	 
