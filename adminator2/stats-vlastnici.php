@@ -112,7 +112,14 @@ include ("include/charset.php");
     		AND ( ( archiv = 0 or archiv is null ) ) ) ";
     
      $prvni=pg_query($dotaz);
-     $prvni_radku=pg_num_rows($prvni);
+
+     if($prvni === false){
+      echo pg_last_error($db_ok2);
+      exit;
+     }
+		 else{
+      $prvni_radku=pg_num_rows($prvni);
+     }
 		 
     if ( $prvni_radku == 0){ }
     else
