@@ -51,13 +51,13 @@ sqlcmd query "SELECT Name from sys.databases;"
 #### slim
 - https://www.slimframework.com/docs/v3/tutorial/first-app.html
 - https://github.com/slimphp/Tutorial-First-Application/blob/master/src/public/index.php
-- https://github.com/bryanjhv/slim-session/tree/3.7.2
+- https://odan.github.io/slim4-skeleton/configuration.html
 #### slim twig
 - https://packagist.org/packages/slim/twig-view
 #### slim auth
 - https://discourse.slimframework.com/t/slim-framework-3-skeleton-application-has-authentication-mvc-construction/2088
 - https://github.com/HavenShen/slim-born/tree/v1.0.6
-#### slim-auth w zend
+#### slim-auth w zend/laminas
 - https://github.com/marcelbonnet/slim-auth
 - https://github.com/marcelbonnet/slim-allinone-template
 - https://packagist.org/packages/marcelbonnet/slim-auth

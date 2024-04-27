@@ -1,9 +1,16 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 require("include/main.function.shared.php");
 require("include/config.php"); 
 require("include/check_login.php");
 require("include/check_level.php");
+
+// require("mailing/phpmailer.lang-cz.php");
+// require("mailing/phpmailer.lang-en.php");
 
 if ( !( check_level($level,15) ) )
 {
@@ -94,7 +101,7 @@ include ("./include/charset.php");
      
     // konec nandavani emailu do pole
     
-    require "mailing/class.phpmailer.php";
+    // require "mailing/class.phpmailer.php";
   
     $mail = new PHPMailer();
   
