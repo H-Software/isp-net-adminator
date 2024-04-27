@@ -8,6 +8,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 use Illuminate\Database\Capsule\Manager as DB;
 
+use App\Partner\partner;
+
 class partnerController extends adminatorController {
     public $conn_mysql;
     public $smarty;
@@ -31,7 +33,7 @@ class partnerController extends adminatorController {
     {
       $this->logger->info("partnerController\cat called");
 
-      $this->checkLevel(90, $this->adminator);
+      $this->checkLevel(75, $this->adminator);
 
       $this->smarty->assign("page_title","Adminator3 :: Partner program");
 
@@ -46,7 +48,7 @@ class partnerController extends adminatorController {
     {
       $this->logger->info("partnerController\orderCat called");
 
-      $this->checkLevel(90, $this->adminator);
+      $this->checkLevel(75, $this->adminator);
 
       $this->smarty->assign("page_title","Adminator3 :: Partner program :: Orders");
 
@@ -59,16 +61,19 @@ class partnerController extends adminatorController {
 
     public function orderList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->info("partnerController\orderList called");
+        $this->logger->info("partnerController\orderList called");
 
-      $this->checkLevel(90, $this->adminator);
+        $this->checkLevel(76, $this->adminator);
 
-      $this->smarty->assign("page_title","Adminator3 :: Partner program :: Order List");
+        $this->smarty->assign("page_title","Adminator3 :: Partner program :: Order List");
 
-      $this->header($request, $response, $this->adminator);
-      
-      $this->smarty->assign("body","T.B.A.");
+        $this->header($request, $response, $this->adminator);
+        
+        $partner = new partner($this->container);
+        $listOutput = $partner->list();
 
-      $this->smarty->display('partner/order-list.tpl');
+        $this->smarty->assign("body",$listOutput[0]);
+
+        $this->smarty->display('partner/order-list.tpl');
     }
 }
