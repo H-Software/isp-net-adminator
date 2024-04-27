@@ -253,20 +253,14 @@ class admin {
 					'smazat'
 		 ] ;
 
-		//  $output .= '<table
-		//  id="level-list"
-		//  class="table table-striped fs-6"
-		//  data-toggle="table"
-		//  data-pagination="true"
-		//  data-side-pagination="client"
-		//  data-search="true"
-		//  ';
-
-		$attributes = 'class="a-common-table" id="tarif-table" style="width: 99%"';
+		$attributes = 'class="a-common-table" '
+					. 'id="tarif-table" '
+					. 'style="width: 99%"'
+					;
 
 		$i = 0;
 		foreach ($data as $id => $a) {
-			if( $i == 0) {
+			if( $i == 0) {				
 				// second header row
 				$dataView[$i] = array(
 					$headers[0] => "H",
@@ -282,19 +276,29 @@ class admin {
 				$i++;
 			}
 
+			$garant = $a['garant'];
+			if ( $garant == 1 )
+			{ $garant = "Ano"; }
+			elseif ( $garant == 0 )
+			{ $garant = "Ne"; }
+
+			$dotaz_lidi = pg_query("SELECT * FROM objekty WHERE id_tarifu = '". intval($a['id_tarifu']). "'");
+			$dotaz_lidi_radku = pg_num_rows($dotaz_lidi);
+
 			// first body row
 			$dataView[$i] = array(
 				$headers[0] => $a["id_tarifu"],
 				$headers[1] => $a["jmeno_tarifu"],
-				$headers[2] => $a["garant"],
+				$headers[2] => $garant,
 				$headers[3] => $a["cena_bez_dph"],
 				$headers[4] => $a["speed_dwn"],
 				$headers[5] => $a["agregace"],
-
+				$headers[6] => $dotaz_lidi_radku,
+				$headers[7] => "<a href=\"/admin/tarify/action?update_id=".$a["id_tarifu"]."\" >upravit</a>",
+				$headers[8] => "<a href=\"/admin/tarify/action?erase_id=".$a["id_tarifu"]."\" >smazat</a>"
 				);
 
 			$i++;
-
 			// second body row
 			$dataView[$i] = array(
 				$headers[0] => $a["id_tarifu"],
@@ -312,136 +316,9 @@ class admin {
 		// echo "<pre>". var_export($dataView, true) . "</pre>";
 
 		$table = new LaravelHtmlTableGenerator;
-
 		$output .= $table->generate($headers, $dataView, $attributes);
 
-		// old table
-
-			$output .= '<table
-							id="tarif-list"
-							class="tarify-table"
-							style="width: 100%;"
-							>';	
-			// $output .= "<table border=\"0\" width=\"1000px\" >";
-			
-			$style1 = "margin-bottom: 2px solid black; border-right: 1px dashed gray; ";
-			$style2 = "margin-bottom: 1px solid gray; border-right: 1px dashed gray; ";
-		
-			$output .= "<thead>
-			<tr>
-				<td style=\"".$style1."\"><b>id</b></td>
-				<td style=\"".$style1."\"><b>název</b></td>
-				<td style=\"".$style1."\"><b>garant</b></td>
-				
-				<td style=\"".$style1."\"><b>cena bez DPH</b></td>
-				
-				<td style=\"".$style1."\"><b>Rychlost<br> download</b></td>
-			
-				<td style=\"".$style1."\"><b>Agregace</b></td>
-			
-				<td style=\"".$style1."\"><b>Počet <br>klientů</b></td>
-				
-				<td style=\"".$style1."\"><b>úprava</b></td>
-				<td style=\"".$style1."\"><b>smazat</b></td>
-		
-			</tr>
-			<tr>
-				<td style=\"".$style1."\"><b>zkratka</b></td>
-				<td style=\"".$style1."\"><b>typ</b></td>
-				
-				<td style=\"".$style1."\" colspan=\"\"></td>
-				<td style=\"".$style1."\"><b>cena s DPH</b></td>
-				<td style=\"".$style1."\"><b>Rychlost<br> upload</b></td>
-
-				<td style=\"".$style1."\"><b>Agregace<br> smluvní</b></td>
-
-				<td style=\"".$style1."\" colspan=\"3\"></td>
-
-			</tr>
-			</thead>
-			";
-			
-			$output .= "<tbody>";
-
-			{
-				$dotaz_tarify = $this->conn_mysql->query(" SELECT * FROM tarify_int " . $sql_where . "ORDER BY id_tarifu");
-				while( $data = $dotaz_tarify->fetch_array() )
-				{
-					$output .= "
-					<tr >
-						<td style=\"".$style2."\" colspan=\"\" >".$data["id_tarifu"]."</td>
-						<td style=\"".$style2."\" colspan=\"\" >".$data["jmeno_tarifu"]."</td>							
-					";
 	
-					$output .= "
-						
-						<td style=\"".$style2."\" colspan=\"\" >";
-						
-					if ( $data["garant"] == 1 )
-					{ $output .= "Ano"; }
-					elseif ( $data["garant"] == 0 )
-					{ $output .= "Ne"; }
-					else
-					{ $output .= $data["garant"]; }
-						
-					$output .= "</td>
-						
-						<td style=\"".$style2."\" colspan=\"\" >".$data["cena_bez_dph"]."</td>
-				
-						<td style=\"".$style2."\" colspan=\"\" >".$data["speed_dwn"]."</td>
-				
-						<td style=\"".$style2."\" colspan=\"\" >".$data["agregace"]."</td>
-						
-						<td style=\"".$style2."\" colspan=\"\" >";
-						
-						//zjisteni poctu lidi
-						$id_tarifu = $data["id_tarifu"];
-						
-						$dotaz_lidi = pg_query("SELECT * FROM objekty WHERE id_tarifu = '". intval($id_tarifu). "' ");
-						$dotaz_lidi_radku = pg_num_rows($dotaz_lidi);
-						
-						$output .= $dotaz_lidi_radku;
-						
-						$output .= "</td>
-						
-						<td style=\"".$style2."\" colspan=\"\" >
-						<a href=\"/admin/tarify/action?update_id=".$data["id_tarifu"]."\" >upravit</a>
-						</td>
-						<td style=\"".$style2."\" colspan=\"\" >
-						<a href=\"/admin/tarify/action?erase_id=".$data["id_tarifu"]."\" >smazat</a>
-						</td>
-				
-					</tr>
-					<tr>
-						<td style=\"".$style2."\" colspan=\"\" >".$data["zkratka_tarifu"]."</td>";
-
-					$output .= "<td style=\"".$style2."\" colspan=\"\" >";
-
-					if ( $data["typ_tarifu"] == 0 )
-					{ $output .= "wifi tarif"; }
-					elseif ( $data["typ_tarifu"] == 1 )
-					{ $output .= "optický tarif"; }
-					else
-					{ $output .= $data["typ_tarifu"]; }
-
-					$output .= "
-							</td>
-							<td style=\"".$style2."\" ></td>
-							<td style=\"".$style2."\" colspan=\"\" >".$data["cena_s_dph"]."</td>
-							<td style=\"".$style2."\" colspan=\"\" >".$data["speed_upl"]."</td>
-
-							<td style=\"".$style2."\" colspan=\"\" >".$data["agregace_smlouva"]."</td>
-							";
-	
-					$output .= "</tr>"; 
-				}
-			
-			} //konec else if radku == 1
-		
-			$output .= "<tbody>";
-
-			$output .= "</table>";
-		
 	   return array($output);
 	}
 
