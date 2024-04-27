@@ -101,19 +101,15 @@ include ("./include/charset.php");
     $mail->SetLanguage("cz");
   
     $mail->IsSMTP();  // k odeslání e-mailu použijeme SMTP server
-    $mail->Host = "mail.simelon.net";  // zadáme adresu SMTP serveru
+    $mail->Host = "mail.adminator.net";  // zadáme adresu SMTP serveru
     $mail->SMTPAuth = false;               // nastavíme true v případě, že server vyžaduje SMTP autentizaci
   
     $mail->From = $source;   // adresa odesílatele skriptu
     $mail->FromName = $source; // jméno odesílatele skriptu (zobrazí se vedle adresy odesílatele)
 
-    // $mail->AddAddress("@simelon.net");  // přidáme příjemce
-    // $mail->AddAddress("druhy.prijemce@example.net", "Jméno druhého příjemce");  // a klidně i druhého, včetně jména
-    // $mail->AddBCC("patrik.majer@simelon.net");
-
     foreach ($bcc as $my_bcc) 
     {
-	$mail->AddBCC($my_bcc);
+	    $mail->AddBCC($my_bcc);
     }
           
     $mail->Subject = $predmet;    // nastavíme předmět e-mailu
