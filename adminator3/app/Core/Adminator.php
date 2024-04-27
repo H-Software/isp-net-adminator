@@ -378,4 +378,33 @@ class adminator {
       
         return $r;
     }
+
+    public static function convertIntToBoolTextCs ($v)
+    {
+        if ( $v == 1 ){
+            return "Ano"; 
+        }
+        elseif ( $v == 0 ){
+            return "Ne"; 
+        }
+        else{
+            return $v;
+        }
+    }
+
+    public static function convertIntToTextPrioCs ($v)
+    {
+        if ( $v == 0 ){
+            return "Nízká"; 
+        }
+        elseif ( $v == 1 ){
+            return "Normální"; 
+        }
+        elseif ( $v == 2){
+            return "Vysoká";
+        }
+        else{
+            return $v;
+        }
+    }
 }

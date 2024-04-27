@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class PartnerOrder extends Model
 {
@@ -43,4 +44,25 @@ class PartnerOrder extends Model
         // 'provedeno_kym',
         // 'vysledek' 
     ];
+
+    protected function akceptovano(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => \App\Core\Adminator::convertIntToBoolTextCs($value),
+        );
+    }
+
+    protected function pripojeno(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => \App\Core\Adminator::convertIntToBoolTextCs($value),
+        );
+    }
+
+    protected function prio(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => \App\Core\Adminator::convertIntToTextPrioCs($value),
+        );
+    }
 }
