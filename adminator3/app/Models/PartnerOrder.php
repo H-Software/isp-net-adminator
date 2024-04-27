@@ -45,6 +45,11 @@ class PartnerOrder extends Model
         // 'vysledek' 
     ];
 
+    /**
+     * present integer like a text value
+     * 
+     * @var int
+     */
     protected function akceptovano(): Attribute
     {
         return Attribute::make(
@@ -52,6 +57,11 @@ class PartnerOrder extends Model
         );
     }
 
+    /**
+     * present integer like a text value
+     * 
+     * @var int
+     */
     protected function pripojeno(): Attribute
     {
         return Attribute::make(
@@ -59,6 +69,11 @@ class PartnerOrder extends Model
         );
     }
 
+    /**
+     * present integer like a text value
+     * 
+     * @var int
+     */
     protected function prio(): Attribute
     {
         return Attribute::make(
