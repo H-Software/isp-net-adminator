@@ -73,6 +73,12 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/partner/order', \partnerController::class . ':orderCat');
     $this->map(['GET', 'POST'],'/partner/order/cat', \partnerController::class . ':orderCat');
 
+    $this->map(['GET', 'POST'],'/partner/order/add', \partnerController::class . ':orderAdd');
+    $this->map(['GET', 'POST'],'/partner/order/list', \partnerController::class . ':orderList');
+    $this->map(['GET', 'POST'],'/partner/order/accept', \partnerController::class . ':orderAccept');
+    $this->map(['GET', 'POST'],'/partner/order/change-status', \partnerController::class . ':orderChangeStatus');
+    $this->map(['GET', 'POST'],'/partner/order/change-desc', \partnerController::class . ':orderChangeDesc');
+
     $this->map(['GET', 'POST'],'/platby/cat', \platbyController::class . ':cat');
     $this->map(['GET', 'POST'],'/platby/fn', \platbyController::class . ':fn');
     $this->map(['GET', 'POST'],'/platby/fn-kontrola-omezeni', \platbyController::class . ':fnKontrolaOmezeni');
