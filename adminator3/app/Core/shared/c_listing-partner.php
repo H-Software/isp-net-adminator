@@ -26,15 +26,14 @@ class c_listing_partner {
     var $errName;
     var $befError = "<div align=\"center\" style=\"color: maroon;\">";
     var $aftError = "</div>";
-    
-   // $select="./objekty.php?";
+    var $echo = true;
     
     //konstruktor...naplni promenne
     function __construct($conn_mysql, $conUrl = "./partner.php.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
         $this->conn_mysql = $conn_mysql;
         $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
-        // $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
+        $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;
@@ -57,10 +56,15 @@ class c_listing_partner {
         if (!$listRecord){
             $this->error(2);
         }
-        $allRecords = $listRecord->num_rows;
-        if (!$allRecords){
-            $this->error(3);
+        else{
+            $allRecords = $listRecord->num_rows;
         }
+        
+        if (!$allRecords){
+            // $this->error(3);
+            $allRecords = 0;
+        }
+
         $allLists = ceil($allRecords / $this->interval);
         
         $this->numLists = $allLists;
@@ -99,8 +103,10 @@ class c_listing_partner {
     //zobrazi seznam intervalu v zadanem rozsahu ($interval)
     //napr.:    1-10 | 11-20 | 21-30
     function listInterval(){
+        $output = "";
+
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         for ($i = 1; $i <= $this->numLists; $i++){
             $isLink = 1;
             $spacer = " | ";
@@ -118,13 +124,21 @@ class c_listing_partner {
                 $spacer = "";
             }
             if ($isLink == 0){
-                echo $from."-".$to." ".$spacer;
+                $output .= $from."-".$to." ".$spacer;
             }
             if ($isLink == 1){
-                echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
+                $output .= "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
             }
         }
-        echo $this->after;
+        
+        $output .= $this->after;
+
+        if($this->echo === true){
+            echo $output;
+        }
+        else{
+            return $output;
+        }
     }
     
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)

@@ -178,12 +178,11 @@ require_once("include/charset.php");
 	}
 	else{
 	
-	    while ($zaznam_ms=mysql_fetch_array($vysledek_ms)):
-		$nazev_nodu_new=$zaznam_ms["jmeno"];
+	    while ($zaznam_ms=$vysledek_ms->fetch_array()):
+			$nazev_nodu_new=$zaznam_ms["jmeno"];
 	    endwhile;
 	
-	    echo "\t<td>".htmlspecialchars($nazev_nodu_new)."</td>\n";
-		    
+	    echo "\t<td>".htmlspecialchars($nazev_nodu_new)."</td>\n"; 
 	}
 	
 	echo "\t<td>detail: <a href=\"objekty.php?ip_find=".$zaznam["ip"]."\" >zde</a>, ";

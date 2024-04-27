@@ -252,7 +252,7 @@ class admin {
 					'smazat'
 		 ] ;
 
-		$attributes = 'class="a-common-table" '
+		$attributes = 'class="a-common-table a-common-table-2line" '
 					. 'id="tarif-table" '
 					. 'style="width: 99%"'
 					;
