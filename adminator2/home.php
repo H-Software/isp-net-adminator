@@ -33,33 +33,6 @@ require_once ("include/charset.php");
     <td align="left" colspan="2">
 <br>
 
-<?php
-
-//vlozeni prihlasovaci historie
-list($r, $render) = list_logged_users_history($conn_mysql, $smarty, "fetch");
-echo $render;
-
- // vlozeni vypisu zavad/oprav
-//  if ( check_level($level,101) )
-//  {
-//    require("opravy-for-home.php"); 
-//  }
- 
-// echo "<br><br>";
-
- //informace z modulu neuhrazené faktury
- // require("./faktury/fn-for-home.php");
-
- //generovani zprav z nastenky
-//  if( check_level($level,87) )
-//  {
-   // moved to A3
-   // require("board-header-for-home.php"); //vložíme hlavičku
-   // require("board-main-for-home.php"); // hlavni data, poupravena
-//  }
-
-?>
-
     <!-- konec vlastniho obsahu -->	
     </td>
     </tr>
