@@ -1,6 +1,5 @@
 <?php
 
-require 'smarty/Smarty.class.php';
 require("include/main.function.shared.php");
 require("include/config.php");
 require_once ("include/check_login.php");
