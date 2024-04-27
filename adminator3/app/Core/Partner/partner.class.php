@@ -5,6 +5,8 @@ namespace App\Partner;
 use App\Core\adminator;
 use Psr\Container\ContainerInterface;
 
+use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
+
 class partner extends adminator
 {
 
@@ -25,7 +27,7 @@ class partner extends adminator
     {
         $this->container = $container;
         $this->validator = $container->validator;
-        $this->conn_mysql = $container->connMysql;   
+        $this->conn_mysql = $container->connMysql;
         $this->logger = $container->logger;
 
         $i = $container->auth->getIdentity();
@@ -91,21 +93,56 @@ class partner extends adminator
         else{ $bude_chybet = (($list-1) * $listovani->interval); }
         
         $interval = $listovani->interval;
-                        
+
         $dotaz_limit = " LIMIT ".intval($interval)." OFFSET ".intval($bude_chybet)." ";
 
         $this->list_dotaz_sql .= $dotaz_limit;
             
-        $output .= "<pre>" . var_export($this->list_dotaz_sql, true) . "</pre>";
-
         $output .= $listovani->listInterval();
             
-        // $partner = new partner;
-            
-        // $partner->show_legend(); // prom vyrizeni update asi zde prazdne
-            
-        // $partner->show_art($filtr_akceptovano,$filtr_pripojeno,$dotaz_sql);
+        // $output .= "<pre>" . var_export($this->list_dotaz_sql, true) . "</pre>";
+
+        $listRes = $this->conn_mysql->query($this->list_dotaz_sql);
+        if(!$listRes)
+        {
+            $output .= "<div class=\"alert alert-danger\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Zaznamy se nepodarilo nacist. Chyba Databaze!</div>";
+			return array($output);
+        }
+
+		$listResRows = $listRes->num_rows;
+		if( $listResRows == 0 )
+		{
+			$output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi</div>";
+			return array($output);
+		}
+
+
+		$headers = ['id', 
+                    'telefon',
+                    'jmeno',
+                    'adresa',
+                    'email',
+                    'poznamka',
+                    'priorita',
+                    'vlozil kdo',
+                    'datum vlozeni',
+                    'pripojeno',
+                    'pripojeno linka',
+                    'typ balicku',
+                    'typ linky',
+                    'datum vlozeni2'
+        ] ;
+
+		$attributes = 'class="a-common-table a-common-table-1line" '
+					. 'id="partner-order-table" '
+					. 'style="width: 99%"'
+					;
         
+		$data = $listRes->fetch_all(MYSQLI_ASSOC);
+        
+        $listTable = new LaravelHtmlTableGenerator;
+		$output .= $listTable->generate($headers, $data, $attributes);
+
         $output .= $listovani->listInterval();    					         
 
         return array($output);

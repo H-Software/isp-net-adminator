@@ -557,12 +557,18 @@ subcat-spacebody
     padding: .5rem .5rem;
 }
 
-.a-common-table tbody tr:nth-child(odd)
+.a-common-table-1line tbody tr
+{
+
+    border-top-width: 1px;
+}
+
+.a-common-table-2line tbody tr:nth-child(odd)
 {
     color: grey; 
 }
 
-.a-common-table tbody tr:nth-child(even)
+.a-common-table-2line tbody tr:nth-child(even)
 {
 
     border-top-width: 1px;
