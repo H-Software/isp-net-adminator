@@ -1,5 +1,9 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 require("include/main.function.shared.php");
 require("include/config.php"); 
 require("include/check_login.php");
@@ -94,9 +98,9 @@ include ("./include/charset.php");
      
     // konec nandavani emailu do pole
     
-    require "mailing/class.phpmailer.php";
+    // require "mailing/class.phpmailer.php";
   
-    $mail = new PHPMailer();
+    $mail = new PHPMailer(true);
   
     $mail->SetLanguage("cz");
   
