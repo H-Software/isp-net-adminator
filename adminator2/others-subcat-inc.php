@@ -15,6 +15,6 @@
 <span style="padding-left: 30px; ">
 <span style="padding-right: 10px; ">A3:</span> 
 
-<a href="/adminator3/others-print.php">Tisk</a></span>
+<span>Tisk</span>
 
-<span style="padding-left: 30px; "><a href="/adminator3/others-web-simelon.php">Web Simelon.net</a></span>
+<span style="padding-left: 30px; ">Web Simelon.net</span>

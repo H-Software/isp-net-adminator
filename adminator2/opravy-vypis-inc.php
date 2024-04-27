@@ -1,8 +1,8 @@
-<?
+<?php
 
 echo "<tr><td colspan=\"".$pocet_bunek."\" ><br></tr>";
 
-echo "<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"GET\" name=\"form4\" >";
+echo "<form action=\"\" method=\"GET\" name=\"form4\" >";
 echo "<tr>
         <td colspan=\"3\"><span style=\"font-size: 18px; font-weight: bold; \" >
 	    <a href=\"opravy-index.php?zobr_vlastnika=0&typ=2&priorita_filtr=99&v_reseni_filtr=99&vyreseno_filtr=99\" >Výpis Závad/oprav </a></span>
@@ -79,9 +79,9 @@ echo "<tr><td colspan=\"".$pocet_bunek."\" ><br></tr>";
 
         $order=" ORDER BY datum_vlozeni DESC ";
 
- $dotaz=mysql_query($sql.$select." ) ".$order);
+ $dotaz=$conn_mysql->query($sql.$select." ) ".$order);
 
- $dotaz_radku = mysql_num_rows($dotaz);
+ $dotaz_radku = $dotaz->num_rows;
 
 if ( $dotaz_radku == 0){ echo "<tr><td colspan=\"".$pocet_bunek."\" >Žádné opravy v databázi neuloženy. </tr>"; }
 else
@@ -89,7 +89,7 @@ else
 
  $zobrazeno_limit="0";
   
-  while($data=mysql_fetch_array($dotaz) )
+  while($data=$dotaz->fetch_array() )
   {
    
    if( $zobrazeno_limit >= $limit)
@@ -107,8 +107,8 @@ else
     
    $id_opravy=$data["id_opravy"];
 
-   $dotaz_S1=mysql_query("SELECT * FROM opravy WHERE id_predchozi_opravy = '$id_opravy' "); 
-   $dotaz_radku_S1=mysql_num_rows($dotaz_S1);
+   $dotaz_S1=$conn_mysql->query("SELECT * FROM opravy WHERE id_predchozi_opravy = '$id_opravy' "); 
+   $dotaz_radku_S1=$dotaz_S1->num_rows;
    
    // zde zjistit jestli uz se zobrazilo
    for ($p = 0; $p < count($zobrazene_polozky); ++$p)
@@ -123,7 +123,7 @@ else
 	  { $zobrazovat="ano"; }
 	  elseif ( $dotaz_radku_S1 > 0 )
 	  { 
-	    while($data_S1=mysql_fetch_array($dotaz_S1) )
+	    while($data_S1=$dotaz_S1->fetch_array() )
 	    { if ( $data_S1["v_reseni"] == 1 ){ $zobrazovat="ano"; $sekundarni_show="ano"; } }
 	  } 	
    } // konec if v_reseni_filtr == 1
@@ -133,7 +133,7 @@ else
 	  { $zobrazovat="ano"; }
 	  elseif ( $dotaz_radku_S1 > 0 )
 	  { 
-	    while($data_S1=mysql_fetch_array($dotaz_S1) )
+	    while($data_S1=$dotaz_S1->fetch_array() )
 	    { 
 	      if ( $data_S1["v_reseni"] == 0 ){ $zobrazovat="ano"; $sekundarni_show="ano"; } 
 	      else{ $zobrazovat="ne"; $sekundarni_show="ne"; }
@@ -152,7 +152,7 @@ else
      { $zobrazovat="ano"; }
      elseif( $dotaz_radku_S1 > 0 )
      {
-      while($data_S1=mysql_fetch_array($dotaz_S1) )
+      while($data_S1=$dotaz_S1->fetch_array() )
       { if ( $data_S1["vyreseno"] == 1 ){ $zobrazovat="ano"; $sekundarni_show="ano"; } }
      
      }
@@ -167,7 +167,7 @@ else
      { $zobrazovat="ano"; }
      elseif( $dotaz_radku_S1 > 0 )
      {
-      while($data_S1=mysql_fetch_array($dotaz_S1) )
+      while($data_S1=$dotaz_S1->fetch_array() )
       { 
        if ( $data_S1["vyreseno"] == 1 ){ $zobrazovat="ne"; $sekundarni_show="ne"; } 
        else
@@ -202,7 +202,7 @@ else
    } // if dotaz_radku_S1 == 0
    else
    { 
-     while($data_S1=mysql_fetch_array($dotaz_S1) )
+     while($data_S1=$dotaz_S1->fetch_array() )
      {
        if( $data_S1["vyreseno"] == 1 ){ $barva="green"; }
        elseif( $data_S1["v_reseni"] == 1 ){ $barva="orange"; } 

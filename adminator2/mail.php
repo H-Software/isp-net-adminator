@@ -1,21 +1,21 @@
 <?php
 
-include ("./include/config.php"); 
-include ("./include/check_login.php");
-
-include ("./include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,15) ) )
 {
-// neni level
+  // neni level
 
-$stranka='nolevelpage.php';
- header("Location: ".$stranka);
- 
-   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-      Exit;
+  $stranka='nolevelpage.php';
+  header("Location: ".$stranka);
+
+  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
+  exit;
       
-    }	
+}	
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 
@@ -72,13 +72,13 @@ include ("./include/charset.php");
   
     // nandani emailu do pole
     
-    // $bcc[]="patrik.majer@atlas.cz";
-    // $bcc[]="router-board@simelon.net";
+    // $bcc[]="test@adminator.net";
       
     $pocet_prijemcu=0;
     
-    while ( list($nazev, $hodnota) = each($_POST) ):
-    
+    // while ( list($nazev, $hodnota) = each($_POST) ):
+    foreach($_POST as $nazev => $hodnota) {
+
     if ( (  ( $nazev != "odeslano") and ( $nazev != "source") and ( $nazev != "predmet") and ( $nazev != "obsah") ) )
      {
       if ( ( strlen($hodnota) > 4 ) )
@@ -89,8 +89,8 @@ include ("./include/charset.php");
       
       
      }
-     
-    endwhile;
+    }
+    // endwhile;
      
     // konec nandavani emailu do pole
     
@@ -101,19 +101,15 @@ include ("./include/charset.php");
     $mail->SetLanguage("cz");
   
     $mail->IsSMTP();  // k odeslání e-mailu použijeme SMTP server
-    $mail->Host = "mail.simelon.net";  // zadáme adresu SMTP serveru
+    $mail->Host = "mail.adminator.net";  // zadáme adresu SMTP serveru
     $mail->SMTPAuth = false;               // nastavíme true v případě, že server vyžaduje SMTP autentizaci
   
     $mail->From = $source;   // adresa odesílatele skriptu
     $mail->FromName = $source; // jméno odesílatele skriptu (zobrazí se vedle adresy odesílatele)
 
-    // $mail->AddAddress("@simelon.net");  // přidáme příjemce
-    // $mail->AddAddress("druhy.prijemce@example.net", "Jméno druhého příjemce");  // a klidně i druhého, včetně jména
-    // $mail->AddBCC("patrik.majer@simelon.net");
-
     foreach ($bcc as $my_bcc) 
     {
-	$mail->AddBCC($my_bcc);
+	    $mail->AddBCC($my_bcc);
     }
           
     $mail->Subject = $predmet;    // nastavíme předmět e-mailu
@@ -151,7 +147,7 @@ include ("./include/charset.php");
   
   $id_prijemce=1;
   
-  echo "<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"POST\" >";
+  echo "<form action=\"\" method=\"POST\" >";
   
   echo "<table border=\"1\" width=\"100%\" >";
   
