@@ -9,4 +9,4 @@
 
 <span style="padding-left: 30px; "><a href="monitoring-control-cat-list.php" > Výpis kategorií </a></span>
 
-<span style="padding-left: 30px; "><a href="https://monitoring.simelon.net/mon/www/home.php" target="_new" > Prohlížení grafů </a></span>
+<span style="padding-left: 30px; "><a href="https://monitoring.adminator.net/mon/www/home.php" target="_new" > Prohlížení grafů </a></span>
