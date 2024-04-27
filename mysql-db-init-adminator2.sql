@@ -96,7 +96,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1713884322',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1714198629',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -172,7 +172,7 @@ CREATE TABLE `core__users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `core__users` (`id`, `username`, `passwordHash`, `level`) VALUES
-(1,	'admin@admin',	'$2y$10$szvwhvv/2fTa1LQaZNuiI.1LBqBE0YV5em5DFvvI8XhAEmQmaVk5W',	101);
+(1,	'admin@admin',	'$2y$10$haYN5Ng5BG2oFt5SPMgCUeiXU5c2ZVMOHnZ2oaiC9B5TXg7Hg7KNi',	101);
 
 DROP TABLE IF EXISTS `fakturacni_skupiny`;
 CREATE TABLE `fakturacni_skupiny` (
@@ -297,6 +297,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (49,	50,	'objekty - odendani od vlastnika'),
 (50,	50,	'platby-vypis'),
 (51,	30,	'vlastnici-add-fakt'),
+(59,	70,	'objekty list - export'),
 (63,	40,	'vlastnici export'),
 (67,	60,	'vlastnici erase fakturacni'),
 (68,	50,	'vlastnici2-change-fakt'),
@@ -553,7 +554,8 @@ CREATE TABLE `tarify_int` (
 
 INSERT INTO `tarify_int` (`id_tarifu`, `typ_tarifu`, `zkratka_tarifu`, `jmeno_tarifu`, `speed_dwn`, `speed_upl`, `agregace`, `agregace_smlouva`, `cena_bez_dph`, `cena_s_dph`, `gen_poradi`, `barva`) VALUES
 (1,	0,	'cs',	'small city',	'2048',	'2048',	'1:20',	'1:50',	249,	298.5,	0,	''),
-(2,	0,	'mp',	'metropolitni linka',	'',	'',	'',	'',	0,	0,	0,	'');
+(2,	0,	'mp',	'metropolitni linka',	'',	'',	'',	'',	0,	0,	0,	''),
+(3,	1,	'fiber 1',	'fiber tarif 1',	'60000',	'60000',	'1:4',	'1:',	399,	422,	0,	'');
 
 DROP TABLE IF EXISTS `tarify_iptv`;
 CREATE TABLE `tarify_iptv` (
@@ -627,4 +629,4 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-23 15:06:40
+-- 2024-04-27 06:24:58
