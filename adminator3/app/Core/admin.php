@@ -235,7 +235,6 @@ class admin {
 		if( $dotaz_tarify_radku == 0 )
 		{
 			$output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi</div>";
-
 			return array($output);
 		}
 
@@ -276,11 +275,19 @@ class admin {
 				$i++;
 			}
 
+			// prepare data
 			$garant = $a['garant'];
 			if ( $garant == 1 )
 			{ $garant = "Ano"; }
 			elseif ( $garant == 0 )
 			{ $garant = "Ne"; }
+
+			if ( $a["typ_tarifu"] == 0 )
+			{ $typ_tarifu = "wifi tarif"; }
+			elseif ( $a["typ_tarifu"] == 1 )
+			{ $typ_tarifu = "optický tarif"; }
+			else
+			{ $typ_tarifu = $a["typ_tarifu"]; }
 
 			$dotaz_lidi = pg_query("SELECT * FROM objekty WHERE id_tarifu = '". intval($a['id_tarifu']). "'");
 			$dotaz_lidi_radku = pg_num_rows($dotaz_lidi);
@@ -302,7 +309,7 @@ class admin {
 			// second body row
 			$dataView[$i] = array(
 				$headers[0] => $a["id_tarifu"],
-				$headers[1] => $a["typ_tarifu"],
+				$headers[1] => $typ_tarifu,
 				$headers[2] => $a["zkratka_tarifu"],
 				$headers[3] => $a["cena_s_dph"],
 				$headers[4] => $a["speed_upl"],
