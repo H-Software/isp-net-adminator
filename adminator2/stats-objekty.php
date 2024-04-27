@@ -65,7 +65,7 @@ include ("include/charset.php");
 
                  echo "<td>
 
-                 <form action=\"".$_SERVER["PHP_SELF"]."\" method=\"POST\" >
+                 <form action=\"\" method=\"POST\" >
                     <select name=\"rok\" size=\"1\" >
 
                         <option value=\"2005\" "; if ($rok == "2005")echo "selected"; echo " >2005</option>
@@ -113,9 +113,16 @@ include ("include/charset.php");
     
      $dotaz="SELECT * FROM objekty WHERE ( ( typ = 1 ) AND ( extract(year from pridano) = ".$rok." ) AND ( extract(month from pridano) = ".$mesic." ) ) ";
     
-     $prvni=pg_exec($db_ok2,$dotaz);
-     $prvni_radku=pg_num_rows($prvni);
-		 
+     $prvni=pg_query($db_ok2,$dotaz);
+     
+     if($prvni === false){
+      echo pg_last_error($db_ok2);
+      exit;
+     }
+		 else{
+      $prvni_radku=pg_num_rows($prvni);
+     }
+
     if ( $prvni_radku == 0){ }
     else
     {

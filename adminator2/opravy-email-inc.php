@@ -1,5 +1,5 @@
 <?php
-  require "mailing/class.phpmailer.php";
+  // require "mailing/class.phpmailer.php";
 
  $dotaz_emaily=mysql_query("SELECT * FROM users WHERE (  email_opravy = '1' and id = 2 )");
   

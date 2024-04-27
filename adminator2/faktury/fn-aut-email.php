@@ -108,7 +108,7 @@ else
  else
  {
 
-  require_once "../mailing/class.phpmailer.php";
+  // require_once "../mailing/class.phpmailer.php";
   
   while( $data=mysql_fetch_array($dotaz) )
   {

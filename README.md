@@ -78,6 +78,11 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://pecl.php.net/package/sqlsrv
 - https://learn.microsoft.com/en-us/sql/connect/php/system-requirements-for-the-php-sql-driver?view=sql-server-ver16#odbc-driver
 
+### Stormware Pohoda
+- https://github.com/riesenia/pohoda
+- https://github.com/VitexSoftware/PHP-Pohoda-Connector?tab=readme-ov-file
+- https://github.com/Spoje-NET/PohodaSQL
+
 ## Author
 Patrik Majer
 

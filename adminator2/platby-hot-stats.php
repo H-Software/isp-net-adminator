@@ -119,6 +119,12 @@ include ("include/charset.php");
 	    
 	    // vypis obojiho						    
 	    $dotaz=pg_query("SELECT * FROM platby WHERE ( hotove='1' and zaplaceno_za LIKE '$pozadovane_obdobi' )");
+
+		if($dotaz === false){
+			echo "Chyba! vypis plateb \"celkem\" selhal. <br> " . pg_last_error($db_ok2);
+			exit;
+		}
+
 	    $sum_placeni =  0;
 	    while ($data=pg_fetch_array($dotaz)){ $sum_placeni = $sum_placeni + $data["castka"];  }
 	
@@ -128,6 +134,12 @@ include ("include/charset.php");
 	   
 	    // vypis plateb na FO
 	    $dotaz2=pg_query(" SELECT * FROM platby WHERE ( ( hotove='1') and ( firma is NULL ) and ( zaplaceno_za LIKE '$pozadovane_obdobi') ) "); 
+
+		if($dotaz2 === false){
+			echo "Chyba! vypis plateb pro vlastniky selhal. <br> " . pg_last_error($db_ok2);
+			exit;
+		}
+
 	    $sum_placeni2 = 0;
 	    while ($data2=pg_fetch_array($dotaz2)){ $sum_placeni2 = $sum_placeni2 + $data2["castka"]; }
 		
@@ -137,6 +149,12 @@ include ("include/charset.php");
 	    
 	    //vypis plateb na sro.
 	   $dotaz3=pg_query(" SELECT * FROM platby WHERE ( (hotove='1') and (firma is not null) and ( zaplaceno_za LIKE '$pozadovane_obdobi') ) "); 
+
+	   if($dotaz3 === false){
+			echo "Chyba! vypis plateb pro vlastniky2 selhal. <br> " . pg_last_error($db_ok2);
+			exit;
+		}
+
 	   $sum_placeni3 = 0;
 	   while ($data3=pg_fetch_array($dotaz3)){ $sum_placeni3 = $sum_placeni3 + $data3["castka"]; }
 	
