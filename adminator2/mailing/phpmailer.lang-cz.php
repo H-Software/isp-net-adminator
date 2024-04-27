@@ -16,9 +16,8 @@ $PHPMAILER_LANG["from_failed"] = 'N�sleduj�c� adresa From je nespr�vn�
 $PHPMAILER_LANG["recipients_failed"] = 'SMTP Error: Nasledujici adresy prijemcu ' .
                                        'nejsou spravne: ' .
 $PHPMAILER_LANG["data_not_accepted"] = 'SMTP Error: Data nebyla p�ijata';
-$PHPMAILER_LANG["connect_host"] = 'SMTP Error: Nelze nav�zat spojen� se ' .
+$PHPMAILER_LANG["connect_host"] = 'SMTP Error: Nelze navazat spojeni se ' .
                                   ' SMTP serverem.';
 $PHPMAILER_LANG["file_access"] = 'Soubor nenalezen: ';
 $PHPMAILER_LANG["file_open"] = 'File Error: Nelze otev��t soubor pro �ten�: ';
 $PHPMAILER_LANG["encoding"] = 'Nezn�m� k�dov�n�: ';
-?>

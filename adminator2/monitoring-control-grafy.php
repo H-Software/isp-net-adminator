@@ -50,10 +50,10 @@ include ("include/charset.php");
   
   global $typ;
   
-  $dotaz=mysql_query("SELECT * FROM mon_grafy WHERE typ_grafu='2' order by id ");
+  $dotaz=$conn_mysql->query("SELECT * FROM mon_grafy WHERE typ_grafu='2' order by id ");
   $pocet_bunek=10;
   
-  $dotaz_radku=mysql_num_rows($dotaz);
+  $dotaz_radku=$dotaz->num_rows;
   
   if ( $dotaz_radku == 0 )
   { echo "Žádné grafy v databázi nenalezeny. "; }
@@ -82,7 +82,7 @@ include ("include/charset.php");
     echo "</tr>";
   
   
-  while ( $data=mysql_fetch_array($dotaz) )
+  while ( $data=$dotaz->fetch_array() )
   {
   
     echo "<tr>";
@@ -94,21 +94,21 @@ include ("include/charset.php");
     
 	if ( $data["sablona_grafu"] == 1)
 	{ 
-	    echo "<td><a href=\"https://monitoring.simelon.net/mon/www-generated/ping_".$data["popis1"].".php\" target=\"_new\" >".$data["popis1"]."</a></td>";     
+	    echo "<td><a href=\"https://monitoring.adminator.net/mon/www-generated/ping_".$data["popis1"].".php\" target=\"_new\" >".$data["popis1"]."</a></td>";     
 	}
 	elseif ( $data["sablona_grafu"] == 2 )
-	{ echo "<td><a href=\"https://monitoring.simelon.net/mon/www-generated/pingloss_".$data["popis1"].".php\" target=\"_new\" >".$data["popis1"]."</a></td>"; }
+	{ echo "<td><a href=\"https://monitoring.adminator.net/mon/www-generated/pingloss_".$data["popis1"].".php\" target=\"_new\" >".$data["popis1"]."</a></td>"; }
 	else
 	{ echo "<td>".$data["popis1"]."</td>"; }    
     
 	// zacatek zjistovani kategorie
 	$cat_id=$data["cat"];
     
-	$dotaz_cat=mysql_query("SELECT jmeno FROM kategorie WHERE id='".intval($cat_id)."' ");
+	$dotaz_cat=$conn_mysql->query("SELECT jmeno FROM kategorie WHERE id='".intval($cat_id)."' ");
     
-	while( $data2=mysql_fetch_array($dotaz_cat) )
+	while( $data2=$dotaz_cat->fetch_array() )
 	{ $cat_jmeno=$data2["jmeno"]; }
-    
+  
 	echo "<td>".$cat_jmeno." (".htmlspecialchars($data["cat"]).") </td>";
     
 	// konec zjistovani a vypisu kategorie
