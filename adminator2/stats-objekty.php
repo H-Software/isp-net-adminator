@@ -113,12 +113,14 @@ include ("include/charset.php");
     
      $dotaz="SELECT * FROM objekty WHERE ( ( typ = 1 ) AND ( extract(year from pridano) = ".$rok." ) AND ( extract(month from pridano) = ".$mesic." ) ) ";
     
-     $prvni=pg_exec($db_ok2,$dotaz);
-     if(is_object($prvni)){
-      $prvni_radku=pg_num_rows($prvni);
+     $prvni=pg_query($db_ok2,$dotaz);
+     
+     if($prvni === false){
+      echo pg_last_error($db_ok2);
+      exit;
      }
 		 else{
-      echo pg_last_error($db_ok2);
+      $prvni_radku=pg_num_rows($prvni);
      }
 
     if ( $prvni_radku == 0){ }
