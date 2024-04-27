@@ -4,7 +4,7 @@
 
 <div class="row mt-3 mb-1 ml-3">
     <div class="col" style="font-size: 18px; padding-left: 20px;">
-        Výpis zadosti
+        Výpis žádostí
     </div>
     <div class="col">
         {* <a href="/partner/order/add"> *}
