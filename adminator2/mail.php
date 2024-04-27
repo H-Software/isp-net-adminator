@@ -9,6 +9,9 @@ require("include/config.php");
 require("include/check_login.php");
 require("include/check_level.php");
 
+// require("mailing/phpmailer.lang-cz.php");
+// require("mailing/phpmailer.lang-en.php");
+
 if ( !( check_level($level,15) ) )
 {
   // neni level
@@ -100,7 +103,7 @@ include ("./include/charset.php");
     
     // require "mailing/class.phpmailer.php";
   
-    $mail = new PHPMailer(true);
+    $mail = new PHPMailer();
   
     $mail->SetLanguage("cz");
   
