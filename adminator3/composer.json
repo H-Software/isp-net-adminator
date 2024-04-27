@@ -20,12 +20,13 @@
         "monolog/monolog": "^3.6.0",
         "respect/validation": "^2.2",
         "formr/formr": "^1.4",
-        "illuminate/database": "^8.83",
+        "illuminate/database": "^10.48",
         "doctrine/orm": "^2.19.0",
         "doctrine/annotations": "^1.14.0",
         "symfony/cache": "^5.4",
         "czhujer/slim-auth": "dev-dev-master",
         "setasign/fpdf": "1.8.6",
-        "phpmailer/phpmailer": "^6.9.1"
+        "phpmailer/phpmailer": "^6.9.1",
+        "lloricode/laravel-html-table": "^2.1"
     }
 }

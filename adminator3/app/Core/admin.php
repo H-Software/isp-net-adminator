@@ -1,5 +1,7 @@
 <?php
 
+use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
+
 class admin {
 	var $conn_mysql;
 
@@ -220,6 +222,100 @@ class admin {
 	{
 
 		$output = "";
+		
+		$sql_where = "";
+		if( ( preg_match('/^([[:digit:]]+)$/',$_GET["id_tarifu"]) ) )
+		{
+			$sql_where = "WHERE id_tarifu = '".intval($_GET["id_tarifu"])."' ";
+		}
+
+		$dotaz_tarify = $this->conn_mysql->query(" SELECT * FROM tarify_int " . $sql_where . " ORDER BY id_tarifu");
+		$dotaz_tarify_radku = $dotaz_tarify->num_rows;
+
+		if( $dotaz_tarify_radku == 0 )
+		{
+			$output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi</div>";
+
+			return array($output);
+		}
+
+		$data = $dotaz_tarify->fetch_all(MYSQLI_ASSOC);
+
+
+		$headers = ['id', 
+					'název',
+					'garant',
+					'cena bez DPH',
+					'Rychlost <br>download',
+					'Agregace',
+					'Počet <br>klientů',
+					'úprava',
+					'smazat'
+		 ] ;
+
+		//  $output .= '<table
+		//  id="level-list"
+		//  class="table table-striped fs-6"
+		//  data-toggle="table"
+		//  data-pagination="true"
+		//  data-side-pagination="client"
+		//  data-search="true"
+		//  ';
+
+		$attributes = 'class="a-common-table" id="tarif-table" style="width: 99%"';
+
+		$i = 0;
+		foreach ($data as $id => $a) {
+			if( $i == 0) {
+				// second header row
+				$dataView[$i] = array(
+					$headers[0] => "H",
+					$headers[1] => "Typ",
+					$headers[2] => "zkratka",
+					$headers[3] => "cena s DPH",
+					$headers[4] => "Rychlost <br>upload",
+					$headers[5] => "Agregace <br>smluvní",
+					$headers[6] => "",
+					$headers[7] => "",
+					$headers[8] => "",
+					);
+				$i++;
+			}
+
+			// first body row
+			$dataView[$i] = array(
+				$headers[0] => $a["id_tarifu"],
+				$headers[1] => $a["jmeno_tarifu"],
+				$headers[2] => $a["garant"],
+				$headers[3] => $a["cena_bez_dph"],
+				$headers[4] => $a["speed_dwn"],
+				$headers[5] => $a["agregace"],
+
+				);
+
+			$i++;
+
+			// second body row
+			$dataView[$i] = array(
+				$headers[0] => $a["id_tarifu"],
+				$headers[1] => $a["typ_tarifu"],
+				$headers[2] => $a["zkratka_tarifu"],
+				$headers[3] => $a["cena_s_dph"],
+				$headers[4] => $a["speed_upl"],
+				$headers[5] => $a["agregace_smlouva"],
+				$headers[6] => "",
+				$headers[7] => "",
+				);
+			$i++;
+		}
+
+		// echo "<pre>". var_export($dataView, true) . "</pre>";
+
+		$table = new LaravelHtmlTableGenerator;
+
+		$output .= $table->generate($headers, $dataView, $attributes);
+
+		// old table
 
 			$output .= '<table
 							id="tarif-list"
@@ -266,26 +362,9 @@ class admin {
 			";
 			
 			$output .= "<tbody>";
-		
-			$sql_where = "";
-			if( ( preg_match('/^([[:digit:]]+)$/',$_GET["id_tarifu"]) ) )
-			{
-				$sql_where = "WHERE id_tarifu = '".intval($_GET["id_tarifu"])."' ";
-			}
 
-			$dotaz_tarify = $this->conn_mysql->query(" SELECT * FROM tarify_int " . $sql_where . "ORDER BY id_tarifu");
-			$dotaz_tarify_radku = $dotaz_tarify->num_rows;
-
-			if( $dotaz_tarify_radku == 0 )
 			{
-				$output .= "
-				<tr>
-					<td colspan=\"12\" ><div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi</div></td>
-				</tr>
-				";
-			}
-			else
-			{
+				$dotaz_tarify = $this->conn_mysql->query(" SELECT * FROM tarify_int " . $sql_where . "ORDER BY id_tarifu");
 				while( $data = $dotaz_tarify->fetch_array() )
 				{
 					$output .= "

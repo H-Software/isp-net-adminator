@@ -15,6 +15,8 @@
     <div class="col-8"></div>
 </div>
 
+{include file="partials/bootstrap-table-window-header.tpl"}
 {$body}
+{include file="partials/bootstrap-table-window-footer.tpl"}
 
 {include file="base-end.tpl"}
