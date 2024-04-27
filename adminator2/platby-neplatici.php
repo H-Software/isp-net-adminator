@@ -70,7 +70,7 @@ function isCzechPhoneNumber($to_validate)
 }
 
  //trida pro posilani emailu na urovni :)
- require_once "mailing/class.phpmailer.php";
+ // require_once "mailing/class.phpmailer.php";
  		 
  // bude to trvat dlouho
  set_time_limit(0);
