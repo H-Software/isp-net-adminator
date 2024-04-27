@@ -53,6 +53,8 @@ class Acl extends SlimAuthAcl
             '/objekty/action',
             '/objekty/stb',
             '/objekty/stb/action',
+            '/partner/cat',
+            '/partner',
             '/platby/cat',
             '/platby/fn',
             '/platby/fn-kontrola-omezeni',

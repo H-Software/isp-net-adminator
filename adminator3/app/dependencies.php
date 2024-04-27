@@ -180,6 +180,10 @@ $container['objektyController'] = function ($c) {
     return new \App\Controllers\objektyController($c);
 };
 
+$container['partnerController'] = function ($c) {
+    return new \App\Controllers\partnerController($c);
+};
+
 $container['platbyController'] = function ($c) {
     return new \App\Controllers\platbyController($c);
 };
