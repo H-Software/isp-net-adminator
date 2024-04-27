@@ -118,7 +118,7 @@ include ("include/charset.php");
       $prvni_radku=pg_num_rows($prvni);
      }
 		 else{
-      pg_last_error($db_ok2);
+      echo pg_last_error($db_ok2);
      }
 
     if ( $prvni_radku == 0){ }
