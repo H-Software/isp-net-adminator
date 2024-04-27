@@ -41,4 +41,19 @@ class partnerController extends adminatorController {
 
       $this->smarty->display('partner/partner-cat.tpl');
     }
+
+    public function orderCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+      $this->logger->info("partnerController\orderCat called");
+
+      $this->checkLevel(90, $this->adminator);
+
+      $this->smarty->assign("page_title","Adminator3 :: Partner program :: Orders");
+
+      $this->header($request, $response, $this->adminator);
+      
+      $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+
+      $this->smarty->display('partner/order-cat.tpl');
+    }
 }

@@ -68,8 +68,10 @@ $app->group('', function () {
     $this->map(['GET', 'POST'],'/objekty/stb', \objektyController::class . ':stb');
     $this->map(['GET', 'POST'],'/objekty/stb/action', \objektyController::class . ':stbAction');
 
-    $this->map(['GET', 'POST'],'/partner/cat', \partnerController::class . ':cat');
     $this->map(['GET', 'POST'],'/partner', \partnerController::class . ':cat');
+    $this->map(['GET', 'POST'],'/partner/cat', \partnerController::class . ':cat');
+    $this->map(['GET', 'POST'],'/partner/order', \partnerController::class . ':orderCat');
+    $this->map(['GET', 'POST'],'/partner/order/cat', \partnerController::class . ':orderCat');
 
     $this->map(['GET', 'POST'],'/platby/cat', \platbyController::class . ':cat');
     $this->map(['GET', 'POST'],'/platby/fn', \platbyController::class . ':fn');
