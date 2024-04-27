@@ -72,13 +72,13 @@ include ("./include/charset.php");
   
     // nandani emailu do pole
     
-    // $bcc[]="patrik.majer@atlas.cz";
-    // $bcc[]="router-board@simelon.net";
+    // $bcc[]="test@adminator.net";
       
     $pocet_prijemcu=0;
     
-    while ( list($nazev, $hodnota) = each($_POST) ):
-    
+    // while ( list($nazev, $hodnota) = each($_POST) ):
+    foreach($_POST as $nazev => $hodnota) {
+
     if ( (  ( $nazev != "odeslano") and ( $nazev != "source") and ( $nazev != "predmet") and ( $nazev != "obsah") ) )
      {
       if ( ( strlen($hodnota) > 4 ) )
@@ -89,8 +89,8 @@ include ("./include/charset.php");
       
       
      }
-     
-    endwhile;
+    }
+    // endwhile;
      
     // konec nandavani emailu do pole
     
