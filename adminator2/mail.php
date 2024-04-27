@@ -1,21 +1,21 @@
 <?php
 
-include ("./include/config.php"); 
-include ("./include/check_login.php");
-
-include ("./include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if ( !( check_level($level,15) ) )
 {
-// neni level
+  // neni level
 
-$stranka='nolevelpage.php';
- header("Location: ".$stranka);
- 
-   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-      Exit;
+  $stranka='nolevelpage.php';
+  header("Location: ".$stranka);
+
+  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
+  exit;
       
-    }	
+}	
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 
@@ -151,7 +151,7 @@ include ("./include/charset.php");
   
   $id_prijemce=1;
   
-  echo "<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"POST\" >";
+  echo "<form action=\"\" method=\"POST\" >";
   
   echo "<table border=\"1\" width=\"100%\" >";
   
