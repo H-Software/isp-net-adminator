@@ -56,4 +56,19 @@ class partnerController extends adminatorController {
 
       $this->smarty->display('partner/order-cat.tpl');
     }
+
+    public function orderList(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+      $this->logger->info("partnerController\orderList called");
+
+      $this->checkLevel(90, $this->adminator);
+
+      $this->smarty->assign("page_title","Adminator3 :: Partner program :: Order List");
+
+      $this->header($request, $response, $this->adminator);
+      
+      $this->smarty->assign("body","T.B.A.");
+
+      $this->smarty->display('partner/order-list.tpl');
+    }
 }
