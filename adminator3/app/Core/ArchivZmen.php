@@ -586,7 +586,7 @@ class ArchivZmen {
         { $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"margin-top: 15px; margin-bottom: 15px;\">Žádné změny v archivu</div>"; }
         else
         {
-            $output .= "<table border=\"0\" cellpadding=\"5\" class=\"az-main-table table table-striped fs-6\" >\n";
+            $output .= "<table border=\"0\" cellpadding=\"5\" class=\"az-main-table\" >\n";
             
             $output .= "<tr class=\"table-light\">\n";    
                 $output .= "<td class=\"az-border2\" ><b>id</b></td>\n";
