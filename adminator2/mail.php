@@ -1,5 +1,9 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
 require("include/main.function.shared.php");
 require("include/config.php"); 
 require("include/check_login.php");
@@ -8,13 +12,11 @@ require("include/check_level.php");
 if ( !( check_level($level,15) ) )
 {
   // neni level
-
   $stranka='nolevelpage.php';
   header("Location: ".$stranka);
 
   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
   exit;
-      
 }	
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
