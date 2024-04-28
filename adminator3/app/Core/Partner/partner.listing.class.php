@@ -12,6 +12,8 @@ $listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom
 
 //definice tridy c_Listing
 
+// aktualne nevyuzito -> obsolete
+
 class c_listing_partner {
 
     var $conn_mysql;

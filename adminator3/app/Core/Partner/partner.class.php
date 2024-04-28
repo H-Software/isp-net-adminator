@@ -5,6 +5,7 @@ namespace App\Partner;
 use App\Models\PartnerOrder;
 use App\Core\adminator;
 use Psr\Container\ContainerInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 
@@ -22,8 +23,6 @@ class partner extends adminator
 
     var $url_params;
 
-    var $list_dotaz_sql;
-
     var $listItems;
 
     function __construct(ContainerInterface $container)
@@ -39,28 +38,20 @@ class partner extends adminator
 
     public function listPrepareVars()
     {
-        // priprava form. promennych       
-        //
-        
         $filtr_akceptovano = intval($_GET["filtr_akceptovano"]);
         $filtr_pripojeno = intval($_GET["filtr_pripojeno"]);
 
-        //priprava dotazu              
         if( $filtr_akceptovano == 1 ){
-            // $filtr .= " AND akceptovano = 1 ";
             $this->listItems = $this->listItems->where('akceptovano', 1); 
         }
         elseif( $filtr_akceptovano == 2 ){
-            //  $filtr .= " AND akceptovano = 0 "; 
              $this->listItems = $this->listItems->where('akceptovano', 0); 
         }
                     
         if( $filtr_pripojeno == 1 ){
-            // $filtr .= " AND pripojeno = 1 ";
             $this->listItems = $this->listItems->where('pripojeno', 1);  
         }
         elseif( $filtr_pripojeno == 2 ){
-            // $filtr .= " AND pripojeno = 0 "; 
             $this->listItems = $this->listItems->where('pripojeno', 0);
         }
         
@@ -69,7 +60,7 @@ class partner extends adminator
         }
         
         // old name poradek
-        $this->url_params = "filtr_akceptovano=".$filtr_akceptovano."&filtr_pripojeno=".$filtr_pripojeno;
+        // $this->url_params = "filtr_akceptovano=".$filtr_akceptovano."&filtr_pripojeno=".$filtr_pripojeno;
 
         return true;
     }
@@ -83,51 +74,26 @@ class partner extends adminator
 
         $this->listPrepareVars();
 
-        $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
-
-        if(strlen($_GET['list']) > 0 ){
-            $list = intval($_GET['list']);
-        }
-        //vytvoreni objektu
-        // $listovani = new \c_listing_partner(
-        //                     $this->conn_mysql,
-        //                     "/partner/order/list?" . urlencode($this->url_params),
-        //                     30,
-        //                     $list,
-        //                     "<center><div style=\"".$format_css."\">\n", "</div></center>\n",
-        //                     $this->list_dotaz_sql
-        //                 );
-        // $listovani->echo = false;
-
-        // if (($list == "")||($list == "1")){ $bude_chybet = 0; }
-        // else{ $bude_chybet = (($list-1) * $listovani->interval); }
-        
-        // $interval = $listovani->interval;
-
-        // $dotaz_limit = " LIMIT ".intval($interval)." OFFSET ".intval($bude_chybet)." ";
-
-        // $this->list_dotaz_sql .= $dotaz_limit;
-            
-        // $output .= $listovani->listInterval();
-            
-        // $output .= "<pre>" . var_export($this->list_dotaz_sql, true) . "</pre>";
-
-        // $listRes = $this->conn_mysql->query($this->list_dotaz_sql);
-        // if(!$listRes)
-        // {
-        //     $output .= "<div class=\"alert alert-danger\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Zaznamy se nepodarilo nacist. Chyba Databaze!</div>";
-		// 	return array($output);
-        // }
+        $this->listItems = adminator::collectionPaginate(
+                                $this->listItems, 
+                                1, 
+                                $_GET['page'],                 
+                                [   // $options
+                                    'path' => LengthAwarePaginator::resolveCurrentPath(strtok($_SERVER["REQUEST_URI"], '?')),
+                                    'pageName' => 'page',
+                                ]
+                            );
 
         $data = $this->listItems->toArray();
 
-		// $listResRows = $listRes->num_rows;
+        list($linkPreviousPage, $linkCurrentPage, $linkNextPage) = adminator::paginateGetLinks($data);
+        // echo "<pre>" . var_export($data, true) . "</pre>";
+
 		if( count($data) == 0 )
 		{
 			$output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
 			return array($output);
 		}
-
 
 		$headers = ['id', 
                     'telefon',
@@ -150,23 +116,16 @@ class partner extends adminator
 					. 'id="partner-order-table" '
 					. 'style="width: 99%"'
 					;
-        
-		// $data = $listRes->fetch_all(MYSQLI_ASSOC);
-        
+                
         $listTable = new LaravelHtmlTableGenerator;
-
-        // $output .= $listTable->generateModel(
-        //     ['Id', 'tel', 'jmeno'],  // Column for table
-        //     'App\Models\PartnerOrder' // Model
-        //     ,['id', 'tel', 'jmeno'], // Fields from model
-        //     0, // Pagination Limit, if 0 all will show
-        //     $attributes // Attributes sample js/css
-        // );
         
-		$output .= $listTable->generate($headers, $data, $attributes);
+        $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
 
-        // $output .= $listovani->listInterval();    					         
+		$output .= $listTable->generate($headers, $data['data'], $attributes);
+
+        $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
 
         return array($output);
     }
+
 }
