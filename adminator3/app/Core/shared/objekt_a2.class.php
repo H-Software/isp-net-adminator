@@ -10,6 +10,8 @@ class objekt_a2
 
   var $echo = true;
 
+  var $csrf_html;
+
   var $listAllowedActionUpdate = false;
 
   var $listAllowedActionErase = false;
@@ -494,6 +496,9 @@ else{
       $output .= "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"/objekty/action\" >";
       $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_komplu"]."\" >";
       
+      if(strlen($this->csrf_html) > 0){
+        $output .= $this->csrf_html;
+      }
       
       $output .= "<input type=\"hidden\" name=\"mod_objektu\" value=\"".$update_mod_vypisu."\" >";
       
