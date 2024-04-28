@@ -2,6 +2,7 @@
 
 class vlastnikarchiv
 {
+	var $conn_mysql;
 	var $conn_pgsql;
 
    public static function vypis_tab ($par)
@@ -118,6 +119,7 @@ class vlastnikarchiv
 	// $id=$data["id_cloveka"];
 	// print "debug: id: $id";
 	 $objekt_a2 = new objekt_a2;
+	 $objekt_a2->conn_mysql = $this->conn_mysql;
 	 $objekt_a2->conn_pgsql = $this->conn_pgsql;
 
 	 $objekt_a2->vypis($sql,$co,$id);
