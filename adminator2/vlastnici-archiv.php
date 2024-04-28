@@ -345,7 +345,7 @@ include ("include/charset.php");
           $listovani->listInterval();
 
           $ip = new vlastnikarchiv;
-          // $vlastnik->conn_mysql = $conn_mysql;
+          $ip->conn_mysql = $conn_mysql;
           $ip->conn_pgsql = $db_ok2;
 
           $ip->vypis($sql,$co,$dotaz_final);

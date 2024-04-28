@@ -971,7 +971,7 @@ class objekt extends adminator
                     // primy promenny 
                     $this->form_dns=$data["dns_jmeno"];
                     $this->form_ip=$data["ip"];	     
-                    $mac=$data["mac"];
+                    $this->form_mac=$data["mac"];
                     $this->form_selected_nod = $data["id_nodu"];
                     $this->form_id_tarifu = $data["id_tarifu"];
                     
@@ -1054,24 +1054,24 @@ class objekt extends adminator
             //kontrola dulplicitnich udaju
             if ( ( $update_status!=1 ) )
             { 
-                $this->ip_find=$this->form_ip."/32";
+                $ip=$this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
                 $MSQ_DNS = pg_query("SELECT * FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
-                $MSQ_IP = pg_query("SELECT * FROM objekty WHERE ip <<= '$this->ip_find' ");
+                $MSQ_IP = pg_query("SELECT * FROM objekty WHERE ip <<= '$ip' ");
                     
                 if (pg_num_rows($MSQ_DNS) > 0){ $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>"; $fail = "true"; }
-                if (pg_num_rows($MSQ_IP) > 0){ $error .= "<h4>IP adresa ( ".$this->ip." ) již existuje!!!</h4>"; $fail = "true"; }
+                if (pg_num_rows($MSQ_IP) > 0){ $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>"; $fail = "true"; }
             }
 
             // check v modu uprava
             if( ( $update_status==1 and (isset($this->odeslano)) ) )
             {
-                $this->ip_find=$this->form_ip."/32";
+                $ip=$this->form_ip."/32";
                 
                 //zjisti jestli neni duplicitni dns, ip
                 $MSQ_DNS2 = pg_query("SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
-                $MSQ_IP2 = pg_query("SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '$this->update_id' ) ");
+                $MSQ_IP2 = pg_query("SELECT * FROM objekty WHERE ( ip <<= '$ip' AND id_komplu != '$this->update_id' ) ");
 
                 if(pg_num_rows($MSQ_DNS2) > 0){ $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>"; $fail = "true"; }
                 if(pg_num_rows($MSQ_IP2) > 0){ $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>"; $fail = "true"; }
@@ -1207,7 +1207,7 @@ class objekt extends adminator
                     } // konec else if radku <> 1
 
                     $obj_upd = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
-                            "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $mac,
+                            "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $this->form_mac,
                             "upravil" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
                             "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $port_id,
                             "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
@@ -1232,7 +1232,7 @@ class objekt extends adminator
                 {
                     // rezim pridani        
                     $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
-                            "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $mac,
+                            "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $this->form_mac,
                             "pridal" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
                             "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $port_id,
                             "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
@@ -1963,7 +1963,7 @@ class objekt extends adminator
 
                 <tr>
                 <td>mac adresa:</td>
-                <td><input type="text" name="mac" size="30" "value="'.$mac.'" ></td>
+                <td><input type="text" name="mac" size="30" "value="'.$this->form_mac.'" ></td>
                 <td colspan="2" align="center" >
                 <input type="button" value="Generovat údaje ...." name="G" 
                     style="width: 300px; background-color: red; color: white; " onClick="self.document.forms.form1.submit()" >
