@@ -1223,7 +1223,7 @@ class objekt extends adminator
                     //workaround
                     $obj_upd["typ_ip"] = $this->form_typ_ip;
                     
-                    require("objekty-add-inc-archiv-fiber.php");				     
+                    require("objekty-add-inc-archiv-fiber.php");    
 
                     $updated="true";
                     
@@ -1244,7 +1244,16 @@ class objekt extends adminator
                     
                     if ($res) { $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
                     else
-                    { $output .= "<br><H3><div style=\"color: red; \">Chyba! Data do databáze nelze uložit. </div></H3>\n"; }	
+                    {
+                            $output .= "<H3><div style=\"color: red; padding-top: 20px; padding-left: 5px; \">".
+                                "Chyba! Data do databáze nelze uložit. </div></H3>\n";
+                            
+                            $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
+                            pg_last_error($this->conn_pgsql).
+                                "</div>";
+                            
+                            $output .= "<div style=\"padding-left: 5px; color: grey;\" >obj_add var dump: " . var_export($obj_add, true) ."</div>";
+                    }
                     
                     // pridame to do archivu zmen
                     $pole="<b> akce: pridani objektu ; </b><br>";
@@ -1772,7 +1781,7 @@ class objekt extends adminator
             </td>
             </tr>
 
-                <tr><td colspan="4" ><br></td></tr>							       
+                <tr><td colspan="4" ><br></td></tr>
 
                 <tr>
                     <td><label> poznámka:  </label></td>
