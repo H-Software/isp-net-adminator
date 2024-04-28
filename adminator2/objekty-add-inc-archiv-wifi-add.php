@@ -80,7 +80,7 @@
                             "'".$conn_mysql->real_escape_string($nick)."',".
                             "'".$vysledek_write."')");
 
-        $writed = "true";
+
 
         //automaticke osvezovani/restarty
         if( $typ_ip == 4 )
