@@ -1241,7 +1241,7 @@ class objekt extends adminator
                     
                     //zjistit, krz kterého reinharda jde objekt
                     $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
-                                    
+                    
                     if ($res) { $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
                     else
                     { $output .= "<br><H3><div style=\"color: red; \">Chyba! Data do databáze nelze uložit. </div></H3>\n"; }	
@@ -1259,20 +1259,22 @@ class objekt extends adminator
                             //pokud v promenne neco, tak teprve resime vlozeni do Archivu zmen
 
                             //nahrazovani na citelné hodnoty
-                            if($key == "id_tarifu"){
+                            // TODO: fix missing mysq_results
+                            // if($key == "id_tarifu"){
 
-                                $rs_tarif = mysql_query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
-                                $tarif = mysql_result($rs_tarif,0, 0);
-                                $pole .= " <b>tarif</b> => ".$tarif." ,";
+                            //     $rs_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
+                            //     $tarif = mysql_result($rs_tarif,0, 0);
+                            //     $pole .= " <b>tarif</b> => ".$tarif." ,";
 
-                            }
-                            elseif($key == "id_nodu"){
-                                $rs_nod = mysql_query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
-                                $nod = mysql_result($rs_nod, 0, 0);
-                                $pole .= " <b>přípojný bod</b> => ".$nod." ,";
+                            // }
+                            // elseif($key == "id_nodu"){
+                            //     $rs_nod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
+                            //     $nod = mysql_result($rs_nod, 0, 0);
+                            //     $pole .= " <b>přípojný bod</b> => ".$nod." ,";
 
-                            }
-                            elseif( $key == "typ"){
+                            // }
+                            // else
+                            if( $key == "typ"){
 
                                 if( $val == 1){ $this->form_typ = "poc (platici)"; }
                                 elseif($val == 2){ $this->form_typ = "poc (free)"; }
@@ -1301,8 +1303,9 @@ class objekt extends adminator
                         
                     }
                     
-                    if( $res == 1){ $vysledek_write="1"; }
-                    
+                    if( $res == 1){ $vysledek_write=1; }
+                    else { $vysledek_write=0; }
+
                     $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
                             "('".$this->conn_mysql->real_escape_string($pole)."','".
                             $this->conn_mysql->real_escape_string($this->loggedUserEmail)."','".

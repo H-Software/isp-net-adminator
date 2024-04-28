@@ -803,12 +803,11 @@ class ArchivZmen {
                         while($data_kompl = pg_fetch_array($dotaz_id_komplu) )
                             { $data_kompl_dns = $data_kompl["dns_jmeno"]; }
                     
-                        $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
+                        $id_komplu_pomocne_rs = "<a href=\"/objekty?dns_find=".$data_kompl_dns;
                         $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
                         
-                        $akce = ereg_replace("".$id_komplu_pomocne."", "".$id_komplu_pomocne_rs."", $akce);    
+                        $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);    
                     }
-            
                 }
                 elseif(preg_match("/uprava nodu/", $akce))
                 {
