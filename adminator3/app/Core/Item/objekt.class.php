@@ -1020,7 +1020,7 @@ class objekt extends adminator
                     $this->form_sikana_text = $data["sikana_text"];
 
                     $sikana_status_l=$data["sikana_status"]; 
-                    if ( ereg("a",$sikana_status_l) ){ $this->form_sikana_status=2; } else { $this->form_sikana_status=1; }
+                    if ( preg_match("/a/",$sikana_status_l) ){ $this->form_sikana_status=2; } else { $this->form_sikana_status=1; }
                     
                     $sikana_cas_l=$data["sikana_cas"];  
                     if ( strlen($sikana_cas_l) > 0 ){ $this->form_sikana_cas=$sikana_cas_l; }  
