@@ -75,6 +75,8 @@ class objekt extends adminator
 
     var $form_sikana_cas;
 
+    var $form_sikana_text;
+
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -451,7 +453,7 @@ class objekt extends adminator
                     $this->form_typ=$data["typ"];	$this->form_pozn=$data["poznamka"]; 
                     $this->form_selected_nod=$data["id_nodu"];
 
-                    $sikana_text=$data["sikana_text"];
+                    $this->form_sikana_text=$data["sikana_text"];
                     $this->form_client_ap_ip=$data["client_ap_ip"];
                     
                     $this->form_id_tarifu=$data["id_tarifu"];
@@ -503,7 +505,7 @@ class objekt extends adminator
             $this->form_selected_nod=$_POST["selected_nod"];
 
             // dalsi
-            $this->form_sikana_status = $_POST["sikana_status"];	 $this->form_sikana_cas = $_POST["sikana_cas"];	$sikana_text = $_POST["sikana_text"];
+            $this->form_sikana_status = $_POST["sikana_status"];	 $this->form_sikana_cas = $_POST["sikana_cas"];	$this->form_sikana_text = $_POST["sikana_text"];
 
             //$vip_snat_lip = $_POST["vip_snat_lip"];
             $this->form_client_ap_ip = $_POST["client_ap_ip"];
@@ -530,7 +532,7 @@ class objekt extends adminator
 
             \objektypridani::checkSikanaCas($this->form_sikana_cas); 
             
-            \objektypridani::checkSikanaText($sikana_text); 
+            \objektypridani::checkSikanaText($this->form_sikana_text); 
 
         }
 
@@ -752,7 +754,7 @@ class objekt extends adminator
                                 "client_ap_ip" => $this->form_client_ap_ip, "dov_net" => $dov_net_w,"id_tarifu" => $this->form_id_tarifu,
                             "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "verejna" => $verejna_w,
                             "mac" => $this->form_mac, "upravil" => $this->loggedUserEmail, "sikana_status" => $sikana_status_w,
-                        "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $sikana_text, "id_nodu" => $this->form_selected_nod );
+                        "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "id_nodu" => $this->form_selected_nod );
                                     
                         if( $this->form_typ_ip == 4)
                         {
@@ -797,7 +799,7 @@ class objekt extends adminator
 
                     $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu, "dov_net" => $dov_net_w, 
                             "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "verejna" => $verejna_w, "pridal" => $this->loggedUserEmail, "id_nodu" => $this->form_selected_nod,
-                                    "sikana_status" => $sikana_status_w, "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $sikana_text );
+                                    "sikana_status" => $sikana_status_w, "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text );
 
                     if($this->form_typ_ip == 4){
                         $obj_add["tunnelling_ip"] = $tunnelling_ip;
@@ -934,7 +936,7 @@ class objekt extends adminator
             $output .= "Ano"; 
 
             $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
-            $output .= "<br><b>Šikana - text: </b>".$sikana_text;
+            $output .= "<br><b>Šikana - text: </b>".$this->form_sikana_text;
             } 
             elseif($this->form_sikana_status==1){ $output .= "Ne"; }
             else { $output .= "Nelze zjistit"; }
@@ -981,7 +983,7 @@ class objekt extends adminator
                     
                     $this->form_pozn = $data["poznamka"];
                 
-                    $sikana_text = $data["sikana_text"];
+                    $this->form_sikana_text = $data["sikana_text"];
 
                     $sikana_status_l=$data["sikana_status"]; 
                     if ( ereg("a",$sikana_status_l) ){ $this->form_sikana_status=2; } else { $this->form_sikana_status=1; }
@@ -1023,7 +1025,7 @@ class objekt extends adminator
             $this->form_pozn = $_POST["pozn"];
             
             $this->form_sikana_status = $_POST["sikana_status"];
-            $sikana_text = $_POST["sikana_text"];
+            $this->form_sikana_text = $_POST["sikana_text"];
             $this->form_sikana_cas = $_POST["sikana_cas"];
             
             $port_id = $_POST["port_id"];
@@ -1206,7 +1208,7 @@ class objekt extends adminator
                     $obj_upd = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
                             "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $mac,
                             "upravil" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
-                            "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $sikana_text, "port_id" => $port_id,
+                            "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $port_id,
                             "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
                                                 
                     $obj_id = array( "id_komplu" => $this->update_id );
@@ -1231,7 +1233,7 @@ class objekt extends adminator
                     $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
                             "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $mac,
                             "pridal" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
-                            "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $sikana_text, "port_id" => $port_id,
+                            "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $port_id,
                             "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
                     
                     $res = pg_insert($db_ok2, 'objekty', $obj_add);
@@ -1403,7 +1405,7 @@ class objekt extends adminator
                 $output .= "Ano"; 
 
                 $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
-                $output .= "<br><b>Šikana - text: </b>".$sikana_text;
+                $output .= "<br><b>Šikana - text: </b>".$this->form_sikana_text;
             }
             elseif($this->form_sikana_status==1){ $output .= "Ne"; }
             else{ $output .= "Nelze zjistit"; }
@@ -1781,10 +1783,10 @@ class objekt extends adminator
             if( ( $this->form_typ ==3 or ($this->form_sikana_status!=2) ) ) 
             { 
                 $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
-                $output .= "<input type=\"hidden\" name=\"sikana_text\" value=\"".$sikana_text."\" >";
+                $output .= "<input type=\"hidden\" name=\"sikana_text\" value=\"".$this->form_sikana_text."\" >";
             }
             else 
-            { $output .= "<textarea name=\"sikana_text\" cols=\"30\" rows=\"4\" wrap=\"soft\" >".$sikana_text."</textarea>";  }
+            { $output .= "<textarea name=\"sikana_text\" cols=\"30\" rows=\"4\" wrap=\"soft\" >".$this->form_sikana_text."</textarea>";  }
             
             $output .= '
                     </td>
@@ -2070,10 +2072,10 @@ class objekt extends adminator
                 if( ( $this->form_typ ==3 or ($this->form_sikana_status!=2) ) ) 
                 { 
                 $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
-                $output .= "<input type=\"hidden\" name=\"sikana_text\" value=\"".$sikana_text."\" >";
+                $output .= "<input type=\"hidden\" name=\"sikana_text\" value=\"".$this->form_sikana_text."\" >";
                 }
                 else 
-                { $output .= "<textarea name=\"sikana_text\" cols=\"30\" rows=\"4\" wrap=\"soft\" >".$sikana_text."</textarea>";  }
+                { $output .= "<textarea name=\"sikana_text\" cols=\"30\" rows=\"4\" wrap=\"soft\" >".$this->form_sikana_text."</textarea>";  }
 
             $output .= '
                 </td>
