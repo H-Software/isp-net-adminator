@@ -497,9 +497,9 @@ include ("include/charset.php");
 	{
 	
 	 //ze zjistime jestli neni zaznam v neuhrazenych fakturach
-	 $dotaz_fn=mysql_query("SELECT * FROM faktury_neuhrazene WHERE ( par_id_vlastnika = '$id_vlastnika' 
+	 $dotaz_fn=$conn_mysql->query("SELECT * FROM faktury_neuhrazene WHERE ( par_id_vlastnika = '$id_vlastnika' 
 				and ( EXTRACT(YEAR FROM Datum) = '$rok') and ( EXTRACT(MONTH FROM Datum) = '$mesic_long' ) ) ");
-	 $dotaz_fn_radku=mysql_num_rows($dotaz_fn);
+	 $dotaz_fn_radku=$dotaz_fn->num_rows;
 	 
 	  if ($dotaz_fn_radku == 0)
 	  {
@@ -516,7 +516,7 @@ include ("include/charset.php");
 	  else
 	  {
 	  
-	    while( $data_fn=mysql_fetch_array($dotaz_fn) )
+	    while( $data_fn=$dotaz_fn->fetch_array() )
 	    {
 		$datum_fn = $data_fn["Datum"];
 		
