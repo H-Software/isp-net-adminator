@@ -297,7 +297,6 @@ class objekt_a2
  
  public function vypis($sql,$co,$id,$dotaz_final = "")
  {
-    // global $db_ok2, $conn_mysql;
     $db_ok2 = $this->conn_pgsql;
 
     $output = "";

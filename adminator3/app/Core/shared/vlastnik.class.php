@@ -21,7 +21,8 @@ class vlastnik
     
 		$objekt = new objekt_a2();
 		$objekt->conn_mysql = $this->conn_mysql;
-    
+        $objekt->conn_pgsql = $this->conn_pgsql;
+
     // co - co hledat, 1- podle dns, 2-podle ip , 3 - dle id_vlastnika
 	         
     $dotaz=pg_query($this->conn_pgsql, $dotaz_source);	      
