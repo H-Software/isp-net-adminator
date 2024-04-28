@@ -7,7 +7,7 @@
         // pridame to do archivu zmen
         $pole = "<b> akce: pridani objektu ; </b><br>";
 
-	$pole .= "[id_komplu]=> ".intval($inserted_id)." ";
+	    $pole .= "[id_komplu]=> ".intval($inserted_id)." ";
 	
         foreach ($obj_add as $key => $val) {
 
@@ -15,7 +15,6 @@
                 //pokud v promenne neco, tak teprve resime vlozeni do Archivu zmen
 
                 //nahrazovani na citelné hodnoty
-
                 if($key == "id_tarifu"){
 
                     $rs_tarif = $conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
