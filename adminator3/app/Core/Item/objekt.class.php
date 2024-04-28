@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use Psr\Container\ContainerInterface;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class objekt extends adminator
 {
@@ -77,6 +78,11 @@ class objekt extends adminator
     var $form_sikana_cas;
 
     var $form_sikana_text;
+
+    var $form_port_id;
+
+    var $form_another_vlan_id;
+
 
     function __construct(ContainerInterface $container)
     {
@@ -977,7 +983,7 @@ class objekt extends adminator
                     
                     $this->form_typ = $data["typ"];
                     $this->form_typ_ip = $data["typ_ip"];
-                    $port_id = $data["port_id"];
+                    $this->form_port_id = $data["port_id"];
                     
                     $dov_net_l = $data["dov_net"];
                     if ( $dov_net_l =="a" ){ $this->form_dov_net=2; }else{ $this->form_dov_net=1; }
@@ -1001,7 +1007,7 @@ class objekt extends adminator
                         $vip_rozsah="10.1"; 	
                     }
                         
-                    $another_vlan_id = $data["another_vlan_id"];
+                    $this->form_another_vlan_id = $data["another_vlan_id"];
                 
                 endwhile;
                 
@@ -1029,8 +1035,8 @@ class objekt extends adminator
             $this->form_sikana_text = $_POST["sikana_text"];
             $this->form_sikana_cas = $_POST["sikana_cas"];
             
-            $port_id = $_POST["port_id"];
-            $another_vlan_id = $_POST["another_vlan_id"];
+            $this->form_port_id = $_POST["port_id"];
+            $this->form_another_vlan_id = $_POST["another_vlan_id"];
         
         }
 
@@ -1151,7 +1157,7 @@ class objekt extends adminator
                     //$vip_snat="0"; 
                 }
                     
-                if( $another_vlan_id == 0 ){ $another_vlan_id = ""; }
+                if( $this->form_another_vlan_id == 0 ){ $this->form_another_vlan_id = NULL; }
             
                 if( $update_status =="1" )
                 {
@@ -1209,8 +1215,8 @@ class objekt extends adminator
                     $obj_upd = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
                             "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $this->form_mac,
                             "upravil" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
-                            "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $port_id,
-                            "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
+                            "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $this->form_port_id,
+                            "verejna" => $verejna_w, "another_vlan_id" => $this->form_another_vlan_id );	
                                                 
                     $obj_id = array( "id_komplu" => $this->update_id );
                     $res = pg_update($this->conn_pgsql, 'objekty', $obj_upd, $obj_id);
@@ -1234,15 +1240,17 @@ class objekt extends adminator
                     $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
                             "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $this->form_mac,
                             "pridal" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
-                            "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $port_id,
-                            "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
-                    
-                    $res = pg_insert($this->conn_pgsql, 'objekty', $obj_add);
-                    
+                            "sikana_cas" => intval($this->form_sikana_cas), "sikana_text" => $this->form_sikana_text, "port_id" => $this->form_port_id,
+                            "verejna" => $verejna_w, "another_vlan_id" => $this->form_another_vlan_id );
+                                        
+                    $inserted_id = DB::connection('pgsql')
+                                    ->table('objekty')
+                                    ->insertGetId($obj_add, "id_komplu");
+
                     //zjistit, krz kterého reinharda jde objekt
-                    $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
+                    // $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
                     
-                    if ($res) { $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
+                    if ($inserted_id > 0) { $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
                     else
                     {
                             $output .= "<H3><div style=\"color: red; padding-top: 20px; padding-left: 5px; \">".
@@ -1259,7 +1267,7 @@ class objekt extends adminator
                     $pole="<b> akce: pridani objektu ; </b><br>";
                     
                     $pole .= "[id_komplu]=> ".intval($inserted_id)." ";
-                            
+                    
                     //foreach ($obj_add as $key => $val) { $pole=$pole." [".$key."] => ".$val."\n"; }
                 
                     foreach ($obj_add as $key => $val) {
@@ -1312,7 +1320,7 @@ class objekt extends adminator
                         
                     }
                     
-                    if( $res == 1){ $vysledek_write=1; }
+                    if( $inserted_id > 0 ){ $vysledek_write=1; }
                     else { $vysledek_write=0; }
 
                     $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
@@ -1423,7 +1431,7 @@ class objekt extends adminator
             elseif($this->form_sikana_status==1){ $output .= "Ne"; }
             else{ $output .= "Nelze zjistit"; }
 
-            $output .= "<br><b>Číslo portu (ve switchi)</b>: ".$port_id."<br>";
+            $output .= "<br><b>Číslo portu (ve switchi)</b>: ".$this->form_port_id."<br>";
 
             $output .= "<br><b>Typ IP adresy</b>: ";
             if( $this->form_typ_ip == "2") $output .= "Veřejná";
@@ -1431,10 +1439,10 @@ class objekt extends adminator
             else $output .= "Nelze zjistit";
 
             $output .= "<br><b>Přílušnost MAC k jiné vlaně (ve domov. switchi)</b>: ";
-            if( ($another_vlan_id == "NULL") or ($another_vlan_id == "") )
+            if( ($this->form_another_vlan_id == NULL) or ($this->form_another_vlan_id == "") )
             { $output .= "Vypnuto"; }
             else
-            { $output .= "vlan id: ".$another_vlan_id; }
+            { $output .= "vlan id: ".$this->form_another_vlan_id; }
             
             $output .= "<br>";
 
@@ -2020,7 +2028,7 @@ class objekt extends adminator
                 {
                     $output .= "<option value=\"".$i."\" ";
                     
-                    if( $port_id == $i){ $output .= " selected "; }
+                    if( $this->form_port_id == $i){ $output .= " selected "; }
                     
                     $output .= " >".$i."</option>";
                 }
@@ -2108,7 +2116,7 @@ class objekt extends adminator
                 {	 
                     $output .= "<option value=\"".$data_vlan["vlan_id"]."\" ";
 
-                    if( $another_vlan_id == $data_vlan["vlan_id"] ){ $output .= " SELECTED "; }
+                    if( $this->form_another_vlan_id == $data_vlan["vlan_id"] ){ $output .= " SELECTED "; }
                 
                     $output .= " >".$data_vlan["jmeno"];
                     $output .= " ( vlan_id: ".$data_vlan["vlan_id"]." )		
