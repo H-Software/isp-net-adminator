@@ -69,6 +69,8 @@ class objekt extends adminator
 
     var $form_pozn;
 
+    var $form_dov_net;
+
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -453,8 +455,8 @@ class objekt extends adminator
                     // neprimy :) -> musi se zkonvertovat
                     
                     $dov_net_l=$data["dov_net"];	
-                    if( $dov_net_l =="a" ){ $dov_net=2; }
-                    else{ $dov_net=1; }    
+                    if( $dov_net_l =="a" ){ $this->form_dov_net=2; }
+                    else{ $this->form_dov_net=1; }    
                     
                     $verejna_l=$data["verejna"];	
                     
@@ -488,7 +490,7 @@ class objekt extends adminator
             // rezim pridani, ukladani
             $this->form_dns=$_POST["dns"];		$this->form_ip=$_POST["ip"];			$this->form_typ=$_POST["typ"];	
 
-            $this->form_typ_ip=$_POST["typ_ip"];	$dov_net=$_POST["dov_net"];		$this->form_id_tarifu = $_POST["id_tarifu"];
+            $this->form_typ_ip=$_POST["typ_ip"];	$this->form_dov_net=$_POST["dov_net"];		$this->form_id_tarifu = $_POST["id_tarifu"];
             $this->form_mac=$_POST["mac"];		$verejna=$_POST["verejna"];
             $vip_rozsah=$_POST["vip_rozsah"];	$this->form_pozn=$_POST["pozn"];
 
@@ -633,7 +635,7 @@ class objekt extends adminator
                     // budeme zli
                     // prvne zjisteni predchoziho stavu
             
-                    if( ( ($dov_net_puvodni == "n") and ($dov_net == 2 ) ) )
+                    if( ( ($dov_net_puvodni == "n") and ($this->form_dov_net == 2 ) ) )
                     {
                         $fail="true"; 
                         $error.="<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka pole \"Pozastavené fakturace\". </div>"; 
@@ -655,7 +657,7 @@ class objekt extends adminator
             { 
                 // priprava promennych
                 
-                if ( $dov_net == 2 ) 
+                if ( $this->form_dov_net == 2 ) 
                 { $dov_net_w ="a"; } 
                 else { $dov_net_w="n"; }
                 
@@ -904,7 +906,7 @@ class objekt extends adminator
         
             $output .= '<br>
             <b>Povolet NET</b>: ';
-            if ($dov_net == 2 ) { $output .= "Ano"; } else { $output .= "Ne"; }
+            if ($this->form_dov_net == 2 ) { $output .= "Ano"; } else { $output .= "Ne"; }
             $output .= '<br>
             <br>
             <b>MAC </b>: ' . $this->form_mac . '<br> 
@@ -971,7 +973,7 @@ class objekt extends adminator
                     $port_id = $data["port_id"];
                     
                     $dov_net_l = $data["dov_net"];
-                    if ( $dov_net_l =="a" ){ $dov_net=2; }else{ $dov_net=1; }
+                    if ( $dov_net_l =="a" ){ $this->form_dov_net=2; }else{ $this->form_dov_net=1; }
                     
                     $this->form_pozn = $data["poznamka"];
                 
@@ -1012,7 +1014,7 @@ class objekt extends adminator
             
             $this->form_mac = $_POST["mac"];
             $this->form_typ = $_POST["typ"];
-            $dov_net = $_POST["dov_net"];
+            $this->form_dov_net = $_POST["dov_net"];
             
             $this->form_pozn = $_POST["pozn"];
             
@@ -1111,7 +1113,7 @@ class objekt extends adminator
                     // budeme zli
                     // prvne zjisteni predchoziho stavu
 
-                    if( ( ($dov_net_puvodni == "n") and ($dov_net == 2 ) ) )
+                    if( ( ($dov_net_puvodni == "n") and ($this->form_dov_net == 2 ) ) )
                     {
                         $fail="true"; 
                         $error.="<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka fakturační skupinu. </div>"; 
@@ -1130,7 +1132,7 @@ class objekt extends adminator
             {
                 // priprava promennych
             
-                if( $dov_net == 2 ) { $dov_net_w ="a"; } else { $dov_net_w="n"; }
+                if( $this->form_dov_net == 2 ) { $dov_net_w ="a"; } else { $dov_net_w="n"; }
                 if( $sikana_status =="2" ){ $sikana_status_w='a'; } else { $sikana_status_w='n'; }
                 
                 if ($this->form_typ_ip == 1){ 
@@ -1375,7 +1377,7 @@ class objekt extends adminator
             //if ( $tarif == 2 ) { $output .= "Metropolitní"; } else { $output .= "Small city"; } 
             
             $output .= '<br>
-            <b>Povolet NET</b>: '; if ($dov_net == 2 ) { $output .= "Ano"; } else { $output .= "Ne"; } $output .= '<br>
+            <b>Povolet NET</b>: '; if ($this->form_dov_net == 2 ) { $output .= "Ano"; } else { $output .= "Ne"; } $output .= '<br>
             <br>
             <b>Poznámka</b>: ' . $this->form_pozn . '<br>
             <b>Přípojný bod</b>:';
@@ -1658,10 +1660,10 @@ class objekt extends adminator
                 }
                 else
                 {
-                    $output .= "<input type=\"radio\" name=\"dov_net\" value=\"2\""; if ( ( $dov_net==2 or (!isset($dov_net)) ) ) { $output .= "checked"; } $output .= ">";
+                    $output .= "<input type=\"radio\" name=\"dov_net\" value=\"2\""; if ( ( $this->form_dov_net==2 or (!isset($this->form_dov_net)) ) ) { $output .= "checked"; } $output .= ">";
                     $output .= "<label>Ano | </label>";
                                 
-                    $output .= "<input type=\"radio\" name=\"dov_net\" value=\"1\""; if ( $dov_net==1 ) { $output .= "checked"; } $output .= ">";
+                    $output .= "<input type=\"radio\" name=\"dov_net\" value=\"1\""; if ( $this->form_dov_net==1 ) { $output .= "checked"; } $output .= ">";
                     $output .= "<label> Ne</label>";
                         
                 }
@@ -1974,10 +1976,10 @@ class objekt extends adminator
                 else
                 {
                 
-                $output .= "<input type=\"radio\" name=\"dov_net\" value=\"2\""; if ( ( $dov_net==2 or (!isset($dov_net)) ) ) { $output .= "checked"; } $output .= ">";
+                $output .= "<input type=\"radio\" name=\"dov_net\" value=\"2\""; if ( ( $this->form_dov_net==2 or (!isset($this->form_dov_net)) ) ) { $output .= "checked"; } $output .= ">";
                 $output .= "<label>Ano | </label>";
                                 
-                $output .= "<input type=\"radio\" name=\"dov_net\" value=\"1\""; if ( $dov_net==1 ) { $output .= "checked"; } $output .= ">";
+                $output .= "<input type=\"radio\" name=\"dov_net\" value=\"1\""; if ( $this->form_dov_net==1 ) { $output .= "checked"; } $output .= ">";
                 $output .= "<label> Ne</label>";
                             
                 }
