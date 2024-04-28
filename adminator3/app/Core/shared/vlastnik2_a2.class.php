@@ -54,7 +54,7 @@ class vlastnik2_a2
 	$output = "";
 
 	if (!$this->conn_pgsql) {
-		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_pgsql) . ")");
+		die("An error occurred. The connection with pgsql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_pgsql) . ")");
 	}
 
 	if (!$this->conn_mysql) {
@@ -398,7 +398,7 @@ class vlastnik2_a2
 	$objekt->echo = false;
 	$objekt->logger = $this->logger;
     $objekt->conn_mysql = $this->conn_mysql;
-	$objekt->conn_pqsql = $this->conn_pgsql;
+	$objekt->conn_pgsql = $this->conn_pgsql;
 
 	$objekt->listAllowedActionUpdate = $this->objektListAllowedActionUpdate;
 	$objekt->listAllowedActionErase = $this->objektListAllowedActionErase;

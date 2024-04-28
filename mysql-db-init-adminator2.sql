@@ -5,6 +5,10 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
+DROP DATABASE IF EXISTS `adminator2`;
+CREATE DATABASE `adminator2` /*!40100 DEFAULT CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `adminator2`;
+
 DROP TABLE IF EXISTS `archiv_zmen`;
 CREATE TABLE `archiv_zmen` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -13,7 +17,7 @@ CREATE TABLE `archiv_zmen` (
   `provedeno_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `vysledek` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysledek`) VALUES
 (1,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 5, [mac_adresa]=> 43:22:33:44:55:66, [ip_adresa]=> 10.10.10.4, [puk]=> , [popis]=> stb4, [id_nodu]=> 2, [sw_port]=> 4 [pozn]=> pozn 4, [id_tarifu]=> 1',	'2024-04-12 09:34:49',	'admin',	1),
@@ -74,7 +78,21 @@ INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysl
 (76,	'<b>akce</b>: uprava fakturacni adresy;<br>[id] => 1, nové data: <b>[ftitle]</b> => x\n <b>[fulice]</b> => x\n <b>[fmesto]</b> => x\n <b>[fpsc]</b> => x\n <b>[ico]</b> => \n <b>[dic]</b> => \n <b>[ucet]</b> => x\n <b>[splatnost]</b> => 15\n <b>[cetnost]</b> => 1\n',	'2024-04-22 15:04:37',	'admin',	1),
 (77,	'<b>akce</b>: uprava fakturacni adresy;<br>[id] => 1, nové data: <b>[ftitle]</b> => Hradni Kancelar\n <b>[fulice]</b> => Hrad 1\n <b>[fmesto]</b> => Praha\n <b>[fpsc]</b> => 11111\n <b>[ico]</b> => 1\n <b>[dic]</b> => CZ1\n <b>[ucet]</b> => \n <b>[splatnost]</b> => 15\n <b>[cetnost]</b> => 1\n',	'2024-04-22 15:05:40',	'admin',	1),
 (78,	'<b>akce: prirazeni objektu typu STB k vlastnikovi; </b><br> [id_stb]=> 3, [id_vlastnika]=> 2',	'2024-04-22 15:15:20',	'admin',	1),
-(79,	' akce: smazani fakturacni adresy ;  [id] => 1\n, akci provedl: admin, vysledek akce dle postgre: 1, datum akce: 22/04/2024 15:24:57',	'2024-04-22 15:24:57',	NULL,	0);
+(79,	' akce: smazani fakturacni adresy ;  [id] => 1\n, akci provedl: admin, vysledek akce dle postgre: 1, datum akce: 22/04/2024 15:24:57',	'2024-04-22 15:24:57',	NULL,	0),
+(80,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.12\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 15:18:54',	'admin@admin',	0),
+(81,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> =>  test-fiber-1\n <b>[ip]</b> => 10.10.10.12\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 15:24:02',	'admin@admin',	0),
+(82,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-2\n <b>[ip]</b> => 10.10.10.122\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[poznamka]</b> => test 1\n <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:01:24',	'admin@admin',	0),
+(83,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.12\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:15:15',	'admin@admin',	0),
+(84,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.122\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:23:06',	'admin@admin',	0),
+(85,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.4\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[mac]</b> => 11:22:33:44:55:66\n <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:28:22',	'admin@admin',	0),
+(86,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.4\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[mac]</b> => 11:22:33:44:55:66\n <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:29:44',	'admin@admin',	0),
+(87,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.12\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[mac]</b> => 11:22:33:44:55:66\n <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:31:29',	'admin@admin',	0),
+(88,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.4\n <b>[id_tarifu]</b> => 3\n <b>Typ</b> => poc (platici) , <b>[mac]</b> => 11:22:33:44:55:66\n <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 3\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:34:41',	'admin@admin',	0),
+(89,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.4\n <b>[id_tarifu]</b> => 3\n <b>Typ</b> => poc (platici) , <b>[mac]</b> => 11:22:33:44:55:66\n <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:35:31',	'admin@admin',	0),
+(90,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.5\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[mac]</b> => 11:22:33:44:55:66\n <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:41:13',	'admin@admin',	0),
+(91,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 0  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.122\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => n\n <b>Typ</b> => poc (platici) , <b>[mac]</b> => 22:22:33:44:55:66\n <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 16:45:50',	'admin@admin',	0),
+(92,	'<b>akce: prirazeni objektu k vlastnikovi; </b><br> [id_komplu]=> 1, [id_vlastnika] => 2',	'2024-04-28 16:46:58',	'admin',	1),
+(93,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 2  <b>[dns_jmeno]</b> => test-fiber-1\n <b>[ip]</b> => 10.10.10.12\n <b>[id_tarifu]</b> => 3\n <b>[dov_net]</b> => a\n <b>Typ</b> => poc (platici) , <b>[mac]</b> => 11:22:33:44:55:66\n <b>[pridal]</b> => admin@admin\n <b>[id_nodu]</b> => 2\n <b>[sikana_status]</b> => n\n <b>[sikana_cas]</b> => 0\n <b>[port_id]</b> => 1\n <b>Veřejná IP</b> => Ne ,',	'2024-04-28 17:11:53',	'admin@admin',	0);
 
 DROP TABLE IF EXISTS `archiv_zmen_work`;
 CREATE TABLE `archiv_zmen_work` (
@@ -96,7 +114,7 @@ CREATE TABLE `autorizace` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1714198629',	'admin',	'100');
+('21232f297a57a5a743894a0e4a801fc3',	'1714323140',	'admin',	'100');
 
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
@@ -110,7 +128,7 @@ CREATE TABLE `az_ucetni` (
   `zu_vlozeno_kdy` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `zu_vlozeno_kym` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`zu_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `az_ucetni` (`zu_id`, `zu_text`, `zu_typ`, `zu_akceptovano`, `zu_akceptovano_kdy`, `zu_akceptovano_kym`, `zu_akceptovano_pozn`, `zu_vlozeno_kdy`, `zu_vlozeno_kym`) VALUES
 (1,	'NULL',	'1',	0,	NULL,	NULL,	NULL,	'2024-04-15 17:16:05',	'admin@admin'),
@@ -122,7 +140,7 @@ CREATE TABLE `az_ucetni_typy` (
   `zu_nazev_typ` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`zu_id_typ`),
   UNIQUE KEY `zu_nazev_typ` (`zu_nazev_typ`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `az_ucetni_typy` (`zu_id_typ`, `zu_nazev_typ`) VALUES
 (1,	'ucetni typ 1');
@@ -137,7 +155,7 @@ CREATE TABLE `board` (
   `subject` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `body` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `board` (`id`, `author`, `email`, `from_date`, `to_date`, `subject`, `body`) VALUES
 (5,	'admin',	'test',	'2024-04-08',	'2024-04-19',	'subject',	'text'),
@@ -156,7 +174,7 @@ CREATE TABLE `core__user_roles` (
   UNIQUE KEY `role_idx` (`fk_user_id`,`role`),
   KEY `IDX_E086BB8D5741EEB9` (`fk_user_id`),
   CONSTRAINT `FK_E086BB8D5741EEB9` FOREIGN KEY (`fk_user_id`) REFERENCES `core__users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `core__user_roles` (`id`, `fk_user_id`, `role`) VALUES
 (1,	1,	'member');
@@ -169,7 +187,7 @@ CREATE TABLE `core__users` (
   `level` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_idx` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `core__users` (`id`, `username`, `passwordHash`, `level`) VALUES
 (1,	'admin@admin',	'$2y$10$haYN5Ng5BG2oFt5SPMgCUeiXU5c2ZVMOHnZ2oaiC9B5TXg7Hg7KNi',	101);
@@ -190,7 +208,7 @@ CREATE TABLE `fakturacni_skupiny` (
   `sluzba_voip_id_tarifu` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `nazev` (`nazev`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `fakturacni_skupiny` (`id`, `nazev`, `typ`, `typ_sluzby`, `fakturacni_text`, `vlozil_kdo`, `sluzba_int`, `sluzba_int_id_tarifu`, `sluzba_iptv`, `sluzba_iptv_id_tarifu`, `sluzba_voip`, `sluzba_voip_id_tarifu`) VALUES
 (1,	'fakturacni skupina 1',	1,	0,	'text fakturace 1',	NULL,	1,	2,	0,	0,	0,	0),
@@ -233,7 +251,7 @@ CREATE TABLE `faktury_neuhrazene` (
   `po_splatnosti_vlastnik` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_unique` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `faktury_neuhrazene` (`id`, `Cislo`, `VarSym`, `Datum`, `DatSplat`, `KcCelkem`, `KcLikv`, `Firma`, `Jmeno`, `ICO`, `DIC`, `par_id_vlastnika`, `par_stav`, `datum_vlozeni`, `overeno`, `aut_email_stav`, `aut_email_datum`, `ignorovat`, `po_splatnosti_vlastnik`) VALUES
 (1,	'121212',	'12112',	'2024-04-09',	'2024-04-09',	'1000',	'1000',	'H-Software',	'Patrik',	'1111',	'2222',	1,	0,	'2024-04-09',	0,	0,	'2024-04-09',	0,	'');
@@ -262,7 +280,7 @@ CREATE TABLE `leveling` (
   `level` int unsigned NOT NULL DEFAULT '0',
   `popis` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=304 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (1,	6,	'a2: objekty'),
@@ -272,6 +290,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (6,	10,	'topolog-user-list'),
 (13,	10,	'vlastnici / vlastnici-gen-xml'),
 (14,	20,	'a2: platby'),
+(15,	20,	'maily'),
 (16,	10,	'a2: work'),
 (17,	10,	'a2: admin'),
 (20,	88,	'a2: admin-level-add'),
@@ -297,6 +316,8 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (49,	50,	'objekty - odendani od vlastnika'),
 (50,	50,	'platby-vypis'),
 (51,	30,	'vlastnici-add-fakt'),
+(53,	53,	'monitoring-control'),
+(55,	50,	'monitoring grafy'),
 (59,	70,	'objekty list - export'),
 (63,	40,	'vlastnici export'),
 (67,	60,	'vlastnici erase fakturacni'),
@@ -333,7 +354,9 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (111,	10,	'partner-pripojeni'),
 (115,	50,	'a2: automatika-fn-check-vlastnik'),
 (116,	40,	'topology-nod-erase'),
+(117,	20,	'voip index'),
 (119,	20,	'partner-pozn-update'),
+(125,	60,	'voip online-dial-cust-list'),
 (128,	60,	'topology-router-erase'),
 (131,	40,	'admin tarify list'),
 (132,	20,	'topology-router-mail'),
@@ -365,7 +388,7 @@ CREATE TABLE `login_log` (
   `date` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ip` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
 (34,	'admin',	'1713601589',	'172.18.0.1'),
@@ -374,7 +397,15 @@ INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
 (37,	'admin',	'1713792013',	'172.18.0.1'),
 (38,	'admin',	'1713798122',	'172.18.0.1'),
 (39,	'admin',	'1713819772',	'172.18.0.1'),
-(40,	'admin',	'1713880109',	'172.18.0.1');
+(40,	'admin',	'1713880109',	'172.18.0.1'),
+(41,	'admin',	'1714211930',	'172.18.0.1');
+
+DROP TABLE IF EXISTS `mon_grafy`;
+CREATE TABLE `mon_grafy` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
 
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
@@ -389,7 +420,7 @@ CREATE TABLE `nod_list` (
   `router_id` int unsigned NOT NULL,
   `vlan_id` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=371 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `nod_list` (`id`, `jmeno`, `adresa`, `pozn`, `ip_rozsah`, `typ_nodu`, `typ_vysilace`, `stav`, `router_id`, `vlan_id`) VALUES
 (1,	'prvni nod',	'u me doma',	'test pozn',	'10.10.10.0/24',	1,	0,	0,	1,	0),
@@ -415,7 +446,7 @@ CREATE TABLE `objekty_stb` (
   `datum_vytvoreni` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `id_tarifu` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_stb`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `objekty_stb` (`id_stb`, `id_cloveka`, `mac_adresa`, `puk`, `pin1`, `pin2`, `ip_adresa`, `popis`, `id_nodu`, `sw_port`, `pozn`, `vlozil_kdo`, `upravil_kdo`, `datum_vytvoreni`, `id_tarifu`) VALUES
 (2,	NULL,	'11:22:33:44:55:66',	'111',	'',	'',	'10.10.10.1',	'stb-1acbaa',	2,	1,	'xxx111uacba',	'admin',	'admin@admin',	'2024-04-21 15:10:10',	1),
@@ -457,7 +488,7 @@ CREATE TABLE `opravy` (
   `text` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id_opravy`),
   UNIQUE KEY `id_opravy` (`id_opravy`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `opravy` (`id_opravy`, `id_predchozi_opravy`, `id_vlastnika`, `datum_vlozeni`, `v_reseni`, `v_reseni_kym`, `vlozil`, `priorita`, `vyreseno`, `vyreseno_kym`, `text`) VALUES
 (2,	0,	1,	'2024-04-10',	0,	'patrik',	'nevime',	0,	0,	'',	'fakt mi neco nejde, a uz to nejde asi sto let, nekolikrat jsem si volal s vasim technikem a nic'),
@@ -476,10 +507,17 @@ CREATE TABLE `partner_klienti` (
   `datum_vlozeni` datetime NOT NULL,
   `pripojeno` int NOT NULL DEFAULT '0',
   `pripojeno_linka` int NOT NULL DEFAULT '0',
+  `typ_balicku` int NOT NULL DEFAULT '0',
+  `typ_linky` int NOT NULL DEFAULT '0',
+  `akceptovano` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
+INSERT INTO `partner_klienti` (`id`, `tel`, `jmeno`, `adresa`, `email`, `poznamky`, `prio`, `vlozil`, `datum_vlozeni`, `pripojeno`, `pripojeno_linka`, `typ_balicku`, `typ_linky`, `akceptovano`) VALUES
+(1,	'123456789',	'Petr Pavel',	'Hrad 1',	'me@hrad.gov.cz',	'celej areal + wifi',	0,	'backoffice',	'2024-04-27 17:21:54',	1,	0,	0,	0,	0),
+(2,	'608608608',	'Vratislav Mynar',	'Hrad 666',	'podatelna@hrad.gov.cz',	'presna lokace bude vyresena na miste',	0,	'admin',	'2024-04-27 20:40:33',	0,	0,	0,	0,	1),
+(3,	'608608608',	'Milan Balak',	'Obora 1',	'',	'',	0,	'hrad',	'2024-04-28 07:51:09',	0,	0,	0,	0,	0);
 
 DROP TABLE IF EXISTS `partner_klienti_servis`;
 CREATE TABLE `partner_klienti_servis` (
@@ -496,7 +534,7 @@ CREATE TABLE `partner_klienti_servis` (
   `akceptovano_pozn` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `datum_vlozeni` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `partner_klienti_servis` (`id`, `tel`, `jmeno`, `adresa`, `email`, `poznamky`, `prio`, `vlozil`, `akceptovano`, `akceptovano_kym`, `akceptovano_pozn`, `datum_vlozeni`) VALUES
 (1,	'112233222',	'xx,  V:0',	'kdesi 2',	'hu@hu.hu',	'nic',	2,	'admin',	0,	NULL,	NULL,	'2024-04-18 09:32:03');
@@ -517,7 +555,7 @@ CREATE TABLE `router_list` (
   `mail` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `router_list` (`id`, `nazev`, `ip_adresa`, `parent_router`, `mac`, `monitoring`, `monitoring_cat`, `alarm`, `alarm_stav`, `filtrace`, `warn`, `mail`) VALUES
 (1,	'router 1',	'10.10.10.10',	0,	'',	0,	0,	0,	0,	0,	'',	''),
@@ -550,7 +588,7 @@ CREATE TABLE `tarify_int` (
   UNIQUE KEY `id_tarifu` (`id_tarifu`),
   UNIQUE KEY `zkratka_tarifu` (`zkratka_tarifu`),
   UNIQUE KEY `jmeno_tarifu` (`jmeno_tarifu`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `tarify_int` (`id_tarifu`, `typ_tarifu`, `zkratka_tarifu`, `jmeno_tarifu`, `speed_dwn`, `speed_upl`, `agregace`, `agregace_smlouva`, `cena_bez_dph`, `cena_s_dph`, `gen_poradi`, `barva`) VALUES
 (1,	0,	'cs',	'small city',	'2048',	'2048',	'1:20',	'1:50',	249,	298.5,	0,	''),
@@ -566,7 +604,7 @@ CREATE TABLE `tarify_iptv` (
   UNIQUE KEY `id_tarifu_unique` (`id_tarifu`),
   UNIQUE KEY `jmeno_tarifu` (`jmeno_tarifu`),
   UNIQUE KEY `zkratka_tarifu` (`zkratka_tarifu`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `tarify_iptv` (`id_tarifu`, `jmeno_tarifu`, `zkratka_tarifu`) VALUES
 (1,	'tarif iptv 1',	NULL),
@@ -588,7 +626,7 @@ CREATE TABLE `users` (
   `lvl_phd_adresar` int unsigned NOT NULL DEFAULT '0',
   `lvl_phd_list_fa` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`, `lvl_partner_servis_accept`, `lvl_partner_servis_pozn_update`, `lvl_phd_adresar`, `lvl_phd_list_fa`) VALUES
 (1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1,	1,	1,	1,	1,	1,	1);
@@ -623,10 +661,10 @@ CREATE TABLE `workitems_names` (
   `priority` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'work item 1',	0),
 (2,	'work item 2',	0);
 
--- 2024-04-27 06:24:58
+-- 2024-04-28 18:44:00

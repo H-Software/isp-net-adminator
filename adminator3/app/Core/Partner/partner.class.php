@@ -12,7 +12,7 @@ use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 class partner extends adminator
 {
 
-    var $conn_pqsql;
+    var $conn_pgsql;
     var $conn_mysql;
 
     var $logger;

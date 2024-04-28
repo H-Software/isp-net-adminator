@@ -191,7 +191,7 @@ class Aglobal
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
-    public static function pg_last_inserted_id($con, $table){ 
+    public static function pg_last_inserted_id($con, $table, $logger = ''){ 
          
          //make the initial query 
          $sql = "SELECT * FROM " . $table; 
@@ -206,6 +206,13 @@ class Aglobal
          //exec 
          $retorno =pg_query($con, $sql); 
          
+		 if(!$retorno){
+			if(is_object($logger))
+				$logger->info("Aglobal\pg_last_inserted_id: pg_query failed! sql: " . var_export($sql, true));
+
+			return false;
+		 }
+
          if(pg_num_rows($ret)>0){ 
              //array 
              $s_dados = pg_fetch_all($retorno); 
