@@ -160,8 +160,10 @@ class objektyController extends adminatorController {
         $this->header($request, $response, $this->adminator);
         
         $objekt = new \App\Core\objekt($this->container);
-        $objekt->mod_objektu = intval($_POST["mod_objektu"]);
         $objekt->csrf_html = $this->generateCsrfToken($request, $response, true);
+        $objekt->adminator = $this->adminator;
+        
+        $objekt->mod_objektu = intval($_POST["mod_objektu"]);
 
         // $objekt->dns_find = $dns_find;
         // $objekt->ip_find = $ip_find;

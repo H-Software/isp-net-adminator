@@ -718,7 +718,7 @@ class objekt extends adminator
                 {
                     // rezim upravy
                     
-                    if( !(check_level($level,29) ) ) 
+                    if ($this->adminator->checkLevel(29, false) === false)
                     {
                         $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                         exit;
@@ -1175,7 +1175,7 @@ class objekt extends adminator
                 if( $update_status =="1" )
                 {
                     
-                    if ( !( check_level($level,29) ) ) 
+                    if ($this->adminator->checkLevel(29, false) === false)
                     {
                         $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                         exit;
