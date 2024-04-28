@@ -46,7 +46,7 @@ require_once("include/charset.php");
   <!-- zacatek vlastniho obsahu -->
   <?php
 	if (!$db_ok2) {
-		die("An error occurred. The connection with pqsql does not exist.\n <br> (type of handler variable: " . gettype($db_ok2) . ")");
+		die("An error occurred. The connection with pgsql does not exist.\n <br> (type of handler variable: " . gettype($db_ok2) . ")");
 	}
 
 	if (!$conn_mysql) {
