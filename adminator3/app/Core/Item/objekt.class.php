@@ -71,6 +71,10 @@ class objekt extends adminator
 
     var $form_dov_net;
 
+    var $form_sikana_status;
+
+    var $form_sikana_cas;
+
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -476,9 +480,9 @@ class objekt extends adminator
                     }
                     
                     $sikana_status_l=$data["sikana_status"]; 
-                    if( preg_match("/a/",$sikana_status_l) ) { $sikana_status=2; } else { $sikana_status=1; }
+                    if( preg_match("/a/",$sikana_status_l) ) { $this->form_sikana_status=2; } else { $this->form_sikana_status=1; }
                     $sikana_cas_l=$data["sikana_cas"];
-                    if( strlen($sikana_cas_l) > 0 ) { $sikana_cas=$sikana_cas_l; }
+                    if( strlen($sikana_cas_l) > 0 ) { $this->form_sikana_cas=$sikana_cas_l; }
                 
                 endwhile;
                 
@@ -499,7 +503,7 @@ class objekt extends adminator
             $this->form_selected_nod=$_POST["selected_nod"];
 
             // dalsi
-            $sikana_status = $_POST["sikana_status"];	 $sikana_cas = $_POST["sikana_cas"];	$sikana_text = $_POST["sikana_text"];
+            $this->form_sikana_status = $_POST["sikana_status"];	 $this->form_sikana_cas = $_POST["sikana_cas"];	$sikana_text = $_POST["sikana_text"];
 
             //$vip_snat_lip = $_POST["vip_snat_lip"];
             $this->form_client_ap_ip = $_POST["client_ap_ip"];
@@ -517,14 +521,14 @@ class objekt extends adminator
 
         if( ( strlen($this->form_dns) > 0 ) )  { \objektypridani::checkdns($this->form_dns); }
         if( ( strlen($this->form_mac) > 0 ) ) { \objektypridani::checkmac($this->form_mac); }	
-        if( (strlen($sikana_cas) > 0 ) ) { \objektypridani::checkcislo($sikana_cas); }
+        if( (strlen($this->form_sikana_cas) > 0 ) ) { \objektypridani::checkcislo($this->form_sikana_cas); }
         if( (strlen($this->form_selected_nod) > 0 ) ) { \objektypridani::checkcislo($this->form_selected_nod); }
 
         if( (strlen($this->form_client_ap_ip) > 0 ) ) { \objektypridani::checkip($this->form_client_ap_ip); }
 
-        if( $sikana_status == 2 ) { 
+        if( $this->form_sikana_status == 2 ) { 
 
-            \objektypridani::checkSikanaCas($sikana_cas); 
+            \objektypridani::checkSikanaCas($this->form_sikana_cas); 
             
             \objektypridani::checkSikanaText($sikana_text); 
 
@@ -687,12 +691,12 @@ class objekt extends adminator
                     $tunnelling_ip="0"; 
                 }
                 
-                if( $sikana_status =="2" )
+                if( $this->form_sikana_status == "2" )
                 { $sikana_status_w='a'; } 
                 else
                 { $sikana_status_w='n'; }
                     
-                $sikana_cas = intval($sikana_cas);
+                $this->form_sikana_cas = intval($this->form_sikana_cas);
             
                 if($update_status =="1")
                 {
@@ -748,7 +752,7 @@ class objekt extends adminator
                                 "client_ap_ip" => $this->form_client_ap_ip, "dov_net" => $dov_net_w,"id_tarifu" => $this->form_id_tarifu,
                             "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "verejna" => $verejna_w,
                             "mac" => $this->form_mac, "upravil" => $this->loggedUserEmail, "sikana_status" => $sikana_status_w,
-                        "sikana_cas" => $sikana_cas, "sikana_text" => $sikana_text, "id_nodu" => $this->form_selected_nod );
+                        "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $sikana_text, "id_nodu" => $this->form_selected_nod );
                                     
                         if( $this->form_typ_ip == 4)
                         {
@@ -793,7 +797,7 @@ class objekt extends adminator
 
                     $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu, "dov_net" => $dov_net_w, 
                             "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "verejna" => $verejna_w, "pridal" => $this->loggedUserEmail, "id_nodu" => $this->form_selected_nod,
-                                    "sikana_status" => $sikana_status_w, "sikana_cas" => $sikana_cas, "sikana_text" => $sikana_text );
+                                    "sikana_status" => $sikana_status_w, "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $sikana_text );
 
                     if($this->form_typ_ip == 4){
                         $obj_add["tunnelling_ip"] = $tunnelling_ip;
@@ -925,14 +929,14 @@ class objekt extends adminator
             }
             
             $output .= "<br><br><b>Šikana: </b>"; 
-            if( $sikana_status==2) 
+            if( $this->form_sikana_status==2) 
             { 
             $output .= "Ano"; 
 
-            $output .= "<br><b>Šikana - počet dní: </b>".$sikana_cas;
+            $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
             $output .= "<br><b>Šikana - text: </b>".$sikana_text;
             } 
-            elseif($sikana_status==1){ $output .= "Ne"; }
+            elseif($this->form_sikana_status==1){ $output .= "Ne"; }
             else { $output .= "Nelze zjistit"; }
 
         endif;
@@ -980,10 +984,10 @@ class objekt extends adminator
                     $sikana_text = $data["sikana_text"];
 
                     $sikana_status_l=$data["sikana_status"]; 
-                    if ( ereg("a",$sikana_status_l) ){ $sikana_status=2; } else { $sikana_status=1; }
+                    if ( ereg("a",$sikana_status_l) ){ $this->form_sikana_status=2; } else { $this->form_sikana_status=1; }
                     
                     $sikana_cas_l=$data["sikana_cas"];  
-                    if ( strlen($sikana_cas_l) > 0 ){ $sikana_cas=$sikana_cas_l; }  
+                    if ( strlen($sikana_cas_l) > 0 ){ $this->form_sikana_cas=$sikana_cas_l; }  
                     
                     $verejna_l=$data["verejna"];
                     
@@ -1018,9 +1022,9 @@ class objekt extends adminator
             
             $this->form_pozn = $_POST["pozn"];
             
-            $sikana_status = $_POST["sikana_status"];
+            $this->form_sikana_status = $_POST["sikana_status"];
             $sikana_text = $_POST["sikana_text"];
-            $sikana_cas = $_POST["sikana_cas"];
+            $this->form_sikana_cas = $_POST["sikana_cas"];
             
             $port_id = $_POST["port_id"];
             $another_vlan_id = $_POST["another_vlan_id"];
@@ -1038,7 +1042,7 @@ class objekt extends adminator
         if( ( strlen($this->form_dns) > 0 ) ){ \objektypridani::checkdns($this->form_dns); }
         if( ( strlen($this->form_mac) > 0 ) ){ \objektypridani::checkmac($this->form_mac); }
 
-        if( (strlen($sikana_cas) > 0 ) ){ \objektypridani::checkcislo($sikana_cas); }
+        if( (strlen($this->form_sikana_cas) > 0 ) ){ \objektypridani::checkcislo($this->form_sikana_cas); }
         //if( (strlen($this->form_selected_nod) > 0 ) ){ \objektypridani::checkcislo($this->form_selected_nod); }
             
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
@@ -1133,7 +1137,7 @@ class objekt extends adminator
                 // priprava promennych
             
                 if( $this->form_dov_net == 2 ) { $dov_net_w ="a"; } else { $dov_net_w="n"; }
-                if( $sikana_status =="2" ){ $sikana_status_w='a'; } else { $sikana_status_w='n'; }
+                if( $this->form_sikana_status =="2" ){ $sikana_status_w='a'; } else { $sikana_status_w='n'; }
                 
                 if ($this->form_typ_ip == 1){ 
                     $verejna_w="99"; 
@@ -1202,7 +1206,7 @@ class objekt extends adminator
                     $obj_upd = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
                             "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $mac,
                             "upravil" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
-                            "sikana_cas" => $sikana_cas, "sikana_text" => $sikana_text, "port_id" => $port_id,
+                            "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $sikana_text, "port_id" => $port_id,
                             "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
                                                 
                     $obj_id = array( "id_komplu" => $this->update_id );
@@ -1227,7 +1231,7 @@ class objekt extends adminator
                     $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
                             "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $mac,
                             "pridal" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
-                            "sikana_cas" => $sikana_cas, "sikana_text" => $sikana_text, "port_id" => $port_id,
+                            "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $sikana_text, "port_id" => $port_id,
                             "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
                     
                     $res = pg_insert($db_ok2, 'objekty', $obj_add);
@@ -1394,14 +1398,14 @@ class objekt extends adminator
             // $output .= "data nejak upravena";
 
             $output .= "<br><br><b>Šikana: </b>"; 
-            if( $sikana_status==2) 
+            if( $this->form_sikana_status==2) 
             { 
                 $output .= "Ano"; 
 
-                $output .= "<br><b>Šikana - počet dní: </b>".$sikana_cas;
+                $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
                 $output .= "<br><b>Šikana - text: </b>".$sikana_text;
             }
-            elseif($sikana_status==1){ $output .= "Ne"; }
+            elseif($this->form_sikana_status==1){ $output .= "Ne"; }
             else{ $output .= "Nelze zjistit"; }
 
             $output .= "<br><b>Číslo portu (ve switchi)</b>: ".$port_id."<br>";
@@ -1694,8 +1698,8 @@ class objekt extends adminator
             else
             {
                 $output .= "<select name=\"sikana_status\" size=\"1\" onChange=\"self.document.forms.form1.submit()\"> \n";
-                $output .= "<option value=\"1\" "; if ( ( $sikana_status==1 or (!isset($sikana_status) ) ) ) { $output .= " selected "; } $output .= ">Ne</option> \n";	    
-                $output .= "<option value=\"2\" "; if ( $sikana_status==2 ) { $output .= " selected "; } $output .= ">Ano</option> \n";
+                $output .= "<option value=\"1\" "; if ( ( $this->form_sikana_status==1 or (!isset($this->form_sikana_status) ) ) ) { $output .= " selected "; } $output .= ">Ne</option> \n";	    
+                $output .= "<option value=\"2\" "; if ( $this->form_sikana_status==2 ) { $output .= " selected "; } $output .= ">Ano</option> \n";
                 $output .= "</select>";
             }
             
@@ -1751,13 +1755,13 @@ class objekt extends adminator
             $output .= "<td>Šikana - počet dní: </td>
                 <td>";
             
-            if( ( $this->form_typ==3 or ($sikana_status!=2) ) )
+            if( ( $this->form_typ==3 or ($this->form_sikana_status!=2) ) )
             { 
                 $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
-                $output .= "<input type=\"hidden\" name=\"sikana_cas\" value=\"".$sikana_cas."\">";
+                $output .= "<input type=\"hidden\" name=\"sikana_cas\" value=\"".$this->form_sikana_cas."\">";
             }
             else
-            { $output .= "<input type=\"text\" name=\"sikana_cas\" size=\"5\" value=\"".$sikana_cas."\" >"; }
+            { $output .= "<input type=\"text\" name=\"sikana_cas\" size=\"5\" value=\"".$this->form_sikana_cas."\" >"; }
             
             $output .= '	    
             </td>
@@ -1774,7 +1778,7 @@ class objekt extends adminator
                     <td><label>Šikana - text: </label></td>
                     <td>';
 
-            if( ( $this->form_typ ==3 or ($sikana_status!=2) ) ) 
+            if( ( $this->form_typ ==3 or ($this->form_sikana_status!=2) ) ) 
             { 
                 $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
                 $output .= "<input type=\"hidden\" name=\"sikana_text\" value=\"".$sikana_text."\" >";
@@ -2021,8 +2025,8 @@ class objekt extends adminator
                 else
                 {
                     $output .= "<select name=\"sikana_status\" size=\"1\" onChange=\"self.document.forms.form1.submit()\"> \n";
-                    $output .= "<option value=\"1\" "; if ( ( $sikana_status==1 or (!isset($sikana_status) ) ) ) { $output .= " selected "; } $output .= ">Ne</option> \n";	    
-                    $output .= "<option value=\"2\" "; if ( $sikana_status==2 ) { $output .= " selected "; } $output .= ">Ano</option> \n";
+                    $output .= "<option value=\"1\" "; if ( ( $this->form_sikana_status==1 or (!isset($this->form_sikana_status) ) ) ) { $output .= " selected "; } $output .= ">Ne</option> \n";	    
+                    $output .= "<option value=\"2\" "; if ( $this->form_sikana_status==2 ) { $output .= " selected "; } $output .= ">Ano</option> \n";
                     $output .= "</select>";
                 }
                 
@@ -2040,13 +2044,13 @@ class objekt extends adminator
                     
                 $output .= "<td>Šikana - počet dní: </td><td>";
                 
-                if( ( $this->form_typ==3 or ($sikana_status!=2) ) )
+                if( ( $this->form_typ==3 or ($this->form_sikana_status!=2) ) )
                 {
                     $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
-                    $output .= "<input type=\"hidden\" name=\"sikana_cas\" value=\"".$sikana_cas."\">";
+                    $output .= "<input type=\"hidden\" name=\"sikana_cas\" value=\"".$this->form_sikana_cas."\">";
                 }
                 else
-                { $output .= "<input type=\"text\" name=\"sikana_cas\" size=\"5\" value=\"".$sikana_cas."\" >"; }
+                { $output .= "<input type=\"text\" name=\"sikana_cas\" size=\"5\" value=\"".$this->form_sikana_cas."\" >"; }
 
                 $output .= '
                 </td>
@@ -2063,7 +2067,7 @@ class objekt extends adminator
                 <td><label>Šikana - text: </label></td>
                 <td>';
                 
-                if( ( $this->form_typ ==3 or ($sikana_status!=2) ) ) 
+                if( ( $this->form_typ ==3 or ($this->form_sikana_status!=2) ) ) 
                 { 
                 $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>"; 
                 $output .= "<input type=\"hidden\" name=\"sikana_text\" value=\"".$sikana_text."\" >";
