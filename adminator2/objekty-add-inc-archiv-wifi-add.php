@@ -16,21 +16,21 @@
 
                 //nahrazovani na citelné hodnoty
 
-                // TODO: 8.1, fix removed f
-                // if($key == "id_tarifu"){
+                if($key == "id_tarifu"){
 
-                //     $rs_tarif = $conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
-                //     $tarif = mysql_result($rs_tarif,0, 0);
-                //     $pole .= " <b>tarif</b> => ".$tarif." ,";
+                    $rs_tarif = $conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
+                    $rs_tarif->data_seek(0);
+                    list($tarif) = $rs_tarif->fetch_row();
+                    $pole .= " <b>tarif</b> => ".$tarif." ,";
 
-                // }
-                // elseif($key == "id_nodu"){
-                //     $rs_nod = $conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
-                //     $nod = mysql_result($rs_nod, 0, 0);
-                //     $pole .= " <b>přípojný bod</b> => ".$nod." ,";
-
-                // }
-                // else
+                }
+                elseif($key == "id_nodu"){
+                    $rs_nod = $conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
+                    $rs_nod->data_seek(0);
+                    list($nod) = $rs_nod->fetch_row();
+                    $pole .= " <b>přípojný bod</b> => ".$nod." ,";
+                }
+                else
                 if($key == "typ"){
 
                     if( $val == 1){ $typ = "poc (platici)"; }

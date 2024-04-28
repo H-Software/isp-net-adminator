@@ -1276,21 +1276,24 @@ class objekt extends adminator
                             //pokud v promenne neco, tak teprve resime vlozeni do Archivu zmen
 
                             //nahrazovani na citelné hodnoty
-                            // TODO: fix missing mysq_results
-                            // if($key == "id_tarifu"){
+                            if($key == "id_tarifu"){
 
-                            //     $rs_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
-                            //     $tarif = mysql_result($rs_tarif,0, 0);
-                            //     $pole .= " <b>tarif</b> => ".$tarif." ,";
+                                $rs_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
+                                
+                                $rs_tarif->data_seek(0);
+                                list($tarif) = $rs_tarif->fetch_row();
 
-                            // }
-                            // elseif($key == "id_nodu"){
-                            //     $rs_nod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
-                            //     $nod = mysql_result($rs_nod, 0, 0);
-                            //     $pole .= " <b>přípojný bod</b> => ".$nod." ,";
+                                $pole .= " <b>tarif</b> => ".$tarif." ,";
+                            }
+                            elseif($key == "id_nodu"){
+                                $rs_nod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
 
-                            // }
-                            // else
+                                $rs_nod->data_seek(0);
+                                list($nod) = $rs_nod->fetch_row();
+
+                                $pole .= " <b>přípojný bod</b> => ".$nod." ,";
+                            }
+                            else
                             if( $key == "typ"){
 
                                 if( $val == 1){ $this->form_typ = "poc (platici)"; }
@@ -1362,7 +1365,6 @@ class objekt extends adminator
             $output .= $info;
 
             // vlozeni vlastniho formu
-            // require ("objekty-add-inc-form-fiber.php");
             $output .= $this->actionFormFiber();
 
         elseif ( ( isset($writed) or isset($updated) ) ):

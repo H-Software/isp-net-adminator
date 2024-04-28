@@ -2,10 +2,6 @@
 
 class Aglobal
 {
-    function restart_mon2()
-    {
-	//obsolete
-    }
     
     function synchro_router_list()
     {
@@ -45,9 +41,8 @@ class Aglobal
 	return $output;
     }
     
-    function work_handler($item_id)
+    public static function work_handler($item_id, $nick)
     {
-	global $nick;
 	
 	//item_id - cislo ktery odpovida vzdy nejaky akci :)
 	
