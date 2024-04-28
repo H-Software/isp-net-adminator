@@ -1075,9 +1075,9 @@ class objekt extends adminator
                 $ip=$this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS = pg_query("SELECT * FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
-                $MSQ_IP = pg_query("SELECT * FROM objekty WHERE ip <<= '$ip' ");
-                    
+                $MSQ_DNS = pg_query("SELECT * FROM objekty WHERE dns_jmeno LIKE '" . $this->form_dns ."' ");
+                $MSQ_IP = pg_query("SELECT * FROM objekty WHERE ip <<= '" . $ip ."' ");
+                
                 if (pg_num_rows($MSQ_DNS) > 0){ $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>"; $fail = "true"; }
                 if (pg_num_rows($MSQ_IP) > 0){ $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>"; $fail = "true"; }
             }
@@ -1411,7 +1411,8 @@ class objekt extends adminator
             <br>
             Objekt byl přidán/upraven , zadané údaje:<br><br> 
             <b>Dns záznam</b>: ' .  $this->form_dns . '<br> 
-            <b>IP adresa</b>: ' . $this->form_ip . '<br>'; 
+            <b>IP adresa</b>: ' . $this->form_ip . '<br>
+            <b>MAC adresa:</b>' . $this->form_mac . '<br>'; 
 
             $output .= "<br><b>Typ objektu </b>:";
             
