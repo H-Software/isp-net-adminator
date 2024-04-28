@@ -5,6 +5,9 @@ namespace App\Core;
 use App\Models\User;
 use App\Models\PageLevel;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 class adminator {
     var $conn_mysql;
     var $smarty;
@@ -377,5 +380,86 @@ class adminator {
         }
       
         return $r;
+    }
+
+    public static function convertIntToBoolTextCs ($v)
+    {
+        if ( $v == 1 ){
+            return "Ano"; 
+        }
+        elseif ( $v == 0 ){
+            return "Ne"; 
+        }
+        else{
+            return $v;
+        }
+    }
+
+    public static function convertIntToTextPrioCs ($v)
+    {
+        if ( $v == 0 ){
+            return "Nízká"; 
+        }
+        elseif ( $v == 1 ){
+            return "Normální"; 
+        }
+        elseif ( $v == 2){
+            return "Vysoká";
+        }
+        else{
+            return $v;
+        }
+    }
+
+    /**
+     * paginate collection
+     * 
+     * base is stolen from: https://stackoverflow.com/a/75755710/19497107
+     * appends for queryString is here: https://stackoverflow.com/questions/24891276/how-to-automatically-append-query-string-to-laravel-pagination-links
+     * 
+     */
+
+    public function collectionPaginate($items, $perPage = 15, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        $paginator = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        $paginator->appends($_GET);
+        return $paginator;
+    }
+
+    public function paginateGetLinks($data)
+    {
+        $linkCurrentPage = $data['current_page'];
+
+        foreach ($data['links'] as $key => $value) {
+            if ($value['label'] == "Previous") {
+                $linkPreviousPage = $value['url'];
+            }
+            if ($value['label'] == "Next") {
+                $linkNextPage = $value['url'];
+            }
+        }
+
+        return array($linkPreviousPage, $linkCurrentPage, $linkNextPage);
+    }
+
+    public function paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage)
+    {
+        $output = "<div align=\"center\" style=\"font-size: 0.8rem; padding-top: 5px; padding-bottom: 5px;\">";
+
+        if($linkPreviousPage != NULL){
+            $output .= "<span><a href=\"".$linkPreviousPage."\" >previous</a></span> | ";
+        }
+        if($linkCurrentPage != NULL){
+            $output .= "<span style=\"margin-left: 10px: margin-right: 10px;\">" . $linkCurrentPage . "</span>";
+        }
+        if($linkNextPage != NULL){
+            $output .= " | <span><a href=\"".$linkNextPage."\" >next</a></span>";
+        }
+
+        $output .= "</div>";
+
+        return $output;
     }
 }

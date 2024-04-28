@@ -65,29 +65,28 @@ require ($cesta."include/charset.php");
 
  // zde kontrola, popr. naplneni promenne error
 
- $cesta="/var/www/html/virtuals/partner/";
+// $cesta="/var/www/html/virtuals/partner/";
     
- require($cesta."vlozeni-kontrola-inc.php");
+//  require($cesta."vlozeni-kontrola-inc.php");
 
- if( ( isset($odeslat) and ($fail == false) ) )
- { // mod ukladani
+//  if( ( isset($odeslat) and ($fail == false) ) )
+//  { // mod ukladani
 
-    require($cesta."vlozeni-ukladani-inc.php");
+//     require($cesta."vlozeni-ukladani-inc.php");
 
- }
- else
- { // zobrazime formular
+//  }
+//  else
+//  { // zobrazime formular
 
-    echo "<form action=\"\" method=\"post\" >";
+//     echo "<form action=\"\" method=\"post\" >";
 
-    if( isset($odeslat) ){ echo $error; }
+//     if( isset($odeslat) ){ echo $error; }
 
-    require($cesta."vlozeni-form-inc.php");
+//     require($cesta."vlozeni-form-inc.php");
  
-    echo "</form>";
+//     echo "</form>";
 
- }
-
+//  }
 
 ?>
   
