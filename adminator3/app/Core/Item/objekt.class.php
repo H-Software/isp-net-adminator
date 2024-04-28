@@ -508,11 +508,11 @@ class objekt extends adminator
         else
         {
             // rezim pridani, ukladani
-            $this->form_dns=$_POST["dns"];		$this->form_ip=$_POST["ip"];			$this->form_typ=$_POST["typ"];	
+            $this->form_dns=trim($_POST["dns"]);		$this->form_ip=$_POST["ip"];			$this->form_typ=$_POST["typ"];	
 
             $this->form_typ_ip=$_POST["typ_ip"];	$this->form_dov_net=$_POST["dov_net"];		$this->form_id_tarifu = $_POST["id_tarifu"];
             $this->form_mac=$_POST["mac"];		$verejna=$_POST["verejna"];
-            $vip_rozsah=$_POST["vip_rozsah"];	$this->form_pozn=$_POST["pozn"];
+            $vip_rozsah=$_POST["vip_rozsah"];	$this->form_pozn=trim($_POST["pozn"]);
 
             //systémove
             $this->send=$_POST["send"];	
@@ -789,15 +789,17 @@ class objekt extends adminator
                         }   
                         else
                         { 
-                                $obj_upd["tunnelling_ip"] = "0"; 
+                                $obj_upd["tunnelling_ip"] = NULL; 
                         }
                     
-                        $obj_id = array( "id_komplu" => $this->update_id );
-                        $res = pg_update($this->conn_pgsql, 'objekty', $obj_upd, $obj_id);
+                        $affected = DB::connection('pgsql')
+                                    ->table('objekty')
+                                    ->where('id_komplu', $this->update_id)
+                                    ->update($obj_upd);
 
                     } // konec else jestli je opravneni
                     
-                    if($res){
+                    if($affected > 0){
                         $vysledek_write = 1; 
                         $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; 
                     }
@@ -1044,7 +1046,7 @@ class objekt extends adminator
         {
             // rezim pridani, nacitame z POSTu
 
-            $this->form_dns=$_POST["dns"];	
+            $this->form_dns=trim($_POST["dns"]);	
             $this->form_ip=$_POST["ip"];
                 
             $this->form_typ_ip = $_POST["typ_ip"];
@@ -1056,7 +1058,7 @@ class objekt extends adminator
             $this->form_typ = $_POST["typ"];
             $this->form_dov_net = $_POST["dov_net"];
             
-            $this->form_pozn = $_POST["pozn"];
+            $this->form_pozn = trim($_POST["pozn"]);
             
             $this->form_sikana_status = $_POST["sikana_status"];
             $this->form_sikana_text = $_POST["sikana_text"];
