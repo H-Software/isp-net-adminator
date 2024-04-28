@@ -83,6 +83,11 @@ class objekt extends adminator
 
     var $form_another_vlan_id;
 
+    var $origDataArray;
+
+    var $updatedDataArray;
+
+    var $addedDataArray;
 
     function __construct(ContainerInterface $container)
     {
@@ -734,25 +739,25 @@ class objekt extends adminator
                         { 
                             while ($data4=pg_fetch_array($vysl4) ){
                         
-                                $pole_puvodni_data["id_komplu"]=$data4["id_komplu"];		
-                                $pole_puvodni_data["dns_jmeno"]=$data4["dns_jmeno"];	
-                                $pole_puvodni_data["ip"]=$data4["ip"];
-                                $pole_puvodni_data["mac"]=$data4["mac"];		
-                                $pole_puvodni_data["client_ap_ip"]=$data4["client_ap_ip"];	
-                                $pole_puvodni_data["dov_net"]=$data4["dov_net"];	
-                                $pole_puvodni_data["id_tarifu"]=$data4["id_tarifu"];
-                                $pole_puvodni_data["typ"]=$data4["typ"];
-                                $pole_puvodni_data["poznamka"]=$data4["poznamka"];	
-                                $pole_puvodni_data["verejna"]=$data4["verejna"];
-                                $pole_puvodni_data["sikana_status"]=$data4["sikana_status"];	
-                                $pole_puvodni_data["sikana_cas"]=$data4["sikana_cas"];
-                                $pole_puvodni_data["sikana_text"]=$data4["sikana_text"];
-                                $pole_puvodni_data["upravil"]=trim($data4["upravil"]);	
-                                $pole_puvodni_data["id_nodu"]=$data4["id_nodu"];
+                                $this->origDataArray["id_komplu"]=$data4["id_komplu"];		
+                                $this->origDataArray["dns_jmeno"]=$data4["dns_jmeno"];	
+                                $this->origDataArray["ip"]=$data4["ip"];
+                                $this->origDataArray["mac"]=$data4["mac"];		
+                                $this->origDataArray["client_ap_ip"]=$data4["client_ap_ip"];	
+                                $this->origDataArray["dov_net"]=$data4["dov_net"];	
+                                $this->origDataArray["id_tarifu"]=$data4["id_tarifu"];
+                                $this->origDataArray["typ"]=$data4["typ"];
+                                $this->origDataArray["poznamka"]=$data4["poznamka"];	
+                                $this->origDataArray["verejna"]=$data4["verejna"];
+                                $this->origDataArray["sikana_status"]=$data4["sikana_status"];	
+                                $this->origDataArray["sikana_cas"]=$data4["sikana_cas"];
+                                $this->origDataArray["sikana_text"]=$data4["sikana_text"];
+                                $this->origDataArray["upravil"]=trim($data4["upravil"]);	
+                                $this->origDataArray["id_nodu"]=$data4["id_nodu"];
                             
-                                $pole_puvodni_data["tunnelling_ip"]=$data4["tunnelling_ip"];	
-                                $pole_puvodni_data["tunnel_user"]=$data4["tunnel_user"];
-                                $pole_puvodni_data["tunnel_pass"]=$data4["tunnel_pass"];	
+                                $this->origDataArray["tunnelling_ip"]=$data4["tunnelling_ip"];	
+                                $this->origDataArray["tunnel_user"]=$data4["tunnel_user"];
+                                $this->origDataArray["tunnel_pass"]=$data4["tunnel_pass"];	
                         
                             }
                             
@@ -788,7 +793,9 @@ class objekt extends adminator
                     }
                         
                     //ted zvlozime do archivu zmen
-                    require("objekty-add-inc-archiv.php");				     
+                    $this->updatedDataArray = $obj_upd;
+                    // require("objekty-add-inc-archiv.php");				     
+                    $this->actionArchivZmenWifiDiff();
 
                     $updated="true";
                     
@@ -845,9 +852,12 @@ class objekt extends adminator
                     if( !($res === false) ) 
                     { 
                         $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; 
+                        $vysledek_write=1;
                     } 
                     else
                     { 
+                        $vysledek_write=0;
+
                             $output .= "<H3><div style=\"color: red; padding-top: 20px; padding-left: 5px; \">".
                                 "Chyba! Data do databáze nelze uložit. </div></H3>\n";
                             
@@ -859,9 +869,11 @@ class objekt extends adminator
                     }
                     
                     // pridame to do archivu zmen
-                    // TODO: fix AZ
                     // require("objekty-add-inc-archiv-wifi-add.php");
+                    $this->addedDataArray = $obj_add;
+                    $this->actionArchivZmenWifi($vysledek_write);
                     
+                    $writed = "true";
                 } // konec else - rezim pridani
 
             }
@@ -1063,9 +1075,9 @@ class objekt extends adminator
                 $ip=$this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS = pg_query("SELECT * FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
-                $MSQ_IP = pg_query("SELECT * FROM objekty WHERE ip <<= '$ip' ");
-                    
+                $MSQ_DNS = pg_query("SELECT * FROM objekty WHERE dns_jmeno LIKE '" . $this->form_dns ."' ");
+                $MSQ_IP = pg_query("SELECT * FROM objekty WHERE ip <<= '" . $ip ."' ");
+                
                 if (pg_num_rows($MSQ_DNS) > 0){ $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>"; $fail = "true"; }
                 if (pg_num_rows($MSQ_IP) > 0){ $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>"; $fail = "true"; }
             }
@@ -1221,18 +1233,26 @@ class objekt extends adminator
                     $obj_id = array( "id_komplu" => $this->update_id );
                     $res = pg_update($this->conn_pgsql, 'objekty', $obj_upd, $obj_id);
                     
-                    if($res) { $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
-                    else{ $output .= "<br><H3><div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($this->conn_pgsql); }
+                    if($res) { 
+                        $vysledek_write = 1;
+                        $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; 
+                    }
+                    else {
+                        $vysledek_write = 0;
+                        $output .= "<br><H3><div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($this->conn_pgsql); 
+                    }
                         
                     //ted zvlozime do archivu zmen
                     
                     //workaround
                     $obj_upd["typ_ip"] = $this->form_typ_ip;
                     
-                    require("objekty-add-inc-archiv-fiber.php");    
+                    $this->origDataArray = $pole_puvodni_data;
+                    $this->updatedDataArray = $obj_upd;
+                    // require("objekty-add-inc-archiv-fiber.php");    
+                    $this->actionArchivZmenFiber($vysledek_write);
 
-                    $updated="true";
-                    
+                    $updated="true";   
                 }
                 else
                 {
@@ -1276,21 +1296,24 @@ class objekt extends adminator
                             //pokud v promenne neco, tak teprve resime vlozeni do Archivu zmen
 
                             //nahrazovani na citelné hodnoty
-                            // TODO: fix missing mysq_results
-                            // if($key == "id_tarifu"){
+                            if($key == "id_tarifu"){
 
-                            //     $rs_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
-                            //     $tarif = mysql_result($rs_tarif,0, 0);
-                            //     $pole .= " <b>tarif</b> => ".$tarif." ,";
+                                $rs_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
+                                
+                                $rs_tarif->data_seek(0);
+                                list($tarif) = $rs_tarif->fetch_row();
 
-                            // }
-                            // elseif($key == "id_nodu"){
-                            //     $rs_nod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
-                            //     $nod = mysql_result($rs_nod, 0, 0);
-                            //     $pole .= " <b>přípojný bod</b> => ".$nod." ,";
+                                $pole .= " <b>tarif</b> => ".$tarif." ,";
+                            }
+                            elseif($key == "id_nodu"){
+                                $rs_nod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
 
-                            // }
-                            // else
+                                $rs_nod->data_seek(0);
+                                list($nod) = $rs_nod->fetch_row();
+
+                                $pole .= " <b>přípojný bod</b> => ".$nod." ,";
+                            }
+                            else
                             if( $key == "typ"){
 
                                 if( $val == 1){ $this->form_typ = "poc (platici)"; }
@@ -1362,7 +1385,6 @@ class objekt extends adminator
             $output .= $info;
 
             // vlozeni vlastniho formu
-            // require ("objekty-add-inc-form-fiber.php");
             $output .= $this->actionFormFiber();
 
         elseif ( ( isset($writed) or isset($updated) ) ):
@@ -1389,7 +1411,8 @@ class objekt extends adminator
             <br>
             Objekt byl přidán/upraven , zadané údaje:<br><br> 
             <b>Dns záznam</b>: ' .  $this->form_dns . '<br> 
-            <b>IP adresa</b>: ' . $this->form_ip . '<br>'; 
+            <b>IP adresa</b>: ' . $this->form_ip . '<br>
+            <b>MAC adresa:</b>' . $this->form_mac . '<br>'; 
 
             $output .= "<br><b>Typ objektu </b>:";
             
@@ -2290,4 +2313,540 @@ class objekt extends adminator
        
        //return true;  
       } //konec funkce generujdata
+
+      public function actionArchivZmenWifiDiff()
+      {
+            $pole3 .= "[id_komplu]=> ".$this->update_id.",";
+    
+            $pole3 .= " diferencialni data: ";
+            
+            $obj_upd = $this->updatedDataArray;
+
+                //novy zpusob archivovani dat
+                foreach ($this->origDataArray as $key => $val)
+                {
+                if ( !($obj_upd[$key] == $val) )
+                {
+                if ( !($key == "id_komplu") )
+                {
+                    if( $key == "ip" )
+                    {
+                        $pole3 .= "změna <b>IP adresy</b> z: ";
+                        $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
+                        $pole3 .= ", ";
+                    } //konec key == ip
+                    elseif( $key == "mac" )
+                    {
+                        $pole3 .= "změna <b>MAC adresy</b> z: ";
+                        $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
+                        $pole3 .= ", ";
+                    } //konec key == mac
+                elseif( $key == "dov_net" )
+                    {
+                        $pole3 .= "změna <b>Povolen Inet</b> z: ";
+        
+                        if( $val == "a"){ $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>"; }
+                        elseif( $val == "n"){ $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>"; }
+                        else{ $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>"; }
+        
+                        $pole3 .= ", ";
+                    
+                    } //konec key == dov_net
+                    elseif( $key == "id_nodu" )
+                    {
+                        $pole3 .= "změna <b>Připojného bodu</b> z: ";
+        
+                        $vysl_t1=mysql_query("select jmeno from nod_list WHERE id = '$val'" );
+                        while ($data_t1=mysql_fetch_array($vysl_t1) )
+                        { $pole3 .= "<span class=\"az-s1\">".$data_t1["jmeno"]."</span>"; }
+        
+                        $pole3 .= " na: ";
+        
+                        $val2 = $obj_upd[$key];
+        
+                        $vysl_t2=mysql_query("select jmeno from nod_list WHERE id = '$val2'" );
+                        while ($data_t2=mysql_fetch_array($vysl_t2) )
+                        { $pole3 .= "<span class=\"az-s2\">".$data_t2["jmeno"]."</span>"; }
+        
+                        $pole3 .= ", ";                                                                                                                 
+                    } // konec key == id_nodu
+                    elseif( $key == "sikana_status" )
+                {
+                    $pole3 .= "změna <b>Šikana</b> z: ";
+        
+                        if( $val == "a"){ $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>"; }
+                        elseif( $val == "n"){ $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>"; }
+                        else{ $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>"; }
+        
+                        $pole3 .= ", ";
+                    
+                    
+                } //konec sikana_status
+                elseif($key == "id_tarifu"){
+            
+                    $rs_tarif = mysql_query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
+                        $tarif = mysql_result($rs_tarif,0, 0);
+                    
+                    $rs_tarif2 = mysql_query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($obj_upd[$key])."' ");
+                        $tarif2 = mysql_result($rs_tarif2,0, 0);
+                        
+                        $pole3 .= "změna <b>Tarifu</b> z: "."<span class=\"az-s1\">".$tarif."</span>";
+                        $pole3 .= " na: <span class=\"az-s2\">".$tarif2."</span>".", ";
+                
+                        //$pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
+                        //$pole3 .= "na: <span class=\"az-s2\">".$obj_upd[$key]."</span>, ";
+                                                        
+                    } //konec elseif id_tarifu
+                    else
+                    { // ostatni mody, nerozpoznane
+                        $pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
+                        $pole3 .= "na: <span class=\"az-s2\">".$obj_upd[$key]."</span>, ";
+                    }
+        
+                    } //konec if nejde li od id_komplu ( to v tom poli neni )
+                } // konec if obj == val
+                } // konec foreach
+                        
+            $pole2 .= "".$pole3;
+                                
+            if ( $res == 1){ $vysledek_write="1"; }  
+            $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
+        
+            // 
+            //pro osvezovani
+            //
+            
+            //zjistit, krz kterého reinharda jde objekt
+            $reinhard_id = Aglobal::find_reinhard($update_id);
+        
+            //zmena sikany
+            if( ereg(".*změna.*Šikana.*z.*", $pole3) )
+            {
+            if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
+            else{
+            
+                //nenalezet pozadovany reinhard, takze osvezime vsechny
+                
+                Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)   
+                Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+                
+            }
+            
+            }
+        
+            //zmena NetN
+            if( ereg(".*změna.*Povolen.*Inet.*z.*", $pole3) )
+            {
+            if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
+            else{
+            
+                //nenalezet pozadovany reinhard, takze osvezime vsechny
+                
+                Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)   
+                Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+            
+            }
+            }
+        
+            //zmena IP adresy pokud je aktivni Sikana ci NetN
+            if( ( 
+                ereg(".*změna.*IP.*adresy.*z.*", $pole3) 
+                and
+                (
+                ($this->origDataArray["sikana_status"] == "a")
+            or
+            ($this->origDataArray["dov_net"] == "n")
+                )
+                )
+            )
+            {
+                //radsi vynutit restart net-n/sikany u vseho
+                
+                Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)   
+                Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                Aglobal::work_handler("3"); //reinhard-fiber (linux) - iptables (net-n/sikana)
+                Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+        
+                Aglobal::work_handler("5");  //reinhard-fiber - shaper
+                Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+                Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+                Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+                
+                Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+                
+            }
+            //zmena IP adresy bez aktivovaného omezení
+            elseif( ereg(".*změna.*IP.*adresy.*z.*", $pole3) )
+            {
+                Aglobal::work_handler("5");  //reinhard-fiber - shaper
+                Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+                Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+                Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+                
+                Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+            
+            } 
+        
+            //zmena linky -- shaper / filtrace
+            if( ereg(".*změna.*pole.*id_tarifu.*", $pole3) 
+                or
+                ereg(".*změna.*Tarifu.*", $pole3)
+            )
+            {
+                if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)      
+                elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
+                elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
+                else
+                {
+                Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+                Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)      
+                Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+                }
+                
+                // filtrace asi neni treba
+                // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+            
+            }
+            
+            //zmena tunneling_ip ci tunel záznamů  
+            // --> radius artemis
+            // zde dodelat zmenu IP adresy, pokud tunelovana verejka
+            if( 
+            ereg(".*změna.*pole.*tunnelling_ip.*", $pole3)
+            or
+            ereg(".*změna.*pole.*tunnel_user.*", $pole3) 
+            or
+            ereg(".*změna.*pole.*tunnel_pass.*", $pole3)
+            )
+            {
+                Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+            }
+            
+            //zmena MAC adresy .. zatim se nepouziva u wifi
+            
+            //zmena DNS záznamu, asi jen u veřejných IP adresa
+            // --> restart DNS auth. serveru
+            if( ereg(".*změna.*pole.*dns_jmeno.*", $pole3) )
+            {
+                Aglobal::work_handler("9"); //erik - dns-restart
+                Aglobal::work_handler("10"); //trinity - dns restart
+                Aglobal::work_handler("11"); //artemis - dns restart
+                Aglobal::work_handler("12"); //c.ns.simelon.net - dns.restart
+            }
+            
+            if( ereg(".*změna.*pole.*client_ap_ip.*", $pole3) ){
+            
+                Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+            
+                if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)      
+                elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
+                elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
+                else
+                {
+                Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+                Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)      
+                Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+                }
+            }
+            
+            //nic vic mi nenapada :-) 
+      }
+
+      public function actionArchivZmenWifi($vysledek_write)
+      {
+            //zjistit, krz kterého reinharda jde objekt
+            $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
+
+            // pridame to do archivu zmen
+            $pole = "<b> akce: pridani objektu ; </b><br>";
+    
+            $pole .= "[id_komplu]=> ".intval($inserted_id)." ";
+        
+            foreach ($this->addedDataArray as $key => $val) {
+    
+                if( (strlen($val) > 0) ){
+                    //pokud v promenne neco, tak teprve resime vlozeni do Archivu zmen
+    
+                    //nahrazovani na citelné hodnoty
+                    if($key == "id_tarifu"){
+    
+                        $rs_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
+                        $rs_tarif->data_seek(0);
+                        list($tarif) = $rs_tarif->fetch_row();
+                        $pole .= " <b>tarif</b> => ".$tarif." ,";
+                    }
+                    elseif($key == "id_nodu"){
+                        $rs_nod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
+                        $rs_nod->data_seek(0);
+                        list($nod) = $rs_nod->fetch_row();
+                        $pole .= " <b>přípojný bod</b> => ".$nod." ,";
+                    }
+                    else
+                    if($key == "typ"){
+    
+                        if( $val == 1){ $typ = "poc (platici)"; }
+                        elseif($val == 2){ $typ = "poc (free)"; }
+                        elseif($val == 3){ $typ = "AP"; }
+                        else
+                        { $typ = $val; }
+    
+                        $pole .= " <b>Typ</b> => ".$typ." ,";
+    
+                    }
+                    elseif( $key == "verejna"){
+    
+                        if( $val == "99"){ $vip = "Ne"; }
+                        elseif($val == "1"){ $vip = "Ano"; }
+                        else
+                        { $vip = $val; }
+                        //dalsi moznosti pripadne dodat
+    
+                        if( ($val == "1") and (array_key_exists("tunnelling_ip", $this->addedDataArray) === true) )
+                        {
+                            $vip = "Ano - tunelovaná";
+                        }
+    
+                        $pole .= " <b>Veřejná IP</b> => ".$vip." ,";
+                    }
+                    elseif($key == "tunnelling_ip"){
+    
+                        //nic, resime v predchozim
+                    }
+                    else
+                    {
+                        //nenaslo se nahrazovaci pravidlo, tj. pridat v "surovem" stavu
+                        $pole .= " <b>[".$key."]</b> => ".$val." ,";
+                    }
+                }
+    
+            } //end of foreach
+        
+            $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+                                "('".$this->conn_mysql->real_escape_string($pole)."',".
+                                "'".$this->conn_mysql->real_escape_string($this->loggedUserEmail)."',".
+                                "'".$vysledek_write."')");
+    
+            //automaticke osvezovani/restarty
+            // TODO: fix automatic restarts
+            // if( $this->form_typ_ip == 4 )
+            // {
+            //     //L2TP verejka
+            //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+            // }
+    
+            // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+    
+            // $reinhard_id = Aglobal::find_reinhard($inserted_id);
+    
+            // //zde dodat if zda-li je NetN ci SikanaA
+            // if( (preg_match("/.*<b>\[dov_net\]<\/b> => n.*/", $pole) == 1) 
+            //         or (preg_match("/.*<b>\[sikana_status\]<\/b> => a.*/", $pole) == 1) ){
+    
+    
+            //     if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
+            //     elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
+            //     elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
+            //     else{
+    
+            //         //nenalezet pozadovany reinhard, takze osvezime vsechny
+    
+            //         Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+            //         Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+            //         Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+    
+            //     } //end of else - if reinhard_id
+    
+            // }
+    
+            // if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)
+            // elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
+            // elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
+            // else
+            // {
+            //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+            //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+            //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+            // }
+      }
+
+      private function actionArchivZmenFiber($vysledek_write)
+      {
+            $pole3 .= "[id_komplu]=> ".$this->update_id.",";
+            $pole3 .= " diferencialni data: ";
+        
+            $obj_upd = $this->updatedDataArray;
+
+            //novy zpusob archivovani dat
+            foreach ($this->origDataArray as $key => $val)
+            {
+             if ( !($obj_upd[$key] == $val) )
+             {
+               if ( !($key == "id_komplu") )
+               {
+                   if( $key == "ip" )
+                   {
+                     $pole3 .= "změna <b>IP adresy</b> z: ";
+                     $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
+                     $pole3 .= ", ";
+                   } //konec key == ip
+                   elseif( $key == "mac" )
+                   {
+                     $pole3 .= "změna <b>MAC adresy</b> z: ";
+                     $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
+                     $pole3 .= ", ";
+                   } //konec key == mac
+                   elseif( $key == "port_id" )
+                   {
+                     $pole3 .= "změna <b>Číslo sw. portu</b> z: ";
+                 $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
+                     $pole3 .= ", ";
+                   } //konec key == vezeni
+               elseif( $key == "dov_net" )
+                   {
+                     $pole3 .= "změna <b>Povolen Inet</b> z: ";
+       
+                     if( $val == "a"){ $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>"; }
+                     elseif( $val == "n"){ $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>"; }
+                     else{ $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>"; }
+       
+                     $pole3 .= ", ";
+                   } //konec key == dov_net
+               elseif( $key == "verejna")
+                   {
+       
+                   } // konec key == verejna
+               elseif( $key == "typ_ip")
+                   {
+                 $pole3 .= "změna <b>Typ IP adresy</b> z: ";
+       
+                     if( $val == "1"){ $pole3 .= "<span class=\"az-s1\">Neveřejná</span> na: <span class=\"az-s2\">Veřejná</span>"; }
+                     elseif( $val == "2"){ $pole3 .= "<span class=\"az-s1\">Veřejná</span> na: <span class=\"az-s2\">Neveřejná</span>"; }
+                     else{ $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>"; }
+       
+                     $pole3 .= ", ";
+                   
+                   } // konec key == typ_ip	    
+                   elseif( $key == "id_nodu" )
+                   {
+                     $pole3 .= "změna <b>Připojného bodu</b> z: ";
+       
+                       $vysl_t1=$this->conn_mysql->query("select * from nod_list WHERE id = '$val'" );
+                       while ($data_t1=$vysl_t1->fetch_array() )
+                       { $pole3 .= "<span class=\"az-s1\">".$data_t1["jmeno"]."</span>"; }
+       
+                     $pole3 .= " na: ";
+       
+                     $val2 = $obj_upd[$key];
+       
+                       $vysl_t2=$this->conn_mysql->query("select * from nod_list WHERE id = '$val2'" );
+                       while ($data_t2= $vysl_t2->fetch_array() )
+                       { $pole3 .= "<span class=\"az-s2\">".$data_t2["jmeno"]."</span>"; }
+       
+                     $pole3 .= ", ";                                                                                                                 
+                   } // konec key == id_nodu
+                   elseif( $key == "sikana_status" )
+               {
+                   $pole3 .= "změna <b>Šikana</b> z: ";
+                     
+                   if( $val == "a"){ $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>"; }
+                   elseif( $val == "n"){ $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>"; }
+               else{ $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>"; }
+                                           
+               $pole3 .= ", ";
+                                                                                                       
+               } //konec sikana_status
+               else
+                   { // ostatni mody, nerozpoznane
+                     $pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
+                     $pole3 .= "na: <span class=\"az-s2\">".$obj_upd[$key]."</span>, ";
+                   }
+       
+                } //konec if nejde li od id_komplu ( to v tom poli neni )
+              } // konec if obj == val
+            } // konec foreach
+                      
+            $pole2 .= "".$pole3;
+                                
+            $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+                    "('".$this->conn_mysql->real_escape_string($pole2)."','".
+                    $this->conn_mysql->real_escape_string($this->loggedUserEmail)."','".
+                    $this->conn_mysql->real_escape_string($vysledek_write)."') ");
+        
+            // TODO: fix automatic restarts
+            //zmena sikany nebo IP adresy
+            // if( ereg(".*změna.*Šikana.*z.*", $pole3) )
+            // {
+            // Aglobal::work_handler("3"); //reinhard-fiber - sikana/net-n
+            // }
+        
+            // //zmena NetN nebo IP adresy
+            // if( ereg(".*změna.*Povolen.*Inet.*z.*", $pole3) )
+            // {
+            // Aglobal::work_handler("3"); //reinhard-fiber - sikana/net-n
+            // }
+        
+            // //zmena IP adresy pokud je aktivni Sikana ci NetN
+            // if( (
+            //     ereg(".*změna.*IP.*adresy.*z.*", $pole3)
+            //     and
+            //     (
+            //     ($pole_puvodni_data["sikana_status"] == "a")
+            //     or
+            //     ($pole_puvodni_data["dov_net"] == "n")
+            //     )
+            //     )
+            // )
+            // {
+            //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+            //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                    
+            //     Aglobal::work_handler("3"); //reinhard-fiber - sikana/net-n
+                
+            //     Aglobal::work_handler("4"); //reinhard-fiber - radius      
+            //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+                
+            //     Aglobal::work_handler("6"); //(reinhard-fiber) - mikrotik.dhcp.leases.erase
+        
+            //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
+            
+            // }
+            // elseif(ereg(".*změna.*IP.*adresy.*z.*", $pole3)){
+            
+            //     Aglobal::work_handler("4"); //reinhard-fiber - radius      
+        
+            //     Aglobal::work_handler("6"); //(reinhard-fiber) - mikrotik.dhcp.leases.erase
+        
+            //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
+            // }
+        
+            // if(ereg(".*změna.*MAC.*adresy.*", $pole3)){
+        
+            //     Aglobal::work_handler("4"); //reinhard-fiber - radius      
+            //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+                
+            //     Aglobal::work_handler("6"); //(reinhard-fiber) - mikrotik.dhcp.leases.erase
+            //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
+            
+            // }
+        
+            // //zmena pripojneho bodu
+            
+            // //zmena tarifu
+            
+            // //zmena cisla portu
+            // if(ereg(".*Číslo sw. portu.*", $pole3)){
+            //     Aglobal::work_handler("4"); //reinhard-fiber - radius      
+            //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        
+            //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
+                
+            // }
+      }
+
 }

@@ -491,7 +491,7 @@ else{
     { $output .= "<td class=\"tab-objekty2\" style=\"font-size: 10px; font-family: arial; color: gray;\">Upravit</td> \n"; }
     else
     {
-      $output .= "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"objekty-add.php\" >";
+      $output .= "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"/objekty/action\" >";
       $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_komplu"]."\" >";
       
       
