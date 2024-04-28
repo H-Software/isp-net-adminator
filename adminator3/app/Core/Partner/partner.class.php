@@ -25,6 +25,8 @@ class partner extends adminator
 
     var $listItems;
 
+    var $paginateItemsPerPage = 15;
+
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -76,7 +78,7 @@ class partner extends adminator
 
         $this->listItems = adminator::collectionPaginate(
                                 $this->listItems, 
-                                1, 
+                                $this->paginateItemsPerPage, 
                                 $_GET['page'],                 
                                 [   // $options
                                     'path' => LengthAwarePaginator::resolveCurrentPath(strtok($_SERVER["REQUEST_URI"], '?')),
