@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 class objekt extends adminator
 {
 
-    var $conn_pqsql;
+    var $conn_pgsql;
     var $conn_mysql;
 
     var $logger;
@@ -50,6 +50,7 @@ class objekt extends adminator
 
     var $mod_objektu;
 
+    var $form_ip_error;
 
     var $form_selected_nod;
 
@@ -81,7 +82,9 @@ class objekt extends adminator
     {
         $this->container = $container;
         $this->validator = $container->validator;
-        $this->conn_mysql = $container->connMysql;   
+        $this->conn_mysql = $container->connMysql;
+        $this->conn_pgsql = $container->connPgsql;   
+
         $this->logger = $container->logger;
 
         $i = $container->auth->getIdentity();
@@ -310,7 +313,7 @@ class objekt extends adminator
         $objekt_a2 = new \objekt_a2;
         $objekt_a2->echo = false;
         $objekt_a2->conn_mysql = $this->conn_mysql;
-        $objekt_a2->conn_pqsql = $this->container->connPgsql;
+        $objekt_a2->conn_pgsql = $this->container->connPgsql;
 
         // checking levels for update/erase/..
         if ($this->adminator->checkLevel(29, false) === true) {
@@ -431,7 +434,6 @@ class objekt extends adminator
     public function actionWifi()
     {
         $output = "";
-        $db_ok2 = $this->conn_pqsql;
 
         if (  ( $this->update_id > 0 ) )
         { $update_status=1; }
@@ -577,8 +579,8 @@ class objekt extends adminator
                 $this->ip_find=$this->form_ip."/32";
                 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '".intval($this->update_id)."' ) ");
-                $MSQ_IP2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '".intval($this->update_id)."' ) ");
+                $MSQ_DNS2 = pg_query("SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '".intval($this->update_id)."' ) ");
+                $MSQ_IP2 = pg_query("SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '".intval($this->update_id)."' ) ");
 
                 if(pg_num_rows($MSQ_DNS2) > 0){ $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>"; $fail = "true"; }
                 if(pg_num_rows($MSQ_IP2) > 0){ $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>"; $fail = "true"; }
@@ -769,14 +771,14 @@ class objekt extends adminator
                         }
                     
                         $obj_id = array( "id_komplu" => $this->update_id );
-                        $res = pg_update($db_ok2, 'objekty', $obj_upd, $obj_id);
+                        $res = pg_update($this->conn_pgsql, 'objekty', $obj_upd, $obj_id);
 
                     } // konec else jestli je opravneni
                     
                     if($res){ $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
                     else{ 
                         $output .= "<br><H3><div style=\"color: red; \">".
-                        "Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($db_ok2); 
+                        "Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($this->conn_pgsql); 
                     }
                         
                     //ted zvlozime do archivu zmen
@@ -844,7 +846,7 @@ class objekt extends adminator
                                 "Chyba! Data do databáze nelze uložit. </div></H3>\n";
                             
                             $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
-                            pg_last_error($db_ok2).
+                            pg_last_error($this->conn_pgsql).
                                 "</div>";
                             
                             $output .= "<div style=\"padding-left: 5px; \">sql: ".$sql."</div>";
@@ -949,7 +951,6 @@ class objekt extends adminator
     public function actionFiber()
     {
         $output = "";
-        $db_ok2 = $this->conn_pqsql;
 
         if (  ( $this->update_id > 0 ) ) { $update_status=1; }
 
@@ -1036,7 +1037,7 @@ class objekt extends adminator
         //co mame: v promeny selected_nod mame id nodu kam se to bude pripojovat
         // co chcete: ip adresu , idealne ze spravnyho rozsahu :)
 
-        $this->generujDataFiber($this->form_selected_nod,$this->form_id_tarifu); 
+        $this->generujDataFiber(); 
 
         //kontrola vlozenych promennych ..
         if( (strlen($this->form_ip) > 0) ){ \objektypridani::checkip($this->form_ip); }
@@ -1056,8 +1057,8 @@ class objekt extends adminator
                 $this->ip_find=$this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS = pg_exec($db_ok2, "SELECT * FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
-                $MSQ_IP = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ip <<= '$this->ip_find' ");
+                $MSQ_DNS = pg_query("SELECT * FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
+                $MSQ_IP = pg_query("SELECT * FROM objekty WHERE ip <<= '$this->ip_find' ");
                     
                 if (pg_num_rows($MSQ_DNS) > 0){ $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>"; $fail = "true"; }
                 if (pg_num_rows($MSQ_IP) > 0){ $error .= "<h4>IP adresa ( ".$this->ip." ) již existuje!!!</h4>"; $fail = "true"; }
@@ -1069,8 +1070,8 @@ class objekt extends adminator
                 $this->ip_find=$this->form_ip."/32";
                 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
-                $MSQ_IP2 = pg_exec($db_ok2, "SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '$this->update_id' ) ");
+                $MSQ_DNS2 = pg_query("SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
+                $MSQ_IP2 = pg_query("SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '$this->update_id' ) ");
 
                 if(pg_num_rows($MSQ_DNS2) > 0){ $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>"; $fail = "true"; }
                 if(pg_num_rows($MSQ_IP2) > 0){ $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>"; $fail = "true"; }
@@ -1130,7 +1131,7 @@ class objekt extends adminator
             } // konec if jestli id_cloveka > 1 and update == 1
 
             //checkem jestli se macklo na tlacitko "OK" :)
-            if( ereg("^OK*",$this->odeslano) ) { $output .= ""; }
+            if( preg_match("/^OK*/",$this->odeslano) ) { $output .= ""; }
             else { $fail="true"; $error.="<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>"; }
 
             //ukladani udaju ...
@@ -1212,10 +1213,10 @@ class objekt extends adminator
                             "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
                                                 
                     $obj_id = array( "id_komplu" => $this->update_id );
-                    $res = pg_update($db_ok2, 'objekty', $obj_upd, $obj_id);
+                    $res = pg_update($this->conn_pgsql, 'objekty', $obj_upd, $obj_id);
                     
                     if($res) { $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }
-                    else{ $output .= "<br><H3><div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($db_ok2); }
+                    else{ $output .= "<br><H3><div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($this->conn_pgsql); }
                         
                     //ted zvlozime do archivu zmen
                     
@@ -1236,10 +1237,10 @@ class objekt extends adminator
                             "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $port_id,
                             "verejna" => $verejna_w, "another_vlan_id" => $another_vlan_id );	
                     
-                    $res = pg_insert($db_ok2, 'objekty', $obj_add);
+                    $res = pg_insert($this->conn_pgsql, 'objekty', $obj_add);
                     
                     //zjistit, krz kterého reinharda jde objekt
-                    $inserted_id = \Aglobal::pg_last_inserted_id($db_ok2, "objekty");
+                    $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
                                     
                     if ($res) { $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
                     else
@@ -1556,8 +1557,7 @@ class objekt extends adminator
             <tr>
                 <td>ip adresa:</td>
                 <td><input type="Text" name="ip" size="30" maxlength="20" value="'.$this->form_ip.'" >';
-                //global $ip_error;
-                if($ip_error == 1) 
+                if($this->form_ip_error == 1) 
                 { 
                 $output .= "<img title=\"error\" width=\"20px\" src=\"img2/warning.gif\" align=\"middle\" ";
                 $output .= "onclick=\" window.open('objekty-vypis-ip.php?id_rozsah=".$ip_rozsah."'); "."\">";
@@ -1903,7 +1903,7 @@ class objekt extends adminator
                 <td>ip adresa:</td>
                 <td><input type="Text" name="ip" size="30" maxlength="20"  value="'.$this->form_ip.'" >';
                     
-                if ($ip_error == 1) 
+                if ($this->form_ip_error == 1) 
                 { 
                     $output .= "<img title=\"error\" width=\"20px\" src=\"img2/warning.gif\" align=\"middle\" ";
                     $output .= "onclick=\" window.open('objekty-vypis-ip.php?id_rozsah=".$ip_rozsah."'); "."\">";
@@ -2141,50 +2141,44 @@ class objekt extends adminator
             return $output;
     }
 
-    public static function generujDataFiber( $selected_nod,$id_tarifu )
+    public function generujDataFiber()
     {
-  
-       global $ip;
-       //global $mac;
-       //global $rra;
-       global $ip_rozsah;
-  
-       if($selected_nod < 1 )
+    
+       if($this->form_selected_nod < 1 )
        {
          echo "";
          return false;
        }
-           
+       
        // skusime ip vygenerovat
-       $vysl_nod=mysql_query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($selected_nod)."'");
-       $radku_nod=mysql_num_rows($vysl_nod);
+       $vysl_nod = $this->conn_mysql->query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($this->form_selected_nod)."'");
+       $radku_nod = $vysl_nod->num_rows;
   
        if( $radku_nod <> 1 )
        { 
-         if( ( strlen($ip) < 1 ) ){ $ip = "E_1"; }
+         if( ( strlen($this->form_ip) < 1 ) ){ $this->form_ip = "E_1"; }
          return false;
        }
        else
        {
-           while( $data_nod=mysql_fetch_array($vysl_nod) ):
-         $ip_rozsah=$data_nod["ip_rozsah"];
-      //   $umisteni_aliasu=$data_nod["umisteni_aliasu"];  
-      endwhile;
+           while( $data_nod=$vysl_nod->fetch_array() ):
+                $ip_rozsah=$data_nod["ip_rozsah"];
+            endwhile;
        }
       
-       $vysl_tarif = mysql_query("SELECT gen_poradi FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
-       $radku_tarif=mysql_num_rows($vysl_tarif);
+       $vysl_tarif = $this->conn_mysql->query("SELECT gen_poradi FROM tarify_int WHERE id_tarifu = '".intval($this->form_id_tarifu)."' ");
+       $radku_tarif = $vysl_tarif->num_rows;
    
        if( $radku_tarif <> 1 )
        { 
-         if( ( strlen($ip) < 1 ) ){ $ip = "E_2"; }
+         if( ( strlen($this->form_ip) < 1 ) ){ $this->form_ip = "E_2"; }
          return false;
        }
        else
        {
-           while( $data_tarif = mysql_fetch_array($vysl_tarif) ):
-         $gen_poradi = $data_tarif["gen_poradi"];
-      endwhile;
+           while( $data_tarif = $vysl_tarif->fetch_array() ):
+                $gen_poradi = $data_tarif["gen_poradi"];
+            endwhile;
        }
        
        if( !( $gen_poradi > 0 ) )
@@ -2194,7 +2188,7 @@ class objekt extends adminator
          return false;
        }
        
-       list($r_a, $r_b, $r_c, $r_d) =split("[.]",$ip_rozsah);
+       list($r_a, $r_b, $r_c, $r_d) = preg_split("/[.]/",$ip_rozsah);
        
        if( $gen_poradi == 1 )	{ $r_d = $r_d + "0"; }
        elseif( $gen_poradi == 2 ) { $r_d = $r_d + "128"; }
@@ -2212,7 +2206,7 @@ class objekt extends adminator
        
        else
        {
-         if( ( strlen($ip) < 1 ) ){ $ip = "E_4"; }  
+         if( ( strlen($this->form_ip) < 1 ) ){ $this->form_ip = "E_4"; }  
          return false;
        }
        
@@ -2238,17 +2232,17 @@ class objekt extends adminator
         while(  $data_check_ip = pg_fetch_array($check_ip) )
         { $gen_ip2=$data_check_ip["ip"]; }
             
-        list($g_a,$g_b,$g_c,$g_d) = split("[.]",$gen_ip2);
+        list($g_a,$g_b,$g_c,$g_d) = preg_split("/[.]/",$gen_ip2);
   
         if( $sub_rozsah_d == "0" ){ $limit = 120; }
         elseif( $sub_rozsah_d == "128" ){ $limit = 250; }
         else
         {
-          if( ( strlen($ip) < 1 ) ){ $ip = "E_5"; }  
+          if( ( strlen($this->form_ip) < 1 ) ){ $this->form_ip = "E_5"; }  
           return false;
         }
            
-        if( ( $g_d >= $limit ) ){ $gen_ip=$ip_rozsah; $ip_error="1"; }
+        if( ( $g_d >= $limit ) ){ $gen_ip=$ip_rozsah; $this->form_ip_error="1"; }
         else
         {
          //zde tedy pricist udaje a predat ...
@@ -2259,7 +2253,7 @@ class objekt extends adminator
          
          if( $rs == 1) //je to lichy, chyba ...
          {
-           if( ( strlen($ip) < 1 ) ){ $ip = "E_5"; }  
+           if( ( strlen($this->form_ip) < 1 ) ){ $this->form_ip = "E_5"; }  
            return false;
          } 
          else //neni to lichy, takze je to spravne, cili finalni predani .
@@ -2272,7 +2266,7 @@ class objekt extends adminator
        
              
        //tady asi cosi neni-li zadana ip, tak gen_ip = ip;
-       if( ( strlen($ip) < 1 ) ){ $ip = $gen_ip; }
+       if( ( strlen($this->form_ip) < 1 ) ){ $this->form_ip = $gen_ip; }
        
        //return true;  
       } //konec funkce generujdata

@@ -3,7 +3,7 @@
 class objekt_a2
 {
 
-  var $conn_pqsql;
+  var $conn_pgsql;
 	var $conn_mysql;
 
   var $logger;
@@ -298,12 +298,12 @@ class objekt_a2
  public function vypis($sql,$co,$id,$dotaz_final = "")
  {
     // global $db_ok2, $conn_mysql;
-    $db_ok2 = $this->conn_pqsql;
+    $db_ok2 = $this->conn_pgsql;
 
     $output = "";
 
     if (!$db_ok2) {
-      echo "An error occurred. The connection with pqsql does not exist.\n";
+      echo "An error occurred. The connection with pgsql does not exist.\n";
       exit;
     }
 
