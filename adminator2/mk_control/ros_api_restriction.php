@@ -84,6 +84,9 @@ class mk_net_n_sikana
       echo "mk_net_n_sikana\find_obj: Error: no downstream/connected router found! <br>\n";
       return false;
     }
+    else{
+      echo "mk_net_n_sikana\find_obj: INFO: found " . count($routers) . "routers<br>\n";
+    }
 
     //2. zjistit nody
     $i=0;
