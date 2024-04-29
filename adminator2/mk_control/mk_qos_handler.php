@@ -50,12 +50,26 @@ if(!( preg_match("/^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" .
   exit;
 }
 
-$conn = RouterOS::connect($ip, $login_user, $login_pass) or die("couldn't connect to router\n");
+// $conn = RouterOS::connect($ip, $login_user, $login_pass) or die("couldn't connect to router\n");
+
+$rosConfig = new Config([
+  'host' => $ip,
+  'user' => $login_user,
+  'pass' => $login_pass,
+  'port' => 18728,
+]);
+
+try {
+  $rosClient = new Client($rosConfig);
+  echo "mk_qos_handler.php: Connection to router was established.<br>\n";
+} catch (Exception $exception) {
+  die("mk_qos_handler.php: Error! Couldn't connect to router!\n" . $exception->getMessage() . "<br>\n");
+}
 
 $mk_qos=new mk_synchro_qos();
 
-$mk_qos->debug=$debug;
-$mk_qos->conn=$conn;
+$mk_qos->debug = $debug;
+$mk_qos->conn = $rosClient;
 
 $mk_qos->set_wanted_values($ip); //nastaveni IP a ID routeru do globalnich promennych
 
@@ -100,6 +114,3 @@ $mk_qos->sc_speed_koef=$sc_speed_koef;
   
  $mk_qos->detect_diff_queues();
  //$mk_qos->synchro_qt_force();
-   
-
-?>
