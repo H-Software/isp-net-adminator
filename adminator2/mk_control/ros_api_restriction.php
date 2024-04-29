@@ -1,6 +1,6 @@
 <?php
 
-// ! trida pro synchronizaci RouterOS zarízení, co budou delat QoS/marking  trafficu
+// ! trida pro synchronizaci RouterOS zarízení, co budou delat IP filtraci
 // ! krz MK API
 // !
 // ! 2010/2/15
@@ -11,6 +11,7 @@
 
 class mk_net_n_sikana
 {
+ var $conn_mysql;
 
  var $conn;
  
@@ -273,25 +274,25 @@ class mk_net_n_sikana
 
  function zamek_lock()
  {
-    $rs = mysql_query("UPDATE workzamek SET zamek = 'ano' WHERE id = 1");
+    $rs = $this->conn_mysql->query("UPDATE workzamek SET zamek = 'ano' WHERE id = 1");
  }
 	
  function zamek_unlock()
  {
-    $rs = mysql_query("UPDATE workzamek SET zamek = 'ne' WHERE id = 1");
+    $rs = $this->conn_mysql->query("UPDATE workzamek SET zamek = 'ne' WHERE id = 1");
  }
 		
  function zamek_status()
  {
-    $rs = mysql_query("SELECT zamek FROM workzamek WHERE id = 1");
+    $rs = $this->conn_mysql->query("SELECT zamek FROM workzamek WHERE id = 1");
 			
-    while( $data = mysql_fetch_array($rs) )
+    while( $data = $rs->fetch_array() )
     { $zamek_status = $data["zamek"]; }
 				
     if( $zamek_status == "ano" )
     {
         print "  Nelze provést AKCI, jiz se nejaka provadi (LOCKED). Ukončuji skript. \n";
-	exit;
+	      exit;
     }
     							    
  } //end of function zamek_status

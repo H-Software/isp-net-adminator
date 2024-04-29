@@ -19,8 +19,8 @@ require_once(__DIR__ . "/../mk_control/ros_api_restriction.php");
 $debug = 0;
 
 //login vars
-$login_user = "admin-api";
-$login_pass = "Q5I.iPB:sP";
+$login_user = "admin";
+$login_pass = "";
 
 //api vars
 
@@ -43,6 +43,7 @@ if(!( preg_match("/^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" .
 }
 
 $mk=new mk_net_n_sikana;
+$mk->conn_mysql = $conn_mysql;
 
 $mk->zamek_status(); //pokud ON, tak exit :)
 

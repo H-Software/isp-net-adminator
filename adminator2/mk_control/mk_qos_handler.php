@@ -18,8 +18,8 @@ require_once(__DIR__ . "/../mk_control/ros_api_qos.php");
 $debug = 0;
 
 //login vars
-$login_user = "admin-api";
-$login_pass = "Q5I.iPB:sP";
+$login_user = "admin";
+$login_pass = "";
 
 //api vars
 $element_name_dwn = "dst-address";
