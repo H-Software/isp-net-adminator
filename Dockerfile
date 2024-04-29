@@ -30,6 +30,7 @@ RUN apt-get update \
             pdo_mysql \
             ldap \
             gd \
+            sockets \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

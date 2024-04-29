@@ -83,6 +83,12 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/VitexSoftware/PHP-Pohoda-Connector?tab=readme-ov-file
 - https://github.com/Spoje-NET/PohodaSQL
 
+### Mikrotik and RouterOS
+- https://github.com/EvilFreelancer/routeros-api-php?tab=readme-ov-file
+- https://github.com/EvilFreelancer/docker-routeros?tab=readme-ov-file
+- https://github.com/ayufan/rosapi-php
+  - originally used class
+
 ## Author
 Patrik Majer
 

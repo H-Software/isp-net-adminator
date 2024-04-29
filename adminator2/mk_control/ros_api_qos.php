@@ -15,6 +15,8 @@
 
 class mk_synchro_qos
 {
+  var $conn_mysql;
+
  var $conn;			//objekt pripojeni k API na MK
  
  var $debug; 			//uroven nebo on/off stav debug výpisů
@@ -76,18 +78,20 @@ class mk_synchro_qos
  var $controlled_router_id; //ID ovladaneho routeru
  
  
- function __construct()
+ function __construct($conn_mysql)
  {
+    $this->conn_mysql = $conn_mysql;
+    
     //vytvorit pole pro garanty
-    $q = mysql_query("SELECT id_tarifu, zkratka_tarifu, speed_dwn, speed_upl
+    $q = $this->conn_mysql->query("SELECT id_tarifu, zkratka_tarifu, speed_dwn, speed_upl
 			FROM tarify_int 
 			WHERE (typ_tarifu = '0' AND garant = '1') 
 			ORDER BY id_tarifu");
     
-    while($data = mysql_fetch_array($q))
+    while($data = $q->fetch_array())
     { 
-	$id = "objects_g_".$data["id_tarifu"];
-	$this->objects_garants[$id] = $data["speed_dwn"].":".$data["speed_upl"]; 
+      $id = "objects_g_".$data["id_tarifu"];
+      $this->objects_garants[$id] = $data["speed_dwn"].":".$data["speed_upl"]; 
     }
          
  } //end of function contsruct
@@ -97,7 +101,7 @@ class mk_synchro_qos
     $this->controlled_router_ip = $ip;
 
     //ID zjistime z adminatora
-    $rs = mysql_query("SELECT id FROM router_list WHERE ip_adresa = '$ip'");
+    $rs = $this->conn_mysql->query("SELECT id FROM router_list WHERE ip_adresa = '$ip'");
     $this->controlled_router_id = mysql_result($rs, 0);
  
  } //end of function set_wanted_values

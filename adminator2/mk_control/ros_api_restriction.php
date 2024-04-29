@@ -1,6 +1,6 @@
 <?php
 
-// ! trida pro synchronizaci RouterOS zarízení, co budou delat QoS/marking  trafficu
+// ! trida pro synchronizaci RouterOS zarízení, co budou delat omezeni typu povoleni/zakazani inetu/sikana
 // ! krz MK API
 // !
 // ! 2010/2/15
@@ -11,6 +11,7 @@
 
 class mk_net_n_sikana
 {
+ var $conn_mysql;
 
  var $conn;
  
@@ -34,14 +35,14 @@ class mk_net_n_sikana
  
  function find_root_router($id_routeru, $ip_adresa_routeru)
  {
-    $rs = mysql_query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$id_routeru'");
+    $rs = $this->conn_mysql->query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$id_routeru'");
 
-    while( $d = mysql_fetch_array($rs) )
+    while( $d = $rs->fetch_array() )
     { $parent_router = $d["parent_router"]; }
 
-    $rs2 = mysql_query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$parent_router'");
+    $rs2 = $this->conn_mysql->query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$parent_router'");
 
-    while( $d2 = mysql_fetch_array($rs2) )
+    while( $d2 = $rs2->fetch_array() )
     { $ip_adresa_2 = $d2["ip_adresa"]; }
 
     if($ip_adresa_2 == $ip_adresa_routeru)
@@ -61,38 +62,52 @@ class mk_net_n_sikana
 
  function find_obj($ip)
  {
+    $routers = array();
 
-  //1. zjistit routery co jedou pres reinhard-fiber
-  $rs_routers = mysql_query("SELECT id, parent_router, nazev FROM router_list ORDER BY id");
-  $num_rs_routers = mysql_num_rows($rs_routers);
+    //1. zjistit routery co jedou pres reinhard-fiber
+    $rs_routers = $this->conn_mysql->query("SELECT id, parent_router, nazev FROM router_list ORDER BY id");
+    $num_rs_routers = $rs_routers->num_rows;
 
-  while($data_routers = mysql_fetch_array($rs_routers))
-  {
-   $id_routeru = $data_routers["id"];
-   if( $this->find_root_router($id_routeru,$ip) === true)
-   { $routers[] = $id_routeru; }
-  }
+    if($num_rs_routers < 1){
+      echo "mk_net_n_sikana\find_obj: query failed: no router found! <br>\n";
+      return false;
+    }
 
-  //2. zjistit nody
-  $i=0;
-  foreach ($routers as $key => $id_routeru) {
+    while($data_routers = $rs_routers->fetch_array())
+    {
+      $id_routeru = $data_routers["id"];
+      if( $this->find_root_router($id_routeru,$ip) === true)
+      { $routers[] = $id_routeru; }
+    }
 
-    //print "router: ".$id_routeru.", \t\t  selected \n";
-    if($i == 0)
-    { $sql_where .= "'$id_routeru'"; }
-    else
-    { $sql_where .= ",'$id_routeru'"; }
+    if (count($routers) < 1){
+      echo "mk_net_n_sikana\find_obj: Error: no downstream/connected router found! <br>\n";
+      return false;
+    }
+    else{
+      echo "mk_net_n_sikana\find_obj: INFO: found " . count($routers) . "routers<br>\n";
+    }
 
-    $i++;
-  }
+    //2. zjistit nody
+    $i=0;
+    foreach ($routers as $key => $id_routeru) {
+
+      //print "router: ".$id_routeru.", \t\t  selected \n";
+      if($i == 0)
+      { $sql_where .= "'$id_routeru'"; }
+      else
+      { $sql_where .= ",'$id_routeru'"; }
+
+      $i++;
+    }
 
   $sql = "SELECT id, jmeno FROM nod_list WHERE router_id IN (".$sql_where.") ORDER BY id";
   //print $sql."\n";
 
-  $rs_nods = mysql_query($sql);
-  $num_rs_nods = mysql_num_rows($rs_nods);
+  $rs_nods = $this->conn_mysql->query($sql);
+  $num_rs_nods = $rs_nods->num_rows;
 
-  while($data_nods = mysql_fetch_array($rs_nods))
+  while($data_nods = $rs_nods->fetch_array())
   { $nods[] = $data_nods["id"]; }
 
   //3. zjistit lidi
@@ -273,25 +288,25 @@ class mk_net_n_sikana
 
  function zamek_lock()
  {
-    $rs = mysql_query("UPDATE workzamek SET zamek = 'ano' WHERE id = 1");
+    $rs = $this->conn_mysql->query("UPDATE workzamek SET zamek = 'ano' WHERE id = 1");
  }
 	
  function zamek_unlock()
  {
-    $rs = mysql_query("UPDATE workzamek SET zamek = 'ne' WHERE id = 1");
+    $rs = $this->conn_mysql->query("UPDATE workzamek SET zamek = 'ne' WHERE id = 1");
  }
 		
  function zamek_status()
  {
-    $rs = mysql_query("SELECT zamek FROM workzamek WHERE id = 1");
+    $rs = $this->conn_mysql->query("SELECT zamek FROM workzamek WHERE id = 1");
 			
-    while( $data = mysql_fetch_array($rs) )
+    while( $data = $rs->fetch_array() )
     { $zamek_status = $data["zamek"]; }
 				
     if( $zamek_status == "ano" )
     {
         print "  Nelze provést AKCI, jiz se nejaka provadi (LOCKED). Ukončuji skript. \n";
-	exit;
+	      exit;
     }
     							    
  } //end of function zamek_status
