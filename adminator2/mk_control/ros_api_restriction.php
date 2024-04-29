@@ -95,10 +95,10 @@ class mk_net_n_sikana
   $sql = "SELECT id, jmeno FROM nod_list WHERE router_id IN (".$sql_where.") ORDER BY id";
   //print $sql."\n";
 
-  $rs_nods = mysql_query($sql);
-  $num_rs_nods = mysql_num_rows($rs_nods);
+  $rs_nods = $this->conn_mysql->query($sql);
+  $num_rs_nods = $rs_nods->num_rows;
 
-  while($data_nods = mysql_fetch_array($rs_nods))
+  while($data_nods = $rs_nods->fetch_array())
   { $nods[] = $data_nods["id"]; }
 
   //3. zjistit lidi

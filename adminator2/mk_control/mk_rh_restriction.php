@@ -64,15 +64,15 @@ $rosConfig = new Config([
 
 try {
   $rosClient = new Client($rosConfig);
-  echo "mk_rh_restriction.php: Connection to router was established.\n";
+  echo "mk_rh_restriction.php: Connection to router was established.<br>\n";
 } catch (Exception $exception) {
-  die("mk_rh_restriction.php: Error! Couldn't connect to router!\n" . $exception->getMessage());
+  die("mk_rh_restriction.php: Error! Couldn't connect to router!\n" . $exception->getMessage() . "<br>\n");
 }
 
 $resourceQuery = (new Query('/system/resource/print'));
 
 $response = $rosClient->query($resourceQuery)->read();
-echo "mk_rh_restriction.php: INFO: version of RouterOS: " . var_export($response[0]['version'], true) . "\n";
+echo "mk_rh_restriction.php: INFO: version of RouterOS: " . var_export($response[0]['version'], true) . "<br>\n";
 
 $mk->debug = $debug;
 $mk->conn = $rosClient;
