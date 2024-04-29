@@ -105,7 +105,17 @@ class mk_net_n_sikana
   //print $sql."\n";
 
   $rs_nods = $this->conn_mysql->query($sql);
+  if($rs_nods === false){
+    echo "mk_net_n_sikana\\find_obj: Error: nod_list query failed! <br>\n";
+    printf("Error message: %s <br>\n", $this->conn_mysql->error);
+    return false;
+  }
+
   $num_rs_nods = $rs_nods->num_rows;
+  if($rs_nods < 1){
+    echo "mk_net_n_sikana\\find_obj: Error: No nodes found! (for routers: " . $sql_where. ")<br>\n";
+    return false;
+  }
 
   while($data_nods = $rs_nods->fetch_array())
   { $nods[] = $data_nods["id"]; }
