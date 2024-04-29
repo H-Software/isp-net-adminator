@@ -77,7 +77,13 @@ echo "mk_rh_restriction.php: INFO: version of RouterOS: " . var_export($response
 $mk->debug = $debug;
 $mk->conn = $rosClient;
 
-$mk->find_obj($ip); 
+$rs = $mk->find_obj($ip); 
+
+if ($fs === false){
+  echo "mk_rh_restriction.php: ERROR: find_obj failed!<br>\n";
+  $mk->zamek_unlock();
+  exit;
+}
 
 $mk->detect_diff_and_repaid("net-n"); 
 
@@ -86,5 +92,3 @@ $mk->detect_diff_and_repaid("sikana");
 $mk->zamek_unlock();
 
 echo "mk_rh_restriction.php finish \n";
-
-?>

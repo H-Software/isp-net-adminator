@@ -80,12 +80,12 @@ class mk_net_n_sikana
       { $routers[] = $id_routeru; }
     }
 
-    //2. zjistit nody
     if (count($routers) < 1){
       echo "mk_net_n_sikana\find_obj: Error: no downstream/connected router found! <br>\n";
       return false;
     }
 
+    //2. zjistit nody
     $i=0;
     foreach ($routers as $key => $id_routeru) {
 
