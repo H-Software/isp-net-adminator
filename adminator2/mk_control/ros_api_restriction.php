@@ -62,6 +62,7 @@ class mk_net_n_sikana
 
  function find_obj($ip)
  {
+    $routers = array();
 
     //1. zjistit routery co jedou pres reinhard-fiber
     $rs_routers = $this->conn_mysql->query("SELECT id, parent_router, nazev FROM router_list ORDER BY id");
