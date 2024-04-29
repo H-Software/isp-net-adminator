@@ -725,8 +725,7 @@ class objekt extends adminator
                         $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                         return $output;
                     }
-                    else
-                    {
+
                         //prvne stavajici data docasne ulozime 
                         $pole2 .= "<b>akce: uprava objektu; </b><br>";
                             
@@ -798,8 +797,6 @@ class objekt extends adminator
                                     ->table('objekty')
                                     ->where('id_komplu', $this->update_id)
                                     ->update($obj_upd);
-
-                    } // konec else jestli je opravneni
                     
                     if($affected > 0){
                         $vysledek_write = 1; 
@@ -846,24 +843,7 @@ class objekt extends adminator
                     if( (strlen($this->form_mac) > 0) ){
                         $obj_add["mac"] = $this->form_mac;
                     }
-                        
-                                                                                        
-                    // foreach ($obj_add as $key => $val) {
-                    //     if($obj_add_i > 1){
-                    //         $sql_rows .= ", ";
-                    //         $sql_values .= ", ";
-                    //     }
-                    //     $sql_rows .= $this->conn_mysql->real_escape_string($key);
-                        
-                    //     $sql_values .= "'".$this->conn_mysql->real_escape_string($val)."'";
-                        
-                    //     $obj_add_i++;	
-                    // }
-
-                    // $sql = "INSERT INTO objekty (".$sql_rows.") VALUES (".$sql_values.") ";
-                        
-                    // $res = pg_query($sql);
-                    
+                                     
                     $this->insertedId = DB::connection('pgsql')
                                     ->table('objekty')
                                     ->insertGetId($obj_add, "id_komplu");
