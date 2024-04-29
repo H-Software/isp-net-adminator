@@ -119,6 +119,19 @@ services:
     volumes:
       - mssql-data:/var/opt/mssql
 
+  routeros-6-48:
+    image: evilfreelancer/docker-routeros:6.48.3
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+      - /dev/kvm
+    ports:
+      - "12222:22"
+      - "12223:23"
+      - "18728:8728"
+      - "18729:8729"
 
   # otel-collector:
   #   deploy:
