@@ -79,7 +79,7 @@ $mk->conn = $rosClient;
 
 $rs = $mk->find_obj($ip); 
 
-if ($fs === false){
+if ($rs === false){
   echo "mk_rh_restriction.php: ERROR: find_obj failed!<br>\n";
   $mk->zamek_unlock();
   exit;
