@@ -246,10 +246,10 @@ class mk_synchro_qos
  {
 
   //1. zjistit routery co jedou pres pozadovany reinhard
-  $rs_routers = mysql_query("SELECT id, parent_router, nazev, ip_adresa FROM router_list WHERE id > 1 ORDER BY id");
-  $num_rs_routers = mysql_num_rows($rs_routers);
+  $rs_routers = $this->conn_mysql->query("SELECT id, parent_router, nazev, ip_adresa FROM router_list WHERE id > 1 ORDER BY id");
+  $num_rs_routers = $rs_routers->num_rows;
 
-  while($data_routers = mysql_fetch_array($rs_routers))
+  while($data_routers = $rs_routers->fetch_array())
   {
    $id_routeru = $data_routers["id"];
    $ip_adresa = $data_routers["ip_adresa"];
@@ -279,10 +279,10 @@ class mk_synchro_qos
   $sql = "SELECT id, jmeno FROM nod_list WHERE router_id IN (".$sql_where.") ORDER BY id";
   //print $sql."\n";
 
-  $rs_nods = mysql_query($sql);
-  $num_rs_nods = mysql_num_rows($rs_nods);
+  $rs_nods = $this->conn_mysql->query($sql);
+  $num_rs_nods = $rs_nods->num_rows;
 
-  while($data_nods = mysql_fetch_array($rs_nods))
+  while($data_nods = $rs_nods->fetch_array())
   { $nods[] = $data_nods["id"]; }
 
   //3. zjistit lidi
