@@ -116,6 +116,9 @@ class mk_net_n_sikana
     echo "mk_net_n_sikana\\find_obj: Error: No nodes found! (for routers: " . $sql_where. ")<br>\n";
     return false;
   }
+  else{
+    echo "mk_net_n_sikana\\find_obj: Info: Found " . $num_rs_nods . " nodes(s)! (for routers: " . $sql_where. ")<br>\n";
+  }
 
   while($data_nods = $rs_nods->fetch_array())
   { $nods[] = $data_nods["id"]; }
