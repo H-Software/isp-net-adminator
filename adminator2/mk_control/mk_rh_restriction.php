@@ -64,6 +64,7 @@ $rosConfig = new Config([
 
 try {
   $rosClient = new Client($rosConfig);
+  echo "mk_rh_restriction.php: Connection to router was established.\n";
 } catch (Exception $exception) {
   die("Error! Couldn't connect to router!\n" . $exception->getMessage());
 }
