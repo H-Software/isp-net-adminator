@@ -277,9 +277,6 @@ class Aglobal
                 
                     
     function test_router_for_monitoring($router_id){
-    
-	// autoloaded, probably :)
-	// require_once("include/routeros.class.php");
 		
 	$ret_array = array();
         
