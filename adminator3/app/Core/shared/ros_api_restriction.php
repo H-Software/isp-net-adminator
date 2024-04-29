@@ -141,7 +141,7 @@ class mk_net_n_sikana
   $this->rs_objects = pg_query($sql_obj);
   if($this->rs_objects === false){
     echo "mk_net_n_sikana\\find_obj: Error: Pg_query failed! <br>\n";
-    echo preg_last_error();
+    echo pg_last_error() . "<br>\n";
     return false;
   }
 
