@@ -69,7 +69,7 @@ class mk_net_n_sikana
     $num_rs_routers = $rs_routers->num_rows;
 
     if($num_rs_routers < 1){
-      echo "mk_net_n_sikana\find_obj: query failed: no router found! <br>\n";
+      echo "mk_net_n_sikana\\find_obj: query failed: no router found! <br>\n";
       return false;
     }
 
@@ -81,11 +81,11 @@ class mk_net_n_sikana
     }
 
     if (count($routers) < 1){
-      echo "mk_net_n_sikana\find_obj: Error: no downstream/connected router found! <br>\n";
+      echo "mk_net_n_sikana\\find_obj: Error: no downstream/connected router found! <br>\n";
       return false;
     }
     else{
-      echo "mk_net_n_sikana\find_obj: INFO: found " . count($routers) . "routers<br>\n";
+      echo "mk_net_n_sikana\\find_obj: INFO: found " . count($routers) . " router(s)<br>\n";
     }
 
     //2. zjistit nody
@@ -132,13 +132,19 @@ class mk_net_n_sikana
 	       (
 	        objekty.dov_net = 'n'::bpchar
 	        OR
-		objekty.sikana_status ~~ '%a%'::text
+		      objekty.sikana_status ~~ '%a%'::text
 	       )
 	      )
 	      ORDER BY id_komplu";
   //print $sql_obj."\n";
 
   $this->rs_objects = pg_query($sql_obj);
+  if($this->rs_objects === false){
+    echo "mk_net_n_sikana\\find_obj: Error: Pg_query failed! <br>\n";
+    echo preg_last_error();
+    return false;
+  }
+
   $num_rs_objects = pg_num_rows($this->rs_objects);
 
   while( $data = pg_fetch_array($this->rs_objects))

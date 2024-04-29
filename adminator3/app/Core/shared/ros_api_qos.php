@@ -83,10 +83,11 @@ class mk_synchro_qos
  var $controlled_router_id; //ID ovladaneho routeru
  
  
- function __construct($conn_mysql)
+ function __construct($conn_mysql, $rosClient)
  {
     $this->conn_mysql = $conn_mysql;
-    $this->rosClient = $this->conn;
+    $this->rosClient = $rosClient;
+    $this->conn = $rosClient;
 
     //vytvorit pole pro garanty
     $q = $this->conn_mysql->query("SELECT id_tarifu, zkratka_tarifu, speed_dwn, speed_upl
@@ -121,7 +122,7 @@ class mk_synchro_qos
 
     //zjistit verzi ROSu
     $resourceQuery = (new Query('/system/resource/print'));
-    $response = $this->rosClient->query($resourceQuery)->read();    
+    $response = $this->rosClient->query($resourceQuery)->read();
     $this->ros_version = $response[0]['version'];
 
     if($this->debug >= 1 ){ echo " ros version: " . $this->ros_version . "<br>\n"; }

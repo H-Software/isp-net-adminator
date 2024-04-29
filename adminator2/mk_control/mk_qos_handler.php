@@ -67,10 +67,11 @@ try {
   exit(1);
 }
 
-$mk_qos=new mk_synchro_qos($conn_mysql);
+$mk_qos=new mk_synchro_qos($conn_mysql, $rosClient);
 
 $mk_qos->debug = $debug;
-$mk_qos->conn = $rosClient;
+
+$mk_qos->find_version();
 
 $rs = $mk_qos->set_wanted_values($ip); //nastaveni IP a ID routeru do globalnich promennych
 if( $rs === false ) {
@@ -88,8 +89,6 @@ $mk_qos->speed_mp_dwn="10240000";
 $mk_qos->speed_mp_upl="5120000";
 
 $mk_qos->chain=$chain;
-
-$mk_qos->find_version();
 
 $mk_qos->find_obj($ip);
 //$mk_qos->find_obj("10.128.0.3");
