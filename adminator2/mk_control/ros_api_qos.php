@@ -78,8 +78,10 @@ class mk_synchro_qos
  var $controlled_router_id; //ID ovladaneho routeru
  
  
- function __construct()
+ function __construct($conn_mysql)
  {
+    $this->conn_mysql = $conn_mysql;
+    
     //vytvorit pole pro garanty
     $q = $this->conn_mysql->query("SELECT id_tarifu, zkratka_tarifu, speed_dwn, speed_upl
 			FROM tarify_int 

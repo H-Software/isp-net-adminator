@@ -66,11 +66,10 @@ try {
   die("mk_qos_handler.php: Error! Couldn't connect to router!\n" . $exception->getMessage() . "<br>\n");
 }
 
-$mk_qos=new mk_synchro_qos();
+$mk_qos=new mk_synchro_qos($conn_mysql);
 
 $mk_qos->debug = $debug;
 $mk_qos->conn = $rosClient;
-$mk->conn_mysql = $conn_mysql;
 
 $mk_qos->set_wanted_values($ip); //nastaveni IP a ID routeru do globalnich promennych
 
