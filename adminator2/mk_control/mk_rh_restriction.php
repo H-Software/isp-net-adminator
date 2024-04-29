@@ -1,14 +1,14 @@
 <?php
 
+require __DIR__ . '/vendor/autoload.php';
+
 echo "mk_rh_restriction.php start \n";
 
 error_reporting(E_ERROR | E_PARSE | E_COMPILE_ERROR);
 
-require_once("/var/www/html/htdocs.ssl/adminator2/include/routeros.class.php");
+require_once(__DIR__ . "/include/config.php");
 
-require_once("/var/www/html/htdocs.ssl/adminator2/include/config.php");
-
-require_once("/var/www/html/htdocs.ssl/adminator2/mk_control/ros_api_restriction.php");
+require_once(__DIR__ . "/mk_control/ros_api_restriction.php");
 
 //
 //input variables
