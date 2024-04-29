@@ -9,6 +9,10 @@
 // !
 // !
 
+use RouterOS\Config;
+use RouterOS\Client;
+use RouterOS\Query;
+
 class mk_net_n_sikana
 {
  var $conn_mysql;
@@ -16,7 +20,7 @@ class mk_net_n_sikana
  var $conn;
  
  var $rosClient;
- 
+
  var $debug = 0; //uroven nebo on/off stav debug výpisů
  
  var $objects_net_n = array(); //pole s objekty, ktere maji NetN
