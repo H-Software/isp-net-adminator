@@ -70,6 +70,7 @@ $mk_qos=new mk_synchro_qos();
 
 $mk_qos->debug = $debug;
 $mk_qos->conn = $rosClient;
+$mk->conn_mysql = $conn_mysql;
 
 $mk_qos->set_wanted_values($ip); //nastaveni IP a ID routeru do globalnich promennych
 

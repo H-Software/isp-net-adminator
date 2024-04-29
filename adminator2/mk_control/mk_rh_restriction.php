@@ -66,7 +66,6 @@ try {
 }
 
 $resourceQuery = (new Query('/system/resource/print'));
-
 $response = $rosClient->query($resourceQuery)->read();
 echo "mk_rh_restriction.php: INFO: version of RouterOS: " . var_export($response[0]['version'], true) . "<br>\n";
 
