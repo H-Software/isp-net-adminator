@@ -73,6 +73,7 @@ echo "mk_rh_restriction.php: INFO: version of RouterOS: " . var_export($response
 
 $mk->debug = $debug;
 $mk->conn = $rosClient;
+$mk->rosClient = $rosClient;
 
 $rs = $mk->find_obj($ip); 
 
