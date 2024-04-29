@@ -71,7 +71,11 @@ $mk_qos=new mk_synchro_qos($conn_mysql);
 $mk_qos->debug = $debug;
 $mk_qos->conn = $rosClient;
 
-$mk_qos->set_wanted_values($ip); //nastaveni IP a ID routeru do globalnich promennych
+$rs = $mk_qos->set_wanted_values($ip); //nastaveni IP a ID routeru do globalnich promennych
+if( $rs === false ) {
+  echo "mk_qos_handler.php: Error! Router not found in database<br>\n";
+  exit(2);
+}
 
 $mk_qos->element_name_dwn=$element_name_dwn;
 $mk_qos->element_name_upl=$element_name_upl;

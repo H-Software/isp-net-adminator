@@ -102,8 +102,13 @@ class mk_synchro_qos
 
     //ID zjistime z adminatora
     $rs = $this->conn_mysql->query("SELECT id FROM router_list WHERE ip_adresa = '$ip'");
-    $this->controlled_router_id = mysql_result($rs, 0);
- 
+    $rs->data_seek(0);
+    list($this->controlled_router_id) = $rs->fetch_row();
+
+    if(!isset($this->controlled_router_id)){
+      return false;
+    }
+    
  } //end of function set_wanted_values
  
  function find_version() {
