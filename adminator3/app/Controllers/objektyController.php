@@ -132,6 +132,9 @@ class objektyController extends adminatorController {
         $objekt->dns_find = $dns_find;
         $objekt->ip_find = $ip_find;
 
+        $csrf_html = $this->generateCsrfToken($request, $response, true);
+        $objekt->csrf_html = $csrf_html[0];
+
         list($output, $errors, $exportLink) = $objekt->listGetBodyContent();
 
         if(strlen($errors) > 0){
@@ -157,8 +160,10 @@ class objektyController extends adminatorController {
         $this->header($request, $response, $this->adminator);
         
         $objekt = new \App\Core\objekt($this->container);
-        $objekt->mod_objektu = intval($_POST["mod_objektu"]);
         $objekt->csrf_html = $this->generateCsrfToken($request, $response, true);
+        $objekt->adminator = $this->adminator;
+        
+        $objekt->mod_objektu = intval($_POST["mod_objektu"]);
 
         // $objekt->dns_find = $dns_find;
         // $objekt->ip_find = $ip_find;

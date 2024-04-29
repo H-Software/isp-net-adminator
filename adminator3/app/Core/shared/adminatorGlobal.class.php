@@ -186,43 +186,43 @@ class Aglobal
 		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
-    public static function pg_last_inserted_id($con, $table, $logger = ''){ 
+    // public static function pg_last_inserted_id($con, $table, $logger = ''){ 
          
-         //make the initial query 
-         $sql = "SELECT * FROM " . $table; 
-         //execute 
-         $ret = pg_query($con, $sql); 
-         //get the field name 
-         $campoId = pg_field_name($ret, 0); 
+    //      //make the initial query 
+    //      $sql = "SELECT * FROM " . $table; 
+    //      //execute 
+    //      $ret = pg_query($con, $sql); 
+    //      //get the field name 
+    //      $campoId = pg_field_name($ret, 0); 
          
-         //change the query, using currval() 
-         $sql = "SELECT currval('".$table."_".$campoId."_seq')"; 
+    //      //change the query, using currval() 
+    //      $sql = "SELECT currval('".$table."_".$campoId."_seq')"; 
          
-         //exec 
-         $retorno =pg_query($con, $sql); 
+    //      //exec 
+    //      $retorno =pg_query($con, $sql); 
          
-		 if(!$retorno){
-			if(is_object($logger))
-				$logger->info("Aglobal\pg_last_inserted_id: pg_query failed! sql: " . var_export($sql, true));
+	// 	 if(!$retorno){
+	// 		if(is_object($logger))
+	// 			$logger->info("Aglobal\pg_last_inserted_id: pg_query failed! sql: " . var_export($sql, true));
 
-			return false;
-		 }
+	// 		return false;
+	// 	 }
 
-         if(pg_num_rows($ret)>0){ 
-             //array 
-             $s_dados = pg_fetch_all($retorno); 
+    //      if(pg_num_rows($ret)>0){ 
+    //          //array 
+    //          $s_dados = pg_fetch_all($retorno); 
              
-             //vars 
-             extract($s_dados[0],EXTR_OVERWRITE); 
+    //          //vars 
+    //          extract($s_dados[0],EXTR_OVERWRITE); 
              
-             return $currval; 
+    //          return $currval; 
              
-         } else { 
-             //case error, returns false 
-             return false; 
-         }
+    //      } else { 
+    //          //case error, returns false 
+    //          return false; 
+    //      }
          
-    } //end of function pg_last_inserted_id
+    // } //end of function pg_last_inserted_id
     
     public static function create_link_to_owner($owner_id) {
     
