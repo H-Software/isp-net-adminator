@@ -723,7 +723,7 @@ class objekt extends adminator
                     if ($this->adminator->checkLevel(29, false) === false)
                     {
                         $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
-                        exit;
+                        return $output;
                     }
                     else
                     {
@@ -1196,7 +1196,7 @@ class objekt extends adminator
                     if ($this->adminator->checkLevel(29, false) === false)
                     {
                         $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
-                        exit;
+                        return $output;
                     }
                     
                     // rezim upravy
