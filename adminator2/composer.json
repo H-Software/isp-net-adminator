@@ -5,6 +5,7 @@
         "respect/validation": "^2.2",
         "formr/formr": "^1.4",
         "illuminate/database": "^8.83",
-        "phpmailer/phpmailer": "^6.9.1"
+        "phpmailer/phpmailer": "^6.9.1",
+        "evilfreelancer/routeros-api-php": "1.5.2"
     }
 }
