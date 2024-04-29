@@ -68,7 +68,7 @@ class mk_net_n_sikana
     $num_rs_routers = $rs_routers->num_rows;
 
     if($num_rs_routers < 1){
-      echo "mk_net_n_sikana\find_obj failed: no router found!";
+      echo "mk_net_n_sikana\find_obj: query failed: no router found! <br>\n";
       return false;
     }
 
@@ -80,6 +80,11 @@ class mk_net_n_sikana
     }
 
     //2. zjistit nody
+    if (count($routers) < 1){
+      echo "mk_net_n_sikana\find_obj: Error: no downstream/connected router found! <br>\n";
+      return false;
+    }
+
     $i=0;
     foreach ($routers as $key => $id_routeru) {
 
