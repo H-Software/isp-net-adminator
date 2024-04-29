@@ -222,9 +222,12 @@ class mk_net_n_sikana
   else
   { $system_items = $this->objects_sikana; }
   
-  $this->getall = $this->conn->getall(array("ip", "firewall", "address-list") );
+  $query = (new Query('/ip/firewall/address-list/print'));
+  $responseFwAddrList = $this->rosClient->query($query)->read();
 
-  foreach ($this->getall as $key => $value) {
+  echo "<pre>" . var_export( $responseFwAddrList, true ) ."</pre>\n";
+
+  foreach ($responseFwAddrList as $key => $value) {
   
    if( $this->getall["$key"]["list"] == "$mod")
    {
