@@ -4,6 +4,10 @@ require __DIR__ . '/../vendor/autoload.php';
 
 echo "mk_rh_restriction.php start \n";
 
+use RouterOS\Config;
+use RouterOS\Client;
+use RouterOS\Query;
+
 error_reporting(E_ERROR | E_PARSE | E_COMPILE_ERROR);
 
 require_once(__DIR__ . "/../include/main.function.shared.php");
@@ -49,12 +53,25 @@ $mk->zamek_status(); //pokud ON, tak exit :)
 
 $mk->zamek_lock();
 
-$conn = RouterOS::connect($ip, $login_user, $login_pass) or die("couldn't connect to router\n");
+// $conn = RouterOS::connect($ip, $login_user, $login_pass) or die("couldn't connect to router\n");
 
-$mk=new mk_net_n_sikana;
+$rosConfig = new Config([
+  'host' => $ip,
+  'user' => $login_user,
+  'pass' => $login_pass,
+  'port' => 18728,
+]);
 
-$mk->debug=$debug;
-$mk->conn=$conn;
+try {
+  $rosClient = new Client($rosConfig);
+} catch (Exception $exception) {
+  die("Error! Couldn't connect to router!\n" . $exception->getMessage());
+}
+
+// $mk=new mk_net_n_sikana;
+
+$mk->debug = $debug;
+$mk->conn = $rosClient;
 
 $mk->find_obj($ip); 
 

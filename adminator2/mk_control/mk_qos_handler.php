@@ -2,6 +2,10 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use RouterOS\Config;
+use RouterOS\Client;
+use RouterOS\Query;
+
 //spravne
 error_reporting(E_ERROR | E_PARSE | E_COMPILE_ERROR);
 

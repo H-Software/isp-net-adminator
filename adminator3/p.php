@@ -8,15 +8,19 @@ require __DIR__ . '/vendor/autoload.php';
 
 // echo $v->rehash("pass");
 
-$rosConfig = new \RouterOS\Config([
+use RouterOS\Config;
+use RouterOS\Client;
+use RouterOS\Query;
+
+$rosConfig = new Config([
     'host' => '192.168.1.213',
     'user' => 'admin',
     'pass' => '',
     'port' => 18728,
 ]);
-$rosClient = new \RouterOS\Client($rosConfig);
+$rosClient = new Client($rosConfig);
 
-$query = (new \RouterOS\Query('/ip/address/print'));
+$query = (new Query('/ip/address/print'));
 
 // Send query and read response from RouterOS
 $response = $rosClient->query($query)->read();
