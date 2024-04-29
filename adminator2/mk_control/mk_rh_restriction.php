@@ -89,4 +89,4 @@ $mk->detect_diff_and_repaid("sikana");
 
 $mk->zamek_unlock();
 
-echo "mk_rh_restriction.php finish \n";
+echo "mk_rh_restriction.php finish <br>\n";

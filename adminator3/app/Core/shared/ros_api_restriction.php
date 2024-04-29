@@ -259,7 +259,7 @@ class mk_net_n_sikana
   //print_r($system_items);
     
  if( ((count($this->arr_diff_exc) == 0) and (count($this->arr_diff_mis) == 0) and (count($this->wrong_items) == 0) ) )
- { echo "  $mod: records OK \n"; }
+ { echo "  $mod: records OK <br>\n"; }
  else
  {
      foreach($this->arr_diff_exc as $key => $value)
