@@ -13,12 +13,17 @@
 // !
 // !
 
+use RouterOS\Config;
+use RouterOS\Client;
+use RouterOS\Query;
+
 class mk_synchro_qos
 {
   var $conn_mysql;
 
  var $conn;			//objekt pripojeni k API na MK
- 
+ var $rosClient; // dtto
+
  var $debug; 			//uroven nebo on/off stav debug výpisů
  
  var $ros_version;		//verze ROSu v cilovem zarizeni
@@ -81,7 +86,8 @@ class mk_synchro_qos
  function __construct($conn_mysql)
  {
     $this->conn_mysql = $conn_mysql;
-    
+    $this->rosClient = $this->conn;
+
     //vytvorit pole pro garanty
     $q = $this->conn_mysql->query("SELECT id_tarifu, zkratka_tarifu, speed_dwn, speed_upl
 			FROM tarify_int 
@@ -114,11 +120,11 @@ class mk_synchro_qos
  function find_version() {
 
     //zjistit verzi ROSu
-    $getall_resource = $this->conn->getall(array("system", "resource") );
-    
-    $this->ros_version = $getall_resource["version"];
+    $resourceQuery = (new Query('/system/resource/print'));
+    $response = $this->rosClient->query($resourceQuery)->read();    
+    $this->ros_version = $response[0]['version'];
 
-    if($this->debug >= 1 ){ echo " ros version: ".$this->ros_version."\n"; }
+    if($this->debug >= 1 ){ echo " ros version: " . $this->ros_version . "<br>\n"; }
      
  } //end of function find_version
  
