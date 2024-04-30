@@ -265,9 +265,12 @@ class mk_synchro_qos
    }
   }
 
-  if($num_rs_routers < 1){
-    echo "ros_api_qos\\find_obj: query failed: no router found! <br>\n";
+  if (count($routers) < 1){
+    echo "ros_api_qos\\find_obj: Error: no downstream/connected router(s) found! <br>\n";
     return false;
+  }
+  else{
+    echo "ros_api_qos\\find_obj: INFO: found " . count($routers) . " router(s)<br>\n";
   }
 
   //debug  print_r($routers_ip);

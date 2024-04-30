@@ -87,11 +87,11 @@ class mk_net_n_sikana
     }
 
     if (count($routers) < 1){
-      echo "mk_net_n_sikana\\find_obj: Error: no downstream/connected router found! <br>\n";
+      echo "ros_api_restriction\\find_obj: Error: no downstream/connected router(s) found! <br>\n";
       return false;
     }
     else{
-      echo "mk_net_n_sikana\\find_obj: INFO: found " . count($routers) . " router(s)<br>\n";
+      echo "ros_api_restriction\\find_obj: INFO: found " . count($routers) . " router(s)<br>\n";
     }
 
     //2. zjistit nody
