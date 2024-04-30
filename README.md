@@ -55,6 +55,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 #### slim twig
 - https://packagist.org/packages/slim/twig-view
 #### slim auth
+- https://github.com/darkalchemy/Slim-Auth
 - https://discourse.slimframework.com/t/slim-framework-3-skeleton-application-has-authentication-mvc-construction/2088
 - https://github.com/HavenShen/slim-born/tree/v1.0.6
 #### slim-auth w zend/laminas

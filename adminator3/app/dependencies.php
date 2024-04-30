@@ -1,5 +1,10 @@
 <?php
 
+use Slim\Views\Twig;
+use Slim\Csrf\Guard;
+
+use Slim\Exception\NotFoundException;
+
 use czhujer\Slim\Auth\ServiceProvider\SlimAuthProvider;
 use czhujer\Slim\Auth\Middleware\Authorization;
 use czhujer\Slim\Auth\Handlers\RedirectHandler;
@@ -11,6 +16,10 @@ use Laminas\Session\Config\SessionConfig;
 use Laminas\Session\SessionManager;
 
 $container = $app->getContainer();
+
+$container->set('settings', function () {
+    return require __DIR__ . '/settings.php';
+});
 
 // init sessions
 $sessionConfig = new SessionConfig();
@@ -25,9 +34,9 @@ $sessionManager->rememberMe();
 $storage = new SessionStorage();
 // $sessionManager->setStorage($storage);
 
-$container["authStorage"] = $storage;
+// $container["authStorage"] = $storage;
 
-$container['logger'] = function($c) {
+$container->set('logger', function($c) {
     
     $settings = $c->get('settings')['logger'];
 
@@ -58,7 +67,7 @@ $container['logger'] = function($c) {
 
     $logger->pushHandler($fingersCrossed);
     return $logger;
-};
+});
 
 // https://www.slimframework.com/docs/v3/handlers/error.html
 // $container['errorHandler'] = function ($container) {
@@ -69,132 +78,130 @@ $container['logger'] = function($c) {
 //     return $container['errorHandler'];
 // };
 
-$container['connMysql'] = $conn_mysql;
+$container->set('connMysql', $conn_mysql);
 
-$container['connPgsql'] = $db_ok2;
+$container->set('connPgsql', $db_ok2);
 
-$container['smarty'] = $smarty;
+$container->set('smarty', $smarty);
 
-$container['db'] = function ($container) use ($capsule) {
+$container->set('db', function ($container) use ($capsule) {
     return $capsule;
-};
+});
 
-$container['validator'] = function ($container) {
+$container->set('validator', function ($container) {
 	return new App\Validation\Validator;
-};
+});
 
-$container['flash'] = function($container) {
+$container->set('flash', function($container) {
 	return new \Slim\Flash\Messages;
-};
+});
 
-$container['view'] = function ($container) {
-	$view = new \Slim\Views\Twig(__DIR__ . '/../resources/views/', [
+$container->set('view', function ($container) {
+	$view = Twig::create(__DIR__ . '/../resources/views/', [
 		'cache' => false,
 	]);
 
-	$view->addExtension(new \Slim\Views\TwigExtension(
-		$container->router,
-		$container->request->getUri()
-	));
+	// $view->addExtension(new \Slim\Views\TwigExtension(
+	// 	$container->router,
+	// 	$container->request->getUri()
+	// ));
 
 	$view->getEnvironment()->addGlobal('flash', $container->flash);
 
 	return $view;
-};
+});
 
 // $container['validator'] = function ($container) {
 // 	return new App\Validation\Validator;
 // };
 
-$acl = new Acl();
+// $acl = new Acl();
 
-$container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
-$container['acl']    = $acl;
+// $container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
+// $container['acl']    = $acl;
 
-$adapterOptions = [];
-$adapter = new czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter(
-    NULL,  //LDAP config or NULL if not using LDAP
-    $em, //an Doctrine's Entity Manager instance 
-    "App\Entity\UserRole",    //Role class
-    "role", //Role's class role attribute
-    "user", //Role's class user attribute (the @ManyToOne attrib)
-    "App\Entity\User", //User class
-    "username", //User name attribute
-    "passwordHash", //password (as a hash) attribute
-    czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
-    10, //a hash factor
-    PASSWORD_DEFAULT, //hash algorithm
-    $adapterOptions //if needed
-    );
+// $adapterOptions = [];
+// $adapter = new czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter(
+//     NULL,  //LDAP config or NULL if not using LDAP
+//     $em, //an Doctrine's Entity Manager instance 
+//     "App\Entity\UserRole",    //Role class
+//     "role", //Role's class role attribute
+//     "user", //Role's class user attribute (the @ManyToOne attrib)
+//     "App\Entity\User", //User class
+//     "username", //User name attribute
+//     "passwordHash", //password (as a hash) attribute
+//     czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
+//     10, //a hash factor
+//     PASSWORD_DEFAULT, //hash algorithm
+//     $adapterOptions //if needed
+//     );
 
-$container["authAdapter"] = $adapter;
+// $container["authAdapter"] = $adapter;
 
-$slimAuthProvider = new SlimAuthProvider();
-$slimAuthProvider->register($container);
+// $slimAuthProvider = new SlimAuthProvider();
+// $slimAuthProvider->register($container);
 
-$app->add(
-        new Authorization( 
-                $container["auth"], 
-                $acl, 
-                new RedirectHandler("/auth/notAuthenticated", "/auth/notAuthorized") 
-            )
-        );
+// $app->add(
+//         new Authorization( 
+//                 $container["auth"], 
+//                 $acl, 
+//                 new RedirectHandler("/auth/notAuthenticated", "/auth/notAuthorized") 
+//             )
+//         );
 
-$container['csrf'] = function($container) {
-	return new \Slim\Csrf\Guard;
-};
+$container->set('csrf', function() use($responseFactory) {
+	return new Guard($responseFactory);
+});
 
-$app->add(new \App\Middleware\CsrfViewMiddleware($container));
+$app->add('csrf');
 
-$app->add($container->csrf);
-
-$container['AuthController'] = function($container) {
+$container->set('AuthController', function($container) {
 	return new \App\Controllers\Auth\AuthController($container);
-};
+});
 
-$container['PasswordController'] = function($container) {
-	return new \App\Controllers\Auth\PasswordController($container);
-};
+// $container['PasswordController'] = function($container) {
+// 	return new \App\Controllers\Auth\PasswordController($container);
+// };
 
-$container['HomeController'] = function($container) {
+$container->set('HomeController', function($container) {
 	return new \App\Controllers\HomeController($container);
-};
+});
 
-$container['aboutController'] = function ($c) {
-    return new \App\Controllers\aboutController($c);
-};
+// $container['aboutController'] = function ($c) {
+//     return new \App\Controllers\aboutController($c);
+// };
 
-$container['adminController'] = function ($c) {
-    return new \App\Controllers\adminController($c);
-};
+// $container['adminController'] = function ($c) {
+//     return new \App\Controllers\adminController($c);
+// };
 
-$container['archivZmenController'] = function ($c) {
-    return new \App\Controllers\archivZmenController($c);
-};
+// $container['archivZmenController'] = function ($c) {
+//     return new \App\Controllers\archivZmenController($c);
+// };
 
-$container['othersController'] = function ($c) {
-    return new \App\Controllers\othersController($c);
-};
+// $container['othersController'] = function ($c) {
+//     return new \App\Controllers\othersController($c);
+// };
 
-$container['objektyController'] = function ($c) {
-    return new \App\Controllers\objektyController($c);
-};
+// $container['objektyController'] = function ($c) {
+//     return new \App\Controllers\objektyController($c);
+// };
 
-$container['partnerController'] = function ($c) {
-    return new \App\Controllers\partnerController($c);
-};
+// $container['partnerController'] = function ($c) {
+//     return new \App\Controllers\partnerController($c);
+// };
 
-$container['platbyController'] = function ($c) {
-    return new \App\Controllers\platbyController($c);
-};
+// $container['platbyController'] = function ($c) {
+//     return new \App\Controllers\platbyController($c);
+// };
 
-$container['topologyController'] = function ($container) {
-    return new \App\Controllers\topologyController($container);
-};
+// $container['topologyController'] = function ($container) {
+//     return new \App\Controllers\topologyController($container);
+// };
 
-$container['vlastniciController'] = function ($c) {
-    return new \App\Controllers\vlastniciController($c);
-};
-$container['workController'] = function ($c) {
-    return new \App\Controllers\workController($c);
-};
+// $container['vlastniciController'] = function ($c) {
+//     return new \App\Controllers\vlastniciController($c);
+// };
+// $container['workController'] = function ($c) {
+//     return new \App\Controllers\workController($c);
+// };

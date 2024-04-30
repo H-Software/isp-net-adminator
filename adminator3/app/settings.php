@@ -1,7 +1,6 @@
 <?php
 
-$config = [
-    'settings' => [
+$settings = [
         'displayErrorDetails' => true, // solved by custom handler
         'addContentLengthHeader' => false,
 
@@ -10,5 +9,6 @@ $config = [
             // 'level' => Monolog\Logger::DEBUG,
             // 'path' => __DIR__ . '/../logs/app.log',
         ],
-    ],
 ];
+
+return $settings;

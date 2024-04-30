@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Exception\NotFoundException;
 
 class HomeController extends adminatorController {
     var $conn_mysql;
@@ -24,7 +25,7 @@ class HomeController extends adminatorController {
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	}
     
-    public function home(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    public function home(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {            
         $this->logger->info("homeController\home called");
 
