@@ -55,6 +55,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 #### slim twig
 - https://packagist.org/packages/slim/twig-view
 #### slim auth
+- https://github.com/darkalchemy/Slim-Auth
 - https://discourse.slimframework.com/t/slim-framework-3-skeleton-application-has-authentication-mvc-construction/2088
 - https://github.com/HavenShen/slim-born/tree/v1.0.6
 #### slim-auth w zend/laminas
@@ -88,6 +89,11 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/EvilFreelancer/docker-routeros?tab=readme-ov-file
 - https://github.com/ayufan/rosapi-php
   - originally used class
+
+### Opentelemetry
+- https://packagist.org/packages/open-telemetry/opentelemetry-auto-slim
+- https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/Slim
+- https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Logs/Monolog
 
 ## Author
 Patrik Majer

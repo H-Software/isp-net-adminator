@@ -1,9 +1,7 @@
 <?php
 
-use czhujer\Slim\Auth\ServiceProvider\SlimAuthProvider;
-use czhujer\Slim\Auth\Middleware\Authorization;
-use czhujer\Slim\Auth\Handlers\RedirectHandler;
-// use czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter;
+use Slim\Views\Twig;
+use Slim\Csrf\Guard;
 
 use Laminas\Authentication\Storage\Session as SessionStorage;
 
@@ -11,6 +9,10 @@ use Laminas\Session\Config\SessionConfig;
 use Laminas\Session\SessionManager;
 
 $container = $app->getContainer();
+
+$container->set('settings', function () {
+    return require __DIR__ . '/settings.php';
+});
 
 // init sessions
 $sessionConfig = new SessionConfig();
@@ -25,14 +27,13 @@ $sessionManager->rememberMe();
 $storage = new SessionStorage();
 // $sessionManager->setStorage($storage);
 
-$container["authStorage"] = $storage;
+// $container["authStorage"] = $storage;
 
-$container['logger'] = function($c) {
-    
-    $settings = $c->get('settings')['logger'];
+$container->set('logger', function($c) { 
+    $settings = $c->get('settings');
 
-    $logger = new Monolog\Logger($settings['name']);
-    $filename = __DIR__ . '/../../a3-logs/app.log';
+    $logger = new Monolog\Logger($settings['logger']['name']);
+    $filename = $settings['logger']['path'];
 
     // the default date format is "Y-m-d\TH:i:sP"
     // $dateFormat = "Y n j, g:i a";
@@ -58,143 +59,136 @@ $container['logger'] = function($c) {
 
     $logger->pushHandler($fingersCrossed);
     return $logger;
-};
+});
 
-// https://www.slimframework.com/docs/v3/handlers/error.html
-// $container['errorHandler'] = function ($container) {
-//     return new App\Handlers\Error($container['logger']);
-// };
 
-// $container['phpErrorHandler'] = function ($container) {
-//     return $container['errorHandler'];
-// };
+$container->set('connMysql', $conn_mysql);
 
-$container['connMysql'] = $conn_mysql;
+$container->set('connPgsql', $db_ok2);
 
-$container['connPgsql'] = $db_ok2;
+$container->set('smarty', $smarty);
 
-$container['smarty'] = $smarty;
-
-$container['db'] = function ($container) use ($capsule) {
+$container->set('db', function ($container) use ($capsule) {
     return $capsule;
-};
+});
 
-$container['validator'] = function ($container) {
+$container->set('validator', function ($container) {
 	return new App\Validation\Validator;
-};
+});
 
-$container['flash'] = function($container) {
+$container->set('flash', function($container) {
 	return new \Slim\Flash\Messages;
-};
+});
 
-$container['view'] = function ($container) {
-	$view = new \Slim\Views\Twig(__DIR__ . '/../resources/views/', [
+$container->set('view', function ($c) {
+    $settings = $c->get('settings');
+
+	$view = Twig::create($settings['twig']['path'], [
 		'cache' => false,
 	]);
 
-	$view->addExtension(new \Slim\Views\TwigExtension(
-		$container->router,
-		$container->request->getUri()
-	));
+	// $view->addExtension(new \Slim\Views\TwigExtension(
+	// 	$container->router,
+	// 	$container->request->getUri()
+	// ));
 
-	$view->getEnvironment()->addGlobal('flash', $container->flash);
+	$view->getEnvironment()->addGlobal('flash', $c->flash);
 
 	return $view;
-};
+});
 
-// $container['validator'] = function ($container) {
-// 	return new App\Validation\Validator;
+$container->set('validator', function ($container) {
+	return new App\Validation\Validator;
+});
+
+// $acl = new Acl();
+
+// $container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
+// $container['acl']    = $acl;
+
+// $adapterOptions = [];
+// $adapter = new czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter(
+//     NULL,  //LDAP config or NULL if not using LDAP
+//     $em, //an Doctrine's Entity Manager instance 
+//     "App\Entity\UserRole",    //Role class
+//     "role", //Role's class role attribute
+//     "user", //Role's class user attribute (the @ManyToOne attrib)
+//     "App\Entity\User", //User class
+//     "username", //User name attribute
+//     "passwordHash", //password (as a hash) attribute
+//     czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
+//     10, //a hash factor
+//     PASSWORD_DEFAULT, //hash algorithm
+//     $adapterOptions //if needed
+//     );
+
+// $container["authAdapter"] = $adapter;
+
+// $slimAuthProvider = new SlimAuthProvider();
+// $slimAuthProvider->register($container);
+
+// $app->add(
+//         new Authorization( 
+//                 $container["auth"], 
+//                 $acl, 
+//                 new RedirectHandler("/auth/notAuthenticated", "/auth/notAuthorized") 
+//             )
+//         );
+
+$container->set('csrf', function() use($responseFactory) {
+	return new Guard($responseFactory);
+});
+
+$app->add('csrf');
+
+$container->set('AuthController', function($container) {
+	return new \App\Controllers\Auth\AuthController($container);
+});
+
+// $container['PasswordController'] = function($container) {
+// 	return new \App\Controllers\Auth\PasswordController($container);
 // };
 
-$acl = new Acl();
-
-$container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
-$container['acl']    = $acl;
-
-$adapterOptions = [];
-$adapter = new czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter(
-    NULL,  //LDAP config or NULL if not using LDAP
-    $em, //an Doctrine's Entity Manager instance 
-    "App\Entity\UserRole",    //Role class
-    "role", //Role's class role attribute
-    "user", //Role's class user attribute (the @ManyToOne attrib)
-    "App\Entity\User", //User class
-    "username", //User name attribute
-    "passwordHash", //password (as a hash) attribute
-    czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
-    10, //a hash factor
-    PASSWORD_DEFAULT, //hash algorithm
-    $adapterOptions //if needed
-    );
-
-$container["authAdapter"] = $adapter;
-
-$slimAuthProvider = new SlimAuthProvider();
-$slimAuthProvider->register($container);
-
-$app->add(
-        new Authorization( 
-                $container["auth"], 
-                $acl, 
-                new RedirectHandler("/auth/notAuthenticated", "/auth/notAuthorized") 
-            )
-        );
-
-$container['csrf'] = function($container) {
-	return new \Slim\Csrf\Guard;
-};
-
-$app->add(new \App\Middleware\CsrfViewMiddleware($container));
-
-$app->add($container->csrf);
-
-$container['AuthController'] = function($container) {
-	return new \App\Controllers\Auth\AuthController($container);
-};
-
-$container['PasswordController'] = function($container) {
-	return new \App\Controllers\Auth\PasswordController($container);
-};
-
-$container['HomeController'] = function($container) {
+$container->set('HomeController', function($container) {
 	return new \App\Controllers\HomeController($container);
-};
+});
 
-$container['aboutController'] = function ($c) {
+$container->set('aboutController', function ($c) {
     return new \App\Controllers\aboutController($c);
-};
+});
 
-$container['adminController'] = function ($c) {
+$container->set('adminController', function ($c) {
     return new \App\Controllers\adminController($c);
-};
+});
 
-$container['archivZmenController'] = function ($c) {
+$container->set('archivZmenController', function ($c) {
     return new \App\Controllers\archivZmenController($c);
-};
+});
 
-$container['othersController'] = function ($c) {
+$container->set('othersController', function ($c) {
     return new \App\Controllers\othersController($c);
-};
+});
 
-$container['objektyController'] = function ($c) {
+$container->set('objektyController', function ($c) {
     return new \App\Controllers\objektyController($c);
-};
+});
 
-$container['partnerController'] = function ($c) {
+$container->set('partnerController', function ($c) {
     return new \App\Controllers\partnerController($c);
-};
+});
 
-$container['platbyController'] = function ($c) {
+$container->set('platbyController', function ($c) {
     return new \App\Controllers\platbyController($c);
-};
+});
 
-$container['topologyController'] = function ($container) {
+$container->set('topologyController', function ($container) {
     return new \App\Controllers\topologyController($container);
-};
+});
 
-$container['vlastniciController'] = function ($c) {
+$container->set('vlastniciController', function ($c) {
     return new \App\Controllers\vlastniciController($c);
-};
-$container['workController'] = function ($c) {
+});
+
+$container->set('workController', function ($c) {
     return new \App\Controllers\workController($c);
-};
+});

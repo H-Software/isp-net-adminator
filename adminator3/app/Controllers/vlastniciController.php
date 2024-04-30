@@ -17,11 +17,10 @@ class vlastniciController extends adminatorController {
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container; // for adminator class
-		$this->conn_mysql = $container->connMysql;
-        $this->smarty = $container->smarty;
-
-        $this->logger = $container->logger;
+        $this->container = $container;
+        $this->conn_mysql = $this->container->get('connMysql');
+        $this->smarty = $this->container->get('smarty');
+        $this->logger = $this->container->get('logger');
         $this->logger->info("vlastniciController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);

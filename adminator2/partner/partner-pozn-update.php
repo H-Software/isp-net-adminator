@@ -65,14 +65,14 @@ require ($cesta."include/charset.php");
       $dotaz_sql = "SELECT *,DATE_FORMAT(datum_vlozeni, '%d.%m.%Y %H:%i:%s') ".
 		"as datum_vlozeni2 FROM partner_klienti WHERE ( id > 0 ".$filtr." ) ORDER BY id DESC ".$dotaz_limit;
    
-      $listovani = new c_listing_partner($conn_mysql, "./partner-pozn-update.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+      // $listovani = new c_listing_partner($conn_mysql, "./partner-pozn-update.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 
-      if(($list == "")||($list == "1")){ $bude_chybet = 0; }
-      else{ $bude_chybet = (($list-1) * $listovani->interval); }
+      // if(($list == "")||($list == "1")){ $bude_chybet = 0; }
+      // else{ $bude_chybet = (($list-1) * $listovani->interval); }
 
-      $interval = $listovani->interval;
+      // $interval = $listovani->interval;
    
-      $dotaz_limit = " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+      // $dotaz_limit = " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
       
     global $update, $dotaz_limit;
@@ -80,11 +80,16 @@ require ($cesta."include/charset.php");
     $update = true;
    
     // $filtr_akceptovano = "2";
-    $listovani->listInterval();
+    // $listovani->listInterval();
     
-    require("/var/www/html/virtuals/partner/vypis-inc.php");
+    echo "<div style=\"padding-left: 40px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
+    <span style=\"border-bottom: 1px solid grey; \" >Změna poznámky technika</span>
+    </div>";
+
+    echo "<div> zde nejaky vypis zadosti</div>";
+    // require("/var/www/html/virtuals/partner/vypis-inc.php");
    
-    $listovani->listInterval();
+    // $listovani->listInterval();
     
    } //konec if update_id > 0
    else

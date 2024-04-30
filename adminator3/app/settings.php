@@ -1,14 +1,14 @@
 <?php
 
-$config = [
-    'settings' => [
-        'displayErrorDetails' => true, // solved by custom handler
-        'addContentLengthHeader' => false,
-
+$settings = [
         'logger' => [
             'name' => 'slim-app',
             // 'level' => Monolog\Logger::DEBUG,
-            // 'path' => __DIR__ . '/../logs/app.log',
+            'path' => __DIR__ . '/../../a3-logs/app.log',
         ],
-    ],
+        'twig' => [
+            'path' => __DIR__ . '/../resources/views/',
+        ],
 ];
+
+return $settings;

@@ -70,7 +70,7 @@ class adminatorController extends Controller {
             $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
 
-        $auth_identity = $this->container->auth->getIdentity();
+        // $auth_identity = $this->container->auth->getIdentity();
         // $this->logger->info("adminatorController\\check_level getIdentity: ".var_export( $auth_identity['username'], true));
 
         if ($page_level_id == 0){

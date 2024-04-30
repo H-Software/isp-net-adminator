@@ -1,98 +1,101 @@
 <?php
 
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteCollectorProxy;
+
+use App\Controllers\HomeController;
+
 // routes
 
-use \Slim\Http\Request as SlimHttpRequest;
-use \Slim\Http\Response as SlimHttpResponse;
+$app->get('/', function ($req, $res, $args) {
+    return $res->withStatus(302)->withHeader('Location', '/home');
+});
 
-$app->group('/auth', function() use ($app) {
-	$app->get('/notAuthenticated', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) use ($app) {
+$app->group('/auth', function(RouteCollectorProxy $group) use ($app) {
+	// $group->get('/notAuthenticated', function ($request, $response, $args) use ($app) {
       
-        $app->getContainer()["flash"]->addMessage('info', "You are not authenticated");
+    //     $app->getContainer()["flash"]->addMessage('info', "You are not authenticated");
 
-        $route = $app->getContainer()->get('router')->getNamedRoute('login');
-		//redirect:
-		// $route = \Slim\App::object()->getContainer()->get('router')->getNamedRoute('login');
-		$route->setArgument("message" , "You are not authenticated" );
-		$route->run($request, $response );
-	})->setName("notAuthenticated");
+    //     $route = $app->getContainer()->get('router')->getNamedRoute('login');
+	// 	//redirect:
+	// 	// $route = \Slim\App::object()->getContainer()->get('router')->getNamedRoute('login');
+	// 	$route->setArgument("message" , "You are not authenticated" );
+	// 	$route->run($request, $response );
+	// })->setName("notAuthenticated");
 	
-	$app->get('/notAuthorized', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) {
-		return $response
-		->withStatus(403)
-		->withHeader('Content-Type', 'text/html;charset=utf-8')
-		->write('You are not authorized to this resource.');
-	})->setName("notAuthorized");
+// 	$app->get('/notAuthorized', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) {
+// 		return $response
+// 		->withStatus(403)
+// 		->withHeader('Content-Type', 'text/html;charset=utf-8')
+// 		->write('You are not authorized to this resource.');
+// 	})->setName("notAuthorized");
 
-    $app->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('login');
+//     $app->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('login');
 
-    $app->get('/signout', AuthController::class . ':signout')->setName('logout');
+//     $app->get('/signout', AuthController::class . ':signout')->setName('logout');
 });
 
-$app->group('', function () use ($app) {
-    $this->get('/', function ($req, $res, $args) {
-        return $res->withStatus(302)->withHeader('Location', '/home');
-    });
-
-    $app->get('/auth/password/change', PasswordController::class . ':getChangePassword')->setName('auth.password.change');
-	$app->post('/auth/password/change', PasswordController::class . ':postChangePassword');
+$app->group('', function (RouteCollectorProxy $group) use ($app) {
+    // $app->get('/auth/password/change', PasswordController::class . ':getChangePassword')->setName('auth.password.change');
+	// $app->post('/auth/password/change', PasswordController::class . ':postChangePassword');
 });
 
-$app->group('', function () {
-    $this->map(['GET', 'POST'],'/home', HomeController::class . ':home')->setName('home');
+$app->group('', function(RouteCollectorProxy $group) {
+    $group->map(['GET', 'POST'],'/home', HomeController::class . ':home')->setName('home');
 
-    $this->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
-    $this->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
-    $this->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
+    $group->map(['GET', 'POST'],'/about', \aboutController::class . ':about');
+    $group->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
+    $group->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
     
-    $this->map(['GET', 'POST'],'/admin', \adminController::class . ':admin');
-    $this->map(['GET', 'POST'],'/admin/admin', \adminController::class . ':adminMain');
-    $this->map(['GET', 'POST'],'/admin/level-list', \adminController::class . ':adminLevelList');
-    $this->map(['GET', 'POST'],'/admin/level-list/json', \adminController::class . ':adminLevelListJson');
-    $this->map(['GET', 'POST'],'/admin/level-action', \adminController::class . ':adminLevelAction');
+    $group->map(['GET', 'POST'],'/admin', \adminController::class . ':admin');
+    $group->map(['GET', 'POST'],'/admin/admin', \adminController::class . ':adminMain');
+    $group->map(['GET', 'POST'],'/admin/level-list', \adminController::class . ':adminLevelList');
+    $group->map(['GET', 'POST'],'/admin/level-list/json', \adminController::class . ':adminLevelListJson');
+    $group->map(['GET', 'POST'],'/admin/level-action', \adminController::class . ':adminLevelAction');
 
-    $this->map(['GET', 'POST'],'/admin/tarify', \adminController::class . ':adminTarify');
-    $this->map(['GET', 'POST'],'/admin/tarify/action', \adminController::class . ':adminTarifyAction');
+    $group->map(['GET', 'POST'],'/admin/tarify', \adminController::class . ':adminTarify');
+    $group->map(['GET', 'POST'],'/admin/tarify/action', \adminController::class . ':adminTarifyAction');
 
-    $this->map(['GET', 'POST'],'/archiv-zmen', \archivZmenController::class . ':archivZmenList');
-    $this->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');
-    $this->map(['GET', 'POST'],'/archiv-zmen/work', \archivZmenController::class . ':archivZmenWork');
-    $this->map(['GET', 'POST'],'/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
+    $group->map(['GET', 'POST'],'/archiv-zmen', \archivZmenController::class . ':archivZmenList');
+    $group->map(['GET', 'POST'],'/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');
+    $group->map(['GET', 'POST'],'/archiv-zmen/work', \archivZmenController::class . ':archivZmenWork');
+    $group->map(['GET', 'POST'],'/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
 
-    $this->map(['GET', 'POST'],'/others', \othersController::class . ':others');
-    $this->map(['GET', 'POST'],'/others/board', \othersController::class . ':board');
+    $group->map(['GET', 'POST'],'/others', \othersController::class . ':others');
+    $group->map(['GET', 'POST'],'/others/board', \othersController::class . ':board');
 
-    $this->map(['GET', 'POST'],'/objekty/cat', \objektyController::class . ':cat');
-    $this->map(['GET', 'POST'],'/objekty', \objektyController::class . ':objekty');
-    $this->map(['GET', 'POST'],'/objekty/action', \objektyController::class . ':objektyAction');
-    $this->map(['GET', 'POST'],'/objekty/stb', \objektyController::class . ':stb');
-    $this->map(['GET', 'POST'],'/objekty/stb/action', \objektyController::class . ':stbAction');
+    $group->map(['GET', 'POST'],'/objekty/cat', \objektyController::class . ':cat');
+    $group->map(['GET', 'POST'],'/objekty', \objektyController::class . ':objekty');
+    $group->map(['GET', 'POST'],'/objekty/action', \objektyController::class . ':objektyAction');
+    $group->map(['GET', 'POST'],'/objekty/stb', \objektyController::class . ':stb');
+    $group->map(['GET', 'POST'],'/objekty/stb/action', \objektyController::class . ':stbAction');
 
-    $this->map(['GET', 'POST'],'/partner', \partnerController::class . ':cat');
-    $this->map(['GET', 'POST'],'/partner/cat', \partnerController::class . ':cat');
-    $this->map(['GET', 'POST'],'/partner/order', \partnerController::class . ':orderCat');
-    $this->map(['GET', 'POST'],'/partner/order/cat', \partnerController::class . ':orderCat');
+    $group->map(['GET', 'POST'],'/partner', \partnerController::class . ':cat');
+    $group->map(['GET', 'POST'],'/partner/cat', \partnerController::class . ':cat');
+    $group->map(['GET', 'POST'],'/partner/order', \partnerController::class . ':orderCat');
+    $group->map(['GET', 'POST'],'/partner/order/cat', \partnerController::class . ':orderCat');
 
-    $this->map(['GET', 'POST'],'/partner/order/add', \partnerController::class . ':orderAdd');
-    $this->map(['GET', 'POST'],'/partner/order/list', \partnerController::class . ':orderList');
-    $this->map(['GET', 'POST'],'/partner/order/accept', \partnerController::class . ':orderAccept');
-    $this->map(['GET', 'POST'],'/partner/order/change-status', \partnerController::class . ':orderChangeStatus');
-    $this->map(['GET', 'POST'],'/partner/order/change-desc', \partnerController::class . ':orderChangeDesc');
+    $group->map(['GET', 'POST'],'/partner/order/add', \partnerController::class . ':orderAdd');
+    $group->map(['GET', 'POST'],'/partner/order/list', \partnerController::class . ':orderList');
+    $group->map(['GET', 'POST'],'/partner/order/accept', \partnerController::class . ':orderAccept');
+    $group->map(['GET', 'POST'],'/partner/order/change-status', \partnerController::class . ':orderChangeStatus');
+    $group->map(['GET', 'POST'],'/partner/order/change-desc', \partnerController::class . ':orderChangeDesc');
 
-    $this->map(['GET', 'POST'],'/platby/cat', \platbyController::class . ':cat');
-    $this->map(['GET', 'POST'],'/platby/fn', \platbyController::class . ':fn');
-    $this->map(['GET', 'POST'],'/platby/fn-kontrola-omezeni', \platbyController::class . ':fnKontrolaOmezeni');
+    $group->map(['GET', 'POST'],'/platby/cat', \platbyController::class . ':cat');
+    $group->map(['GET', 'POST'],'/platby/fn', \platbyController::class . ':fn');
+    $group->map(['GET', 'POST'],'/platby/fn-kontrola-omezeni', \platbyController::class . ':fnKontrolaOmezeni');
 
-    $this->map(['GET', 'POST'],'/vlastnici/cat', \vlastniciController::class . ':cat');
-    $this->map(['GET', 'POST'],'/vlastnici2', \vlastniciController::class . ':vlastnici2');
-    $this->map(['GET', 'POST'],'/vlastnici2/fakturacni-skupiny', \vlastniciController::class . ':fakturacniSkupiny');
-    $this->map(['GET', 'POST'],'/vlastnici2/fakturacni-skupiny/action', \vlastniciController::class . ':fakturacniSkupinyAction');
+    $group->map(['GET', 'POST'],'/vlastnici/cat', \vlastniciController::class . ':cat');
+    $group->map(['GET', 'POST'],'/vlastnici2', \vlastniciController::class . ':vlastnici2');
+    $group->map(['GET', 'POST'],'/vlastnici2/fakturacni-skupiny', \vlastniciController::class . ':fakturacniSkupiny');
+    $group->map(['GET', 'POST'],'/vlastnici2/fakturacni-skupiny/action', \vlastniciController::class . ':fakturacniSkupinyAction');
 
-    $this->map(['GET', 'POST'],'/topology', \topologyController::class . ':nodeList');
-    $this->map(['GET', 'POST'],'/topology/node-list', \topologyController::class . ':nodeList');
-    $this->map(['GET', 'POST'],'/topology/router-list', \topologyController::class . ':routerList');
+    $group->map(['GET', 'POST'],'/topology', \topologyController::class . ':nodeList');
+    $group->map(['GET', 'POST'],'/topology/node-list', \topologyController::class . ':nodeList');
+    $group->map(['GET', 'POST'],'/topology/router-list', \topologyController::class . ':routerList');
 
-    $this->map(['GET', 'POST'],'/work', \workController::class . ':work');
+    $group->map(['GET', 'POST'],'/work', \workController::class . ':work');
 
 });
 
