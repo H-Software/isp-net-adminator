@@ -5,7 +5,6 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Exception\NotFoundException;
 
 class HomeController extends adminatorController {
     var $conn_mysql;
@@ -13,8 +12,6 @@ class HomeController extends adminatorController {
     var $logger;
 
     var $adminator;
-
-    protected $container;
 
     public function __construct(ContainerInterface $container)
     {
@@ -24,19 +21,19 @@ class HomeController extends adminatorController {
         $this->logger = $this->container->get('logger');
         $this->logger->info("homeController\__construct called");
 
-        // $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 	}
     
     public function home(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {            
         $this->logger->info("homeController\home called");
 
-        // $this->checkLevel(38, $this->adminator);
+        $this->checkLevel(38, $this->adminator);
 
-        // if ($request->isPost()) {
-        //     $data = $request->getParsedBody();
-        //     $this->logger->debug("homeController\home post data: ".var_export($data, true));    
-        // }
+        if ($request->getMethod() == "POST") {
+            $data = $request->getParsedBody();
+            $this->logger->debug("homeController\home post data: ".var_export($data, true));    
+        }
 
         $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
 
@@ -49,23 +46,23 @@ class HomeController extends adminatorController {
         //echo "<pre>" . var_export($flashMessages, true) ."</pre>";
 
         //vlozeni prihlasovaci historie
-        // $this->adminator->list_logged_users_history($this->conn_mysql, $this->smarty);
+        $this->adminator->list_logged_users_history($this->conn_mysql, $this->smarty);
         
         //informace z modulu neuhrazené faktury
         //
-        // $neuhr_faktury_pole = $this->adminator->show_stats_faktury_neuhr();
-        // $this->logger->info("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
+        $neuhr_faktury_pole = $this->adminator->show_stats_faktury_neuhr();
+        $this->logger->info("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
 
-        // $this->smarty->assign("d",$neuhr_faktury_pole[0]);
+        $this->smarty->assign("d",$neuhr_faktury_pole[0]);
 
-        // $this->smarty->assign("count_total", $neuhr_faktury_pole[0]);
-        // $this->smarty->assign("count_ignored", $neuhr_faktury_pole[1]);
-        // $this->smarty->assign("count_unknown", $neuhr_faktury_pole[2]);
-        // $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
+        $this->smarty->assign("count_total", $neuhr_faktury_pole[0]);
+        $this->smarty->assign("count_ignored", $neuhr_faktury_pole[1]);
+        $this->smarty->assign("count_unknown", $neuhr_faktury_pole[2]);
+        $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
 
-        // $this->opravy_a_zavady();
+        $this->opravy_a_zavady();
 
-        // $this->board();
+        $this->board();
 
         $this->logger->info("homeController\home: end of rendering");
         $this->smarty->display('home.tpl');

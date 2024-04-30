@@ -13,9 +13,9 @@ class aboutController extends adminatorController {
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-		$this->conn_mysql = $this->container->connMysql;
-        $this->smarty = $this->container->smarty;
-        $this->logger = $this->container->logger;
+        $this->conn_mysql = $this->container->get('connMysql');
+        $this->smarty = $this->container->get('smarty');
+        $this->logger = $this->container->get('logger');
         $this->logger->info("aboutController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
