@@ -269,7 +269,7 @@ class mk_synchro_qos
     echo "ros_api_qos\\find_obj: query failed: no router found! <br>\n";
     return false;
   }
-  
+
   //debug  print_r($routers_ip);
   
   //2. zjistit nody
@@ -286,7 +286,7 @@ class mk_synchro_qos
   }
 
   $sql = "SELECT id, jmeno FROM nod_list WHERE router_id IN (".$sql_where.") ORDER BY id";
-  //print $sql."\n";
+  print "DEBUG: SQL DUMP: " . $sql."<br>\n";
 
   $rs_nods = $this->conn_mysql->query($sql);
   $num_rs_nods = $rs_nods->num_rows;
