@@ -93,7 +93,7 @@ $mk_qos->chain=$chain;
 $rs = $mk_qos->find_obj($ip);
 if( $rs === false ) {
   echo "mk_qos_handler.php: ERROR: find_obj failed!<br>\n";
-  exit;
+  exit(3);
 }
 
 //$mk_qos->find_obj("10.128.0.3");
