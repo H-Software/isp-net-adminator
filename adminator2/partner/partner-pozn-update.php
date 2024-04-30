@@ -82,6 +82,11 @@ require ($cesta."include/charset.php");
     // $filtr_akceptovano = "2";
     // $listovani->listInterval();
     
+    echo "<div style=\"padding-left: 40px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
+    <span style=\"border-bottom: 1px solid grey; \" >Změna poznámky technika</span>
+    </div>";
+
+    echo "<div> zde nejaky vypis zadosti</div>";
     // require("/var/www/html/virtuals/partner/vypis-inc.php");
    
     // $listovani->listInterval();
