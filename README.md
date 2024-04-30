@@ -89,6 +89,11 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/ayufan/rosapi-php
   - originally used class
 
+### Opentelemetry
+- https://packagist.org/packages/open-telemetry/opentelemetry-auto-slim
+- https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/Slim
+- https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Logs/Monolog
+
 ## Author
 Patrik Majer
 
