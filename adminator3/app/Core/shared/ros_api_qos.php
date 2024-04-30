@@ -13,12 +13,17 @@
 // !
 // !
 
+use RouterOS\Config;
+use RouterOS\Client;
+use RouterOS\Query;
+
 class mk_synchro_qos
 {
   var $conn_mysql;
 
  var $conn;			//objekt pripojeni k API na MK
- 
+ var $rosClient; // dtto
+
  var $debug; 			//uroven nebo on/off stav debug výpisů
  
  var $ros_version;		//verze ROSu v cilovem zarizeni
@@ -78,10 +83,12 @@ class mk_synchro_qos
  var $controlled_router_id; //ID ovladaneho routeru
  
  
- function __construct($conn_mysql)
+ function __construct($conn_mysql, $rosClient)
  {
     $this->conn_mysql = $conn_mysql;
-    
+    $this->rosClient = $rosClient;
+    $this->conn = $rosClient;
+
     //vytvorit pole pro garanty
     $q = $this->conn_mysql->query("SELECT id_tarifu, zkratka_tarifu, speed_dwn, speed_upl
 			FROM tarify_int 
@@ -102,18 +109,23 @@ class mk_synchro_qos
 
     //ID zjistime z adminatora
     $rs = $this->conn_mysql->query("SELECT id FROM router_list WHERE ip_adresa = '$ip'");
-    $this->controlled_router_id = mysql_result($rs, 0);
- 
+    $rs->data_seek(0);
+    list($this->controlled_router_id) = $rs->fetch_row();
+
+    if(!isset($this->controlled_router_id)){
+      return false;
+    }
+    
  } //end of function set_wanted_values
  
  function find_version() {
 
     //zjistit verzi ROSu
-    $getall_resource = $this->conn->getall(array("system", "resource") );
-    
-    $this->ros_version = $getall_resource["version"];
+    $resourceQuery = (new Query('/system/resource/print'));
+    $response = $this->rosClient->query($resourceQuery)->read();
+    $this->ros_version = $response[0]['version'];
 
-    if($this->debug >= 1 ){ echo " ros version: ".$this->ros_version."\n"; }
+    if($this->debug >= 1 ){ echo " ros version: " . $this->ros_version . "<br>\n"; }
      
  } //end of function find_version
  
@@ -162,29 +174,31 @@ class mk_synchro_qos
  function find_root_router($id_routeru, $ip_adresa_routeru)
  {
     //zjitime si parent router
-    $rs = mysql_query("SELECT parent_router FROM router_list WHERE id = '$id_routeru'");
-    $parent_router_id = mysql_result($rs, 0);
+    $rs = $this->conn_mysql->query("SELECT parent_router FROM router_list WHERE id = '$id_routeru'");
+    $rs->data_seek(0);
+    list($parent_router_id) = $rs->fetch_row();
 
     //zjistime IP-cko parent routeru
-    $rs2 = mysql_query("SELECT ip_adresa FROM router_list WHERE id = '$parent_router_id'");
-    $parent_router_ip = mysql_result($rs2, 0);
+    $rs2 = $this->conn_mysql->query("SELECT ip_adresa FROM router_list WHERE id = '$parent_router_id'");
+    $rs2->data_seek(0);
+    list($parent_router_ip) = $rs2->fetch_row();
 
     //DEBUG //print " id_r: ".$id_routeru.", p_r: ".$parent_router.", p_r_ip: ".$parent_router_ip." \n";
     
     if( ( ($this->controlled_router_id == $this->reinhard_3_id) or
 	  ($this->controlled_router_id == $this->reinhard_5_id)
-	) )
+    ) )
     {
-	if( $parent_router_ip == $ip_adresa_routeru )
-	{ //dosahlo se pozadovaneho reinhard, tj. zaznam CHCEME
-    	    return true;
-	}
-	elseif( ($parent_router_id == $this->reinhard_wifi_id) )
-	{ //dosahlo se rh-wifi (zacatku stromu), a nechceme routery krz rh-wifi, tj. zaznam NECHCEME
-	
-	}
-	else
-	{
+        if( $parent_router_ip == $ip_adresa_routeru )
+        { //dosahlo se pozadovaneho reinhard, tj. zaznam CHCEME
+                return true;
+        }
+        elseif( ($parent_router_id == $this->reinhard_wifi_id) )
+        { //dosahlo se rh-wifi (zacatku stromu), a nechceme routery krz rh-wifi, tj. zaznam NECHCEME
+        
+        }
+        else
+        {
           if( $this->find_root_router($parent_router_id, $ip_adresa_routeru) == true)
           { return true; }
         }
@@ -192,40 +206,42 @@ class mk_synchro_qos
     elseif( $this->controlled_router_id == $this->reinhard_wifi_id )
     {
     
-	if( ($parent_router_id == $this->reinhard_3_id) 
-		or ($parent_router_id == $this->reinhard_fiber_id) 
-		or ($parent_router_id == $this->reinhard_5_id) 
-	)
-	{
-	    //ve stromu jsme se dostali k rh-3 nebo rh-fiber (ty jsou bohuzel taky "pod" rh-wifi), tj. zaznam NECHCEM
-	}
-	elseif( ($id_routeru == $this->reinhard_3_id) 
-		    or ($id_routeru == $this->reinhard_fiber_id) 
-		    or ($id_routeru == $this->reinhard_5_id) 
-	)
-	{
-	
-	}
-	elseif( $parent_router_ip == $ip_adresa_routeru )
-	{
-	    return true;
-	}
-	elseif($parent_router_id == $this->reinhard_wifi_id)
-	{
-	    //dostali jsme se na vrchol, tj. rh-wifi, tj. zaznam CHCEME
-	}
-	else
-	{  //ani jedno z predchozich, tj. rekurze
-          if( $this->find_root_router($parent_router_id, $ip_adresa_routeru) == true)
-          { return true; }	
-	}
+        if( ($parent_router_id == $this->reinhard_3_id) 
+          or ($parent_router_id == $this->reinhard_fiber_id) 
+          or ($parent_router_id == $this->reinhard_5_id) 
+        )
+        {
+            //ve stromu jsme se dostali k rh-3 nebo rh-fiber (ty jsou bohuzel taky "pod" rh-wifi), tj. zaznam NECHCEM
+        }
+        elseif( ($id_routeru == $this->reinhard_3_id) 
+              or ($id_routeru == $this->reinhard_fiber_id) 
+              or ($id_routeru == $this->reinhard_5_id) 
+        )
+        {
+        
+        }
+        elseif( $parent_router_ip == $ip_adresa_routeru )
+        {
+            return true;
+        }
+        elseif($parent_router_id == $this->reinhard_wifi_id)
+        {
+            //dostali jsme se na vrchol, tj. rh-wifi, tj. zaznam CHCEME
+        }
+        else
+        {  //ani jedno z predchozich, tj. rekurze
+                if( $this->find_root_router($parent_router_id, $ip_adresa_routeru) == true)
+                { return true; }	
+        }
     }
     else
     {
-	//error, tento router neumim ..
-	echo "ERROR: pro tento router neumim najit parent router ... ".
-	    "(debug: controlled router: id: ".$this->controlled_router_id.
-	    ", ip: ".$this->controlled_router_ip.") \n";
+        //error, tento router neumim ..
+        echo "ERROR: pro tento router neumim najit parent router ... ".
+            "(debug: controlled router: id: ".$this->controlled_router_id.
+            ", ip: ".$this->controlled_router_ip.") <br>\n";
+
+        return false;
     }
         
  } //end of function find_root_router
@@ -233,11 +249,14 @@ class mk_synchro_qos
  function find_obj($ip)
  {
 
+  $routers = array();
+  $routers_ip = array();
+  
   //1. zjistit routery co jedou pres pozadovany reinhard
-  $rs_routers = mysql_query("SELECT id, parent_router, nazev, ip_adresa FROM router_list WHERE id > 1 ORDER BY id");
-  $num_rs_routers = mysql_num_rows($rs_routers);
+  $rs_routers = $this->conn_mysql->query("SELECT id, parent_router, nazev, ip_adresa FROM router_list WHERE id > 1 ORDER BY id");
+  $num_rs_routers = $rs_routers->num_rows;
 
-  while($data_routers = mysql_fetch_array($rs_routers))
+  while($data_routers = $rs_routers->fetch_array())
   {
    $id_routeru = $data_routers["id"];
    $ip_adresa = $data_routers["ip_adresa"];
@@ -247,6 +266,14 @@ class mk_synchro_qos
     $routers[] = $id_routeru; 
     $routers_ip[] = $ip_adresa;
    }
+  }
+
+  if (count($routers) < 1){
+    echo "ros_api_qos\\find_obj: Error: no downstream/connected router(s) found! <br>\n";
+    return false;
+  }
+  else{
+    echo "ros_api_qos\\find_obj: INFO: found " . count($routers) . " router(s)<br>\n";
   }
 
   //debug  print_r($routers_ip);
@@ -265,12 +292,12 @@ class mk_synchro_qos
   }
 
   $sql = "SELECT id, jmeno FROM nod_list WHERE router_id IN (".$sql_where.") ORDER BY id";
-  //print $sql."\n";
+  print "DEBUG: SQL DUMP: " . $sql."<br>\n";
 
-  $rs_nods = mysql_query($sql);
-  $num_rs_nods = mysql_num_rows($rs_nods);
+  $rs_nods = $this->conn_mysql->query($sql);
+  $num_rs_nods = $rs_nods->num_rows;
 
-  while($data_nods = mysql_fetch_array($rs_nods))
+  while($data_nods = $rs_nods->fetch_array())
   { $nods[] = $data_nods["id"]; }
 
   //3. zjistit lidi

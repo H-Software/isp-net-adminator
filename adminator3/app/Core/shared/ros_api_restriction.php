@@ -9,12 +9,18 @@
 // !
 // !
 
+use RouterOS\Config;
+use RouterOS\Client;
+use RouterOS\Query;
+
 class mk_net_n_sikana
 {
  var $conn_mysql;
 
  var $conn;
  
+ var $rosClient;
+
  var $debug = 0; //uroven nebo on/off stav debug výpisů
  
  var $objects_net_n = array(); //pole s objekty, ktere maji NetN
@@ -69,7 +75,7 @@ class mk_net_n_sikana
     $num_rs_routers = $rs_routers->num_rows;
 
     if($num_rs_routers < 1){
-      echo "mk_net_n_sikana\find_obj: query failed: no router found! <br>\n";
+      echo "mk_net_n_sikana\\find_obj: query failed: no router found! <br>\n";
       return false;
     }
 
@@ -81,11 +87,11 @@ class mk_net_n_sikana
     }
 
     if (count($routers) < 1){
-      echo "mk_net_n_sikana\find_obj: Error: no downstream/connected router found! <br>\n";
+      echo "ros_api_restriction\\find_obj: Error: no downstream/connected router(s) found! <br>\n";
       return false;
     }
     else{
-      echo "mk_net_n_sikana\find_obj: INFO: found " . count($routers) . "routers<br>\n";
+      echo "ros_api_restriction\\find_obj: INFO: found " . count($routers) . " router(s)<br>\n";
     }
 
     //2. zjistit nody
@@ -105,7 +111,20 @@ class mk_net_n_sikana
   //print $sql."\n";
 
   $rs_nods = $this->conn_mysql->query($sql);
+  if($rs_nods === false){
+    echo "mk_net_n_sikana\\find_obj: Error: nod_list query failed! <br>\n";
+    printf("Error message: %s <br>\n", $this->conn_mysql->error);
+    return false;
+  }
+
   $num_rs_nods = $rs_nods->num_rows;
+  if($rs_nods < 1){
+    echo "mk_net_n_sikana\\find_obj: Error: No nodes found! (for routers: " . $sql_where. ")<br>\n";
+    return false;
+  }
+  else{
+    echo "mk_net_n_sikana\\find_obj: Info: Found " . $num_rs_nods . " nodes(s)! (for routers: " . $sql_where. ")<br>\n";
+  }
 
   while($data_nods = $rs_nods->fetch_array())
   { $nods[] = $data_nods["id"]; }
@@ -132,13 +151,19 @@ class mk_net_n_sikana
 	       (
 	        objekty.dov_net = 'n'::bpchar
 	        OR
-		objekty.sikana_status ~~ '%a%'::text
+		      objekty.sikana_status ~~ '%a%'::text
 	       )
 	      )
 	      ORDER BY id_komplu";
   //print $sql_obj."\n";
 
   $this->rs_objects = pg_query($sql_obj);
+  if($this->rs_objects === false){
+    echo "mk_net_n_sikana\\find_obj: Error: Pg_query failed! <br>\n";
+    echo pg_last_error() . "<br>\n";
+    return false;
+  }
+
   $num_rs_objects = pg_num_rows($this->rs_objects);
 
   while( $data = pg_fetch_array($this->rs_objects))
@@ -203,9 +228,12 @@ class mk_net_n_sikana
   else
   { $system_items = $this->objects_sikana; }
   
-  $this->getall = $this->conn->getall(array("ip", "firewall", "address-list") );
+  $query = (new Query('/ip/firewall/address-list/print'));
+  $responseFwAddrList = $this->rosClient->query($query)->read();
 
-  foreach ($this->getall as $key => $value) {
+  echo "<pre>" . var_export( $responseFwAddrList, true ) ."</pre>\n";
+
+  foreach ($responseFwAddrList as $key => $value) {
   
    if( $this->getall["$key"]["list"] == "$mod")
    {
@@ -231,7 +259,7 @@ class mk_net_n_sikana
   //print_r($system_items);
     
  if( ((count($this->arr_diff_exc) == 0) and (count($this->arr_diff_mis) == 0) and (count($this->wrong_items) == 0) ) )
- { echo "  $mod: records OK \n"; }
+ { echo "  $mod: records OK <br>\n"; }
  else
  {
      foreach($this->arr_diff_exc as $key => $value)

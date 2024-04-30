@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . "/../include/main.function.shared.php");
 require_once(__DIR__ . "/../include/config.php");
-require_once(__DIR__ . "/../mk_control/ros_api_qos.php");
+// require_once(__DIR__ . "/../mk_control/ros_api_qos.php");
 
 error_reporting(E_ERROR | E_PARSE | E_COMPILE_ERROR);
 
@@ -63,15 +63,21 @@ try {
   $rosClient = new Client($rosConfig);
   echo "mk_qos_handler.php: Connection to router was established.<br>\n";
 } catch (Exception $exception) {
-  die("mk_qos_handler.php: Error! Couldn't connect to router!\n" . $exception->getMessage() . "<br>\n");
+  echo "mk_qos_handler.php: Error! Couldn't connect to router!\n" . $exception->getMessage() . "<br>\n";
+  exit(1);
 }
 
-$mk_qos=new mk_synchro_qos($conn_mysql);
+$mk_qos=new mk_synchro_qos($conn_mysql, $rosClient);
 
 $mk_qos->debug = $debug;
-$mk_qos->conn = $rosClient;
 
-$mk_qos->set_wanted_values($ip); //nastaveni IP a ID routeru do globalnich promennych
+$mk_qos->find_version();
+
+$rs = $mk_qos->set_wanted_values($ip); //nastaveni IP a ID routeru do globalnich promennych
+if( $rs === false ) {
+  echo "mk_qos_handler.php: Error! Router not found in database<br>\n";
+  exit(2);
+}
 
 $mk_qos->element_name_dwn=$element_name_dwn;
 $mk_qos->element_name_upl=$element_name_upl;
@@ -84,9 +90,12 @@ $mk_qos->speed_mp_upl="5120000";
 
 $mk_qos->chain=$chain;
 
-$mk_qos->find_version();
+$rs = $mk_qos->find_obj($ip);
+if( $rs === false ) {
+  echo "mk_qos_handler.php: ERROR: find_obj failed!<br>\n";
+  exit(3);
+}
 
-$mk_qos->find_obj($ip);
 //$mk_qos->find_obj("10.128.0.3");
 
 $mk_qos->sc_speed_koef=$sc_speed_koef;

@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . "/../include/main.function.shared.php");
 require_once(__DIR__ . "/../include/config.php");
-require_once(__DIR__ . "/../mk_control/ros_api_restriction.php");
+// require_once(__DIR__ . "/../mk_control/ros_api_restriction.php");
 
 error_reporting(E_ERROR | E_PARSE | E_COMPILE_ERROR);
 
@@ -62,7 +62,9 @@ try {
   $rosClient = new Client($rosConfig);
   echo "mk_rh_restriction.php: Connection to router was established.<br>\n";
 } catch (Exception $exception) {
-  die("mk_rh_restriction.php: Error! Couldn't connect to router!\n" . $exception->getMessage() . "<br>\n");
+  echo "mk_rh_restriction.php: Error! Couldn't connect to router!\n" . $exception->getMessage() . "<br>\n";
+  $mk->zamek_unlock();
+  exit(1);
 }
 
 $resourceQuery = (new Query('/system/resource/print'));
@@ -71,6 +73,7 @@ echo "mk_rh_restriction.php: INFO: version of RouterOS: " . var_export($response
 
 $mk->debug = $debug;
 $mk->conn = $rosClient;
+$mk->rosClient = $rosClient;
 
 $rs = $mk->find_obj($ip); 
 
@@ -86,4 +89,4 @@ $mk->detect_diff_and_repaid("sikana");
 
 $mk->zamek_unlock();
 
-echo "mk_rh_restriction.php finish \n";
+echo "mk_rh_restriction.php finish <br>\n";
