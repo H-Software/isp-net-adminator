@@ -90,7 +90,12 @@ $mk_qos->speed_mp_upl="5120000";
 
 $mk_qos->chain=$chain;
 
-$mk_qos->find_obj($ip);
+$rs = $mk_qos->find_obj($ip);
+if( $rs === false ) {
+  echo "mk_qos_handler.php: ERROR: find_obj failed!<br>\n";
+  exit;
+}
+
 //$mk_qos->find_obj("10.128.0.3");
 
 $mk_qos->sc_speed_koef=$sc_speed_koef;

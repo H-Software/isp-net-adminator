@@ -240,6 +240,8 @@ class mk_synchro_qos
         echo "ERROR: pro tento router neumim najit parent router ... ".
             "(debug: controlled router: id: ".$this->controlled_router_id.
             ", ip: ".$this->controlled_router_ip.") \n";
+
+        return false;
     }
         
  } //end of function find_root_router
@@ -263,6 +265,11 @@ class mk_synchro_qos
    }
   }
 
+  if($num_rs_routers < 1){
+    echo "ros_api_qos\\find_obj: query failed: no router found! <br>\n";
+    return false;
+  }
+  
   //debug  print_r($routers_ip);
   
   //2. zjistit nody
