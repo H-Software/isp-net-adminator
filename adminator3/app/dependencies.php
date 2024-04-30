@@ -3,13 +3,6 @@
 use Slim\Views\Twig;
 use Slim\Csrf\Guard;
 
-use Slim\Exception\NotFoundException;
-
-use czhujer\Slim\Auth\ServiceProvider\SlimAuthProvider;
-use czhujer\Slim\Auth\Middleware\Authorization;
-use czhujer\Slim\Auth\Handlers\RedirectHandler;
-// use czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter;
-
 use Laminas\Authentication\Storage\Session as SessionStorage;
 
 use Laminas\Session\Config\SessionConfig;
@@ -36,12 +29,11 @@ $storage = new SessionStorage();
 
 // $container["authStorage"] = $storage;
 
-$container->set('logger', function($c) {
-    
-    $settings = $c->get('settings')['logger'];
+$container->set('logger', function($c) { 
+    $settings = $c->get('settings');
 
-    $logger = new Monolog\Logger($settings['name']);
-    $filename = __DIR__ . '/../../a3-logs/app.log';
+    $logger = new Monolog\Logger($settings['logger']['name']);
+    $filename = $settings['logger']['path'];
 
     // the default date format is "Y-m-d\TH:i:sP"
     // $dateFormat = "Y n j, g:i a";
@@ -69,14 +61,6 @@ $container->set('logger', function($c) {
     return $logger;
 });
 
-// https://www.slimframework.com/docs/v3/handlers/error.html
-// $container['errorHandler'] = function ($container) {
-//     return new App\Handlers\Error($container['logger']);
-// };
-
-// $container['phpErrorHandler'] = function ($container) {
-//     return $container['errorHandler'];
-// };
 
 $container->set('connMysql', $conn_mysql);
 
@@ -96,8 +80,10 @@ $container->set('flash', function($container) {
 	return new \Slim\Flash\Messages;
 });
 
-$container->set('view', function ($container) {
-	$view = Twig::create(__DIR__ . '/../resources/views/', [
+$container->set('view', function ($c) {
+    $settings = $c->get('settings');
+
+	$view = Twig::create($settings['twig']['path'], [
 		'cache' => false,
 	]);
 
@@ -106,14 +92,14 @@ $container->set('view', function ($container) {
 	// 	$container->request->getUri()
 	// ));
 
-	$view->getEnvironment()->addGlobal('flash', $container->flash);
+	$view->getEnvironment()->addGlobal('flash', $c->flash);
 
 	return $view;
 });
 
-// $container['validator'] = function ($container) {
-// 	return new App\Validation\Validator;
-// };
+$container->set('validator', function ($container) {
+	return new App\Validation\Validator;
+});
 
 // $acl = new Acl();
 
@@ -167,41 +153,42 @@ $container->set('HomeController', function($container) {
 	return new \App\Controllers\HomeController($container);
 });
 
-// $container['aboutController'] = function ($c) {
-//     return new \App\Controllers\aboutController($c);
-// };
+$container->set('aboutController', function ($c) {
+    return new \App\Controllers\aboutController($c);
+});
 
-// $container['adminController'] = function ($c) {
-//     return new \App\Controllers\adminController($c);
-// };
+$container->set('adminController', function ($c) {
+    return new \App\Controllers\adminController($c);
+});
 
-// $container['archivZmenController'] = function ($c) {
-//     return new \App\Controllers\archivZmenController($c);
-// };
+$container->set('archivZmenController', function ($c) {
+    return new \App\Controllers\archivZmenController($c);
+});
 
-// $container['othersController'] = function ($c) {
-//     return new \App\Controllers\othersController($c);
-// };
+$container->set('othersController', function ($c) {
+    return new \App\Controllers\othersController($c);
+});
 
-// $container['objektyController'] = function ($c) {
-//     return new \App\Controllers\objektyController($c);
-// };
+$container->set('objektyController', function ($c) {
+    return new \App\Controllers\objektyController($c);
+});
 
-// $container['partnerController'] = function ($c) {
-//     return new \App\Controllers\partnerController($c);
-// };
+$container->set('partnerController', function ($c) {
+    return new \App\Controllers\partnerController($c);
+});
 
-// $container['platbyController'] = function ($c) {
-//     return new \App\Controllers\platbyController($c);
-// };
+$container->set('platbyController', function ($c) {
+    return new \App\Controllers\platbyController($c);
+});
 
-// $container['topologyController'] = function ($container) {
-//     return new \App\Controllers\topologyController($container);
-// };
+$container->set('topologyController', function ($container) {
+    return new \App\Controllers\topologyController($container);
+});
 
-// $container['vlastniciController'] = function ($c) {
-//     return new \App\Controllers\vlastniciController($c);
-// };
-// $container['workController'] = function ($c) {
-//     return new \App\Controllers\workController($c);
-// };
+$container->set('vlastniciController', function ($c) {
+    return new \App\Controllers\vlastniciController($c);
+});
+
+$container->set('workController', function ($c) {
+    return new \App\Controllers\workController($c);
+});

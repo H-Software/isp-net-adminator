@@ -10,6 +10,10 @@ use Slim\Routing\RouteCollectorProxy;
 
 use App\Controllers\HomeController;
 
+$app->get('/', function ($req, $res, $args) {
+    return $res->withStatus(302)->withHeader('Location', '/home');
+});
+
 $app->group('/auth', function(RouteCollectorProxy $group) use ($app) {
 	$group->get('/notAuthenticated', function ($request, $response, $args) use ($app) {
       
@@ -35,14 +39,8 @@ $app->group('/auth', function(RouteCollectorProxy $group) use ($app) {
 });
 
 $app->group('', function (RouteCollectorProxy $group) use ($app) {
-
-
     // $app->get('/auth/password/change', PasswordController::class . ':getChangePassword')->setName('auth.password.change');
 	// $app->post('/auth/password/change', PasswordController::class . ':postChangePassword');
-});
-
-$app->get('/', function ($req, $res, $args) {
-    return $res->withStatus(302)->withHeader('Location', '/home');
 });
 
 $app->group('', function(RouteCollectorProxy $group) {
