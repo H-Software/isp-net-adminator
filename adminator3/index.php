@@ -11,13 +11,10 @@ $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-// use Psr\Http\Message\ResponseInterface as Response;
-// use Psr\Http\Message\ServerRequestInterface as Request;
+
 use Slim\Factory\AppFactory;
 use DI\Container;
 use DI\ContainerBuilder;
-
-// $container = new Container();
 
 $builder = new ContainerBuilder();
 // $builder->addDefinitions(__DIR__ . '/app/container.php');
@@ -36,8 +33,6 @@ $displayErrorDetails = true;
 $logErrors = true;
 $logErrorDetails = false;
 $app->addErrorMiddleware($displayErrorDetails, $logErrors, $logErrorDetails);
-
-require __DIR__ ."/app/bootstrap-doctrine.php";
 
 require "app/dependencies.php";
 
