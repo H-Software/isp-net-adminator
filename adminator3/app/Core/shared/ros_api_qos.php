@@ -174,29 +174,31 @@ class mk_synchro_qos
  function find_root_router($id_routeru, $ip_adresa_routeru)
  {
     //zjitime si parent router
-    $rs = mysql_query("SELECT parent_router FROM router_list WHERE id = '$id_routeru'");
-    $parent_router_id = mysql_result($rs, 0);
+    $rs = $this->conn_mysql->query("SELECT parent_router FROM router_list WHERE id = '$id_routeru'");
+    $rs->data_seek(0);
+    list($parent_router_id) = $rs->fetch_row();
 
     //zjistime IP-cko parent routeru
-    $rs2 = mysql_query("SELECT ip_adresa FROM router_list WHERE id = '$parent_router_id'");
-    $parent_router_ip = mysql_result($rs2, 0);
+    $rs2 = $this->conn_mysql->query("SELECT ip_adresa FROM router_list WHERE id = '$parent_router_id'");
+    $rs2->data_seek(0);
+    list($parent_router_ip) = $rs2->fetch_row();
 
     //DEBUG //print " id_r: ".$id_routeru.", p_r: ".$parent_router.", p_r_ip: ".$parent_router_ip." \n";
     
     if( ( ($this->controlled_router_id == $this->reinhard_3_id) or
 	  ($this->controlled_router_id == $this->reinhard_5_id)
-	) )
+    ) )
     {
-	if( $parent_router_ip == $ip_adresa_routeru )
-	{ //dosahlo se pozadovaneho reinhard, tj. zaznam CHCEME
-    	    return true;
-	}
-	elseif( ($parent_router_id == $this->reinhard_wifi_id) )
-	{ //dosahlo se rh-wifi (zacatku stromu), a nechceme routery krz rh-wifi, tj. zaznam NECHCEME
-	
-	}
-	else
-	{
+        if( $parent_router_ip == $ip_adresa_routeru )
+        { //dosahlo se pozadovaneho reinhard, tj. zaznam CHCEME
+                return true;
+        }
+        elseif( ($parent_router_id == $this->reinhard_wifi_id) )
+        { //dosahlo se rh-wifi (zacatku stromu), a nechceme routery krz rh-wifi, tj. zaznam NECHCEME
+        
+        }
+        else
+        {
           if( $this->find_root_router($parent_router_id, $ip_adresa_routeru) == true)
           { return true; }
         }
@@ -204,40 +206,40 @@ class mk_synchro_qos
     elseif( $this->controlled_router_id == $this->reinhard_wifi_id )
     {
     
-	if( ($parent_router_id == $this->reinhard_3_id) 
-		or ($parent_router_id == $this->reinhard_fiber_id) 
-		or ($parent_router_id == $this->reinhard_5_id) 
-	)
-	{
-	    //ve stromu jsme se dostali k rh-3 nebo rh-fiber (ty jsou bohuzel taky "pod" rh-wifi), tj. zaznam NECHCEM
-	}
-	elseif( ($id_routeru == $this->reinhard_3_id) 
-		    or ($id_routeru == $this->reinhard_fiber_id) 
-		    or ($id_routeru == $this->reinhard_5_id) 
-	)
-	{
-	
-	}
-	elseif( $parent_router_ip == $ip_adresa_routeru )
-	{
-	    return true;
-	}
-	elseif($parent_router_id == $this->reinhard_wifi_id)
-	{
-	    //dostali jsme se na vrchol, tj. rh-wifi, tj. zaznam CHCEME
-	}
-	else
-	{  //ani jedno z predchozich, tj. rekurze
-          if( $this->find_root_router($parent_router_id, $ip_adresa_routeru) == true)
-          { return true; }	
-	}
+        if( ($parent_router_id == $this->reinhard_3_id) 
+          or ($parent_router_id == $this->reinhard_fiber_id) 
+          or ($parent_router_id == $this->reinhard_5_id) 
+        )
+        {
+            //ve stromu jsme se dostali k rh-3 nebo rh-fiber (ty jsou bohuzel taky "pod" rh-wifi), tj. zaznam NECHCEM
+        }
+        elseif( ($id_routeru == $this->reinhard_3_id) 
+              or ($id_routeru == $this->reinhard_fiber_id) 
+              or ($id_routeru == $this->reinhard_5_id) 
+        )
+        {
+        
+        }
+        elseif( $parent_router_ip == $ip_adresa_routeru )
+        {
+            return true;
+        }
+        elseif($parent_router_id == $this->reinhard_wifi_id)
+        {
+            //dostali jsme se na vrchol, tj. rh-wifi, tj. zaznam CHCEME
+        }
+        else
+        {  //ani jedno z predchozich, tj. rekurze
+                if( $this->find_root_router($parent_router_id, $ip_adresa_routeru) == true)
+                { return true; }	
+        }
     }
     else
     {
-	//error, tento router neumim ..
-	echo "ERROR: pro tento router neumim najit parent router ... ".
-	    "(debug: controlled router: id: ".$this->controlled_router_id.
-	    ", ip: ".$this->controlled_router_ip.") \n";
+        //error, tento router neumim ..
+        echo "ERROR: pro tento router neumim najit parent router ... ".
+            "(debug: controlled router: id: ".$this->controlled_router_id.
+            ", ip: ".$this->controlled_router_ip.") \n";
     }
         
  } //end of function find_root_router
