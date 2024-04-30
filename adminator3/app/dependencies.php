@@ -66,19 +66,25 @@ $container->set('flash', function($container) {
 	return new \Slim\Flash\Messages;
 });
 
-$container->set('view', function ($c) {
-    $settings = $c->get('settings');
+$container->set('view', function ($container) {
+    $settings = $container->get('settings');
 
 	$view = Twig::create($settings['twig']['path'], [
 		'cache' => false,
 	]);
+
+    $view->getEnvironment()->enableStrictVariables();
+
+    $view>addExtension($container->get(TwigPhpExtension::class));
+    $view->addExtension($container->get(CsrfExtension::class));
+    $view->addExtension($container->get(TwigMessagesExtension::class));
 
 	// $view->addExtension(new \Slim\Views\TwigExtension(
 	// 	$container->router,
 	// 	$container->request->getUri()
 	// ));
 
-	$view->getEnvironment()->addGlobal('flash', $c->flash);
+	$view->getEnvironment()->addGlobal('flash', $container->flash);
 
 	return $view;
 });
@@ -86,51 +92,6 @@ $container->set('view', function ($c) {
 $container->set('validator', function ($container) {
 	return new App\Validation\Validator;
 });
-
-$container->set(SessionInterface::class, function (ContainerInterface $container) {
-    $settings = $container->get('settings');
-    $session = new PhpSession((array) $settings['session']);
-
-    return $session;
-});
-
-$container->set(SessionStartMiddleware::class, function (ContainerInterface $container) {
-    return new SessionStartMiddleware($container->get(SessionInterface::class));
-});
-
-// $acl = new Acl();
-
-// $container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
-// $container['acl']    = $acl;
-
-// $adapterOptions = [];
-// $adapter = new czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter(
-//     NULL,  //LDAP config or NULL if not using LDAP
-//     $em, //an Doctrine's Entity Manager instance 
-//     "App\Entity\UserRole",    //Role class
-//     "role", //Role's class role attribute
-//     "user", //Role's class user attribute (the @ManyToOne attrib)
-//     "App\Entity\User", //User class
-//     "username", //User name attribute
-//     "passwordHash", //password (as a hash) attribute
-//     czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
-//     10, //a hash factor
-//     PASSWORD_DEFAULT, //hash algorithm
-//     $adapterOptions //if needed
-//     );
-
-// $container["authAdapter"] = $adapter;
-
-// $slimAuthProvider = new SlimAuthProvider();
-// $slimAuthProvider->register($container);
-
-// $app->add(
-//         new Authorization( 
-//                 $container["auth"], 
-//                 $acl, 
-//                 new RedirectHandler("/auth/notAuthenticated", "/auth/notAuthorized") 
-//             )
-//         );
 
 $container->set('csrf', function() use($responseFactory) {
 	return new Guard($responseFactory);

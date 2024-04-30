@@ -17,7 +17,7 @@ use DI\Container;
 use DI\ContainerBuilder;
 
 $builder = new ContainerBuilder();
-// $builder->addDefinitions(__DIR__ . '/app/container.php');
+$builder->addDefinitions(__DIR__ . '/app/container.php');
 $container = $builder->build();
 
 AppFactory::setContainer($container);

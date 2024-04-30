@@ -5,6 +5,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteCollectorProxy;
 
 use App\Controllers\HomeController;
+use App\Controllers\Auth\AuthController;
 
 // routes
 
@@ -12,7 +13,7 @@ $app->get('/', function ($req, $res, $args) {
     return $res->withStatus(302)->withHeader('Location', '/home');
 });
 
-$app->group('/auth', function(RouteCollectorProxy $group) use ($app) {
+$app->group('/auth', function(RouteCollectorProxy $group) {
 	// $group->get('/notAuthenticated', function ($request, $response, $args) use ($app) {
       
     //     $app->getContainer()["flash"]->addMessage('info', "You are not authenticated");
@@ -31,9 +32,9 @@ $app->group('/auth', function(RouteCollectorProxy $group) use ($app) {
 // 		->write('You are not authorized to this resource.');
 // 	})->setName("notAuthorized");
 
-//     $app->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('login');
+    $group->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('login');
 
-//     $app->get('/signout', AuthController::class . ':signout')->setName('logout');
+    $group->get('/signout', AuthController::class . ':signout')->setName('logout');
 });
 
 $app->group('', function (RouteCollectorProxy $group) use ($app) {

@@ -11,7 +11,7 @@
     			<div class="card-title bg-black bg-opacity-25 pb-2 pt-2">Sign In</div>
     			<div class="card-text">
 				{# "{{path_for('auth.signin')}}"  #}
-    				<form action="{{ path_for('login') }}" method="post">
+    				<form action="{{ url_for('login') }}" method="post">
     					<div class="form-group{{ errors.email ? ' has-error' : '' }}">
     						<label for="email">Email</label>
     						<input type="email" name="slimUsername" id="email" placeholder="you@domain.com" class="form-control" value="{{ old.email }}">
