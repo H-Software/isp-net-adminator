@@ -239,7 +239,7 @@ class mk_synchro_qos
         //error, tento router neumim ..
         echo "ERROR: pro tento router neumim najit parent router ... ".
             "(debug: controlled router: id: ".$this->controlled_router_id.
-            ", ip: ".$this->controlled_router_ip.") \n";
+            ", ip: ".$this->controlled_router_ip.") <br>\n";
 
         return false;
     }
@@ -249,6 +249,9 @@ class mk_synchro_qos
  function find_obj($ip)
  {
 
+  $routers = array();
+  $routers_ip = array();
+  
   //1. zjistit routery co jedou pres pozadovany reinhard
   $rs_routers = $this->conn_mysql->query("SELECT id, parent_router, nazev, ip_adresa FROM router_list WHERE id > 1 ORDER BY id");
   $num_rs_routers = $rs_routers->num_rows;
