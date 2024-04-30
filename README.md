@@ -71,6 +71,12 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://fideloper.com/laravel-multiple-database-connections
 - https://medium.com/@miladev95/how-to-use-multiple-databases-in-laravel-274df382fecd
 
+#### Session
+- https://odan.github.io/session/v6/
+
+#### DI
+- https://php-di.org/doc/php-definitions.html
+
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html
 

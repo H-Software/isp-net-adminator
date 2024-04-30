@@ -11,15 +11,17 @@ $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+// use Psr\Http\Message\ResponseInterface as Response;
+// use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
-use Slim\Exception\NotFoundException;
+use DI\Container;
+use DI\ContainerBuilder;
 
-// $app = new \Slim\App($config);
-// $container = new Container(['settings' => $config]);
+// $container = new Container();
 
-$container = new \DI\Container();
+$builder = new ContainerBuilder();
+// $builder->addDefinitions(__DIR__ . '/app/container.php');
+$container = $builder->build();
 
 AppFactory::setContainer($container);
 $app = AppFactory::create();

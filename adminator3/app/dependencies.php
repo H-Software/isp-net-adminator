@@ -3,31 +3,17 @@
 use Slim\Views\Twig;
 use Slim\Csrf\Guard;
 
-use Laminas\Authentication\Storage\Session as SessionStorage;
-
-use Laminas\Session\Config\SessionConfig;
-use Laminas\Session\SessionManager;
+use Odan\Session\PhpSession;
+use Odan\Session\SessionInterface;
+use Odan\Session\SessionManagerInterface;
+use Psr\Container\ContainerInterface;
+use Odan\Session\Middleware\SessionStartMiddleware;
 
 $container = $app->getContainer();
 
 $container->set('settings', function () {
     return require __DIR__ . '/settings.php';
 });
-
-// init sessions
-$sessionConfig = new SessionConfig();
-$sessionConfig->setOptions(array(
-    // 'remember_me_seconds' => 5,
-    'name' => 'adminator-auth',
-    // 'cookie_lifetime' => 5
-));
-$sessionManager = new SessionManager($sessionConfig);
-$sessionManager->rememberMe();
-
-$storage = new SessionStorage();
-// $sessionManager->setStorage($storage);
-
-// $container["authStorage"] = $storage;
 
 $container->set('logger', function($c) { 
     $settings = $c->get('settings');
@@ -101,6 +87,17 @@ $container->set('validator', function ($container) {
 	return new App\Validation\Validator;
 });
 
+$container->set(SessionInterface::class, function (ContainerInterface $container) {
+    $settings = $container->get('settings');
+    $session = new PhpSession((array) $settings['session']);
+
+    return $session;
+});
+
+$container->set(SessionStartMiddleware::class, function (ContainerInterface $container) {
+    return new SessionStartMiddleware($container->get(SessionInterface::class));
+});
+
 // $acl = new Acl();
 
 // $container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
@@ -140,6 +137,8 @@ $container->set('csrf', function() use($responseFactory) {
 });
 
 $app->add('csrf');
+
+$app->add(SessionStartMiddleware::class);
 
 $container->set('AuthController', function($container) {
 	return new \App\Controllers\Auth\AuthController($container);

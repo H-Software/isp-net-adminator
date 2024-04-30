@@ -9,6 +9,15 @@ $settings = [
         'twig' => [
             'path' => __DIR__ . '/../resources/views/',
         ],
+        'session' => [
+            'name' => 'adminator-app',
+            'lifetime' => 7200,
+            'path' => null,
+            'domain' => null,
+            'secure' => false,
+            'httponly' => true,
+            'cache_limiter' => 'nocache',
+        ],
 ];
 
 return $settings;
