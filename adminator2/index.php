@@ -39,7 +39,7 @@ if((isset($login)) and (isset($password))):
             . " login LIKE '".$conn_mysql->real_escape_string($login)."') "
             . "AND (password LIKE '".$conn_mysql->real_escape_string($p)."') ";
 
-    $MSQ = $conn_mysql->query($sql);
+    $MSQ = $conn_mysql->query($SQL);
 
     if ($MSQ->num_rows <> 1){
         echo "</head><body>";
