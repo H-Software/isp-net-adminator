@@ -1,4 +1,4 @@
-<?path?
+<?php
 
 $logger = new Monolog\Logger($settings['logger']['name']);
 
