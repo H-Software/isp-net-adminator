@@ -66,15 +66,11 @@ class passwordHelper
 
     function changePassword(){
         
-        $auth_identity = (string) Sentinel::getUser()->email;
-
-        $loggedUser = User::where('email', $auth_identity)
-                        ->get(['email', 'password']);
-
-        list($loggedUserData) = $loggedUser->toArray();
-        $this->loggedUserData = $loggedUserData;
-
-        //$this->logger->debug("passwordHelper\changePassword dump current DB data: " . var_export($loggedUser['password'],true));
+        $this->loggedUserData = array(
+                                      "email" => (string) Sentinel::getUser()->email,
+                                      "password" => (string) Sentinel::getUser()->password
+                                    );
+        // $this->logger->debug("passwordHelper\changePassword current data: " . var_export($this->loggedUserData,true));
 
         $valRes = $this->validatePassword();
 
@@ -85,12 +81,15 @@ class passwordHelper
         // update PW in DB
         $pwHash = password_hash($this->requestData['password'], PASSWORD_DEFAULT, array('cost' => 10));
 
-        $affRows = User::where('email', $auth_identity)
+        $affRows = User::where('email', $this->loggedUserData['email'])
                 ->update(['password' => $pwHash]);
 
         if($affRows <> 1){
             $this->errorMessage = 'Update password failed! Database error.' . "(affected rows: " . $affRows . ")";
             return false;
+        }
+        else{
+            $this->logger->info("PasswordController\changePassword: password successfully changed for user " . var_export($this->loggedUserData['email'], true));
         }
 
         return true;
