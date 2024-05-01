@@ -2,8 +2,6 @@
 
 require "include/main.function.shared.php";
 
-init_ses();
-
 require ("include/config.php");
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
