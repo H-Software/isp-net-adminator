@@ -16,12 +16,6 @@ $callableResolver = $app->getCallableResolver();
 $responseFactory = $app->getResponseFactory();
 $routeParser = $app->getRouteCollector()->getRouteParser();
 
-// Add Error Handling Middleware
-$displayErrorDetails = true;
-$logErrors = true;
-$logErrorDetails = false;
-$app->addErrorMiddleware($displayErrorDetails, $logErrors, $logErrorDetails);
-
 require __DIR__ ."/app/dependencies.php";
 
 require "app/routing.php";
