@@ -36,7 +36,7 @@ if((isset($login)) and (isset($password))):
 
     try {
         $MSQ = $conn_mysql->query(
-            "SELECT login, level FROM users ".
+            "SELECT login, level FROM users_old ".
             " WHERE ( " 
             . " login LIKE '".$conn_mysql->real_escape_string($login)."') "
             . "AND (password LIKE '".$conn_mysql->real_escape_string($p)."') "

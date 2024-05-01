@@ -87,7 +87,7 @@ require ("include/charset.php");
     $old_pass=md5($old_pass);
 
     // checkneme stary heslo
-    $vysl_old_pass=mysql_query("select * from users where password='".$old_pass."' " );
+    $vysl_old_pass=mysql_query("select * from users_old where password='".$old_pass."' " );
     $radku_old_pass=mysql_num_rows($vysl_old_pass);
 	
     if ( $radku_old_pass==0 )     
@@ -113,7 +113,7 @@ require ("include/charset.php");
     $new_pass=md5($new_pass);
     	  
     // uz to upravime
-    $add=mysql_query("UPDATE users SET password ='$new_pass' WHERE login = '".mysql_real_escape_string($nick)."' ");
+    $add=mysql_query("UPDATE users_old SET password ='$new_pass' WHERE login = '".mysql_real_escape_string($nick)."' ");
 
     if($add) 
     { echo "<br><H3><div style=\"color: green; \" >Heslo v databázi úspěšně změněno.</div></H3>\n"; }

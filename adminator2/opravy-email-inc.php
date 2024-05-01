@@ -1,7 +1,7 @@
 <?php
   // require "mailing/class.phpmailer.php";
 
- $dotaz_emaily=mysql_query("SELECT * FROM users WHERE (  email_opravy = '1' and id = 2 )");
+ $dotaz_emaily=mysql_query("SELECT * FROM users_old WHERE (  email_opravy = '1' and id = 2 )");
   
  while( $data = mysql_fetch_array($dotaz_emaily) )
  { 

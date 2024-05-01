@@ -35,7 +35,7 @@ include ("include/charset.php");
     
    }				   
    
-   $vysl_user=mysql_query("SELECT * FROM users WHERE login LIKE '$nick' ");
+   $vysl_user=mysql_query("SELECT * FROM users_old WHERE login LIKE '$nick' ");
    $radku_user=mysql_num_rows($vysl_user);
    
    if ( $radku_user == 0){ }

@@ -47,7 +47,7 @@ include ("include/charset.php");
    
  <?
   
-    $vysledek=mysql_query("select * from users order by name asc" );
+    $vysledek=mysql_query("select * from users_old order by name asc" );
     $radku=mysql_num_rows($vysledek);
 	
     if ($radku==0) echo "Zadní uživatelé v db (divny) ";

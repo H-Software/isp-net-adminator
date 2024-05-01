@@ -41,7 +41,7 @@ function check_level2 ($user_level,$level_col)
 {
   global $conn_mysql, $nick;
   try {
-    $dotaz = $conn_mysql->query("SELECT ".$conn_mysql->real_escape_string($level_col)." FROM users WHERE login = '".$conn_mysql->real_escape_string($nick)."'");
+    $dotaz = $conn_mysql->query("SELECT ".$conn_mysql->real_escape_string($level_col)." FROM users_old WHERE login = '".$conn_mysql->real_escape_string($nick)."'");
     $radku = $dotaz->num_rows;
   } catch (Exception $e) {
     die ("<h2 style=\"color: red; \">Check level Failed: Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
