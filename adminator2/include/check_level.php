@@ -13,6 +13,8 @@ function check_level ($user_level, $id, $adminator = null) {
 
   global $conn_mysql, $logger, $smarty;
 
+  $logger->debug("checkLevel: called");
+
   if(is_object($adminator))
   {
       $a = $adminator;
@@ -23,6 +25,7 @@ function check_level ($user_level, $id, $adminator = null) {
   }
 
   if ($id < 1){
+      $logger->error("checkLevel: \$id < 1");
       return false;
   }
 

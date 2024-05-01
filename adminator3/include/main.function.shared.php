@@ -153,6 +153,9 @@ function check_login($app_name = "adminator3") {
       echo "Neautorizovaný přístup / Timeout Spojení";
       exit;
   }
+  else{
+    $logger->info("check_login: OK");
+  }
 
   return true;
 }

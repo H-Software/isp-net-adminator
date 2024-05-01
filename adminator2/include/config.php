@@ -20,6 +20,8 @@ require __DIR__ . '/../bootstrap/logger.php';
 // and after containerBuilder
 require __DIR__ . '/../bootstrap/session.php';
 
+// DB inits and ORM
 require __DIR__ . '/../bootstrap/database.php';
 
+// authz
 require __DIR__ . '/../bootstrap/sentinel.php';

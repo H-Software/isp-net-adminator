@@ -10,7 +10,7 @@ $session = new PhpSession((array) $settings['session']);
 // $logger->debug("SessionInterface: creating PhpSession: result: " . var_export($session, true));
 
 if (!$session->isStarted() && !headers_sent()) {
-    $logger->debug("Boostrap\Session: session not started, starting");
+    $logger->debug("Bootstrap\Session: session not started, starting");
     $session->start();
 }
 if (!$session->has('regen') || $session->get('regen') < time()) {
