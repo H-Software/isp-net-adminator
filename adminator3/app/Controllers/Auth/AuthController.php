@@ -5,18 +5,16 @@ namespace App\Controllers\Auth;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-// use App\Models\User;
 use App\Controllers\Controller;
-// use Respect\Validation\Validator as v;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Exception;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Flash\Messages;
+use Slim\Views\Twig;
 
 class AuthController extends Controller
 {
-	var $conn_mysql;
-    var $smarty;
+
     var $logger;
 
     /**
@@ -29,10 +27,10 @@ class AuthController extends Controller
      */
     protected RouteParserInterface $routeParser;
 
-    //  /**
-    //  * @var Twig
-    //  */
-    // protected Twig $view;
+     /**
+     * @var Twig
+     */
+    protected Twig $view;
 
     public function __construct(
         ContainerInterface $container,
@@ -43,7 +41,6 @@ class AuthController extends Controller
         $this->container = $container;
         $this->routeParser = $routeParser;
         $this->flash = $container->get('flash');
-
         $this->logger = $container->get('logger');
         $this->view = $container->get('view');
 
@@ -98,18 +95,19 @@ class AuthController extends Controller
 
 	public function signout($request, $response, array $args)
 	{
-        $this->logger->info("route/logout called");
-        $this->logger->info("route/logout: dump auth->hasIdentity: ".var_export($this->container->auth->hasIdentity(), true));
-        $this->logger->info("route/logout: before: dump auth->getStorage()->isEmpty(): ".var_export($this->container->auth->getStorage()->isEmpty(), true));
+        $this->logger->info("AuthController/signout called");
+        $this->logger->debug("AuthController/signout: dump user identity: ".var_export(Sentinel::getUser()->email, true));
     
-        if ($this->container->auth->hasIdentity()) {
-            $this->container->auth->clearIdentity();
+        if (!Sentinel::guest()) {
+            $rs = sentinel::logout();
+            $this->logger->info("AuthController/signout: signout action result: " . var_export($rs, true));
         }
-    
-        $this->logger->info("route/logout: dump auth->getStorage()->isEmpty(): ".var_export($this->container->auth->getStorage()->isEmpty(), true));
-    
-        //redirect:
-        $url = $this->container->router->pathFor('home');
+        else{
+            $this->logger->info("AuthController/signout: user is not logged, redirecting to home");
+        }
+
+        //redirect
+        $url = $this->routeParser->urlFor('home');
         return $response->withStatus(302)->withHeader('Location', $url);
 	}
 

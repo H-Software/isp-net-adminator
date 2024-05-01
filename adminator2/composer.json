@@ -2,9 +2,16 @@
     "require": {
         "nette/robot-loader": "^3.4",
         "smarty/smarty": "^4.5.2",
+        "monolog/monolog": "^3.6.0",
         "respect/validation": "^2.2",
-        "formr/formr": "^1.4",
-        "illuminate/database": "^8.83",
+        "formr/formr": "^1.5",
+        "illuminate/database": "^10.48",
+        "illuminate/events": "^v10.0",
+        "cartalyst/sentinel": "^v7.0",
+        "nyholm/psr7": "^1.4.1",
+        "nyholm/psr7-server": "^1.0.2",
+        "symfony/http-foundation": "^v6.4",
+        "odan/session": "^6.1",
         "phpmailer/phpmailer": "^6.9.1",
         "evilfreelancer/routeros-api-php": "1.5.2"
     }
