@@ -9,6 +9,11 @@ use Psr\Http\Message\ServerRequestInterface;
 use App\Controllers\Controller;
 // use Respect\Validation\Validator as v;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Slim\Views\Twig;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -16,13 +21,21 @@ class AuthController extends Controller
     var $smarty;
     var $logger;
 
-    public function __construct(ContainerInterface $container)
+    //  /**
+    //  * @var Twig
+    //  */
+    // protected Twig $view;
+
+    public function __construct(
+        ContainerInterface $container,
+        )
     {
         $this->container = $container;
 		// $this->conn_mysql = $conn_mysql;
         // $this->smarty = $smarty;
         // $this->logger = $logger;
         $this->logger = $container->get('logger');
+        $this->view = $container->get('view');
 
         $this->logger->info("authController\__construct called");
 	}
@@ -79,7 +92,8 @@ class AuthController extends Controller
     
             // }
         }
-        return $this->container->get('view')->render($response, 'auth\signin.twig', array('username' => @$username, "message" => $message));
+
+        return $this->view->render($response, 'auth\signin.twig', array('username' => @$username, "message" => $message));
 	}
 
 	public function signout($request, $response, array $args)

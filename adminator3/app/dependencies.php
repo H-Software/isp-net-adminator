@@ -3,13 +3,16 @@
 use Slim\Views\Twig;
 use Slim\Csrf\Guard;
 
-use Odan\Session\PhpSession;
-use Odan\Session\SessionInterface;
-use Odan\Session\SessionManagerInterface;
 use Psr\Container\ContainerInterface;
 use Odan\Session\Middleware\SessionStartMiddleware;
+use App\View\CsrfExtension;
+use App\View\TwigMessagesExtension;
+use App\View\TwigPhpExtension;
+use App\Middleware\FlashOldFormDataMiddleware;
+use Slim\Views\TwigMiddleware;
 
-$container = $app->getContainer();
+
+// $container = $app->getContainer();
 
 $container->set('settings', function () {
     return require __DIR__ . '/settings.php';
@@ -73,18 +76,13 @@ $container->set('view', function ($container) {
 		'cache' => false,
 	]);
 
-    $view->getEnvironment()->enableStrictVariables();
+    // $view->getEnvironment()->enableStrictVariables();
 
-    $view>addExtension($container->get(TwigPhpExtension::class));
-    $view->addExtension($container->get(CsrfExtension::class));
-    $view->addExtension($container->get(TwigMessagesExtension::class));
+    // $view->addExtension($container->get(TwigPhpExtension::class));
+    // $view->addExtension($container->get(CsrfExtension::class));
+    // $view->addExtension($container->get(TwigMessagesExtension::class));
 
-	// $view->addExtension(new \Slim\Views\TwigExtension(
-	// 	$container->router,
-	// 	$container->request->getUri()
-	// ));
-
-	$view->getEnvironment()->addGlobal('flash', $container->flash);
+	// $view->getEnvironment()->addGlobal('flash', $container->get('flash'));
 
 	return $view;
 });
@@ -99,7 +97,26 @@ $container->set('csrf', function() use($responseFactory) {
 
 $app->add('csrf');
 
-$app->add(SessionStartMiddleware::class);
+// $app->add(
+//     function ($request, $next) {
+//         // Start PHP session
+//         if (session_status() !== PHP_SESSION_ACTIVE) {
+//             session_start();
+//         }
+
+//         // Change flash message storage
+//         $this->get('flash')->__construct($_SESSION);
+
+//         return $next->handle($request);
+//     }
+// );
+
+$app->addMiddleware($container->get(SessionStartMiddleware::class));
+
+// $app->addMiddleware($container->get(TwigMiddleware::class));
+$app->addMiddleware(TwigMiddleware::createFromContainer($app));
+
+// $app->addMiddleware($container->get(FlashOldFormDataMiddleware::class));
 
 $container->set('AuthController', function($container) {
 	return new \App\Controllers\Auth\AuthController($container);

@@ -9,9 +9,9 @@ use App\Controllers\Auth\AuthController;
 
 // routes
 
-$app->get('/', function ($req, $res, $args) {
-    return $res->withStatus(302)->withHeader('Location', '/home');
-});
+$app->get('/', function ($request, $response, $args) {
+    return $request->withStatus(302)->withHeader('Location', '/home');
+})->setName('index');
 
 $app->group('/auth', function(RouteCollectorProxy $group) {
 	// $group->get('/notAuthenticated', function ($request, $response, $args) use ($app) {
@@ -32,7 +32,7 @@ $app->group('/auth', function(RouteCollectorProxy $group) {
 // 		->write('You are not authorized to this resource.');
 // 	})->setName("notAuthorized");
 
-    $group->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('login');
+    $group->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('auth.signin');
 
     $group->get('/signout', AuthController::class . ':signout')->setName('logout');
 });

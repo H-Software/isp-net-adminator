@@ -11,10 +11,11 @@ $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
+// use Slim\App;
 
 use Slim\Factory\AppFactory;
-use DI\Container;
 use DI\ContainerBuilder;
+use DI\DependencyException;
 
 $builder = new ContainerBuilder();
 $builder->addDefinitions(__DIR__ . '/app/container.php');
@@ -22,6 +23,8 @@ $container = $builder->build();
 
 AppFactory::setContainer($container);
 $app = AppFactory::create();
+
+// $app = \DI\Bridge\Slim\Bridge::create($container);
 
 // $app->setBasePath('/');
 
