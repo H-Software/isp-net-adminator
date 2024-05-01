@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use App\Models\UserPersistence;
 
 /*
  * Part of the Sentinel package.
@@ -107,8 +108,8 @@ return [
     */
 
     'persistences' => [
-        'model' => 'Cartalyst\Sentinel\Persistences\EloquentPersistence',
-
+        // 'model' => 'Cartalyst\Sentinel\Persistences\EloquentPersistence',
+        'model' => UserPersistence::class,
         'single' => false,
     ],
 
