@@ -1,6 +1,7 @@
  <tr>
 <?php   
    echo "<td style=\"\" width=\"80%\" >"; 
+   use Cartalyst\Sentinel\Native\Facades\Sentinel;
 ?>
 
     <table border="0" width="100%">
@@ -124,14 +125,14 @@
   // zde vypis prihlasenych useru
       
       //prvne vypisem prihlaseneho
-      // $MSQ_USER_NICK = $conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '".$conn_mysql->real_escape_string($nick)."' ");
+      $MSQ_USER_NICK = $conn_mysql->query("SELECT email, level FROM users WHERE email LIKE '".$conn_mysql->real_escape_string(Sentinel::getUser()->email)."' ");
       
-      // if ($MSQ_USER_NICK->num_rows <> 1){ echo "Chyba! Vyber nicku nelze provest."; }
-      // else
-      // {
-      //   while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
-      //   { echo "jméno:  <b>".$data_user_nick["nick"]."</b>, level: <b>".$data_user_nick["level"]."</b><br>"; }
-      // } // konec else
+      if ($MSQ_USER_NICK->num_rows <> 1){ echo "Chyba! Vyber nicku nelze provest."; }
+      else
+      {
+        while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
+        { echo "jméno:  <b>".$data_user_nick["nick"]."</b>, level: <b>".$data_user_nick["level"]."</b><br>"; }
+      } // konec else
 
   // ted najilejeme prihlaseny lidi ( vsecky ) do pop-up okna
   // $MSQ_USER2 = $conn_mysql->query("SELECT nick, level FROM autorizace");
