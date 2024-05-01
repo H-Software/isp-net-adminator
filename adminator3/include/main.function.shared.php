@@ -122,62 +122,20 @@ function mssql_num_rows($statement)
 	return @sqlsrv_num_rows($statement);
 }
 
-// ond of MS SQL stuff
+// end of MS SQL stuff
 
-function is_session_started()
+// authz stuff
+
+/**
+ * @param array $array The array
+ * @param array $keys  The keys
+ *
+ * @return array
+ */
+function array_clean(array $array, array $keys): array
 {
-    if (php_sapi_name() === 'cli')
-        return false;
-
-    if (version_compare(phpversion(), '5.4.0', '>='))
-        return session_status() === PHP_SESSION_ACTIVE;
-
-    return session_id() !== '';
+    return array_intersect_key($array, array_flip($keys));
 }
-
-  /**
-   * @param array $array The array
-   * @param array $keys  The keys
-   *
-   * @return array
-   */
-  function array_clean(array $array, array $keys): array
-  {
-      return array_intersect_key($array, array_flip($keys));
-  }
-
-// function start_ses()
-// {
-//   global $sid, $level, $nick, $date, $ad, $logger;
-
-//   if(is_object($logger))
-//   {
-//     $logger->info("start_ses called");
-//   }
-
-//   // some backwards compatibility attemt
-//   if (!is_session_started()) {
-//     init_ses();
-//   }
-
-//   $sid = $_SESSION["db_login_md5"];
-//   $level = $_SESSION["db_level"];
-//   $nick = $_SESSION["db_nick"];
-
-//   $date = date("U"); 
-//   $ad = date("U") - 1200; 
-
-//   if(is_object($logger))
-//   {
-//     $logger->info("start_ses: result: "
-//       . "[nick => " . $nick
-//       . ", level => " . $level
-//       . ", sid => " . $sid
-//       . "]");
-//   }
-
-//   return array($sid, $level, $nick);
-// }
 
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
@@ -192,12 +150,14 @@ function check_login($app_name = "adminator3") {
       $stranka=$cesta.'nologinpage.php';
       header("Location: ".$stranka);
   
-      echo "Neautorizovaný přístup / Timeout Spojení   ".htmlspecialchars($sid)."  ".htmlspecialchars($level)."";
+      echo "Neautorizovaný přístup / Timeout Spojení";
       exit;
   }
-  
+
   return true;
 }
+
+// end of authz stuff
 
 function last_page(){
     $uri=$_SERVER["REQUEST_URI"];

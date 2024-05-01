@@ -1,6 +1,8 @@
 <?php
 
-function check_level ($user_level,$id) {
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+
+function check_level ($user_level, $id, $adminator = null) {
   // co mame
   // v promeny level mame level prihlaseneho uzivatele
   // databazi levelu pro jednotlivy stranky
@@ -9,8 +11,35 @@ function check_level ($user_level,$id) {
   // porovnat level uzivatele s prislusnym levelem 
   // stranky podle jejiho id
 
-  global $conn_mysql;
+  global $conn_mysql, $logger, $smarty;
 
+  if(is_object($adminator))
+  {
+      $a = $adminator;
+  }
+  else
+  {
+      $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
+  }
+
+  if ($id < 1){
+      return false;
+  }
+
+  $a->page_level_id = $id;
+  $a->userIdentityUsername = Sentinel::getUser()->email;
+  $logger->debug("checkLevel: current identity: ".var_export($a->userIdentityUsername, true));
+
+  $checkLevel = $a->checkLevel();
+  
+  $logger->info("checkLevel: checkLevel result: ".var_export($checkLevel, true));
+
+  if($checkLevel === false){
+      return false;
+  }
+
+  // old code
+  /*
   try {
     $dotaz = $conn_mysql->query("SELECT level FROM leveling WHERE id = '".intval($id)."' ");
     $radku = $dotaz->num_rows;
@@ -35,6 +64,7 @@ function check_level ($user_level,$id) {
   {
     return true;
   }
+  */
 }
 
 function check_level2 ($user_level,$level_col)
