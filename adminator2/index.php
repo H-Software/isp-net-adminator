@@ -18,7 +18,7 @@ $lo=$_GET["lo"];
 
 if( ( strlen($login) > 0) )
 {
-  if( preg_match('/^[[:alnum:]]+$/',$login) <> 1 )
+  if( preg_match('/^([[:alnum:]]|@|\.|\-|_)+$/',$login) <> 1 )
   {
     echo "</head><body>";
     echo "<p>Chyba prihlasovani! Neplatna vstupni data (jmeno).</p>";
