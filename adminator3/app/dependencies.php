@@ -93,6 +93,10 @@ $container->set('validator', function ($container) {
 	return new App\Validation\Validator;
 });
 
+$container->set('FlashOldFormDataMiddleware', function ($container) {
+    return new FlashOldFormDataMiddleware($container->get('flash'));
+});
+
 $container->set('csrf', function() use($responseFactory) {
 	return new Guard($responseFactory);
 });
@@ -118,8 +122,7 @@ $app->addMiddleware($container->get(SessionMiddleware::class));
 // $app->addMiddleware($container->get(TwigMiddleware::class));
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
-$app->addMiddleware($container->get(FlashOldFormDataMiddleware::class));
-
+$app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
 
 $container->set('AuthController', function($container) {
 	return new \App\Controllers\Auth\AuthController($container);

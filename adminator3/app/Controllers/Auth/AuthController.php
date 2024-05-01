@@ -52,25 +52,8 @@ class AuthController extends Controller
 
 	public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
 	{
-        $username = null;
-
-        // global $app;
-        /*
-         * require: slim/flash
-         * don't know if slim/flash is not stable or I'm a fool
-         */
-    //     $app->getContainer()["flash"]->addMessage('error', 'testando novo');
-    //     var_dump( $app->getContainer()["flash"]->storage["slimFlash"]["error"] );
-        var_dump( $this->flash->getMessages()["error"] );
-        echo "<pre>OLD: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
-
-        $message = array_key_exists("message", $args) ? $args["message"] : null;
-
         if ($request->getMethod() == "POST") 
         {
-            // $username = $request->getParsedBody()['slimUsername'];
-            // $password = $request->getParsedBody()['slimPassword'];
-
             $data = $request->getParsedBody();
 
             try {
@@ -88,32 +71,20 @@ class AuthController extends Controller
                     return $response->withStatus(302)->withHeader('Location', $url);
                 }
             } catch (Exception $e) {
-                $this->flash->addMessage('error', $e->getMessage());
+                $this->flash->addMessageNow('error', $e->getMessage());
                 $this->logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
     
-                // return $response->withStatus(302)->withHeader('Location', $this->routeParser->urlFor('auth.signin'));
+                echo "<pre>CATCH: ERROR: " . var_export($this->flash->getMessages()["error"], true) . "</pre>";
+                // echo "<pre>CATCH OLD2: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
+
             }
-
-
-            // $result = $this->container->authenticator->authenticate($username, $password);
-    
-            // if ($result->isValid()) {
-            //     $url = $this->router->pathFor('home');
-            //     return $response->withStatus(302)->withHeader('Location', $url);
-            // } else {
-            //     $messages = $result->getMessages();
-            //     $message = $messages[0]; //message to presentation layer
-            //     $this->container->flash->addMessage('error', $messages[0]);
-            //     foreach ($messages as $i => $msg) {
-            //             $messages[$i] = str_replace("\n", "\n  ", $msg);
-            //     }
-            //     $this->logger->warning("Authentication failure for $username .", $messages);
-            //     $this->logger->warning("Authentication failure error: ".var_export($messages[0], true));
-    
-            // }
         }
 
-        return $this->view->render($response, 'auth\signin.twig', array('username' => @$username, "message" => $message));
+        echo "<pre>END: ERROR: " . var_export($this->flash->getMessages()["error"], true) . "</pre>";
+        echo "<pre>END OLD: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
+        echo "<pre>END OLD NOW: " . var_export($this->flash->getMessages()["oldNow"], true) . "</pre>";
+
+        return $this->view->render($response, 'auth\signin.twig');
 	}
 
 	public function signout($request, $response, array $args)

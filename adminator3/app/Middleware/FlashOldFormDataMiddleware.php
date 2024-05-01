@@ -37,6 +37,7 @@ class FlashOldFormDataMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (!empty($params = $request->getParsedBody())) {
+            $this->flash->addMessageNow('oldNow', $params);
             $this->flash->addMessage('old', $params);
         }
 
