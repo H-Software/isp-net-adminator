@@ -131,7 +131,7 @@
       else
       {
         while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
-        { echo "jméno:  <b>".$data_user_nick["nick"]."</b>, level: <b>".$data_user_nick["level"]."</b><br>"; }
+        { echo "jméno:  <b>".$data_user_nick["email"]."</b>, level: <b>".$data_user_nick["level"]."</b><br>"; }
       } // konec else
 
   // ted najilejeme prihlaseny lidi ( vsecky ) do pop-up okna
