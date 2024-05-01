@@ -135,6 +135,17 @@ function is_session_started()
     return session_id() !== '';
 }
 
+  /**
+   * @param array $array The array
+   * @param array $keys  The keys
+   *
+   * @return array
+   */
+  function array_clean(array $array, array $keys): array
+  {
+      return array_intersect_key($array, array_flip($keys));
+  }
+
 function init_ses()
 {
     $SN = "autorizace"; 

@@ -2,7 +2,9 @@
 
 require "include/main.function.shared.php";
 
-require ("include/config.php");
+require "include/config.php";
+
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
       <html>
@@ -28,18 +30,43 @@ if( ( strlen($login) > 0) )
 
 if((isset($login)) and (isset($password))):
 
-    $p = md5($password);
+    $logged=false;
+
+    $data = array(
+        'email' => $_POST["login"],
+        'password' => $_POST["password"],
+    );
+
+    try {
+        if (
+            !Sentinel::authenticate(array_clean($data, [
+                'email',
+                'password',
+            ]), isset($data['persist']))
+        ) {
+            throw new Exception('Incorrect email or password.');
+        }
+        else 
+        {
+            $logged=true;
+        }
+    } catch (Exception $e) {
+        $logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
+    }
+
+    // $p = md5($password);
     
-    global $MSQ;
+    // global $MSQ;
 
-    $SQL = "SELECT login, level FROM users_old ".
-            " WHERE ( " 
-            . " login LIKE '".$conn_mysql->real_escape_string($login)."') "
-            . "AND (password LIKE '".$conn_mysql->real_escape_string($p)."') ";
+    // $SQL = "SELECT login, level FROM users_old ".
+    //         " WHERE ( " 
+    //         . " login LIKE '".$conn_mysql->real_escape_string($login)."') "
+    //         . "AND (password LIKE '".$conn_mysql->real_escape_string($p)."') ";
 
-    $MSQ = $conn_mysql->query($SQL);
+    // $MSQ = $conn_mysql->query($SQL);
 
     if ($MSQ->num_rows <> 1){
+    if( $logged === false) {
         echo "</head><body>";
     	echo "<p>Neautorizovaný prístup. / Chyba prístupu.</p>";
     	echo "<p>(num rows: " . $MSQ->num_rows . ")</p>";
@@ -48,66 +75,63 @@ if((isset($login)) and (isset($password))):
 
         exit;
     }
-    else{
-        //
-        // uzivatel se zalogoval spravne, ted to ulozit do db
-	    //  
-        $time = date("U");
-        $at = date("U") - 1800;
+    // else{
+    //     //
+    //     // uzivatel se zalogoval spravne, ted to ulozit do db
+	//     //  
+    //     $time = date("U");
+    //     $at = date("U") - 1800;
 
-        // co budeme ukladat do db ? zahashovany jmeno usera, nejdriv ho ale musime zjistit
+    //     // co budeme ukladat do db ? zahashovany jmeno usera, nejdriv ho ale musime zjistit
     
-        $radek = $MSQ->fetch_array();
+    //     $radek = $MSQ->fetch_array();
         
-        $db_login=$radek["login"];
-        $db_nick=$radek["login"];
-        $db_level=$radek["level"];
+    //     $db_login=$radek["login"];
+    //     $db_nick=$radek["login"];
+    //     $db_level=$radek["level"];
     
-        $db_login_md5 = md5($db_login);
+    //     $db_login_md5 = md5($db_login);
     
-        //ted to nahazem do session
-        $_SESSION["db_login_md5"]=$db_login_md5;
-        $_SESSION["db_level"]=$db_level;
-        $_SESSION["db_nick"]=$db_nick;
+    //     //ted to nahazem do session
+    //     $_SESSION["db_login_md5"]=$db_login_md5;
+    //     $_SESSION["db_level"]=$db_level;
+    //     $_SESSION["db_nick"]=$db_nick;
     
-        //ted zjistime jestli nejde o refresh stanky :)
-    }
+    //     //ted zjistime jestli nejde o refresh stanky :)
+    // }
 
-// presmerovani na zakladnu :)
-echo "<meta http-equiv=\"Refresh\" content=\"2;url=home.php\">";
-?>
+    // presmerovani na zakladnu :)
+    echo "<meta http-equiv=\"Refresh\" content=\"1;url=home.php\">";
 
-<title>Adminator 2 :: prihlášení</title>
+    echo '
+    <title>Adminator 2 :: prihlášení</title>
 
-</head>
-<body>
+    </head>
+    <body>
 
-<p>Jste bezpecne prihlašováni do administracního systému síte Simelon ...</p>
-<p>
+    <p>Jste bezpecne prihlašováni do administracního systému síte Simelon ...</p>
+    <p>
 
-<form name="hours">
-  <table border="0" cellpadding="0" cellspacing="0" width="700">
-   <tr>
-      <td width="232">Pokud nebudete prihlášeni do <b>
-      <input type="text" size="22" name="time" style="display: none">
-      <input type="text" size="20" name="elapsed" style="display: none">
-      <input type="text" size="10" name="timetojump" style="width: 25px; text-align: right; border: 0px;">
+    <form name="hours">
+    <table border="0" cellpadding="0" cellspacing="0" width="700">
+    <tr>
+        <td width="232">Pokud nebudete prihlášeni do <b>
+        <input type="text" size="22" name="time" style="display: none">
+        <input type="text" size="20" name="elapsed" style="display: none">
+        <input type="text" size="10" name="timetojump" style="width: 25px; text-align: right; border: 0px;">
 
-    </b> sekund ,klepnete <a href="home.php" >sem</a>
-      </td>
-    </tr>
-   </table>
-</form>
+        </b> sekund ,klepnete <a href="home.php" >sem</a>
+        </td>
+        </tr>
+    </table>
+    </form>
 
-<script src="/include/js/login_time.js"></script>
-</p>
-
-<?php
+    <script src="/include/js/login_time.js"></script>
+    </p>';
 
 elseif (isset($lo)):
-    //
+
     //log out
-    //
 
     // presmerovani na login
     echo "<meta http-equiv=\"refresh\" content=\"1;url=index.php\" >";
