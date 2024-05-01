@@ -1,6 +1,7 @@
 <?php
 
-// probably only for non-slim pages (print, etc..)
+// this class is used probably only for non-slim pages (print, etc..)
+
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 class auth_service{
