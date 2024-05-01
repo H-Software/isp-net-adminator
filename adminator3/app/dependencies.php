@@ -9,6 +9,7 @@ use App\View\CsrfExtension;
 use App\View\TwigMessagesExtension;
 use App\View\TwigPhpExtension;
 use App\Middleware\FlashOldFormDataMiddleware;
+use App\Middleware\SessionMiddleware;
 use Slim\Views\TwigMiddleware;
 
 // $container = $app->getContainer();
@@ -81,7 +82,7 @@ $container->set('view', function ($container) {
     $view->addExtension($container->get(CsrfExtension::class));
     // $view->addExtension($container->get(TwigMessagesExtension::class));
 
-	// $view->getEnvironment()->addGlobal('flash', $container->get('flash'));
+	$view->getEnvironment()->addGlobal('flash', $container->get('flash'));
 
 	return $view;
 });
@@ -101,9 +102,9 @@ $app->add('csrf');
 // $app->add(
 //     function ($request, $next) {
 //         // Start PHP session
-//         if (session_status() !== PHP_SESSION_ACTIVE) {
-//             session_start();
-//         }
+//         // if (session_status() !== PHP_SESSION_ACTIVE) {
+//         //     session_start();
+//         // }
 
 //         // Change flash message storage
 //         $this->get('flash')->__construct($_SESSION);
@@ -112,12 +113,12 @@ $app->add('csrf');
 //     }
 // );
 
-$app->addMiddleware($container->get(SessionStartMiddleware::class));
+$app->addMiddleware($container->get(SessionMiddleware::class));
 
 // $app->addMiddleware($container->get(TwigMiddleware::class));
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
-// $app->addMiddleware($container->get(FlashOldFormDataMiddleware::class));
+$app->addMiddleware($container->get(FlashOldFormDataMiddleware::class));
 
 
 $container->set('AuthController', function($container) {

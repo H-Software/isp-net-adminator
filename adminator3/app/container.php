@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-use Odan\Session\Middleware\SessionStartMiddleware;
+use App\Middleware\SessionMiddleware;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
@@ -30,10 +30,9 @@ return [
         return $session;
     },
 
-    SessionStartMiddleware::class => function (ContainerInterface $container) {
-        return new SessionStartMiddleware($container->get(SessionInterface::class));
+    SessionMiddleware::class => function (ContainerInterface $container) {
+        return new SessionMiddleware($container->get(SessionInterface::class), $container->get('csrf'));
     },
-
     
     // Guard::class => function (ContainerInterface $container) {
     //     $storage = [];

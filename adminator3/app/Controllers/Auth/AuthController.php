@@ -11,12 +11,18 @@ use App\Controllers\Controller;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Exception;
 use Slim\Interfaces\RouteParserInterface;
+use Slim\Flash\Messages;
 
 class AuthController extends Controller
 {
 	var $conn_mysql;
     var $smarty;
     var $logger;
+
+    /**
+     * @var Messages
+     */
+    protected Messages $flash;
 
     /**
      * @var RouteParserInterface
@@ -30,6 +36,7 @@ class AuthController extends Controller
 
     public function __construct(
         ContainerInterface $container,
+        Messages $flash,
         RouteParserInterface $routeParser,
         )
     {
@@ -54,13 +61,15 @@ class AuthController extends Controller
          */
     //     $app->getContainer()["flash"]->addMessage('error', 'testando novo');
     //     var_dump( $app->getContainer()["flash"]->storage["slimFlash"]["error"] );
-    //     var_dump( $app->getContainer()["flash"]->getMessages()["error"] );
+        var_dump( $this->flash->getMessages()["error"] );
+        echo "<pre>OLD: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
+
         $message = array_key_exists("message", $args) ? $args["message"] : null;
 
         if ($request->getMethod() == "POST") 
         {
-            $username = $request->getParsedBody()['slimUsername'];
-            $password = $request->getParsedBody()['slimPassword'];
+            // $username = $request->getParsedBody()['slimUsername'];
+            // $password = $request->getParsedBody()['slimPassword'];
 
             $data = $request->getParsedBody();
 
@@ -79,10 +88,10 @@ class AuthController extends Controller
                     return $response->withStatus(302)->withHeader('Location', $url);
                 }
             } catch (Exception $e) {
-                $this->flash->addMessage('status', $e->getMessage());
-                $this->logger->error($e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
+                $this->flash->addMessage('error', $e->getMessage());
+                $this->logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
     
-                // return $response->withHeader('Location', $this->routeParser->urlFor('auth.signin'));
+                // return $response->withStatus(302)->withHeader('Location', $this->routeParser->urlFor('auth.signin'));
             }
 
 
