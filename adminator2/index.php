@@ -65,7 +65,7 @@ if((isset($login)) and (isset($password))):
 
     // $MSQ = $conn_mysql->query($SQL);
 
-    if ($MSQ->num_rows <> 1){
+    // if ($MSQ->num_rows <> 1){
     if( $logged === false) {
         echo "</head><body>";
     	echo "<p>Neautorizovaný prístup. / Chyba prístupu.</p>";
@@ -75,6 +75,7 @@ if((isset($login)) and (isset($password))):
 
         exit;
     }
+
     // else{
     //     //
     //     // uzivatel se zalogoval spravne, ted to ulozit do db

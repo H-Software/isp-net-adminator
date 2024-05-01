@@ -15,7 +15,10 @@ require __DIR__ . '/../bootstrap/settings.php';
 
 require __DIR__ . '/../bootstrap/logger.php';
 
+// session_start must be before sentinel stuff
+// and after containerBuilder
 require __DIR__ . '/../bootstrap/session.php';
 
 require __DIR__ . '/../bootstrap/database.php';
 
+require __DIR__ . '/../bootstrap/sentinel.php';
