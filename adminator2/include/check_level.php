@@ -43,33 +43,6 @@ function check_level ($user_level, $id, $adminator = null) {
   
   return true;
 
-  // old code
-  /*
-  try {
-    $dotaz = $conn_mysql->query("SELECT level FROM leveling WHERE id = '".intval($id)."' ");
-    $radku = $dotaz->num_rows;
-  } catch (Exception $e) {
-    die ("<h2 style=\"color: red; \">Check level Failed: Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
-  }
-
-  if ($radku==0)
-  {
-    return false; 
-    // "Chyba: NELZE ZJISTIT LEVEL prvku! ";
-
-    //exit;
-  }
-
-  while ($data = $dotaz->fetch_array())
-  {
-    $level_stranky=$data["level"];
-  }
-
-  if ( $user_level >= $level_stranky)
-  {
-    return true;
-  }
-  */
 }
 
 function check_level2 ($user_level,$level_col)

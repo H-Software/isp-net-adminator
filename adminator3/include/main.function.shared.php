@@ -162,22 +162,6 @@ function check_login($app_name = "adminator3") {
 
 // end of authz stuff
 
-function last_page(){
-    $uri=$_SERVER["REQUEST_URI"];
-    
-    if (preg_match("/\/adminator3\//i", $uri)) {
-      list($x,$y) = explode("adminator3/",$uri);
-    } 
-    elseif (preg_match("/\/adminator2\//i", $uri)) {
-      list($x,$y) = explode("adminator2/",$uri);
-    }
-    else {
-      $y = $_SERVER['REQUEST_URI'];
-      // echo "<div>DEBUG: last page: " . $y . "," . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_URL'] . ",R.U: " . $_SERVER['REQUEST_URI'] . ",  </div>";
-    }
-    return $y;
-}
-
 function fix_link_to_another_adminator($link){
 
     $uri=$_SERVER["REQUEST_URI"];
