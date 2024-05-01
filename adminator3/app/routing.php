@@ -16,24 +16,6 @@ $app->get('/', function ($request, $response, $args) {
 })->setName('index');
 
 $app->group('/auth', function(RouteCollectorProxy $group) {
-	// $group->get('/notAuthenticated', function ($request, $response, $args) use ($app) {
-      
-    //     $app->getContainer()["flash"]->addMessage('info', "You are not authenticated");
-
-    //     $route = $app->getContainer()->get('router')->getNamedRoute('login');
-	// 	//redirect:
-	// 	// $route = \Slim\App::object()->getContainer()->get('router')->getNamedRoute('login');
-	// 	$route->setArgument("message" , "You are not authenticated" );
-	// 	$route->run($request, $response );
-	// })->setName("notAuthenticated");
-	
-// 	$app->get('/notAuthorized', function (SlimHttpRequest $request, SlimHttpResponse $response, $args) {
-// 		return $response
-// 		->withStatus(403)
-// 		->withHeader('Content-Type', 'text/html;charset=utf-8')
-// 		->write('You are not authorized to this resource.');
-// 	})->setName("notAuthorized");
-
     $group->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('auth.signin');
 
     $group->get('/signout', AuthController::class . ':signout')->setName('logout');

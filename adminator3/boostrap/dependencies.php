@@ -4,12 +4,6 @@ use App\Middleware\SessionMiddleware;
 use Slim\Views\TwigMiddleware;
 use Slim\Csrf\Guard;
 
-// Add Error Handling Middleware
-$displayErrorDetails = true;
-$logErrors = true;
-$logErrorDetails = false;
-$app->addErrorMiddleware($displayErrorDetails, $logErrors, $logErrorDetails);
-
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
 $container->set('csrf', function() use($responseFactory) {
