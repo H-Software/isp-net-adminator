@@ -1,5 +1,5 @@
 <?php
 
-start_ses();
+// start_ses();
 
 check_login("adminator2");

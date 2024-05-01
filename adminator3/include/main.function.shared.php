@@ -146,94 +146,56 @@ function is_session_started()
       return array_intersect_key($array, array_flip($keys));
   }
 
-function init_ses()
-{
-    $SN = "autorizace"; 
-    session_name("$SN");
-    session_start();
-}
+// function start_ses()
+// {
+//   global $sid, $level, $nick, $date, $ad, $logger;
 
-function start_ses()
-{
-  global $sid, $level, $nick, $date, $ad, $logger;
+//   if(is_object($logger))
+//   {
+//     $logger->info("start_ses called");
+//   }
 
-  if(is_object($logger))
-  {
-    $logger->info("start_ses called");
-  }
+//   // some backwards compatibility attemt
+//   if (!is_session_started()) {
+//     init_ses();
+//   }
 
-  // some backwards compatibility attemt
-  if (!is_session_started()) {
-    init_ses();
-  }
+//   $sid = $_SESSION["db_login_md5"];
+//   $level = $_SESSION["db_level"];
+//   $nick = $_SESSION["db_nick"];
 
-  $sid = $_SESSION["db_login_md5"];
-  $level = $_SESSION["db_level"];
-  $nick = $_SESSION["db_nick"];
+//   $date = date("U"); 
+//   $ad = date("U") - 1200; 
 
-  $date = date("U"); 
-  $ad = date("U") - 1200; 
+//   if(is_object($logger))
+//   {
+//     $logger->info("start_ses: result: "
+//       . "[nick => " . $nick
+//       . ", level => " . $level
+//       . ", sid => " . $sid
+//       . "]");
+//   }
 
-  if(is_object($logger))
-  {
-    $logger->info("start_ses: result: "
-      . "[nick => " . $nick
-      . ", level => " . $level
-      . ", sid => " . $sid
-      . "]");
-  }
+//   return array($sid, $level, $nick);
+// }
 
-  return array($sid, $level, $nick);
-}
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 function check_login($app_name = "adminator3") {
-  global $sid, $ad, $level, $date, $conn_mysql, $cesta;
+  global $logger, $level, $date, $conn_mysql, $cesta;
 
-  try {
-    $MSQ_S = $conn_mysql->query("SELECT id FROM autorizace WHERE id != '".$conn_mysql->real_escape_string($sid)."' ");
-    $MSQ_S_RADKU = $MSQ_S->num_rows;
-  } catch (Exception $e) {
-    die ("<h2 style=\"color: red; \">Login Failed (check login): Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+  $logger->info("check_login called");
+
+  if (Sentinel::guest()) {
+      $logger->info("check_login: sentinel::guest, redirecting to nologinpage");
+
+      $stranka=$cesta.'nologinpage.php';
+      header("Location: ".$stranka);
+  
+      echo "Neautorizovaný přístup / Timeout Spojení   ".htmlspecialchars($sid)."  ".htmlspecialchars($level)."";
+      exit;
   }
- 
-  if( $MSQ_S_RADKU == 0 ){
-    //jestli je prihlasen pouze jeden clovek tak se neresi cas
-    $MSQ = $conn_mysql->query("SELECT id FROM autorizace WHERE (id = '".$conn_mysql->real_escape_string($sid)."') "); 
-  }
-  else {
-    $MSQ = $conn_mysql->query("SELECT id FROM autorizace ".
-          "WHERE (id = '".$conn_mysql->real_escape_string($sid)."') AND (date >= ".$conn_mysql->real_escape_string($ad).") "); 
-  }
-
-  $MSQ_R = $MSQ->num_rows;
- 
-  if( $MSQ_R <> 1 and $app_name == "adminator3" ) {
-    $ret = array();
-
-    $ret[] = "false";
-    $ret[] = "Neautorizovany pristup / Timeout Spojeni. (sid: ".$sid.", lvl: ".$level.", rows: ".$MSQ_R.",rows2: $MSQ_S_RADKU )";
-   
-    return $ret;  
-  }
-
-  if($MSQ->num_rows <> 1 and $app_name == "adminator2")
-  {
- 
-     $stranka=$cesta.'nologinpage.php';
-     header("Location: ".$stranka);
- 
-     echo "Neautorizovaný přístup / Timeout Spojení   ".htmlspecialchars($sid)."  ".htmlspecialchars($level)."";
-     exit;
- 
-  }
-
-  $MSQ = $conn_mysql->query("UPDATE autorizace ".
-    "SET date = ".$conn_mysql->real_escape_string($date)." WHERE id = '".$conn_mysql->real_escape_string($sid)."' "); 
-
-  // sem asi odstranovani ostatnich useru co jim prosel limit
-  $MSQ_D = $conn_mysql->query("DELETE FROM autorizace ".
-    " WHERE ( date <= ".$conn_mysql->real_escape_string($ad).") AND (id != '".$conn_mysql->real_escape_string($sid)."') ");
-
+  
   return true;
 }
 
