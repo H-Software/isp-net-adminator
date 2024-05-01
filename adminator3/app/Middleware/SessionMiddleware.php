@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard;
 
 /**
@@ -27,12 +28,22 @@ class SessionMiddleware implements MiddlewareInterface
     protected Guard $guard;
 
     /**
+     * @var LoggerInterface
+     */
+    protected LoggerInterface $logger;
+
+    /**
      * @param SessionInterface $session The session
      */
-    public function __construct(SessionInterface $session, Guard $guard)
+    public function __construct(
+            SessionInterface $session,
+            Guard $guard,
+            LoggerInterface $logger
+        )
     {
         $this->session = $session;
         $this->guard   = $guard;
+        $this->logger  = $logger;
     }
 
     /**
@@ -44,6 +55,7 @@ class SessionMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (!$this->session->isStarted() && !headers_sent()) {
+            $this->logger->debug("SessionMiddleware: session not started, starting");
             $this->session->start();
         }
         if (!$this->session->has('regen') || $this->session->get('regen') < time()) {
@@ -52,6 +64,8 @@ class SessionMiddleware implements MiddlewareInterface
         }
 
         $this->guard->setStorage($this);
+
+        $this->logger->debug("SessionMiddleware iniciated");
 
         return $handler->handle($request);
     }

@@ -10,7 +10,7 @@ $settings = [
             'path' => __DIR__ . '/../resources/views/',
         ],
         'session' => [
-            'name' => 'adminator-app',
+            'name' => 'adminator3-slimapp',
             'lifetime' => 7200,
             'path' => null,
             'domain' => null,
