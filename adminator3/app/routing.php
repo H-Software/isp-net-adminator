@@ -8,6 +8,7 @@ use Slim\Routing\RouteCollectorProxy;
 use App\Middleware\RedirectIfNotAuthenticated;
 use App\Controllers\HomeController;
 use App\Controllers\Auth\AuthController;
+use App\Controllers\Auth\PasswordController;
 
 // routes
 
@@ -22,8 +23,8 @@ $app->group('/auth', function(RouteCollectorProxy $group) {
 });
 
 $app->group('', function (RouteCollectorProxy $group) use ($app) {
-    // $app->get('/auth/password/change', PasswordController::class . ':getChangePassword')->setName('auth.password.change');
-	// $app->post('/auth/password/change', PasswordController::class . ':postChangePassword');
+    $app->get('/auth/password/change', PasswordController::class . ':getChangePassword')->setName('auth.password.change');
+	$app->post('/auth/password/change', PasswordController::class . ':postChangePassword');
 })->add(RedirectIfNotAuthenticated::class);
 
 $app->group('', function(RouteCollectorProxy $group) {

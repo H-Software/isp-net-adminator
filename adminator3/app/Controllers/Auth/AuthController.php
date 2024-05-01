@@ -5,18 +5,16 @@ namespace App\Controllers\Auth;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-// use App\Models\User;
 use App\Controllers\Controller;
-// use Respect\Validation\Validator as v;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Exception;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Flash\Messages;
+use Slim\Views\Twig;
 
 class AuthController extends Controller
 {
-	var $conn_mysql;
-    var $smarty;
+
     var $logger;
 
     /**
@@ -29,10 +27,10 @@ class AuthController extends Controller
      */
     protected RouteParserInterface $routeParser;
 
-    //  /**
-    //  * @var Twig
-    //  */
-    // protected Twig $view;
+     /**
+     * @var Twig
+     */
+    protected Twig $view;
 
     public function __construct(
         ContainerInterface $container,
