@@ -43,6 +43,16 @@ $container->set('logger', function($c) {
     return $logger;
 });
 
+// $container->set('smarty', $smarty);
+
+$container->set('smarty', function($c) { 
+    $smarty = new Smarty;
+    $smarty->compile_check = true;
+    //$smarty->debugging = true;
+
+    return $smarty;
+});
+
 $container->set('connMysql', $conn_mysql);
 
 $container->set('connPgsql', $db_ok2);

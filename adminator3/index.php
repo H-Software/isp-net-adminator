@@ -7,10 +7,6 @@ require "include/main.function.shared.php";
 // autoload, init DB conns, init Illuminate\Database
 require "app/bootstrap.php";
 
-$smarty = new Smarty;
-$smarty->compile_check = true;
-//$smarty->debugging = true;
-
 use Slim\Factory\AppFactory;
 
 AppFactory::setContainer($container);

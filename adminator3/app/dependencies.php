@@ -4,8 +4,6 @@ use App\Middleware\SessionMiddleware;
 use Slim\Views\TwigMiddleware;
 use Slim\Csrf\Guard;
 
-$container->set('smarty', $smarty);
-
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
 $container->set('csrf', function() use($responseFactory) {

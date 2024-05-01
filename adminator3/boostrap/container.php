@@ -10,12 +10,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Slim\Views\Twig;
-use Slim\Views\TwigMiddleware;
-use DI\Bridge\Slim\Bridge;
-use Slim\Csrf\Guard;
-use Slim\Interfaces\RouteParserInterface;
-
 
 return [
 
