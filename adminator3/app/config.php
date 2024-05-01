@@ -67,6 +67,3 @@ $capsule->bootEloquent();
 
 # sentinel
 Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/config-sentinel.php')));
-
-// Sentinel::removeCheckpoint('activation');
-// Sentinel::removeCheckpoint('throttle');

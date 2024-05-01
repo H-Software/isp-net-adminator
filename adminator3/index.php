@@ -4,14 +4,10 @@
 require "include/main.function.shared.php";
 // autoload, init DB conns, init Illuminate\Database
 require "app/config.php";
-// slim config
-// require "app/settings.php";
 
 $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
-
-// use Slim\App;
 
 use Slim\Factory\AppFactory;
 use DI\ContainerBuilder;
@@ -23,10 +19,6 @@ $container = $builder->build();
 
 AppFactory::setContainer($container);
 $app = AppFactory::create();
-
-// $app = \DI\Bridge\Slim\Bridge::create($container);
-
-// $app->setBasePath('/');
 
 $callableResolver = $app->getCallableResolver();
 $responseFactory = $app->getResponseFactory();
