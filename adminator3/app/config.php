@@ -3,6 +3,9 @@
 // autoload
 require __DIR__ . '/../vendor/autoload.php';
 
+use Cartalyst\Sentinel\Native\SentinelBootstrapper;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+
 $loader = new Nette\Loaders\RobotLoader;
 
 $loader->addDirectory(__DIR__ . '/../app/Middleware');
@@ -14,6 +17,7 @@ $loader->addDirectory(__DIR__ . '/../app/Models');
 $loader->addDirectory(__DIR__ . '/../app/Validation');
 $loader->addDirectory(__DIR__ . '/../app/Handlers');
 $loader->addDirectory(__DIR__ . '/../app/View');
+$loader->addDirectory(__DIR__ . '/../app/Migration');
 
 $loader->setTempDirectory(__DIR__ . '/../temp');
 $loader->register();
@@ -62,7 +66,7 @@ $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
 # sentinel
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
+Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/config-sentinel.php')));
 
-Sentinel::removeCheckpoint('activation');
-Sentinel::removeCheckpoint('throttle');
+// Sentinel::removeCheckpoint('activation');
+// Sentinel::removeCheckpoint('throttle');

@@ -80,6 +80,10 @@ sqlcmd query "SELECT Name from sys.databases;"
 #### sentinel
 - https://github.com/cartalyst/sentinel/blob/2.0/src/Native/ConfigRepository.php
 
+#### phinx
+- https://siipo.la/blog/how-to-use-eloquent-orm-migrations-outside-laravel
+- https://book.cakephp.org/phinx/0/en/migrations.html#custom-column-types-default-values
+
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html
 

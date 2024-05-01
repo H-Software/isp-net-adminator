@@ -54,7 +54,10 @@ class AuthController extends Controller
 	{
         if ($request->getMethod() == "POST") 
         {
-            $data = $request->getParsedBody();
+            $data = array(
+                    'email' => $request->getParsedBody()['slimUsername'],
+                    'password' => $request->getParsedBody()['slimPassword'],
+            );
 
             try {
                 if (

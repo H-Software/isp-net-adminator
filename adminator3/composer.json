@@ -1,4 +1,8 @@
 {
+    "name": "hsoftware/isp-net-adminator",
+    "type": "project",
+    "homepage": "https://github.com/H-Software/isp-net-adminator",
+    "license": "MIT",
     "config": {
         "allow-plugins": {
             "kylekatarnls/update-helper": true
@@ -32,6 +36,28 @@
         "phpmailer/phpmailer": "^6.9.1",
         "lloricode/laravel-html-table": "^2.1",
         "illuminate/pagination": "^10.48",
-        "evilfreelancer/routeros-api-php": "1.5.2"
+        "evilfreelancer/routeros-api-php": "1.5.2",
+        "robmorgan/phinx": "^0.12.10"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^v3.5.0",
+        "overtrue/phplint": "^4.1.0",
+        "phpstan/phpstan": "^1.4.2",
+        "squizlabs/php_codesniffer": "*",
+        "symfony/var-dumper": "^v6.0.2"
+    },
+    "scripts": {
+        "cleanup": [
+            "phpcbf",
+            "vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --show-progress=dots -vvv"
+        ],
+        "dump": "composer dump-autoload -a",
+        "post-update-cmd": "composer dump-autoload -o",
+        "create-migration": "vendor/bin/phinx create -c config/phinx.php --ansi -- ",
+        "migrate": "vendor/bin/phinx migrate -c config/phinx.php -e default --ansi",
+        "rollback": "vendor/bin/phinx rollback -c config/phinx.php -e default --ansi -t 0",
+        "phplint": "phplint --no-cache",
+        "phpstan": "phpstan analyse",
+        "phpcs": "phpcs -s"
     }
 }

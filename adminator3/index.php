@@ -5,7 +5,7 @@ require "include/main.function.shared.php";
 // autoload, init DB conns, init Illuminate\Database
 require "app/config.php";
 // slim config
-require "app/settings.php";
+// require "app/settings.php";
 
 $smarty = new Smarty;
 $smarty->compile_check = true;
