@@ -2,8 +2,9 @@
     "require": {
         "nette/robot-loader": "^3.4",
         "smarty/smarty": "^4.5.2",
+        "monolog/monolog": "^3.6.0",
         "respect/validation": "^2.2",
-        "formr/formr": "^1.4",
+        "formr/formr": "^1.5",
         "illuminate/database": "^10.48",
         "illuminate/events": "^v10.0",
         "cartalyst/sentinel": "^v7.0",
