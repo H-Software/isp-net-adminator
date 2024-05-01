@@ -69,7 +69,7 @@ class adminator {
     public function getUserLevel()
 	{
 		$rs = User::where(
-                            "username",
+                            "email",
                             isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
                         )->first(['level']);
         if(is_object($rs))

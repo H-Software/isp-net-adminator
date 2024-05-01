@@ -5,7 +5,7 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 class adminatorController extends Controller {
 
     var $conn_mysql;
@@ -70,16 +70,14 @@ class adminatorController extends Controller {
             $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
 
-        // $auth_identity = $this->container->auth->getIdentity();
-        // $this->logger->info("adminatorController\\check_level getIdentity: ".var_export( $auth_identity['username'], true));
-
         if ($page_level_id == 0){
             $this->renderNoLogin();
             return false;
         }
 
         $a->page_level_id = $page_level_id;
-        $a->userIdentityUsername = $auth_identity['username'];
+        $a->userIdentityUsername = Sentinel::getUser()->email;
+        $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($a->userIdentityUsername, true));
 
         $checkLevel = $a->checkLevel();
         

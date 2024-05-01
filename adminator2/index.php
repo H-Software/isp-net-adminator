@@ -34,21 +34,18 @@ if((isset($login)) and (isset($password))):
     
     global $MSQ;
 
-    try {
-        $MSQ = $conn_mysql->query(
-            "SELECT login, level FROM users ".
+    $SQL = "SELECT login, level FROM users_old ".
             " WHERE ( " 
             . " login LIKE '".$conn_mysql->real_escape_string($login)."') "
-            . "AND (password LIKE '".$conn_mysql->real_escape_string($p)."') "
-        );
-    } catch (Exception $e) {
-        // die ("<h2 style=\"color: red; \">Login Failed: Caught exception: " .  $e->getMessage() . "\n" . "</h2></body></html>\n");
-    }
+            . "AND (password LIKE '".$conn_mysql->real_escape_string($p)."') ";
+
+    $MSQ = $conn_mysql->query($SQL);
 
     if ($MSQ->num_rows <> 1){
         echo "</head><body>";
     	echo "<p>Neautorizovaný prístup. / Chyba prístupu.</p>";
     	echo "<p>(num rows: " . $MSQ->num_rows . ")</p>";
+        // echo "<p>SQL DUMP: " . $SQL . "</p>";
         echo "</body></html>";
 
         exit;

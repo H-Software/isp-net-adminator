@@ -1,4 +1,8 @@
 {
+    "name": "hsoftware/isp-net-adminator",
+    "type": "project",
+    "homepage": "https://github.com/H-Software/isp-net-adminator",
+    "license": "MIT",
     "config": {
         "allow-plugins": {
             "kylekatarnls/update-helper": true
@@ -19,18 +23,43 @@
         "slim/csrf": "^1.4",
         "slim/flash": "^0.4.0",
         "php-di/php-di": "^7.0",
+        "php-di/slim-bridge": "^3.4",
         "monolog/monolog": "^3.6.0",
         "respect/validation": "^2.2",
         "formr/formr": "^1.5",
         "illuminate/database": "^10.48",
-        "doctrine/orm": "^2.19.0",
-        "doctrine/annotations": "^1.14.0",
-        "symfony/cache": "^5.4",
-        "czhujer/slim-auth": "dev-dev-master",
+        "illuminate/events": "^v10.0",
+        "cartalyst/sentinel": "^v7.0",
+        "nyholm/psr7": "^1.4.1",
+        "nyholm/psr7-server": "^1.0.2",
+        "symfony/http-foundation": "^v6.4",
+        "odan/session": "^6.1",
         "setasign/fpdf": "1.8.6",
         "phpmailer/phpmailer": "^6.9.1",
         "lloricode/laravel-html-table": "^2.1",
         "illuminate/pagination": "^10.48",
-        "evilfreelancer/routeros-api-php": "1.5.2"
+        "evilfreelancer/routeros-api-php": "1.5.2",
+        "robmorgan/phinx": "^0.12.10"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^v3.5.0",
+        "overtrue/phplint": "^4.1.0",
+        "phpstan/phpstan": "^1.4.2",
+        "squizlabs/php_codesniffer": "*",
+        "symfony/var-dumper": "^v6.0.2"
+    },
+    "scripts": {
+        "cleanup": [
+            "phpcbf",
+            "vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --show-progress=dots -vvv"
+        ],
+        "dump": "composer dump-autoload -a",
+        "post-update-cmd": "composer dump-autoload -o",
+        "create-migration": "vendor/bin/phinx create -c config/phinx.php --ansi -- ",
+        "migrate": "vendor/bin/phinx migrate -c config/phinx.php -e default --ansi",
+        "rollback": "vendor/bin/phinx rollback -c config/phinx.php -e default --ansi -t 0",
+        "phplint": "phplint --no-cache",
+        "phpstan": "phpstan analyse",
+        "phpcs": "phpcs -s"
     }
 }

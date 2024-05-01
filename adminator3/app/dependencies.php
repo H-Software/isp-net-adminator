@@ -3,31 +3,20 @@
 use Slim\Views\Twig;
 use Slim\Csrf\Guard;
 
-use Laminas\Authentication\Storage\Session as SessionStorage;
+use Psr\Container\ContainerInterface;
+use Odan\Session\Middleware\SessionStartMiddleware;
+use App\View\CsrfExtension;
+use App\View\TwigMessagesExtension;
+use App\View\TwigPhpExtension;
+use App\Middleware\FlashOldFormDataMiddleware;
+use App\Middleware\SessionMiddleware;
+use Slim\Views\TwigMiddleware;
 
-use Laminas\Session\Config\SessionConfig;
-use Laminas\Session\SessionManager;
-
-$container = $app->getContainer();
+// $container = $app->getContainer();
 
 $container->set('settings', function () {
     return require __DIR__ . '/settings.php';
 });
-
-// init sessions
-$sessionConfig = new SessionConfig();
-$sessionConfig->setOptions(array(
-    // 'remember_me_seconds' => 5,
-    'name' => 'adminator-auth',
-    // 'cookie_lifetime' => 5
-));
-$sessionManager = new SessionManager($sessionConfig);
-$sessionManager->rememberMe();
-
-$storage = new SessionStorage();
-// $sessionManager->setStorage($storage);
-
-// $container["authStorage"] = $storage;
 
 $container->set('logger', function($c) { 
     $settings = $c->get('settings');
@@ -80,66 +69,58 @@ $container->set('flash', function($container) {
 	return new \Slim\Flash\Messages;
 });
 
-$container->set('view', function ($c) {
-    $settings = $c->get('settings');
+$container->set('view', function ($container) {
+    $settings = $container->get('settings');
 
 	$view = Twig::create($settings['twig']['path'], [
 		'cache' => false,
 	]);
 
-	// $view->addExtension(new \Slim\Views\TwigExtension(
-	// 	$container->router,
-	// 	$container->request->getUri()
-	// ));
+    $view->getEnvironment()->enableStrictVariables();
 
-	$view->getEnvironment()->addGlobal('flash', $c->flash);
+    $view->addExtension($container->get(CsrfExtension::class));
+
+	$view->getEnvironment()->addGlobal('flash', $container->get('flash'));
 
 	return $view;
 });
+
+$container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
 $container->set('validator', function ($container) {
 	return new App\Validation\Validator;
 });
 
-// $acl = new Acl();
-
-// $container['router'] = new \czhujer\Slim\Auth\Route\AuthorizableRouter(null, $acl);
-// $container['acl']    = $acl;
-
-// $adapterOptions = [];
-// $adapter = new czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter(
-//     NULL,  //LDAP config or NULL if not using LDAP
-//     $em, //an Doctrine's Entity Manager instance 
-//     "App\Entity\UserRole",    //Role class
-//     "role", //Role's class role attribute
-//     "user", //Role's class user attribute (the @ManyToOne attrib)
-//     "App\Entity\User", //User class
-//     "username", //User name attribute
-//     "passwordHash", //password (as a hash) attribute
-//     czhujer\Slim\Auth\Adapter\LdapRdbmsAdapter::AUTHENTICATE_RDBMS, //auth method: LdapRdbmsAdapter::AUTHENTICATE_RDBMS | LdapRdbmsAdapter::AUTHENTICATE_LDAP 
-//     10, //a hash factor
-//     PASSWORD_DEFAULT, //hash algorithm
-//     $adapterOptions //if needed
-//     );
-
-// $container["authAdapter"] = $adapter;
-
-// $slimAuthProvider = new SlimAuthProvider();
-// $slimAuthProvider->register($container);
-
-// $app->add(
-//         new Authorization( 
-//                 $container["auth"], 
-//                 $acl, 
-//                 new RedirectHandler("/auth/notAuthenticated", "/auth/notAuthorized") 
-//             )
-//         );
+$container->set('FlashOldFormDataMiddleware', function ($container) {
+    return new FlashOldFormDataMiddleware($container->get('flash'));
+});
 
 $container->set('csrf', function() use($responseFactory) {
 	return new Guard($responseFactory);
 });
 
 $app->add('csrf');
+
+// $app->add(
+//     function ($request, $next) {
+//         // Start PHP session
+//         // if (session_status() !== PHP_SESSION_ACTIVE) {
+//         //     session_start();
+//         // }
+
+//         // Change flash message storage
+//         $this->get('flash')->__construct($_SESSION);
+
+//         return $next->handle($request);
+//     }
+// );
+
+$app->addMiddleware($container->get(SessionMiddleware::class));
+
+// $app->addMiddleware($container->get(TwigMiddleware::class));
+$app->addMiddleware(TwigMiddleware::createFromContainer($app));
+
+$app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
 
 $container->set('AuthController', function($container) {
 	return new \App\Controllers\Auth\AuthController($container);

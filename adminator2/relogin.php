@@ -16,7 +16,7 @@ $lo=$_GET["lo"];
 
 If ((IsSet($login)) AND (IsSet($password))): 
 $p = MD5($password); 
-$MSQ = $conn_mysql->query("SELECT * FROM users WHERE (login LIKE '$login') AND (password LIKE '$p')"); 
+$MSQ = $conn_mysql->query("SELECT * FROM users_old WHERE (login LIKE '$login') AND (password LIKE '$p')"); 
 
 If ($MSQ->num_rows <> 1): 
 echo "<p>Neautorizovaný přístup. / Chyba přístupu.</p>"; 

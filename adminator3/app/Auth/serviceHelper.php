@@ -1,5 +1,9 @@
 <?php
 
+// this class is used probably only for non-slim pages (print, etc..)
+
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+
 class auth_service{
 
     var $conn_mysql;
@@ -37,8 +41,8 @@ class auth_service{
             $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
 
-        $auth_identity = $this->container->auth->getIdentity();
-        // $this->logger->info("adminatorController\\check_level getIdentity: ".var_export( $auth_identity['username'], true));
+        $auth_identity = Sentinel::getUser()->email;
+        $this->logger->debug("adminatorController\\check_level getIdentity: ".var_export($auth_identity, true));
 
         if ($page_level_id == 0){
             $this->renderNoLogin();
@@ -46,7 +50,7 @@ class auth_service{
         }
 
         $a->page_level_id = $page_level_id;
-        $a->userIdentityUsername = $auth_identity['username'];
+        $a->userIdentityUsername = $auth_identity;
 
         $checkLevel = $a->checkLevel();
         
@@ -56,5 +60,17 @@ class auth_service{
             $this->renderNoLogin();
             return false;
         }
+    }
+
+    public function renderNoLogin ()
+    {
+        $this->smarty->assign("page_title","Adminator3 - chybny level");
+
+        // $this->header();
+
+        $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+        $this->smarty->display('global/no-level.tpl');
+        
+        exit;
     }
 }    

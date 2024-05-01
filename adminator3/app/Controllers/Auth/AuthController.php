@@ -3,9 +3,15 @@
 namespace App\Controllers\Auth;
 
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 // use App\Models\User;
 use App\Controllers\Controller;
 // use Respect\Validation\Validator as v;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Exception;
+use Slim\Interfaces\RouteParserInterface;
+use Slim\Flash\Messages;
 
 class AuthController extends Controller
 {
@@ -13,50 +19,81 @@ class AuthController extends Controller
     var $smarty;
     var $logger;
 
-    public function __construct(ContainerInterface $container)
+    /**
+     * @var Messages
+     */
+    protected Messages $flash;
+
+    /**
+     * @var RouteParserInterface
+     */
+    protected RouteParserInterface $routeParser;
+
+    //  /**
+    //  * @var Twig
+    //  */
+    // protected Twig $view;
+
+    public function __construct(
+        ContainerInterface $container,
+        Messages $flash,
+        RouteParserInterface $routeParser,
+        )
     {
         $this->container = $container;
-		// $this->conn_mysql = $conn_mysql;
-        // $this->smarty = $smarty;
-        // $this->logger = $logger;
-        $this->logger = $container->logger;
+        $this->routeParser = $routeParser;
+        $this->flash = $container->get('flash');
+
+        $this->logger = $container->get('logger');
+        $this->view = $container->get('view');
 
         $this->logger->info("authController\__construct called");
 	}
 
-	public function signin($request, $response, array $args)
+	public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
 	{
-        $username = null;
-        // global $app;
-        /*
-         * require: slim/flash
-         * don't know if slim/flash is not stable or I'm a fool
-         */
-    //     $app->getContainer()["flash"]->addMessage('error', 'testando novo');
-    //     var_dump( $app->getContainer()["flash"]->storage["slimFlash"]["error"] );
-    //     var_dump( $app->getContainer()["flash"]->getMessages()["error"] );
-        $message = array_key_exists("message", $args) ? $args["message"] : null;
-        if ($request->isPost()) {
-            $username = $request->getParsedBody()['slimUsername'];
-            $password = $request->getParsedBody()['slimPassword'];
-            $result = $this->container->authenticator->authenticate($username, $password);
-    
-            if ($result->isValid()) {
-                $url = $this->router->pathFor('home');
-                return $response->withStatus(302)->withHeader('Location', $url);
-            } else {
-                $messages = $result->getMessages();
-                $message = $messages[0]; //message to presentation layer
-                $this->container->flash->addMessage('error', $messages[0]);
-                foreach ($messages as $i => $msg) {
-                        $messages[$i] = str_replace("\n", "\n  ", $msg);
+        if ($request->getMethod() == "POST") 
+        {
+            $data = array(
+                    'email' => $request->getParsedBody()['slimUsername'],
+                    'password' => $request->getParsedBody()['slimPassword'],
+            );
+
+            try {
+                if (
+                    !Sentinel::authenticate($this->array_clean($data, [
+                        'email',
+                        'password',
+                    ]), isset($data['persist']))
+                ) {
+                    throw new Exception('Incorrect email or password.');
                 }
-                $this->logger->warning("Authentication failure for $username .", $messages);
-                $this->logger->warning("Authentication failure error: ".var_export($messages[0], true));
-    
+                else 
+                {
+                    $url = $this->routeParser->urlFor('home');
+                    return $response->withStatus(302)->withHeader('Location', $url);
+                }
+            } catch (Exception $e) {
+                $this->flash->addMessageNow('error', $e->getMessage());
+                $this->logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
             }
         }
-        return $this->container->view->render($response, 'auth\signin.twig', array('username' => @$username, "message" => $message));
+
+        if (isset($this->flash->getMessages()["oldNow"][0]['slimUsername'])){
+            $username = $this->flash->getMessages()["oldNow"][0]['slimUsername'];
+        }
+        elseif(isset($this->flash->getMessages()["old"][0]['slimUsername']) ){
+            $username = $this->flash->getMessages()["old"][0]['slimUsername'];
+        }
+        else{
+            $username = null;
+        }
+
+        // echo "<pre>END: ERROR: " . var_export($this->flash->getMessages()["error"], true) . "</pre>";
+        // echo "<pre>END OLD: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
+        // echo "<pre>END OLD NOW: " . var_export($this->flash->getMessages()["oldNow"], true) . "</pre>";
+
+        return $this->view->render($response, 'auth\signin.twig', array('username' => @$username));
 	}
 
 	public function signout($request, $response, array $args)
@@ -75,5 +112,16 @@ class AuthController extends Controller
         $url = $this->container->router->pathFor('home');
         return $response->withStatus(302)->withHeader('Location', $url);
 	}
+
+    /**
+     * @param array $array The array
+     * @param array $keys  The keys
+     *
+     * @return array
+     */
+    function array_clean(array $array, array $keys): array
+    {
+        return array_intersect_key($array, array_flip($keys));
+    }
 
 }
