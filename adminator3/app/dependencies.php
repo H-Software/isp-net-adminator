@@ -78,9 +78,7 @@ $container->set('view', function ($container) {
 
     $view->getEnvironment()->enableStrictVariables();
 
-    // $view->addExtension($container->get(TwigPhpExtension::class));
     $view->addExtension($container->get(CsrfExtension::class));
-    // $view->addExtension($container->get(TwigMessagesExtension::class));
 
 	$view->getEnvironment()->addGlobal('flash', $container->get('flash'));
 
