@@ -41,7 +41,6 @@ class AuthController extends Controller
         $this->container = $container;
         $this->routeParser = $routeParser;
         $this->flash = $container->get('flash');
-
         $this->logger = $container->get('logger');
         $this->view = $container->get('view');
 
