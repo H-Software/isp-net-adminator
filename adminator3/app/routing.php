@@ -2,8 +2,10 @@
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Routing\RouteCollectorProxy;
 
+use App\Middleware\RedirectIfNotAuthenticated;
 use App\Controllers\HomeController;
 use App\Controllers\Auth\AuthController;
 
@@ -40,7 +42,7 @@ $app->group('/auth', function(RouteCollectorProxy $group) {
 $app->group('', function (RouteCollectorProxy $group) use ($app) {
     // $app->get('/auth/password/change', PasswordController::class . ':getChangePassword')->setName('auth.password.change');
 	// $app->post('/auth/password/change', PasswordController::class . ':postChangePassword');
-});
+})->add(RedirectIfNotAuthenticated::class);
 
 $app->group('', function(RouteCollectorProxy $group) {
     $group->map(['GET', 'POST'],'/home', HomeController::class . ':home')->setName('home');
@@ -98,7 +100,7 @@ $app->group('', function(RouteCollectorProxy $group) {
 
     $group->map(['GET', 'POST'],'/work', \workController::class . ':work');
 
-});
+})->add(RedirectIfNotAuthenticated::class);
 
 // $app->map(['GET'],'/others/img/{name}', function ($request, $response, array $args) {
 //     $name = $args['name'];

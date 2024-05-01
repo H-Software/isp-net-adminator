@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-
+use Psr\Log\LoggerInterface;
 use App\Middleware\SessionMiddleware;
 use Odan\Session\PhpSession;
 use Odan\Session\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use DI\Bridge\Slim\Bridge;
@@ -22,6 +23,10 @@ return [
     //     $app = Bridge::create($container);
     //     return $app;
     // },
+
+    LoggerInterface::class => function (ContainerInterface $container) {
+        return $container->get('logger');
+    },
 
     SessionInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
@@ -48,8 +53,8 @@ return [
     //     return $container->get(App::class)->getResponseFactory();
     // },
 
-    // ResponseFactoryInterface::class => function (ContainerInterface $container) {
-    //     return $container->get(Psr17Factory::class);
-    // },
+    ResponseFactoryInterface::class => function (ContainerInterface $container) {
+        return $container->get(Psr17Factory::class);
+    },
     
 ];
