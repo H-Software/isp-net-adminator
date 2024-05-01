@@ -45,7 +45,7 @@ if((isset($login)) and (isset($password))):
         echo "</head><body>";
     	echo "<p>Neautorizovaný prístup. / Chyba prístupu.</p>";
     	echo "<p>(num rows: " . $MSQ->num_rows . ")</p>";
-        echo "<p>SQL DUMP: " . $SQL . "</p>";
+        // echo "<p>SQL DUMP: " . $SQL . "</p>";
         echo "</body></html>";
 
         exit;
