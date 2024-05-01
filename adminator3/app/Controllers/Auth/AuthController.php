@@ -9,17 +9,19 @@ use Psr\Http\Message\ServerRequestInterface;
 use App\Controllers\Controller;
 // use Respect\Validation\Validator as v;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
-use Slim\Views\Twig;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use Exception;
+use Slim\Interfaces\RouteParserInterface;
 
 class AuthController extends Controller
 {
 	var $conn_mysql;
     var $smarty;
     var $logger;
+
+    /**
+     * @var RouteParserInterface
+     */
+    protected RouteParserInterface $routeParser;
 
     //  /**
     //  * @var Twig
@@ -28,12 +30,13 @@ class AuthController extends Controller
 
     public function __construct(
         ContainerInterface $container,
+        RouteParserInterface $routeParser,
         )
     {
         $this->container = $container;
-		// $this->conn_mysql = $conn_mysql;
-        // $this->smarty = $smarty;
-        // $this->logger = $logger;
+        $this->routeParser = $routeParser;
+        $this->flash = $container->get('flash');
+
         $this->logger = $container->get('logger');
         $this->view = $container->get('view');
 
@@ -59,21 +62,23 @@ class AuthController extends Controller
             $username = $request->getParsedBody()['slimUsername'];
             $password = $request->getParsedBody()['slimPassword'];
 
-            // try {
-            //     if (
-            //         !Sentinel::authenticate(array_clean($data, [
-            //             'email',
-            //             'password',
-            //         ]), isset($data['persist']))
-            //     ) {
-            //         throw new AuthException('Incorrect email or password.');
-            //     }
-            // } catch (Exception $e) {
-            //     $this->flash->addMessage('status', $e->getMessage());
-            //     $this->logger->error($e->getMessage(), array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
+            $data = $request->getParsedBody();
+
+            try {
+                if (
+                    !Sentinel::authenticate($this->array_clean($data, [
+                        'email',
+                        'password',
+                    ]), isset($data['persist']))
+                ) {
+                    throw new Exception('Incorrect email or password.');
+                }
+            } catch (Exception $e) {
+                $this->flash->addMessage('status', $e->getMessage());
+                $this->logger->error($e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
     
-            //     return $response->withHeader('Location', $this->routeParser->urlFor('auth.signin'));
-            // }
+                // return $response->withHeader('Location', $this->routeParser->urlFor('auth.signin'));
+            }
 
 
             // $result = $this->container->authenticator->authenticate($username, $password);
@@ -113,5 +118,16 @@ class AuthController extends Controller
         $url = $this->container->router->pathFor('home');
         return $response->withStatus(302)->withHeader('Location', $url);
 	}
+
+    /**
+     * @param array $array The array
+     * @param array $keys  The keys
+     *
+     * @return array
+     */
+    function array_clean(array $array, array $keys): array
+    {
+        return array_intersect_key($array, array_flip($keys));
+    }
 
 }

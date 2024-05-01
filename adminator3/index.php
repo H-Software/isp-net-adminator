@@ -30,6 +30,7 @@ $app = AppFactory::create();
 
 $callableResolver = $app->getCallableResolver();
 $responseFactory = $app->getResponseFactory();
+$routeParser = $app->getRouteCollector()->getRouteParser();
 
 // Add Error Handling Middleware
 $displayErrorDetails = true;

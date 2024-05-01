@@ -86,6 +86,8 @@ $container->set('view', function ($container) {
 	return $view;
 });
 
+$container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
+
 $container->set('validator', function ($container) {
 	return new App\Validation\Validator;
 });
