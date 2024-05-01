@@ -54,18 +54,6 @@ if((isset($login)) and (isset($password))):
         $logger->error("authController\signin " . $e->getMessage(), array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
     }
 
-    // $p = md5($password);
-    
-    // global $MSQ;
-
-    // $SQL = "SELECT login, level FROM users_old ".
-    //         " WHERE ( " 
-    //         . " login LIKE '".$conn_mysql->real_escape_string($login)."') "
-    //         . "AND (password LIKE '".$conn_mysql->real_escape_string($p)."') ";
-
-    // $MSQ = $conn_mysql->query($SQL);
-
-    // if ($MSQ->num_rows <> 1){
     if( $logged === false) {
         echo "</head><body>";
     	echo "<p>Neautorizovaný prístup. / Chyba prístupu.</p>";
@@ -75,31 +63,6 @@ if((isset($login)) and (isset($password))):
 
         exit;
     }
-
-    // else{
-    //     //
-    //     // uzivatel se zalogoval spravne, ted to ulozit do db
-	//     //  
-    //     $time = date("U");
-    //     $at = date("U") - 1800;
-
-    //     // co budeme ukladat do db ? zahashovany jmeno usera, nejdriv ho ale musime zjistit
-    
-    //     $radek = $MSQ->fetch_array();
-        
-    //     $db_login=$radek["login"];
-    //     $db_nick=$radek["login"];
-    //     $db_level=$radek["level"];
-    
-    //     $db_login_md5 = md5($db_login);
-    
-    //     //ted to nahazem do session
-    //     $_SESSION["db_login_md5"]=$db_login_md5;
-    //     $_SESSION["db_level"]=$db_level;
-    //     $_SESSION["db_nick"]=$db_nick;
-    
-    //     //ted zjistime jestli nejde o refresh stanky :)
-    // }
 
     // presmerovani na zakladnu :)
     echo "<meta http-equiv=\"Refresh\" content=\"1;url=home.php\">";
@@ -133,17 +96,24 @@ if((isset($login)) and (isset($password))):
 elseif (isset($lo)):
 
     //log out
+    $logger->info("signout called");
+    $logger->debug("signout: dump user identity: ".var_export(Sentinel::getUser()->email, true));
+
+    if (!Sentinel::guest()) {
+        $rs = sentinel::logout();
+        $logger->info("signout: signout action result: " . var_export($rs, true));
+    }
+    else{
+        $logger->info("AuthController/signout: user is not logged");
+    }
 
     // presmerovani na login
     echo "<meta http-equiv=\"refresh\" content=\"1;url=index.php\" >";
 
-    $sid=$_SESSION["db_login_md5"];
-
     echo "<H2>Byl(a) jste odhlášen(a)!</H2>";
     echo "<br><br>Prihlášení: ".'<a href="index.php">zde</a>';
-    echo '<div style="color: grey;"><br><br>'."debug info: <br> delka session: ".strlen($sid)."\n</div>";
+    echo '<div style="color: grey;"><br><br>'."debug info: <br> result: ".var_export($rs, true)."\n</div>";
 
-    session_destroy();
 else:
 
     // prihlasovaci dialog ...
