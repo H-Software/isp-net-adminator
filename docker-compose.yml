@@ -8,6 +8,7 @@ volumes:
   postgres-data:
   pgadmin-data:
   mssql-data:
+  adminator-tmp:
 
 networks:
   default:
@@ -35,6 +36,7 @@ services:
       - POSTGRES_DB=adminator.new
     volumes:
       - adminator-php-log:/var/log/php:uid=33,gid=33
+      - adminator-tmp:/tmp:
     tmpfs:
       # apache logs
       - /var/log/apache2/adminator:uid=33,gid=33
