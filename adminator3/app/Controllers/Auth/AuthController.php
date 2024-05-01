@@ -73,6 +73,11 @@ class AuthController extends Controller
                 ) {
                     throw new Exception('Incorrect email or password.');
                 }
+                else 
+                {
+                    $url = $this->routeParser->urlFor('home');
+                    return $response->withStatus(302)->withHeader('Location', $url);
+                }
             } catch (Exception $e) {
                 $this->flash->addMessage('status', $e->getMessage());
                 $this->logger->error($e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));

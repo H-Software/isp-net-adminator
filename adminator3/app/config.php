@@ -61,3 +61,8 @@ $capsule->addConnection([
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
 
+# sentinel
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+
+Sentinel::removeCheckpoint('activation');
+Sentinel::removeCheckpoint('throttle');

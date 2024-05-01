@@ -54,7 +54,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://odan.github.io/slim4-skeleton/configuration.html
 #### slim twig
 - https://packagist.org/packages/slim/twig-view
-#### slim auth
+#### slim auth Old)
 - https://github.com/darkalchemy/Slim-Auth
 - https://discourse.slimframework.com/t/slim-framework-3-skeleton-application-has-authentication-mvc-construction/2088
 - https://github.com/HavenShen/slim-born/tree/v1.0.6
@@ -67,7 +67,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://filip-prochazka.com/blog/doctrine-a-service-vrstva-aneb-takto-mi-to-dava-smysl
 - https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/getting-started.html
 #### Eloquent
-- https://laravel.com/docs/8.x/eloquent
+- https://laravel.com/docs/10.x/eloquent
 - https://fideloper.com/laravel-multiple-database-connections
 - https://medium.com/@miladev95/how-to-use-multiple-databases-in-laravel-274df382fecd
 
@@ -76,6 +76,9 @@ sqlcmd query "SELECT Name from sys.databases;"
 
 #### DI
 - https://php-di.org/doc/php-definitions.html
+
+#### sentinel
+- https://github.com/cartalyst/sentinel/blob/2.0/src/Native/ConfigRepository.php
 
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html
