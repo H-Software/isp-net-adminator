@@ -1,33 +1,6 @@
 <?php
 
-// autoload
-require __DIR__ . '/../vendor/autoload.php';
-
-use Cartalyst\Sentinel\Native\SentinelBootstrapper;
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
-
-$loader = new Nette\Loaders\RobotLoader;
-
-$loader->addDirectory(__DIR__ . '/../app/Auth');
-$loader->addDirectory(__DIR__ . '/../app/Core');
-$loader->addDirectory(__DIR__ . '/../app/Controllers');
-$loader->addDirectory(__DIR__ . '/../app/Handlers');
-$loader->addDirectory(__DIR__ . '/../app/Middleware');
-$loader->addDirectory(__DIR__ . '/../app/Middleware');
-$loader->addDirectory(__DIR__ . '/../app/Models');
-$loader->addDirectory(__DIR__ . '/../app/Validation');
-$loader->addDirectory(__DIR__ . '/../app/View');
-
-$loader->setTempDirectory(__DIR__ . '/../temp');
-$loader->register();
-
-// debug
-// $res = $loader->getIndexedClasses();
-// print_r($res);
-
-// DBs
 $capsule = new Illuminate\Database\Capsule\Manager;
-
 
 // Mysql init
 //
@@ -63,6 +36,3 @@ $capsule->addConnection([
 
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
-
-# sentinel
-Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/config-sentinel.php')));

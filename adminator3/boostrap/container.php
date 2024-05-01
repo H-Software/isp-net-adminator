@@ -10,12 +10,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Slim\Views\Twig;
-use Slim\Views\TwigMiddleware;
-use DI\Bridge\Slim\Bridge;
-use Slim\Csrf\Guard;
-use Slim\Interfaces\RouteParserInterface;
-
 
 return [
 
@@ -30,13 +24,19 @@ return [
 
     SessionInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
+        $logger = $container->get('logger');
+        
+        $logger->debug("SessionInterface: creating PhpSession");
+        // $logger->debug("SessionInterface: PhpSession config dump: " . var_export($settings['session'], true));
+
         $session = new PhpSession((array) $settings['session']);
+        // $logger->debug("SessionInterface: creating PhpSession: result: " . var_export($session, true));
 
         return $session;
     },
 
     SessionMiddleware::class => function (ContainerInterface $container) {
-        return new SessionMiddleware($container->get(SessionInterface::class), $container->get('csrf'));
+        return new SessionMiddleware($container->get(SessionInterface::class), $container->get('csrf'), $container->get('logger'));
     },
     
     // Guard::class => function (ContainerInterface $container) {

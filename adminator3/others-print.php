@@ -1,49 +1,18 @@
 <?php
 
+require __DIR__ . '/vendor/autoload.php';
+
 // init db functions defs
 require "include/main.function.shared.php";
 // autoload, init DB conns, init Illuminate\Database
-require "app/config.php";
-
-$smarty = new Smarty;
-$smarty->compile_check = true;
-//$smarty->debugging = true;
-
-use Slim\Factory\AppFactory;
-use DI\ContainerBuilder;
-use DI\DependencyException;
-
-$builder = new ContainerBuilder();
-$builder->addDefinitions(__DIR__ . '/app/container.php');
-$container = $builder->build();
-
-AppFactory::setContainer($container);
-$app = AppFactory::create();
-
-$callableResolver = $app->getCallableResolver();
-$responseFactory = $app->getResponseFactory();
-$routeParser = $app->getRouteCollector()->getRouteParser();
-
-// Add Error Handling Middleware
-$displayErrorDetails = true;
-$logErrors = true;
-$logErrorDetails = false;
-$app->addErrorMiddleware($displayErrorDetails, $logErrors, $logErrorDetails);
-
-require "app/dependencies.php";
-
-require "app/routing.php";
-
-$app->addRoutingMiddleware();
+require "app/bootstrap.php";
 
 // end of app bootstrap
-
-$container = $app->getContainer();
-
 $logger = $container->get('logger');
+$smarty = $container->get('smarty');
 
 $logger->info("others-print called");
-        
+
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
