@@ -116,17 +116,6 @@ CREATE TABLE `archiv_zmen_work` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 
-DROP TABLE IF EXISTS `autorizace`;
-CREATE TABLE `autorizace` (
-  `id` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `date` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `nick` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `level` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
-INSERT INTO `autorizace` (`id`, `date`, `nick`, `level`) VALUES
-('21232f297a57a5a743894a0e4a801fc3',	'1714395018',	'admin',	'100');
-
 DROP TABLE IF EXISTS `az_ucetni`;
 CREATE TABLE `az_ucetni` (
   `zu_id` int NOT NULL AUTO_INCREMENT,
@@ -175,33 +164,6 @@ INSERT INTO `board` (`id`, `author`, `email`, `from_date`, `to_date`, `subject`,
 (8,	'1',	'',	'2024-04-13',	'2024-04-27',	'test',	'rffff'),
 (9,	'1',	'',	'2024-04-13',	'2024-04-27',	'test4',	'rffff4'),
 (10,	'1',	'x@xx',	'2024-04-20',	'2024-04-20',	'hu@hu',	'hu');
-
-DROP TABLE IF EXISTS `core__user_roles`;
-CREATE TABLE `core__user_roles` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `fk_user_id` int NOT NULL,
-  `role` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `role_idx` (`fk_user_id`,`role`),
-  KEY `IDX_E086BB8D5741EEB9` (`fk_user_id`),
-  CONSTRAINT `FK_E086BB8D5741EEB9` FOREIGN KEY (`fk_user_id`) REFERENCES `core__users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
-INSERT INTO `core__user_roles` (`id`, `fk_user_id`, `role`) VALUES
-(1,	1,	'member');
-
-DROP TABLE IF EXISTS `core__users`;
-CREATE TABLE `core__users` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `passwordHash` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `level` int NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username_idx` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-
-INSERT INTO `core__users` (`id`, `username`, `passwordHash`, `level`) VALUES
-(1,	'admin@admin',	'$2y$10$haYN5Ng5BG2oFt5SPMgCUeiXU5c2ZVMOHnZ2oaiC9B5TXg7Hg7KNi',	101);
 
 DROP TABLE IF EXISTS `fakturacni_skupiny`;
 CREATE TABLE `fakturacni_skupiny` (
@@ -399,17 +361,8 @@ CREATE TABLE `login_log` (
   `date` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ip` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `login_log` (`id`, `nick`, `date`, `ip`) VALUES
-(34,	'admin',	'1713601589',	'172.18.0.1'),
-(35,	'admin',	'1713715907',	'172.18.0.1'),
-(36,	'admin',	'1713740348',	'172.18.0.1'),
-(37,	'admin',	'1713792013',	'172.18.0.1'),
-(38,	'admin',	'1713798122',	'172.18.0.1'),
-(39,	'admin',	'1713819772',	'172.18.0.1'),
-(40,	'admin',	'1713880109',	'172.18.0.1'),
-(41,	'admin',	'1714211930',	'172.18.0.1');
 
 DROP TABLE IF EXISTS `mon_grafy`;
 CREATE TABLE `mon_grafy` (
@@ -437,8 +390,8 @@ INSERT INTO `nod_list` (`id`, `jmeno`, `adresa`, `pozn`, `ip_rozsah`, `typ_nodu`
 (1,	'prvni nod',	'u me doma',	'test pozn',	'10.10.10.0/24',	1,	0,	0,	1,	0),
 (2,	'opticky nod 1',	'',	'',	'10.10.100.0/24',	2,	0,	0,	0,	0),
 (3,	'opticky nod 2',	'kdesi 2',	'',	'10.10.200.0/24',	2,	0,	0,	0,	0),
-(370,	'optika - neco special',	'',	'',	'',	2,	0,	0,	0,	0),
-(371,	'druhy nod',	'',	'',	'10.20.20.20/24',	1,	0,	0,	3,	0);
+(4,	'druhy nod',	'',	'',	'10.20.20.20/24',	1,	0,	0,	3,	0),
+(370,	'optika - neco special',	'',	'',	'',	2,	0,	0,	0,	0);
 
 DROP TABLE IF EXISTS `objekty_stb`;
 CREATE TABLE `objekty_stb` (
@@ -551,6 +504,20 @@ CREATE TABLE `partner_klienti_servis` (
 INSERT INTO `partner_klienti_servis` (`id`, `tel`, `jmeno`, `adresa`, `email`, `poznamky`, `prio`, `vlozil`, `akceptovano`, `akceptovano_kym`, `akceptovano_pozn`, `datum_vlozeni`) VALUES
 (1,	'112233222',	'xx,  V:0',	'kdesi 2',	'hu@hu.hu',	'nic',	2,	'admin',	0,	NULL,	NULL,	'2024-04-18 09:32:03');
 
+DROP TABLE IF EXISTS `phinxlog`;
+CREATE TABLE `phinxlog` (
+  `version` bigint NOT NULL,
+  `migration_name` varchar(100) DEFAULT NULL,
+  `start_time` timestamp NULL DEFAULT NULL,
+  `end_time` timestamp NULL DEFAULT NULL,
+  `breakpoint` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+INSERT INTO `phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
+(20240501120830,	'CreateUsersTable',	'2024-05-01 12:24:56',	'2024-05-01 12:24:57',	0),
+(20240501122737,	'CreatePersistencesTable',	'2024-05-01 12:41:33',	'2024-05-01 12:41:33',	0);
+
 DROP TABLE IF EXISTS `router_list`;
 CREATE TABLE `router_list` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -627,6 +594,25 @@ INSERT INTO `tarify_iptv` (`id_tarifu`, `jmeno_tarifu`, `zkratka_tarifu`) VALUES
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `permissions` text COLLATE utf8mb3_unicode_ci,
+  `last_login` timestamp NULL DEFAULT NULL,
+  `level` int unsigned NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_username_unique` (`username`),
+  UNIQUE KEY `users_email_unique` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `level`, `created_at`, `updated_at`) VALUES
+(1,	'Administrator',	'admin@admin',	'$2y$10$H1razrcagxKIoRQWbPmnLu5kUfOo0qeCVic2/J4kNliB8wmTX.6Vi',	NULL,	'2024-05-01 21:33:00',	101,	'2024-05-01 12:29:13',	'2024-05-01 21:33:00');
+
+DROP TABLE IF EXISTS `users_old`;
+CREATE TABLE `users_old` (
   `id` int NOT NULL AUTO_INCREMENT,
   `login` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `password` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
@@ -643,8 +629,35 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `users` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`, `lvl_partner_servis_accept`, `lvl_partner_servis_pozn_update`, `lvl_phd_adresar`, `lvl_phd_list_fa`) VALUES
+INSERT INTO `users_old` (`id`, `login`, `password`, `level`, `lvl_admin_login_iptv`, `lvl_objekty_stb_add_portal`, `lvl_objekty_stb_erase`, `lvl_partner_servis_add`, `lvl_partner_servis_list`, `lvl_partner_servis_accept`, `lvl_partner_servis_pozn_update`, `lvl_phd_adresar`, `lvl_phd_list_fa`) VALUES
 (1,	'admin',	'1a1dc91c907325c69271ddf0c944bc72',	100,	1,	1,	1,	1,	1,	1,	1,	1,	1);
+
+DROP TABLE IF EXISTS `users_persistences`;
+CREATE TABLE `users_persistences` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int unsigned NOT NULL,
+  `code` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `users_persistences_code_unique` (`code`),
+  KEY `users_persistences_user_id_foreign` (`user_id`),
+  CONSTRAINT `users_persistences_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+
+INSERT INTO `users_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
+(1,	1,	'fIiIc3IGLmRBfISXQapQ1yqedEX0rGuj',	'2024-05-01 12:51:55',	'2024-05-01 12:51:55'),
+(2,	1,	'dP0W0MpuBJbc3ZGiUlDOP4rcVddSaQFT',	'2024-05-01 12:54:28',	'2024-05-01 12:54:28'),
+(3,	1,	'gQMJ1UFmbSYos8NDzMiI3Jzrchj5Zpxp',	'2024-05-01 13:24:42',	'2024-05-01 13:24:42'),
+(4,	1,	'7Wf58wgvL4rr1qM456qyaiLP1ketMz35',	'2024-05-01 13:45:16',	'2024-05-01 13:45:16'),
+(5,	1,	'FmaesS1t8yBi4Afn4mUdauGQ9gyjxrdG',	'2024-05-01 15:31:37',	'2024-05-01 15:31:37'),
+(6,	1,	'GtWo2DfbQHUbvgWSPUYxQmm6FNas1kn6',	'2024-05-01 16:13:18',	'2024-05-01 16:13:18'),
+(10,	1,	'1m7W7tzlJePPGmt8GarAf6kRXDTd0vxo',	'2024-05-01 17:14:49',	'2024-05-01 17:14:49'),
+(12,	1,	'CL5O28WCV5ZqDcmn6cQ4Xp8p5HPVv9P5',	'2024-05-01 17:24:06',	'2024-05-01 17:24:06'),
+(13,	1,	'JR4ZjgpHm4MzBG3J6hMJuO44hy0f0sNG',	'2024-05-01 20:51:44',	'2024-05-01 20:51:44'),
+(15,	1,	'tEYcDpxqVKxjLD8B3gwjiICxBCBzCD3g',	'2024-05-01 21:08:06',	'2024-05-01 21:08:06'),
+(17,	1,	'8sh4hLqI4yRK5t50Kub7uhoxHiB8nI0y',	'2024-05-01 21:19:50',	'2024-05-01 21:19:50'),
+(18,	1,	'btMIBNZDdbOHKr4QmmxauMzms4Idzz1A',	'2024-05-01 21:31:52',	'2024-05-01 21:31:52');
 
 DROP TABLE IF EXISTS `vypovedi`;
 CREATE TABLE `vypovedi` (
@@ -692,4 +705,4 @@ CREATE TABLE `workzamek` (
 INSERT INTO `workzamek` (`id`, `zamek`) VALUES
 (1,	'ne');
 
--- 2024-04-30 07:36:50
+-- 2024-05-01 21:37:22

@@ -1,6 +1,7 @@
  <tr>
 <?php   
    echo "<td style=\"\" width=\"80%\" >"; 
+   use Cartalyst\Sentinel\Native\Facades\Sentinel;
 ?>
 
     <table border="0" width="100%">
@@ -115,7 +116,7 @@
   
   <?php
   
-  $MSQ_USER2 = $conn_mysql->query("SELECT * FROM autorizace");
+  $MSQ_USER2 = $conn_mysql->query("SELECT * FROM users_persistences");
 
   $MSQ_USER_COUNT = $MSQ_USER2->num_rows;
 
@@ -124,53 +125,53 @@
   // zde vypis prihlasenych useru
       
       //prvne vypisem prihlaseneho
-      $MSQ_USER_NICK = $conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '".$conn_mysql->real_escape_string($nick)."' ");
+      $MSQ_USER_NICK = $conn_mysql->query("SELECT email, level FROM users WHERE email LIKE '".$conn_mysql->real_escape_string(Sentinel::getUser()->email)."' ");
       
       if ($MSQ_USER_NICK->num_rows <> 1){ echo "Chyba! Vyber nicku nelze provest."; }
       else
       {
         while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
-        { echo "jméno:  <b>".$data_user_nick["nick"]."</b>, level: <b>".$data_user_nick["level"]."</b><br>"; }
+        { echo "jméno:  <b>".$data_user_nick["email"]."</b>, level: <b>".$data_user_nick["level"]."</b><br>"; }
       } // konec else
 
   // ted najilejeme prihlaseny lidi ( vsecky ) do pop-up okna
-  $MSQ_USER2 = $conn_mysql->query("SELECT nick, level FROM autorizace");
+  // $MSQ_USER2 = $conn_mysql->query("SELECT nick, level FROM autorizace");
 
-  $MSQ_USER_COUNT=$MSQ_USER2->num_rows;
+  // $MSQ_USER_COUNT=$MSQ_USER2->num_rows;
   
-  if ( $MSQ_USER_COUNT < 1 ){ $obsah_pop_okna .= "Nikdo nepřihlášen. (divny)"; }
-  else
-  {
+  // if ( $MSQ_USER_COUNT < 1 ){ $obsah_pop_okna .= "Nikdo nepřihlášen. (divny)"; }
+  // else
+  // {
   
-   while ($data_user2 = $MSQ_USER2->fetch_array())
-   {     
-     $obsah_pop_okna .= "jméno:  ".$data_user2["nick"].", level: ".$data_user2["level"].", "; 
-   } //konec while  
+  //  while ($data_user2 = $MSQ_USER2->fetch_array())
+  //  {     
+  //    $obsah_pop_okna .= "jméno:  ".$data_user2["nick"].", level: ".$data_user2["level"].", "; 
+  //  } //konec while  
   
-  } // konec if
+  // } // konec if
   
    echo "<div style=\"padding-bottom: 8px; padding-top: 15px; align: center; padding-left: ; \" >
      <a href=\"".$cesta."index.php?lo=true\" target=\"_top\" class=\"cat\" >Odhlásit se</a></div>";
 
-    echo "<input type=\"button\" class=\"buttonalllogin\" name=\"OK2\" value=\"Zobrazit všechny přihlášené ";
-    echo "\" onclick=\"showWindow2()\" >";
+    // echo "<input type=\"button\" class=\"buttonalllogin\" name=\"OK2\" value=\"Zobrazit všechny přihlášené ";
+    // echo "\" onclick=\"showWindow2()\" >";
     
-   include("include/js.include.1.php");
+  //  require("include/js.include.1.php");
    
    // $windowtext2 = "Ostatní přihlášení uživatelé: ".'\n'.$obsah_pop_okna;
-   $windowtext2 = $obsah_pop_okna;
+  //  $windowtext2 = $obsah_pop_okna;
    
-   // velikost okna
-   $windowdelka2 = 170;
-   $windowpadding2 = 40;
+  //  // velikost okna
+  //  $windowdelka2 = 170;
+  //  $windowpadding2 = 40;
    
-   // pozice okna
-   $windowtop2 = 150;
-   $windowleft2 = 350;
+  //  // pozice okna
+  //  $windowtop2 = 150;
+  //  $windowleft2 = 350;
    
-   include("include/window-main2.php");
+  //  include("include/window-main2.php");
     
-   echo '<div id="windowPlaceholder2"></div>';
+  //  echo '<div id="windowPlaceholder2"></div>';
     								   
  ?>
 								     

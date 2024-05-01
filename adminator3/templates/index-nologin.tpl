@@ -19,7 +19,7 @@
 
         <p>Pokud nějakou dobu v systém nepracujete, dojde na serveru k odhlášení,
   ale na klientském pc zůstanou identifikační údaje</p>
-  <p><b>Náprava: </b>Prosím proveďte odhlášení <a href="/index.php?lo=true&lp={$last_page}">zde</a> a poté se znovu přihlašte.</p>
+  <p><b>Náprava: </b>Prosím proveďte odhlášení <a href="/index.php?lo=true">zde</a> a poté se znovu přihlašte.</p>
   <div style="color: grey">
   <p><i>Předcházení problému:</i> Pokud v administračním systému
   delší dobu nebudete pracovat, odhlašte se z něj.</p>

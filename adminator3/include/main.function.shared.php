@@ -122,125 +122,45 @@ function mssql_num_rows($statement)
 	return @sqlsrv_num_rows($statement);
 }
 
-// ond of MS SQL stuff
+// end of MS SQL stuff
 
-function is_session_started()
+// authz stuff
+
+/**
+ * @param array $array The array
+ * @param array $keys  The keys
+ *
+ * @return array
+ */
+function array_clean(array $array, array $keys): array
 {
-    if (php_sapi_name() === 'cli')
-        return false;
-
-    if (version_compare(phpversion(), '5.4.0', '>='))
-        return session_status() === PHP_SESSION_ACTIVE;
-
-    return session_id() !== '';
+    return array_intersect_key($array, array_flip($keys));
 }
 
-function init_ses()
-{
-    $SN = "autorizace"; 
-    session_name("$SN");
-    session_start();
-}
-
-function start_ses()
-{
-  global $sid, $level, $nick, $date, $ad, $logger;
-
-  if(is_object($logger))
-  {
-    $logger->info("start_ses called");
-  }
-
-  // some backwards compatibility attemt
-  if (!is_session_started()) {
-    init_ses();
-  }
-
-  $sid = $_SESSION["db_login_md5"];
-  $level = $_SESSION["db_level"];
-  $nick = $_SESSION["db_nick"];
-
-  $date = date("U"); 
-  $ad = date("U") - 1200; 
-
-  if(is_object($logger))
-  {
-    $logger->info("start_ses: result: "
-      . "[nick => " . $nick
-      . ", level => " . $level
-      . ", sid => " . $sid
-      . "]");
-  }
-
-  return array($sid, $level, $nick);
-}
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 function check_login($app_name = "adminator3") {
-  global $sid, $ad, $level, $date, $conn_mysql, $cesta;
+  global $logger, $level, $date, $conn_mysql, $cesta;
 
-  try {
-    $MSQ_S = $conn_mysql->query("SELECT id FROM autorizace WHERE id != '".$conn_mysql->real_escape_string($sid)."' ");
-    $MSQ_S_RADKU = $MSQ_S->num_rows;
-  } catch (Exception $e) {
-    die ("<h2 style=\"color: red; \">Login Failed (check login): Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+  $logger->info("check_login called");
+
+  if (Sentinel::guest()) {
+      $logger->info("check_login: sentinel::guest, redirecting to nologinpage");
+
+      $stranka=$cesta.'nologinpage.php';
+      header("Location: ".$stranka);
+  
+      echo "Neautorizovaný přístup / Timeout Spojení";
+      exit;
   }
- 
-  if( $MSQ_S_RADKU == 0 ){
-    //jestli je prihlasen pouze jeden clovek tak se neresi cas
-    $MSQ = $conn_mysql->query("SELECT id FROM autorizace WHERE (id = '".$conn_mysql->real_escape_string($sid)."') "); 
+  else{
+    $logger->info("check_login: OK");
   }
-  else {
-    $MSQ = $conn_mysql->query("SELECT id FROM autorizace ".
-          "WHERE (id = '".$conn_mysql->real_escape_string($sid)."') AND (date >= ".$conn_mysql->real_escape_string($ad).") "); 
-  }
-
-  $MSQ_R = $MSQ->num_rows;
- 
-  if( $MSQ_R <> 1 and $app_name == "adminator3" ) {
-    $ret = array();
-
-    $ret[] = "false";
-    $ret[] = "Neautorizovany pristup / Timeout Spojeni. (sid: ".$sid.", lvl: ".$level.", rows: ".$MSQ_R.",rows2: $MSQ_S_RADKU )";
-   
-    return $ret;  
-  }
-
-  if($MSQ->num_rows <> 1 and $app_name == "adminator2")
-  {
- 
-     $stranka=$cesta.'nologinpage.php';
-     header("Location: ".$stranka);
- 
-     echo "Neautorizovaný přístup / Timeout Spojení   ".htmlspecialchars($sid)."  ".htmlspecialchars($level)."";
-     exit;
- 
-  }
-
-  $MSQ = $conn_mysql->query("UPDATE autorizace ".
-    "SET date = ".$conn_mysql->real_escape_string($date)." WHERE id = '".$conn_mysql->real_escape_string($sid)."' "); 
-
-  // sem asi odstranovani ostatnich useru co jim prosel limit
-  $MSQ_D = $conn_mysql->query("DELETE FROM autorizace ".
-    " WHERE ( date <= ".$conn_mysql->real_escape_string($ad).") AND (id != '".$conn_mysql->real_escape_string($sid)."') ");
 
   return true;
 }
 
-function last_page(){
-    $uri=$_SERVER["REQUEST_URI"];
-    
-    if (preg_match("/\/adminator3\//i", $uri)) {
-      list($x,$y) = explode("adminator3/",$uri);
-    } 
-    elseif (preg_match("/\/adminator2\//i", $uri)) {
-      list($x,$y) = explode("adminator2/",$uri);
-    }
-    else {
-      $y = $_SERVER['REQUEST_URI'];
-      // echo "<div>DEBUG: last page: " . $y . "," . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_URL'] . ",R.U: " . $_SERVER['REQUEST_URI'] . ",  </div>";
-    }
-    return $y;
-}
+// end of authz stuff
 
 function fix_link_to_another_adminator($link){
 
