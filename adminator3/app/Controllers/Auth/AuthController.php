@@ -98,18 +98,19 @@ class AuthController extends Controller
 
 	public function signout($request, $response, array $args)
 	{
-        $this->logger->info("route/logout called");
-        $this->logger->info("route/logout: dump auth->hasIdentity: ".var_export($this->container->auth->hasIdentity(), true));
-        $this->logger->info("route/logout: before: dump auth->getStorage()->isEmpty(): ".var_export($this->container->auth->getStorage()->isEmpty(), true));
+        $this->logger->info("AuthController/signout called");
+        $this->logger->debug("AuthController/signout: dump user identity: ".var_export(Sentinel::getUser()->email, true));
     
-        if ($this->container->auth->hasIdentity()) {
-            $this->container->auth->clearIdentity();
+        if (!Sentinel::guest()) {
+            $rs = sentinel::logout();
+            $this->logger->info("AuthController/signout: signout action result: " . var_export($rs, true));
         }
-    
-        $this->logger->info("route/logout: dump auth->getStorage()->isEmpty(): ".var_export($this->container->auth->getStorage()->isEmpty(), true));
-    
-        //redirect:
-        $url = $this->container->router->pathFor('home');
+        else{
+            $this->logger->info("AuthController/signout: user is not logged, redirecting to home");
+        }
+
+        //redirect
+        $url = $this->routeParser->urlFor('home');
         return $response->withStatus(302)->withHeader('Location', $url);
 	}
 
