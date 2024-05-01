@@ -73,18 +73,24 @@ class AuthController extends Controller
             } catch (Exception $e) {
                 $this->flash->addMessageNow('error', $e->getMessage());
                 $this->logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
-    
-                echo "<pre>CATCH: ERROR: " . var_export($this->flash->getMessages()["error"], true) . "</pre>";
-                // echo "<pre>CATCH OLD2: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
-
             }
         }
 
-        echo "<pre>END: ERROR: " . var_export($this->flash->getMessages()["error"], true) . "</pre>";
-        echo "<pre>END OLD: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
-        echo "<pre>END OLD NOW: " . var_export($this->flash->getMessages()["oldNow"], true) . "</pre>";
+        if (isset($this->flash->getMessages()["oldNow"][0]['slimUsername'])){
+            $username = $this->flash->getMessages()["oldNow"][0]['slimUsername'];
+        }
+        elseif(isset($this->flash->getMessages()["old"][0]['slimUsername']) ){
+            $username = $this->flash->getMessages()["old"][0]['slimUsername'];
+        }
+        else{
+            $username = null;
+        }
 
-        return $this->view->render($response, 'auth\signin.twig');
+        // echo "<pre>END: ERROR: " . var_export($this->flash->getMessages()["error"], true) . "</pre>";
+        // echo "<pre>END OLD: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
+        // echo "<pre>END OLD NOW: " . var_export($this->flash->getMessages()["oldNow"], true) . "</pre>";
+
+        return $this->view->render($response, 'auth\signin.twig', array('username' => @$username));
 	}
 
 	public function signout($request, $response, array $args)
