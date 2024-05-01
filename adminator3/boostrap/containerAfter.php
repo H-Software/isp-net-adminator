@@ -15,23 +15,21 @@ $container->set('logger', function($c) {
     $settings = $c->get('settings');
 
     $logger = new Monolog\Logger($settings['logger']['name']);
-    $filename = $settings['logger']['path'];
 
-    // the default date format is "Y-m-d\TH:i:sP"
-    // $dateFormat = "Y n j, g:i a";
-    $dateFormat = 'Y-m-d\TH:i:s';
+    $formatter = new Monolog\Formatter\LineFormatter(
+                                    $settings['logger']['output'], 
+                                    $settings['logger']['dateFormat']
+                                );
 
-    // the default output format is "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n"
-    // we now change the default output format according to our needs.
-    $output = "%datetime% > %level_name% > %message% %context% %extra%\n";
-
-    // finally, create a formatter
-    $formatter = new Monolog\Formatter\LineFormatter($output, $dateFormat);
-
-    $stream = new Monolog\Handler\StreamHandler($filename, Monolog\Logger::DEBUG);
+    $stream = new Monolog\Handler\StreamHandler(
+                                    $settings['logger']['path'], 
+                                    $settings['logger']['level']
+                                );
     $stream->setFormatter($formatter);
+    
     $fingersCrossed = new Monolog\Handler\FingersCrossedHandler(
-        $stream, Monolog\Logger::DEBUG
+        $stream, 
+        $settings['logger']['level']
     );
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
     
