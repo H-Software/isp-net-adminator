@@ -51,7 +51,7 @@ if((isset($login)) and (isset($password))):
             $logged=true;
         }
     } catch (Exception $e) {
-        $logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
+        $logger->error("authController\signin " . $e->getMessage(), array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
     }
 
     // $p = md5($password);
