@@ -31,9 +31,11 @@ class CsrfExtension extends AbstractExtension
      */
     public function getFunctions(): array
     {
+        $c = new CsrfRuntime($this->container->get('csrf'));
+
         return [
             // @phpstan-ignore-next-line
-            new TwigFunction('csrf', [$this->container->get(CsrfRuntime::class), 'csrf'], ['is_safe' => ['html']]),
+            new TwigFunction('csrf', [$c, 'csrf'], ['is_safe' => ['html']]),
         ];
     }
 }

@@ -43,6 +43,7 @@ class AuthController extends Controller
 	public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
 	{
         $username = null;
+
         // global $app;
         /*
          * require: slim/flash

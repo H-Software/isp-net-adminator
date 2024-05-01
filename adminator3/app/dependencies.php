@@ -11,7 +11,6 @@ use App\View\TwigPhpExtension;
 use App\Middleware\FlashOldFormDataMiddleware;
 use Slim\Views\TwigMiddleware;
 
-
 // $container = $app->getContainer();
 
 $container->set('settings', function () {
@@ -76,10 +75,10 @@ $container->set('view', function ($container) {
 		'cache' => false,
 	]);
 
-    // $view->getEnvironment()->enableStrictVariables();
+    $view->getEnvironment()->enableStrictVariables();
 
     // $view->addExtension($container->get(TwigPhpExtension::class));
-    // $view->addExtension($container->get(CsrfExtension::class));
+    $view->addExtension($container->get(CsrfExtension::class));
     // $view->addExtension($container->get(TwigMessagesExtension::class));
 
 	// $view->getEnvironment()->addGlobal('flash', $container->get('flash'));
@@ -117,6 +116,7 @@ $app->addMiddleware($container->get(SessionStartMiddleware::class));
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
 // $app->addMiddleware($container->get(FlashOldFormDataMiddleware::class));
+
 
 $container->set('AuthController', function($container) {
 	return new \App\Controllers\Auth\AuthController($container);
