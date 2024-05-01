@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int    $user_id
  * @property string $uri
  */
-class Email extends Model
+class UserEmail extends Model
 {
     /**
      * {@inheritDoc}
@@ -26,7 +26,7 @@ class Email extends Model
     /**
      * @var string
      */
-    protected $table = 'core__email';
+    protected $table = 'users_email';
 
     /**
      * @return BelongsTo
