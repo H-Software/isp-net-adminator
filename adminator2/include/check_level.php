@@ -35,11 +35,13 @@ function check_level ($user_level, $id, $adminator = null) {
 
   $checkLevel = $a->checkLevel();
   
-  $logger->info("checkLevel: checkLevel result: ".var_export($checkLevel, true));
+  $logger->info("checkLevel: A->checkLevel result: ".var_export($checkLevel, true));
 
   if($checkLevel === false){
       return false;
   }
+  
+  return true;
 
   // old code
   /*
