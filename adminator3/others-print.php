@@ -4,25 +4,43 @@
 require "include/main.function.shared.php";
 // autoload, init DB conns, init Illuminate\Database
 require "app/config.php";
-// slim config
-require "app/settings.php";
 
 $smarty = new Smarty;
 $smarty->compile_check = true;
 //$smarty->debugging = true;
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+use Slim\Factory\AppFactory;
+use DI\ContainerBuilder;
+use DI\DependencyException;
 
-$app = new \Slim\App($config);
+$builder = new ContainerBuilder();
+$builder->addDefinitions(__DIR__ . '/app/container.php');
+$container = $builder->build();
 
-require __DIR__ ."/app/bootstrap-doctrine.php";
+AppFactory::setContainer($container);
+$app = AppFactory::create();
+
+$callableResolver = $app->getCallableResolver();
+$responseFactory = $app->getResponseFactory();
+$routeParser = $app->getRouteCollector()->getRouteParser();
+
+// Add Error Handling Middleware
+$displayErrorDetails = true;
+$logErrors = true;
+$logErrorDetails = false;
+$app->addErrorMiddleware($displayErrorDetails, $logErrors, $logErrorDetails);
 
 require "app/dependencies.php";
 
 require "app/routing.php";
 
-$logger = $container->logger;
+$app->addRoutingMiddleware();
+
+// end of app bootstrap
+
+$container = $app->getContainer();
+
+$logger = $container->get('logger');
 
 $logger->info("others-print called");
         
