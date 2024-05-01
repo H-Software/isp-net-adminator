@@ -115,7 +115,7 @@
   
   <?php
   
-  $MSQ_USER2 = $conn_mysql->query("SELECT * FROM autorizace");
+  $MSQ_USER2 = $conn_mysql->query("SELECT * FROM users_persistences");
 
   $MSQ_USER_COUNT = $MSQ_USER2->num_rows;
 
@@ -152,10 +152,10 @@
    echo "<div style=\"padding-bottom: 8px; padding-top: 15px; align: center; padding-left: ; \" >
      <a href=\"".$cesta."index.php?lo=true\" target=\"_top\" class=\"cat\" >Odhlásit se</a></div>";
 
-    echo "<input type=\"button\" class=\"buttonalllogin\" name=\"OK2\" value=\"Zobrazit všechny přihlášené ";
-    echo "\" onclick=\"showWindow2()\" >";
+    // echo "<input type=\"button\" class=\"buttonalllogin\" name=\"OK2\" value=\"Zobrazit všechny přihlášené ";
+    // echo "\" onclick=\"showWindow2()\" >";
     
-   include("include/js.include.1.php");
+  //  require("include/js.include.1.php");
    
    // $windowtext2 = "Ostatní přihlášení uživatelé: ".'\n'.$obsah_pop_okna;
   //  $windowtext2 = $obsah_pop_okna;
