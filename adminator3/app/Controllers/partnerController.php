@@ -10,7 +10,8 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 use App\Partner\partner;
 
-class partnerController extends adminatorController {
+class partnerController extends adminatorController
+{
     public $conn_mysql;
     public $smarty;
     public $logger;
@@ -26,36 +27,36 @@ class partnerController extends adminatorController {
         $this->logger->info("partnerController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-	  }
+    }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->info("partnerController\cat called");
+        $this->logger->info("partnerController\cat called");
 
-      $this->checkLevel(75, $this->adminator);
+        $this->checkLevel(75, $this->adminator);
 
-      $this->smarty->assign("page_title","Adminator3 :: Partner program");
+        $this->smarty->assign("page_title", "Adminator3 :: Partner program");
 
-      $this->header($request, $response, $this->adminator);
-      
-      $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+        $this->header($request, $response, $this->adminator);
 
-      $this->smarty->display('partner/partner-cat.tpl');
+        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
+
+        $this->smarty->display('partner/partner-cat.tpl');
     }
 
     public function orderCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->info("partnerController\orderCat called");
+        $this->logger->info("partnerController\orderCat called");
 
-      $this->checkLevel(75, $this->adminator);
+        $this->checkLevel(75, $this->adminator);
 
-      $this->smarty->assign("page_title","Adminator3 :: Partner program :: Orders");
+        $this->smarty->assign("page_title", "Adminator3 :: Partner program :: Orders");
 
-      $this->header($request, $response, $this->adminator);
-      
-      $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+        $this->header($request, $response, $this->adminator);
 
-      $this->smarty->display('partner/order-cat.tpl');
+        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
+
+        $this->smarty->display('partner/order-cat.tpl');
     }
 
     public function orderList(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -64,14 +65,14 @@ class partnerController extends adminatorController {
 
         $this->checkLevel(76, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: Partner program :: Order List");
+        $this->smarty->assign("page_title", "Adminator3 :: Partner program :: Order List");
 
         $this->header($request, $response, $this->adminator);
-        
+
         $partner = new partner($this->container);
         $listOutput = $partner->list();
 
-        $this->smarty->assign("body",$listOutput[0]);
+        $this->smarty->assign("body", $listOutput[0]);
 
         $this->smarty->display('partner/order-list.tpl');
     }

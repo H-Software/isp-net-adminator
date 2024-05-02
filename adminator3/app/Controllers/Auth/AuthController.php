@@ -14,8 +14,7 @@ use Slim\Views\Twig;
 
 class AuthController extends Controller
 {
-
-    var $logger;
+    public $logger;
 
     /**
      * @var Messages
@@ -27,7 +26,7 @@ class AuthController extends Controller
      */
     protected RouteParserInterface $routeParser;
 
-     /**
+    /**
      * @var Twig
      */
     protected Twig $view;
@@ -36,8 +35,7 @@ class AuthController extends Controller
         ContainerInterface $container,
         Messages $flash,
         RouteParserInterface $routeParser,
-        )
-    {
+    ) {
         $this->container = $container;
         $this->routeParser = $routeParser;
         $this->flash = $container->get('flash');
@@ -45,28 +43,30 @@ class AuthController extends Controller
         $this->view = $container->get('view');
 
         $this->logger->info("authController\__construct called");
-	}
+    }
 
-	public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
-	{
-        if ($request->getMethod() == "POST") 
-        {
+    public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        if ($request->getMethod() == "POST") {
             $data = array(
                     'email' => $request->getParsedBody()['slimUsername'],
                     'password' => $request->getParsedBody()['slimPassword'],
             );
 
             try {
-                if (
-                    !Sentinel::authenticate($this->array_clean($data, [
-                        'email',
-                        'password',
-                    ]), isset($data['persist']))
+                if (!Sentinel::authenticate(
+                    $this->array_clean(
+                        $data,
+                        [
+                            'email',
+                            'password',
+                            ]
+                    ),
+                    isset($data['persist'])
+                )
                 ) {
                     throw new Exception('Incorrect email or password.');
-                }
-                else 
-                {
+                } else {
                     $url = $this->routeParser->urlFor('home');
                     return $response->withStatus(302)->withHeader('Location', $url);
                 }
@@ -76,13 +76,11 @@ class AuthController extends Controller
             }
         }
 
-        if (isset($this->flash->getMessages()["oldNow"][0]['slimUsername'])){
+        if (isset($this->flash->getMessages()["oldNow"][0]['slimUsername'])) {
             $username = $this->flash->getMessages()["oldNow"][0]['slimUsername'];
-        }
-        elseif(isset($this->flash->getMessages()["old"][0]['slimUsername']) ){
+        } elseif(isset($this->flash->getMessages()["old"][0]['slimUsername'])) {
             $username = $this->flash->getMessages()["old"][0]['slimUsername'];
-        }
-        else{
+        } else {
             $username = null;
         }
 
@@ -91,25 +89,24 @@ class AuthController extends Controller
         // echo "<pre>END OLD NOW: " . var_export($this->flash->getMessages()["oldNow"], true) . "</pre>";
 
         return $this->view->render($response, 'auth\signin.twig', array('username' => @$username));
-	}
+    }
 
-	public function signout($request, $response, array $args)
-	{
+    public function signout($request, $response, array $args)
+    {
         $this->logger->info("AuthController/signout called");
         $this->logger->debug("AuthController/signout: dump user identity: ".var_export(Sentinel::getUser()->email, true));
-    
+
         if (!Sentinel::guest()) {
             $rs = sentinel::logout();
             $this->logger->info("AuthController/signout: signout action result: " . var_export($rs, true));
-        }
-        else{
+        } else {
             $this->logger->info("AuthController/signout: user is not logged, redirecting to home");
         }
 
         //redirect
         $url = $this->routeParser->urlFor('home');
         return $response->withStatus(302)->withHeader('Location', $url);
-	}
+    }
 
     /**
      * @param array $array The array
@@ -117,7 +114,7 @@ class AuthController extends Controller
      *
      * @return array
      */
-    function array_clean(array $array, array $keys): array
+    public function array_clean(array $array, array $keys): array
     {
         return array_intersect_key($array, array_flip($keys));
     }

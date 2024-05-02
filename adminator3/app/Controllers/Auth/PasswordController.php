@@ -12,8 +12,7 @@ use Slim\Flash\Messages;
 
 class PasswordController extends Controller
 {
-
-    var $logger;
+    public $logger;
 
     /**
      * @var Messages
@@ -25,7 +24,7 @@ class PasswordController extends Controller
      */
     protected RouteParserInterface $routeParser;
 
-     /**
+    /**
      * @var Twig
      */
     protected Twig $view;
@@ -34,8 +33,7 @@ class PasswordController extends Controller
         ContainerInterface $container,
         Messages $flash,
         RouteParserInterface $routeParser,
-        )
-    {
+    ) {
         $this->container = $container;
         $this->routeParser = $routeParser;
         $this->flash = $container->get('flash');
@@ -43,15 +41,15 @@ class PasswordController extends Controller
         $this->view = $container->get('view');
 
         $this->logger->info("PasswordController\__construct called");
-	}
+    }
 
-	public function getChangePassword($request, $response)
-	{
-		return $this->view->render($response, 'auth/password/change.twig');
-	}
+    public function getChangePassword($request, $response)
+    {
+        return $this->view->render($response, 'auth/password/change.twig');
+    }
 
-	public function postChangePassword($request, $response)
-	{
+    public function postChangePassword($request, $response)
+    {
         $this->logger->info("PasswordController\postChangePassword called");
 
         $requestData = $request->getParsedBody();
@@ -59,15 +57,14 @@ class PasswordController extends Controller
         $passwordHelper = new \App\Auth\passwordHelper($this->container, $requestData);
         $rs = $passwordHelper->changePassword();
 
-        if($rs === false){
+        if($rs === false) {
             $this->flash->addMessage('error', $passwordHelper->errorMessage);
             return $response->withStatus(302)
-                            ->withHeader('Location', $this->routeParser->urlFor('auth.password.change'));
-        }
-        else{
+                ->withHeader('Location', $this->routeParser->urlFor('auth.password.change'));
+        } else {
             $this->flash->addMessage('info', 'Your password was changed');
             return $response->withStatus(302)
-                            ->withHeader('Location', $this->routeParser->urlFor('home'));
+                ->withHeader('Location', $this->routeParser->urlFor('home'));
         }
-	}
+    }
 }

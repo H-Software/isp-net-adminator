@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stb extends Model
 {
-	protected $table = 'objekty_stb';
+    protected $table = 'objekty_stb';
     /**
      * The primary key associated with the table.
      *
@@ -21,16 +21,16 @@ class Stb extends Model
      */
     public $timestamps = false;
 
-	 /**
+    /**
      * The model's default values for attributes.
      *
      * @var array
      */
     protected $attributes = [
         'id_cloveka' => 0,
-		'mac_adresa' => NULL,
-		'puk' => NULL,
-		'ip_adresa' => NULL,
+    'mac_adresa' => null,
+    'puk' => null,
+    'ip_adresa' => null,
         // TODO: add the of columns
     ];
 }

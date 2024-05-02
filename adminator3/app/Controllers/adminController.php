@@ -6,14 +6,15 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class adminController extends adminatorController {
-    var $conn_mysql;
-    var $smarty;
-    var $logger;
+class adminController extends adminatorController
+{
+    public $conn_mysql;
+    public $smarty;
+    public $logger;
 
-    var $admin;
+    public $admin;
 
-    var $adminator;
+    public $adminator;
 
     public function __construct(ContainerInterface $container)
     {
@@ -27,20 +28,20 @@ class adminController extends adminatorController {
 
         $this->admin = new \admin($this->conn_mysql, $this->logger);
 
-	}
+    }
 
     public function admin(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
         $this->logger->info("adminController\admin called");
-        
+
         $this->checkLevel(91, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: admin");
+        $this->smarty->assign("page_title", "Adminator3 :: admin");
 
         $this->header($request, $response, $this->adminator);
 
-        $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('admin/subcat.tpl');
 
@@ -51,14 +52,14 @@ class adminController extends adminatorController {
     {
 
         $this->logger->info("adminController\adminMain called");
-        
+
         $this->checkLevel(17, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: admin :: subca2");
+        $this->smarty->assign("page_title", "Adminator3 :: admin :: subca2");
 
         $this->header($request, $response, $this->adminator);
 
-        $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('admin/subcat2.tpl');
 
@@ -69,10 +70,10 @@ class adminController extends adminatorController {
     {
 
         $this->logger->info("adminController\adminLevelList called");
-        
+
         $this->checkLevel(21, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: vypis levelu stranek");
+        $this->smarty->assign("page_title", "Adminator3 :: vypis levelu stranek");
 
         $this->header($request, $response, $this->adminator);
 
@@ -82,20 +83,20 @@ class adminController extends adminatorController {
         $this->logger->info("adminController\adminLevelList: csrf generated: ".var_export($csrf_name, true));
 
         // render
-        $this->smarty->assign("body",$this->admin->levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value));
+        $this->smarty->assign("body", $this->admin->levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value));
 
         $this->smarty->display('admin/level-list.tpl');
 
         return $response;
     }
 
-    function adminLevelListJson(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    public function adminLevelListJson(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info("adminController\adminLevelListJson called");
-        
+
         $this->checkLevel(21, $this->adminator);
 
-        list ($data, $status, $msg) = $this->admin->levelListJson();
+        list($data, $status, $msg) = $this->admin->levelListJson();
 
         // $this->logger->info("adminController\adminLevelListJson response: ". var_export(array($data, $status, $msg), true));
 
@@ -106,10 +107,10 @@ class adminController extends adminatorController {
     public function adminLevelAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info("adminController\adminLevelAction called");
-          
+
         $this->checkLevel(23, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: uprava levelu stranek");
+        $this->smarty->assign("page_title", "Adminator3 :: uprava levelu stranek");
 
         $this->header($request, $response, $this->adminator);
 
@@ -120,7 +121,7 @@ class adminController extends adminatorController {
 
         $rs = $this->admin->levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
 
-        $this->smarty->assign("body",$rs[0]);
+        $this->smarty->assign("body", $rs[0]);
 
         $this->smarty->display('admin/level-action.tpl');
 
@@ -129,10 +130,10 @@ class adminController extends adminatorController {
     public function adminTarify(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info("adminController\adminTarify called");
-          
+
         $this->checkLevel(131, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: Tarify");
+        $this->smarty->assign("page_title", "Adminator3 :: Tarify");
 
         $this->header($request, $response, $this->adminator);
 
@@ -140,7 +141,7 @@ class adminController extends adminatorController {
 
         $rs = $this->admin->tarifList();
 
-        $this->smarty->assign("body",$rs[0]);
+        $this->smarty->assign("body", $rs[0]);
 
         $this->smarty->display('admin/tarify.tpl');
     }
@@ -148,10 +149,10 @@ class adminController extends adminatorController {
     public function adminTarifyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info("adminController\adminTarify called");
-          
+
         $this->checkLevel(303, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: Tarify :: Action");
+        $this->smarty->assign("page_title", "Adminator3 :: Tarify :: Action");
 
         $this->header($request, $response, $this->adminator);
 
@@ -160,7 +161,7 @@ class adminController extends adminatorController {
 
         //TODO: add showing errors in templates
 
-        $this->smarty->assign("body",$rs[0]);
+        $this->smarty->assign("body", $rs[0]);
 
         $this->smarty->display('admin/tarify.tpl');
     }

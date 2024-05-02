@@ -11,30 +11,29 @@ use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 
 class partner extends adminator
 {
+    public $conn_pgsql;
+    public $conn_mysql;
 
-    var $conn_pgsql;
-    var $conn_mysql;
+    public $logger;
 
-    var $logger;
+    public $loggedUserEmail;
 
-    var $loggedUserEmail;
+    public $adminator; // handler for instance of adminator class
 
-    var $adminator; // handler for instance of adminator class
+    public $url_params;
 
-    var $url_params;
+    public $listItems;
 
-    var $listItems;
+    public $paginateItemsPerPage = 15;
 
-    var $paginateItemsPerPage = 15;
-
-    function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->logger = $container->get('logger');
 
-        
+
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
 
@@ -43,24 +42,22 @@ class partner extends adminator
         $filtr_akceptovano = intval($_GET["filtr_akceptovano"]);
         $filtr_pripojeno = intval($_GET["filtr_pripojeno"]);
 
-        if( $filtr_akceptovano == 1 ){
-            $this->listItems = $this->listItems->where('akceptovano', 1); 
+        if($filtr_akceptovano == 1) {
+            $this->listItems = $this->listItems->where('akceptovano', 1);
+        } elseif($filtr_akceptovano == 2) {
+            $this->listItems = $this->listItems->where('akceptovano', 0);
         }
-        elseif( $filtr_akceptovano == 2 ){
-             $this->listItems = $this->listItems->where('akceptovano', 0); 
-        }
-                    
-        if( $filtr_pripojeno == 1 ){
-            $this->listItems = $this->listItems->where('pripojeno', 1);  
-        }
-        elseif( $filtr_pripojeno == 2 ){
+
+        if($filtr_pripojeno == 1) {
+            $this->listItems = $this->listItems->where('pripojeno', 1);
+        } elseif($filtr_pripojeno == 2) {
             $this->listItems = $this->listItems->where('pripojeno', 0);
         }
-        
-        if( isset($_GET['user']) ){
+
+        if(isset($_GET['user'])) {
             $this->listItems = $this->listItems->where('vlozil', $_GET['user']);
         }
-        
+
         // old name poradek
         // $this->url_params = "filtr_akceptovano=".$filtr_akceptovano."&filtr_pripojeno=".$filtr_pripojeno;
 
@@ -72,32 +69,31 @@ class partner extends adminator
         $output = "";
 
         $this->listItems = PartnerOrder::get()
-        ->sortByDesc('id');
+            ->sortByDesc('id');
 
         $this->listPrepareVars();
 
         $this->listItems = adminator::collectionPaginate(
-                                $this->listItems, 
-                                $this->paginateItemsPerPage, 
-                                $_GET['page'],                 
-                                [   // $options
+            $this->listItems,
+            $this->paginateItemsPerPage,
+            $_GET['page'],
+            [   // $options
                                     'path' => LengthAwarePaginator::resolveCurrentPath(strtok($_SERVER["REQUEST_URI"], '?')),
                                     'pageName' => 'page',
                                 ]
-                            );
+        );
 
         $data = $this->listItems->toArray();
 
         list($linkPreviousPage, $linkCurrentPage, $linkNextPage) = adminator::paginateGetLinks($data);
         // echo "<pre>" . var_export($data, true) . "</pre>";
 
-		if( count($data) == 0 )
-		{
-			$output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
-			return array($output);
-		}
+        if(count($data) == 0) {
+            $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
+            return array($output);
+        }
 
-		$headers = ['id', 
+        $headers = ['id',
                     'telefon',
                     'jmeno',
                     'adresa',
@@ -114,16 +110,16 @@ class partner extends adminator
                     // 'datum vlozeni2'
         ] ;
 
-		$attributes = 'class="a-common-table a-common-table-1line" '
-					. 'id="partner-order-table" '
-					. 'style="width: 99%"'
-					;
-                
-        $listTable = new LaravelHtmlTableGenerator;
-        
+        $attributes = 'class="a-common-table a-common-table-1line" '
+        . 'id="partner-order-table" '
+        . 'style="width: 99%"'
+        ;
+
+        $listTable = new LaravelHtmlTableGenerator();
+
         $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
 
-		$output .= $listTable->generate($headers, $data['data'], $attributes);
+        $output .= $listTable->generate($headers, $data['data'], $attributes);
 
         $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
 

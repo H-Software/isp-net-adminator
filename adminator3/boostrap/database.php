@@ -6,7 +6,8 @@ $capsule = new Illuminate\Database\Capsule\Manager;
 //
 $conn_mysql = init_mysql("Adminator3");
 
-$capsule->addConnection([
+$capsule->addConnection(
+    [
     'driver' => 'mysql',
     'host' => getenv("MYSQL_SERVER") ? getenv("MYSQL_SERVER") : "localhost",
     'database' => 'adminator2',
@@ -16,14 +17,16 @@ $capsule->addConnection([
     'port' => '3306',
     'collation' => 'utf8_unicode_ci',
     'prefix' => ''
-], "default");
+    ], "default"
+);
 
 // PgSQL init
 //
 $db_ok2 = init_postgres("Adminator3");
 
 // https://stackoverflow.com/questions/34649181/multiple-database-connection-using-illuminate-database-eloquent-orm-in-codeignit/34650166#34650166
-$capsule->addConnection([
+$capsule->addConnection(
+    [
     'driver' => 'pgsql',
     'host' => getenv("POSTGRES_SERVER") ? getenv("POSTGRES_SERVER") : "localhost",
     'database' => 'adminator.new',
@@ -32,7 +35,8 @@ $capsule->addConnection([
     'charset' => 'utf8',
     'collation' => 'utf8_unicode_ci',
     'prefix' => '',
-], "pgsql");
+    ], "pgsql"
+);
 
 $capsule->setAsGlobal();
 $capsule->bootEloquent();

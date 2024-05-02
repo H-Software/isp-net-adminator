@@ -1,45 +1,43 @@
 <?php
 
-class fakturacni{
-	var $echo = true;
-	var $firma;
+class fakturacni
+{
+    public $echo = true;
+    public $firma;
 
-    function vypis($id_f,$id_v)
-    {    
-		$output = "";
+    public function vypis($id_f, $id_v)
+    {
+        $output = "";
 
-		$dotaz=pg_query( "SELECT * FROM fakturacni where id='" . intval($id_f). "'");
-		$dotaz_radku=pg_num_rows($dotaz);
-		
-		if ( $dotaz_radku==0 )
-		{
-			$output .= "<tr><td> CHYBA! Fakturacni udaje nenalezeny. debug: id=$id_f </td></tr>";
-		}
-		else
-		{
-			while( $data=pg_fetch_array($dotaz) ):
-				$output .= "<tr>";
+        $dotaz = pg_query("SELECT * FROM fakturacni where id='" . intval($id_f). "'");
+        $dotaz_radku = pg_num_rows($dotaz);
 
-				if( $this->firma == 1)
-				{ $output .= "<td></td>"; }
+        if ($dotaz_radku == 0) {
+            $output .= "<tr><td> CHYBA! Fakturacni udaje nenalezeny. debug: id=$id_f </td></tr>";
+        } else {
+            while($data = pg_fetch_array($dotaz)):
+                $output .= "<tr>";
 
-				$output .= " <td colspan=\"2\"> <b>Fakturační údaje:</b> <br>".$data["ftitle"]." ".$data["fadresa"]."<br> ";
-				$output .= $data["fulice"]." <br> ";
+                if($this->firma == 1) {
+                    $output .= "<td></td>";
+                }
 
-				$output .= $data["fmesto"]." ".$data["fpsc"]."</td>";
+                $output .= " <td colspan=\"2\"> <b>Fakturační údaje:</b> <br>".$data["ftitle"]." ".$data["fadresa"]."<br> ";
+                $output .= $data["fulice"]." <br> ";
 
-				$output .= "<td colspan=\"12\">ičo: ".$data["ico"].", dič: ".$data["dic"];
-				$output .= "<br>účet: ".$data["ucet"]." <br> splatnost (dnů): ".$data["splatnost"];
-				$output .= "<br> četnost: ".$data["cetnost"]."</td>";
-						
-			endwhile;										  
-		}
+                $output .= $data["fmesto"]." ".$data["fpsc"]."</td>";
 
-		if($this->echo === true){
-			echo $output;
-		}
-		else{
-			return $output;
-		}
+                $output .= "<td colspan=\"12\">ičo: ".$data["ico"].", dič: ".$data["dic"];
+                $output .= "<br>účet: ".$data["ucet"]." <br> splatnost (dnů): ".$data["splatnost"];
+                $output .= "<br> četnost: ".$data["cetnost"]."</td>";
+
+            endwhile;
+        }
+
+        if($this->echo === true) {
+            echo $output;
+        } else {
+            return $output;
+        }
     } // konec funkce vypis
 }

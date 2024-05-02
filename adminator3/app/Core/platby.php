@@ -2,23 +2,24 @@
 
 class platby
 {
-    var $conn_mysql;
+    public $conn_mysql;
 
-    var $logger;
+    public $logger;
 
-    function __construct($conn_mysql, $logger) {
+    public function __construct($conn_mysql, $logger)
+    {
         $this->conn_mysql = $conn_mysql;
         $this->logger = $logger;
     }
 
-    function synchro_db_nf()
+    public function synchro_db_nf()
     {
         // synchro tabulky neuhr. faktur mezi MySQL a Postgresem :)
         $this->logger->info("platby\synchro_db_nf called");
 
         global $db_ok2;
 
-        $pocet_cyklu=0;
+        $pocet_cyklu = 0;
 
         $vymazani_pg_fn = pg_query("DELETE FROM faktury_neuhrazene");
         $this->logger->info("platby\synchro_db_nf: vymazani_pg_fn query result: ".var_export($vymazani_pg_fn, true));
@@ -27,15 +28,16 @@ class platby
             $dotaz_mysql_fn = $this->conn_mysql->query("SELECT * FROM faktury_neuhrazene ORDER BY id");
             $dotaz_mysql_fn_radku = $dotaz_mysql_fn->num_rows;
         } catch (Exception $e) {
-          die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
-        $this->logger->info("platby\synchro_db_nf: dotaz_mysql_fn query: "
+        $this->logger->info(
+            "platby\synchro_db_nf: dotaz_mysql_fn query: "
                                 . "result: ".var_export($vymazani_pg_fn, true)
-                                . " num_rows: ".var_export($dotaz_mysql_fn_radku, true));
+            . " num_rows: ".var_export($dotaz_mysql_fn_radku, true)
+        );
 
-        while( $data = $dotaz_mysql_fn->fetch_array() )
-        {
+        while($data = $dotaz_mysql_fn->fetch_array()) {
             //vypis z mysql
             $id = $data["id"];
             $Cislo = $data["Cislo"];
@@ -72,35 +74,34 @@ class platby
 
 
             $res = pg_insert($db_ok2, 'faktury_neuhrazene', $fn_add);
-            if($res === false)
-            {
-              $this->logger->addError("platby\\synchro_db_nf pg_insert res failed! ".pg_last_error($db_ok2));
-            }
-            else{
-              $res_rows = pg_affected_rows($res);
-              $this->logger->info("platby\synchro_db_nf: pg_insert res: "
+            if($res === false) {
+                $this->logger->addError("platby\\synchro_db_nf pg_insert res failed! ".pg_last_error($db_ok2));
+            } else {
+                $res_rows = pg_affected_rows($res);
+                $this->logger->info(
+                    "platby\synchro_db_nf: pg_insert res: "
                                       . " result: ".var_export($res, true)
                                       . " affected_rows: ".var_export($res_rows, true)
-                                    );
+                );
             }
 
             $pocet_cyklu++;
 
-        } //konec while 
+        } //konec while
 
         return $pocet_cyklu;
     }
 
-    function fn_kontrola_omezeni()
+    public function fn_kontrola_omezeni()
     {
         $ret = array();
-        
+
         global $db_ok2;
 
         $this->logger->info("platby\\fn_kontrola_omezeni called");
 
         $sql_dotaz =
-    
+
         "SELECT 
          DISTINCT ON (t2.ip)
           COALESCE(nf.id,0),
@@ -123,109 +124,96 @@ class platby
             GROUP BY t1.id_cloveka, t1.jmeno, t1.prijmeni, t1.billing_suspend_status,
              t2.id_komplu, t2.ip, t2.dov_net, t2.sikana_status, 
                  nf.datsplat, nf.cislo, nf.datum, nf.id, t2.sikana_text";
-      
-       $dotaz_vlastnici = pg_query($sql_dotaz);
-       if ($dotaz_vlastnici === false){
-          $this->logger->addError("platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici failed! ".pg_last_error($db_ok2));
-          return $ret;
-       } else{
-          $dotaz_vlastnici_num = pg_num_rows($dotaz_vlastnici);
-          $this->logger->info("platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici: "
-                                  . " result: ".var_export($dotaz_vlastnici, true)
-                                  . " num_rows: ".var_export($dotaz_vlastnici_num, true));
-       }
 
-       $index = 1;   
-       while( $data = pg_fetch_array($dotaz_vlastnici))
-       { 
-              //print "objekt $i: ".$data_obj["id_komplu"]."<br>";
+        $dotaz_vlastnici = pg_query($sql_dotaz);
+        if ($dotaz_vlastnici === false) {
+            $this->logger->addError("platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici failed! ".pg_last_error($db_ok2));
+            return $ret;
+        } else {
+            $dotaz_vlastnici_num = pg_num_rows($dotaz_vlastnici);
+            $this->logger->info(
+                "platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici: "
+                                  . " result: ".var_export($dotaz_vlastnici, true)
+                . " num_rows: ".var_export($dotaz_vlastnici_num, true)
+            );
+        }
+
+        $index = 1;
+        while($data = pg_fetch_array($dotaz_vlastnici)) {
+            //print "objekt $i: ".$data_obj["id_komplu"]."<br>";
             $id_komplu = $data["id_komplu"];
             $id_cloveka = $data["id_cloveka"];
             $sikana_text = $data["sikana_text"];
             $nf_cislo = $data["cislo"];
-    
+
             $nf_pocet = $data["nf_pocet"];
             $nf_datum2 = $data["nf_datum2"];
-    
+
             $zprava = "";
-    
-            if( $data["dov_net"] == "n" )
-            { $duvod = "netn"; }
-            elseif( $data["sikana_status"] == "a")
-            { 
-                  $duvod = "sikana"; 
-        
-                  if( ereg(".+za fakturu č. [0123456789]+.+", $sikana_text) )
-                {
+
+            if($data["dov_net"] == "n") {
+                $duvod = "netn";
+            } elseif($data["sikana_status"] == "a") {
+                $duvod = "sikana";
+
+                if(ereg(".+za fakturu č. [0123456789]+.+", $sikana_text)) {
                     list($a1, $a2) = split("za fakturu č.", $sikana_text, 2);
                     list($b1, $b2, $b3) = split(" ", $a2, 3);
-    
-                    $cislo_faktury_sikana = ereg_replace(" ","",$b2);
+
+                    $cislo_faktury_sikana = ereg_replace(" ", "", $b2);
                     //print "cislo faktury: -".$cislo_faktury."-<br>";
+                } else {
+                    $cislo_faktury_sikana = "";
                 }
-                else
-                { $cislo_faktury_sikana = ""; }
-    
-              }
-            else
-            { $duvod = ""; }
-    
+
+            } else {
+                $duvod = "";
+            }
+
             //$dotaz_fa = mysql_query("SELECT Cislo,DATE_FORMAT(datum, '%Y-%m') as datum2 FROM faktury_neuhrazene WHERE par_id_vlastnika = '$id_cloveka' ");
             //$dotaz_fa_num = mysql_num_rows($dotaz_fa);
-    
-            if( $nf_pocet == 0 )
-            { //ne-nalezena dluzna faktura
-    
-              if( ($duvod == "sikana") and ( $cislo_faktury_sikana > 0 ) )
-              { $zprava .= "<span style=\"color: red;\" > chyba! nic nedluzi, ale ma sikanu za FA </span>"; }
-              else
-              { $zprava .= "<span style=\"color: maroon;\" > nic nedluzi (divny) </span>"; }
-            }
-            elseif( $nf_pocet == 1 )
-            { //k objektu nalezena 1. faktura
-            
-                 if( ($duvod == "sikana") and ($nf_cislo == $cislo_faktury_sikana) )
-                 {
+
+            if($nf_pocet == 0) { //ne-nalezena dluzna faktura
+
+                if(($duvod == "sikana") and ($cislo_faktury_sikana > 0)) {
+                    $zprava .= "<span style=\"color: red;\" > chyba! nic nedluzi, ale ma sikanu za FA </span>";
+                } else {
+                    $zprava .= "<span style=\"color: maroon;\" > nic nedluzi (divny) </span>";
+                }
+            } elseif($nf_pocet == 1) { //k objektu nalezena 1. faktura
+
+                if(($duvod == "sikana") and ($nf_cislo == $cislo_faktury_sikana)) {
                     $platba_dotaz = pg_query("SELECT * FROM platby WHERE ( id_cloveka = '$id_cloveka' AND zaplaceno_za LIKE '$nf_datum2' ) ");
-                    if ($platba_dotaz === false){
-                      $this->logger->addError("platby\\fn_kontrola_omezeni pg_query platba_dotaz failed! ".pg_last_error($db_ok2));
+                    if ($platba_dotaz === false) {
+                        $this->logger->addError("platby\\fn_kontrola_omezeni pg_query platba_dotaz failed! ".pg_last_error($db_ok2));
                     }
 
                     $platba_dotaz_num = pg_num_rows($platba_dotaz);
-    
-                    if( $platba_dotaz_num > 0 )
-                    {
-                      $zprava .= "<span style=\"color: red;\" > chyba! existuje hot. platba a ma sikanu za Neuhr. FA</span>";
+
+                    if($platba_dotaz_num > 0) {
+                        $zprava .= "<span style=\"color: red;\" > chyba! existuje hot. platba a ma sikanu za Neuhr. FA</span>";
+                    } else {
+                        $zprava .= "<span style=\"color: green;\" > dluzi furt (OK) </span>";
                     }
-                    else
-                    {
-                      $zprava .= "<span style=\"color: green;\" > dluzi furt (OK) </span>";
-                    }
-                  }
-                  elseif( ($duvod == "netn") and ($nf_cislo == $cislo_faktury_sikana) )
-                  {
-                      $zprava .= "<span style=\"color: maroon;\" >nic nedluzi, ale ma netn (divny)</span>";
-                  }
-                  else
-                  {
-                      $zprava .= "<span style=\"color: maroon;\" > nic nedluzi, ale ma omezeni (asi za neco jinyho) </span>";
-                  }
+                } elseif(($duvod == "netn") and ($nf_cislo == $cislo_faktury_sikana)) {
+                    $zprava .= "<span style=\"color: maroon;\" >nic nedluzi, ale ma netn (divny)</span>";
+                } else {
+                    $zprava .= "<span style=\"color: maroon;\" > nic nedluzi, ale ma omezeni (asi za neco jinyho) </span>";
+                }
+            } else { //nalezeno více faktur
+                $zprava .= "<span style=\"color: maroon;\" >dluzi vice faktur, neumim zjistit </span>";
             }
-            else
-            { //nalezeno více faktur
-              $zprava .= "<span style=\"color: maroon;\" >dluzi vice faktur, neumim zjistit </span>";
-            }
-    
+
             $zaznam[] = "<b>zaznam c</b>: ".$index.", <b>id_komplu</b>: ".$id_komplu.", <b>id_cloveka</b>: ".$id_cloveka
                         . ",<b>duvod</b>: ".$duvod.", <b>cislo_fa</b>: ".$nf_cislo.", <b>cislo_fa_sikana:</b> ".$cislo_faktury_sikana
                         .". ".$zprava."<br>";
-    
-            $index++;
-       }
-       
-       $ret[0] = $dotaz_vlastnici_num;
-       $ret[1] = array($zaznam);
 
-       return $ret;
+            $index++;
+        }
+
+        $ret[0] = $dotaz_vlastnici_num;
+        $ret[1] = array($zaznam);
+
+        return $ret;
     }
 }

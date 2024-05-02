@@ -1,4 +1,5 @@
 <?php
+
 // cli-config.php
 // cli-config.php
 require_once "bootstrap-doctrine.php";

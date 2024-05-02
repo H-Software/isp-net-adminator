@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class PartnerOrder extends Model
 {
-	protected $table = 'partner_klienti';
+    protected $table = 'partner_klienti';
     /**
      * The primary key associated with the table.
      *
@@ -22,19 +22,19 @@ class PartnerOrder extends Model
      */
     public $timestamps = false;
 
-	 /**
+    /**
      * The model's default values for attributes.
      *
      * @var array
      */
     protected $attributes = [
-		// 'akce' => NULL,
-		// // 'provedeno_kdy' => 'CURRENT_TIMESTAMP',
-		// 'provedeno_kym' => NULL,
+    // 'akce' => NULL,
+    // // 'provedeno_kdy' => 'CURRENT_TIMESTAMP',
+    // 'provedeno_kym' => NULL,
         // 'vysledek' => 0
     ];
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -42,12 +42,12 @@ class PartnerOrder extends Model
     protected $fillable = [
         // 'akce',
         // 'provedeno_kym',
-        // 'vysledek' 
+        // 'vysledek'
     ];
 
     /**
      * present integer like a text value
-     * 
+     *
      * @var int
      */
     protected function akceptovano(): Attribute
@@ -59,7 +59,7 @@ class PartnerOrder extends Model
 
     /**
      * present integer like a text value
-     * 
+     *
      * @var int
      */
     protected function pripojeno(): Attribute
@@ -71,7 +71,7 @@ class PartnerOrder extends Model
 
     /**
      * present integer like a text value
-     * 
+     *
      * @var int
      */
     protected function prio(): Attribute
