@@ -115,7 +115,7 @@ require("include/charset.php");
     
   foreach ($f_add as $key => $val) { $pole=$pole." [".$key."] => ".$val."\n"; }
     
-  //$pole .= " <br> akci provedl: ".$nick." vysledek akce dle databáze: vlastniku: ".$dotaz_v_r." , fakturacni: ".$f_add_r.", datum akce: ".$datum;
+  //$pole .= " <br> akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email." vysledek akce dle databáze: vlastniku: ".$dotaz_v_r." , fakturacni: ".$f_add_r.", datum akce: ".$datum;
        
   if( ( ($f_add_r == 1) and ($dotaz_v_r == 1) ) ){ $vysledek_write=1; }
        

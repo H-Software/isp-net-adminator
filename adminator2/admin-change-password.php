@@ -108,7 +108,7 @@ require ("include/charset.php");
     else
     {
     
-     echo "Změna heslo pro uživatele ".$nick."...<br>";
+     echo "Změna heslo pro uživatele ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email."...<br>";
 
     $new_pass=md5($new_pass);
     	  

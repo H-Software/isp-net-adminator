@@ -71,7 +71,7 @@ include ("include/charset.php");
 
     $datum = strftime("%d/%m/%Y %H:%M:%S", time());
     
-     $pole .= $pole2.", akci provedl: ".$nick.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
+     $pole .= $pole2.", akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
 		 
     $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce) VALUES ('$pole')");
   

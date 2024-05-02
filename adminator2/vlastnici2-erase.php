@@ -123,7 +123,7 @@ include ("include/charset.php");
      // pridame to do archivu zmen
     $pole = "<b>akce: smazani vlastnika ;</b><br>";
     foreach ($obj_erase_eq as $key => $val) { $pole=$pole." [".$key."] => ".$val."\n"; }
-    // $pole .= $pole2.", akci provedl: ".$nick.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
+    // $pole .= $pole2.", akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
 
     if ( $res == 1){ $vysledek_write="1"; }
        		   

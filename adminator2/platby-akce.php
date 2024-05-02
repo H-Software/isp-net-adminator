@@ -185,7 +185,7 @@ include ("include/charset.php");
 		$pole="<b>akce: pridani hotovostni platby; </b><br>";
 	        
 		foreach ($platba_add as $key => $val) { $pole=$pole." [".$key."] => ".$val."\n"; }
-		// $pole=$pole.",<br> akci provedl: ".$nick.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum2;
+		// $pole=$pole.",<br> akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum2;
 		     
 		if ( $res == 1){ $vysledek_write="1"; }
 		
