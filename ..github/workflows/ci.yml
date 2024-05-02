@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        php-versions: ['8.2']
+
+    name: Test on ${{ matrix.os }} with PHP ${{ matrix.php-versions }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --ignore-platform-reqs
+
+      # - name: Run the tests
+      #   run: composer phpunit
+
+      - name: PHP-CS-Fixer
+        uses: docker://ghcr.io/php-cs-fixer/php-cs-fixer:3-php8.3
+          with:
+            args: |
+              check 
+              adminator3/app 
+              adminator3/boostrap
+              adminator3/config
+
+            # use `check .` if your repository not having paths configured in .php-cs-fixer[.dist].php
