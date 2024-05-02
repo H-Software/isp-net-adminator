@@ -90,21 +90,21 @@ else
 {
 
   //normal dotaz 
- $dotaz=mysql_query("SELECT *,DATE_FORMAT(Datum, '%m-%Y') as datum2 FROM faktury_neuhrazene WHERE 
+ $dotaz=$conn_mysql->query("SELECT *,DATE_FORMAT(Datum, '%m-%Y') as datum2 FROM faktury_neuhrazene WHERE 
 			( ignorovat = '0' AND par_id_vlastnika > 0 AND aut_sms_stav = 0 AND po_splatnosti_vlastnik = '1' ) ");	
   
 
-// $dotaz=mysql_query("SELECT * FROM faktury_neuhrazene WHERE 
+// $dotaz=$conn_mysql->query("SELECT * FROM faktury_neuhrazene WHERE 
 //			( ignorovat = '0' AND par_id_vlastnika > 0 and po_splatnosti_vlastnik = '1' ) ");
 
- $dotaz_radku=mysql_num_rows($dotaz);
+ $dotaz_radku= $dotaz->num_rows;
  
  if ( $dotaz_radku == 0)
  { echo "<div>Žádné neuhrazené faktury v databázi.</div>"; }
  else
  {
 
-  while( $data=mysql_fetch_array($dotaz) )
+  while( $data= $dotaz->fetch_array() )
   {
       $id_cloveka=$data["par_id_vlastnika"];
       $id_faktury=$data["id"];
@@ -143,12 +143,12 @@ else
      $text = "Dobry den. Nemate uhrazenou fakturu c. ".$data["Cislo"]." v obdobi ".$data["datum2"].". ";
      $text .= "Prosim uhradte ji co nejdrive, aby nedoslo k omezeni sluzeb. SIMELON, s.r.o.";
      
-     $vlastnik_sms_send=mysql_query("insert into QUEUE (PHONE, MSG,SCRIPT) VALUES ('$vlastnik_tel', '$text','Mobilem') "); 
+     $vlastnik_sms_send=$conn_mysql->query("insert into QUEUE (PHONE, MSG,SCRIPT) VALUES ('$vlastnik_tel', '$text','Mobilem') "); 
      
      sleep(2);
      
      $last_id=mysql_insert_id();
-     $dotaz_se=mysql_query("SELECT * FROM QUEUE WHERE ID = '$last_id' ");
+     $dotaz_se=$conn_mysql->query("SELECT * FROM QUEUE WHERE ID = '$last_id' ");
      
       while( $data_se=mysql_fetch_array($dotaz_se) )
       { $last_status=$data_se["STATUS"]; } 
@@ -181,7 +181,7 @@ else
     }
         
     //zde ulozime do db vysledky
-    $uprava_zpetna=mysql_query("UPDATE faktury_neuhrazene SET aut_sms_stav='$aut_sms_stav', aut_sms_datum=Now() WHERE id=".$id_faktury." Limit 1 ");
+    $uprava_zpetna=$conn_mysql->query("UPDATE faktury_neuhrazene SET aut_sms_stav='$aut_sms_stav', aut_sms_datum=Now() WHERE id=".$id_faktury." Limit 1 ");
     
 //  if ($odesilat == "ano" )
     {

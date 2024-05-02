@@ -100,13 +100,13 @@ include ("include/charset.php");
     // $pole .= $pole2.", akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
 
     if ( $res == 1){ $vysledek_write=1; }   		   
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write' )");
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write' )");
 
   }
   else 
   { 
     $dotaz = mysql_query("SELECT * FROM fakturacni_skupiny WHERE id = '$erase_id' ");
-    $radku = mysql_num_rows($dotaz);
+    $radku = $dotaz->num_rows;
     
     if ($radku <> 1 ) 
     { 
@@ -122,7 +122,7 @@ include ("include/charset.php");
   
    echo "<tr><td colspan=\"4\"> Opravdu smazat následující Fakturační skupinu? <br><br></td></tr>";
   
-    while ($data=mysql_fetch_array($dotaz) ) 
+    while ($data= $dotaz->fetch_array() ) 
     {
      
      echo "<tr> <td><b>id fakt. skupiny: </b></td> <td>".$data["id"]." </td> </tr>";

@@ -98,16 +98,16 @@ if( ( isset($odeslano) and !(isset($error) ) ) )
   if( $v_reseni == 1){ $v_reseni_kym = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email; }
   if( $vyreseno == 1){ $vyreseno_kym = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email; }
 
-  $add=mysql_query("INSERT INTO opravy (id_vlastnika,id_predchozi_opravy, datum_vlozeni, priorita, v_reseni, v_reseni_kym, vyreseno, vyreseno_kym,text,vlozil )
+  $add=$conn_mysql->query("INSERT INTO opravy (id_vlastnika,id_predchozi_opravy, datum_vlozeni, priorita, v_reseni, v_reseni_kym, vyreseno, vyreseno_kym,text,vlozil )
                     VALUES ('$id_vlastnika','$id_predchozi_opravy','$datum_vlozeni','$priorita','$v_reseni','$v_reseni_kym','$vyreseno','$vyreseno_kym','$text','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "' ) ");
 
  if( $id_predchozi_opravy > 0)
  {
   //upravime predchozi prispevky
     if( $vyreseno == 1)
-    { $rs_vyr=mysql_query("UPDATE opravy SET vyreseno = '1',v_reseni = '0' WHERE id_predchozi_opravy = '$id_predchozi_opravy' "); }
+    { $rs_vyr=$conn_mysql->query("UPDATE opravy SET vyreseno = '1',v_reseni = '0' WHERE id_predchozi_opravy = '$id_predchozi_opravy' "); }
     elseif( $v_reseni == 1)
-    { $rs_v_res=mysql_query("UPDATE opravy SET v_reseni = '1' WHERE id_predchozi_opravy = '$id_predchozi_opravy' "); }
+    { $rs_v_res=$conn_mysql->query("UPDATE opravy SET v_reseni = '1' WHERE id_predchozi_opravy = '$id_predchozi_opravy' "); }
     
     //zjistime jestli neni nadrazeny prispevek
     $vysl = mysql_query("SELECT * FROM opravy WHERE id_opravy = '$id_predchozi_opravy' ");
@@ -117,9 +117,9 @@ if( ( isset($odeslano) and !(isset($error) ) ) )
      $id_predchozi_opravy = $data_vysl["id_predchozi_opravy"];
      
      if( $vyreseno == 1)
-     { $rs_vyr_vysl=mysql_query("UPDATE opravy SET vyreseno = '1',v_reseni = '0' WHERE id_opravy = '$id_opravy' "); }
+     { $rs_vyr_vysl=$conn_mysql->query("UPDATE opravy SET vyreseno = '1',v_reseni = '0' WHERE id_opravy = '$id_opravy' "); }
      elseif( $v_reseni == 1)
-     { $rs_v_res_vysl=mysql_query("UPDATE opravy SET v_reseni = '1' WHERE id_opravy = '$id_opravy' "); }
+     { $rs_v_res_vysl=$conn_mysql->query("UPDATE opravy SET v_reseni = '1' WHERE id_opravy = '$id_opravy' "); }
     
     } // konec while mysql_fetch_array
     
@@ -137,7 +137,7 @@ if( ( isset($odeslano) and !(isset($error) ) ) )
     $pole .= ", text: ".$text.", <br> ";
 
     if ( $add == 1){ $vysledek_write=1; }
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
 
     //zkusime poslat email
         

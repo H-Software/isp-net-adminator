@@ -93,7 +93,7 @@ include ($cesta."include/charset.php");
 	$typ_systemu = $data2["typ_systemu"];     
       } 
  
-   $erase=mysql_query("DELETE FROM voip_cisla WHERE id_cisla = '$erase_id' LIMIT 1 ");
+   $erase=$conn_mysql->query("DELETE FROM voip_cisla WHERE id_cisla = '$erase_id' LIMIT 1 ");
 
    if ($erase){ echo "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně vymazán.</span><br><br>"; }
    else { echo "<span style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze smazat. </span>"; }
@@ -110,7 +110,7 @@ include ($cesta."include/charset.php");
 
   } // konec if isset update_id
  
-    $add_2=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+    $add_2=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
     				   
  } // konec if isset odeslano and ! isset error
  else
@@ -121,7 +121,7 @@ include ($cesta."include/charset.php");
       //nacteni predchozich udaju
       $dotaz = mysql_query("SELECT * FROM voip_cisla WHERE id_cisla = '$erase_id' ");
     
-      while( $data = mysql_fetch_array($dotaz) )
+      while( $data = $dotaz->fetch_array() )
       { 
 	$id_cisla = $data["id_cisla"];
 	$cislo = $data["cislo"]; 

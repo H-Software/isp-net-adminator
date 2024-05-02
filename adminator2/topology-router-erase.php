@@ -82,7 +82,7 @@ include ("include/charset.php");
         $pole3 = "<b>akce: smazání routeru;</b><br>";
 
 	// prvne zjistime detaily mazane polozky
-	$vyber=mysql_query("SELECT * FROM router_list WHERE id = '$erase_id' ");
+	$vyber=$conn_mysql->query("SELECT * FROM router_list WHERE id = '$erase_id' ");
 	
 	if( ( mysql_num_rows($vyber) <> 1 ) )
 	{ $pole3 .= "predchozi data nelze zjistit, "; }
@@ -106,7 +106,7 @@ include ("include/charset.php");
         else { echo "<div style=\"color: red; \">Chyba! Router nelze smazat. </div><br>\n"; }
 
         if ( $res == 1){ $vysledek_write=1; }
-        $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+        $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
   
   } // konec if Send
   else

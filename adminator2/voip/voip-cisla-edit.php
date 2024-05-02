@@ -101,7 +101,7 @@ include ($cesta."include/charset.php");
   {
     // echo "ukladani";
  
-   $add=mysql_query("INSERT INTO voip_cisla (cislo, id_vlastnika, typ_systemu)
+   $add=$conn_mysql->query("INSERT INTO voip_cisla (cislo, id_vlastnika, typ_systemu)
                                VALUES ('$cislo','$id_vlastnika','$typ_systemu') ");
 
    if ($add){ echo "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně vložen.</span><br><br>"; }
@@ -120,7 +120,7 @@ include ($cesta."include/charset.php");
   else
   {
    
-   $uprava=mysql_query("UPDATE voip_cisla SET cislo='$cislo', id_vlastnika='$id_vlastnika' where id_cisla='".$update_id."' Limit 1 ");
+   $uprava=$conn_mysql->query("UPDATE voip_cisla SET cislo='$cislo', id_vlastnika='$id_vlastnika' where id_cisla='".$update_id."' Limit 1 ");
 
    if ($uprava){ echo "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně upraven.</span><br><br>"; }
    else { echo "<span style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze upravit v databázi. </span>"; }
@@ -136,7 +136,7 @@ include ($cesta."include/charset.php");
    	    	    
   }// konec else if isset update_id
 
-    $add_2=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+    $add_2=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
     				   
  } // konec if isset odeslano and ! isset error
  else
@@ -147,7 +147,7 @@ include ($cesta."include/charset.php");
       //nacteni predchozich udaju
       $dotaz = mysql_query("SELECT * FROM voip_cisla WHERE id_cisla = '$update_id' ");
     
-      while( $data = mysql_fetch_array($dotaz) )
+      while( $data = $dotaz->fetch_array() )
       { 
 	$id_cisla = $data["id_cisla"];
 	$cislo = $data["cislo"]; 

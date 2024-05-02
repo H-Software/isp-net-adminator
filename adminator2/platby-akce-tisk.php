@@ -35,7 +35,7 @@ include ("include/charset.php");
     
    }				   
    
-   $vysl_user=mysql_query("SELECT * FROM users_old WHERE login LIKE '" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "' ");
+   $vysl_user=$conn_mysql->query("SELECT * FROM users_old WHERE login LIKE '" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "' ");
    $radku_user=mysql_num_rows($vysl_user);
    
    if ( $radku_user == 0){ }

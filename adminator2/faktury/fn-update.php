@@ -61,7 +61,7 @@ echo "<div style=\"padding-bottom: 10px; font-weight: bold; \">ZvolenÃ¡ akce: PÅ
   if ( ( $id_faktury != "akce" and $hodnota >= 0) )
   {
 
-   $uprava=mysql_query("UPDATE faktury_neuhrazene SET ignorovat='$hodnota' WHERE id=".$id_faktury." Limit 1 ");
+   $uprava=$conn_mysql->query("UPDATE faktury_neuhrazene SET ignorovat='$hodnota' WHERE id=".$id_faktury." Limit 1 ");
 
    echo "id polozky: ".$id_faktury.", hodnota: ".$hodnota.", ulozeno: ";
    if( $uprava == 1){ echo "Ano"; }

@@ -90,18 +90,18 @@ else
 {
 
  //debug dotaz
-// $dotaz=mysql_query("SELECT *,DATE_FORMAT(Datum, '%d.%c.%Y') as Datum2, DATE_FORMAT(DatSplat, '%d.%c.%Y') as DatSplat2
+// $dotaz=$conn_mysql->query("SELECT *,DATE_FORMAT(Datum, '%d.%c.%Y') as Datum2, DATE_FORMAT(DatSplat, '%d.%c.%Y') as DatSplat2
 //			FROM faktury_neuhrazene WHERE ( ignorovat != '1' AND par_id_vlastnika > 0 and Cislo LIKE '280107026' ) LIMIT 1 ");
  
  if ( $typ == 1)
  {
   //normal dotaz 
-  $dotaz=mysql_query("SELECT *,DATE_FORMAT(Datum, '%d.%c.%Y') as Datum2, DATE_FORMAT(DatSplat, '%d.%c.%Y') as DatSplat2
+  $dotaz=$conn_mysql->query("SELECT *,DATE_FORMAT(Datum, '%d.%c.%Y') as Datum2, DATE_FORMAT(DatSplat, '%d.%c.%Y') as DatSplat2
 			FROM faktury_neuhrazene WHERE ( aut_email_stav = '0' AND ignorovat = '0' 
 			AND par_id_vlastnika > 0 ) ");
  }
  	
- $dotaz_radku=mysql_num_rows($dotaz);
+ $dotaz_radku= $dotaz->num_rows;
  
  if ( $dotaz_radku == 0)
  { echo "<div>Žádné neuhrazené faktury v databázi.</div>"; }
@@ -110,7 +110,7 @@ else
 
   // require_once "../mailing/class.phpmailer.php";
   
-  while( $data=mysql_fetch_array($dotaz) )
+  while( $data= $dotaz->fetch_array() )
   {
     $posilat_email="ano";
     
@@ -231,7 +231,7 @@ else
 
     //ted to ulozime, i kdyz email nebyl odeslan
     
-    $uprava=mysql_query("UPDATE faktury_neuhrazene 
+    $uprava=$conn_mysql->query("UPDATE faktury_neuhrazene 
 			    SET aut_email_stav='".intval($aut_email_stav)."', aut_email_datum=Now() 
 			    WHERE id=".intval($id_faktury)." Limit 1 ");
     
@@ -240,7 +240,7 @@ else
     $vysl .= "stav odeslani emailu: ".intval($aut_email_stav);
     
     //ted ulozime do archivu poslani emailu
-    $log=mysql_query("INSERT INTO fn_aut_email_log (zprava) VALUES ('".$conn_mysql->real_escape_string($vysl)."') ");
+    $log=$conn_mysql->query("INSERT INTO fn_aut_email_log (zprava) VALUES ('".$conn_mysql->real_escape_string($vysl)."') ");
     
     $aut_email_stav="";
     

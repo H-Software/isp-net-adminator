@@ -11,7 +11,7 @@
  $time = strftime("%d/%m/%Y %H:%M:%S", time());
 
 // prvne zjistime jestli je funkce zapnuta a pak kdy se ma vykonavat
- $vysl_cas=mysql_query("select * from automatika WHERE vec LIKE 'sikana_odpocet' " );
+ $vysl_cas=$conn_mysql->query("select * from automatika WHERE vec LIKE 'sikana_odpocet' " );
  $radku_cas=mysql_num_rows($vysl_cas);
      
  if($radku_cas==0) { 

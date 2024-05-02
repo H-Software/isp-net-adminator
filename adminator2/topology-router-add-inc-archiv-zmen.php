@@ -93,7 +93,7 @@
         {
           $pole3 .= "změna <b>Připojného bodu</b> z: ";
 
-            $vysl_t1=mysql_query("select jmeno FROM nod_list WHERE id = '$val'" );
+            $vysl_t1=$conn_mysql->query("select jmeno FROM nod_list WHERE id = '$val'" );
             while ($data_t1=mysql_fetch_array($vysl_t1) )
             { $pole3 .= "<span class=\"az-s1\">".$data_t1["jmeno"]."</span>"; }
 
@@ -101,7 +101,7 @@
 
           $val2 = $nod_upd[$key];
 
-    	    $vysl_t2=mysql_query("SELECT jmeno FROM nod_list WHERE id = '$val2'");
+    	    $vysl_t2=$conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '$val2'");
             while ($data_t2=mysql_fetch_array($vysl_t2) )
             { $pole3 .= "<span class=\"az-s2\">".$data_t2["jmeno"]."</span>"; }
 
@@ -141,7 +141,7 @@
   
   if( $uprava == 1){ $vysledek_write=1; }
   
-  $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+  $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
 		    "('".$conn_mysql->real_escape_string($pole)."',".
 		    "'".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."',".
 		    "'".$conn_mysql->real_escape_string($vysledek_write)."') ");

@@ -200,7 +200,7 @@ include ($cesta."include/charset.php");
    if( $typ_systemu == 2 )
    {
     $dotaz = mysql_query($dotaz_sql);
-    $dotaz_radku = mysql_num_rows($dotaz); 
+    $dotaz_radku = $dotaz->num_rows; 
    }
    else
    { echo "<div style=\"font-weight: bold; \" >Musíte vybrat \"Typ systému\"! </div>"; }
@@ -263,7 +263,7 @@ include ($cesta."include/charset.php");
      
      $pocet_zaznamu = "1";
      
-     while( $data = mysql_fetch_array($dotaz) )
+     while( $data = $dotaz->fetch_array() )
      {
       echo "<tr>";
 

@@ -61,7 +61,7 @@ if ( $cat_jmeno )
     echo "jméno : ".$jmeno." \n <br>";
     echo "šablona: ".$sablona." \n <br>";
 
-    $uprava=mysql_query("insert into kategorie (jmeno,sablona) values ('$jmeno','$sablona') ");
+    $uprava=$conn_mysql->query("insert into kategorie (jmeno,sablona) values ('$jmeno','$sablona') ");
 
     if ($uprava)echo "<br>MySql potvrdilo, takze:<br><H1> Data v databazi upravena.</H1><br>\n";
     else echo "Houstone tato uprava databaze selhala<br><br>";

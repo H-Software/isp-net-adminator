@@ -120,7 +120,7 @@ require($cesta."include/charset.php");
   //
   // vynulovani kontrolniho sloupce "overeno" v adminator (MY_SQL)
   //
-  $overeno_stav=mysql_query("UPDATE ".$adminator_db_nf." SET overeno = '0' ");
+  $overeno_stav=$conn_mysql->query("UPDATE ".$adminator_db_nf." SET overeno = '0' ");
   
   echo "<div style=\"padding-top: 10px; padding-bottom: 10px;\">Adminator: ";
    
@@ -243,7 +243,7 @@ require($cesta."include/charset.php");
 	$sql2 .= "and KcLikv LIKE '$kc_likv' and Firma LIKE '$Firma' and Jmeno LIKE '$Jmeno' ";
 	$sql2 .= "and ICO LIKE '$ico' and DIC LIKE '$dic' AND po_splatnosti_vlastnik = '1') ";  
 	
-	$dotaz2=mysql_query($sql2);
+	$dotaz2=$conn_mysql->query($sql2);
 	$dotaz2_radku=mysql_num_rows($dotaz2);
   
 	if( $dotaz2_radku == 1 )
@@ -252,7 +252,7 @@ require($cesta."include/charset.php");
 	    while($data2 = mysql_fetch_array($dotaz2) )
 	    { $id_faktury=$data2["id"]; }
     
-	    $uprava=mysql_query("UPDATE ".$adminator_db_nf." SET overeno='1' WHERE id=".$id_faktury." Limit 1 ");
+	    $uprava=$conn_mysql->query("UPDATE ".$adminator_db_nf." SET overeno='1' WHERE id=".$id_faktury." Limit 1 ");
 
 	    if ($uprava){ echo "<td><span style=\"color: green; \" >O-OK</span></td>"; }
 	    else { echo "<td><span style=\"color: red; \" >O-E </td>"; }
@@ -261,7 +261,7 @@ require($cesta."include/charset.php");
 	elseif( $dotaz2_radku == 0 )
 	{
 	    // faktura neexistuje, takze ji pridame
-	    $add=mysql_query("INSERT INTO ".$adminator_db_nf." (Cislo,VarSym,Datum,DatSplat, KcCelkem, KcLikv, ".
+	    $add=$conn_mysql->query("INSERT INTO ".$adminator_db_nf." (Cislo,VarSym,Datum,DatSplat, KcCelkem, KcLikv, ".
 				"Firma,Jmeno,ICO,DIC,overeno, po_splatnosti_vlastnik ) VALUES ('$Cislo','$VarSym','$DatumCZ_ins',".
 				"'$DatSplatCZ_ins','$kc_celkem','$kc_likv','$Firma','$Jmeno','$ico','$dic','1','1' ) ");
  
@@ -434,7 +434,7 @@ require($cesta."include/charset.php");
 		  //zde pripadne este dodelat dalsi kontrolu id_fakturry ...
 		  
 		  //finalni uprava, pokud jsou spravne promenny
-	          $vlastnik_update=mysql_query("UPDATE ".$adminator_db_nf." SET par_id_vlastnika = '$id_cloveka' WHERE id = '$id_faktury'");
+	          $vlastnik_update=$conn_mysql->query("UPDATE ".$adminator_db_nf." SET par_id_vlastnika = '$id_cloveka' WHERE id = '$id_faktury'");
 	      }
 	
 	      //$par_id_vlastnika = $ad_rada."/".$ui."(".$num_vlastnik.")";
@@ -491,7 +491,7 @@ require($cesta."include/charset.php");
   $datum_import = strftime("%Y-%m-%d %H:%M:%S", time());
 
   //pak ve finalne zapnout
-  $log=mysql_query("INSERT INTO fn_import_log (datum, stav) VALUES ('$datum_import','1' ) ");
+  $log=$conn_mysql->query("INSERT INTO fn_import_log (datum, stav) VALUES ('$datum_import','1' ) ");
       
   if($log !== true)
   { 

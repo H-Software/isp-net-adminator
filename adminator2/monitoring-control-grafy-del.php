@@ -63,7 +63,7 @@ require ("include/charset.php");
 	else
 	{
 	
-	    $res=mysql_query("DELETE FROM mon_grafy WHERE id='".intval($erase_id)."' LIMIT 1 "); 
+	    $res=$conn_mysql->query("DELETE FROM mon_grafy WHERE id='".intval($erase_id)."' LIMIT 1 "); 
 	
 	    if ($res) { echo "<br><H3><div style=\"color: green; \" >Graf úspěšně smazán. </div></H3>\n"; }
 	    else { echo "<div style=\"color: red; \">Chyba pri mazání grafu. </div><br>\n"; }
@@ -77,7 +77,7 @@ require ("include/charset.php");
 	    $pole = $conn_mysql->real_escape_string($pole);
 	    $loggedUser = $conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email);
 
-	    $add=mysql_query("INSERT INTO archiv_zmen (akce, provedeno_kym, vysledek) VALUES ('$pole','" . $loggedUser . "', '$res_w')");
+	    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce, provedeno_kym, vysledek) VALUES ('$pole','" . $loggedUser . "', '$res_w')");
 	
 	    Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
 	    Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart      		     
@@ -89,8 +89,8 @@ require ("include/charset.php");
     {
     // zobrazime udaje
     
-	$dotaz=mysql_query("SELECT * FROM mon_grafy WHERE id='".intval($erase_id)."' ");
-	$dotaz_radku=mysql_num_rows($dotaz);
+	$dotaz=$conn_mysql->query("SELECT * FROM mon_grafy WHERE id='".intval($erase_id)."' ");
+	$dotaz_radku= $dotaz->num_rows;
     
 	if ( $dotaz_radku <> 1 )
 	{ 
@@ -108,7 +108,7 @@ require ("include/charset.php");
 	
 	echo "<tr><td colspan=\"2\" ><br></td></tr>";
 	
-	while ( $data=mysql_fetch_array($dotaz) ) 
+	while ( $data= $dotaz->fetch_array() ) 
 	{
 	
 	echo "<tr>"."<td width=\"30%\">id: </td>"."<td>".htmlspecialchars($data["id"])."</td>"."</tr>";

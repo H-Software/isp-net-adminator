@@ -113,7 +113,7 @@ require ($cesta."include/charset.php");
 	$pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
 	$id = intval($_GET["id"]);
 	
-        $uprava=mysql_query("UPDATE partner_klienti SET akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
+        $uprava=$conn_mysql->query("UPDATE partner_klienti SET akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
   
        if ($uprava) { echo "<br><H3><div style=\"color: green; \" >Poznámka úspěšně upravena.</div></H3><br>\n"; }
        else
@@ -132,7 +132,7 @@ require ($cesta."include/charset.php");
       //nacteme predchozi data
       $dotaz = mysql_query("SELECT akceptovano_pozn FROM partner_klienti WHERE id = '$id' ");
       
-      while( $data = mysql_fetch_array($dotaz) )
+      while( $data = $dotaz->fetch_array() )
       { $pozn = $data["akceptovano_pozn"]; }
 
         echo "<form action=\"\" method=\"GET\" >";

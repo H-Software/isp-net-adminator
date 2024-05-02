@@ -120,7 +120,7 @@ if ( ( ($login_jmeno != "") and ($jmeno != "") and ($login_level != "") ) ):
 if ( ( $update_status!=1 ) )
 {
 
- $dupl=mysql_query("SELECT login_name FROM users_old WHERE login like '$login_jmeno' ");
+ $dupl=$conn_mysql->query("SELECT login_name FROM users_old WHERE login like '$login_jmeno' ");
  $dupl_radku=mysql_num_rows($dupl);
  
  if ($dupl_radku >= 1)
@@ -135,7 +135,7 @@ if ( ( $update_status!=1 ) )
 if ( ( $update_status==1 and (isset($odeslano)) ) )
 {
 
- $dupl=mysql_query("SELECT login_name FROM users_old WHERE ( login like '$login_jmeno' and id != '$update_id' ) ");
+ $dupl=$conn_mysql->query("SELECT login_name FROM users_old WHERE ( login like '$login_jmeno' and id != '$update_id' ) ");
  $dupl_radku=mysql_num_rows($dupl);
  
  if ($dupl_radku >= 1)
@@ -265,7 +265,7 @@ if( !( isset($fail) ) )
 	$password=md5($login_password);    
 	$smb_pass_crypt=md5($smb_pass);
     
-	$res=mysql_query("INSERT INTO users_old (login, password, name, email, level, smb_user, smb_pass) 
+	$res=$conn_mysql->query("INSERT INTO users_old (login, password, name, email, level, smb_user, smb_pass) 
 	VALUES ('$login_jmeno','$password','$jmeno','$email','$login_level','$smb_user','$smb_pass_crypt')");
                                                                                                 
 	if ($res) { echo "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; } 
@@ -281,7 +281,7 @@ if( !( isset($fail) ) )
     
 	if( !($res === false) ){ $vysledek_write=1; }
         
-	$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+	$add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
                     "('".$conn_mysql->real_escape_string($pole)."',".
                     "'".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."',".
                     "'".intval($vysledek_write)."')");                                                                                                

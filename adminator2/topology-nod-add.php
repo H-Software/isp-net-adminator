@@ -110,7 +110,7 @@ if( ( isset($_POST["jmeno"]) and !isset($error) ) )
   
   echo "<b>Mód nodu</b>: ".$typ_nodu."<br>";
   
-  $add=mysql_query("INSERT INTO nod_list (jmeno, adresa, pozn, ip_rozsah,typ_vysilace,stav,router_id,typ_nodu, filter_router_id) 
+  $add=$conn_mysql->query("INSERT INTO nod_list (jmeno, adresa, pozn, ip_rozsah,typ_vysilace,stav,router_id,typ_nodu, filter_router_id) 
 			VALUES ('$jmeno','$adresa','$pozn','$ip_rozsah','$typ_vysilace','$stav','$router_id','$typ_nodu', '$filter_router_id') ");
 					
   if($add){ echo "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně vložen.</span><br><br>"; }
@@ -129,7 +129,7 @@ if( ( isset($_POST["jmeno"]) and !isset($error) ) )
   $pole .= " [typ_nodu]=> ".$typ_nodu.", [filter_router_id]=> ".$filter_router_id;
   
   if ( $add == 1){ $vysledek_write=1; }
-  $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+  $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
                     "('".$conn_mysql->real_escape_string($pole)."','".
                 	$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."','".
                 	$conn_mysql->real_escape_string($vysledek_write)."') ");
