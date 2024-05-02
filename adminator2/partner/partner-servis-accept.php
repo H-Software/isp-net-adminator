@@ -95,6 +95,8 @@ require ($cesta."include/charset.php");
 	
 	$ps->list_show_legend();
 
+  $logger->info("partner-servis-accept: List SQL: " . var_export($dotaz_sql,true));
+
 	$ps->list_show_items("2",$filtr_prio,$dotaz_sql);
 
 	// $listovani->listInterval();
@@ -122,8 +124,12 @@ require ($cesta."include/charset.php");
       $pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
       $id = intval($_GET["id"]);
 	
-        $uprava=$conn_mysql->query("UPDATE partner_klienti_servis SET akceptovano='1', akceptovano_kym='".
-        $conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email). "', akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
+      $sql = "UPDATE partner_klienti_servis SET akceptovano='1', akceptovano_kym='".
+      $conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email). "', akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ";
+
+        $logger->info("partner-servis-accept: Update SQL: " . var_export($sql,true));
+
+        $uprava=$conn_mysql->query($sql);
   
        if ($uprava) { echo "<br><H3><div style=\"color: green; padding-left: 20px;\" >Zákazník úspěšně akceptován.</div></H3><br>\n"; }
        else
