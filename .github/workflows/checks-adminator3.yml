@@ -38,6 +38,16 @@ jobs:
       # - name: Run the tests
       #   run: composer phpunit
 
+      - name: PHP CodeSniffer
+        run: |
+          composer \
+          run \
+            phpcs \
+              app \
+              boostrap \
+              print \
+              rss
+            
       - name: PHP-CS-Fixer
         run: |
           php \
