@@ -13,13 +13,15 @@ use App\Controllers\Auth\PasswordController;
 // routes
 
 $app->get(
-    '/', function ($request, $response, $args) {
+    '/',
+    function ($request, $response, $args) {
         return $request->withStatus(302)->withHeader('Location', '/home');
     }
 )->setName('index');
 
 $app->group(
-    '/auth', function (RouteCollectorProxy $group) {
+    '/auth',
+    function (RouteCollectorProxy $group) {
         $group->map(['GET','POST'], '/signin', AuthController::class . ':signin')->setName('auth.signin');
 
         $group->get('/signout', AuthController::class . ':signout')->setName('logout');
@@ -27,20 +29,22 @@ $app->group(
 );
 
 $app->group(
-    '', function (RouteCollectorProxy $group) use ($app) {
+    '',
+    function (RouteCollectorProxy $group) use ($app) {
         $app->get('/auth/password/change', PasswordController::class . ':getChangePassword')->setName('auth.password.change');
         $app->post('/auth/password/change', PasswordController::class . ':postChangePassword');
     }
 )->add(RedirectIfNotAuthenticated::class);
 
 $app->group(
-    '', function (RouteCollectorProxy $group) {
+    '',
+    function (RouteCollectorProxy $group) {
         $group->map(['GET', 'POST'], '/home', HomeController::class . ':home')->setName('home');
 
         $group->map(['GET', 'POST'], '/about', \aboutController::class . ':about');
         $group->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
         $group->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
-    
+
         $group->map(['GET', 'POST'], '/admin', \adminController::class . ':admin');
         $group->map(['GET', 'POST'], '/admin/admin', \adminController::class . ':adminMain');
         $group->map(['GET', 'POST'], '/admin/level-list', \adminController::class . ':adminLevelList');

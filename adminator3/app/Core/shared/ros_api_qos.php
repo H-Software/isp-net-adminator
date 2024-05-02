@@ -4,7 +4,7 @@
 // ! krz MK API
 // !
 // ! 2011/2/15
-// ! 
+// !
 // ! created by Patrik "hujer" Majer (hujer@simelon.net)
 // !
 // ! 2011/03/01 - v1.0a - alpha version - deployment operation
@@ -19,71 +19,71 @@ use RouterOS\Query;
 
 class mk_synchro_qos
 {
-    var $conn_mysql;
+    public $conn_mysql;
 
-    var $conn;            //objekt pripojeni k API na MK
-    var $rosClient; // dtto
+    public $conn;            //objekt pripojeni k API na MK
+    public $rosClient; // dtto
 
-    var $debug;             //uroven nebo on/off stav debug výpisů
- 
-    var $ros_version;        //verze ROSu v cilovem zarizeni
- 
-    var $objects;             //pole s objekty, ktere jedou krz tento router
- 
-    var $getall_mangle;         //pole pro export dat z /ip/firewall/mangle
- 
-    var $element_name_dwn;     //nazev prvku kterej urcuje dst ip adrress, pouziti u parsingu dat
-    var $element_name_upl;     // dtto pro src ip adrress, pouziti u parsingu dat
- 
-    var $item_ip_dwn;          //nazev polozky, ktera ma specifikovat dst ip adress, pouzito pri vkladani zaznamu
-    var $item_ip_upl;               //nazev polozky, ktera ma specifikovat src ip adress, pouzito pri vkladani zaznamu
- 
-    var $wrong_firewall_items;  //polozky ve /ip/firewall/mangle, ktere jsou na smazani
- 
-    var $force_mangle_rewrite;  //stav (0/1) jestli se ma navrdo premazat firewall 
- 
-    var $arr_global_diff_exc;   //pole s prebyvajicimi prvky v mangle
-    var $arr_global_diff_miss;  //pole s chybejicimi prvky v mangle
- 
-    var $arr_objects_dev_dwn;
-    var $arr_objects_dev_upl;
- 
-    var $agregace_sc;          //agragace SmallCity
- 
-    var $speed_sc_dwn;          //rychlosti smallcity linek :)
-    var $speed_sc_upl;
- 
-    var $speed_mp_dwn;        //rychlosti MP linky
-    var $speed_mp_upl;        //dtto upload
- 
+    public $debug;             //uroven nebo on/off stav debug výpisů
+
+    public $ros_version;        //verze ROSu v cilovem zarizeni
+
+    public $objects;             //pole s objekty, ktere jedou krz tento router
+
+    public $getall_mangle;         //pole pro export dat z /ip/firewall/mangle
+
+    public $element_name_dwn;     //nazev prvku kterej urcuje dst ip adrress, pouziti u parsingu dat
+    public $element_name_upl;     // dtto pro src ip adrress, pouziti u parsingu dat
+
+    public $item_ip_dwn;          //nazev polozky, ktera ma specifikovat dst ip adress, pouzito pri vkladani zaznamu
+    public $item_ip_upl;               //nazev polozky, ktera ma specifikovat src ip adress, pouzito pri vkladani zaznamu
+
+    public $wrong_firewall_items;  //polozky ve /ip/firewall/mangle, ktere jsou na smazani
+
+    public $force_mangle_rewrite;  //stav (0/1) jestli se ma navrdo premazat firewall
+
+    public $arr_global_diff_exc;   //pole s prebyvajicimi prvky v mangle
+    public $arr_global_diff_miss;  //pole s chybejicimi prvky v mangle
+
+    public $arr_objects_dev_dwn;
+    public $arr_objects_dev_upl;
+
+    public $agregace_sc;          //agragace SmallCity
+
+    public $speed_sc_dwn;          //rychlosti smallcity linek :)
+    public $speed_sc_upl;
+
+    public $speed_mp_dwn;        //rychlosti MP linky
+    public $speed_mp_upl;        //dtto upload
+
     //pole pro trideni dle typu linky, pro potreby QT
-    var $objects_sc;
-    var $objects_mp;
- 
-    var $objects_garants;         //pole se seznamem garantovejch trid
-    var $objects_garants_used;  //dtto, akorat pouze pouzivane krz definovaný router
-   
-    var $qt_ar_exc;         //pri diff. porovnani QT zaznamu
-    var $qt_ar_mis;             //dtto
- 
-    var $sc_speed_koef;          //koeficient pro nasobeni parent tridy u SC linek
+    public $objects_sc;
+    public $objects_mp;
 
-    var $id_tarifu_routers=2;   //id tarifu pro routery (idealne garant)
+    public $objects_garants;         //pole se seznamem garantovejch trid
+    public $objects_garants_used;  //dtto, akorat pouze pouzivane krz definovaný router
 
-    var $reinhard_wifi_id=1; //ID jednotlivejch routeru v Adminator - Topology - Routery
- 
-    var $reinhard_fiber_id=114; //dtto
+    public $qt_ar_exc;         //pri diff. porovnani QT zaznamu
+    public $qt_ar_mis;             //dtto
 
-    var $reinhard_3_id=177; //dtto
- 
-    var $reinhard_5_id=236; //dtto
- 
-    var $controlled_router_ip; //ip adresa ovladaneho routeru
- 
-    var $controlled_router_id; //ID ovladaneho routeru
- 
- 
-    function __construct($conn_mysql, $rosClient)
+    public $sc_speed_koef;          //koeficient pro nasobeni parent tridy u SC linek
+
+    public $id_tarifu_routers = 2;   //id tarifu pro routery (idealne garant)
+
+    public $reinhard_wifi_id = 1; //ID jednotlivejch routeru v Adminator - Topology - Routery
+
+    public $reinhard_fiber_id = 114; //dtto
+
+    public $reinhard_3_id = 177; //dtto
+
+    public $reinhard_5_id = 236; //dtto
+
+    public $controlled_router_ip; //ip adresa ovladaneho routeru
+
+    public $controlled_router_id; //ID ovladaneho routeru
+
+
+    public function __construct($conn_mysql, $rosClient)
     {
         $this->conn_mysql = $conn_mysql;
         $this->rosClient = $rosClient;
@@ -96,16 +96,15 @@ class mk_synchro_qos
 			WHERE (typ_tarifu = '0' AND garant = '1') 
 			ORDER BY id_tarifu"
         );
-    
-        while($data = $q->fetch_array())
-        { 
+
+        while($data = $q->fetch_array()) {
             $id = "objects_g_".$data["id_tarifu"];
-            $this->objects_garants[$id] = $data["speed_dwn"].":".$data["speed_upl"]; 
+            $this->objects_garants[$id] = $data["speed_dwn"].":".$data["speed_upl"];
         }
-         
+
     } //end of function contsruct
 
-    function set_wanted_values($ip)
+    public function set_wanted_values($ip)
     {
         $this->controlled_router_ip = $ip;
 
@@ -117,10 +116,10 @@ class mk_synchro_qos
         if(!isset($this->controlled_router_id)) {
             return false;
         }
-    
+
     } //end of function set_wanted_values
- 
-    function find_version()
+
+    public function find_version()
     {
 
         //zjistit verzi ROSu
@@ -128,57 +127,59 @@ class mk_synchro_qos
         $response = $this->rosClient->query($resourceQuery)->read();
         $this->ros_version = $response[0]['version'];
 
-        if($this->debug >= 1 ) { echo " ros version: " . $this->ros_version . "<br>\n"; 
+        if($this->debug >= 1) {
+            echo " ros version: " . $this->ros_version . "<br>\n";
         }
-     
+
     } //end of function find_version
- 
-    function array_serialize($array)
+
+    public function array_serialize($array)
     {
- 
+
         $aReturn = array();
-    
-        foreach ($array as $key => $value) 
-        { 
-            if(isset($value["limit-at"])) { $value["limit-at"] = floatval($value["limit-at"]); 
+
+        foreach ($array as $key => $value) {
+            if(isset($value["limit-at"])) {
+                $value["limit-at"] = floatval($value["limit-at"]);
             }
-    
-            if(isset($value["max-limit"])) { $value["max-limit"] = floatval($value["max-limit"]); 
+
+            if(isset($value["max-limit"])) {
+                $value["max-limit"] = floatval($value["max-limit"]);
             }
-    
-            $serValue = serialize($value);    
-    
+
+            $serValue = serialize($value);
+
             $aReturn[$key] = $serValue;
         }
-    
+
         return $aReturn;
-    
-    } //end of function array_serialize 
- 
- 
-    function arrayDiff($aArray1, $aArray2)
-    { 
- 
+
+    } //end of function array_serialize
+
+
+    public function arrayDiff($aArray1, $aArray2)
+    {
+
         //priprava promenych
-        $aReturn = array(); 
-        
-        $serArray1 = $this->array_serialize($aArray1);    
-        $serArray2 = $this->array_serialize($aArray2);    
+        $aReturn = array();
+
+        $serArray1 = $this->array_serialize($aArray1);
+        $serArray2 = $this->array_serialize($aArray2);
 
         $diffArray = array_diff($serArray1, $serArray2);
 
         // echo "--- serArray1 --- \n".print_r($serArray1);
         // echo "--- diffArray --- \n".print_r($diffArray)." \n";
 
-        foreach($diffArray as $key => $value) 
-        { $aReturn[$key] = ""; 
+        foreach($diffArray as $key => $value) {
+            $aReturn[$key] = "";
         }
-    
-        return $aReturn; 
-    
+
+        return $aReturn;
+
     } //end of function arrayRecursiveDiff
 
-    function find_root_router($id_routeru, $ip_adresa_routeru)
+    public function find_root_router($id_routeru, $ip_adresa_routeru)
     {
         //zjitime si parent router
         $rs = $this->conn_mysql->query("SELECT parent_router FROM router_list WHERE id = '$id_routeru'");
@@ -191,50 +192,41 @@ class mk_synchro_qos
         list($parent_router_ip) = $rs2->fetch_row();
 
         //DEBUG //print " id_r: ".$id_routeru.", p_r: ".$parent_router.", p_r_ip: ".$parent_router_ip." \n";
-    
-        if(( ($this->controlled_router_id == $this->reinhard_3_id) 
-            or ($this->controlled_router_id == $this->reinhard_5_id)       ) 
+
+        if((($this->controlled_router_id == $this->reinhard_3_id)
+            or ($this->controlled_router_id == $this->reinhard_5_id))
         ) {
-            if($parent_router_ip == $ip_adresa_routeru ) { //dosahlo se pozadovaneho reinhard, tj. zaznam CHCEME
+            if($parent_router_ip == $ip_adresa_routeru) { //dosahlo se pozadovaneho reinhard, tj. zaznam CHCEME
                 return true;
-            }
-            elseif(($parent_router_id == $this->reinhard_wifi_id) ) { //dosahlo se rh-wifi (zacatku stromu), a nechceme routery krz rh-wifi, tj. zaznam NECHCEME
-        
-            }
-            else
-            {
-                if($this->find_root_router($parent_router_id, $ip_adresa_routeru) == true) { return true; 
+            } elseif(($parent_router_id == $this->reinhard_wifi_id)) { //dosahlo se rh-wifi (zacatku stromu), a nechceme routery krz rh-wifi, tj. zaznam NECHCEME
+
+            } else {
+                if($this->find_root_router($parent_router_id, $ip_adresa_routeru) == true) {
+                    return true;
                 }
             }
-        }
-        elseif($this->controlled_router_id == $this->reinhard_wifi_id ) {
-    
-            if(($parent_router_id == $this->reinhard_3_id) 
-                or ($parent_router_id == $this->reinhard_fiber_id) 
-                or ($parent_router_id == $this->reinhard_5_id) 
+        } elseif($this->controlled_router_id == $this->reinhard_wifi_id) {
+
+            if(($parent_router_id == $this->reinhard_3_id)
+                or ($parent_router_id == $this->reinhard_fiber_id)
+                or ($parent_router_id == $this->reinhard_5_id)
             ) {
-                 //ve stromu jsme se dostali k rh-3 nebo rh-fiber (ty jsou bohuzel taky "pod" rh-wifi), tj. zaznam NECHCEM
-            }
-            elseif(($id_routeru == $this->reinhard_3_id) 
-                or ($id_routeru == $this->reinhard_fiber_id) 
-                or ($id_routeru == $this->reinhard_5_id) 
+                //ve stromu jsme se dostali k rh-3 nebo rh-fiber (ty jsou bohuzel taky "pod" rh-wifi), tj. zaznam NECHCEM
+            } elseif(($id_routeru == $this->reinhard_3_id)
+                or ($id_routeru == $this->reinhard_fiber_id)
+                or ($id_routeru == $this->reinhard_5_id)
             ) {
-        
-            }
-            elseif($parent_router_ip == $ip_adresa_routeru ) {
+
+            } elseif($parent_router_ip == $ip_adresa_routeru) {
                 return true;
-            }
-            elseif($parent_router_id == $this->reinhard_wifi_id) {
+            } elseif($parent_router_id == $this->reinhard_wifi_id) {
                 //dostali jsme se na vrchol, tj. rh-wifi, tj. zaznam CHCEME
+            } else {  //ani jedno z predchozich, tj. rekurze
+                if($this->find_root_router($parent_router_id, $ip_adresa_routeru) == true) {
+                    return true;
+                }
             }
-            else
-            {  //ani jedno z predchozich, tj. rekurze
-                if($this->find_root_router($parent_router_id, $ip_adresa_routeru) == true) { return true; 
-                }    
-            }
-        }
-        else
-        {
+        } else {
             //error, tento router neumim ..
             echo "ERROR: pro tento router neumim najit parent router ... ".
                 "(debug: controlled router: id: ".$this->controlled_router_id.
@@ -242,26 +234,25 @@ class mk_synchro_qos
 
             return false;
         }
-        
+
     } //end of function find_root_router
 
-    function find_obj($ip)
+    public function find_obj($ip)
     {
 
         $routers = array();
         $routers_ip = array();
-  
+
         //1. zjistit routery co jedou pres pozadovany reinhard
         $rs_routers = $this->conn_mysql->query("SELECT id, parent_router, nazev, ip_adresa FROM router_list WHERE id > 1 ORDER BY id");
         $num_rs_routers = $rs_routers->num_rows;
 
-        while($data_routers = $rs_routers->fetch_array())
-        {
+        while($data_routers = $rs_routers->fetch_array()) {
             $id_routeru = $data_routers["id"];
             $ip_adresa = $data_routers["ip_adresa"];
-   
-            if($this->find_root_router($id_routeru, $ip) === true) { 
-                $routers[] = $id_routeru; 
+
+            if($this->find_root_router($id_routeru, $ip) === true) {
+                $routers[] = $id_routeru;
                 $routers_ip[] = $ip_adresa;
             }
         }
@@ -269,22 +260,21 @@ class mk_synchro_qos
         if (count($routers) < 1) {
             echo "ros_api_qos\\find_obj: Error: no downstream/connected router(s) found! <br>\n";
             return false;
-        }
-        else{
+        } else {
             echo "ros_api_qos\\find_obj: INFO: found " . count($routers) . " router(s)<br>\n";
         }
 
         //debug  print_r($routers_ip);
-  
+
         //2. zjistit nody
-        $i=0;
+        $i = 0;
         foreach ($routers as $key => $id_routeru) {
 
             //print "router: ".$id_routeru.", \t\t  selected \n";
-            if($i == 0) { $sql_where .= "'$id_routeru'"; 
-            }
-            else
-            { $sql_where .= ",'$id_routeru'"; 
+            if($i == 0) {
+                $sql_where .= "'$id_routeru'";
+            } else {
+                $sql_where .= ",'$id_routeru'";
             }
 
             $i++;
@@ -296,20 +286,20 @@ class mk_synchro_qos
         $rs_nods = $this->conn_mysql->query($sql);
         $num_rs_nods = $rs_nods->num_rows;
 
-        while($data_nods = $rs_nods->fetch_array())
-        { $nods[] = $data_nods["id"]; 
+        while($data_nods = $rs_nods->fetch_array()) {
+            $nods[] = $data_nods["id"];
         }
 
         //3. zjistit lidi
-        $i=0;
+        $i = 0;
 
-        foreach($nods as $key => $id_nodu){
+        foreach($nods as $key => $id_nodu) {
             //print "nods: ".$id_nodu." \n";
 
-            if($i == 0) { $sql_obj_where .= "'$id_nodu'"; 
-            }
-            else
-            { $sql_obj_where .= ",'$id_nodu'"; 
+            if($i == 0) {
+                $sql_obj_where .= "'$id_nodu'";
+            } else {
+                $sql_obj_where .= ",'$id_nodu'";
             }
 
             $i++;
@@ -321,18 +311,18 @@ class mk_synchro_qos
         $rs_objects = pg_query($sql_obj);
         $num_rs_objects = pg_num_rows($rs_objects);
 
-        while( $data = pg_fetch_array($rs_objects))
-        {
+        while($data = pg_fetch_array($rs_objects)) {
             $ip = $data["ip"];
             $client_ap_ip = $data["client_ap_ip"];
-    
+
             $this->objects[$ip] = $data["id_tarifu"];
-  
-            if((strlen($client_ap_ip) > 4) ) { //vyplnena ip adresa apcka
-    
-                //zjistit zda-li uz neni 
-                if(!(array_key_exists($client_ap_ip, $this->objects)) ) { $this->objects[$client_ap_ip] = $this->id_tarifu_routers; 
-                }    
+
+            if((strlen($client_ap_ip) > 4)) { //vyplnena ip adresa apcka
+
+                //zjistit zda-li uz neni
+                if(!(array_key_exists($client_ap_ip, $this->objects))) {
+                    $this->objects[$client_ap_ip] = $this->id_tarifu_routers;
+                }
             }
         }
 
@@ -340,39 +330,39 @@ class mk_synchro_qos
         foreach($routers_ip as $key => $ip) {
 
             //zjistit zda uz IP adresa neni v objektu
-            if((array_key_exists($ip, $this->objects)) ) { /* echo "  object ".$ip." exists \n"; */  
+            if((array_key_exists($ip, $this->objects))) { /* echo "  object ".$ip." exists \n"; */
+            } else {
+                $this->objects[$ip] = $this->id_tarifu_routers;
             }
-            else
-            { $this->objects[$ip] = $this->id_tarifu_routers; 
-            }    
 
         }
-  
+
         print " number of IP addresses via this router: ".count($this->objects);
-    
-        if($this->debug == 1) { echo ", count of array objects: ".count($this->objects)." "; 
+
+        if($this->debug == 1) {
+            echo ", count of array objects: ".count($this->objects)." ";
         }
         echo "\n";
 
     } //end of function
 
-    function remove_wrong_items($wrong_items)
+    public function remove_wrong_items($wrong_items)
     {
-        $item_del_ok=0;
-        $item_del_err=0;
+        $item_del_ok = 0;
+        $item_del_err = 0;
 
         //print_r($wrong_items);
 
         $del = $this->conn->remove("/ip/firewall/mangle", $wrong_items);
 
-        if($del == "1" ) {
-            if($this->debug > 0) { echo "    Wrong Item(s) successfully deleted (".count($wrong_items).")\n"; 
+        if($del == "1") {
+            if($this->debug > 0) {
+                echo "    Wrong Item(s) successfully deleted (".count($wrong_items).")\n";
             }
             $item_del_ok = count($wrong_items);
-        }
-        else
-        {
-            if($this->debug > 0) { echo "    ERROR: ".print_r($del)."\n"; 
+        } else {
+            if($this->debug > 0) {
+                echo "    ERROR: ".print_r($del)."\n";
             }
             $item_del_err++;
         }
@@ -381,17 +371,17 @@ class mk_synchro_qos
 
     } //end of function remove_wrong_items
 
-    function detect_diff_in_mangle()
+    public function detect_diff_in_mangle()
     {
         $this->getall_mangle = array();
         $this->arr_objects_dev_upl = array();
         $this->arr_objects_dev_dwn = array();
-   
+
         $this->getall_mangle = $this->conn->getall(array("ip", "firewall", "mangle"));
 
         /*
         muster ROS 5.1
-  
+
         [0] => Array
         (
         [.id] => *45FB
@@ -403,10 +393,10 @@ class mk_synchro_qos
         [invalid] => false
         [dynamic] => false
         [disabled] => false
-        )                                                        
+        )
 
         muster ROS 4.16
-  
+
         $mangle_muster = array();
         $mangle_muster[".id"] = $this->getall_mangle["$key"][".id"];
         $mangle_muster["chain"] = $this->chain; //[chain] => prerouting
@@ -422,10 +412,10 @@ class mk_synchro_qos
         */
 
         //   print_r($this->getall_mangle);
-        /* 
-        if( count($this->getall_mangle) > 0 ) { 
+        /*
+        if( count($this->getall_mangle) > 0 ) {
          print_r($this->getall_mangle); }
-        else { 
+        else {
          echo " Array \"getall_mangle\" is empty \n"; }
         */
 
@@ -435,50 +425,48 @@ class mk_synchro_qos
             $ip_dwn = $this->getall_mangle["$key"]["$this->element_name_dwn"];
             $ip_upl = $this->getall_mangle["$key"]["$this->element_name_upl"];
 
-            if(isset($this->getall_mangle[$key]["$this->element_name_dwn"]) ) {
-                 //definice pole, jak ma zaznam vypadat :)
-                 $mangle_muster = array();
-                 $mangle_muster[".id"] = $this->getall_mangle["$key"][".id"];
-                 $mangle_muster["chain"] = $this->chain; //[chain] => prerouting
-                 $mangle_muster["action"] = "mark-packet"; //[action] => mark-packet
-                 $mangle_muster["new-packet-mark"] = $this->getall_mangle[$key]["$this->element_name_dwn"]."_dwn";
-                 $mangle_muster["passthrough"] = "false";
-                 $mangle_muster["$this->element_name_dwn"] = $this->getall_mangle[$key]["$this->element_name_dwn"];
-                 $mangle_muster["invalid"] = "false";
-                 $mangle_muster["dynamic"] = "false";
-                 $mangle_muster["disabled"] = "false";
-        
-                if(($this->ros_version == "5.1") or ($this->ros_version == "5.6") ) { /* chybi pole comment, kdyz je prazdne */ 
+            if(isset($this->getall_mangle[$key]["$this->element_name_dwn"])) {
+                //definice pole, jak ma zaznam vypadat :)
+                $mangle_muster = array();
+                $mangle_muster[".id"] = $this->getall_mangle["$key"][".id"];
+                $mangle_muster["chain"] = $this->chain; //[chain] => prerouting
+                $mangle_muster["action"] = "mark-packet"; //[action] => mark-packet
+                $mangle_muster["new-packet-mark"] = $this->getall_mangle[$key]["$this->element_name_dwn"]."_dwn";
+                $mangle_muster["passthrough"] = "false";
+                $mangle_muster["$this->element_name_dwn"] = $this->getall_mangle[$key]["$this->element_name_dwn"];
+                $mangle_muster["invalid"] = "false";
+                $mangle_muster["dynamic"] = "false";
+                $mangle_muster["disabled"] = "false";
+
+                if(($this->ros_version == "5.1") or ($this->ros_version == "5.6")) { /* chybi pole comment, kdyz je prazdne */
+                } else {
+                    $mangle_muster["comment"] = "";
                 }
-                else
-                { $mangle_muster["comment"] = ""; 
-                }
-    
+
                 /*
                 print "item muster \n";
                 print_r($mangle_muster);
                 print "item from device \n";
                 print_r($value);
                 */
-        
+
                 $diff1 = array_diff($mangle_muster, $value);
                 $diff2 = array_diff($value, $mangle_muster);
 
-                if((empty($diff1) and empty($diff2)) ) { $this->arr_objects_dev_dwn[$ip_dwn] = $this->getall_mangle["$key"][".id"]; 
-                }
-                else
-                {
+                if((empty($diff1) and empty($diff2))) {
+                    $this->arr_objects_dev_dwn[$ip_dwn] = $this->getall_mangle["$key"][".id"];
+                } else {
                     echo " ERROR: Item id: ".$this->getall_mangle["$key"][".id"];
                     echo " (".$this->getall_mangle["$key"]["name"].") ";
                     echo " does not match the muster item. \n";
-                    print_r($diff1); print_r($diff2);
-            
+                    print_r($diff1);
+                    print_r($diff2);
+
                     $this->wrong_firewall_items[] = $this->getall_mangle["$key"][".id"];
                 }
 
                 //echo "adding: $ip -- $key\n";
-            }
-            elseif(isset($this->getall_mangle[$key]["$this->element_name_upl"]) ) {
+            } elseif(isset($this->getall_mangle[$key]["$this->element_name_upl"])) {
 
                 //definice pole, jak ma zaznam vypadat :)
                 $mangle_muster = array();
@@ -492,10 +480,9 @@ class mk_synchro_qos
                 $mangle_muster["dynamic"] = "false";
                 $mangle_muster["disabled"] = "false";
 
-                if(($this->ros_version == "5.1") or ($this->ros_version == "5.6") ) { /* chybi pole comment, kdyz je prazdne */ 
-                }
-                else
-                { $mangle_muster["comment"] = ""; 
+                if(($this->ros_version == "5.1") or ($this->ros_version == "5.6")) { /* chybi pole comment, kdyz je prazdne */
+                } else {
+                    $mangle_muster["comment"] = "";
                 }
 
                 //print_r($mangle_muster);
@@ -504,17 +491,14 @@ class mk_synchro_qos
                 $diff1 = array_diff($mangle_muster, $value);
                 $diff2 = array_diff($value, $mangle_muster);
 
-                if((empty($diff1) and empty($diff2)) ) { $this->arr_objects_dev_upl[$ip_upl] = $this->getall_mangle["$key"][".id"]; 
+                if((empty($diff1) and empty($diff2))) {
+                    $this->arr_objects_dev_upl[$ip_upl] = $this->getall_mangle["$key"][".id"];
+                } else {
+                    echo " ERROR: Item id: ".$this->getall_mangle["$key"][".id"]." does not match the muster item. \n";
+                    //print_r($diff1); print_r($diff2);
+                    $this->wrong_firewall_items[] = $this->getall_mangle["$key"][".id"];
                 }
-                else
-                {
-                     echo " ERROR: Item id: ".$this->getall_mangle["$key"][".id"]." does not match the muster item. \n";
-                     //print_r($diff1); print_r($diff2);
-                     $this->wrong_firewall_items[] = $this->getall_mangle["$key"][".id"];
-                }
-            }
-            else
-            {
+            } else {
                 echo " WARNING: Nalezeno jiné pravidlo/nelze parsovat. (id: ".$this->getall_mangle["$key"][".id"].") \n";
 
                 //zde udelat seznam pravidel pro smazani :)
@@ -522,17 +506,20 @@ class mk_synchro_qos
 
             } //end of else if
         }
-  
+
         //print_r($arr_objects_dev_dwn);
         //print_r($arr_objects_dev_upl);
- 
-        if((count($this->wrong_firewall_items) > 0 ) && ($this->force_mangle_rewrite != 1)) { $this->remove_wrong_items($this->wrong_firewall_items); 
+
+        if((count($this->wrong_firewall_items) > 0) && ($this->force_mangle_rewrite != 1)) {
+            $this->remove_wrong_items($this->wrong_firewall_items);
         }
 
-        if(!(is_array($this->arr_objects_dev_upl)) ) { $this->arr_objects_dev_upl = array(); 
+        if(!(is_array($this->arr_objects_dev_upl))) {
+            $this->arr_objects_dev_upl = array();
         }
 
-        if(!(is_array($this->arr_objects_dev_dwn)) ) { $this->arr_objects_dev_dwn = array(); 
+        if(!(is_array($this->arr_objects_dev_dwn))) {
+            $this->arr_objects_dev_dwn = array();
         }
 
         $arr_obj_dev_diff = array_diff_key($this->arr_objects_dev_dwn, $this->arr_objects_dev_upl);
@@ -541,12 +528,10 @@ class mk_synchro_qos
         $arr_obj_dev_diff2 = array_diff_key($this->arr_objects_dev_upl, $this->arr_objects_dev_dwn);
         //print_r($arr_obj_dev_diff2);
 
-        if((count($arr_obj_dev_diff) > 0) or ( count($arr_obj_dev_diff2) > 0) ) {
+        if((count($arr_obj_dev_diff) > 0) or (count($arr_obj_dev_diff2) > 0)) {
             echo " ERROR: Rozdilny pocet zaznamu pro DWN a UPL. Forcing a full sync... \n";
             $this->force_mangle_rewrite = 1;
-        }
-        else
-        {
+        } else {
             echo " number of records : device: ".count($this->arr_objects_dev_dwn).", system: ".count($this->objects)."\n";
 
             $this->arr_global_diff_exc = array_diff_key($this->arr_objects_dev_dwn, $this->objects);
@@ -555,7 +540,7 @@ class mk_synchro_qos
 
     } //end of function detect_diff_in_mangle
 
-    function erase_mangle()
+    public function erase_mangle()
     {
 
         $items_suc_del = 0;
@@ -569,22 +554,22 @@ class mk_synchro_qos
             else
             */
             {
-            $erase[] = $this->getall_mangle[$key][".id"];
-            //print "erasing id: ".$key."\n";
+                $erase[] = $this->getall_mangle[$key][".id"];
+                //print "erasing id: ".$key."\n";
             }
 
         } //end of forearch
 
         $del = $this->conn->remove("/ip/firewall/mangle", $erase);
 
-        if($del == "1" ) {
-            if($this->debug > 0) { echo "    Item(s) successfully deleted (".count($erase).")\n"; 
+        if($del == "1") {
+            if($this->debug > 0) {
+                echo "    Item(s) successfully deleted (".count($erase).")\n";
             }
             $items_suc_del++;
-        }
-        else
-        {
-            if($this->debug > 0) { echo "    ERROR: ".print_r($del)."\n"; 
+        } else {
+            if($this->debug > 0) {
+                echo "    ERROR: ".print_r($del)."\n";
             }
             $items_err_del++;
         }
@@ -595,7 +580,7 @@ class mk_synchro_qos
 
     } //end of function erase_mangle
 
-    function synchro_mangle_force()
+    public function synchro_mangle_force()
     {
         //reseni asi smazat vse a pak pustit synchro_mangle
         $this->erase_mangle();
@@ -603,12 +588,12 @@ class mk_synchro_qos
         $this->detect_diff_in_mangle();
 
         print "  counts excess ip: ".count($this->arr_global_diff_exc).", missing ip: ".count($this->arr_global_diff_mis)."\n";
- 
+
         $this->synchro_mangle();
 
     } //end of function synchro_mangle_force
 
-    function synchro_mangle()
+    public function synchro_mangle()
     {
 
         $items_suc_added = 0;
@@ -616,34 +601,34 @@ class mk_synchro_qos
 
         foreach ($this->arr_global_diff_mis as $ip => $value) {
 
-            $add_par_r = array ("chain" => $this->chain, "action" => "mark-packet", "disabled" => "no", "new-packet-mark" => $ip."_dwn",
+            $add_par_r = array("chain" => $this->chain, "action" => "mark-packet", "disabled" => "no", "new-packet-mark" => $ip."_dwn",
                      "$this->item_ip_dwn" => "$ip", "passthrough" => "no");
             $add = $this->conn->add("/ip/firewall/mangle", $add_par_r);
 
-            if(ereg('^\*([[:xdigit:]])*$', $add) ) {
-                if($debug > 0) { echo "    Item ".$add." successfully added \n"; 
+            if(ereg('^\*([[:xdigit:]])*$', $add)) {
+                if($debug > 0) {
+                    echo "    Item ".$add." successfully added \n";
                 }
                 $items_suc_added++;
-            }
-            else
-            {
-                if($debug > 0) { echo "    ERROR: ".print_r($add)."\n"; 
+            } else {
+                if($debug > 0) {
+                    echo "    ERROR: ".print_r($add)."\n";
                 }
                 $items_err_added++;
             }
 
-            $add_par_r2 = array ("chain" => $this->chain, "action" => "mark-packet", "disabled" => "no", "new-packet-mark" => $ip."_upl",
+            $add_par_r2 = array("chain" => $this->chain, "action" => "mark-packet", "disabled" => "no", "new-packet-mark" => $ip."_upl",
                      "$this->item_ip_upl" => "$ip", "passthrough" => "no");
             $add2 = $this->conn->add("/ip/firewall/mangle", $add_par_r2);
 
-            if(ereg('^\*([[:xdigit:]])*$', $add2) ) {
-                if($debug > 0) { echo "    Item ".$add." successfully added \n"; 
+            if(ereg('^\*([[:xdigit:]])*$', $add2)) {
+                if($debug > 0) {
+                    echo "    Item ".$add." successfully added \n";
                 }
                 $items_suc_added++;
-            }
-            else
-            {
-                if($debug > 0) { echo "    ERROR: ".print_r($add2)."\n"; 
+            } else {
+                if($debug > 0) {
+                    echo "    ERROR: ".print_r($add2)."\n";
                 }
                 $items_err_added++;
                 print_r($add_par_r2);
@@ -665,14 +650,14 @@ class mk_synchro_qos
 
             $del = $this->conn->remove("/ip/firewall/mangle", array("$index","$index2"));
 
-            if($del == "1" ) {
-                if($debug > 0) { echo "    Item(s) successfully deleted (".$index.",".$index2.")\n"; 
+            if($del == "1") {
+                if($debug > 0) {
+                    echo "    Item(s) successfully deleted (".$index.",".$index2.")\n";
                 }
                 $items_suc_del++;
-            }
-            else
-            {
-                if($debug > 0) { echo "    ERROR: ".print_r($del)."\n"; 
+            } else {
+                if($debug > 0) {
+                    echo "    ERROR: ".print_r($del)."\n";
                 }
                 $items_err_del++;
             }
@@ -684,49 +669,44 @@ class mk_synchro_qos
 
     } //end of function synchro_mangle
 
-    function qt_global()
+    public function qt_global()
     {
 
         //zjisteni agregace SC
         $rs_agreg = mysql_query("SELECT agregace, speed_dwn, speed_upl FROM tarify_int WHERE id_tarifu = '1'");
 
-        while( $d_agreg = mysql_fetch_array($rs_agreg) )
-        {
+        while($d_agreg = mysql_fetch_array($rs_agreg)) {
             $this->agregace_sc = $d_agreg["agregace"];
             $this->speed_sc_dwn = $d_agreg["speed_dwn"];
             $this->speed_sc_upl = $d_agreg["speed_upl"];
         }
 
         foreach ($this->objects as $ip => $linka) {
-    
+
             if($linka == 1) {
-                     $this->objects_sc[] = $ip;
-            } 
-            elseif($linka == 0) {
-                   $this->objects_mp[] = $ip;
-            }
-            else
-            {
+                $this->objects_sc[] = $ip;
+            } elseif($linka == 0) {
+                $this->objects_mp[] = $ip;
+            } else {
                 if(array_key_exists("objects_g_".$linka, $this->objects_garants)) {
                     //echo "   WARNING: garant: "."objects_g_".$linka.", ip> $ip \n";
                     $this->{"objects_g_".$linka}[] = $ip;
-                }
-                else { 
+                } else {
                     //$this->objects_garants[]
-                      echo "   WARNING: Neznámá linka (".$linka.") u objektu: ".$ip."\n";
+                    echo "   WARNING: Neznámá linka (".$linka.") u objektu: ".$ip."\n";
                 }
             }
         }
 
         //zredukovat pole objects_garants, dle vyuziti
         foreach ($this->objects_garants as $key => $value) {
-    
-            if((count($this->{$key}) > 0 )) {
+
+            if((count($this->{$key}) > 0)) {
                 $this->objects_garants_used[$key] = $value;
             }
-    
+
         }
-  
+
         //print_r($this->objects_g_2);
         //print_r($this->objects_garants_used);
 
@@ -734,11 +714,11 @@ class mk_synchro_qos
 
     }
 
-    function qt_delete_all()
+    public function qt_delete_all()
     {
 
-        $qt_suc_del=0;
-        $qt_err_del=0;
+        $qt_suc_del = 0;
+        $qt_err_del = 0;
 
         $qt_del_all = $this->conn->getall(array("queue","tree"));
 
@@ -750,13 +730,14 @@ class mk_synchro_qos
 
         $qt_del = $this->conn->remove("/queue/tree", $qt_del_all_id);
 
-        if($qt_del == "1" ) {
-            if($this->debug > 0) { echo "    QT Item(s) successfully deleted (".count($qt_del_all_id).")\n"; 
+        if($qt_del == "1") {
+            if($this->debug > 0) {
+                echo "    QT Item(s) successfully deleted (".count($qt_del_all_id).")\n";
             }
             $qt_suc_del++;
-        }
-        else {
-            if($this->debug > 0) { echo "    QT ERROR: ".print_r($qt_del_all_id)."\n"; 
+        } else {
+            if($this->debug > 0) {
+                echo "    QT ERROR: ".print_r($qt_del_all_id)."\n";
             }
             $qt_err_del++;
         }
@@ -767,7 +748,7 @@ class mk_synchro_qos
 
     }
 
-    function erase_qt($array)
+    public function erase_qt($array)
     {
 
         $items_suc_del = 0;
@@ -775,41 +756,41 @@ class mk_synchro_qos
 
         $del = $this->conn->remove("/queue/tree", $array);
 
-        if($del == "1" ) {
-            if($this->debug > 0) { echo "    Item(s) successfully deleted (".count($erase).")\n"; 
+        if($del == "1") {
+            if($this->debug > 0) {
+                echo "    Item(s) successfully deleted (".count($erase).")\n";
             }
             $items_suc_del++;
-        }
-        else
-        {
-            if($this->debug > 0) { echo "    ERROR: ".print_r($del)."\n"; 
+        } else {
+            if($this->debug > 0) {
+                echo "    ERROR: ".print_r($del)."\n";
             }
             $items_err_del++;
         }
 
         echo "  qt: count of deleted items: ".count($array).", status: ";
 
-        if($items_suc_del == 1) { echo " OK "; 
+        if($items_suc_del == 1) {
+            echo " OK ";
+        } elseif($items_err_del == 1) {
+            echo " error ";
+        } else {
+            echo "unknown (ok: ".$items_suc_del.", error: ".$items_err_del.") ";
         }
-        elseif($items_err_del == 1) { echo " error "; 
-        }
-        else
-        { echo "unknown (ok: ".$items_suc_del.", error: ".$items_err_del.") "; 
-        }
-  
+
         echo "\n";
 
         //print_r($array)."\n";
 
     } //end of function erase_qt
 
-    function detect_diff_queues()
+    public function detect_diff_queues()
     {
- 
+
         //
         //1. zjistime co je v zarizeni
         //
- 
+
         //$qt_dump = $this->conn->getall( array("queue","tree"), "", "", ".id" );
         $qt_dump = $this->conn->getall(array("queue","tree"));
 
@@ -823,55 +804,55 @@ class mk_synchro_qos
         } //end of foreach qt_dump_trim
 
         //2. zjistime, co je v adminatoru
-  
+
         //
         // 2.1 SmallCity Linky
         //
-  
-        $sc_group=1;
-        $sc_count=0;
 
-        $limit_at_sc_dwn = ($this->speed_sc_dwn / $this->agregace_sc)*1000;
-        $limit_at_sc_upl = ($this->speed_sc_upl / $this->agregace_sc)*1000;
+        $sc_group = 1;
+        $sc_count = 0;
+
+        $limit_at_sc_dwn = ($this->speed_sc_dwn / $this->agregace_sc) * 1000;
+        $limit_at_sc_upl = ($this->speed_sc_upl / $this->agregace_sc) * 1000;
 
         foreach ($this->objects_sc as $key => $ip) {
 
             if($sc_count == 0) { //zresetovan citac sc, tj. vytvorime globalni skupinu
-    
+
                 //2.1.1 - agregacni SC tridy
-      
-                $limit = ($this->speed_sc_dwn * $this->sc_speed_koef)*1000;
-      
-                $qt_system[] = array ("name" => "q-dwn-sc-".$sc_group, "parent" => "global-out", "limit-at" => $limit,
+
+                $limit = ($this->speed_sc_dwn * $this->sc_speed_koef) * 1000;
+
+                $qt_system[] = array("name" => "q-dwn-sc-".$sc_group, "parent" => "global-out", "limit-at" => $limit,
                       "priority" => "1", "max-limit" => $limit, "burst-limit" => "0",
                  "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
                  "disabled" => "false");
 
-                $limit_sc = ($this->speed_sc_upl * $this->sc_speed_koef)*1000;
+                $limit_sc = ($this->speed_sc_upl * $this->sc_speed_koef) * 1000;
 
-                $qt_system[] = array ("name" => "q-upl-sc-".$sc_group, "parent" => "global-out", "limit-at" => $limit_sc,
+                $qt_system[] = array("name" => "q-upl-sc-".$sc_group, "parent" => "global-out", "limit-at" => $limit_sc,
                       "priority" => "1", "max-limit" => $limit_sc, "burst-limit" => "0",
                   "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
                   "disabled" => "false");
             }
-    
+
             //2.1.2 - jednotlive IP adresy
-    
-            $qt_system[] = array ("name" => "q-dwn-sc-".$ip, "parent" => "q-dwn-sc-".$sc_group, "packet-mark" => $ip."_dwn",
-            "limit-at" => $limit_at_sc_dwn, "queue" => "wireless-default", "priority" => "1", 
-            "max-limit" => ($this->speed_sc_dwn)*1000, "burst-limit" => "0", "burst-threshold" => "0", 
+
+            $qt_system[] = array("name" => "q-dwn-sc-".$ip, "parent" => "q-dwn-sc-".$sc_group, "packet-mark" => $ip."_dwn",
+            "limit-at" => $limit_at_sc_dwn, "queue" => "wireless-default", "priority" => "1",
+            "max-limit" => ($this->speed_sc_dwn) * 1000, "burst-limit" => "0", "burst-threshold" => "0",
             "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
 
-            $qt_system[] = array ("name" => "q-upl-sc-".$ip, "parent" => "q-upl-sc-".$sc_group, "packet-mark" => $ip."_upl", 
-            "limit-at" => $limit_at_sc_upl, "queue" => "wireless-default", "priority" => "1", 
-            "max-limit" => ($this->speed_sc_upl)*1000, "burst-limit" => "0", "burst-threshold" => "0", 
+            $qt_system[] = array("name" => "q-upl-sc-".$ip, "parent" => "q-upl-sc-".$sc_group, "packet-mark" => $ip."_upl",
+            "limit-at" => $limit_at_sc_upl, "queue" => "wireless-default", "priority" => "1",
+            "max-limit" => ($this->speed_sc_upl) * 1000, "burst-limit" => "0", "burst-threshold" => "0",
             "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
 
             //konec cyklu
             $sc_count++;
 
             if($sc_count == $this->agregace_sc) {
-                $sc_count=0;
+                $sc_count = 0;
                 $sc_group++;
             }
         } //end of foreach array objects_sc
@@ -879,69 +860,67 @@ class mk_synchro_qos
         //
         // 2.2 - MP linky
         //
-  
+
         //2.2.1 - globalni MP skupiny
-        $qt_system[] = array ("name" => "q-dwn-mp-global", "parent" => "global-out", "limit-at" => "0", "priority" => "1",
-            "max-limit" => "100000000", "burst-limit" => "0", "burst-threshold" => "0", 
+        $qt_system[] = array("name" => "q-dwn-mp-global", "parent" => "global-out", "limit-at" => "0", "priority" => "1",
+            "max-limit" => "100000000", "burst-limit" => "0", "burst-threshold" => "0",
             "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
 
-        $qt_system[] = array ("name" => "q-upl-mp-global", "parent" => "global-out", "limit-at" => "0", "priority" => "1",
-            "max-limit" => "100000000", "burst-limit" => "0", "burst-threshold" => "0", 
+        $qt_system[] = array("name" => "q-upl-mp-global", "parent" => "global-out", "limit-at" => "0", "priority" => "1",
+            "max-limit" => "100000000", "burst-limit" => "0", "burst-threshold" => "0",
             "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
-            
-  
+
+
         //2.2.2 - klientske linky/skupiny
 
         foreach ($this->objects_mp as $key => $ip) {
 
-            $qt_system[] = array ("name" => "q-dwn-mp-".$ip, "parent" => "q-dwn-mp-global", "packet-mark" => $ip."_dwn",
-                     "limit-at" => "100000", "queue" => "wireless-default", "priority" => "1", 
-                 "max-limit" => $this->speed_mp_dwn, "burst-limit" => "0", "burst-threshold" => "0", 
+            $qt_system[] = array("name" => "q-dwn-mp-".$ip, "parent" => "q-dwn-mp-global", "packet-mark" => $ip."_dwn",
+                     "limit-at" => "100000", "queue" => "wireless-default", "priority" => "1",
+                 "max-limit" => $this->speed_mp_dwn, "burst-limit" => "0", "burst-threshold" => "0",
                  "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
-                  
-            $qt_system[] = array ("name" => "q-upl-mp-".$ip, "parent" => "q-upl-mp-global", "packet-mark" => $ip."_upl",
-                    "limit-at" => "100000", "queue" => "wireless-default", "priority" => "1", 
-                "max-limit" => $this->speed_mp_upl, "burst-limit" => "0", "burst-threshold" => "0", 
+
+            $qt_system[] = array("name" => "q-upl-mp-".$ip, "parent" => "q-upl-mp-global", "packet-mark" => $ip."_upl",
+                    "limit-at" => "100000", "queue" => "wireless-default", "priority" => "1",
+                "max-limit" => $this->speed_mp_upl, "burst-limit" => "0", "burst-threshold" => "0",
                 "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
         }
-   
+
         //
         // 2.3 - Garanti, routery atd
         //
-        foreach( $this->objects_garants_used as $garant_id => $speeds)
-        {
+        foreach($this->objects_garants_used as $garant_id => $speeds) {
             list($speed_dwn, $speed_upl) = explode(":", $speeds);
 
-            //parent tridy pro garanty        
-            $qt_system[] = array ("name" => "q-dwn-".$garant_id, "parent" => "global-out", "limit-at" => $speed_dwn."000",
-            "priority" => "1", "max-limit" => $speed_dwn."000", "burst-limit" => "0", 
+            //parent tridy pro garanty
+            $qt_system[] = array("name" => "q-dwn-".$garant_id, "parent" => "global-out", "limit-at" => $speed_dwn."000",
+            "priority" => "1", "max-limit" => $speed_dwn."000", "burst-limit" => "0",
             "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
             "disabled" => "false" );
 
-            $qt_system[] = array ("name" => "q-upl-".$garant_id, "parent" => "global-out", "limit-at" => $speed_upl."000",
-            "priority" => "1", "max-limit" => $speed_upl."000", "burst-limit" => "0", 
+            $qt_system[] = array("name" => "q-upl-".$garant_id, "parent" => "global-out", "limit-at" => $speed_upl."000",
+            "priority" => "1", "max-limit" => $speed_upl."000", "burst-limit" => "0",
             "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
             "disabled" => "false" );
 
-            foreach( $this->{$garant_id} as $id => $ip)
-            {
+            foreach($this->{$garant_id} as $id => $ip) {
 
-                $qt_system[] = array ("name" => "q-dwn-q-".$ip, "parent" => "q-dwn-".$garant_id, "packet-mark" => $ip."_dwn",
+                $qt_system[] = array("name" => "q-dwn-q-".$ip, "parent" => "q-dwn-".$garant_id, "packet-mark" => $ip."_dwn",
                  "limit-at" => "0", "queue" => "wireless-default", "priority" => "1", "max-limit" => "0",
-                 "burst-limit" => "0", "burst-threshold" => "0", "burst-time" => "00:00:00", 
+                 "burst-limit" => "0", "burst-threshold" => "0", "burst-time" => "00:00:00",
                  "invalid" => "false", "disabled" => "false" );
-                
-                $qt_system[] = array ("name" => "q-upl-q-".$ip, "parent" => "q-upl-".$garant_id, "packet-mark" => $ip."_upl",
+
+                $qt_system[] = array("name" => "q-upl-q-".$ip, "parent" => "q-upl-".$garant_id, "packet-mark" => $ip."_upl",
                   "limit-at" => "0", "queue" => "wireless-default", "priority" => "1", "max-limit" => "0",
-                  "burst-limit" => "0",  "burst-threshold" => "0", "burst-time" => "00:00:00", 
+                  "burst-limit" => "0",  "burst-threshold" => "0", "burst-time" => "00:00:00",
                   "invalid" => "false", "disabled" => "false");
-    
+
             }
-      
+
         }
-    
+
         //
-        // 3. porovname pole 
+        // 3. porovname pole
         //
 
         /* pole se zaznamama */
@@ -952,78 +931,72 @@ class mk_synchro_qos
         $this->qt_ar_mis = $this->arrayDiff($qt_system, $qt_dump_trim);
 
         echo "  qt: count of classess: excess: ".count($this->qt_ar_exc).", missing: ".count($this->qt_ar_mis)." \n";
-  
-        if((count($this->qt_ar_exc) > 0 ) or (count($this->qt_ar_mis) > 0 ) ) { 
-            //neco nesedi .. 
-            //echo "--- printing qt_ar_exc --- \n"; print_r($this->qt_ar_exc); 
-            //echo "--- printing qt_ar_mis --- \n"; print_r($this->qt_ar_mis); 
-  
+
+        if((count($this->qt_ar_exc) > 0) or (count($this->qt_ar_mis) > 0)) {
+            //neco nesedi ..
+            //echo "--- printing qt_ar_exc --- \n"; print_r($this->qt_ar_exc);
+            //echo "--- printing qt_ar_mis --- \n"; print_r($this->qt_ar_mis);
+
             //prebejvajici zaznamy smazat
-    
-            foreach($this->qt_ar_exc as $key => $val) 
-            {
+
+            foreach($this->qt_ar_exc as $key => $val) {
                 $item_id = $qt_dump[$key][".id"];
                 //print "  add erase number: ".$key.", item_id: ".$item_id." \n";
-    
-                if((strlen($item_id) > 0 ) ) { $qt_delete_items[] = $item_id; 
+
+                if((strlen($item_id) > 0)) {
+                    $qt_delete_items[] = $item_id;
                 }
             } //end of foreach this->qt_ar_exc
-    
-            if(( is_array($qt_delete_items) and (count($qt_delete_items) > 0) ) ) { 
+
+            if((is_array($qt_delete_items) and (count($qt_delete_items) > 0))) {
                 //print "--- qt_delete_items --- \n"; print_r($qt_delete_items);
-                $this->erase_qt($qt_delete_items); 
+                $this->erase_qt($qt_delete_items);
+            } else {
+                echo "  qt: no excess items \n";
             }
-            else
-            { echo "  qt: no excess items \n"; 
-            }
-  
+
             //pridame chybejici zaznamy
-            if(( is_array($this->qt_ar_mis) and (count($this->qt_ar_mis) > 0) ) ) { 
-                //print_r($this->qt_ar_mis);    
-      
-                foreach($this->qt_ar_mis as $key => $val) 
-                {
+            if((is_array($this->qt_ar_mis) and (count($this->qt_ar_mis) > 0))) {
+                //print_r($this->qt_ar_mis);
+
+                foreach($this->qt_ar_mis as $key => $val) {
                     //echo $key." => "; print_r($qt_system[$key])." \n";
                     $array = $qt_system[$key];
-    
+
                     unset($array["invalid"]);
                     $this->qt_add_single($array);
                 }
-     
+
                 print "  qt: count of adding items: ".count($this->qt_ar_mis).",status: N/A \n";
-       
+
+            } else {
+                echo "  qt: no missing items \n";
             }
-            else
-            { echo "  qt: no missing items \n"; 
-            }
-    
+
             //a... hotovo :-)
 
-        }
-        else
-        {
+        } else {
             //zaznamy sedi, nemam co delat
             echo "  qt: no excess or missing items (OK) \n";
-  
+
         }
-  
-   
+
+
     } //end of function datect_diff_queues
 
-    function qt_add_single($input_array)
+    public function qt_add_single($input_array)
     {
-          $qt_items_suc_added = 0;
-          $qt_items_err_added = 0;
+        $qt_items_suc_added = 0;
+        $qt_items_err_added = 0;
 
-          $add_qt = $this->conn->add("/queue/tree", $input_array);
+        $add_qt = $this->conn->add("/queue/tree", $input_array);
 
-        if(ereg('^\*([[:xdigit:]])*$', $add_qt) ) {
-            if($this->debug > 0) { echo "    QT Item ".$add_qt." successfully added \n"; 
+        if(ereg('^\*([[:xdigit:]])*$', $add_qt)) {
+            if($this->debug > 0) {
+                echo "    QT Item ".$add_qt." successfully added \n";
             }
             $qt_items_suc_added++;
-        }
-        else
-        {
+        } else {
             //if($this->debug > 0)
             { echo "    ERROR: ".print_r($add_qt)."\n"; }
             $qt_items_err_added++;
@@ -1031,13 +1004,13 @@ class mk_synchro_qos
 
     } //end of qt_add_single
 
-    function synchro_qt_force()
+    public function synchro_qt_force()
     {
 
         //for testing, erasing arrays
         //$this->objects_sc = array();
         //$this->objects_mp = array();
-  
+
         echo " qt - force rewriting ... \n";
         $this->qt_delete_all();
 
@@ -1046,64 +1019,64 @@ class mk_synchro_qos
         echo "  qt number of records tariff: sc: ".count($this->objects_sc).", mp: ".count($this->objects_mp)."\n";
         echo "  qt number of records tariff: garants: ".count($this->objects_garants_used)."\n";
 
-        $sc_group=1;
-        $sc_count=0;
+        $sc_group = 1;
+        $sc_count = 0;
 
-        $limit_at_sc_dwn = ($this->speed_sc_dwn / $this->agregace_sc)*1000;
-        $limit_at_sc_upl = ($this->speed_sc_upl / $this->agregace_sc)*1000;
+        $limit_at_sc_dwn = ($this->speed_sc_dwn / $this->agregace_sc) * 1000;
+        $limit_at_sc_upl = ($this->speed_sc_upl / $this->agregace_sc) * 1000;
 
-        $qt_ip_suc_added=0;
-        $qt_ip_err_added=0;
+        $qt_ip_suc_added = 0;
+        $qt_ip_err_added = 0;
 
         //muster queues pro SC
         ///queue tree
         //add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=1024k max-limit=1024k name=\
         // q-dwn-sc-1 parent=global-in priority=1
 
-        // 
+        //
         //  QT - SMallCity
         //
         foreach ($this->objects_sc as $key => $ip) {
 
             if($sc_count == 0) { //zresetovan citac sc, tj. vytvorime globalni skupinu
 
-                $limit = ($this->speed_sc_dwn * $this->sc_speed_koef)*1000;
+                $limit = ($this->speed_sc_dwn * $this->sc_speed_koef) * 1000;
 
-                $qt_items_suc_added=0;
-                $qt_items_err_added=0;
+                $qt_items_suc_added = 0;
+                $qt_items_err_added = 0;
 
-                $add_qt_data = array ("disabled" => "false", "limit-at" => $limit, "max-limit" => $limit,
+                $add_qt_data = array("disabled" => "false", "limit-at" => $limit, "max-limit" => $limit,
                      "name" => "q-dwn-sc-".$sc_group, "parent" => "global-out", "priority" => "1",
                  "queue" => "wireless-default");
                 $add_qt = $this->conn->add("/queue/tree", $add_qt_data);
 
-                if(ereg('^\*([[:xdigit:]])*$', $add_qt) ) {
-                    if($this->debug > 0) { echo "    QT Item ".$add_qt." successfully added \n"; 
+                if(ereg('^\*([[:xdigit:]])*$', $add_qt)) {
+                    if($this->debug > 0) {
+                        echo "    QT Item ".$add_qt." successfully added \n";
                     }
                     $qt_items_suc_added++;
-                }
-                else
-                {
-                    if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt)."\n"; 
+                } else {
+                    if($this->debug > 0) {
+                        echo "    ERROR: ".print_r($add_qt)."\n";
                     }
                     $qt_items_err_added++;
                 }
 
-                $limit = ($this->speed_sc_upl * $this->sc_speed_koef)*1000;
+                $limit = ($this->speed_sc_upl * $this->sc_speed_koef) * 1000;
 
-                $add_qt_data = array ("disabled" => "false", "limit-at" => $limit, "max-limit" => $limit,
+                $add_qt_data = array("disabled" => "false", "limit-at" => $limit, "max-limit" => $limit,
                      "name" => "q-upl-sc-".$sc_group, "parent" => "global-out", "priority" => "1",
                 "queue" => "wireless-default");
                 $add_qt = $this->conn->add("/queue/tree", $add_qt_data);
 
-                if(ereg('^\*([[:xdigit:]])*$', $add_qt) ) {
-                    if($this->debug > 0) { echo "    QT Item ".$add_qt." successfully added \n"; 
+                if(ereg('^\*([[:xdigit:]])*$', $add_qt)) {
+                    if($this->debug > 0) {
+                        echo "    QT Item ".$add_qt." successfully added \n";
                     }
                     $qt_items_suc_added++;
-                }
-                else
-                {
-                    if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt)."\n"; 
+                } else {
+                    if($this->debug > 0) {
+                        echo "    ERROR: ".print_r($add_qt)."\n";
                     }
                     $qt_items_err_added++;
                 }
@@ -1118,37 +1091,37 @@ class mk_synchro_qos
             // wireless-default
 
 
-            $add_qt_data = array ("disabled" => "false", "limit-at" => $limit_at_sc_dwn, "max-limit" => (($this->speed_sc_dwn)*1000),
+            $add_qt_data = array("disabled" => "false", "limit-at" => $limit_at_sc_dwn, "max-limit" => (($this->speed_sc_dwn) * 1000),
                      "name" => "q-dwn-sc-".$ip, "parent" => "q-dwn-sc-".$sc_group, "priority" => "1",
                      "packet-mark" => $ip."_dwn", "queue" => "wireless-default");
 
             $add_qt = $this->conn->add("/queue/tree", $add_qt_data);
 
-            if(ereg('^\*([[:xdigit:]])*$', $add_qt) ) {
-                if($this->debug > 0) { echo "    QT Item ".$add_qt." successfully added \n"; 
+            if(ereg('^\*([[:xdigit:]])*$', $add_qt)) {
+                if($this->debug > 0) {
+                    echo "    QT Item ".$add_qt." successfully added \n";
                 }
                 $qt_ip_suc_added++;
-            }
-            else
-            {
-                if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt)."\n"; 
+            } else {
+                if($this->debug > 0) {
+                    echo "    ERROR: ".print_r($add_qt)."\n";
                 }
                 $qt_ip_err_added++;
             }
 
-            $add_qt_data = array ("disabled" => "false", "limit-at" => $limit_at_sc_upl, "max-limit" => (($this->speed_sc_upl)*1000),
+            $add_qt_data = array("disabled" => "false", "limit-at" => $limit_at_sc_upl, "max-limit" => (($this->speed_sc_upl) * 1000),
                      "name" => "q-upl-sc-".$ip, "parent" => "q-upl-sc-".$sc_group, "priority" => "1",
                      "packet-mark" => $ip."_upl", "queue" => "wireless-default");
             $add_qt = $this->conn->add("/queue/tree", $add_qt_data);
 
-            if(ereg('^\*([[:xdigit:]])*$', $add_qt) ) {
-                if($this->debug > 0) { echo "    QT Item ".$add_qt." successfully added \n"; 
+            if(ereg('^\*([[:xdigit:]])*$', $add_qt)) {
+                if($this->debug > 0) {
+                    echo "    QT Item ".$add_qt." successfully added \n";
                 }
                 $qt_ip_suc_added++;
-            }
-            else
-            {
-                if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt)."\n"; 
+            } else {
+                if($this->debug > 0) {
+                    echo "    ERROR: ".print_r($add_qt)."\n";
                 }
                 $qt_ip_err_added++;
             }
@@ -1157,7 +1130,7 @@ class mk_synchro_qos
             $sc_count++;
 
             if($sc_count == $this->agregace_sc) {
-                $sc_count=0;
+                $sc_count = 0;
                 $sc_group++;
             }
         }
@@ -1167,81 +1140,81 @@ class mk_synchro_qos
         //
         // QT Force - MP linky
         //
-        $qt_mp_items_suc_added=0;
-        $qt_mp_items_err_added=0;
+        $qt_mp_items_suc_added = 0;
+        $qt_mp_items_err_added = 0;
 
         //globalni tridy pro MP
-  
-        $add_qt_mp_global_data = array ("disabled" => "false", "limit-at" => "0", "max-limit" => "100000k",
+
+        $add_qt_mp_global_data = array("disabled" => "false", "limit-at" => "0", "max-limit" => "100000k",
                      "name" => "q-dwn-mp-global", "parent" => "global-out", "priority" => "1",
                      "queue" => "wireless-default");
-             
+
         $add_qt_mp_global = $this->conn->add("/queue/tree", $add_qt_mp_global_data);
 
-        if(ereg('^\*([[:xdigit:]])*$', $add_qt_mp_global) ) {
-            if($this->debug > 0) { echo "    QT Item ".$add_qt_mp_global." successfully added \n"; 
+        if(ereg('^\*([[:xdigit:]])*$', $add_qt_mp_global)) {
+            if($this->debug > 0) {
+                echo "    QT Item ".$add_qt_mp_global." successfully added \n";
             }
             $qt_mp_items_suc_added++;
-        }
-        else
-        {
-            if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt_mp_global)."\n"; 
+        } else {
+            if($this->debug > 0) {
+                echo "    ERROR: ".print_r($add_qt_mp_global)."\n";
             }
             $qt_mp_items_err_added++;
         }
 
-        $add_qt_mp_global_data2 = array ("disabled" => "false", "limit-at" => "0", "max-limit" => "100000k",
+        $add_qt_mp_global_data2 = array("disabled" => "false", "limit-at" => "0", "max-limit" => "100000k",
                      "name" => "q-upl-mp-global", "parent" => "global-out", "priority" => "1",
                      "queue" => "wireless-default");
-             
+
         $add_qt_mp_global2 = $this->conn->add("/queue/tree", $add_qt_mp_global_data2);
 
-        if(ereg('^\*([[:xdigit:]])*$', $add_qt_mp_global2) ) {
-            if($this->debug > 0) { echo "    QT Item ".$add_qt_mp_global2." successfully added \n"; 
+        if(ereg('^\*([[:xdigit:]])*$', $add_qt_mp_global2)) {
+            if($this->debug > 0) {
+                echo "    QT Item ".$add_qt_mp_global2." successfully added \n";
             }
             $qt_mp_items_suc_added++;
-        }
-        else
-        {
-            if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt_mp_global2)."\n"; 
+        } else {
+            if($this->debug > 0) {
+                echo "    ERROR: ".print_r($add_qt_mp_global2)."\n";
             }
             $qt_mp_items_err_added++;
         }
-        
+
         foreach ($this->objects_mp as $key => $ip) {
 
-            $add_qt_data_mp = array ("disabled" => "false", "limit-at" => "100k", "max-limit" => "10000k",
+            $add_qt_data_mp = array("disabled" => "false", "limit-at" => "100k", "max-limit" => "10000k",
                      "name" => "q-dwn-mp-".$ip, "parent" => "q-dwn-mp-global", "priority" => "1",
                      "packet-mark" => $ip."_dwn", "queue" => "wireless-default");
-             
+
             $add_qt_mp = $this->conn->add("/queue/tree", $add_qt_data_mp);
 
-            if(ereg('^\*([[:xdigit:]])*$', $add_qt_mp) ) {
-                if($this->debug > 0) { echo "    QT Item ".$add_qt_mp." successfully added \n"; 
+            if(ereg('^\*([[:xdigit:]])*$', $add_qt_mp)) {
+                if($this->debug > 0) {
+                    echo "    QT Item ".$add_qt_mp." successfully added \n";
                 }
                 $qt_mp_items_suc_added++;
-            }
-            else
-            {
-                if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt_mp)."\n"; 
+            } else {
+                if($this->debug > 0) {
+                    echo "    ERROR: ".print_r($add_qt_mp)."\n";
                 }
                 $qt_mp_items_err_added++;
             }
 
-            $add_qt_data_mp2 = array ("disabled" => "false", "limit-at" => "100k", "max-limit" => "10000k",
+            $add_qt_data_mp2 = array("disabled" => "false", "limit-at" => "100k", "max-limit" => "10000k",
                      "name" => "q-upl-mp-".$ip, "parent" => "q-upl-mp-global", "priority" => "1",
                      "packet-mark" => $ip."_upl", "queue" => "wireless-default");
-             
+
             $add_qt_mp2 = $this->conn->add("/queue/tree", $add_qt_data_mp2);
 
-            if(ereg('^\*([[:xdigit:]])*$', $add_qt_mp2) ) {
-                if($this->debug > 0) { echo "    QT Item ".$add_qt_mp2." successfully added \n"; 
+            if(ereg('^\*([[:xdigit:]])*$', $add_qt_mp2)) {
+                if($this->debug > 0) {
+                    echo "    QT Item ".$add_qt_mp2." successfully added \n";
                 }
                 $qt_mp_items_suc_added++;
-            }
-            else
-            {
-                if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt_mp2)."\n"; 
+            } else {
+                if($this->debug > 0) {
+                    echo "    ERROR: ".print_r($add_qt_mp2)."\n";
                 }
                 $qt_mp_items_err_added++;
             }
@@ -1249,102 +1222,96 @@ class mk_synchro_qos
         }
 
         print " qt: number of records with MP: added items: ok: ".$qt_mp_items_suc_added.", error: ".$qt_mp_items_err_added."\n";
-  
+
         //
         // QT Force - Garanty
         //
         $qt_g_items_suc_added = 0;
         $qt_g_items_err_added = 0;
-  
-        foreach( $this->objects_garants_used as $garant_id => $speeds )
-        {
+
+        foreach($this->objects_garants_used as $garant_id => $speeds) {
             list($speed_dwn, $speed_upl) = explode(":", $speeds);
-    
+
             print " qt-force :: garants :: ".$garant_id.", speed_dwn: ".$speed_dwn.", speed_upl: ".$speed_upl."\n";
-    
-            $add_qt_data_g = array ("disabled" => "false", "limit-at" => $speed_dwn."k", "max-limit" => $speed_dwn."k",
+
+            $add_qt_data_g = array("disabled" => "false", "limit-at" => $speed_dwn."k", "max-limit" => $speed_dwn."k",
                  "name" => "q-dwn-".$garant_id, "parent" => "global-out", "priority" => "1", "queue" => "wireless-default");
-             
+
             $add_qt_g = $this->conn->add("/queue/tree", $add_qt_data_g);
 
-            if(ereg('^\*([[:xdigit:]])*$', $add_qt_g) ) {
-                if($this->debug > 0) { echo "    QT Item (garant parent dwn) ".$add_qt_g." successfully added \n"; 
+            if(ereg('^\*([[:xdigit:]])*$', $add_qt_g)) {
+                if($this->debug > 0) {
+                    echo "    QT Item (garant parent dwn) ".$add_qt_g." successfully added \n";
                 }
                 $qt_g_items_suc_added++;
-            }
-            else
-            {
-                if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt_q)."\n"; 
+            } else {
+                if($this->debug > 0) {
+                    echo "    ERROR: ".print_r($add_qt_q)."\n";
                 }
                 $qt_g_items_err_added++;
             }
-    
-            $add_qt_data_g2 = array ("disabled" => "false", "limit-at" => $speed_upl."k", "max-limit" => $speed_upl."k",
+
+            $add_qt_data_g2 = array("disabled" => "false", "limit-at" => $speed_upl."k", "max-limit" => $speed_upl."k",
                      "name" => "q-upl-".$garant_id, "parent" => "global-out", "priority" => "1", "queue" => "wireless-default");
-         
+
             $add_qt_g2 = $this->conn->add("/queue/tree", $add_qt_data_g2);
 
-            if(ereg('^\*([[:xdigit:]])*$', $add_qt_g2) ) {
-                if($this->debug > 0) { echo "    QT Item (garant parent upl) ".$add_qt_g2." successfully added \n"; 
+            if(ereg('^\*([[:xdigit:]])*$', $add_qt_g2)) {
+                if($this->debug > 0) {
+                    echo "    QT Item (garant parent upl) ".$add_qt_g2." successfully added \n";
                 }
                 $qt_g_items_suc_added++;
-            }
-            else
-            {
-                if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt_q2)."\n"; 
+            } else {
+                if($this->debug > 0) {
+                    echo "    ERROR: ".print_r($add_qt_q2)."\n";
                 }
                 $qt_g_items_err_added++;
             }
-    
-            foreach( $this->{$garant_id} as $id => $ip)
-            {
 
-                $add_qt_data_g_dwn = array ("disabled" => "false", "name" => "q-dwn-q-".$ip, "parent" => "q-dwn-".$garant_id,
+            foreach($this->{$garant_id} as $id => $ip) {
+
+                $add_qt_data_g_dwn = array("disabled" => "false", "name" => "q-dwn-q-".$ip, "parent" => "q-dwn-".$garant_id,
                     "priority" => "1", "packet-mark" => $ip."_dwn", "queue" => "wireless-default");
-             
+
                 $add_qt_g_dwn = $this->conn->add("/queue/tree", $add_qt_data_g_dwn);
 
-                if(ereg('^\*([[:xdigit:]])*$', $add_qt_g_dwn) ) {
-                    if($this->debug > 0) { echo "    QT Item (garant ".$ip." dwn) ".$add_qt_g_dwn." successfully added \n"; 
+                if(ereg('^\*([[:xdigit:]])*$', $add_qt_g_dwn)) {
+                    if($this->debug > 0) {
+                        echo "    QT Item (garant ".$ip." dwn) ".$add_qt_g_dwn." successfully added \n";
                     }
-                      $qt_g_items_suc_added++;
-                }
-                else
-                {
-                    if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt_q_dwn)."\n"; 
+                    $qt_g_items_suc_added++;
+                } else {
+                    if($this->debug > 0) {
+                        echo "    ERROR: ".print_r($add_qt_q_dwn)."\n";
                     }
-                      $qt_g_items_err_added++;
+                    $qt_g_items_err_added++;
                 }
-    
-                $add_qt_data_g_upl = array ("disabled" => "false", "name" => "q-upl-q-".$ip, "parent" => "q-upl-".$garant_id,
+
+                $add_qt_data_g_upl = array("disabled" => "false", "name" => "q-upl-q-".$ip, "parent" => "q-upl-".$garant_id,
                      "priority" => "1", "packet-mark" => $ip."_upl", "queue" => "wireless-default");
-         
+
                 $add_qt_g_upl = $this->conn->add("/queue/tree", $add_qt_data_g_upl);
 
-                if(ereg('^\*([[:xdigit:]])*$', $add_qt_g_upl) ) {
-                    if($this->debug > 0) { echo "    QT Item (garant ".$ip." upl) ".$add_qt_g_upl." successfully added \n"; 
+                if(ereg('^\*([[:xdigit:]])*$', $add_qt_g_upl)) {
+                    if($this->debug > 0) {
+                        echo "    QT Item (garant ".$ip." upl) ".$add_qt_g_upl." successfully added \n";
                     }
-                      $qt_g_items_suc_added++;
-                }
-                else
-                {
-                    if($this->debug > 0) { echo "    ERROR: ".print_r($add_qt_q2)."\n"; 
+                    $qt_g_items_suc_added++;
+                } else {
+                    if($this->debug > 0) {
+                        echo "    ERROR: ".print_r($add_qt_q2)."\n";
                     }
-                      $qt_g_items_err_added++;
+                    $qt_g_items_err_added++;
                 }
-    
+
 
             } //end of FOREACH $this->{$garant_id}
-  
+
         } //end of FOREACH objects_garants_used
-  
+
         print " qt: number of records with GARANT: added items: ok: ".$qt_g_items_suc_added.", error: ".$qt_g_items_err_added."\n";
-  
+
     } //end of function synchro_qt_force
 
 
 } //end of class mk_synchro_qos
-
-
-
-?>

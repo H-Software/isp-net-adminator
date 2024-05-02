@@ -1,15 +1,16 @@
 <?php
+
 class c_xml_generator
 {
-    var $data = array(
-    0=>array('type'=>'root', 'parent'=>-1)
+    public $data = array(
+    0 => array('type' => 'root', 'parent' => -1)
     );
-    var $auto_indent = '  ';
-    var $append_after_element = "\n";
-    var $xml_version = '1.0';
-    var $xml_encoding = 'iso-8859-2';
+    public $auto_indent = '  ';
+    public $append_after_element = "\n";
+    public $xml_version = '1.0';
+    public $xml_encoding = 'iso-8859-2';
 
-    function add_node($parent, $name, $params=array())
+    public function add_node($parent, $name, $params = array())
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
@@ -20,8 +21,8 @@ class c_xml_generator
         );
         return($new_id);
     }
-  
-    function add_node_cdata($parent, $name, $data, $params=array())
+
+    public function add_node_cdata($parent, $name, $data, $params = array())
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
@@ -34,7 +35,7 @@ class c_xml_generator
         return($new_id);
     }
 
-    function add_cdata($parent, $data)
+    public function add_cdata($parent, $data)
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
@@ -45,7 +46,7 @@ class c_xml_generator
         return($new_id);
     }
 
-    function add_entity($parent, $name)
+    public function add_entity($parent, $name)
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
@@ -56,7 +57,7 @@ class c_xml_generator
         return($new_id);
     }
 
-    function add_note($parent, $text)
+    public function add_note($parent, $text)
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
@@ -67,12 +68,12 @@ class c_xml_generator
         return($new_id);
     }
 
-    function create_xml($start_node=0)
+    public function create_xml($start_node = 0)
     {
         return($this->_create_xml_node($start_node));
     }
 
-    function _get_new_id()
+    public function _get_new_id()
     {
         if (count($this->data) > 0) {
             return(array_reduce(array_keys($this->data), 'max') + 1);
@@ -80,15 +81,15 @@ class c_xml_generator
             return(1);
         }
     }
-  
-    function _create_xml_node($id)
+
+    public function _create_xml_node($id)
     {
         static $level = 0;
-    
+
         $level++;
         $node = &$this->data[$id];
         switch($node['type']) {
-        case 'node' :
+        case 'node':
             $ret = '<'.$node['name'];
             foreach($node['params'] as $param_name => $param_value) {
                 $ret .= ' '.$this->_encode_param_name($param_name).
@@ -98,26 +99,23 @@ class c_xml_generator
             $complete_tag = true;
             foreach($this->data as $node_id => $node_data) {
                 if ($node_data['parent'] == $id) {
-                      $complete_tag = false;
-                      $childs .= $this->_create_xml_node($node_id);
+                    $complete_tag = false;
+                    $childs .= $this->_create_xml_node($node_id);
                 }
             };
             if ($complete_tag) {
                 $ret .= ' />';
-            }
-            else {
-        
-                if(preg_match("/<|>/", $childs) == 0 ) {
+            } else {
+
+                if(preg_match("/<|>/", $childs) == 0) {
                     $ret .= '>'.$childs.'</'.$node['name'].'>';
-                }
-                else
-                {
+                } else {
                     $ret .= '>'.$this->append_after_element.$childs.str_repeat($this->auto_indent, $level - 1).'</'.$node['name'].'>';
                 }
             }
-            
+
             break;
-        case 'node_cdata' :
+        case 'node_cdata':
             $ret = '<'.$node['name'];
             foreach($node['params'] as $param_name => $param_value) {
                 $ret .= ' '.$this->_encode_param_name($param_name).
@@ -125,16 +123,16 @@ class c_xml_generator
             };
             $ret .= '>'.$this->_encode_cdata($node['data']).'</'.$node['name'].'>';
             break;
-        case 'cdata' :
+        case 'cdata':
             $ret = $this->_encode_cdata($node['data']);
             break;
-        case 'entity' :
+        case 'entity':
             $ret = '&'.$node['name'].';';
             break;
-        case 'note' :
+        case 'note':
             $ret = '<!--'.$this->_encode_cdata($node['text']).'-->';
             break;
-        case 'root' :
+        case 'root':
             $ret = '<'.'?xml'.
             ($this->xml_version ? ' version="'.$this->xml_version.'"' : '').
             ($this->xml_encoding ? ' encoding="'.$this->xml_encoding.'"' : '').
@@ -148,27 +146,25 @@ class c_xml_generator
             break;
         };
         $level--;
-    
+
         if($node['type'] == "cdata") {
-    
-        }
-        else
-        {
-    
+
+        } else {
+
             $ret = str_repeat($this->auto_indent, $level).
              $ret.
              $this->append_after_element;
         }
-    
+
         return($ret);
     }
-  
-    function _encode_param_name($text)
+
+    public function _encode_param_name($text)
     {
         return(htmlspecialchars($text));
     }
-  
-    function _encode_param_value($text)
+
+    public function _encode_param_value($text)
     {
         return(str_replace(
             array("\n","\r"),
@@ -177,12 +173,12 @@ class c_xml_generator
         ));
     }
 
-    function _encode_cdata($text)
+    public function _encode_cdata($text)
     {
-        if (is_array($text)) { return('Chyba: nelze pouzit array jako CDATA');
+        if (is_array($text)) {
+            return('Chyba: nelze pouzit array jako CDATA');
         }
         return(htmlspecialchars($text));
     }
 
 }
-?>

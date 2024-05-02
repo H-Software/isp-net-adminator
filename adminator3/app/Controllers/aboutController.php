@@ -8,8 +8,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class aboutController extends adminatorController
 {
-    var $conn_mysql;
-    var $smarty;
+    public $conn_mysql;
+    public $smarty;
 
     public function __construct(ContainerInterface $container)
     {
@@ -26,7 +26,7 @@ class aboutController extends adminatorController
     {
 
         $this->logger->info("aboutController\about called");
-        
+
         $this->checkLevel(142, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: O programu");
@@ -43,7 +43,7 @@ class aboutController extends adminatorController
     public function changesOld(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info("aboutController\changesOld called");
-        
+
         $this->checkLevel(144, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: O programu :: Staré změny");
@@ -54,7 +54,7 @@ class aboutController extends adminatorController
 
         return $response;
     }
-    
+
     public function changes(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info("aboutController\changes called");
@@ -64,7 +64,7 @@ class aboutController extends adminatorController
         $this->smarty->assign("page_title", "Adminator3 :: O programu :: Změny");
 
         $this->header($request, $response, $this->adminator);
-        
+
         $this->smarty->display('about/about-changes.tpl');
 
         return $response;

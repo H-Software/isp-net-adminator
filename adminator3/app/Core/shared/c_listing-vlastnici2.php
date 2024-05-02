@@ -1,11 +1,12 @@
 <?php
+
 //coded by Warden - http://warden.dharma.cz
 
 /*
 priklad vytvareni instance:
 
-$listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom listu", 
-    "list pro zobrazeni", "formatovani zacatku odkazu strankovani", 
+$listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
+    "list pro zobrazeni", "formatovani zacatku odkazu strankovani",
     "formatovani konce odkazu strankovani", "sql dotaz pro vyber vsech zazkamu k vylistovani");
 */
 
@@ -13,21 +14,21 @@ $listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom
 
 class c_listing_vlastnici2
 {
-    var $url;
-    var $interval;
-    var $sql;
-    var $list;
-    var $before;
-    var $after;
-    var $numLists;
-    var $numRecords;
-    var $errName;
-    var $befError = "<div align=\"center\" style=\"color: maroon;\">";
-    var $aftError = "</div>";
-    
+    public $url;
+    public $interval;
+    public $sql;
+    public $list;
+    public $before;
+    public $after;
+    public $numLists;
+    public $numRecords;
+    public $errName;
+    public $befError = "<div align=\"center\" style=\"color: maroon;\">";
+    public $aftError = "</div>";
+
     // $select="./objekty.php?";
-    
-    function __construct($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
+
+    public function __construct($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
     {
         $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
@@ -37,22 +38,20 @@ class c_listing_vlastnici2
         $this->list = $conList;
         $this->before = $conBefore;
         $this->after = $conAfter;
-    
+
         if (empty($conSql)) {
             $this->error(1);
-        }
-        else {
+        } else {
             $this->sql = $conSql;
         }
     }
-    
+
     //vyber dat z databaze
-    function dbSelect()
+    public function dbSelect()
     {
         try {
             $listRecord = pg_query($this->sql);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
         }
 
@@ -77,24 +76,24 @@ class c_listing_vlastnici2
 
             return;
         }
-                
+
         $allLists = ceil($allRecords / $this->interval);
 
         $this->numLists = $allLists;
         $this->numRecords = $allRecords;
-        
+
     }
-    
+
     //zobrazi pouze seznam cisel listu
     //napr.:    1 | 2 | 3
-    function listNumber()
+    public function listNumber()
     {
         $this->dbSelect();
         echo $this->before;
-        for ($i = 1; $i <= $this->numLists; $i++){
+        for ($i = 1; $i <= $this->numLists; $i++) {
             $isLink = 1;
             $spacer = " | ";
-            
+
             if (empty($this->list)) {
                 $this->list = 1;
             }
@@ -113,20 +112,20 @@ class c_listing_vlastnici2
         }
         echo $this->after;
     }
-    
+
     //zobrazi seznam intervalu v zadanem rozsahu ($interval)
     //napr.:    1-10 | 11-20 | 21-30
-    function listInterval()
+    public function listInterval()
     {
         $this->dbSelect();
         echo $this->before;
-        for ($i = 1; $i <= $this->numLists; $i++){
+        for ($i = 1; $i <= $this->numLists; $i++) {
             $isLink = 1;
             $spacer = " | ";
-            $from = ($i*$this->interval)-($this->interval-1);
-            $to = $i*$this->interval;
-            
-            if (Empty($this->list)) {
+            $from = ($i * $this->interval) - ($this->interval - 1);
+            $to = $i * $this->interval;
+
+            if (empty($this->list)) {
                 $this->list = 1;
             }
             if ($i == $this->list) {
@@ -145,23 +144,23 @@ class c_listing_vlastnici2
         }
         echo $this->after;
     }
-    
+
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)
     //napr.:    <<< << 11-20 >> >>>
-    function listPart($echo = true)
+    public function listPart($echo = true)
     {
         $output = "";
 
         $this->dbSelect();
         $output .= $this->before;
-        if (Empty($this->list)) {
-                $this->list = 1;
+        if (empty($this->list)) {
+            $this->list = 1;
         }
-        $from = ($this->list*$this->interval)-($this->interval-1);
-        $to = $this->list*$this->interval;
-        $forward = "<a href=\"".$this->url."&list=1\" onFocus=\"blur()\">&lt;&lt;&lt;</a>&nbsp;<a href=\"".$this->url."&list=".($this->list-1)."\" onFocus=\"blur()\">&lt;&lt;</a>&nbsp;";
-        $backward = "&nbsp;<a href=\"".$this->url."&list=".($this->list+1)."\" onFocus=\"blur()\">&gt;&gt;</a>&nbsp;<a href=\"".$this->url."&list=".$this->numLists."\" onFocus=\"blur()\">&gt;&gt;&gt;</a>";
-        
+        $from = ($this->list * $this->interval) - ($this->interval - 1);
+        $to = $this->list * $this->interval;
+        $forward = "<a href=\"".$this->url."&list=1\" onFocus=\"blur()\">&lt;&lt;&lt;</a>&nbsp;<a href=\"".$this->url."&list=".($this->list - 1)."\" onFocus=\"blur()\">&lt;&lt;</a>&nbsp;";
+        $backward = "&nbsp;<a href=\"".$this->url."&list=".($this->list + 1)."\" onFocus=\"blur()\">&gt;&gt;</a>&nbsp;<a href=\"".$this->url."&list=".$this->numLists."\" onFocus=\"blur()\">&gt;&gt;&gt;</a>";
+
         if ($this->list == 1) {
             $forward = "";
         }
@@ -170,22 +169,20 @@ class c_listing_vlastnici2
             $backward = "";
         }
         $output .= $forward.$from."-".$to.$backward;
-        $output .=$this->after;
+        $output .= $this->after;
 
         if($echo === true) {
             echo $output;
-        }
-        else{
+        } else {
             return $output;
         }
     }
-    
+
     //vypisovani chybovych hlasek
-    function error($errNum = 0)
+    public function error($errNum = 0)
     {
         if ($errNum != 0) {
             echo $this->befError.$this->errName[$errNum].$this->aftError;
         }
     }
 }
-?>

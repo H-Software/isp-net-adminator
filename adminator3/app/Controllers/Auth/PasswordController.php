@@ -12,8 +12,7 @@ use Slim\Flash\Messages;
 
 class PasswordController extends Controller
 {
-
-    var $logger;
+    public $logger;
 
     /**
      * @var Messages
@@ -25,9 +24,9 @@ class PasswordController extends Controller
      */
     protected RouteParserInterface $routeParser;
 
-     /**
-      * @var Twig
-      */
+    /**
+     * @var Twig
+     */
     protected Twig $view;
 
     public function __construct(
@@ -62,8 +61,7 @@ class PasswordController extends Controller
             $this->flash->addMessage('error', $passwordHelper->errorMessage);
             return $response->withStatus(302)
                 ->withHeader('Location', $this->routeParser->urlFor('auth.password.change'));
-        }
-        else{
+        } else {
             $this->flash->addMessage('info', 'Your password was changed');
             return $response->withStatus(302)
                 ->withHeader('Location', $this->routeParser->urlFor('home'));

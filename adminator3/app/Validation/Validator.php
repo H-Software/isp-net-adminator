@@ -32,8 +32,7 @@ class Validator
 
             if(preg_match("/#/", $field)) {
                 [$field_name, $field_key] = explode("#", $field);
-            }
-            else {
+            } else {
                 $field_name = $field_key = $field;
             }
 

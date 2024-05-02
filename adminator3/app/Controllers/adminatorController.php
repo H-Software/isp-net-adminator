@@ -6,25 +6,25 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
+
 class adminatorController extends Controller
 {
+    public $conn_mysql;
+    public $smarty;
+    public $logger;
 
-    var $conn_mysql;
-    var $smarty;
-    var $logger;
-    
     public function __construct($conn_mysql, $smarty, $logger)
     {
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
-        
+
         $this->logger->info("adminatorController\__construct called");
     }
 
     public function jsonRender(ServerRequestInterface $request, ResponseInterface $response, $data, $status = 200, $msg = '')
     {
-        
+
         // $this->logger->info("JsonViewer\\render called");
         // $this->logger->info("JsonViewer\\render response dump: " . var_export($data, true));
 
@@ -32,7 +32,7 @@ class adminatorController extends Controller
         $_response = ['code' => $status, 'data' => null, 'msg' => ''];
         if(200 == $status or 418 == $status) {
             $_response['data'] = $data;
-        }else{
+        } else {
             $_response['msg'] = $msg;
         }
 
@@ -47,7 +47,7 @@ class adminatorController extends Controller
     //     $response = ['code' => $status, 'data' => null, 'msg' => $msg];
     //     $this->_response->withJson($response);
     // }
-    
+
     public function renderNoLogin()
     {
         $this->smarty->assign("page_title", "Adminator3 - chybny level");
@@ -56,7 +56,7 @@ class adminatorController extends Controller
 
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $this->smarty->display('global/no-level.tpl');
-        
+
         exit;
     }
     public function checkLevel($page_level_id = 0, $adminator = null)
@@ -64,9 +64,7 @@ class adminatorController extends Controller
 
         if(is_object($adminator)) {
             $a = $adminator;
-        }
-        else
-        {
+        } else {
             $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
 
@@ -80,7 +78,7 @@ class adminatorController extends Controller
         $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($a->userIdentityUsername, true));
 
         $checkLevel = $a->checkLevel();
-        
+
         $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false) {
@@ -91,36 +89,32 @@ class adminatorController extends Controller
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
     {
-        
-            $ret = array();
 
-            // CSRF token name and value for update form
-            $csrf = $this->container->get('csrf');
-            $csrf_nameKey = $csrf->getTokenNameKey();
-            $csrf_valueKey = $csrf->getTokenValueKey();
-            $csrf_name = $request->getAttribute($csrf_nameKey);
-            $csrf_value = $request->getAttribute($csrf_valueKey);
+        $ret = array();
+
+        // CSRF token name and value for update form
+        $csrf = $this->container->get('csrf');
+        $csrf_nameKey = $csrf->getTokenNameKey();
+        $csrf_valueKey = $csrf->getTokenValueKey();
+        $csrf_name = $request->getAttribute($csrf_nameKey);
+        $csrf_value = $request->getAttribute($csrf_valueKey);
 
         if($return_form_html === true) {
             $ret[0] = '<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">'
                        . '<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">';
-        }
-        else
-            {
+        } else {
             $ret = array("", $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
         }
 
-            return $ret;
+        return $ret;
     }
 
-    function header(ServerRequestInterface $request = null, ResponseInterface $response = null, $adminator = null)
+    public function header(ServerRequestInterface $request = null, ResponseInterface $response = null, $adminator = null)
     {
 
         if(is_object($adminator)) {
             $a = $adminator;
-        }
-        else
-        {
+        } else {
             $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
 
@@ -132,7 +126,7 @@ class adminatorController extends Controller
 
         //kategorie
 
-        $uri=$_SERVER["REQUEST_URI"];
+        $uri = $_SERVER["REQUEST_URI"];
         $uri_replace = str_replace("adminator3", "", $uri);
 
         list($kategorie, $kat_2radka, $mapa) = $a->zobraz_kategorie($uri, $uri_replace);
@@ -144,9 +138,7 @@ class adminatorController extends Controller
             $csrf = $this->generateCsrfToken($request, $response, true);
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             $this->smarty->assign("kat_csrf_html", $csrf[0]);
-        }
-        else
-        {
+        } else {
             $this->logger->addWarning("adminatorController\\header: no required vars for generateCsrfToken");
         }
 
@@ -155,10 +147,10 @@ class adminatorController extends Controller
 
         $show_se_cat = $_POST["show_se_cat"];
 
-        if($show_se_cat == 0 ) { $this->smarty->assign("show_se_cat_selected", "0"); 
-        }
-        else
-        { $this->smarty->assign("show_se_cat_selected", "1"); 
+        if($show_se_cat == 0) {
+            $this->smarty->assign("show_se_cat_selected", "0");
+        } else {
+            $this->smarty->assign("show_se_cat_selected", "1");
         }
 
         $this->smarty->assign("show_se_cat", $show_se_cat);
@@ -187,7 +179,7 @@ class adminatorController extends Controller
         // // velikost okna
         // $this->smarty->assign("windowdelka2","170");
         // $this->smarty->assign("windowpadding2","40");
-            
+
         // // pozice okna
         // $this->smarty->assign("windowtop2","150px");
         // $this->smarty->assign("windowleft2","50%");

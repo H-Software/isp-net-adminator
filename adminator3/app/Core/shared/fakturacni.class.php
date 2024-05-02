@@ -2,25 +2,24 @@
 
 class fakturacni
 {
-    var $echo = true;
-    var $firma;
+    public $echo = true;
+    public $firma;
 
-    function vypis($id_f,$id_v)
-    {    
+    public function vypis($id_f, $id_v)
+    {
         $output = "";
 
-        $dotaz=pg_query("SELECT * FROM fakturacni where id='" . intval($id_f). "'");
-        $dotaz_radku=pg_num_rows($dotaz);
-        
-        if ($dotaz_radku==0 ) {
+        $dotaz = pg_query("SELECT * FROM fakturacni where id='" . intval($id_f). "'");
+        $dotaz_radku = pg_num_rows($dotaz);
+
+        if ($dotaz_radku == 0) {
             $output .= "<tr><td> CHYBA! Fakturacni udaje nenalezeny. debug: id=$id_f </td></tr>";
-        }
-        else
-        {
-            while( $data=pg_fetch_array($dotaz) ):
+        } else {
+            while($data = pg_fetch_array($dotaz)):
                 $output .= "<tr>";
 
-                if($this->firma == 1) { $output .= "<td></td>"; 
+                if($this->firma == 1) {
+                    $output .= "<td></td>";
                 }
 
                 $output .= " <td colspan=\"2\"> <b>Fakturační údaje:</b> <br>".$data["ftitle"]." ".$data["fadresa"]."<br> ";
@@ -31,14 +30,13 @@ class fakturacni
                 $output .= "<td colspan=\"12\">ičo: ".$data["ico"].", dič: ".$data["dic"];
                 $output .= "<br>účet: ".$data["ucet"]." <br> splatnost (dnů): ".$data["splatnost"];
                 $output .= "<br> četnost: ".$data["cetnost"]."</td>";
-                        
-            endwhile;                                          
+
+            endwhile;
         }
 
         if($this->echo === true) {
             echo $output;
-        }
-        else{
+        } else {
             return $output;
         }
     } // konec funkce vypis

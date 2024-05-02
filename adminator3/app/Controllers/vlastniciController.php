@@ -36,7 +36,7 @@ class vlastniciController extends adminatorController
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
 
         $this->header($request, $response, $this->adminator);
-      
+
         $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('vlastnici/vlastnici-cat.tpl');
@@ -47,7 +47,7 @@ class vlastniciController extends adminatorController
     {
 
         $this->logger->info("vlastniciController\\vlastnici2 called");
-        
+
         $this->checkLevel(38, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
@@ -55,23 +55,25 @@ class vlastniciController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         $vlastnik2 = new \vlastnik2($this->container);
-        
+
         // selectors form
         //
         $fs = new \App\Customer\fakturacniSkupiny($this->container);
 
         $select = $_GET["select"];
 
-        if($select == 2) { $fu_select = "2"; 
+        if($select == 2) {
+            $fu_select = "2";
         } //Pouze FU
-        if($select == 3 ) { $fu_select = "1"; 
+        if($select == 3) {
+            $fu_select = "1";
         } //pouze DU
 
         $this->smarty->assign("select", $select);
         $fakt_skupiny = $fs->show_fakt_skupiny($fu_select);
-        
+
         $this->smarty->assign("fakt_skupiny", $fakt_skupiny);
-        
+
         $this->smarty->assign("fakt_skupiny_selected", $_GET['fakt_skupina']);
 
         $this->smarty->assign("razeni", $_GET['razeni']);
@@ -105,7 +107,7 @@ class vlastniciController extends adminatorController
     {
 
         $this->logger->info("vlastniciController\\fakturacniSkupiny called");
-        
+
         $this->checkLevel(99, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: fakturační skupiny");
@@ -121,13 +123,13 @@ class vlastniciController extends adminatorController
             $this->smarty->assign("message_no_items", "Nebyly nalezeny žádné fakturační skupiny");
             $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
             return $response;
-        }        
+        }
 
         $this->smarty->assign("fs_items", $fs_items);
 
         // debug
         // $this->smarty->assign("fs_items_debug","<pre>" . var_export($fs_items,true). "</pre>");
-        
+
         $this->smarty->display('vlastnici/fakturacni-skupiny/list.tpl');
 
     }
@@ -136,7 +138,7 @@ class vlastniciController extends adminatorController
     {
 
         $this->logger->info("vlastniciController\\fakturacniSkupinyAction called");
-        
+
         $this->checkLevel(301, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: . :: fakturační skupiny :: Action");

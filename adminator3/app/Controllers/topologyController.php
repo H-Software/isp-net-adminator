@@ -8,16 +8,16 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class topologyController extends adminatorController
 {
-    var $conn_mysql;
-    var $smarty;
-    var $logger;
+    public $conn_mysql;
+    public $smarty;
+    public $logger;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
-        $this->logger = $this->container->get('logger'); 
+        $this->logger = $this->container->get('logger');
         $this->logger->info("topologyController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
@@ -34,7 +34,7 @@ class topologyController extends adminatorController
         $this->smarty->assign("page_title", "Adminator3 :: Topologie :: Node list");
 
         $this->header($request, $response, $this->adminator);
-      
+
         $output = $topology->getNodeList();
 
         $this->smarty->assign("body", $output);
@@ -53,7 +53,7 @@ class topologyController extends adminatorController
         $this->smarty->assign("page_title", "Adminator3 :: Topologie :: Router list");
 
         $this->header($request, $response, $this->adminator);
-      
+
         $output = $topology->getRouterList();
 
         $this->smarty->assign("body", $output);

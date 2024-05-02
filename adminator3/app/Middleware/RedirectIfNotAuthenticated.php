@@ -18,7 +18,6 @@ use Psr\Log\LoggerInterface;
  */
 class RedirectIfNotAuthenticated
 {
-
     /**
      * @var LoggerInterface
      */

@@ -16,7 +16,7 @@ use App\Models;
 class Migration extends AbstractMigration
 {
     /**
-     * @var \Illuminate\Database\Capsule\Manager $capsule 
+     * @var \Illuminate\Database\Capsule\Manager $capsule
      */
     public $capsule;
 

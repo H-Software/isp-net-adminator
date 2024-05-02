@@ -72,7 +72,7 @@ class objekt_a2
       <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>vlastník </b></td>
           <td colspan=\"2\" style=\"".$styl."\" ><b>mac klienta </b></td>
           <td colspan=\"1\" style=\"".$styl."\" ><b>ip rb </b></td>
-          
+
           <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>přidal</b></td>
           <td colspan=\"1\" style=\"".$styl."\" align=\"center\" ><b>upravil </b></td>
       <td style=\"".$styl."\" >&nbsp;</td>

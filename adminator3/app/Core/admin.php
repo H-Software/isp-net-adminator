@@ -4,17 +4,17 @@ use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 
 class admin
 {
-    var $conn_mysql;
+    public $conn_mysql;
 
-    function __construct($conn_mysql, $logger)
+    public function __construct($conn_mysql, $logger)
     {
         $this->conn_mysql = $conn_mysql;
         $this->logger = $logger;
     }
 
-    function levelListDbQuery()
+    public function levelListDbQuery()
     {
-        $rs= $this->conn_mysql->query("select * from leveling order by level asc");    
+        $rs = $this->conn_mysql->query("select * from leveling order by level asc");
         $num_rows = $rs->num_rows;
 
         if ($num_rows > 0) {
@@ -24,7 +24,7 @@ class admin
         return array($num_rows, $data);
     }
 
-    function levelListJson()
+    public function levelListJson()
     {
         $r_data = array();
         $r_status = 418;
@@ -35,22 +35,20 @@ class admin
         list($q_num_rows, $q_data) = $this->levelListDbQuery();
         // $this->logger->info("admin\LevelList dump q_data: " . var_export($q_data, true));
 
-        if ($q_num_rows==0) {
+        if ($q_num_rows == 0) {
             $r_data = array(0 => "Zadné levely v databazi");
-        }
-        else
-        {
+        } else {
             $r_data = $q_data;
         }
 
         return array($r_data, $r_status, $r_msg);
     }
 
-    function levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value)
+    public function levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value)
     {
 
         $output  = "";
-        
+
         if($_POST['search']) {
             $search_string = $this->conn_mysql->real_escape_string($_POST['search']);
             $this->logger->info("admin\LevelList search string: " . var_export($search_string, true));
@@ -62,9 +60,9 @@ class admin
 
         $output .= '<div style="padding-top: 10px; padding-left: 10px;" class="fs-5">Výpis levelů stránek</div>';
 
-        if ($q_num_rows==0) { $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Zadné levely v databazi</div>";
-        } else
-        {                        
+        if ($q_num_rows == 0) {
+            $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Zadné levely v databazi</div>";
+        } else {
             // $output .= '<table class="table table-striped fs-6">';
             $output .= '<table
 							id="level-list"
@@ -74,7 +72,7 @@ class admin
 							data-side-pagination="client"
 							data-search="true"
 							';
-                            
+
             $output .= '>';
 
             $output .= "\n
@@ -91,8 +89,8 @@ class admin
 			</thead>
 			<tbody id=\"hidden\"> <!-- hidden is used because of jquery duplicates this element -->
 			\n";
-            
-            foreach ($q_data as $d){
+
+            foreach ($q_data as $d) {
                 $output .= "<tr>"
                 . "<td scope=\"row\">".$d["id"]."</td>\n"
                 . "<td >".$d["popis"]."</td>\n"
@@ -113,27 +111,26 @@ class admin
         return $output;
     }
 
-    function levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value)
+    public function levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value)
     {
 
         $output = "";
 
-        if (( $_POST["popis_new"] ) ) {
+        if (($_POST["popis_new"])) {
             //budeme ukladat
             $popis = $this->conn_mysql->real_escape_string($_POST["popis_new"]);
             $level = intval($_POST["level_new"]);
-    
+
             $output .= "Zadáno do formuláre : <br><br>";
             $output .= "popis stránky: ".$popis."<br>";
             $output .= "level stránky: ".$level."<br>";
-            
-            $id_new=intval($_POST["new_id"]);
-        
-            if($id_new > 0 ) {
+
+            $id_new = intval($_POST["new_id"]);
+
+            if($id_new > 0) {
                 // update
                 $sql = "UPDATE leveling SET popis='$popis', level='$level' where id=".$id_new;
-            }
-            else{
+            } else {
                 // novy zaznam
                 $sql = "INSERT INTO leveling (popis, level) VALUES ('$popis','$level')";
             }
@@ -143,19 +140,19 @@ class admin
             } catch (Exception $e) {
                 die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
             }
-        
-            if ($rs) { $output .= "<br><br>MySql potvrdilo, takze: <br><H2>Data v databazi upravena.</H2><br><br>";
-            } else { $output .= "Houstone, tento zapis do databaze nevysel :)";
+
+            if ($rs) {
+                $output .= "<br><br>MySql potvrdilo, takze: <br><H2>Data v databazi upravena.</H2><br><br>";
+            } else {
+                $output .= "Houstone, tento zapis do databaze nevysel :)";
             }
-                                                                            
-        }
-        else
-        {
+
+        } else {
             //zobrazime formular
-    
+
             //nejdrive nacteme predchozi data
-            $update_id=intval($_POST["update_id"]);
-    
+            $update_id = intval($_POST["update_id"]);
+
             if($update_id > 0) {
                 try {
                     $vysledek = $this->conn_mysql->query("select * from leveling where id = $update_id ");
@@ -164,15 +161,15 @@ class admin
                 }
 
                 $radku = $vysledek->num_rows;
-            
-                if ($radku==0) { $output .= "Zadné levely v db (divny) ";
-                } else
-                {
-                    while ($zaznam=$vysledek->fetch_array()):
-                        $id=$zaznam["id"];
-                        $popis=$zaznam["popis"];
-                        $level=$zaznam["level"];
-                    endwhile;    
+
+                if ($radku == 0) {
+                    $output .= "Zadné levely v db (divny) ";
+                } else {
+                    while ($zaznam = $vysledek->fetch_array()):
+                        $id = $zaznam["id"];
+                        $popis = $zaznam["popis"];
+                        $level = $zaznam["level"];
+                    endwhile;
                 }
             }
 
@@ -218,20 +215,20 @@ class admin
         return array($output);
     }
 
-    function tarifList()
+    public function tarifList()
     {
 
         $output = "";
-        
+
         $sql_where = "";
-        if(( preg_match('/^([[:digit:]]+)$/', $_GET["id_tarifu"]) ) ) {
+        if((preg_match('/^([[:digit:]]+)$/', $_GET["id_tarifu"]))) {
             $sql_where = "WHERE id_tarifu = '".intval($_GET["id_tarifu"])."' ";
         }
 
         $dotaz_tarify = $this->conn_mysql->query(" SELECT * FROM tarify_int " . $sql_where . " ORDER BY id_tarifu");
         $dotaz_tarify_radku = $dotaz_tarify->num_rows;
 
-        if($dotaz_tarify_radku == 0 ) {
+        if($dotaz_tarify_radku == 0) {
             $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi</div>";
             return array($output);
         }
@@ -239,7 +236,7 @@ class admin
         $data = $dotaz_tarify->fetch_all(MYSQLI_ASSOC);
 
 
-        $headers = ['id', 
+        $headers = ['id',
                     'název',
                     'garant',
                     'cena bez DPH',
@@ -253,11 +250,11 @@ class admin
         $attributes = 'class="a-common-table a-common-table-2line" '
                     . 'id="tarif-table" '
                     . 'style="width: 99%"'
-                    ;
+        ;
 
         $i = 0;
         foreach ($data as $id => $a) {
-            if($i == 0) {                
+            if($i == 0) {
                 // second header row
                 $dataView[$i] = array(
                 $headers[0] => "H",
@@ -275,17 +272,18 @@ class admin
 
             // prepare data
             $garant = $a['garant'];
-            if ($garant == 1 ) { $garant = "Ano"; 
-            }
-            elseif ($garant == 0 ) { $garant = "Ne"; 
+            if ($garant == 1) {
+                $garant = "Ano";
+            } elseif ($garant == 0) {
+                $garant = "Ne";
             }
 
-            if ($a["typ_tarifu"] == 0 ) { $typ_tarifu = "wifi tarif"; 
-            }
-            elseif ($a["typ_tarifu"] == 1 ) { $typ_tarifu = "optický tarif"; 
-            }
-            else
-            { $typ_tarifu = $a["typ_tarifu"]; 
+            if ($a["typ_tarifu"] == 0) {
+                $typ_tarifu = "wifi tarif";
+            } elseif ($a["typ_tarifu"] == 1) {
+                $typ_tarifu = "optický tarif";
+            } else {
+                $typ_tarifu = $a["typ_tarifu"];
             }
 
             $dotaz_lidi = pg_query("SELECT * FROM objekty WHERE id_tarifu = '". intval($a['id_tarifu']). "'");
@@ -321,10 +319,10 @@ class admin
 
         // echo "<pre>". var_export($dataView, true) . "</pre>";
 
-        $table = new LaravelHtmlTableGenerator;
+        $table = new LaravelHtmlTableGenerator();
         $output .= $table->generate($headers, $dataView, $attributes);
 
-    
+
         return array($output);
     }
 
@@ -333,47 +331,45 @@ class admin
 
         $update_id = $_GET["update_id"];
         $erase_id = $_GET["erase_id"];
-                
+
         //kontrola promennych zde ...
-        if(isset($update_id) ) {
-            if(!( preg_match('/^([[:digit:]])+$/', $update_id) ) ) { $error .= "<div>Chyba! Update id není ve správném formátu. </div>"; 
+        if(isset($update_id)) {
+            if(!(preg_match('/^([[:digit:]])+$/', $update_id))) {
+                $error .= "<div>Chyba! Update id není ve správném formátu. </div>";
             }
         }
-      
-        if(isset($erase_id) ) {
-            if(!( preg_match('/^([[:digit:]])+$/', $erase_id) ) ) { $error .= "<div>Chyba! Erase id není ve správném formátu. </div>"; 
+
+        if(isset($erase_id)) {
+            if(!(preg_match('/^([[:digit:]])+$/', $erase_id))) {
+                $error .= "<div>Chyba! Erase id není ve správném formátu. </div>";
             }
         }
-        
-        if(isset($update_id) ) {
-            if(isset($send) ) {
+
+        if(isset($update_id)) {
+            if(isset($send)) {
                 //budeme ukladat ..
                 $output .= "budeme ukladat ... T.B.A.";
-          
-            }
-            else
-            {
+
+            } else {
                 //zobrazeni formu pro update ...
                 $output .= "zobrazeni formu pro update .... T.B.A.";
-          
+
             }
-          
+
         } //konec if isset update_id
-        elseif(isset($erase_id) ) {
-            if(isset($send) ) {
+        elseif(isset($erase_id)) {
+            if(isset($send)) {
                 //budeme ukladat ..
                 $output .= "budeme mazat ...";
-          
-            }
-            else
-            {
+
+            } else {
                 //zobrazeni formu pro erase ...
                 $output .= "zobrazeni formu pro erase ....";
-          
+
             }
-          
+
         } //konec if isset erase_id
-        else{
+        else {
             // noting to do :)
         }
 

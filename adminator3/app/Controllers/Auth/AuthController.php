@@ -14,8 +14,7 @@ use Slim\Views\Twig;
 
 class AuthController extends Controller
 {
-
-    var $logger;
+    public $logger;
 
     /**
      * @var Messages
@@ -27,9 +26,9 @@ class AuthController extends Controller
      */
     protected RouteParserInterface $routeParser;
 
-     /**
-      * @var Twig
-      */
+    /**
+     * @var Twig
+     */
     protected Twig $view;
 
     public function __construct(
@@ -57,17 +56,17 @@ class AuthController extends Controller
             try {
                 if (!Sentinel::authenticate(
                     $this->array_clean(
-                        $data, [
+                        $data,
+                        [
                             'email',
                             'password',
                             ]
-                    ), isset($data['persist'])
+                    ),
+                    isset($data['persist'])
                 )
                 ) {
                     throw new Exception('Incorrect email or password.');
-                }
-                else 
-                {
+                } else {
                     $url = $this->routeParser->urlFor('home');
                     return $response->withStatus(302)->withHeader('Location', $url);
                 }
@@ -79,11 +78,9 @@ class AuthController extends Controller
 
         if (isset($this->flash->getMessages()["oldNow"][0]['slimUsername'])) {
             $username = $this->flash->getMessages()["oldNow"][0]['slimUsername'];
-        }
-        elseif(isset($this->flash->getMessages()["old"][0]['slimUsername']) ) {
+        } elseif(isset($this->flash->getMessages()["old"][0]['slimUsername'])) {
             $username = $this->flash->getMessages()["old"][0]['slimUsername'];
-        }
-        else{
+        } else {
             $username = null;
         }
 
@@ -98,12 +95,11 @@ class AuthController extends Controller
     {
         $this->logger->info("AuthController/signout called");
         $this->logger->debug("AuthController/signout: dump user identity: ".var_export(Sentinel::getUser()->email, true));
-    
+
         if (!Sentinel::guest()) {
             $rs = sentinel::logout();
             $this->logger->info("AuthController/signout: signout action result: " . var_export($rs, true));
-        }
-        else{
+        } else {
             $this->logger->info("AuthController/signout: user is not logged, redirecting to home");
         }
 
@@ -118,7 +114,7 @@ class AuthController extends Controller
      *
      * @return array
      */
-    function array_clean(array $array, array $keys): array
+    public function array_clean(array $array, array $keys): array
     {
         return array_intersect_key($array, array_flip($keys));
     }

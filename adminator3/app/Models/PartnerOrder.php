@@ -34,20 +34,20 @@ class PartnerOrder extends Model
         // 'vysledek' => 0
     ];
 
-     /**
-      * The attributes that are mass assignable.
-      *
-      * @var array
-      */
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         // 'akce',
         // 'provedeno_kym',
-        // 'vysledek' 
+        // 'vysledek'
     ];
 
     /**
      * present integer like a text value
-     * 
+     *
      * @var int
      */
     protected function akceptovano(): Attribute
@@ -59,7 +59,7 @@ class PartnerOrder extends Model
 
     /**
      * present integer like a text value
-     * 
+     *
      * @var int
      */
     protected function pripojeno(): Attribute
@@ -71,7 +71,7 @@ class PartnerOrder extends Model
 
     /**
      * present integer like a text value
-     * 
+     *
      * @var int
      */
     protected function prio(): Attribute

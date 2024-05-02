@@ -33,14 +33,14 @@ class ArchivZmen extends Model
         'vysledek' => 0
     ];
 
-     /**
-      * The attributes that are mass assignable.
-      *
-      * @var array
-      */
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'akce',
         'provedeno_kym',
-        'vysledek' 
+        'vysledek'
     ];
 }

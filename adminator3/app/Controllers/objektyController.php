@@ -8,12 +8,12 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class objektyController extends adminatorController
 {
-    var $conn_mysql;
-    var $smarty;
-    var $logger;
-    var $app;
+    public $conn_mysql;
+    public $smarty;
+    public $logger;
+    public $app;
 
-    var $adminator;
+    public $adminator;
 
     public function __construct(ContainerInterface $container)
     {
@@ -35,7 +35,7 @@ class objektyController extends adminatorController
         $this->smarty->assign("page_title", "Adminator3 :: Objekty");
 
         $this->header($request, $response, $this->adminator);
-      
+
         $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('objekty/subcat.tpl');
@@ -50,7 +50,7 @@ class objektyController extends adminatorController
         $stb->csrf_html = $csrf_html[0];
 
         $this->logger->info("objektyController\\stb called");
-        
+
         $this->checkLevel(135, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: Objekty STB");
@@ -60,7 +60,7 @@ class objektyController extends adminatorController
         if ($this->adminator->checkLevel(137, false) === true) {
             $stb->enable_modify_action = true;
         }
-        
+
         if ($this->adminator->checkLevel(152, false) === true) {
             $stb->enable_unpair_action = true;
         }
@@ -78,7 +78,7 @@ class objektyController extends adminatorController
     {
 
         $this->logger->info("objektyController\\stbAction called");
-        
+
         $this->checkLevel(136, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: STB :: Actions");
@@ -96,8 +96,7 @@ class objektyController extends adminatorController
             $this->smarty->assign($rs[0]);
 
             $this->smarty->display($rs[1]);
-        }
-        else{
+        } else {
             // result view, ..
             $this->smarty->assign("body", $rs[0]);
             $this->smarty->display('objekty/stb-action.tpl');
@@ -109,17 +108,18 @@ class objektyController extends adminatorController
     {
 
         $this->logger->info("objektyController\objekty called");
-        
+
         $this->checkLevel(1, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: Objekty");
 
         $this->header($request, $response, $this->adminator);
-      
+
         $dns_find = $_GET['dns_find'];
         $ip_find = $_GET['ip_find'];
 
-        if((strlen($dns_find) ==0 ) ) { $dns_find = "%"; 
+        if((strlen($dns_find) == 0)) {
+            $dns_find = "%";
         }
 
         $this->smarty->assign("es", $_GET['es']);
@@ -139,12 +139,11 @@ class objektyController extends adminatorController
 
         if(strlen($errors) > 0) {
             $this->smarty->assign("body", $errors);
-        }
-        else{
+        } else {
             $this->smarty->assign("export_link", $exportLink);
             $this->smarty->assign("body", $output);
         }
-  
+
         $this->smarty->display('objekty/list.tpl');
     }
 
@@ -152,29 +151,27 @@ class objektyController extends adminatorController
     {
 
         $this->logger->info("objektyController\objektyAction called");
-        
+
         $this->checkLevel(2, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: Objekty :: Action");
 
         $this->header($request, $response, $this->adminator);
-        
+
         $objekt = new \App\Core\objekt($this->container);
         $objekt->csrf_html = $this->generateCsrfToken($request, $response, true);
         $objekt->adminator = $this->adminator;
-        
+
         $objekt->mod_objektu = intval($_POST["mod_objektu"]);
 
         // $objekt->dns_find = $dns_find;
         // $objekt->ip_find = $ip_find;
-        
+
         $objekt->actionPrepareVars();
 
         if($objekt->mod_objektu == 2) {
             $output = $objekt->actionFiber();
-        }
-        else
-        {
+        } else {
             $output = $objekt->actionWifi();
         }
 

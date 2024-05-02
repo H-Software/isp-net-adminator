@@ -38,7 +38,7 @@ class partnerController extends adminatorController
         $this->smarty->assign("page_title", "Adminator3 :: Partner program");
 
         $this->header($request, $response, $this->adminator);
-      
+
         $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('partner/partner-cat.tpl');
@@ -53,7 +53,7 @@ class partnerController extends adminatorController
         $this->smarty->assign("page_title", "Adminator3 :: Partner program :: Orders");
 
         $this->header($request, $response, $this->adminator);
-      
+
         $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('partner/order-cat.tpl');
@@ -68,7 +68,7 @@ class partnerController extends adminatorController
         $this->smarty->assign("page_title", "Adminator3 :: Partner program :: Order List");
 
         $this->header($request, $response, $this->adminator);
-        
+
         $partner = new partner($this->container);
         $listOutput = $partner->list();
 
