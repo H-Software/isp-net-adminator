@@ -39,7 +39,6 @@ jobs:
       #   run: composer phpunit
 
       - name: PHP CodeSniffer
-        continue-on-error: true
         run: |
           composer \
           run \
@@ -51,18 +50,21 @@ jobs:
               print \
               rss
             
-      - name: PHP CodeSniffer Fix
-        run: |
-          composer \
-            run \
-              phpcbf \
-                boostrap \
-                config \
-                resources \
-                templates \
-                app
+      # - name: PHP CodeSniffer Fix
+      #   run: |
+      #     composer \
+      #       run \
+      #         phpcbf \
+      #           -- \
+      #           --standard=PSR12 \
+      #           boostrap \
+      #           config \
+      #           resources \
+      #           templates \
+      #           app
 
       - name: PHP-CS-Fixer
+        continue-on-error: true
         run: |
           php \
           vendor/friendsofphp/php-cs-fixer/php-cs-fixer \
