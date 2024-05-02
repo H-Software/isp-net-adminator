@@ -22,7 +22,7 @@ class zmeny_ucetni {
       $this->logger = $logger;
 
       
-      $this->loggedUserEmail = $i['username'];
+      $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
 
     function load_sql_result() {

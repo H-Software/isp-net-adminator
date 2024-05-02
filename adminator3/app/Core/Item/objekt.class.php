@@ -101,7 +101,7 @@ class objekt extends adminator
         $this->logger = $container->get('logger');
 
         
-        $this->loggedUserEmail = $i['username'];
+        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
 
     public function listGetOrderItems()
