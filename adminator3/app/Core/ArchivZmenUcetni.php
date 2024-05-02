@@ -21,7 +21,7 @@ class zmeny_ucetni {
       $this->conn_mysql = $conn_mysql;
       $this->logger = $logger;
 
-      $i = $auth->getIdentity();
+      
       $this->loggedUserEmail = $i['username'];
     }
 

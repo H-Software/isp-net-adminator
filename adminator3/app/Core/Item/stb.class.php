@@ -58,7 +58,7 @@ class stb extends adminator
         $this->conn_mysql = $container->get('connMysql');   
         $this->logger = $container->get('logger');
 
-        $i = $container->auth->getIdentity();
+        
         $this->loggedUserEmail = $i['username'];
     }
 

@@ -96,11 +96,11 @@ class objekt extends adminator
         $this->container = $container;
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
-        $this->conn_pgsql = $container->connPgsql;   
+        $this->conn_pgsql = $container->get('connPgsql');   
 
         $this->logger = $container->get('logger');
 
-        $i = $container->auth->getIdentity();
+        
         $this->loggedUserEmail = $i['username'];
     }
 
