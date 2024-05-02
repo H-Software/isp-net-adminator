@@ -109,7 +109,7 @@ require ($cesta."include/charset.php");
                <span style=\"border-bottom: 1px solid grey; \" >Změna poznámky technika</span>
 	    </div>";
 	
-    if ( !( ereg('^([[:digit:]])+$',$_GET["id"]) ) )
+    if ( !( preg_match('/^([[:digit:]])+$/',$_GET["id"]) ) )
     {
       echo "<div style=\"color: red; font-weight: bold; padding-left: 20px; padding-bottom: 20px; \">
         Chyba! Zákazníka nelze akceptovat! Vstupní data jsou ve špatném formátu! </div> ";
