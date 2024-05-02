@@ -94,9 +94,9 @@ else
    
    if( $zobrazeno_limit >= $limit)
    {
-   // prozatimni reseni limitu
-   
-   $exit ="ano";
+    // prozatimni reseni limitu
+    
+    $exit ="ano";
    
    }
    
@@ -111,11 +111,14 @@ else
    $dotaz_radku_S1=$dotaz_S1->num_rows;
    
    // zde zjistit jestli uz se zobrazilo
-   for ($p = 0; $p < count($zobrazene_polozky); ++$p)
-   {
-     if( $zobrazene_polozky[$p] == $id_opravy){ $zobrazeno = "ano"; }
-     else{ $zobrazeno = "ne"; }
-   }
+    if(is_array($zobrazene_polozky))
+    {
+      for ($p = 0; $p < count($zobrazene_polozky); ++$p)
+      {
+        if( $zobrazene_polozky[$p] == $id_opravy){ $zobrazeno = "ano"; }
+        else{ $zobrazeno = "ne"; }
+      }
+    }
    
    if( $v_reseni_filtr == 1 )
    {  	    
