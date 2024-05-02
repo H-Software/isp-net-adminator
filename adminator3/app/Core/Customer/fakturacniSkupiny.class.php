@@ -26,12 +26,12 @@ class fakturacniSkupiny extends adminator
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->logger = $container->logger;
+        $this->logger = $container->get('logger');
 
-        $i = $container->auth->getIdentity();
-        $this->loggedUserEmail = $i['username'];
+        
+        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
 
-        $this->conn_mysql = $container->connMysql;
+        $this->conn_mysql = $container->get('connMysql');
 
     }
 

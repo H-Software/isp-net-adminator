@@ -30,12 +30,12 @@ class partner extends adminator
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->validator = $container->validator;
-        $this->conn_mysql = $container->connMysql;
-        $this->logger = $container->logger;
+        $this->validator = $container->get('validator');
+        $this->conn_mysql = $container->get('connMysql');
+        $this->logger = $container->get('logger');
 
-        $i = $container->auth->getIdentity();
-        $this->loggedUserEmail = $i['username'];
+        
+        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
 
     public function listPrepareVars()

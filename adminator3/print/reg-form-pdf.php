@@ -1,32 +1,18 @@
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
 // init db functions defs
 require __DIR__ . "/../include/main.function.shared.php";
-
 // autoload, init DB conns, init Illuminate\Database
-require __DIR__ . "/../app/config.php";
-// slim config
-require  __DIR__ . "/../app/settings.php";
+require __DIR__ . "/../app/bootstrap.php";
 
-$smarty = new Smarty;
-$smarty->compile_check = true;
-//$smarty->debugging = true;
+// end of app bootstrap
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
+$logger = $container->get('logger');
+$smarty = $container->get('smarty');
 
-$app = new \Slim\App($config);
-
-
-require __DIR__ ."/../app/bootstrap-doctrine.php";
-
-require __DIR__ ."/../app/dependencies.php";
-
-require __DIR__ ."/../app/routing.php";
-
-$logger = $container->logger;
-
-$logger->info("others-smlouva-pdf called");
+$logger->info("others-reg-form-pdf called");
 
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 

@@ -34,10 +34,10 @@ class vlastnik2 {
 
 	function __construct(ContainerInterface $container) {
 		$this->container = $container;
-		$this->conn_mysql = $container->connMysql;
-		$this->logger = $container->logger;
+		$this->conn_mysql = $container->get('connMysql');
+		$this->logger = $container->get('logger');
 
-		$this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->smarty, $this->logger);
+		$this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->get('smarty'), $this->logger);
 	}
 
 	private function listPrepareVars($vlastnik)
@@ -142,7 +142,7 @@ class vlastnik2 {
 	{
 		$vlastnik = new vlastnik2_a2;
 		$vlastnik->conn_mysql = $this->conn_mysql;
-		$vlastnik->conn_pgsql = $this->container->connPgsql;
+		$vlastnik->conn_pgsql = $this->container->get('connPgsql');
 		$vlastnik->container = $this->container;
 		$vlastnik->logger = $this->logger;
 		$vlastnik->echo = false;

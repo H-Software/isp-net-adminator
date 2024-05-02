@@ -18,8 +18,6 @@ $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
 $auth->checkLevel(146, $a);
 
-// $ac = new adminatorController($conn_mysql, $smarty, $logger, $auth);
-
 $smarty->assign("page_title","Adminator3 :: Ostatní :: Tisk");
 
 $smarty->assign("nick_a_level",\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email." (".$level.")");

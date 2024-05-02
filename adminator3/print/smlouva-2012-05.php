@@ -1,24 +1,16 @@
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+// init db functions defs
 require __DIR__ . "/../include/main.function.shared.php";
-require __DIR__ . "/../app/config.php";
+// autoload, init DB conns, init Illuminate\Database
+require __DIR__ . "/../app/bootstrap.php";
 
-$smarty = new Smarty;
-$smarty->compile_check = true;
-// $smarty->debugging = true;
+// end of app bootstrap
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
-$app = new \Slim\App(['settings' => $slim_config]);
-
-require __DIR__ ."/../app/bootstrap-doctrine.php";
-
-require __DIR__ ."/../app/dependencies.php";
-
-require __DIR__ ."/../app/routing.php";
-
-$logger = $container->logger;
+$logger = $container->get('logger');
+$smarty = $container->get('smarty');
 
 $logger->info("others-smlouva-2012-05 called");
 

@@ -1,38 +1,23 @@
 <?php
 
+require __DIR__ . '/vendor/autoload.php';
+
 // init db functions defs
 require "include/main.function.shared.php";
 // autoload, init DB conns, init Illuminate\Database
-require "app/config.php";
-// slim config
-require "app/settings.php";
+require "app/bootstrap.php";
 
-$smarty = new Smarty;
-$smarty->compile_check = true;
-//$smarty->debugging = true;
+// end of app bootstrap
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
-$app = new \Slim\App($config);
-
-require __DIR__ ."/app/bootstrap-doctrine.php";
-
-require "app/dependencies.php";
-
-require "app/routing.php";
-
-$logger = $container->logger;
+$logger = $container->get('logger');
+$smarty = $container->get('smarty');
 
 $logger->info("others-web-simelon called");
         
-// $this->checkLevel(95);
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
 $auth->checkLevel(151, $a);
-
-// $ac = new adminatorController($conn_mysql, $smarty, $logger, $auth);
 
 $smarty->assign("page_title","Adminator3 :: Ostatní :: Web Simelon");
 
@@ -91,7 +76,7 @@ else
 try {
 	$count = $conn_mysql->select_db("simelonnet");
 } catch (Exception $e) {
-	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database select failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 }
 
 //tab qestions
@@ -101,7 +86,7 @@ try {
 	FROM questions ORDER BY id_question
 	");
 } catch (Exception $e) {
-	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed (table questions)! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 }
 
   $pole_q = array();
@@ -128,7 +113,7 @@ try {
 	FROM orders ORDER BY id_order
 	");
 } catch (Exception $e) {
-	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed (table orders)! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 }
 
   $pole_o = array();
