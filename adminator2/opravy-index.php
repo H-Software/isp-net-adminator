@@ -180,9 +180,7 @@ echo "<tr><td colspan=\"".$pocet_bunek."\" ><br></td></tr>";
 
 echo " <tr>
         <td width=\"\">Výběr vlastníka: </td>
-        <td colspan=\"".$pocet_bunek."\" >
-
-            <select size=\"1\" name=\"id_vlastnika\" onchange=\"self.document.forms.form3.submit()\" >";
+        <td colspan=\"".$pocet_bunek."\" >";
 
           $sql="%".$vlastnik_hledani."%";
 
@@ -191,7 +189,27 @@ echo " <tr>
 
          $dotaz_klienti = pg_query("SELECT * FROM vlastnici ".$select1.$select2." order by prijmeni ");
 
+         if ( $dotaz_klienti === false ) {
+            echo "<div>Chyba! Vlastniky nelze vypsat. </div>";
+            echo "<div>" . pg_last_error() . "</div";
+
+            echo "</td></tr></table>";
+
+            // vnejsi tabulka
+            echo '  </td>
+                    </tr>
+                    
+                  </table>
+                  
+                  </body>
+                  </html>';
+
+            exit;
+         }
+
          $radku_klienti = pg_num_rows($dotaz_klienti);
+
+         echo "<select size=\"1\" name=\"id_vlastnika\" onchange=\"self.document.forms.form3.submit()\" >";
 
          if ( $radku_klienti == 0 )
          { echo "<option value=\"0\" style=\"color: gray; font-style: bold; \">Žádný klient neodpovídá výběru/ není v databazi! </option>"; }

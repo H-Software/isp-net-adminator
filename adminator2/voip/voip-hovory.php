@@ -4,10 +4,10 @@ global $cesta;
 
 $cesta = "../";
 
-include ($cesta."include/config.php"); 
-include ($cesta."include/check_login.php");
-
-include ($cesta."include/check_level.php");
+require ($cesta."include/main.function.shared.php");
+require ($cesta."include/config.php"); 
+require ($cesta."include/check_login.php");
+require ($cesta."include/check_level.php");
 
 if( !( check_level($level,118) ) )
 {
