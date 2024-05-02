@@ -22,6 +22,20 @@ class print_reg_form
     //  functions
     //
     
+	// stolen from https://www.php.net/manual/en/function.each.php#126076
+	function legacy_each($array){
+		$key = key($array);
+		$value = current($array);
+		$each = is_null($key) ? false : [
+			1        => $value,
+			'value'    => $value,
+			0        => $key,
+			'key'    => $key,
+		];
+		next($array);
+		return $each;
+	}
+
     //
     // load_input_vars
     //
@@ -30,7 +44,7 @@ class print_reg_form
     
 	 reset ($_POST);
 	 
-	 while ( list($name, $value) = each($_POST) ){
+	 while ( list($name, $value) = $this->legacy_each($_POST) ){
 	 
 	    if(preg_match("/^input_/",$name) == 1){
 		
