@@ -62,7 +62,7 @@ require ("include/charset.php");
 
     echo "<div style=\"padding: 10px; \">";
 
-    $rs = mysql_query("DELETE FROM objekty_stb WHERE id_stb = '".intval($id_stb)."' LIMIT 1");
+    $rs = $conn_mysql->query("DELETE FROM objekty_stb WHERE id_stb = '".intval($id_stb)."' LIMIT 1");
     
     if( $rs === true ){
     
@@ -80,7 +80,7 @@ require ("include/charset.php");
     
     $az_akce .= " <b>[id_stb]</b> => ".$id_stb."";
     
-    $rs_az_add = mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+    $rs_az_add = $conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
                             "('".$conn_mysql->real_escape_string($az_akce)."',".
                             "'".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."',".
                             "'".intval($vysledek_write)."')");
@@ -111,7 +111,7 @@ require ("include/charset.php");
  
     echo "<br><span style=\"font-size: 20px; \">Opravdu chcete smazat tento stb objekt? </span><br><br>";
 
-    $rs = mysql_query("SELECT popis, ip_adresa FROM objekty_stb WHERE id_stb = '".intval($id_stb)."' ");
+    $rs = $conn_mysql->query("SELECT popis, ip_adresa FROM objekty_stb WHERE id_stb = '".intval($id_stb)."' ");
     $rs_radku = mysql_num_rows($rs);
 
     if( $rs_radku == 0 )

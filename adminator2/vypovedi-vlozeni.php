@@ -251,7 +251,7 @@ include ("include/charset.php");
 	echo "<b>uhrazení výpovědní lhůty: </b>".$uhrazeni_vypovedni_lhuty."<br>";
 	echo "<b>důvod výpovědi: </b>".$duvod_vypovedi."<br>";
 	
-	$dotaz_klient=mysql_query("SELECT * FROM vypovedi WHERE id_vlastnika LIKE '$klient' ");
+	$dotaz_klient=$conn_mysql->query("SELECT * FROM vypovedi WHERE id_vlastnika LIKE '$klient' ");
 	$dotaz_klient_radku=mysql_num_rows($dotaz_klient);
 	
 	if ( $dotaz_klient_radku > 0 )
@@ -262,7 +262,7 @@ include ("include/charset.php");
 	}
 	else
 	{
-	    $res=mysql_query("INSERT INTO vypovedi (id_vlastnika,datum_vlozeni,datum_uzavreni,datum_vypovedi,vypovedni_lhuta,uhrazeni_vypovedni_lhuty,duvod) 
+	    $res=$conn_mysql->query("INSERT INTO vypovedi (id_vlastnika,datum_vlozeni,datum_uzavreni,datum_vypovedi,vypovedni_lhuta,uhrazeni_vypovedni_lhuty,duvod) 
 	    VALUES ('$klient','$datum_vlozeni','$datum_uzavreni','$datum_vypovedi','$vypovedni_lhuta', '$uhrazeni_vypovedni_lhuty','$duvod_vypovedi')");
 	 
 	    if($res) { echo "<br><H3><div style=\"color: green; \" >Žádost úspěšně vložena.</div></H3>\n"; }

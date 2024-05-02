@@ -15,7 +15,7 @@ echo $hlaska;
 
 $output_main .= $hlaska;
        
-    $rs = mysql_query("SELECT id, number_request FROM workitems ORDER BY id ");
+    $rs = $conn_mysql->query("SELECT id, number_request FROM workitems ORDER BY id ");
     $num_rows = mysql_num_rows($rs);
      
     if ($num_rows ==0 ) 

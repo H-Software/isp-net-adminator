@@ -47,7 +47,7 @@ include ("include/charset.php");
    
  <?
   
-    $vysledek=mysql_query("select * from users_old order by name asc" );
+    $vysledek=$conn_mysql->query("select * from users_old order by name asc" );
     $radku=mysql_num_rows($vysledek);
 	
     if ($radku==0) echo "Zadní uživatelé v db (divny) ";
@@ -75,7 +75,7 @@ include ("include/charset.php");
 							
 	    echo "\n";
 	
-	while ($zaznam=mysql_fetch_array($vysledek)):
+	while ($zaznam = $vysledek->fetch_array()):
 	 
 	  echo "<tr><td>".$zaznam["id"]."</td>\n";
 	  echo "<td>".$zaznam["login"]."</td>\n";

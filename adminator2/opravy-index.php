@@ -79,7 +79,7 @@ if ( (strlen($datum_vlozeni) < 1) )
 if ( ( strlen($vlastnik_hledani) < 1 ) ){ $vlastnik_hledani="%"; }
 else 
 { 
-  if ( !(ereg("^%.*%$",$vlastnik_hledani)) )
+  if ( !(preg_match("/^%.*%$/",$vlastnik_hledani)) )
   { $vlastnik_hledani="%".$vlastnik_hledani."%"; }
 }
 
@@ -98,28 +98,28 @@ if( ( isset($odeslano) and !(isset($error) ) ) )
   if( $v_reseni == 1){ $v_reseni_kym = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email; }
   if( $vyreseno == 1){ $vyreseno_kym = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email; }
 
-  $add=mysql_query("INSERT INTO opravy (id_vlastnika,id_predchozi_opravy, datum_vlozeni, priorita, v_reseni, v_reseni_kym, vyreseno, vyreseno_kym,text,vlozil )
+  $add=$conn_mysql->query("INSERT INTO opravy (id_vlastnika,id_predchozi_opravy, datum_vlozeni, priorita, v_reseni, v_reseni_kym, vyreseno, vyreseno_kym,text,vlozil )
                     VALUES ('$id_vlastnika','$id_predchozi_opravy','$datum_vlozeni','$priorita','$v_reseni','$v_reseni_kym','$vyreseno','$vyreseno_kym','$text','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "' ) ");
 
  if( $id_predchozi_opravy > 0)
  {
   //upravime predchozi prispevky
     if( $vyreseno == 1)
-    { $rs_vyr=mysql_query("UPDATE opravy SET vyreseno = '1',v_reseni = '0' WHERE id_predchozi_opravy = '$id_predchozi_opravy' "); }
+    { $rs_vyr=$conn_mysql->query("UPDATE opravy SET vyreseno = '1',v_reseni = '0' WHERE id_predchozi_opravy = '$id_predchozi_opravy' "); }
     elseif( $v_reseni == 1)
-    { $rs_v_res=mysql_query("UPDATE opravy SET v_reseni = '1' WHERE id_predchozi_opravy = '$id_predchozi_opravy' "); }
+    { $rs_v_res=$conn_mysql->query("UPDATE opravy SET v_reseni = '1' WHERE id_predchozi_opravy = '$id_predchozi_opravy' "); }
     
     //zjistime jestli neni nadrazeny prispevek
-    $vysl = mysql_query("SELECT * FROM opravy WHERE id_opravy = '$id_predchozi_opravy' ");
-    while($data_vysl = mysql_fetch_array($vysl) )
+    $vysl = $conn_mysql->query("SELECT * FROM opravy WHERE id_opravy = '$id_predchozi_opravy' ");
+    while($data_vysl = $vysl->fetch_array() )
     {
      $vysl_id_opravy = $data_vysl["id_opravy"];
      $id_predchozi_opravy = $data_vysl["id_predchozi_opravy"];
      
      if( $vyreseno == 1)
-     { $rs_vyr_vysl=mysql_query("UPDATE opravy SET vyreseno = '1',v_reseni = '0' WHERE id_opravy = '$id_opravy' "); }
+     { $rs_vyr_vysl=$conn_mysql->query("UPDATE opravy SET vyreseno = '1',v_reseni = '0' WHERE id_opravy = '$id_opravy' "); }
      elseif( $v_reseni == 1)
-     { $rs_v_res_vysl=mysql_query("UPDATE opravy SET v_reseni = '1' WHERE id_opravy = '$id_opravy' "); }
+     { $rs_v_res_vysl=$conn_mysql->query("UPDATE opravy SET v_reseni = '1' WHERE id_opravy = '$id_opravy' "); }
     
     } // konec while mysql_fetch_array
     
@@ -137,7 +137,7 @@ if( ( isset($odeslano) and !(isset($error) ) ) )
     $pole .= ", text: ".$text.", <br> ";
 
     if ( $add == 1){ $vysledek_write=1; }
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
 
     //zkusime poslat email
         
@@ -242,8 +242,8 @@ echo " <tr>
 
          <select size=\"1\" name=\"id_predchozi_opravy\" onChange=\"self.document.forms.form3.submit()\" >";
 
-         $dotaz_predchozi_oprava = mysql_query("SELECT * FROM opravy WHERE ( id_vlastnika = '$id_vlastnika' AND id_predchozi_opravy = 0 ) ");
-         $dotaz_predchozi_oprava_radku = mysql_num_rows($dotaz_predchozi_oprava);
+         $dotaz_predchozi_oprava = $conn_mysql->query("SELECT * FROM opravy WHERE ( id_vlastnika = '$id_vlastnika' AND id_predchozi_opravy = 0 ) ");
+         $dotaz_predchozi_oprava_radku = $dotaz_predchozi_oprava->num_rows;
 
          if ( $dotaz_predchozi_oprava_radku == 0 )
          { echo "<option value=\"0\" style=\"color: gray; font-style: bold; \">Žádná závada v databázi neuložena. ( Režim: nová závada )</option>"; }
@@ -252,7 +252,7 @@ echo " <tr>
 
               echo "<option value=\"0\" style=\"color: gray; font-style: bold; \"> Nová Závada </option>";
 
-              while( $data_predchozi_oprava = mysql_fetch_array($dotaz_predchozi_oprava) ):
+              while( $data_predchozi_oprava = $dotaz_predchozi_oprava->fetch_array() ):
 
               echo "<option value=\"".$data_predchozi_oprava["id_opravy"]."\" ";
 
@@ -262,19 +262,19 @@ echo " <tr>
 
               echo "id: ".$data_predchozi_oprava["id_opravy"].", datum: ".$data_predchozi_oprava["datum_vlozeni"];
 	      
-	      echo ", náhled: "; 
-	      
-	      echo substr($data_predchozi_oprava["text"], 0, 20);
-	      
-	      echo ", v řešení: ";
-	      if ( $data_predchozi_oprava["v_reseni"] == 1){ echo "ano"; }
-	      else{ echo "ne"; }
-	    
-	    
-	      echo ", vyřešeno: ";
-	      if ( $data_predchozi_oprava["vyreseno"] == 1){ echo "ano"; }
-	      else{ echo "ne"; }
-	      echo " ";
+              echo ", náhled: "; 
+              
+              echo substr($data_predchozi_oprava["text"], 0, 20);
+              
+              echo ", v řešení: ";
+              if ( $data_predchozi_oprava["v_reseni"] == 1){ echo "ano"; }
+              else{ echo "ne"; }
+            
+            
+              echo ", vyřešeno: ";
+              if ( $data_predchozi_oprava["vyreseno"] == 1){ echo "ano"; }
+              else{ echo "ne"; }
+              echo " ";
 	      
               echo "</option> \n ";
 
@@ -299,8 +299,8 @@ echo " <tr>
 	
 	  if ( ($id_predchozi_opravy > 0) )
 	  {
-	  $dotaz_priorita = mysql_query("SELECT * FROM opravy WHERE id_opravy = '$id_predchozi_opravy' ");
-	  while ($data_priorita=mysql_fetch_array($dotaz_priorita) )
+	  $dotaz_priorita = $conn_mysql->query("SELECT * FROM opravy WHERE id_opravy = '$id_predchozi_opravy' ");
+	  while ($data_priorita=$dotaz_priorita->fetch_array() )
 	  { $priorita_db = $data_priorita["priorita"]; }
 
 	  echo  "<option value=\"0\" "; if($priorita_db == "0"){ echo " selected "; } echo " >Nízká</option>
@@ -329,8 +329,8 @@ echo " <tr>
 	  
 	if ( $id_predchozi_opravy > 0 )
 	{
-	 $dotaz_v_reseni = mysql_query("SELECT * FROM opravy WHERE id_opravy = '$id_predchozi_opravy' ");
-	 while ($data_reseni=mysql_fetch_array($dotaz_v_reseni) )
+	 $dotaz_v_reseni = $conn_mysql->query("SELECT * FROM opravy WHERE id_opravy = '$id_predchozi_opravy' ");
+	 while ($data_reseni=$dotaz_v_reseni->fetch_array() )
 	 { if ( $data_reseni["v_reseni"] == 1 ){ $v_reseni_db= "1"; } }
 	 
 	 if( $vyreseno == 1)
@@ -372,9 +372,9 @@ echo " <tr>
 	
 	if ( $id_predchozi_opravy > 0 )
 	{
-	 $dotaz_vyreseno = mysql_query("SELECT * FROM opravy WHERE id_predchozi_opravy = '$id_predchozi_opravy' ");
+	 $dotaz_vyreseno = $conn_mysql->query("SELECT * FROM opravy WHERE id_predchozi_opravy = '$id_predchozi_opravy' ");
 	 
-	 while ($data_vyreseno=mysql_fetch_array($dotaz_vyreseno) )
+	 while ($data_vyreseno=$dotaz_vyreseno->fetch_array() )
 	 { 
 	   if ( $data_vyreseno["vyreseno"] == 1 ){ $vyreseno_db= "1"; }
 	 }
@@ -442,7 +442,7 @@ echo "<table border=\"0\" width=\"\" align=\"center\" style=\"font-size: 12px; f
 
 $limit="1000";
 
-include("opravy-vypis-inc.php");
+require("opravy-vypis-inc.php");
 
 }
 

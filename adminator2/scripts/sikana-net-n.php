@@ -13,7 +13,7 @@ $datum = strftime("%H ", time());
 $time = strftime("%d/%m/%Y %H:%M:%S", time());
 
 // prvne zjistime jestli je funkce zapnuta a pak kdy se ma vykonavat
-    $vysl_cas=mysql_query("select * from automatika WHERE vec LIKE 'sikana_net_n' ");
+    $vysl_cas=$conn_mysql->query("select * from automatika WHERE vec LIKE 'sikana_net_n' ");
     $radku_cas=mysql_num_rows($vysl_cas);
      
     if ($radku_cas==0) { echo "chyba - nelze zjistit stav"; }
@@ -81,7 +81,7 @@ $time = strftime("%d/%m/%Y %H:%M:%S", time());
 		 
 	$pole2 .= ", rs: ".$res;
 	      
-	 $add=mysql_query("INSERT INTO archiv_zmen (akce, provedeno_kym, vysledek) 
+	 $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce, provedeno_kym, vysledek) 
 			    VALUES ('".$conn_mysql->real_escape_string($pole2)."', 'system', '".intval($res)."')");
 	
 	$pole2 = "";
@@ -102,7 +102,7 @@ $time = strftime("%d/%m/%Y %H:%M:%S", time());
      $pole3 .= "akce: restart po skriptu sikana-net-n, vysledek restartu: ".$err2;
     // zaverecne ulozeni do archivu
     
-    $add=mysql_query("INSERT INTO archiv_zmen (akce) VALUES ('$pole3')");
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce) VALUES ('$pole3')");
     */
     
     //novej zpusob osvezovani, pridat do fronty

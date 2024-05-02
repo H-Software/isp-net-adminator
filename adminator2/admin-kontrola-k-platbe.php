@@ -98,7 +98,7 @@ include ("include/charset.php");
 		    else 
 		    { 
 			//dle tarifu
-			$rs_tarify = mysql_query("SELECT cena_bez_dph FROM tarify_int WHERE id_tarifu = '".intval($data2["id_tarifu"])."'");
+			$rs_tarify = $conn_mysql->query("SELECT cena_bez_dph FROM tarify_int WHERE id_tarifu = '".intval($data2["id_tarifu"])."'");
 			$rs_tarify_num = mysql_num_rows($rs_tarify);
 			
 			if( $rs_tarify_num == 1)

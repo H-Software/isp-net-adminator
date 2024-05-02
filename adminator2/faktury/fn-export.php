@@ -81,7 +81,7 @@ $worksheet1->set_selection('C3');
     
 include("../include/config.php");
 
- $dotaz1 = mysql_query("SELECT *,DATE_FORMAT(Datum, '%d.%c.%Y') as Datum,
+ $dotaz1 = $conn_mysql->query("SELECT *,DATE_FORMAT(Datum, '%d.%c.%Y') as Datum,
 			 DATE_FORMAT(DatSplat, '%d.%c.%Y') as DatSplat FROM faktury_neuhrazene 
 			order by Jmeno,Firma ");
 

@@ -20,7 +20,7 @@ $output_main .= "work-diff.php start [".strftime("%d/%m/%Y %H:%M:%S", time())."]
 	   " WHERE workitems.number_request = workitems_names.id ".
 	   " ORDER BY priority ";
     
-    $rs = mysql_query($sql);
+    $rs = $conn_mysql->query($sql);
     $num_rows = mysql_num_rows($rs);
      
     if( $num_rows ==0 ) 
@@ -65,7 +65,7 @@ if( (strlen($output_main) > 150) )
   //$set["provedeno_kym"] = "'" . $conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email) . "'";
 
   // a další spolu s případným ošetřením hodnot
-  $rs_archiv = mysql_query("INSERT INTO archiv_zmen_work (" . implode(", ", array_keys($set)) . ") VALUES (" . implode(", ", $set) . ")");
+  $rs_archiv = $conn_mysql->query("INSERT INTO archiv_zmen_work (" . implode(", ", array_keys($set)) . ") VALUES (" . implode(", ", $set) . ")");
 }
 
 //
@@ -121,7 +121,7 @@ function execute_action($number_request, $id)
 	    		
 	    execute_request($cmd, $mess_ok, $mess_er);
 	
-	    $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
+	    $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
 	}
 	elseif( $number_request == 2)
 	{ //reinhard-wifi (1) - restrictions (net-n/sikana)
@@ -134,7 +134,7 @@ function execute_action($number_request, $id)
 				   
 	    execute_request($cmd, $mess_ok, $mess_er);
 	
-	    $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
+	    $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
 	}
 	elseif($number_request == 3)
 	{ //reinhard-fiber (2) - iptables (net-n/sikana)
@@ -146,7 +146,7 @@ function execute_action($number_request, $id)
 
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
 	}
 	elseif($number_request == 4)
 	{ //reinhard-fiber - radius
@@ -157,7 +157,7 @@ function execute_action($number_request, $id)
 	
 	    execute_request($cmd, $mess_ok, $mess_er);
 	
-	    $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
+	    $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
 	}
 	elseif($number_request == 5)
 	{
@@ -168,7 +168,7 @@ function execute_action($number_request, $id)
 
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
 	}
 	elseif($number_request == 6)
 	{
@@ -179,7 +179,7 @@ function execute_action($number_request, $id)
 	   
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
 	}
 	elseif($number_request == 7)
 	{
@@ -190,7 +190,7 @@ function execute_action($number_request, $id)
 
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 8)
 	{ //nic
@@ -205,7 +205,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 10)
 	{
@@ -216,7 +216,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 11)
 	{
@@ -227,7 +227,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 12)
 	{
@@ -238,7 +238,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 13)
 	{ // reinhard-wifi (ros) - shaper (client's tariffs)
@@ -250,7 +250,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 14)
 	{
@@ -264,7 +264,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 15)
 	{ //trinity - Monitoring I - Footer-restart (alarms)
@@ -276,7 +276,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 16)
 	{
@@ -287,7 +287,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 17)
 	{
@@ -298,7 +298,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 18)
 	{
@@ -309,7 +309,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 19)
 	{
@@ -322,7 +322,7 @@ function execute_action($number_request, $id)
 	   echo $hlaska;
 	   $output_main .= $hlaska;
 	   
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
 	}
 	elseif( $number_request == 20 )
 	{
@@ -333,7 +333,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 21)
 	{
@@ -344,7 +344,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 22)
 	{
@@ -355,7 +355,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 23)
 	{
@@ -367,7 +367,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == 24)
 	{
@@ -378,7 +378,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	elseif($number_request == "templ")
 	{
@@ -389,7 +389,7 @@ function execute_action($number_request, $id)
 	
 	   execute_request($cmd, $mess_ok, $mess_er);
 	
-	   $rs_delete = mysql_query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
+	   $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");	   
 	}
 	else
 	{ 

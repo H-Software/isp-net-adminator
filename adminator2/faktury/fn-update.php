@@ -61,7 +61,7 @@ echo "<div style=\"padding-bottom: 10px; font-weight: bold; \">Zvolená akce: P�
   if ( ( $id_faktury != "akce" and $hodnota >= 0) )
   {
 
-   $uprava=mysql_query("UPDATE faktury_neuhrazene SET ignorovat='$hodnota' WHERE id=".$id_faktury." Limit 1 ");
+   $uprava=$conn_mysql->query("UPDATE faktury_neuhrazene SET ignorovat='$hodnota' WHERE id=".$id_faktury." Limit 1 ");
 
    echo "id polozky: ".$id_faktury.", hodnota: ".$hodnota.", ulozeno: ";
    if( $uprava == 1){ echo "Ano"; }
@@ -115,7 +115,7 @@ echo "<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"GET\">
 	    
 	    <option value=\"0\" class=\"select-nevybrano\" >Nevybráno</option>";
 	    
-	    $dotaz_faktury = mysql_query("SELECT * FROM faktury_neuhrazene ");
+	    $dotaz_faktury = $conn_mysql->query("SELECT * FROM faktury_neuhrazene ");
 	    //$dotaz_faktury_radku
 	    
 	    while( $data_faktury = mysql_fetch_array($dotaz_faktury) )

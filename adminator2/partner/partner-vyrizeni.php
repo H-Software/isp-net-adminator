@@ -85,7 +85,7 @@ require ($cesta."include/charset.php");
 	$pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
 	$id = intval($_GET["id"]);
 	
-        $uprava=mysql_query("UPDATE partner_klienti SET akceptovano='1', akceptovano_kym='".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."', ".
+        $uprava=$conn_mysql->query("UPDATE partner_klienti SET akceptovano='1', akceptovano_kym='".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."', ".
     			     " akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
   
        if ($uprava == 1) { 

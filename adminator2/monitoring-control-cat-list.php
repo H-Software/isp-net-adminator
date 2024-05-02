@@ -47,7 +47,7 @@ include ("include/charset.php");
   
   <?php
  
-   $vysledek=mysql_query("select * from kategorie" );
+   $vysledek=$conn_mysql->query("select * from kategorie" );
    $radku=mysql_num_rows($vysledek);
 
     if ($radku ==0) { echo "<br><br><span style=\"color: red; font-size: 18px; \"> Chyba! Žádné kategorie nenalezeny. </span>"; }
@@ -65,7 +65,7 @@ include ("include/charset.php");
 
      echo "\n";
 
-    while ($zaznam=mysql_fetch_array($vysledek) ):
+    while ($zaznam = $vysledek->fetch_array() ):
 
     echo "<tr><td>".$zaznam["id"]."</td>\n";
     echo "<td width=\"30%\" >".$zaznam["jmeno"]."</td>\n";

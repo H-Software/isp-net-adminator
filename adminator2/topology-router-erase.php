@@ -59,7 +59,7 @@ include ("include/charset.php");
      if ( !( ereg('^([[:alnum:]]+)$',$erase_id) ) )
      { echo " Špatný formát proměnné erase_id"; exit; }
 
-     $dotaz_routery = mysql_query("SELECT * FROM router_list WHERE parent_router = '$erase_id' ");
+     $dotaz_routery = $conn_mysql->query("SELECT * FROM router_list WHERE parent_router = '$erase_id' ");
      $dotaz_routery_radku = mysql_num_rows($dotaz_routery);
      
      if( ( $dotaz_routery_radku > 0) )
@@ -69,7 +69,7 @@ include ("include/charset.php");
        exit; 
      }
 
-     $dotaz_nody = mysql_query("SELECT * FROM nod_list WHERE router_id = '$erase_id' ");
+     $dotaz_nody = $conn_mysql->query("SELECT * FROM nod_list WHERE router_id = '$erase_id' ");
      $dotaz_nody_radku = mysql_num_rows($dotaz_nody);
      
      if( ( $dotaz_nody_radku > 0) )
@@ -82,7 +82,7 @@ include ("include/charset.php");
         $pole3 = "<b>akce: smazání routeru;</b><br>";
 
 	// prvne zjistime detaily mazane polozky
-	$vyber=mysql_query("SELECT * FROM router_list WHERE id = '$erase_id' ");
+	$vyber=$conn_mysql->query("SELECT * FROM router_list WHERE id = '$erase_id' ");
 	
 	if( ( mysql_num_rows($vyber) <> 1 ) )
 	{ $pole3 .= "predchozi data nelze zjistit, "; }
@@ -100,13 +100,13 @@ include ("include/charset.php");
 	 } //konec while
 	} // konec else if pocet radku
 
-        $res = mysql_query("DELETE FROM router_list WHERE id = '$erase_id' LIMIT 1");
+        $res = $conn_mysql->query("DELETE FROM router_list WHERE id = '$erase_id' LIMIT 1");
 
         if ($res) { echo "<br><H3><div style=\"color: green; \" >Router úspěšně smazána.</div></H3><br>\n"; }
         else { echo "<div style=\"color: red; \">Chyba! Router nelze smazat. </div><br>\n"; }
 
         if ( $res == 1){ $vysledek_write=1; }
-        $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+        $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
   
   } // konec if Send
   else

@@ -226,7 +226,7 @@ require("include/charset.php");
 	$pole="<b>akce: uprava routeru;</b><br>";
           
 	// prvne zjistime puvodni hodnoty
-	$dotaz_top=mysql_query("SELECT nazev, ip_adresa, parent_router, mac, monitoring, 
+	$dotaz_top=$conn_mysql->query("SELECT nazev, ip_adresa, parent_router, mac, monitoring, 
 					monitoring_cat, alarm, filtrace, id_nodu, poznamka 
 				FROM router_list WHERE id = '".intval($update_id)."' ");
 				
@@ -260,7 +260,7 @@ require("include/charset.php");
 	if( strlen($mac) <= 0 )
 	{ $mac = "00:00:00:00:00:00"; }
 	 	
-	$uprava=mysql_query("UPDATE router_list SET nazev='$nazev', ip_adresa='$ip_adresa', parent_router='$parent_router',
+	$uprava=$conn_mysql->query("UPDATE router_list SET nazev='$nazev', ip_adresa='$ip_adresa', parent_router='$parent_router',
 	            		mac='$mac', monitoring='$monitoring', monitoring_cat='$monitoring_cat', alarm='$alarm',
 				filtrace='$filtrace', id_nodu='$selected_nod', poznamka = '$poznamka' WHERE id=".intval($update_id)." Limit 1 ");
 			    
@@ -324,7 +324,7 @@ require("include/charset.php");
 	  if( strlen($mac) <= 0 )
 	  { $mac = "00:00:00:00:00:00"; }
 	 
-          $add=mysql_query("INSERT INTO router_list (nazev,ip_adresa, parent_router,mac, monitoring, alarm, monitoring_cat, filtrace, id_nodu, poznamka) 
+          $add=$conn_mysql->query("INSERT INTO router_list (nazev,ip_adresa, parent_router,mac, monitoring, alarm, monitoring_cat, filtrace, id_nodu, poznamka) 
 					    VALUES ('$nazev','$ip_adresa','$parent_router','$mac','$monitoring','$alarm','$monitoring_cat', '$filtrace', '$selected_nod', '$poznamka' ) ");
 
           if($add){ echo "<br><div style=\"color: green; font-size: 18px; \">Záznam úspěšně vložen.</div><br>"; }
@@ -340,7 +340,7 @@ require("include/charset.php");
 	  $pole .= " alarm: ".$alarm.", parent_router: ".$parent_router.", mac: ".$mac.", filtrace: ".$filtrace.", id_nodu: ".$selected_nod;
 
 	  if( $add == 1 ){ $vysledek_write=1; }	
-          $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
+          $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
   
           Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
           Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
@@ -545,7 +545,7 @@ require("include/charset.php");
         $sql_nod .= " OR pozn LIKE '%$nod_find%' ) ORDER BY jmeno ASC ";
 
        $vysledek=$conn_mysql->query($sql_nod);
-       //$vysledek=mysql_query("SELECT * from nod_list ORDER BY jmeno ASC" );
+       //$vysledek=$conn_mysql->query("SELECT * from nod_list ORDER BY jmeno ASC" );
        $radku=$vysledek->num_rows;
 
        print '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';

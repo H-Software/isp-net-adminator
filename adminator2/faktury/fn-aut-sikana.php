@@ -84,7 +84,7 @@ if( isset($odeslano2) )
      $dotaz_vlastnik=pg_query("SELECT id_cloveka FROM objekty WHERE id_komplu = '".intval($id_objektu)."' ");
      while($data_vlastnik = pg_fetch_array($dotaz_vlastnik) ){ $id_cloveka=$data_vlastnik["id_cloveka"]; }
      
-     $dotaz_vice_fa=mysql_query("SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '".intval($id_cloveka)."' ");	
+     $dotaz_vice_fa=$conn_mysql->query("SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '".intval($id_cloveka)."' ");	
      if ( (mysql_num_rows($dotaz_vice_fa) > 1) )
      { 
       $sikana_text = "Máte nedoplatek za více faktur. ";
@@ -111,7 +111,7 @@ if( isset($odeslano2) )
     
     if ( $res == 1){ $vysledek_write=1; }
      
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
 			"VALUES ('".$conn_mysql->real_escape_string($pole2)."', '".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."', ".
 			"'".$conn_mysql->real_escape_string($vysledek_write)."') ");
     
@@ -141,10 +141,10 @@ else
 {
 
   //normal dotaz 
-  $dotaz=mysql_query("SELECT *,DATE_FORMAT(Datum, '%m/%Y') as dluzne_obdobi
+  $dotaz=$conn_mysql->query("SELECT *,DATE_FORMAT(Datum, '%m/%Y') as dluzne_obdobi
 		       FROM faktury_neuhrazene 
 			WHERE ( ( ignorovat = '0' ) AND par_id_vlastnika > 0 AND po_splatnosti_vlastnik = '1' ) ");	
-  $dotaz_radku=mysql_num_rows($dotaz);
+  $dotaz_radku= $dotaz->num_rows;
  
   $id_sikany="1";
  
@@ -176,7 +176,7 @@ else
 	    
     $cislo_radku = 1;
     
-  while( $data=mysql_fetch_array($dotaz) )
+  while( $data= $dotaz->fetch_array() )
   {
       $id_cloveka=$data["par_id_vlastnika"];
       $id_faktury=$data["id"];
@@ -232,7 +232,7 @@ else
 		echo "<td class=\"".$class."\" >";
 		
 		//dotaz vice faktur
-		$dotaz_vice_fa=mysql_query("SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '".intval($id_cloveka)."' ");	
+		$dotaz_vice_fa=$conn_mysql->query("SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '".intval($id_cloveka)."' ");	
 	        if ( (mysql_num_rows($dotaz_vice_fa) > 1) )
 		{ echo "<span style=\"color: Fuchsia; font-weight: bold; \">Ano</span>"; }
 		else

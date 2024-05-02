@@ -72,7 +72,7 @@ include ("include/charset.php");
         $pole3 = "<b>akce: smazání lokality / nodu; </b><br>";
 
 	// prvne zjistime detaily mazane polozky
-	$vyber=mysql_query("SELECT * FROM nod_list WHERE id = '$erase_id' ");
+	$vyber=$conn_mysql->query("SELECT * FROM nod_list WHERE id = '$erase_id' ");
 	
 	if( ( mysql_num_rows($vyber) <> 1 ) )
 	{ $pole3 .= "predchozi data nelze zjistit, "; }
@@ -90,14 +90,14 @@ include ("include/charset.php");
 	 } //konec while
 	} // konec else if pocet radku
 
-        $res = mysql_query("DELETE FROM nod_list WHERE id = '$erase_id' LIMIT 1");
+        $res = $conn_mysql->query("DELETE FROM nod_list WHERE id = '$erase_id' LIMIT 1");
 
         if ($res) { echo "<br><H3><div style=\"color: green; \" >Lokalita/nod úspěšně smazána.</div></H3><br>\n"; }
         else { echo "<div style=\"color: red; \">Chyba! Data z databáze nelze smazat. </div><br>\n"; }
 
         if ( $res == 1){ $vysledek_write=1; }
 
-        $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+        $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
   
   } // konec if Send
   else
@@ -105,8 +105,8 @@ include ("include/charset.php");
 
   echo "<span style=\"font-size: 20px; \">Opravdu chcete odřadit tuto lokalitu / nodu: </span><br><br>";
 
-  $dotaz=mysql_query("SELECT * FROM nod_list WHERE id = '$erase_id' ");
-  $dotaz_radku=mysql_num_rows($dotaz);
+  $dotaz=$conn_mysql->query("SELECT * FROM nod_list WHERE id = '$erase_id' ");
+  $dotaz_radku= $dotaz->num_rows;
 
   if ( $dotaz_radku == 0 )
   {
@@ -117,7 +117,7 @@ include ("include/charset.php");
 
    echo "<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"POST\" >";
 
-    while ($data=mysql_fetch_array($dotaz) )
+    while ($data= $dotaz->fetch_array() )
     {
 
     echo "<b>id nodu</b>: ".$data["id"]."<br>";

@@ -60,7 +60,7 @@ if ( $ok == "OK" )
 
  echo "<br>";
 	
-	 $uprava=mysql_query("UPDATE opravy SET v_reseni='1', v_reseni_kym = '" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "' where id_opravy = '$id_opravy' Limit 1 ");
+	 $uprava=$conn_mysql->query("UPDATE opravy SET v_reseni='1', v_reseni_kym = '" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "' where id_opravy = '$id_opravy' Limit 1 ");
 	 
          if ($uprava){ echo "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně upraven.</span><br><br>"; }
           else { echo "<span style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze upravit v databázi. </span>"; }
@@ -74,7 +74,7 @@ if ( $ok == "OK" )
 
 //        $pole .= ",<br> akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle mysql: ".$uprava.", datum akce: ".$datum;
 
-//        $add=mysql_query("INSERT INTO archiv_zmen (akce) VALUES ('$pole')");
+//        $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce) VALUES ('$pole')");
 
 }
 else
@@ -92,8 +92,8 @@ echo "<tr><td colspan=\"".$pocet_sloupcu."\" ><span style=\"font-size: 18px; fon
 
 echo "<tr><td colspan=\"".$pocet_sloupcu."\" ><br></td></tr>";
 
-$dotaz=mysql_query("SELECT * FROM opravy WHERE id_opravy = '$id_opravy' ");
-$dotaz_radku=mysql_num_rows($dotaz);
+$dotaz=$conn_mysql->query("SELECT * FROM opravy WHERE id_opravy = '$id_opravy' ");
+$dotaz_radku= $dotaz->num_rows;
 
 if ( $dotaz_radku <> 1)
 { 
@@ -101,7 +101,7 @@ if ( $dotaz_radku <> 1)
     exit;
 }
 
-while($data=mysql_fetch_array($dotaz) )
+while($data= $dotaz->fetch_array() )
 {
 
 $id_opravy=$data["id_opravy"];

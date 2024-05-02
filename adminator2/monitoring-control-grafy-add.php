@@ -116,7 +116,7 @@ require ("include/charset.php");
     if ( ($update_id > 1) )
     { // update 
     
-     $uprava=mysql_query("UPDATE mon_grafy SET popis1='$jmeno_grafu', ip1='$ip' , cat='$kategorie',
+     $uprava=$conn_mysql->query("UPDATE mon_grafy SET popis1='$jmeno_grafu', ip1='$ip' , cat='$kategorie',
                              alarm='$alarm',sablona_grafu ='$sablona_grafu', ping_size = '$ping_size' where id='$update_id' Limit 1 ");
 				 
 				 
@@ -134,7 +134,7 @@ require ("include/charset.php");
     else
     { // pridani
     
-     $add=mysql_query("insert into mon_grafy (typ_grafu, cesta1, ip1, popis1, cat, alarm, sablona_grafu, ping_size) 
+     $add=$conn_mysql->query("insert into mon_grafy (typ_grafu, cesta1, ip1, popis1, cat, alarm, sablona_grafu, ping_size) 
     		    values ('$typ_grafu','$cesta', '$ip', '$jmeno_grafu','$kategorie','$alarm','$sablona_grafu','$ping_size' ) ");
 
      if ($add) { echo "<br><H3><div style=\"color: green; \" >Data do databáze úspěšně uložena.</div></H3><br>\n"; }
@@ -149,7 +149,7 @@ require ("include/charset.php");
      
     }
         
-     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
+     $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 
      //zde reset monitoringu 2
      Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
@@ -170,9 +170,9 @@ require ("include/charset.php");
    {
    
      // zde zjistime predchozi data
-    $dotaz=mysql_query("SELECT * FROM mon_grafy WHERE id='$update_id' LIMIT 1");
+    $dotaz=$conn_mysql->query("SELECT * FROM mon_grafy WHERE id='$update_id' LIMIT 1");
     	
-    while ( $data=mysql_fetch_array($dotaz) )
+    while ( $data= $dotaz->fetch_array() )
     { $ip=$data["ip1"]; $jmeno_grafu=$data["popis1"]; $cat=$data["cat"]; 
     $alarm=$data["alarm"]; $sablona_grafu=$data["sablona_grafu"]; 
     
@@ -216,7 +216,7 @@ require ("include/charset.php");
   echo "<td>";
   
   // sem kategorii
-  $dotaz_cat=mysql_query("select * from kategorie where sablona=2" );
+  $dotaz_cat=$conn_mysql->query("select * from kategorie where sablona=2" );
   
   $dotaz_cat_radku=mysql_num_rows($dotaz_cat);
    

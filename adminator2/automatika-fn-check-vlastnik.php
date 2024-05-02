@@ -62,14 +62,14 @@ include ("include/charset.php");
   
   if ( !($send) )
   {
-  $vysledek=mysql_query("select * from automatika where vec LIKE 'kontrola_fn_vlastnik' " );
+  $vysledek=$conn_mysql->query("select * from automatika where vec LIKE 'kontrola_fn_vlastnik' " );
   $radku=mysql_num_rows($vysledek);
 	    
     if ($radku==0) { echo "Chyba! Stav se nepodarilo zjistit "; }
     else
 	{
     
-     while ($data=mysql_fetch_array($vysledek)):
+     while ($data = $vysledek->fetch_array()):
      
              $vec=$data["vec"];
 	     $zapnuto=$data["zapnuto"];
@@ -117,7 +117,7 @@ include ("include/charset.php");
     {
     //budeme ukladat
     
-    $uprava=mysql_query("UPDATE automatika SET zapnuto='$zapnuto_new', cas_hodina='$cas'  where vec like '$vec_new' Limit 1 ");
+    $uprava=$conn_mysql->query("UPDATE automatika SET zapnuto='$zapnuto_new', cas_hodina='$cas'  where vec like '$vec_new' Limit 1 ");
     
     
     if ($uprava) { echo "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n"; }

@@ -5,7 +5,7 @@
 /*
 require_once("../include/config.php");
 
-$rs = mysql_query("SELECT * FROM archiv_zmen WHERE id = '62616' ");
+$rs = $conn_mysql->query("SELECT * FROM archiv_zmen WHERE id = '62616' ");
 $num_rows = mysql_num_rows($rs);
 
 //$row = mssql_fetch_array($version);

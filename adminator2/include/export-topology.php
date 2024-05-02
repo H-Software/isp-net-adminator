@@ -87,7 +87,7 @@ $worksheet1->set_selection('C3');
     
 include("./config.php");
 
- $dotaz1 = mysql_query("SELECT * FROM nod_list");
+ $dotaz1 = $conn_mysql->query("SELECT * FROM nod_list");
 
 // vlastni data
 
@@ -111,7 +111,7 @@ include("./config.php");
 	{ $router_nazev="nelze zjistit "; $router_ip=""; }
 	else
 	{
-	 $vysledek_router=mysql_query("SELECT * FROM router_list where id = $router_id ");
+	 $vysledek_router=$conn_mysql->query("SELECT * FROM router_list where id = $router_id ");
 	 while($data_router=mysql_fetch_array($vysledek_router))
 	 { $router_nazev = $data_router["nazev"]; $router_ip = $data_router["ip_adresa"]; }
 	}

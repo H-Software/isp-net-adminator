@@ -80,7 +80,7 @@ include ("include/charset.php");
   elseif( ereg('^([[:digit:]]+)$',$id_stb) )
   {
     //prvne zjisteni detailu objektu
-    $dotaz_stb = mysql_query("SELECT * FROM objekty_stb WHERE id_stb = '$id_stb' ");
+    $dotaz_stb = $conn_mysql->query("SELECT * FROM objekty_stb WHERE id_stb = '$id_stb' ");
     $dotaz_stb_radku = mysql_num_rows($dotaz_stb);
     
     if( $dotaz_stb_radku <> 1 )
@@ -109,7 +109,7 @@ include ("include/charset.php");
   }
     
     //zjisteni nodu a detailu nodu
-    $dotaz_nod = mysql_query("SELECT jmeno, ip_rozsah, device_type_id FROM nod_list WHERE id = '".intval($id_nodu)."' ");
+    $dotaz_nod = $conn_mysql->query("SELECT jmeno, ip_rozsah, device_type_id FROM nod_list WHERE id = '".intval($id_nodu)."' ");
     $dotaz_nod_radku = mysql_num_rows($dotaz_nod);
     
     if( $dotaz_nod_radku <> 1 )

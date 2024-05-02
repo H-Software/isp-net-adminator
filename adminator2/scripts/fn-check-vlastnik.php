@@ -11,7 +11,7 @@ $datum = strftime("%H ", time());
 $time = strftime("%d/%m/%Y %H:%M:%S", time());
 
 // prvne zjistime jestli je funkce zapnuta a pak kdy se ma vykonavat
-    $vysl_cas=mysql_query("select * from automatika WHERE vec LIKE 'kontrola_fn_vlastnik' " );
+    $vysl_cas=$conn_mysql->query("select * from automatika WHERE vec LIKE 'kontrola_fn_vlastnik' " );
     $radku_cas=mysql_num_rows($vysl_cas);
      
     if ($radku_cas==0) { echo "chyba - nelze zjistit stav"; }

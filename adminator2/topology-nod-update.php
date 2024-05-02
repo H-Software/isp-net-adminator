@@ -74,7 +74,7 @@ if( $_POST["jmeno_new"] )
 
 if( ( $_POST["B1"] == "OK") )
 {  
-  $dotaz_router = mysql_query("SELECT nazev FROM router_list WHERE id = '$router_id'");
+  $dotaz_router = $conn_mysql->query("SELECT nazev FROM router_list WHERE id = '$router_id'");
   if( (mysql_num_rows($dotaz_router) == 1 ))
   { 		      
     while( $data_parent=mysql_fetch_array($dotaz_router))
@@ -121,7 +121,7 @@ if( ( $_POST["B1"] == "OK") )
   $pole="<b>akce: uprava nodu;</b><br>";
   //$pole .= "puvodni data: ";
 	  
-  $vysledek=mysql_query("select * from nod_list where id=".$id_new );
+  $vysledek=$conn_mysql->query("select * from nod_list where id=".$id_new );
   $radku=mysql_num_rows($vysledek);
 	
   if ($radku==0)
@@ -131,7 +131,7 @@ if( ( $_POST["B1"] == "OK") )
   }
   else
   {
-    while ($zaznam=mysql_fetch_array($vysledek)):
+    while ($zaznam = $vysledek->fetch_array()):
         
      $pole_puvodni_data["jmeno"]=$zaznam["jmeno"]; $pole_puvodni_data["adresa"]=$zaznam["adresa"];
      $pole_puvodni_data["ip_rozsah"]=$zaznam["ip_rozsah"]; $pole_puvodni_data["typ_vysilace"]=$zaznam["typ_vysilace"];
@@ -145,7 +145,7 @@ if( ( $_POST["B1"] == "OK") )
     endwhile;	
   }
 	
-  $uprava=mysql_query("UPDATE nod_list SET jmeno='$jmeno', adresa='$adresa' , pozn='$pozn', ip_rozsah='$ip_rozsah', 
+  $uprava=$conn_mysql->query("UPDATE nod_list SET jmeno='$jmeno', adresa='$adresa' , pozn='$pozn', ip_rozsah='$ip_rozsah', 
 		     typ_vysilace='$typ_vysilace',stav='$stav',router_id='$router_id',
 		     typ_nodu = '$typ_nodu', vlan_id = '$vlan_id', filter_router_id = '$filter_router_id',
 		     device_type_id = '$device_type_id' WHERE id=".$id_new." Limit 1 ");

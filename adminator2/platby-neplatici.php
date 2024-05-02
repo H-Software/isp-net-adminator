@@ -470,7 +470,7 @@ elseif( isset($vybrano) )
 	
 	if( $mail_send_ok == 1 ){ $vysledek_write=1; }
 	
-	$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
+	$add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 															  	 
 	//vypis
 	 echo "<div style=\"\">Zvolena polozka <b>č.".$id_cloveka."</b>, dluzi: ".$_POST[$promenna];
@@ -529,12 +529,12 @@ elseif( isset($vybrano) )
 	  $text .= "Prosim uhradte ji co nejdrive, aby nedoslo k omezeni sluzeb. Simelon.NET. tel.: 391 009 400";
 
 	  //insert do DB do prislusne tabulky		   
-	  $vlastnik_sms_send=mysql_query("insert into QUEUE (PHONE, MSG,SCRIPT) VALUES ('$telefon', '$text','Mobilem') ");
+	  $vlastnik_sms_send=$conn_mysql->query("insert into QUEUE (PHONE, MSG,SCRIPT) VALUES ('$telefon', '$text','Mobilem') ");
 			 
 	  sleep(2);
 		 
 	  $last_id=mysql_insert_id();
-	  $dotaz_se=mysql_query("SELECT * FROM QUEUE WHERE ID = '$last_id' ");
+	  $dotaz_se=$conn_mysql->query("SELECT * FROM QUEUE WHERE ID = '$last_id' ");
 			   
 	  while( $data_se=mysql_fetch_array($dotaz_se) )
 	  { $last_status=$data_se["STATUS"]; }
@@ -554,7 +554,7 @@ elseif( isset($vybrano) )
 	
 	if( $aut_sms_stav = "OK" ){ $vysledek_write=1; }
 	
-	$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
+	$add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 	
 	//vypis
 	 echo "<div style=\"\">Zvolena polozka <b>č.".$id_cloveka."</b>, dluzi: ".$_POST[$promenna];
@@ -638,7 +638,7 @@ elseif( isset($vybrano) )
 
 	        if ( $res == 1){ $vysledek_write=1; }
 
-		$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
+		$add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 
 		
 	    } //konec else nejde-li o typ, NetN, sikany

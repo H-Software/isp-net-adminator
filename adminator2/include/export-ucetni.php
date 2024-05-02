@@ -224,7 +224,7 @@ createsheet("2","5"," pozast. fa. fú ",$pole_id_fu_pz_fa);
 # Sheet X - dynamicke listy
 #
 
-$dotaz_fakt_skup=mysql_query("SELECT * FROM fakturacni_skupiny order by nazev DESC");
+$dotaz_fakt_skup=$conn_mysql->query("SELECT * FROM fakturacni_skupiny order by nazev DESC");
 
 //zde prvne zjistovani jestli ve FS jsou naky lidi ..
 $fakt_skupiny_pole = array();
@@ -249,7 +249,7 @@ for ($p = 0; $p < count($fakt_skupiny_pole); $p++)
 
     $fakturacni_skupina_id = $fakt_skupiny_pole[$p];
     
-    $dotaz_fakt_skup=mysql_query("SELECT * FROM fakturacni_skupiny WHERE id = '$fakturacni_skupina_id' ");
+    $dotaz_fakt_skup=$conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$fakturacni_skupina_id' ");
     $dotaz_fakt_skup_radku=mysql_num_rows($dotaz_fakt_skup);
     
     while( $data_fakt_skup=mysql_fetch_array($dotaz_fakt_skup) )
@@ -346,7 +346,7 @@ for ($p = 0; $p < count($fakt_skupiny_pole); $p++)
  
  $i=2;
   
- $dotaz_fs = mysql_query("SELECT * FROM fakturacni_skupiny ORDER BY id ");
+ $dotaz_fs = $conn_mysql->query("SELECT * FROM fakturacni_skupiny ORDER BY id ");
  $dotaz_fs_radku = mysql_num_rows($dotaz_fs);
  
   while( $data_fs = mysql_fetch_array($dotaz_fs) )
