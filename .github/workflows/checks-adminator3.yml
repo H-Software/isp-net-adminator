@@ -29,6 +29,9 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           coverage: none
 
+      - name: Print PHP version
+        run: echo ${{ steps.setup-php.outputs.php-version }}
+
       - name: Install dependencies
         run: composer install --ignore-platform-reqs
 
