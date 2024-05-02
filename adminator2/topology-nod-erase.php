@@ -90,7 +90,7 @@ include ("include/charset.php");
 	 } //konec while
 	} // konec else if pocet radku
 
-        $res = mysql_query("DELETE FROM nod_list WHERE id = '$erase_id' LIMIT 1");
+        $res = $conn_mysql->query("DELETE FROM nod_list WHERE id = '$erase_id' LIMIT 1");
 
         if ($res) { echo "<br><H3><div style=\"color: green; \" >Lokalita/nod úspěšně smazána.</div></H3><br>\n"; }
         else { echo "<div style=\"color: red; \">Chyba! Data z databáze nelze smazat. </div><br>\n"; }

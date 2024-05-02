@@ -84,7 +84,7 @@ include ($cesta."include/charset.php");
     // echo "ukladani";
 
       //nacteni predchozich udaju
-      $dotaz2 = mysql_query("SELECT * FROM voip_cisla WHERE id_cisla = '$erase_id' ");
+      $dotaz2 = $conn_mysql->query("SELECT * FROM voip_cisla WHERE id_cisla = '$erase_id' ");
       while( $data2 = mysql_fetch_array($dotaz2) )
       { 
 	$id_cisla = $data2["id_cisla"];
@@ -119,7 +119,7 @@ include ($cesta."include/charset.php");
     if( ( isset($erase_id) and ( $send != "yes" ) ) )
     {
       //nacteni predchozich udaju
-      $dotaz = mysql_query("SELECT * FROM voip_cisla WHERE id_cisla = '$erase_id' ");
+      $dotaz = $conn_mysql->query("SELECT * FROM voip_cisla WHERE id_cisla = '$erase_id' ");
     
       while( $data = $dotaz->fetch_array() )
       { 

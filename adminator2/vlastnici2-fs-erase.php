@@ -78,7 +78,7 @@ include ("include/charset.php");
   { 
   
     // zjistime puvodni data pro archiv zmen
-    $vysl_az  = mysql_query("SELECT * FROM fakturacni_skupiny WHERE id = '$erase_id'");
+    $vysl_az  = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$erase_id'");
     
     if( ( mysql_num_rows($vysl_az) <> 1 ) ) 
     { $pole2 .= "<p>Chyba! puvodni data nelze nacist. </p>"; $error="true"; }
@@ -90,7 +90,7 @@ include ("include/charset.php");
 	endwhile;   
     }
     	   
-    $res = mysql_query("DELETE FROM fakturacni_skupiny WHERE id = '$erase_id' LIMIT 1 ");
+    $res = $conn_mysql->query("DELETE FROM fakturacni_skupiny WHERE id = '$erase_id' LIMIT 1 ");
     
     if ($res) { echo "<br><H3><div style=\"color: green; \" >Fakturační skupina úspěšně smazána. </div></H3>\n"; }
     else { echo "<div style=\"color: red; \">Chyba! Fakturační skupinu z databáze nelze smazat. </div><br>\n"; }
@@ -105,7 +105,7 @@ include ("include/charset.php");
   }
   else 
   { 
-    $dotaz = mysql_query("SELECT * FROM fakturacni_skupiny WHERE id = '$erase_id' ");
+    $dotaz = $conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$erase_id' ");
     $radku = $dotaz->num_rows;
     
     if ($radku <> 1 ) 

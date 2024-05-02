@@ -76,7 +76,7 @@ if ( ( $update_status==1 and !( isset($send) ) ) )
     //
     // rezim upravy
     //
-    $dotaz_upd = mysql_query("SELECT * FROM users_old WHERE id = '".intval($update_id)."' ");
+    $dotaz_upd = $conn_mysql->query("SELECT * FROM users_old WHERE id = '".intval($update_id)."' ");
     $radku_upd=mysql_num_rows($dotaz_upd);
  
     if( $radku_upd==0 ) echo "Chyba! Původní data o uživateli nelze načíst! <span style=\"color: grey; \">id: ".intval($update_id)."</span>";
@@ -191,7 +191,7 @@ if( !( isset($fail) ) )
 	$pole2 .= "<b>akce: uprava admina</b><br>";
 	
 	//prvne stavajici data docasne ulozime
-	$vysl4 = mysql_query("SELECT login,name,email,level,smb_user FROM users_old WHERE id='".intval($update_id)."' ");
+	$vysl4 = $conn_mysql->query("SELECT login,name,email,level,smb_user FROM users_old WHERE id='".intval($update_id)."' ");
     
 	if(!$vysl4)
 	{
@@ -233,7 +233,7 @@ if( !( isset($fail) ) )
         $zaklad="UPDATE users_old SET login='$login_jmeno', name='$jmeno', email='$email', level='$login_level',smb_user='$smb_user'";
     
 	//vlastni update    
-        $res = mysql_query($zaklad.$zaklad2.$zaklad3." where id=".intval($update_id)." Limit 1 ");
+        $res = $conn_mysql->query($zaklad.$zaklad2.$zaklad3." where id=".intval($update_id)." Limit 1 ");
 		       	    
         if ($res) 
         { echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n"; }

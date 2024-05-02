@@ -237,7 +237,7 @@ require ("include/charset.php");
 			    <option value=\"0\""; if(!isset($select_fakturacni_skupina)){ echo " selected "; } echo ">nevybráno</option>";
 
 		    //výpis fakt. skupin
-		    $rs_fs = mysql_query("SELECT id, nazev, typ FROM fakturacni_skupiny ORDER BY nazev");
+		    $rs_fs = $conn_mysql->query("SELECT id, nazev, typ FROM fakturacni_skupiny ORDER BY nazev");
 		    
 		    while($data_fs = mysql_fetch_array($rs_fs)){
 			

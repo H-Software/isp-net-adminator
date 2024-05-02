@@ -72,7 +72,7 @@ include ("include/charset.php");
     else
 	{
     
-     while ($data=mysql_fetch_array($vysledek)):
+     while ($data = $vysledek->fetch_array()):
      
              $vec=$data["vec"];
 	     $zapnuto=$data["zapnuto"];

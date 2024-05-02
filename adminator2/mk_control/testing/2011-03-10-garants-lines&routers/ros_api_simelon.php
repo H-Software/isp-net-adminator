@@ -86,12 +86,12 @@ class mk_synchro_qos
 
  function find_root_router($id_routeru, $ip_adresa_routeru)
  {
-    $rs = mysql_query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$id_routeru'");
+    $rs = $conn_mysql->query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$id_routeru'");
 
     while( $d = mysql_fetch_array($rs) )
     { $parent_router = $d["parent_router"]; }
 
-    $rs2 = mysql_query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$parent_router'");
+    $rs2 = $conn_mysql->query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$parent_router'");
 
     while( $d2 = mysql_fetch_array($rs2) )
     { $ip_adresa_2 = $d2["ip_adresa"]; }
@@ -115,7 +115,7 @@ class mk_synchro_qos
  {
 
   //1. zjistit routery co jedou pres reinhard-fiber
-  $rs_routers = mysql_query("SELECT id, parent_router, nazev FROM router_list ORDER BY id");
+  $rs_routers = $conn_mysql->query("SELECT id, parent_router, nazev FROM router_list ORDER BY id");
   $num_rs_routers = mysql_num_rows($rs_routers);
 
   while($data_routers = mysql_fetch_array($rs_routers))
@@ -141,7 +141,7 @@ class mk_synchro_qos
   $sql = "SELECT id, jmeno FROM nod_list WHERE router_id IN (".$sql_where.") ORDER BY id";
   //print $sql."\n";
 
-  $rs_nods = mysql_query($sql);
+  $rs_nods = $conn_mysql->query($sql);
   $num_rs_nods = mysql_num_rows($rs_nods);
 
   while($data_nods = mysql_fetch_array($rs_nods))
@@ -451,7 +451,7 @@ function synchro_mangle()
 function qt_global() {
 
   //zjisteni agregace SC
-  $rs_agreg = mysql_query("SELECT agregace, speed_dwn, speed_upl FROM tarify_int WHERE id_tarifu = '1'");
+  $rs_agreg = $conn_mysql->query("SELECT agregace, speed_dwn, speed_upl FROM tarify_int WHERE id_tarifu = '1'");
 
     while( $d_agreg = mysql_fetch_array($rs_agreg) )
     {

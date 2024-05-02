@@ -130,7 +130,7 @@ require ($cesta."include/charset.php");
       $id = intval($_GET["id"]);
       
       //nacteme predchozi data
-      $dotaz = mysql_query("SELECT akceptovano_pozn FROM partner_klienti WHERE id = '$id' ");
+      $dotaz = $conn_mysql->query("SELECT akceptovano_pozn FROM partner_klienti WHERE id = '$id' ");
       
       while( $data = $dotaz->fetch_array() )
       { $pozn = $data["akceptovano_pozn"]; }

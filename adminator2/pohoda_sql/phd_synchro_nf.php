@@ -473,7 +473,7 @@ require($cesta."include/charset.php");
   //
    
   // ted smazeme vsechno neoverene
-  $vymaz = mysql_query("DELETE FROM ".$adminator_db_nf." WHERE overeno = '0' ");
+  $vymaz = $conn_mysql->query("DELETE FROM ".$adminator_db_nf." WHERE overeno = '0' ");
   
   echo "<div style=\"padding-top: 10px; padding-bottom: 10px;\" >";
   

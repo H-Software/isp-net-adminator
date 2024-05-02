@@ -65,7 +65,7 @@ include ("include/charset.php");
 
      echo "\n";
 
-    while ($zaznam=mysql_fetch_array($vysledek) ):
+    while ($zaznam = $vysledek->fetch_array() ):
 
     echo "<tr><td>".$zaznam["id"]."</td>\n";
     echo "<td width=\"30%\" >".$zaznam["jmeno"]."</td>\n";

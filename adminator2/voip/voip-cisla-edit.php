@@ -145,7 +145,7 @@ include ($cesta."include/charset.php");
     if( ( isset($update_id) and ( $send != "yes" ) ) )
     {
       //nacteni predchozich udaju
-      $dotaz = mysql_query("SELECT * FROM voip_cisla WHERE id_cisla = '$update_id' ");
+      $dotaz = $conn_mysql->query("SELECT * FROM voip_cisla WHERE id_cisla = '$update_id' ");
     
       while( $data = $dotaz->fetch_array() )
       { 

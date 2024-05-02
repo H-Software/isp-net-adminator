@@ -74,7 +74,7 @@ if( $_POST["jmeno_new"] )
 
 if( ( $_POST["B1"] == "OK") )
 {  
-  $dotaz_router = mysql_query("SELECT nazev FROM router_list WHERE id = '$router_id'");
+  $dotaz_router = $conn_mysql->query("SELECT nazev FROM router_list WHERE id = '$router_id'");
   if( (mysql_num_rows($dotaz_router) == 1 ))
   { 		      
     while( $data_parent=mysql_fetch_array($dotaz_router))
@@ -131,7 +131,7 @@ if( ( $_POST["B1"] == "OK") )
   }
   else
   {
-    while ($zaznam=mysql_fetch_array($vysledek)):
+    while ($zaznam = $vysledek->fetch_array()):
         
      $pole_puvodni_data["jmeno"]=$zaznam["jmeno"]; $pole_puvodni_data["adresa"]=$zaznam["adresa"];
      $pole_puvodni_data["ip_rozsah"]=$zaznam["ip_rozsah"]; $pole_puvodni_data["typ_vysilace"]=$zaznam["typ_vysilace"];

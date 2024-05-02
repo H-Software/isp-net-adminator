@@ -115,7 +115,7 @@ echo "<form action=\"".$_SERVER["PHP_SELF"]."\" method=\"GET\">
 	    
 	    <option value=\"0\" class=\"select-nevybrano\" >Nevybráno</option>";
 	    
-	    $dotaz_faktury = mysql_query("SELECT * FROM faktury_neuhrazene ");
+	    $dotaz_faktury = $conn_mysql->query("SELECT * FROM faktury_neuhrazene ");
 	    //$dotaz_faktury_radku
 	    
 	    while( $data_faktury = mysql_fetch_array($dotaz_faktury) )

@@ -346,7 +346,7 @@ for ($p = 0; $p < count($fakt_skupiny_pole); $p++)
  
  $i=2;
   
- $dotaz_fs = mysql_query("SELECT * FROM fakturacni_skupiny ORDER BY id ");
+ $dotaz_fs = $conn_mysql->query("SELECT * FROM fakturacni_skupiny ORDER BY id ");
  $dotaz_fs_radku = mysql_num_rows($dotaz_fs);
  
   while( $data_fs = mysql_fetch_array($dotaz_fs) )

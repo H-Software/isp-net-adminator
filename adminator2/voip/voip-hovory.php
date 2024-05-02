@@ -199,7 +199,7 @@ include ($cesta."include/charset.php");
    
    if( $typ_systemu == 2 )
    {
-    $dotaz = mysql_query($dotaz_sql);
+    $dotaz = $conn_mysql->query($dotaz_sql);
     $dotaz_radku = $dotaz->num_rows; 
    }
    else

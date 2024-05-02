@@ -105,7 +105,7 @@
           $pole3 .= "změna <b>Routeru</b> z: ";
           $pole3 .= "<span class=\"az-s1\">";
 	  
-	  $dotaz_router1 = mysql_query("SELECT * FROM router_list WHERE id = '".intval($val)."'");
+	  $dotaz_router1 = $conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($val)."'");
 	  if( (mysql_num_rows($dotaz_router1) == 1 ))
 	  {
 	    while( $data = mysql_fetch_array($dotaz_router1))
@@ -116,7 +116,7 @@
 	  $pole3 .= "</span> na: <span class=\"az-s2\">";
 	
 	  $nod_zmena = $nod_upd[$key];
-	  $dotaz_router2 = mysql_query("SELECT * FROM router_list WHERE id = '".intval($nod_zmena)."'");
+	  $dotaz_router2 = $conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($nod_zmena)."'");
 	  if( (mysql_num_rows($dotaz_router2) == 1 ))
 	  {
 	    while( $data = mysql_fetch_array($dotaz_router2))
@@ -133,7 +133,7 @@
           $pole3 .= "změna <b>Routeru, kde se provádí filtrace</b> z: ";
           $pole3 .= "<span class=\"az-s1\">";
 	  
-	  $dotaz_router1 = mysql_query("SELECT nazev FROM router_list WHERE id = '".intval($val)."'");
+	  $dotaz_router1 = $conn_mysql->query("SELECT nazev FROM router_list WHERE id = '".intval($val)."'");
 	  if( (mysql_num_rows($dotaz_router1) == 1 ))
 	  {
 	    while( $data = mysql_fetch_array($dotaz_router1))
@@ -144,7 +144,7 @@
 	  $pole3 .= "</span> na: <span class=\"az-s2\">";
 	
 	  $nod_zmena = $nod_upd[$key];
-	  $dotaz_router2 = mysql_query("SELECT nazev FROM router_list WHERE id = '".intval($nod_zmena)."'");
+	  $dotaz_router2 = $conn_mysql->query("SELECT nazev FROM router_list WHERE id = '".intval($nod_zmena)."'");
 	  if( (mysql_num_rows($dotaz_router2) == 1 ))
 	  {
 	    while( $data = mysql_fetch_array($dotaz_router2))
@@ -162,12 +162,12 @@
 	    $pole3 .= "změna <b>koncového zařízení</b> z: ";
             $pole3 .= "<span class=\"az-s1\">";
 	  
-	    $rs_device_id = mysql_query("SELECT name FROM nod_device_type WHERE id = '".intval($val)."' ");
+	    $rs_device_id = $conn_mysql->query("SELECT name FROM nod_device_type WHERE id = '".intval($val)."' ");
 	    $pole3 .= mysql_result($rs_device_id, 0, 0)." (".intval($val).")";
 	    
 	    $pole3 .= "</span> na: <span class=\"az-s2\">";
 	
-	    $rs_device_id2 = mysql_query("SELECT name FROM nod_device_type WHERE id = '".intval($nod_upd[$key])."' ");
+	    $rs_device_id2 = $conn_mysql->query("SELECT name FROM nod_device_type WHERE id = '".intval($nod_upd[$key])."' ");
 	    $pole3 .= mysql_result($rs_device_id2, 0, 0)." (".intval($nod_upd[$key]).")";
 	
 	    $pole3 .= "</span>";

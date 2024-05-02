@@ -87,7 +87,7 @@ $worksheet1->set_selection('C3');
     
 include("./config.php");
 
- $dotaz1 = mysql_query("SELECT * FROM nod_list");
+ $dotaz1 = $conn_mysql->query("SELECT * FROM nod_list");
 
 // vlastni data
 
