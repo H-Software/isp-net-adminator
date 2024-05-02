@@ -19,7 +19,7 @@ class PageLevel extends Model
     public $desc;
 
     protected $fillable = [
-    'level',
-    'desc',
+        'level',
+        'desc',
     ];
 }

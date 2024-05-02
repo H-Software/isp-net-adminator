@@ -1,6 +1,6 @@
 <?php
 
-$loader = new Nette\Loaders\RobotLoader;
+$loader = new Nette\Loaders\RobotLoader();
 
 $loader->addDirectory(__DIR__ . '/../app/Auth');
 $loader->addDirectory(__DIR__ . '/../app/Core');

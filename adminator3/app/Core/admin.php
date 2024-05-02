@@ -237,14 +237,14 @@ class admin
 
 
         $headers = ['id',
-                    'název',
-                    'garant',
-                    'cena bez DPH',
-                    'Rychlost <br>download',
-                    'Agregace',
-                    'Počet <br>klientů',
-                    'úprava',
-                    'smazat'
+            'název',
+            'garant',
+            'cena bez DPH',
+            'Rychlost <br>download',
+            'Agregace',
+            'Počet <br>klientů',
+            'úprava',
+            'smazat'
         ] ;
 
         $attributes = 'class="a-common-table a-common-table-2line" '
@@ -257,15 +257,15 @@ class admin
             if($i == 0) {
                 // second header row
                 $dataView[$i] = array(
-                $headers[0] => "H",
-                $headers[1] => "Typ",
-                $headers[2] => "zkratka",
-                $headers[3] => "cena s DPH",
-                $headers[4] => "Rychlost <br>upload",
-                $headers[5] => "Agregace <br>smluvní",
-                $headers[6] => "",
-                $headers[7] => "",
-                $headers[8] => "",
+                    $headers[0] => "H",
+                    $headers[1] => "Typ",
+                    $headers[2] => "zkratka",
+                    $headers[3] => "cena s DPH",
+                    $headers[4] => "Rychlost <br>upload",
+                    $headers[5] => "Agregace <br>smluvní",
+                    $headers[6] => "",
+                    $headers[7] => "",
+                    $headers[8] => "",
                 );
                 $i++;
             }
@@ -291,28 +291,28 @@ class admin
 
             // first body row
             $dataView[$i] = array(
-            $headers[0] => $a["id_tarifu"],
-            $headers[1] => $a["jmeno_tarifu"],
-            $headers[2] => $garant,
-            $headers[3] => $a["cena_bez_dph"],
-            $headers[4] => $a["speed_dwn"],
-            $headers[5] => $a["agregace"],
-            $headers[6] => $dotaz_lidi_radku,
-            $headers[7] => "<a href=\"/admin/tarify/action?update_id=".$a["id_tarifu"]."\" >upravit</a>",
-            $headers[8] => "<a href=\"/admin/tarify/action?erase_id=".$a["id_tarifu"]."\" >smazat</a>"
+                $headers[0] => $a["id_tarifu"],
+                $headers[1] => $a["jmeno_tarifu"],
+                $headers[2] => $garant,
+                $headers[3] => $a["cena_bez_dph"],
+                $headers[4] => $a["speed_dwn"],
+                $headers[5] => $a["agregace"],
+                $headers[6] => $dotaz_lidi_radku,
+                $headers[7] => "<a href=\"/admin/tarify/action?update_id=".$a["id_tarifu"]."\" >upravit</a>",
+                $headers[8] => "<a href=\"/admin/tarify/action?erase_id=".$a["id_tarifu"]."\" >smazat</a>"
             );
 
             $i++;
             // second body row
             $dataView[$i] = array(
-            $headers[0] => $a["id_tarifu"],
-            $headers[1] => $typ_tarifu,
-            $headers[2] => $a["zkratka_tarifu"],
-            $headers[3] => $a["cena_s_dph"],
-            $headers[4] => $a["speed_upl"],
-            $headers[5] => $a["agregace_smlouva"],
-            $headers[6] => "",
-            $headers[7] => "",
+                $headers[0] => $a["id_tarifu"],
+                $headers[1] => $typ_tarifu,
+                $headers[2] => $a["zkratka_tarifu"],
+                $headers[3] => $a["cena_s_dph"],
+                $headers[4] => $a["speed_upl"],
+                $headers[5] => $a["agregace_smlouva"],
+                $headers[6] => "",
+                $headers[7] => "",
             );
             $i++;
         }

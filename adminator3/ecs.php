@@ -25,4 +25,4 @@ return ECSConfig::configure()
     ])
     // ->withPreparedSets(psr12: true)
     ->withSets([SetList::SYMPLIFY])
-     ;
+;

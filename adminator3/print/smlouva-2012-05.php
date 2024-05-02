@@ -19,7 +19,7 @@ $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
 $auth->checkLevel(146, $a);
 
-$smarty->assign("page_title","Adminator3 :: Ostatní :: Tisk - Smlouva 2012-05");
+$smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Smlouva 2012-05");
 
 $ec = $_POST["ec"];
 
@@ -49,8 +49,7 @@ $email = $_POST["email"];
 //
 $internet_sluzba = $_POST["internet_sluzba"];
 
-if($internet_sluzba > 0)
-{
+if($internet_sluzba > 0) {
     $int_select_1 = $_POST["int_select_1"];
 
     //1. tarif
@@ -64,8 +63,8 @@ if($internet_sluzba > 0)
     $int_1_adresa = $_POST["int_1_adresa"];
 
     $int_select_2 = $_POST["int_select_2"];
-                                    
-    //2. tarif                             
+
+    //2. tarif
 
     $int_2_nazev = $_POST["int_2_nazev"];
     $int_2_rychlost = $_POST["int_2_rychlost"];
@@ -86,31 +85,29 @@ $iptv_sluzba = $_POST["iptv_sluzba"];
 
 $iptv_sluzba_id_tarifu = $_POST["iptv_sluzba_id_tarifu"];
 
-if( $iptv_sluzba == 1 )
-{
+if($iptv_sluzba == 1) {
 
     $iptv_tarif_nazev  = $_POST["iptv_tarif_nazev"];
     $iptv_tarif_kanaly = $_POST["iptv_tarif_kanaly"];
     $iptv_tarif_cena   = $_POST["iptv_tarif_cena"];
-    
-    if( $iptv_sluzba_id_tarifu > 0 )
-    {
+
+    if($iptv_sluzba_id_tarifu > 0) {
 
         $rs_iptv = mysql_query("SELECT id_tarifu, jmeno_tarifu, cena_s_dph FROM tarify_iptv WHERE id_tarifu = '".intval($iptv_sluzba_id_tarifu)."' ");
 
-        while($data_iptv = mysql_fetch_array($rs_iptv)){
+        while($data_iptv = mysql_fetch_array($rs_iptv)) {
 
-            if( (strlen($iptv_tarif_nazev) == 0) ){
+            if((strlen($iptv_tarif_nazev) == 0)) {
                 $iptv_tarif_nazev = $data_iptv["jmeno_tarifu"];
             }
 
-            if( (strlen($iptv_tarif_cena) == 0) ){
+            if((strlen($iptv_tarif_cena) == 0)) {
                 $iptv_tarif_cena = $data_iptv["cena_s_dph"];
             }
         }
 
     }
-    
+
     $iptv_tema_nazev  = $_POST["iptv_tema_nazev"];
     $iptv_tema_kanaly = $_POST["iptv_tema_kanaly"];
     $iptv_tema_cena   = $_POST["iptv_tema_cena"];
@@ -120,52 +117,41 @@ if( $iptv_sluzba == 1 )
     $stb = $_POST["stb"];
     $stb_sn = $_POST["stb_sn"];
     $stb_kauce = $_POST["stb_kauce"];
-    
+
 }
-	    
+
 //sluzba voip
 $voip_sluzba = $_POST["voip_sluzba"];
 
-if($voip_sluzba > 0)
-{
+if($voip_sluzba > 0) {
     $voip_1_cislo = $_POST["voip_1_cislo"];
     $voip_1_typ = $_POST["voip_1_typ"];
 
     $voip_2_cislo = $_POST["voip_2_cislo"];
     $voip_2_typ = $_POST["voip_2_typ"];
 
-    if($voip_1_typ == 1)
-    {
-	$voip_1_pre = "X";
-	$voip_1_post = "";
+    if($voip_1_typ == 1) {
+        $voip_1_pre = "X";
+        $voip_1_post = "";
+    } elseif($voip_1_typ == 2) {
+        $voip_1_pre = "";
+        $voip_1_post = "X";
+    } else {
+        $voip_1_pre = "";
+        $voip_1_post = "";
     }
-    elseif($voip_1_typ == 2)
-    {
-	$voip_1_pre = "";
-	$voip_1_post = "X";
+
+    if($voip_2_typ == 1) {
+        $voip_2_pre = "X";
+        $voip_2_post = "";
+    } elseif($voip_2_typ == 2) {
+        $voip_2_pre = "";
+        $voip_2_post = "X";
+    } else {
+        $voip_2_pre = "";
+        $voip_2_post = "";
     }
-    else
-    {
-	$voip_1_pre = "";
-	$voip_1_post = "";
-    }
-    
-    if($voip_2_typ == 1)
-    {
-	$voip_2_pre = "X";
-	$voip_2_post = "";
-    }
-    elseif($voip_2_typ == 2)
-    {
-	$voip_2_pre = "";
-	$voip_2_post = "X";
-    }
-    else
-    {
-	$voip_2_pre = "";
-	$voip_2_post = "";
-    }
-    
+
 }
 
 
@@ -176,8 +162,7 @@ $ostatni_cena = $_POST["ostatni_cena"];
 
 $sleva_select = $_POST["sleva_select"];
 
-if($sleva_select == 1)
-{
+if($sleva_select == 1) {
     $bonus_select_1 = $_POST["bonus_select_1"];
 }
 
@@ -228,10 +213,9 @@ $odeslano = $_POST["odeslano"];
 #	zacatek stranky pro zobrazeni formu
 #
 
-if( ( ( strlen($jmeno) < 2 ) or ( !isset($odeslano) ) ) )
-{
+if(((strlen($jmeno) < 2) or (!isset($odeslano)))) {
 
-  echo '<html>
+    echo '<html>
 
   <head>
    
@@ -261,34 +245,34 @@ if( ( ( strlen($jmeno) < 2 ) or ( !isset($odeslano) ) ) )
 
   <body>';
 
-  if ( $send != "OK" )
-  { echo "<p><span style=\"color: blue; font-weight: bold; \"> Pro odeslání formuláře použijte tlačítko OK. </span></p>"; }
+    if ($send != "OK") {
+        echo "<p><span style=\"color: blue; font-weight: bold; \"> Pro odeslání formuláře použijte tlačítko OK. </span></p>";
+    }
 
-  //
-  //  zobrazeni hlavni casti formu
-  //
-  require("inc.smlouva.input.form.2.php");
- 
-  echo "</body>
+    //
+    //  zobrazeni hlavni casti formu
+    //
+    require("inc.smlouva.input.form.2.php");
+
+    echo "</body>
   </html>";
 
 } // konec if !isset nazev
-else
-{ //budeme generovat
- 
-        // konverze promennych
-        require("inc.smlouva.gen.prepare.vars.2.php");
-        // konec pripravy promennych
-        
-        // opravdovy zacatek generovani 
-        define('FPDF_FONTPATH',"include/font/");
+else { //budeme generovat
 
-        require("inc.smlouva.gen.main.2.php");
-        
-        //zobrazeni odkazu dpdf soubor
-        $smarty->assign("file_name","/".$nazev_souboru);
+    // konverze promennych
+    require("inc.smlouva.gen.prepare.vars.2.php");
+    // konec pripravy promennych
 
-        //finalni zobrazeni sablony
-        $smarty->display('others/print-smlouva-2012-05.tpl');
-                                            
+    // opravdovy zacatek generovani
+    define('FPDF_FONTPATH', "include/font/");
+
+    require("inc.smlouva.gen.main.2.php");
+
+    //zobrazeni odkazu dpdf soubor
+    $smarty->assign("file_name", "/".$nazev_souboru);
+
+    //finalni zobrazeni sablony
+    $smarty->display('others/print-smlouva-2012-05.tpl');
+
 } //konec else !isset nazev

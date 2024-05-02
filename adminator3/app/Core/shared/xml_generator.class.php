@@ -3,7 +3,7 @@
 class c_xml_generator
 {
     public $data = array(
-    0 => array('type' => 'root', 'parent' => -1)
+        0 => array('type' => 'root', 'parent' => -1)
     );
     public $auto_indent = '  ';
     public $append_after_element = "\n";
@@ -14,10 +14,10 @@ class c_xml_generator
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
-        'type' => 'node',
-        'parent' => $parent,
-        'params' => $params,
-        'name' => $name
+            'type' => 'node',
+            'parent' => $parent,
+            'params' => $params,
+            'name' => $name
         );
         return($new_id);
     }
@@ -26,11 +26,11 @@ class c_xml_generator
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
-        'type' => 'node_cdata',
-        'parent' => $parent,
-        'params' => $params,
-        'name' => $name,
-        'data' => $data
+            'type' => 'node_cdata',
+            'parent' => $parent,
+            'params' => $params,
+            'name' => $name,
+            'data' => $data
         );
         return($new_id);
     }
@@ -39,9 +39,9 @@ class c_xml_generator
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
-        'type' => 'cdata',
-        'parent' => $parent,
-        'data' => $data
+            'type' => 'cdata',
+            'parent' => $parent,
+            'data' => $data
         );
         return($new_id);
     }
@@ -50,9 +50,9 @@ class c_xml_generator
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
-        'type' => 'entity',
-        'parent' => $parent,
-        'name' => $name
+            'type' => 'entity',
+            'parent' => $parent,
+            'name' => $name
         );
         return($new_id);
     }
@@ -61,9 +61,9 @@ class c_xml_generator
     {
         $new_id = $this->_get_new_id();
         $this->data[$new_id] = array(
-        'type' => 'note',
-        'parent' => $parent,
-        'text' => $text
+            'type' => 'note',
+            'parent' => $parent,
+            'text' => $text
         );
         return($new_id);
     }
@@ -89,61 +89,61 @@ class c_xml_generator
         $level++;
         $node = &$this->data[$id];
         switch($node['type']) {
-        case 'node':
-            $ret = '<'.$node['name'];
-            foreach($node['params'] as $param_name => $param_value) {
-                $ret .= ' '.$this->_encode_param_name($param_name).
-                '="'.$this->_encode_param_value($param_value).'"';
-            };
-            $childs = '';
-            $complete_tag = true;
-            foreach($this->data as $node_id => $node_data) {
-                if ($node_data['parent'] == $id) {
-                    $complete_tag = false;
-                    $childs .= $this->_create_xml_node($node_id);
-                }
-            };
-            if ($complete_tag) {
-                $ret .= ' />';
-            } else {
-
-                if(preg_match("/<|>/", $childs) == 0) {
-                    $ret .= '>'.$childs.'</'.$node['name'].'>';
+            case 'node':
+                $ret = '<'.$node['name'];
+                foreach($node['params'] as $param_name => $param_value) {
+                    $ret .= ' '.$this->_encode_param_name($param_name).
+                    '="'.$this->_encode_param_value($param_value).'"';
+                };
+                $childs = '';
+                $complete_tag = true;
+                foreach($this->data as $node_id => $node_data) {
+                    if ($node_data['parent'] == $id) {
+                        $complete_tag = false;
+                        $childs .= $this->_create_xml_node($node_id);
+                    }
+                };
+                if ($complete_tag) {
+                    $ret .= ' />';
                 } else {
-                    $ret .= '>'.$this->append_after_element.$childs.str_repeat($this->auto_indent, $level - 1).'</'.$node['name'].'>';
-                }
-            }
 
-            break;
-        case 'node_cdata':
-            $ret = '<'.$node['name'];
-            foreach($node['params'] as $param_name => $param_value) {
-                $ret .= ' '.$this->_encode_param_name($param_name).
-                '="'.$this->_encode_param_value($param_value).'"';
-            };
-            $ret .= '>'.$this->_encode_cdata($node['data']).'</'.$node['name'].'>';
-            break;
-        case 'cdata':
-            $ret = $this->_encode_cdata($node['data']);
-            break;
-        case 'entity':
-            $ret = '&'.$node['name'].';';
-            break;
-        case 'note':
-            $ret = '<!--'.$this->_encode_cdata($node['text']).'-->';
-            break;
-        case 'root':
-            $ret = '<'.'?xml'.
-            ($this->xml_version ? ' version="'.$this->xml_version.'"' : '').
-            ($this->xml_encoding ? ' encoding="'.$this->xml_encoding.'"' : '').
-            '?'.">\n";
-            foreach($this->data as $node_id => $node_data) {
-                if ($node_data['parent'] == 0) {
-                    $complete_tag = false;
-                    $ret .= $this->_create_xml_node($node_id);
+                    if(preg_match("/<|>/", $childs) == 0) {
+                        $ret .= '>'.$childs.'</'.$node['name'].'>';
+                    } else {
+                        $ret .= '>'.$this->append_after_element.$childs.str_repeat($this->auto_indent, $level - 1).'</'.$node['name'].'>';
+                    }
                 }
-            };
-            break;
+
+                break;
+            case 'node_cdata':
+                $ret = '<'.$node['name'];
+                foreach($node['params'] as $param_name => $param_value) {
+                    $ret .= ' '.$this->_encode_param_name($param_name).
+                    '="'.$this->_encode_param_value($param_value).'"';
+                };
+                $ret .= '>'.$this->_encode_cdata($node['data']).'</'.$node['name'].'>';
+                break;
+            case 'cdata':
+                $ret = $this->_encode_cdata($node['data']);
+                break;
+            case 'entity':
+                $ret = '&'.$node['name'].';';
+                break;
+            case 'note':
+                $ret = '<!--'.$this->_encode_cdata($node['text']).'-->';
+                break;
+            case 'root':
+                $ret = '<'.'?xml'.
+                ($this->xml_version ? ' version="'.$this->xml_version.'"' : '').
+                ($this->xml_encoding ? ' encoding="'.$this->xml_encoding.'"' : '').
+                '?'.">\n";
+                foreach($this->data as $node_id => $node_data) {
+                    if ($node_data['parent'] == 0) {
+                        $complete_tag = false;
+                        $ret .= $this->_create_xml_node($node_id);
+                    }
+                };
+                break;
         };
         $level--;
 

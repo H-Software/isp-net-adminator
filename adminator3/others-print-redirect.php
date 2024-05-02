@@ -1,5 +1,5 @@
 <?php
 
-  $soubor = $_POST["soubory"];
+$soubor = $_POST["soubory"];
 
-  header("Location: print/temp/".$soubor);
+header("Location: print/temp/".$soubor);

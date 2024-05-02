@@ -28,9 +28,9 @@ class PartnerOrder extends Model
      * @var array
      */
     protected $attributes = [
-    // 'akce' => NULL,
-    // // 'provedeno_kdy' => 'CURRENT_TIMESTAMP',
-    // 'provedeno_kym' => NULL,
+        // 'akce' => NULL,
+        // // 'provedeno_kdy' => 'CURRENT_TIMESTAMP',
+        // 'provedeno_kym' => NULL,
         // 'vysledek' => 0
     ];
 

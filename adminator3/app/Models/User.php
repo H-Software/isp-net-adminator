@@ -17,7 +17,7 @@ class User extends EloquentUser
         'username',
         'password',
         'permissions',
-    'level'
+        'level'
     ];
 
     /**

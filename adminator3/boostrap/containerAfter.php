@@ -8,34 +8,36 @@ use App\View\CsrfExtension;
 use App\Middleware\FlashOldFormDataMiddleware;
 
 $container->set(
-    'settings', function () {
+    'settings',
+    function () {
         return include __DIR__ . '/../config/settings.php';
     }
 );
 
 $container->set(
-    'logger', function ($c) { 
+    'logger',
+    function ($c) {
         $settings = $c->get('settings');
 
         $logger = new Monolog\Logger($settings['logger']['name']);
 
         $formatter = new Monolog\Formatter\LineFormatter(
-            $settings['logger']['output'], 
+            $settings['logger']['output'],
             $settings['logger']['dateFormat']
         );
 
         $stream = new Monolog\Handler\StreamHandler(
-            $settings['logger']['path'], 
+            $settings['logger']['path'],
             $settings['logger']['level']
         );
         $stream->setFormatter($formatter);
-    
+
         $fingersCrossed = new Monolog\Handler\FingersCrossedHandler(
-            $stream, 
+            $stream,
             $settings['logger']['level']
         );
         $logger->pushProcessor(new Monolog\Processor\UidProcessor());
-    
+
         $handler = new Monolog\ErrorHandler($logger);
         $handler->registerExceptionHandler();
         $handler->registerFatalHandler();
@@ -48,8 +50,9 @@ $container->set(
 // $container->set('smarty', $smarty);
 
 $container->set(
-    'smarty', function ($c) { 
-        $smarty = new Smarty;
+    'smarty',
+    function ($c) {
+        $smarty = new Smarty();
         $smarty->compile_check = true;
         //$smarty->debugging = true;
 
@@ -62,30 +65,35 @@ $container->set('connMysql', $conn_mysql);
 $container->set('connPgsql', $db_ok2);
 
 $container->set(
-    'db', function ($container) use ($capsule) {
+    'db',
+    function ($container) use ($capsule) {
         return $capsule;
     }
 );
 
 $container->set(
-    'validator', function ($container) {
-        return new App\Validation\Validator;
+    'validator',
+    function ($container) {
+        return new App\Validation\Validator();
     }
 );
 
 $container->set(
-    'flash', function ($container) {
-        return new \Slim\Flash\Messages;
+    'flash',
+    function ($container) {
+        return new \Slim\Flash\Messages();
     }
 );
 
 $container->set(
-    'view', function ($container) {
+    'view',
+    function ($container) {
         $settings = $container->get('settings');
 
         $view = Twig::create(
-            $settings['twig']['path'], [
-            'cache' => false,
+            $settings['twig']['path'],
+            [
+                'cache' => false,
             ]
         );
 
@@ -100,15 +108,15 @@ $container->set(
 );
 
 $container->set(
-    'validator', function ($container) {
-        return new App\Validation\Validator;
+    'validator',
+    function ($container) {
+        return new App\Validation\Validator();
     }
 );
 
 $container->set(
-    'FlashOldFormDataMiddleware', function ($container) {
+    'FlashOldFormDataMiddleware',
+    function ($container) {
         return new FlashOldFormDataMiddleware($container->get('flash'));
     }
 );
-
-

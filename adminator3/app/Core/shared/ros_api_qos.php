@@ -602,7 +602,7 @@ class mk_synchro_qos
         foreach ($this->arr_global_diff_mis as $ip => $value) {
 
             $add_par_r = array("chain" => $this->chain, "action" => "mark-packet", "disabled" => "no", "new-packet-mark" => $ip."_dwn",
-                     "$this->item_ip_dwn" => "$ip", "passthrough" => "no");
+                "$this->item_ip_dwn" => "$ip", "passthrough" => "no");
             $add = $this->conn->add("/ip/firewall/mangle", $add_par_r);
 
             if(ereg('^\*([[:xdigit:]])*$', $add)) {
@@ -618,7 +618,7 @@ class mk_synchro_qos
             }
 
             $add_par_r2 = array("chain" => $this->chain, "action" => "mark-packet", "disabled" => "no", "new-packet-mark" => $ip."_upl",
-                     "$this->item_ip_upl" => "$ip", "passthrough" => "no");
+                "$this->item_ip_upl" => "$ip", "passthrough" => "no");
             $add2 = $this->conn->add("/ip/firewall/mangle", $add_par_r2);
 
             if(ereg('^\*([[:xdigit:]])*$', $add2)) {
@@ -824,29 +824,29 @@ class mk_synchro_qos
                 $limit = ($this->speed_sc_dwn * $this->sc_speed_koef) * 1000;
 
                 $qt_system[] = array("name" => "q-dwn-sc-".$sc_group, "parent" => "global-out", "limit-at" => $limit,
-                      "priority" => "1", "max-limit" => $limit, "burst-limit" => "0",
-                 "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
-                 "disabled" => "false");
+                    "priority" => "1", "max-limit" => $limit, "burst-limit" => "0",
+                    "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
+                    "disabled" => "false");
 
                 $limit_sc = ($this->speed_sc_upl * $this->sc_speed_koef) * 1000;
 
                 $qt_system[] = array("name" => "q-upl-sc-".$sc_group, "parent" => "global-out", "limit-at" => $limit_sc,
-                      "priority" => "1", "max-limit" => $limit_sc, "burst-limit" => "0",
-                  "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
-                  "disabled" => "false");
+                    "priority" => "1", "max-limit" => $limit_sc, "burst-limit" => "0",
+                    "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
+                    "disabled" => "false");
             }
 
             //2.1.2 - jednotlive IP adresy
 
             $qt_system[] = array("name" => "q-dwn-sc-".$ip, "parent" => "q-dwn-sc-".$sc_group, "packet-mark" => $ip."_dwn",
-            "limit-at" => $limit_at_sc_dwn, "queue" => "wireless-default", "priority" => "1",
-            "max-limit" => ($this->speed_sc_dwn) * 1000, "burst-limit" => "0", "burst-threshold" => "0",
-            "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
+                "limit-at" => $limit_at_sc_dwn, "queue" => "wireless-default", "priority" => "1",
+                "max-limit" => ($this->speed_sc_dwn) * 1000, "burst-limit" => "0", "burst-threshold" => "0",
+                "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
 
             $qt_system[] = array("name" => "q-upl-sc-".$ip, "parent" => "q-upl-sc-".$sc_group, "packet-mark" => $ip."_upl",
-            "limit-at" => $limit_at_sc_upl, "queue" => "wireless-default", "priority" => "1",
-            "max-limit" => ($this->speed_sc_upl) * 1000, "burst-limit" => "0", "burst-threshold" => "0",
-            "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
+                "limit-at" => $limit_at_sc_upl, "queue" => "wireless-default", "priority" => "1",
+                "max-limit" => ($this->speed_sc_upl) * 1000, "burst-limit" => "0", "burst-threshold" => "0",
+                "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
 
             //konec cyklu
             $sc_count++;
@@ -876,12 +876,12 @@ class mk_synchro_qos
         foreach ($this->objects_mp as $key => $ip) {
 
             $qt_system[] = array("name" => "q-dwn-mp-".$ip, "parent" => "q-dwn-mp-global", "packet-mark" => $ip."_dwn",
-                     "limit-at" => "100000", "queue" => "wireless-default", "priority" => "1",
-                 "max-limit" => $this->speed_mp_dwn, "burst-limit" => "0", "burst-threshold" => "0",
-                 "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
+                "limit-at" => "100000", "queue" => "wireless-default", "priority" => "1",
+                "max-limit" => $this->speed_mp_dwn, "burst-limit" => "0", "burst-threshold" => "0",
+                "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
 
             $qt_system[] = array("name" => "q-upl-mp-".$ip, "parent" => "q-upl-mp-global", "packet-mark" => $ip."_upl",
-                    "limit-at" => "100000", "queue" => "wireless-default", "priority" => "1",
+                "limit-at" => "100000", "queue" => "wireless-default", "priority" => "1",
                 "max-limit" => $this->speed_mp_upl, "burst-limit" => "0", "burst-threshold" => "0",
                 "burst-time" => "00:00:00", "invalid" => "false", "disabled" => "false");
         }
@@ -894,26 +894,26 @@ class mk_synchro_qos
 
             //parent tridy pro garanty
             $qt_system[] = array("name" => "q-dwn-".$garant_id, "parent" => "global-out", "limit-at" => $speed_dwn."000",
-            "priority" => "1", "max-limit" => $speed_dwn."000", "burst-limit" => "0",
-            "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
-            "disabled" => "false" );
+                "priority" => "1", "max-limit" => $speed_dwn."000", "burst-limit" => "0",
+                "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
+                "disabled" => "false" );
 
             $qt_system[] = array("name" => "q-upl-".$garant_id, "parent" => "global-out", "limit-at" => $speed_upl."000",
-            "priority" => "1", "max-limit" => $speed_upl."000", "burst-limit" => "0",
-            "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
-            "disabled" => "false" );
+                "priority" => "1", "max-limit" => $speed_upl."000", "burst-limit" => "0",
+                "burst-threshold" => "0", "burst-time" => "00:00:00", "invalid" => "false",
+                "disabled" => "false" );
 
             foreach($this->{$garant_id} as $id => $ip) {
 
                 $qt_system[] = array("name" => "q-dwn-q-".$ip, "parent" => "q-dwn-".$garant_id, "packet-mark" => $ip."_dwn",
-                 "limit-at" => "0", "queue" => "wireless-default", "priority" => "1", "max-limit" => "0",
-                 "burst-limit" => "0", "burst-threshold" => "0", "burst-time" => "00:00:00",
-                 "invalid" => "false", "disabled" => "false" );
+                    "limit-at" => "0", "queue" => "wireless-default", "priority" => "1", "max-limit" => "0",
+                    "burst-limit" => "0", "burst-threshold" => "0", "burst-time" => "00:00:00",
+                    "invalid" => "false", "disabled" => "false" );
 
                 $qt_system[] = array("name" => "q-upl-q-".$ip, "parent" => "q-upl-".$garant_id, "packet-mark" => $ip."_upl",
-                  "limit-at" => "0", "queue" => "wireless-default", "priority" => "1", "max-limit" => "0",
-                  "burst-limit" => "0",  "burst-threshold" => "0", "burst-time" => "00:00:00",
-                  "invalid" => "false", "disabled" => "false");
+                    "limit-at" => "0", "queue" => "wireless-default", "priority" => "1", "max-limit" => "0",
+                    "burst-limit" => "0",  "burst-threshold" => "0", "burst-time" => "00:00:00",
+                    "invalid" => "false", "disabled" => "false");
 
             }
 
@@ -1046,8 +1046,8 @@ class mk_synchro_qos
                 $qt_items_err_added = 0;
 
                 $add_qt_data = array("disabled" => "false", "limit-at" => $limit, "max-limit" => $limit,
-                     "name" => "q-dwn-sc-".$sc_group, "parent" => "global-out", "priority" => "1",
-                 "queue" => "wireless-default");
+                    "name" => "q-dwn-sc-".$sc_group, "parent" => "global-out", "priority" => "1",
+                    "queue" => "wireless-default");
                 $add_qt = $this->conn->add("/queue/tree", $add_qt_data);
 
                 if(ereg('^\*([[:xdigit:]])*$', $add_qt)) {
@@ -1065,8 +1065,8 @@ class mk_synchro_qos
                 $limit = ($this->speed_sc_upl * $this->sc_speed_koef) * 1000;
 
                 $add_qt_data = array("disabled" => "false", "limit-at" => $limit, "max-limit" => $limit,
-                     "name" => "q-upl-sc-".$sc_group, "parent" => "global-out", "priority" => "1",
-                "queue" => "wireless-default");
+                    "name" => "q-upl-sc-".$sc_group, "parent" => "global-out", "priority" => "1",
+                    "queue" => "wireless-default");
                 $add_qt = $this->conn->add("/queue/tree", $add_qt_data);
 
                 if(ereg('^\*([[:xdigit:]])*$', $add_qt)) {
@@ -1092,8 +1092,8 @@ class mk_synchro_qos
 
 
             $add_qt_data = array("disabled" => "false", "limit-at" => $limit_at_sc_dwn, "max-limit" => (($this->speed_sc_dwn) * 1000),
-                     "name" => "q-dwn-sc-".$ip, "parent" => "q-dwn-sc-".$sc_group, "priority" => "1",
-                     "packet-mark" => $ip."_dwn", "queue" => "wireless-default");
+                "name" => "q-dwn-sc-".$ip, "parent" => "q-dwn-sc-".$sc_group, "priority" => "1",
+                "packet-mark" => $ip."_dwn", "queue" => "wireless-default");
 
             $add_qt = $this->conn->add("/queue/tree", $add_qt_data);
 
@@ -1110,8 +1110,8 @@ class mk_synchro_qos
             }
 
             $add_qt_data = array("disabled" => "false", "limit-at" => $limit_at_sc_upl, "max-limit" => (($this->speed_sc_upl) * 1000),
-                     "name" => "q-upl-sc-".$ip, "parent" => "q-upl-sc-".$sc_group, "priority" => "1",
-                     "packet-mark" => $ip."_upl", "queue" => "wireless-default");
+                "name" => "q-upl-sc-".$ip, "parent" => "q-upl-sc-".$sc_group, "priority" => "1",
+                "packet-mark" => $ip."_upl", "queue" => "wireless-default");
             $add_qt = $this->conn->add("/queue/tree", $add_qt_data);
 
             if(ereg('^\*([[:xdigit:]])*$', $add_qt)) {
@@ -1146,8 +1146,8 @@ class mk_synchro_qos
         //globalni tridy pro MP
 
         $add_qt_mp_global_data = array("disabled" => "false", "limit-at" => "0", "max-limit" => "100000k",
-                     "name" => "q-dwn-mp-global", "parent" => "global-out", "priority" => "1",
-                     "queue" => "wireless-default");
+            "name" => "q-dwn-mp-global", "parent" => "global-out", "priority" => "1",
+            "queue" => "wireless-default");
 
         $add_qt_mp_global = $this->conn->add("/queue/tree", $add_qt_mp_global_data);
 
@@ -1164,8 +1164,8 @@ class mk_synchro_qos
         }
 
         $add_qt_mp_global_data2 = array("disabled" => "false", "limit-at" => "0", "max-limit" => "100000k",
-                     "name" => "q-upl-mp-global", "parent" => "global-out", "priority" => "1",
-                     "queue" => "wireless-default");
+            "name" => "q-upl-mp-global", "parent" => "global-out", "priority" => "1",
+            "queue" => "wireless-default");
 
         $add_qt_mp_global2 = $this->conn->add("/queue/tree", $add_qt_mp_global_data2);
 
@@ -1184,8 +1184,8 @@ class mk_synchro_qos
         foreach ($this->objects_mp as $key => $ip) {
 
             $add_qt_data_mp = array("disabled" => "false", "limit-at" => "100k", "max-limit" => "10000k",
-                     "name" => "q-dwn-mp-".$ip, "parent" => "q-dwn-mp-global", "priority" => "1",
-                     "packet-mark" => $ip."_dwn", "queue" => "wireless-default");
+                "name" => "q-dwn-mp-".$ip, "parent" => "q-dwn-mp-global", "priority" => "1",
+                "packet-mark" => $ip."_dwn", "queue" => "wireless-default");
 
             $add_qt_mp = $this->conn->add("/queue/tree", $add_qt_data_mp);
 
@@ -1202,8 +1202,8 @@ class mk_synchro_qos
             }
 
             $add_qt_data_mp2 = array("disabled" => "false", "limit-at" => "100k", "max-limit" => "10000k",
-                     "name" => "q-upl-mp-".$ip, "parent" => "q-upl-mp-global", "priority" => "1",
-                     "packet-mark" => $ip."_upl", "queue" => "wireless-default");
+                "name" => "q-upl-mp-".$ip, "parent" => "q-upl-mp-global", "priority" => "1",
+                "packet-mark" => $ip."_upl", "queue" => "wireless-default");
 
             $add_qt_mp2 = $this->conn->add("/queue/tree", $add_qt_data_mp2);
 
@@ -1235,7 +1235,7 @@ class mk_synchro_qos
             print " qt-force :: garants :: ".$garant_id.", speed_dwn: ".$speed_dwn.", speed_upl: ".$speed_upl."\n";
 
             $add_qt_data_g = array("disabled" => "false", "limit-at" => $speed_dwn."k", "max-limit" => $speed_dwn."k",
-                 "name" => "q-dwn-".$garant_id, "parent" => "global-out", "priority" => "1", "queue" => "wireless-default");
+                "name" => "q-dwn-".$garant_id, "parent" => "global-out", "priority" => "1", "queue" => "wireless-default");
 
             $add_qt_g = $this->conn->add("/queue/tree", $add_qt_data_g);
 
@@ -1252,7 +1252,7 @@ class mk_synchro_qos
             }
 
             $add_qt_data_g2 = array("disabled" => "false", "limit-at" => $speed_upl."k", "max-limit" => $speed_upl."k",
-                     "name" => "q-upl-".$garant_id, "parent" => "global-out", "priority" => "1", "queue" => "wireless-default");
+                "name" => "q-upl-".$garant_id, "parent" => "global-out", "priority" => "1", "queue" => "wireless-default");
 
             $add_qt_g2 = $this->conn->add("/queue/tree", $add_qt_data_g2);
 
@@ -1288,7 +1288,7 @@ class mk_synchro_qos
                 }
 
                 $add_qt_data_g_upl = array("disabled" => "false", "name" => "q-upl-q-".$ip, "parent" => "q-upl-".$garant_id,
-                     "priority" => "1", "packet-mark" => $ip."_upl", "queue" => "wireless-default");
+                    "priority" => "1", "packet-mark" => $ip."_upl", "queue" => "wireless-default");
 
                 $add_qt_g_upl = $this->conn->add("/queue/tree", $add_qt_data_g_upl);
 

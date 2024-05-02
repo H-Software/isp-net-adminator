@@ -17,9 +17,10 @@ $finder = (new PhpCsFixer\Finder())
 
 return (new PhpCsFixer\Config())
     ->setRules([
-        '@PhpCsFixer' => true,
+        '@PSR12' => true,
+        // '@PhpCsFixer' => true,
         'array_indentation' => true,
-        // '@PSR12' => true,
+
     ])
     ->setFinder($finder)
 ;

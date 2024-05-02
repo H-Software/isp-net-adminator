@@ -188,101 +188,101 @@ class fakturacniSkupiny extends adminator
                 $error .= "\"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</div></div>";
             }
 
-            //ulozeni
-            if(!(isset($fail))) {
-                // priprava / konverze promennych pred ulozenim ...
-                //if ( $dov_net == 2 ) { $dov_net_w ="a"; } else { $dov_net_w="n"; }
+        //ulozeni
+        if(!(isset($fail))) {
+            // priprava / konverze promennych pred ulozenim ...
+            //if ( $dov_net == 2 ) { $dov_net_w ="a"; } else { $dov_net_w="n"; }
 
-                if($update_status == "1") {
+            if($update_status == "1") {
 
-                    // rezim upravy
+                // rezim upravy
 
-                    //prvne stavajici data docasne ulozime
-                    $vysl4 = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '". intval($this->form_update_id). "' ");
+                //prvne stavajici data docasne ulozime
+                $vysl4 = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '". intval($this->form_update_id). "' ");
 
-                    if(($vysl4->num_rows <> 1)) {
-                        $output .= "<div style=\"color: red; padding-top: 5px; padding-bottom: 5px; \" >";
-                        $output .= "Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
-                    } else {
-                        $pole_puvodni_data = $vysl4->fetch_assoc();
-                        unset($pole_puvodni_data["id"]);
-                        unset($pole_puvodni_data["vlozil_kdo"]);
-                    } // konec else if radku <> 1
-
-                    $affected = DB::table($this->db_table_name)
-                            ->where('id', $this->form_update_id)
-                            ->update($form_data);
-
-                    if($affected == 1) {
-                        $res = true;
-                    }
-
-                    if($res) {
-                        $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n";
-                    } else {
-                        $output .= "<br><H3><div style=\"color: red; \" >Chyba! Data v databázi nelze změnit.</div></h3>\n";
-                    }
-
-                    $output .= "<div style=\"font-weight: bold; font-size: 18px; \">Změny je třeba dát vědět účetní!</div>";
-
-                    if ($res === true) {
-                        $vysledek_write = 1;
-                    } else {
-                        $vysledek_write = 0;
-                    }
-
-                    //ted vlozime do archivu zmen (inkrementarne)
-                    $params = array(
-                            "itemId" => $this->form_update_id,
-                            "actionResult" => $vysledek_write,
-                            "loggedUserEmail" => $this->loggedUserEmail
-                        );
-
-                    $az = new ArchivZmen($this->container, $this->smarty);
-                    $azRes = $az->insertItemDiff(2, $pole_puvodni_data, $form_data, $params);
-
-                    if(is_object($azRes)) {
-                        $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
-                    } else {
-                        $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
-                    }
-
-                    $updated = "true";
+                if(($vysl4->num_rows <> 1)) {
+                    $output .= "<div style=\"color: red; padding-top: 5px; padding-bottom: 5px; \" >";
+                    $output .= "Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
                 } else {
-                    // rezim pridani
-                    //
-                    $form_data = array_merge($form_data, array("vlozil_kdo" => $this->loggedUserEmail));
+                    $pole_puvodni_data = $vysl4->fetch_assoc();
+                    unset($pole_puvodni_data["id"]);
+                    unset($pole_puvodni_data["vlozil_kdo"]);
+                } // konec else if radku <> 1
 
-                    $res = DB::table($this->db_table_name)->insert($form_data);
+                $affected = DB::table($this->db_table_name)
+                        ->where('id', $this->form_update_id)
+                        ->update($form_data);
 
-                    if($res) {
-                        $output .= "<br><H3><div style=\"color: green;\" >Fakturační skupina úspěšně přidána do databáze.</div></H3>\n";
-                    } else {
-                        $output .= "<br><H3><div style=\"color: red;\" >Chyba! Fakturační skupinu nelze přidat.</div></H3>\n";
-                    }
-
-                    if($res === true) {
-                        $vysledek_write = 1;
-                    }
-
-                    // pridame to do archivu zmen
-                    $az = new ArchivZmen($this->container, $this->smarty);
-
-                    $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
-
-                    if(is_object($azRes)) {
-                        $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
-                    } else {
-                        $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
-                    }
-
-                    // for form/page control
-                    $writed = "true";
-
-                    // konec else - rezim pridani
+                if($affected == 1) {
+                    $res = true;
                 }
+
+                if($res) {
+                    $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n";
+                } else {
+                    $output .= "<br><H3><div style=\"color: red; \" >Chyba! Data v databázi nelze změnit.</div></h3>\n";
+                }
+
+                $output .= "<div style=\"font-weight: bold; font-size: 18px; \">Změny je třeba dát vědět účetní!</div>";
+
+                if ($res === true) {
+                    $vysledek_write = 1;
+                } else {
+                    $vysledek_write = 0;
+                }
+
+                //ted vlozime do archivu zmen (inkrementarne)
+                $params = array(
+                    "itemId" => $this->form_update_id,
+                    "actionResult" => $vysledek_write,
+                    "loggedUserEmail" => $this->loggedUserEmail
+                );
+
+                $az = new ArchivZmen($this->container, $this->smarty);
+                $azRes = $az->insertItemDiff(2, $pole_puvodni_data, $form_data, $params);
+
+                if(is_object($azRes)) {
+                    $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+                } else {
+                    $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
+                }
+
+                $updated = "true";
             } else {
-            } // konec else ( !(isset(fail) ), musi tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
+                // rezim pridani
+                //
+                $form_data = array_merge($form_data, array("vlozil_kdo" => $this->loggedUserEmail));
+
+                $res = DB::table($this->db_table_name)->insert($form_data);
+
+                if($res) {
+                    $output .= "<br><H3><div style=\"color: green;\" >Fakturační skupina úspěšně přidána do databáze.</div></H3>\n";
+                } else {
+                    $output .= "<br><H3><div style=\"color: red;\" >Chyba! Fakturační skupinu nelze přidat.</div></H3>\n";
+                }
+
+                if($res === true) {
+                    $vysledek_write = 1;
+                }
+
+                // pridame to do archivu zmen
+                $az = new ArchivZmen($this->container, $this->smarty);
+
+                $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
+
+                if(is_object($azRes)) {
+                    $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+                } else {
+                    $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
+                }
+
+                // for form/page control
+                $writed = "true";
+
+                // konec else - rezim pridani
+            }
+        } else {
+        } // konec else ( !(isset(fail) ), musi tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif (isset($send)) :
             $error = "<div class=\"alert alert-warning\" role=\"alert\">Chybí povinné údaje !!! (aktuálně jsou povinné: Název, Typ, Typ služby) ".
@@ -324,58 +324,58 @@ class fakturacniSkupiny extends adminator
             } else {
                 $output .= "Typ nelze zjistit";
             }
-            $output .= '<b><br>';
+        $output .= '<b><br>';
 
-            $output .= '<b>Typ služby</b>: ';
+        $output .= '<b>Typ služby</b>: ';
 
-            if($form_data['typ_sluzby'] == 0) {
-                $output .= "wifi";
-            } elseif($form_data['typ_sluzby'] == 1) {
-                $output .= "optika";
-            } else {
-                $output .= "nelze zjistit";
-            }
+        if($form_data['typ_sluzby'] == 0) {
+            $output .= "wifi";
+        } elseif($form_data['typ_sluzby'] == 1) {
+            $output .= "optika";
+        } else {
+            $output .= "nelze zjistit";
+        }
 
-            $output .= '<br><br>';
+        $output .= '<br><br>';
 
-            $output .= '<b>Služba "Internet"</b>: ';
+        $output .= '<b>Služba "Internet"</b>: ';
 
-            if($form_data['sluzba_int'] == 0) {
-                $output .= "Ne";
-            } elseif($form_data['sluzba_int'] == 1) {
-                $output .= "Ano";
-            } else {
-                $output .= "Nelze zjistit";
-            }
+        if($form_data['sluzba_int'] == 0) {
+            $output .= "Ne";
+        } elseif($form_data['sluzba_int'] == 1) {
+            $output .= "Ano";
+        } else {
+            $output .= "Nelze zjistit";
+        }
 
-            $output .= '<br>
+        $output .= '<br>
                 <b>Sluzba internet :: tarif ID</b>: ' . $form_data['sluzba_int_id_tarifu'] .
-             '<br><br>';
+         '<br><br>';
 
-            $output .= '<b>Služba "IPTV"</b>: ';
+        $output .= '<b>Služba "IPTV"</b>: ';
 
-            if($form_data['sluzba_iptv'] == 0) {
-                $output .= "Ne";
-            } elseif($form_data['sluzba_iptv'] == 1) {
-                $output .= "Ano";
-            } else {
-                $output .= "Nelze zjistit";
-            }
+        if($form_data['sluzba_iptv'] == 0) {
+            $output .= "Ne";
+        } elseif($form_data['sluzba_iptv'] == 1) {
+            $output .= "Ano";
+        } else {
+            $output .= "Nelze zjistit";
+        }
 
-            $output .= '<br>';
+        $output .= '<br>';
 
-            $output .= '<b>Sluzba iptv :: tarif</b>: ' .  $form_data['sluzba_iptv_id_tarifu'] .
-            '<br><br>';
+        $output .= '<b>Sluzba iptv :: tarif</b>: ' .  $form_data['sluzba_iptv_id_tarifu'] .
+        '<br><br>';
 
-            $output .= '<b>Služba "VoIP"</b>: ';
+        $output .= '<b>Služba "VoIP"</b>: ';
 
-            if($form_data['sluzba_voip'] == 0) {
-                $output .= "Ne";
-            } elseif($form_data['sluzba_voip'] == 1) {
-                $output .= "Ano";
-            } else {
-                $output .= "Nelze zjistit";
-            }
+        if($form_data['sluzba_voip'] == 0) {
+            $output .= "Ne";
+        } elseif($form_data['sluzba_voip'] == 1) {
+            $output .= "Ano";
+        } else {
+            $output .= "Nelze zjistit";
+        }
 
         endif;
         $output .= "<br>";

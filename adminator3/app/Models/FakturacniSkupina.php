@@ -28,15 +28,15 @@ class FakturacniSkupina extends Model
      */
     protected $attributes = [
         'typ' => 0,
-    'typ_sluzby' => 0,
-    'fakturacni_text' => null,
-    'vlozil_kdo' => null,
-    'sluzba_int' => 0,
-    'sluzba_int_id_tarifu' => 0,
-    'sluzba_iptv' => 0,
-    'sluzba_iptv_id_tarifu' => 0,
-    'sluzba_voip' => 0,
-    'sluzba_voip_id_tarifu' => 0,
+        'typ_sluzby' => 0,
+        'fakturacni_text' => null,
+        'vlozil_kdo' => null,
+        'sluzba_int' => 0,
+        'sluzba_int_id_tarifu' => 0,
+        'sluzba_iptv' => 0,
+        'sluzba_iptv_id_tarifu' => 0,
+        'sluzba_voip' => 0,
+        'sluzba_voip_id_tarifu' => 0,
     ];
 
 }

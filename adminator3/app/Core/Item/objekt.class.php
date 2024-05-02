@@ -679,238 +679,238 @@ class objekt extends adminator
                 $error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";
             }
 
-            // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
-            $poz_fakt_clovek = pg_query("SELECT id_cloveka, dov_net FROM objekty WHERE id_komplu = '".intval($this->update_id)."' ");
-            $poz_fakt_clovek_radku = pg_num_rows($poz_fakt_clovek);
+        // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
+        $poz_fakt_clovek = pg_query("SELECT id_cloveka, dov_net FROM objekty WHERE id_komplu = '".intval($this->update_id)."' ");
+        $poz_fakt_clovek_radku = pg_num_rows($poz_fakt_clovek);
 
-            while ($data_poz_f_clovek = pg_fetch_array($poz_fakt_clovek)) {
-                $id_cloveka = $data_poz_f_clovek["id_cloveka"];
-                $dov_net_puvodni = $data_poz_f_clovek["dov_net"];
-            }
+        while ($data_poz_f_clovek = pg_fetch_array($poz_fakt_clovek)) {
+            $id_cloveka = $data_poz_f_clovek["id_cloveka"];
+            $dov_net_puvodni = $data_poz_f_clovek["dov_net"];
+        }
 
-            if ((($id_cloveka > 1) and ($update_status == 1))) {
+        if ((($id_cloveka > 1) and ($update_status == 1))) {
 
-                $pozastavene_fakt = pg_query("SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
-                $pozastavene_fakt_radku = pg_num_rows($pozastavene_fakt);
+            $pozastavene_fakt = pg_query("SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
+            $pozastavene_fakt_radku = pg_num_rows($pozastavene_fakt);
 
-                if ($pozastavene_fakt_radku == 1) {
-                    while ($data_poz_fakt = pg_fetch_array($pozastavene_fakt)) {
-                        $billing_suspend_status = intval($data_poz_fakt["billing_suspend_status"]);
-                    }
-                } else {
-                    $output .= "Chyba! nelze vybrat vlastníka.";
+            if ($pozastavene_fakt_radku == 1) {
+                while ($data_poz_fakt = pg_fetch_array($pozastavene_fakt)) {
+                    $billing_suspend_status = intval($data_poz_fakt["billing_suspend_status"]);
                 }
-
-                // $output .= "debug: id_fakturacni_skupiny: ".$pozastavene_fakturace_id." id_cloveka: $id_cloveka ,dov_net-puvodni: $dov_net_puvodni , povolen inet: $dov_net";
-
-                if($billing_suspend_status == 1) {
-                    // budeme zli
-                    // prvne zjisteni predchoziho stavu
-
-                    if((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
-                        $fail = "true";
-                        $error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka pole \"Pozastavené fakturace\". </div>";
-                    }
-                }
-
-            } // konec if jestli id_cloveka > 1 and update == 1
-
-            //checkem jestli se macklo na tlacitko "OK" :)
-            if(preg_match("/^OK$/", $this->odeslano)) {
-                $output .= "";
             } else {
-                $fail = "true";
-                $error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
+                $output .= "Chyba! nelze vybrat vlastníka.";
             }
 
-            //ulozeni
-            if (!(isset($fail))) {
-                // priprava promennych
+            // $output .= "debug: id_fakturacni_skupiny: ".$pozastavene_fakturace_id." id_cloveka: $id_cloveka ,dov_net-puvodni: $dov_net_puvodni , povolen inet: $dov_net";
 
-                if ($this->form_dov_net == 2) {
-                    $dov_net_w = "a";
+            if($billing_suspend_status == 1) {
+                // budeme zli
+                // prvne zjisteni predchoziho stavu
+
+                if((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
+                    $fail = "true";
+                    $error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka pole \"Pozastavené fakturace\". </div>";
+                }
+            }
+
+        } // konec if jestli id_cloveka > 1 and update == 1
+
+        //checkem jestli se macklo na tlacitko "OK" :)
+        if(preg_match("/^OK$/", $this->odeslano)) {
+            $output .= "";
+        } else {
+            $fail = "true";
+            $error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
+        }
+
+        //ulozeni
+        if (!(isset($fail))) {
+            // priprava promennych
+
+            if ($this->form_dov_net == 2) {
+                $dov_net_w = "a";
+            } else {
+                $dov_net_w = "n";
+            }
+
+            if ($this->form_typ == 3) {
+                $dov_net_w = "a";
+            }
+
+            if ($this->form_typ_ip == 1) {
+                $verejna_w = "99";
+            } elseif($this->form_typ_ip == 3) {
+                $verejna_w = $vip_rozsah;
+                //$vip_snat="1";
+            } elseif($this->form_typ_ip == 4) {
+                //tunelovane ip adresy
+                $tunnelling_ip = 1; //flag pro selekci tunelovanych ip
+                $verejna_w = $vip_rozsah; //flag ze je jedna o verejnou (asi jen pro DNS)
+
+                $tunnel_user_w = $tunnel_user;
+                $tunnel_pass_w = $tunnel_pass;
+
+            } else {
+                //obyc verejka
+                $verejna_w = $vip_rozsah;
+                $tunnelling_ip = "0";
+            }
+
+            if($this->form_sikana_status == "2") {
+                $sikana_status_w = 'a';
+            } else {
+                $sikana_status_w = 'n';
+            }
+
+            $this->form_sikana_cas = intval($this->form_sikana_cas);
+
+            if($update_status == "1") {
+                // rezim upravy
+
+                if ($this->adminator->checkLevel(29, false) === false) {
+                    $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
+                    return $output;
+                }
+
+                //prvne stavajici data docasne ulozime
+                $pole2 .= "<b>akce: uprava objektu; </b><br>";
+
+                $sql_rows = "id_komplu, dns_jmeno, ip, mac, client_ap_ip, dov_net, id_tarifu, typ, poznamka, verejna, ";
+                $sql_rows .= "sikana_status, sikana_cas, sikana_text, upravil, id_nodu, ";
+                $sql_rows .= "tunnelling_ip, tunnel_user, tunnel_pass";
+
+                $vysl4 = pg_query("SELECT ".$sql_rows." FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
+
+                if(!$vysl4) {
+                    $output .= "<div class=\"alert alert-danger\" role=\"alert\" style=\"padding: 10px; \">Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
+                    $output .= "<div>pg_query failed! detail chyby: " . pg_last_error($this->conn_pgsql) . "</div>";
+                    return $output;
+                }
+
+                if((pg_num_rows($vysl4) <> 1)) {
+                    $output .= "<div class=\"alert alert-danger\" role=\"alert\" style=\"padding: 10px; \">Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
+                    $output .= "<div>detail chyby: num_rows: " . pg_num_rows($vysl4) . "</div>";
+                    return $output;
                 } else {
-                    $dov_net_w = "n";
-                }
+                    while ($data4 = pg_fetch_array($vysl4)) {
 
-                if ($this->form_typ == 3) {
-                    $dov_net_w = "a";
-                }
+                        $this->origDataArray["id_komplu"] = $data4["id_komplu"];
+                        $this->origDataArray["dns_jmeno"] = $data4["dns_jmeno"];
+                        $this->origDataArray["ip"] = $data4["ip"];
+                        $this->origDataArray["mac"] = $data4["mac"];
+                        $this->origDataArray["client_ap_ip"] = $data4["client_ap_ip"];
+                        $this->origDataArray["dov_net"] = $data4["dov_net"];
+                        $this->origDataArray["id_tarifu"] = $data4["id_tarifu"];
+                        $this->origDataArray["typ"] = $data4["typ"];
+                        $this->origDataArray["poznamka"] = $data4["poznamka"];
+                        $this->origDataArray["verejna"] = $data4["verejna"];
+                        $this->origDataArray["sikana_status"] = $data4["sikana_status"];
+                        $this->origDataArray["sikana_cas"] = $data4["sikana_cas"];
+                        $this->origDataArray["sikana_text"] = $data4["sikana_text"];
+                        $this->origDataArray["upravil"] = trim($data4["upravil"]);
+                        $this->origDataArray["id_nodu"] = $data4["id_nodu"];
 
-                if ($this->form_typ_ip == 1) {
-                    $verejna_w = "99";
-                } elseif($this->form_typ_ip == 3) {
-                    $verejna_w = $vip_rozsah;
-                    //$vip_snat="1";
-                } elseif($this->form_typ_ip == 4) {
-                    //tunelovane ip adresy
-                    $tunnelling_ip = 1; //flag pro selekci tunelovanych ip
-                    $verejna_w = $vip_rozsah; //flag ze je jedna o verejnou (asi jen pro DNS)
+                        $this->origDataArray["tunnelling_ip"] = $data4["tunnelling_ip"];
+                        $this->origDataArray["tunnel_user"] = $data4["tunnel_user"];
+                        $this->origDataArray["tunnel_pass"] = $data4["tunnel_pass"];
 
-                    $tunnel_user_w = $tunnel_user;
-                    $tunnel_pass_w = $tunnel_pass;
-
-                } else {
-                    //obyc verejka
-                    $verejna_w = $vip_rozsah;
-                    $tunnelling_ip = "0";
-                }
-
-                if($this->form_sikana_status == "2") {
-                    $sikana_status_w = 'a';
-                } else {
-                    $sikana_status_w = 'n';
-                }
-
-                $this->form_sikana_cas = intval($this->form_sikana_cas);
-
-                if($update_status == "1") {
-                    // rezim upravy
-
-                    if ($this->adminator->checkLevel(29, false) === false) {
-                        $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
-                        return $output;
                     }
 
-                    //prvne stavajici data docasne ulozime
-                    $pole2 .= "<b>akce: uprava objektu; </b><br>";
+                } // konec else if radku <> 1
 
-                    $sql_rows = "id_komplu, dns_jmeno, ip, mac, client_ap_ip, dov_net, id_tarifu, typ, poznamka, verejna, ";
-                    $sql_rows .= "sikana_status, sikana_cas, sikana_text, upravil, id_nodu, ";
-                    $sql_rows .= "tunnelling_ip, tunnel_user, tunnel_pass";
-
-                    $vysl4 = pg_query("SELECT ".$sql_rows." FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
-
-                    if(!$vysl4) {
-                        $output .= "<div class=\"alert alert-danger\" role=\"alert\" style=\"padding: 10px; \">Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
-                        $output .= "<div>pg_query failed! detail chyby: " . pg_last_error($this->conn_pgsql) . "</div>";
-                        return $output;
-                    }
-
-                    if((pg_num_rows($vysl4) <> 1)) {
-                        $output .= "<div class=\"alert alert-danger\" role=\"alert\" style=\"padding: 10px; \">Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
-                        $output .= "<div>detail chyby: num_rows: " . pg_num_rows($vysl4) . "</div>";
-                        return $output;
-                    } else {
-                        while ($data4 = pg_fetch_array($vysl4)) {
-
-                            $this->origDataArray["id_komplu"] = $data4["id_komplu"];
-                            $this->origDataArray["dns_jmeno"] = $data4["dns_jmeno"];
-                            $this->origDataArray["ip"] = $data4["ip"];
-                            $this->origDataArray["mac"] = $data4["mac"];
-                            $this->origDataArray["client_ap_ip"] = $data4["client_ap_ip"];
-                            $this->origDataArray["dov_net"] = $data4["dov_net"];
-                            $this->origDataArray["id_tarifu"] = $data4["id_tarifu"];
-                            $this->origDataArray["typ"] = $data4["typ"];
-                            $this->origDataArray["poznamka"] = $data4["poznamka"];
-                            $this->origDataArray["verejna"] = $data4["verejna"];
-                            $this->origDataArray["sikana_status"] = $data4["sikana_status"];
-                            $this->origDataArray["sikana_cas"] = $data4["sikana_cas"];
-                            $this->origDataArray["sikana_text"] = $data4["sikana_text"];
-                            $this->origDataArray["upravil"] = trim($data4["upravil"]);
-                            $this->origDataArray["id_nodu"] = $data4["id_nodu"];
-
-                            $this->origDataArray["tunnelling_ip"] = $data4["tunnelling_ip"];
-                            $this->origDataArray["tunnel_user"] = $data4["tunnel_user"];
-                            $this->origDataArray["tunnel_pass"] = $data4["tunnel_pass"];
-
-                        }
-
-                    } // konec else if radku <> 1
-
-                    $obj_upd = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip,
-                        "client_ap_ip" => $this->form_client_ap_ip, "dov_net" => $dov_net_w,"id_tarifu" => $this->form_id_tarifu,
+                $obj_upd = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip,
+                    "client_ap_ip" => $this->form_client_ap_ip, "dov_net" => $dov_net_w,"id_tarifu" => $this->form_id_tarifu,
                     "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "verejna" => $verejna_w,
                     "mac" => $this->form_mac, "upravil" => $this->loggedUserEmail, "sikana_status" => $sikana_status_w,
                     "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "id_nodu" => $this->form_selected_nod );
 
-                    if($this->form_typ_ip == 4) {
-                        $obj_upd["tunnelling_ip"] = $tunnelling_ip;
+                if($this->form_typ_ip == 4) {
+                    $obj_upd["tunnelling_ip"] = $tunnelling_ip;
 
-                        $obj_upd["tunnel_user"] = $tunnel_user_w;
-                        $obj_upd["tunnel_pass"] = $tunnel_pass_w;
-                    } else {
-                        $obj_upd["tunnelling_ip"] = null;
-                    }
-
-                    $affected = DB::connection('pgsql')
-                        ->table('objekty')
-                        ->where('id_komplu', $this->update_id)
-                        ->update($obj_upd);
-
-                    if($affected > 0) {
-                        $vysledek_write = 1;
-                        $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n";
-                    } else {
-                        $vysledek_write = 0;
-                        $output .= "<br><H3><div style=\"color: red; \">".
-                        "Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($this->conn_pgsql);
-                    }
-
-                    //ted zvlozime do archivu zmen
-                    $this->updatedDataArray = $obj_upd;
-                    // require("objekty-add-inc-archiv.php");
-                    $this->actionArchivZmenWifiDiff($vysledek_write);
-
-                    $updated = "true";
-
+                    $obj_upd["tunnel_user"] = $tunnel_user_w;
+                    $obj_upd["tunnel_pass"] = $tunnel_pass_w;
                 } else {
-                    // rezim pridani
-                    $sql_rows = "";
-                    $sql_values = "";
+                    $obj_upd["tunnelling_ip"] = null;
+                }
 
-                    $obj_add_i = 1;
+                $affected = DB::connection('pgsql')
+                    ->table('objekty')
+                    ->where('id_komplu', $this->update_id)
+                    ->update($obj_upd);
 
-                    $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu, "dov_net" => $dov_net_w,
-                        "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "verejna" => $verejna_w, "pridal" => $this->loggedUserEmail, "id_nodu" => $this->form_selected_nod,
-                                "sikana_status" => $sikana_status_w, "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text );
+                if($affected > 0) {
+                    $vysledek_write = 1;
+                    $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n";
+                } else {
+                    $vysledek_write = 0;
+                    $output .= "<br><H3><div style=\"color: red; \">".
+                    "Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($this->conn_pgsql);
+                }
 
-                    if($this->form_typ_ip == 4) {
-                        $obj_add["tunnelling_ip"] = $tunnelling_ip;
+                //ted zvlozime do archivu zmen
+                $this->updatedDataArray = $obj_upd;
+                // require("objekty-add-inc-archiv.php");
+                $this->actionArchivZmenWifiDiff($vysledek_write);
 
-                        $obj_add["tunnel_user"] = $tunnel_user_w;
-                        $obj_add["tunnel_pass"] = $tunnel_pass_w;
-
-                    }
-
-                    if((strlen($this->form_client_ap_ip) > 0)) {
-                        $obj_add["client_ap_ip"] = $this->form_client_ap_ip;
-                    }
-
-                    if((strlen($this->form_mac) > 0)) {
-                        $obj_add["mac"] = $this->form_mac;
-                    }
-
-                    $this->insertedId = DB::connection('pgsql')
-                        ->table('objekty')
-                        ->insertGetId($obj_add, "id_komplu");
-
-                    if($this->insertedId > 0) {
-                        $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n";
-                        $vysledek_write = 1;
-                    } else {
-                        $vysledek_write = 0;
-
-                        $output .= "<H3><div style=\"color: red; padding-top: 20px; padding-left: 5px; \">".
-                        "Chyba! Data do databáze nelze uložit. </div></H3>\n";
-
-                        $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
-                        pg_last_error($this->conn_pgsql).
-                        "</div>";
-
-                        $output .= "<div style=\"padding-left: 5px; \">sql: ".$sql."</div>";
-                    }
-
-                    // pridame to do archivu zmen
-                    // require("objekty-add-inc-archiv-wifi-add.php");
-                    $this->addedDataArray = $obj_add;
-                    $this->actionArchivZmenWifi($vysledek_write);
-
-                    $writed = "true";
-                } // konec else - rezim pridani
+                $updated = "true";
 
             } else {
-            } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
+                // rezim pridani
+                $sql_rows = "";
+                $sql_values = "";
+
+                $obj_add_i = 1;
+
+                $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu, "dov_net" => $dov_net_w,
+                    "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "verejna" => $verejna_w, "pridal" => $this->loggedUserEmail, "id_nodu" => $this->form_selected_nod,
+                    "sikana_status" => $sikana_status_w, "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text );
+
+                if($this->form_typ_ip == 4) {
+                    $obj_add["tunnelling_ip"] = $tunnelling_ip;
+
+                    $obj_add["tunnel_user"] = $tunnel_user_w;
+                    $obj_add["tunnel_pass"] = $tunnel_pass_w;
+
+                }
+
+                if((strlen($this->form_client_ap_ip) > 0)) {
+                    $obj_add["client_ap_ip"] = $this->form_client_ap_ip;
+                }
+
+                if((strlen($this->form_mac) > 0)) {
+                    $obj_add["mac"] = $this->form_mac;
+                }
+
+                $this->insertedId = DB::connection('pgsql')
+                    ->table('objekty')
+                    ->insertGetId($obj_add, "id_komplu");
+
+                if($this->insertedId > 0) {
+                    $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n";
+                    $vysledek_write = 1;
+                } else {
+                    $vysledek_write = 0;
+
+                    $output .= "<H3><div style=\"color: red; padding-top: 20px; padding-left: 5px; \">".
+                    "Chyba! Data do databáze nelze uložit. </div></H3>\n";
+
+                    $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
+                    pg_last_error($this->conn_pgsql).
+                    "</div>";
+
+                    $output .= "<div style=\"padding-left: 5px; \">sql: ".$sql."</div>";
+                }
+
+                // pridame to do archivu zmen
+                // require("objekty-add-inc-archiv-wifi-add.php");
+                $this->addedDataArray = $obj_add;
+                $this->actionArchivZmenWifi($vysledek_write);
+
+                $writed = "true";
+            } // konec else - rezim pridani
+
+        } else {
+        } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif(isset($this->send)) :
             $error = "<h4>Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) </H4>";
@@ -958,56 +958,56 @@ class objekt extends adminator
                 $output .= "chybný výběr";
             }
 
-            $output .= '<br> 
+        $output .= '<br> 
                  <b>Linka</b>: ';
 
-            $vysledek4 = $this->conn_mysql->query("SELECT jmeno_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu='".intval($this->form_id_tarifu)."' ");
-            $radku4 = $vysledek4->num_rows;
+        $vysledek4 = $this->conn_mysql->query("SELECT jmeno_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu='".intval($this->form_id_tarifu)."' ");
+        $radku4 = $vysledek4->num_rows;
 
-            if($radku4 == 0) {
-                $output .= "Nelze zjistit tarif";
-            } else {
-                while($zaznam4 = $vysledek4->fetch_array()) {
-                    $output .= $zaznam4["jmeno_tarifu"]." (".$zaznam4["zkratka_tarifu"].") ";
-                }
+        if($radku4 == 0) {
+            $output .= "Nelze zjistit tarif";
+        } else {
+            while($zaznam4 = $vysledek4->fetch_array()) {
+                $output .= $zaznam4["jmeno_tarifu"]." (".$zaznam4["zkratka_tarifu"].") ";
             }
+        }
 
-            $output .= '<br>
+        $output .= '<br>
             <b>Povolet NET</b>: ';
-            if ($this->form_dov_net == 2) {
-                $output .= "Ano";
-            } else {
-                $output .= "Ne";
-            }
-            $output .= '<br>
+        if ($this->form_dov_net == 2) {
+            $output .= "Ano";
+        } else {
+            $output .= "Ne";
+        }
+        $output .= '<br>
             <br>
             <b>MAC </b>: ' . $this->form_mac . '<br> 
             <br>
             <b>Poznámka</b>: ' . $this->form_pozn . '<br>
             <b>Přípojný bod</b>:';
 
-            $vysledek3 = $this->conn_mysql->query("SELECT jmeno,id FROM nod_list WHERE id='".intval($this->form_selected_nod)."'");
-            $radku3 = $vysledek3->num_rows;
+        $vysledek3 = $this->conn_mysql->query("SELECT jmeno,id FROM nod_list WHERE id='".intval($this->form_selected_nod)."'");
+        $radku3 = $vysledek3->num_rows;
 
-            if($radku3 == 0) {
-                $output .= "Nelze zjistit ";
-            } else {
-                while ($zaznam3 = $vysledek3->fetch_array()) {
-                    $output .= $zaznam3["jmeno"]." (".$zaznam3["id"].") ".'';
-                }
+        if($radku3 == 0) {
+            $output .= "Nelze zjistit ";
+        } else {
+            while ($zaznam3 = $vysledek3->fetch_array()) {
+                $output .= $zaznam3["jmeno"]." (".$zaznam3["id"].") ".'';
             }
+        }
 
-            $output .= "<br><br><b>Šikana: </b>";
-            if($this->form_sikana_status == 2) {
-                $output .= "Ano";
+        $output .= "<br><br><b>Šikana: </b>";
+        if($this->form_sikana_status == 2) {
+            $output .= "Ano";
 
-                $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
-                $output .= "<br><b>Šikana - text: </b>".$this->form_sikana_text;
-            } elseif($this->form_sikana_status == 1) {
-                $output .= "Ne";
-            } else {
-                $output .= "Nelze zjistit";
-            }
+            $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
+            $output .= "<br><b>Šikana - text: </b>".$this->form_sikana_text;
+        } elseif($this->form_sikana_status == 1) {
+            $output .= "Ne";
+        } else {
+            $output .= "Nelze zjistit";
+        }
 
         endif;
 
@@ -1188,198 +1188,198 @@ class objekt extends adminator
                 $error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";
             }
 
-            // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
-            $poz_fakt_clovek = pg_query("SELECT * FROM objekty WHERE id_komplu = '$this->update_id' ");
-            $poz_fakt_clovek_radku = pg_num_rows($poz_fakt_clovek);
+        // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
+        $poz_fakt_clovek = pg_query("SELECT * FROM objekty WHERE id_komplu = '$this->update_id' ");
+        $poz_fakt_clovek_radku = pg_num_rows($poz_fakt_clovek);
 
-            while($data_poz_f_clovek = pg_fetch_array($poz_fakt_clovek)) {
-                $id_cloveka = $data_poz_f_clovek["id_cloveka"];
-                $dov_net_puvodni = $data_poz_f_clovek["dov_net"];
+        while($data_poz_f_clovek = pg_fetch_array($poz_fakt_clovek)) {
+            $id_cloveka = $data_poz_f_clovek["id_cloveka"];
+            $dov_net_puvodni = $data_poz_f_clovek["dov_net"];
+        }
+
+        if ((($id_cloveka > 1) and ($update_status == 1))) {
+
+            $pozastavene_fakt = pg_query("SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
+            $pozastavene_fakt_radku = pg_num_rows($pozastavene_fakt);
+
+
+            if($pozastavene_fakt_radku == 1) {
+                while ($data_poz_fakt = pg_fetch_array($pozastavene_fakt)) {
+                    $billing_suspend_status = intval($data_poz_fakt["billing_suspend_status"]);
+                }
+            } else {
+                $output .= "Chyba! nelze vybrat vlastníka.";
             }
 
-            if ((($id_cloveka > 1) and ($update_status == 1))) {
+            if($billing_suspend_status == 1) {
+                // budeme zli
+                // prvne zjisteni predchoziho stavu
 
-                $pozastavene_fakt = pg_query("SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
-                $pozastavene_fakt_radku = pg_num_rows($pozastavene_fakt);
-
-
-                if($pozastavene_fakt_radku == 1) {
-                    while ($data_poz_fakt = pg_fetch_array($pozastavene_fakt)) {
-                        $billing_suspend_status = intval($data_poz_fakt["billing_suspend_status"]);
-                    }
-                } else {
-                    $output .= "Chyba! nelze vybrat vlastníka.";
+                if((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
+                    $fail = "true";
+                    $error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka fakturační skupinu. </div>";
                 }
 
-                if($billing_suspend_status == 1) {
-                    // budeme zli
-                    // prvne zjisteni predchoziho stavu
-
-                    if((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
-                        $fail = "true";
-                        $error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka fakturační skupinu. </div>";
-                    }
-
-                }
-
-            } // konec if jestli id_cloveka > 1 and update == 1
-
-            //checkem jestli se macklo na tlacitko "OK" :)
-            if(preg_match("/^OK*/", $this->odeslano)) {
-                $output .= "";
-            } else {
-                $fail = "true";
-                $error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
             }
 
-            //ukladani udaju ...
-            if(!(isset($fail))) {
-                // priprava promennych
+        } // konec if jestli id_cloveka > 1 and update == 1
 
-                if($this->form_dov_net == 2) {
-                    $dov_net_w = "a";
-                } else {
-                    $dov_net_w = "n";
-                }
-                if($this->form_sikana_status == "2") {
-                    $sikana_status_w = 'a';
-                } else {
-                    $sikana_status_w = 'n';
-                }
+        //checkem jestli se macklo na tlacitko "OK" :)
+        if(preg_match("/^OK*/", $this->odeslano)) {
+            $output .= "";
+        } else {
+            $fail = "true";
+            $error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
+        }
 
-                if ($this->form_typ_ip == 1) {
-                    $verejna_w = "99";
-                    //$vip_snat="0";
-                } else {
-                    $verejna_w = "1";
-                    //$vip_snat="0";
-                }
+        //ukladani udaju ...
+        if(!(isset($fail))) {
+            // priprava promennych
 
-                if($this->form_another_vlan_id == 0) {
-                    $this->form_another_vlan_id = null;
-                }
-
-                if($update_status == "1") {
-
-                    if ($this->adminator->checkLevel(29, false) === false) {
-                        $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
-                        return $output;
-                    }
-
-                    // rezim upravy
-
-                    //prvne stavajici data docasne ulozime
-                    $pole2 .= "<b>akce: uprava objektu; </b><br>";
-
-                    $vysl4 = pg_query("select * from objekty WHERE id_komplu='$this->update_id' ");
-
-                    if((pg_num_rows($vysl4) <> 1)) {
-                        $output .= "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>";
-                    } else {
-                        while ($data4 = pg_fetch_array($vysl4)):
-
-                            $pole_puvodni_data["id_komplu"] = $data4["id_komplu"];
-
-                            $pole_puvodni_data["dns_jmeno"] = $data4["dns_jmeno"];
-                            $pole_puvodni_data["ip"] = $data4["ip"];
-
-                            $pole_puvodni_data["id_tarifu"] = $data4["id_tarifu"];
-                            $pole_puvodni_data["dov_net"] = $data4["dov_net"];
-                            $pole_puvodni_data["typ"] = $data4["typ"];
-                            $pole_puvodni_data["poznamka"] = $data4["poznamka"];
-
-                            $pole_puvodni_data["mac"] = $data4["mac"];
-                            $pole_puvodni_data["upravil"] = $data4["upravil"];
-                            $pole_puvodni_data["id_nodu"] = $data4["id_nodu"];
-
-                            $pole_puvodni_data["sikana_status"] = $data4["sikana_status"];
-                            $pole_puvodni_data["sikana_text"] = $data4["sikana_text"];
-                            $pole_puvodni_data["sikana_cas"] = $data4["sikana_cas"];
-
-                            $pole_puvodni_data["port_id"] = $data4["port_id"];
-                            $pole_puvodni_data["verejna"] = $data4["verejna"];
-
-                            $pole_puvodni_data["another_vlan_id"] = $data4["another_vlan_id"];
-
-                            if($data4["verejna"] == 99) {
-                                $pole_puvodni_data["typ_ip"] = "1";
-                            } else {
-                                $pole_puvodni_data["typ_ip"] = "2";
-                            }
-
-                        endwhile;
-
-                    } // konec else if radku <> 1
-
-                    $obj_upd = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
-                        "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $this->form_mac,
-                        "upravil" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
-                        "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $this->form_port_id,
-                        "verejna" => $verejna_w, "another_vlan_id" => $this->form_another_vlan_id );
-
-                    $obj_id = array( "id_komplu" => $this->update_id );
-                    $res = pg_update($this->conn_pgsql, 'objekty', $obj_upd, $obj_id);
-
-                    if($res) {
-                        $vysledek_write = 1;
-                        $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n";
-                    } else {
-                        $vysledek_write = 0;
-                        $output .= "<br><H3><div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($this->conn_pgsql);
-                    }
-
-                    //ted zvlozime do archivu zmen
-
-                    //workaround
-                    $obj_upd["typ_ip"] = $this->form_typ_ip;
-
-                    $this->origDataArray = $pole_puvodni_data;
-                    $this->updatedDataArray = $obj_upd;
-                    // require("objekty-add-inc-archiv-fiber.php");
-                    $this->actionArchivZmenFiberDiff($vysledek_write);
-
-                    $updated = "true";
-                } else {
-                    // rezim pridani
-                    $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
-                        "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $this->form_mac,
-                        "pridal" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
-                        "sikana_cas" => intval($this->form_sikana_cas), "sikana_text" => $this->form_sikana_text, "port_id" => $this->form_port_id,
-                        "verejna" => $verejna_w, "another_vlan_id" => $this->form_another_vlan_id );
-
-                    $this->insertedId = DB::connection('pgsql')
-                        ->table('objekty')
-                        ->insertGetId($obj_add, "id_komplu");
-
-                    //zjistit, krz kterého reinharda jde objekt
-                    // $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
-
-                    if ($this->insertedId > 0) {
-                        $vysledek_write = 1;
-                        $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n";
-                    } else {
-                        $vysledek_write = 0;
-
-                        $output .= "<H3><div style=\"color: red; padding-top: 20px; padding-left: 5px; \">".
-                        "Chyba! Data do databáze nelze uložit. </div></H3>\n";
-
-                        $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
-                        pg_last_error($this->conn_pgsql).
-                        "</div>";
-
-                        $output .= "<div style=\"padding-left: 5px; color: grey;\" >obj_add var dump: " . var_export($obj_add, true) ."</div>";
-                    }
-
-                    // pridame to do archivu zmen
-                    $this->addedDataArray = $obj_add;
-                    $this->actionArchivZmenFiberAdd($vysledek_write);
-
-                    $writed = "true";
-                    // konec else - rezim pridani
-                }
-
+            if($this->form_dov_net == 2) {
+                $dov_net_w = "a";
             } else {
-            } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
+                $dov_net_w = "n";
+            }
+            if($this->form_sikana_status == "2") {
+                $sikana_status_w = 'a';
+            } else {
+                $sikana_status_w = 'n';
+            }
+
+            if ($this->form_typ_ip == 1) {
+                $verejna_w = "99";
+                //$vip_snat="0";
+            } else {
+                $verejna_w = "1";
+                //$vip_snat="0";
+            }
+
+            if($this->form_another_vlan_id == 0) {
+                $this->form_another_vlan_id = null;
+            }
+
+            if($update_status == "1") {
+
+                if ($this->adminator->checkLevel(29, false) === false) {
+                    $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
+                    return $output;
+                }
+
+                // rezim upravy
+
+                //prvne stavajici data docasne ulozime
+                $pole2 .= "<b>akce: uprava objektu; </b><br>";
+
+                $vysl4 = pg_query("select * from objekty WHERE id_komplu='$this->update_id' ");
+
+                if((pg_num_rows($vysl4) <> 1)) {
+                    $output .= "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>";
+                } else {
+                    while ($data4 = pg_fetch_array($vysl4)):
+
+                        $pole_puvodni_data["id_komplu"] = $data4["id_komplu"];
+
+                        $pole_puvodni_data["dns_jmeno"] = $data4["dns_jmeno"];
+                        $pole_puvodni_data["ip"] = $data4["ip"];
+
+                        $pole_puvodni_data["id_tarifu"] = $data4["id_tarifu"];
+                        $pole_puvodni_data["dov_net"] = $data4["dov_net"];
+                        $pole_puvodni_data["typ"] = $data4["typ"];
+                        $pole_puvodni_data["poznamka"] = $data4["poznamka"];
+
+                        $pole_puvodni_data["mac"] = $data4["mac"];
+                        $pole_puvodni_data["upravil"] = $data4["upravil"];
+                        $pole_puvodni_data["id_nodu"] = $data4["id_nodu"];
+
+                        $pole_puvodni_data["sikana_status"] = $data4["sikana_status"];
+                        $pole_puvodni_data["sikana_text"] = $data4["sikana_text"];
+                        $pole_puvodni_data["sikana_cas"] = $data4["sikana_cas"];
+
+                        $pole_puvodni_data["port_id"] = $data4["port_id"];
+                        $pole_puvodni_data["verejna"] = $data4["verejna"];
+
+                        $pole_puvodni_data["another_vlan_id"] = $data4["another_vlan_id"];
+
+                        if($data4["verejna"] == 99) {
+                            $pole_puvodni_data["typ_ip"] = "1";
+                        } else {
+                            $pole_puvodni_data["typ_ip"] = "2";
+                        }
+
+                    endwhile;
+
+                } // konec else if radku <> 1
+
+                $obj_upd = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
+                    "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $this->form_mac,
+                    "upravil" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
+                    "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "port_id" => $this->form_port_id,
+                    "verejna" => $verejna_w, "another_vlan_id" => $this->form_another_vlan_id );
+
+                $obj_id = array( "id_komplu" => $this->update_id );
+                $res = pg_update($this->conn_pgsql, 'objekty', $obj_upd, $obj_id);
+
+                if($res) {
+                    $vysledek_write = 1;
+                    $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n";
+                } else {
+                    $vysledek_write = 0;
+                    $output .= "<br><H3><div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div></h3>\n".pg_last_error($this->conn_pgsql);
+                }
+
+                //ted zvlozime do archivu zmen
+
+                //workaround
+                $obj_upd["typ_ip"] = $this->form_typ_ip;
+
+                $this->origDataArray = $pole_puvodni_data;
+                $this->updatedDataArray = $obj_upd;
+                // require("objekty-add-inc-archiv-fiber.php");
+                $this->actionArchivZmenFiberDiff($vysledek_write);
+
+                $updated = "true";
+            } else {
+                // rezim pridani
+                $obj_add = array( "dns_jmeno" => $this->form_dns, "ip" => $this->form_ip, "id_tarifu" => $this->form_id_tarifu,
+                    "dov_net" => $dov_net_w, "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "mac" => $this->form_mac,
+                    "pridal" => $this->loggedUserEmail , "id_nodu" => $this->form_selected_nod, "sikana_status" => $sikana_status_w,
+                    "sikana_cas" => intval($this->form_sikana_cas), "sikana_text" => $this->form_sikana_text, "port_id" => $this->form_port_id,
+                    "verejna" => $verejna_w, "another_vlan_id" => $this->form_another_vlan_id );
+
+                $this->insertedId = DB::connection('pgsql')
+                    ->table('objekty')
+                    ->insertGetId($obj_add, "id_komplu");
+
+                //zjistit, krz kterého reinharda jde objekt
+                // $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
+
+                if ($this->insertedId > 0) {
+                    $vysledek_write = 1;
+                    $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n";
+                } else {
+                    $vysledek_write = 0;
+
+                    $output .= "<H3><div style=\"color: red; padding-top: 20px; padding-left: 5px; \">".
+                    "Chyba! Data do databáze nelze uložit. </div></H3>\n";
+
+                    $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
+                    pg_last_error($this->conn_pgsql).
+                    "</div>";
+
+                    $output .= "<div style=\"padding-left: 5px; color: grey;\" >obj_add var dump: " . var_export($obj_add, true) ."</div>";
+                }
+
+                // pridame to do archivu zmen
+                $this->addedDataArray = $obj_add;
+                $this->actionArchivZmenFiberAdd($vysledek_write);
+
+                $writed = "true";
+                // konec else - rezim pridani
+            }
+
+        } else {
+        } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif (isset($this->send)) :
             $error = "<h4>Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) </H4>";
@@ -1439,67 +1439,67 @@ class objekt extends adminator
                 $output .= "chybný výběr";
             }
 
-            $output .= '<br> 
+        $output .= '<br> 
 
             <b>Linka</b>:';
 
-            $output .= "id tarifu: ".$this->form_id_tarifu;
-            //if ( $tarif == 2 ) { $output .= "Metropolitní"; } else { $output .= "Small city"; }
+        $output .= "id tarifu: ".$this->form_id_tarifu;
+        //if ( $tarif == 2 ) { $output .= "Metropolitní"; } else { $output .= "Small city"; }
 
-            $output .= '<br>
+        $output .= '<br>
             <b>Povolet NET</b>: ';
-            if ($this->form_dov_net == 2) {
-                $output .= "Ano";
-            } else {
-                $output .= "Ne";
-            } $output .= '<br>
+        if ($this->form_dov_net == 2) {
+            $output .= "Ano";
+        } else {
+            $output .= "Ne";
+        } $output .= '<br>
             <br>
             <b>Poznámka</b>: ' . $this->form_pozn . '<br>
             <b>Přípojný bod</b>:';
 
-            $vysledek3 = $this->conn_mysql->query("select * from nod_list WHERE id=".intval($this->form_selected_nod));
-            $radku3 = $vysledek3->num_rows;
-            if($radku3 == 0) {
-                $output .= "Nelze zjistit ";
-            } else {
-                while ($zaznam3 = $vysledek3->fetch_array()) {
-                    $output .= $zaznam3["jmeno"]." (".$zaznam3["id"].") ".'';
-                }
+        $vysledek3 = $this->conn_mysql->query("select * from nod_list WHERE id=".intval($this->form_selected_nod));
+        $radku3 = $vysledek3->num_rows;
+        if($radku3 == 0) {
+            $output .= "Nelze zjistit ";
+        } else {
+            while ($zaznam3 = $vysledek3->fetch_array()) {
+                $output .= $zaznam3["jmeno"]." (".$zaznam3["id"].") ".'';
             }
+        }
 
-            // $output .= "data nejak upravena";
+        // $output .= "data nejak upravena";
 
-            $output .= "<br><br><b>Šikana: </b>";
-            if($this->form_sikana_status == 2) {
-                $output .= "Ano";
+        $output .= "<br><br><b>Šikana: </b>";
+        if($this->form_sikana_status == 2) {
+            $output .= "Ano";
 
-                $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
-                $output .= "<br><b>Šikana - text: </b>".$this->form_sikana_text;
-            } elseif($this->form_sikana_status == 1) {
-                $output .= "Ne";
-            } else {
-                $output .= "Nelze zjistit";
-            }
+            $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
+            $output .= "<br><b>Šikana - text: </b>".$this->form_sikana_text;
+        } elseif($this->form_sikana_status == 1) {
+            $output .= "Ne";
+        } else {
+            $output .= "Nelze zjistit";
+        }
 
-            $output .= "<br><b>Číslo portu (ve switchi)</b>: ".$this->form_port_id."<br>";
+        $output .= "<br><b>Číslo portu (ve switchi)</b>: ".$this->form_port_id."<br>";
 
-            $output .= "<br><b>Typ IP adresy</b>: ";
-            if($this->form_typ_ip == "2") {
-                $output .= "Veřejná";
-            } elseif($this->form_typ_ip == "1") {
-                $output .= "Neveřejná";
-            } else {
-                $output .= "Nelze zjistit";
-            }
+        $output .= "<br><b>Typ IP adresy</b>: ";
+        if($this->form_typ_ip == "2") {
+            $output .= "Veřejná";
+        } elseif($this->form_typ_ip == "1") {
+            $output .= "Neveřejná";
+        } else {
+            $output .= "Nelze zjistit";
+        }
 
-            $output .= "<br><b>Přílušnost MAC k jiné vlaně (ve domov. switchi)</b>: ";
-            if(($this->form_another_vlan_id == null) or ($this->form_another_vlan_id == "")) {
-                $output .= "Vypnuto";
-            } else {
-                $output .= "vlan id: ".$this->form_another_vlan_id;
-            }
+        $output .= "<br><b>Přílušnost MAC k jiné vlaně (ve domov. switchi)</b>: ";
+        if(($this->form_another_vlan_id == null) or ($this->form_another_vlan_id == "")) {
+            $output .= "Vypnuto";
+        } else {
+            $output .= "vlan id: ".$this->form_another_vlan_id;
+        }
 
-            $output .= "<br>";
+        $output .= "<br>";
 
         endif;
 

@@ -49,8 +49,8 @@ class AuthController extends Controller
     {
         if ($request->getMethod() == "POST") {
             $data = array(
-                    'email' => $request->getParsedBody()['slimUsername'],
-                    'password' => $request->getParsedBody()['slimPassword'],
+                'email' => $request->getParsedBody()['slimUsername'],
+                'password' => $request->getParsedBody()['slimPassword'],
             );
 
             try {
@@ -60,7 +60,7 @@ class AuthController extends Controller
                         [
                             'email',
                             'password',
-                            ]
+                        ]
                     ),
                     isset($data['persist'])
                 )

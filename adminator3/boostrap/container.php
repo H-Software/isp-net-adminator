@@ -25,7 +25,7 @@ return [
     SessionInterface::class => function (ContainerInterface $container) {
         $settings = $container->get('settings');
         $logger = $container->get('logger');
-        
+
         $logger->debug("SessionInterface: creating PhpSession");
         // $logger->debug("SessionInterface: PhpSession config dump: " . var_export($settings['session'], true));
 
@@ -38,7 +38,7 @@ return [
     SessionMiddleware::class => function (ContainerInterface $container) {
         return new SessionMiddleware($container->get(SessionInterface::class), $container->get('csrf'), $container->get('logger'));
     },
-    
+
     // Guard::class => function (ContainerInterface $container) {
     //     $storage = [];
 
@@ -56,5 +56,5 @@ return [
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(Psr17Factory::class);
     },
-    
+
 ];

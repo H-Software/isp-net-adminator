@@ -83,14 +83,14 @@ class othersController extends adminatorController
                 $this->smarty->assign("mod_hlaska", "->> Staré zprávy");
             }
 
-            $nastenka->view_number = 10; //zprávy budou zobrazeny po ...
+        $nastenka->view_number = 10; //zprávy budou zobrazeny po ...
 
-            $zpravy = $nastenka->show_messages();
+        $zpravy = $nastenka->show_messages();
 
-            $this->smarty->assign("zpravy", $zpravy);
+        $this->smarty->assign("zpravy", $zpravy);
 
-            $page = $nastenka->show_pages();
-            $this->smarty->assign("strany", $page);
+        $page = $nastenka->show_pages();
+        $this->smarty->assign("strany", $page);
 
         else:
 

@@ -5,16 +5,16 @@
 chdir(__DIR__);
 
 $scriptName = ltrim($_SERVER["REQUEST_URI"], '/');
- // fix GET in URI
+// fix GET in URI
 list($scriptName) = explode('?', $scriptName);
 // echo "filePath: ". $scriptName . "<br>";
 
 $filePath = realpath($scriptName);
 
-if ($filePath && is_dir($filePath)){
+if ($filePath && is_dir($filePath)) {
     // attempt to find an index file
-    foreach (['index.php'] as $indexFile){
-        if ($filePath = realpath($filePath . DIRECTORY_SEPARATOR . $indexFile)){
+    foreach (['index.php'] as $indexFile) {
+        if ($filePath = realpath($filePath . DIRECTORY_SEPARATOR . $indexFile)) {
             break;
         }
     }
@@ -40,17 +40,13 @@ if ($filePath && is_file($filePath)) {
         header("HTTP/1.1 404 Not Found");
         echo "404 Not Found";
     }
-}
-else {
-    if( (preg_match("/^.+(\.php|\.js)$/", $scriptName) == 1)
+} else {
+    if((preg_match("/^.+(\.php|\.js)$/", $scriptName) == 1)
             or ($scriptName == "favicon.ico")
-    )
-    {
+    ) {
         header("HTTP/1.1 404 Not Found");
         echo "404 Not Found";
-    }
-    else
-    {
+    } else {
         // echo "filePath: ". $scriptName . "<br>";
         // rewrite to our index file
         include __DIR__ . DIRECTORY_SEPARATOR . 'index.php';
