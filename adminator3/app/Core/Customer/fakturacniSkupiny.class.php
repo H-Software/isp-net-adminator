@@ -26,7 +26,7 @@ class fakturacniSkupiny extends adminator
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->logger = $container->logger;
+        $this->logger = $container->get('logger');
 
         $i = $container->auth->getIdentity();
         $this->loggedUserEmail = $i['username'];

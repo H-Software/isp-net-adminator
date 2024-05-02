@@ -98,7 +98,7 @@ class objekt extends adminator
         $this->conn_mysql = $container->connMysql;
         $this->conn_pgsql = $container->connPgsql;   
 
-        $this->logger = $container->logger;
+        $this->logger = $container->get('logger');
 
         $i = $container->auth->getIdentity();
         $this->loggedUserEmail = $i['username'];

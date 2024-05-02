@@ -18,7 +18,7 @@ require "app/dependencies.php";
 
 require "app/routing.php";
 
-$logger = $container->logger;
+$logger = $container->get('logger');
 
 $logger->info("others-print called");
         

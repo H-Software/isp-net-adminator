@@ -32,7 +32,7 @@ class partner extends adminator
         $this->container = $container;
         $this->validator = $container->validator;
         $this->conn_mysql = $container->connMysql;
-        $this->logger = $container->logger;
+        $this->logger = $container->get('logger');
 
         $i = $container->auth->getIdentity();
         $this->loggedUserEmail = $i['username'];

@@ -35,9 +35,9 @@ class vlastnik2 {
 	function __construct(ContainerInterface $container) {
 		$this->container = $container;
 		$this->conn_mysql = $container->connMysql;
-		$this->logger = $container->logger;
+		$this->logger = $container->get('logger');
 
-		$this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->smarty, $this->logger);
+		$this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->get('smarty'), $this->logger);
 	}
 
 	private function listPrepareVars($vlastnik)

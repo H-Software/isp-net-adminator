@@ -18,7 +18,7 @@ require __DIR__ ."/../app/dependencies.php";
 
 require __DIR__ ."/../app/routing.php";
 
-$logger = $container->logger;
+$logger = $container->get('logger');
 
 $logger->info("others-smlouva-pdf called");
 
