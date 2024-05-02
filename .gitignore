@@ -40,4 +40,4 @@ extras/documentation
 adminator3/.php_cs.cache
 a3-logs/
 adminator3/export/vlastnici-sro.xls
-adminator3/.php-cs-fixer.cache
+# adminator3/.php-cs-fixer.cache
