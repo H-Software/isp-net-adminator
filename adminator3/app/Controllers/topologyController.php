@@ -6,7 +6,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class topologyController extends adminatorController {
+class topologyController extends adminatorController
+{
     var $conn_mysql;
     var $smarty;
     var $logger;
@@ -20,25 +21,25 @@ class topologyController extends adminatorController {
         $this->logger->info("topologyController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-	}
+    }
 
     public function nodeList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->info("topologyController\\nodeList called");
+        $this->logger->info("topologyController\\nodeList called");
 
-      $this->checkLevel(5, $this->adminator);
+        $this->checkLevel(5, $this->adminator);
 
-      $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
+        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
-      $this->smarty->assign("page_title","Adminator3 :: Topologie :: Node list");
+        $this->smarty->assign("page_title", "Adminator3 :: Topologie :: Node list");
 
-      $this->header($request, $response, $this->adminator);
+        $this->header($request, $response, $this->adminator);
       
-      $output = $topology->getNodeList();
+        $output = $topology->getNodeList();
 
-      $this->smarty->assign("body", $output);
+        $this->smarty->assign("body", $output);
 
-      $this->smarty->display('topology/node-list.tpl');
+        $this->smarty->display('topology/node-list.tpl');
     }
 
     public function routerList(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -49,7 +50,7 @@ class topologyController extends adminatorController {
 
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
-        $this->smarty->assign("page_title","Adminator3 :: Topologie :: Router list");
+        $this->smarty->assign("page_title", "Adminator3 :: Topologie :: Router list");
 
         $this->header($request, $response, $this->adminator);
       

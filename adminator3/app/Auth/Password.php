@@ -19,38 +19,42 @@ class passwordHelper
 
     protected $logger;
 
-	function __construct(ContainerInterface $container, $requestData) {
+    function __construct(ContainerInterface $container, $requestData)
+    {
         $this->container = $container;
         $this->logger = $container->get('logger');
         $this->validator = $container->get('validator');
 
         $this->requestData = $requestData;
-	}
+    }
 
-    function validatePassword(){
+    function validatePassword()
+    {
 
         // $this->logger->debug("passwordHelper\changePassword dump current form data: " . var_export($this->requestData['password_old'],true));
 
         $validationOld = $this->validator->validatePassword($this->requestData['password_old'], $this->loggedUserData['password']);
 
-        $this->logger->debug("PasswordController\postChangePassword: validationOld for user: "
+        $this->logger->debug(
+            "PasswordController\postChangePassword: validationOld for user: "
                                  . var_export($this->loggedUserData['email'], true) 
-                            . " returned: " . var_export($validationOld, true));
+            . " returned: " . var_export($validationOld, true)
+        );
 
         if ($validationOld === false) {
             $this->errorMessage = 'Wrong current password.';
             return false;
-		}
+        }
 
         // https://respect-validation.readthedocs.io/en/2.3/08-list-of-rules-by-category/
         $validationNew = $this->validator->validate(
-                                    array('password' => $this->requestData['password']), 
-                                    [
+            array('password' => $this->requestData['password']), 
+            [
                                         'password' => v::noWhitespace()->notEmpty()->length(7, null),
                                     ],
-                                    " ",
-                                    " "
-                            );
+            " ",
+            " "
+        );
 
         if ($validationNew->failed()) {
             $valResults = $validationNew->getErrors();
@@ -64,7 +68,8 @@ class passwordHelper
         return true;
     }
 
-    function changePassword(){
+    function changePassword()
+    {
         
         $this->loggedUserData = array(
                                       "email" => (string) Sentinel::getUser()->email,
@@ -74,7 +79,7 @@ class passwordHelper
 
         $valRes = $this->validatePassword();
 
-        if($valRes === false){
+        if($valRes === false) {
             return false;
         }
 
@@ -84,7 +89,7 @@ class passwordHelper
         $affRows = User::where('email', $this->loggedUserData['email'])
                 ->update(['password' => $pwHash]);
 
-        if($affRows <> 1){
+        if($affRows <> 1) {
             $this->errorMessage = 'Update password failed! Database error.' . "(affected rows: " . $affRows . ")";
             return false;
         }

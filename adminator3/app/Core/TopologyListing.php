@@ -14,7 +14,8 @@ $listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom
 
 //definice tridy c_Listing
 
-class c_listing_topology {
+class c_listing_topology
+{
 
     var $conn_mysql;
     var $url;
@@ -36,7 +37,7 @@ class c_listing_topology {
 
         $this->conn_mysql = $conn_mysql;
 
-    	$this->errName[1] = "Při vol�n� konstruktotu nebyl zadán SQL dotaz!<br>\n";
+        $this->errName[1] = "Při vol�n� konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
         $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
@@ -44,8 +45,8 @@ class c_listing_topology {
         $this->list = $conList;
         $this->before = $conBefore;
         $this->after = $conAfter;
-	
-        if (empty($conSql)){
+    
+        if (empty($conSql)) {
             $this->error(1);
         }
         else {
@@ -54,13 +55,14 @@ class c_listing_topology {
     }
     
     //vyber dat z databaze
-    function dbSelect(){
+    function dbSelect()
+    {
         $listRecord = $this->conn_mysql->query($this->sql);
-        if (!$listRecord){
+        if (!$listRecord) {
             $this->error(2);
         }
         $allRecords = $listRecord->num_rows;
-        if (!$allRecords){
+        if (!$allRecords) {
             $this->error(3);
         }
         $allLists = ceil($allRecords / $this->interval);
@@ -72,7 +74,8 @@ class c_listing_topology {
     
     //zobrazi pouze seznam cisel listu
     //napr.:    1 | 2 | 3
-    function listNumber(){
+    function listNumber()
+    {
         $output = "";
 
         $this->dbSelect();
@@ -81,19 +84,19 @@ class c_listing_topology {
             $isLink = 1;
             $spacer = " | ";
             
-            if (empty($this->list)){
+            if (empty($this->list)) {
                 $this->list = 1;
             }
-            if ($i == $this->list){
+            if ($i == $this->list) {
                 $isLink = 0;
             }
-            if ($i == $this->numLists){
+            if ($i == $this->numLists) {
                 $spacer = "";
             }
-            if ($isLink == 0){
+            if ($isLink == 0) {
                 $output .= $i." ".$spacer;
             }
-            if ($isLink == 1){
+            if ($isLink == 1) {
                 $output .= "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$i."</a> ".$spacer;
             }
         }
@@ -103,7 +106,8 @@ class c_listing_topology {
     
     //zobrazi seznam intervalu v zadanem rozsahu ($interval)
     //napr.:    1-10 | 11-20 | 21-30
-    function listInterval(){
+    function listInterval()
+    {
         $output = "";
         
         $this->dbSelect();
@@ -114,20 +118,20 @@ class c_listing_topology {
             $from = ($i*$this->interval)-($this->interval-1);
             $to = $i*$this->interval;
             
-            if (Empty($this->list)){
+            if (Empty($this->list)) {
                 $this->list = 1;
             }
-            if ($i == $this->list){
+            if ($i == $this->list) {
                 $isLink = 0;
             }
-            if ($i == $this->numLists){
+            if ($i == $this->numLists) {
                 $to = $this->numRecords;
                 $spacer = "";
             }
-            if ($isLink == 0){
+            if ($isLink == 0) {
                 $output .= $from."-".$to." ".$spacer;
             }
-            if ($isLink == 1){
+            if ($isLink == 1) {
                 $output .= "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
             }
         }
@@ -139,10 +143,11 @@ class c_listing_topology {
     
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)
     //napr.:    <<< << 11-20 >> >>>
-    function listPart(){
+    function listPart()
+    {
         $this->dbSelect();
         echo $this->before;
-        if (Empty($this->list)){
+        if (Empty($this->list)) {
                 $this->list = 1;
         }
         $from = ($this->list*$this->interval)-($this->interval-1);
@@ -150,10 +155,10 @@ class c_listing_topology {
         $forward = "<a href=\"".$this->url."&list=1\" onFocus=\"blur()\">&lt;&lt;&lt;</a>&nbsp;<a href=\"".$this->url."&list=".($this->list-1)."\" onFocus=\"blur()\">&lt;&lt;</a>&nbsp;";
         $backward = "&nbsp;<a href=\"".$this->url."&list=".($this->list+1)."\" onFocus=\"blur()\">&gt;&gt;</a>&nbsp;<a href=\"".$this->url."&list=".$this->numLists."\" onFocus=\"blur()\">&gt;&gt;&gt;</a>";
         
-        if ($this->list == 1){
+        if ($this->list == 1) {
             $forward = "";
         }
-        if ($this->list == $this->numLists){
+        if ($this->list == $this->numLists) {
             $to = $this->numRecords;
             $backward = "";
         }
@@ -162,8 +167,9 @@ class c_listing_topology {
     }
     
     //vypisovani chybovych hlasek
-    function error($errNum = 0){
-        if ($errNum != 0){
+    function error($errNum = 0)
+    {
+        if ($errNum != 0) {
             $this->msqError = $this->befError.$this->errName[$errNum].$this->aftError;
         }
     }

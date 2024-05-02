@@ -6,21 +6,22 @@ class rss_wrong_login
 
     function rss_wrong_login($subject,$body,$author) 
     {
-      $this->subject = $subject;
-      $this->body = $body;
-      $this->author = $author;
+        $this->subject = $subject;
+        $this->body = $body;
+        $this->author = $author;
     }
-		
+        
 }
 
-class rss 
+class rss
 {
 
     var $conn_mysql;
 
     var $logger;
 
-    function __construct($conn_mysql, $logger) {
+    function __construct($conn_mysql, $logger)
+    {
         $this->conn_mysql = $conn_mysql;
         $this->logger = $logger;
     }
@@ -28,8 +29,7 @@ class rss
     function check_login_rss($get_sid)
     {
 
-        if( !(ereg('^([[:alnum:]]|_|-)+$',$get_sid)) )
-        {
+        if(!(ereg('^([[:alnum:]]|_|-)+$', $get_sid)) ) {
             return false;
             //exit;
         }
@@ -49,14 +49,15 @@ class rss
                 $login = $data["login"];
                 $login_crypt = md5($login);
                 
-                if( $login_crypt == $get_sid)
-                { $pocet_vysl++; }
+                if($login_crypt == $get_sid) { $pocet_vysl++; 
+                }
             }
 
-            if( $pocet_vysl == 1 )
-            { return true; } 
+            if($pocet_vysl == 1 ) { return true; 
+            } 
             else
-            { return false; }
+            { return false; 
+            }
         }
         
     } //konec funkce check_login_rss
@@ -73,8 +74,9 @@ class rss
             return false;
         }
 
-        while ($row=$q->fetch_object()) 
+        while ($row=$q->fetch_object()) { 
             $this->putItem($row);
+        }
 
         $this->putEnd();
     }
@@ -83,7 +85,7 @@ class rss
     function putHeader()
     {
         // nastavení typu aplikace XML
-        header ("Content-type: text/xml");
+        header("Content-type: text/xml");
         echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> \n ";
         
         echo '
@@ -102,13 +104,17 @@ class rss
     // musíme odstranit XHTML tagy
     function encode_xml($data)
     {
-        return strip_tags( str_replace(
-        '</p>',
-        "n",
-        str_replace(
-            '<br />',
-            "n",
-            $data)));
+        return strip_tags(
+            str_replace(
+                '</p>',
+                "n",
+                str_replace(
+                    '<br />',
+                    "n",
+                    $data
+                )
+            )
+        );
     }
 
     // zapsání jedné položky
@@ -123,7 +129,7 @@ class rss
         
         // $itembody = unhtmlentities($itembody);
         
-        $itembody = Str_Replace("&","&amp;",$itembody);
+        $itembody = Str_Replace("&", "&amp;", $itembody);
         
         $itemlink='http://' . $_SERVER['HTTP_HOST'] . '/others-board.php?item_id='.$o->id;
         
@@ -131,11 +137,11 @@ class rss
         $itempubdate = $o->from_date;
 
         $val = $itempubdate;
-        $date = explode("-",$val);
+        $date = explode("-", $val);
         // $time = explode(":",$val[1]);
         
-        $itempubdate = mktime(0,0,0,$date[1],$date[2],$date[0]);    
-        $itempubdate = gmdate('D, d M Y H:i:s', $itempubdate ).' GMT';
+        $itempubdate = mktime(0, 0, 0, $date[1], $date[2], $date[0]);    
+        $itempubdate = gmdate('D, d M Y H:i:s', $itempubdate).' GMT';
         
         echo "\n<item> \n";
         echo "<title>".$itemtitle." [".$itemauthor."]</title> \n";
@@ -154,10 +160,10 @@ class rss
         echo "</rss> \n";
     }
 
-    function unhtmlentities ($string) 
+    function unhtmlentities($string) 
     {
-        $trans_tbl = get_html_translation_table (HTML_ENTITIES);
-        $trans_tbl = array_flip ($trans_tbl);
-        return strtr ($string, $trans_tbl);
+        $trans_tbl = get_html_translation_table(HTML_ENTITIES);
+        $trans_tbl = array_flip($trans_tbl);
+        return strtr($string, $trans_tbl);
     }
 }

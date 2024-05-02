@@ -48,7 +48,6 @@ class RedirectIfNotAuthenticated
         RouteParserInterface $routeParser,
         ResponseFactoryInterface $responseFactory,
         LoggerInterface $loggerInterface
-
     ) {
         $this->flash           = $flash;
         $this->routeParser     = $routeParser;
@@ -70,20 +69,22 @@ class RedirectIfNotAuthenticated
         $this->logger->info("RedirectIfNotAuthenticated invoked");
 
         if (Sentinel::guest()) {
-            $this->logger->info("RedirectIfNotAuthenticated: sentinel::guest, "
-                                . "redirecting to auth.signing (" . $this->routeParser->urlFor('auth.signin') . ")");
+            $this->logger->info(
+                "RedirectIfNotAuthenticated: sentinel::guest, "
+                . "redirecting to auth.signing (" . $this->routeParser->urlFor('auth.signin') . ")"
+            );
 
             $this->flash->addMessage('info', 'Please sign in before continuing');
 
             $response = $this->responseFactory->createResponse();
 
             return $response->withStatus(302)
-                            ->withHeader(
-                'Location',
-                $this->routeParser->urlFor('auth.signin') .
-                    '?' .
-                    http_build_query(['redirect' => $request->getUri()->getPath()])
-            );
+                ->withHeader(
+                    'Location',
+                    $this->routeParser->urlFor('auth.signin') .
+                                '?' .
+                                http_build_query(['redirect' => $request->getUri()->getPath()])
+                );
         }
 
         return $handler->handle($request);

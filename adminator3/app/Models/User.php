@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends EloquentUser
 {
-	protected $table = 'users';
+    protected $table = 'users';
 
     /**
      * {@inheritDoc}
@@ -17,7 +17,7 @@ class User extends EloquentUser
         'username',
         'password',
         'permissions',
-		'level'
+    'level'
     ];
 
     /**

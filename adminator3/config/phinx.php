@@ -7,7 +7,7 @@ require "include/main.function.shared.php";
 // autoload, init DB conns, init Illuminate\Database
 require "app/config.php";
 
-$settings        = require __DIR__ . '/../app/settings.php';
+$settings        = include __DIR__ . '/../app/settings.php';
 
 $db = $settings['db'];
 

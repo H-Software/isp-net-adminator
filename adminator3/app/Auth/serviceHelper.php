@@ -4,7 +4,8 @@
 
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
-class auth_service{
+class auth_service
+{
 
     var $conn_mysql;
 
@@ -23,17 +24,18 @@ class auth_service{
 
     var $check_auth_no_die;
 
-    function __construct($container, $conn_mysql, $smarty, $logger) {
+    function __construct($container, $conn_mysql, $smarty, $logger)
+    {
         $this->container = $container;
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
     }
   
-    public function checkLevel($page_level_id = 0, $adminator = null){
+    public function checkLevel($page_level_id = 0, $adminator = null)
+    {
 
-        if(is_object($adminator))
-        {
+        if(is_object($adminator)) {
             $a = $adminator;
         }
         else
@@ -44,7 +46,7 @@ class auth_service{
         $auth_identity = Sentinel::getUser()->email;
         $this->logger->debug("adminatorController\\check_level getIdentity: ".var_export($auth_identity, true));
 
-        if ($page_level_id == 0){
+        if ($page_level_id == 0) {
             $this->renderNoLogin();
             return false;
         }
@@ -56,19 +58,19 @@ class auth_service{
         
         $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
-        if($checkLevel === false){
+        if($checkLevel === false) {
             $this->renderNoLogin();
             return false;
         }
     }
 
-    public function renderNoLogin ()
+    public function renderNoLogin()
     {
-        $this->smarty->assign("page_title","Adminator3 - chybny level");
+        $this->smarty->assign("page_title", "Adminator3 - chybny level");
 
         // $this->header();
 
-        $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+        $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $this->smarty->display('global/no-level.tpl');
         
         exit;

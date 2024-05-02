@@ -11,7 +11,8 @@ $listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom
 
 //definice tridy c_Listing
 
-class c_listing_vlastnici {
+class c_listing_vlastnici
+{
     var $url;
     var $interval;
     var $sql;
@@ -24,10 +25,11 @@ class c_listing_vlastnici {
     var $befError = "<div align=\"center\" style=\"color: maroon;\">";
     var $aftError = "</div>";
     
-   // $select="./objekty.php?";
+    // $select="./objekty.php?";
     
     //konstruktor...naplni promenne
-    function __construct($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = ""){
+    function __construct($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
+    {
         $this->errName[1] = "P�i vol�n� konstruktotu nebyl zad�n SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listov�n�, chyba datab�ze(Query)!<br>\n";
         $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
@@ -36,8 +38,8 @@ class c_listing_vlastnici {
         $this->list = $conList;
         $this->before = $conBefore;
         $this->after = $conAfter;
-	
-        if (empty($conSql)){
+    
+        if (empty($conSql)) {
             $this->error(1);
         }
         else {
@@ -46,7 +48,8 @@ class c_listing_vlastnici {
     }
         
     //vyber dat z databaze
-    function dbSelect(){
+    function dbSelect()
+    {
         try {
             $listRecord = pg_query($this->sql);
         }
@@ -54,7 +57,7 @@ class c_listing_vlastnici {
             echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
         }
 
-        if (!$listRecord){
+        if (!$listRecord) {
             $this->error(2);
             echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
 
@@ -66,7 +69,7 @@ class c_listing_vlastnici {
 
         $allRecords = pg_num_rows($listRecord);
 
-        if ($allRecords < 0){
+        if ($allRecords < 0) {
             $this->error(3);
             echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
 
@@ -85,26 +88,27 @@ class c_listing_vlastnici {
     
     //zobrazi pouze seznam cisel listu
     //napr.:    1 | 2 | 3
-    function listNumber(){
+    function listNumber()
+    {
         $this->dbSelect();
         echo $this->before;
         for ($i = 1; $i <= $this->numLists; $i++){
             $isLink = 1;
             $spacer = " | ";
             
-            if (empty($this->list)){
+            if (empty($this->list)) {
                 $this->list = 1;
             }
-            if ($i == $this->list){
+            if ($i == $this->list) {
                 $isLink = 0;
             }
-            if ($i == $this->numLists){
+            if ($i == $this->numLists) {
                 $spacer = "";
             }
-            if ($isLink == 0){
+            if ($isLink == 0) {
                 echo $i." ".$spacer;
             }
-            if ($isLink == 1){
+            if ($isLink == 1) {
                 echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$i."</a> ".$spacer;
             }
         }
@@ -113,7 +117,8 @@ class c_listing_vlastnici {
     
     //zobrazi seznam intervalu v zadanem rozsahu ($interval)
     //napr.:    1-10 | 11-20 | 21-30
-    function listInterval(){
+    function listInterval()
+    {
         $this->dbSelect();
         echo $this->before;
         for ($i = 1; $i <= $this->numLists; $i++){
@@ -122,20 +127,20 @@ class c_listing_vlastnici {
             $from = ($i*$this->interval)-($this->interval-1);
             $to = $i*$this->interval;
             
-            if (Empty($this->list)){
+            if (Empty($this->list)) {
                 $this->list = 1;
             }
-            if ($i == $this->list){
+            if ($i == $this->list) {
                 $isLink = 0;
             }
-            if ($i == $this->numLists){
+            if ($i == $this->numLists) {
                 $to = $this->numRecords;
                 $spacer = "";
             }
-            if ($isLink == 0){
+            if ($isLink == 0) {
                 echo $from."-".$to." ".$spacer;
             }
-            if ($isLink == 1){
+            if ($isLink == 1) {
                 echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
             }
         }
@@ -144,10 +149,11 @@ class c_listing_vlastnici {
     
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)
     //napr.:    <<< << 11-20 >> >>>
-    function listPart(){
+    function listPart()
+    {
         $this->dbSelect();
         echo $this->before;
-        if (Empty($this->list)){
+        if (Empty($this->list)) {
                 $this->list = 1;
         }
         $from = ($this->list*$this->interval)-($this->interval-1);
@@ -155,10 +161,10 @@ class c_listing_vlastnici {
         $forward = "<a href=\"".$this->url."&list=1\" onFocus=\"blur()\">&lt;&lt;&lt;</a>&nbsp;<a href=\"".$this->url."&list=".($this->list-1)."\" onFocus=\"blur()\">&lt;&lt;</a>&nbsp;";
         $backward = "&nbsp;<a href=\"".$this->url."&list=".($this->list+1)."\" onFocus=\"blur()\">&gt;&gt;</a>&nbsp;<a href=\"".$this->url."&list=".$this->numLists."\" onFocus=\"blur()\">&gt;&gt;&gt;</a>";
         
-        if ($this->list == 1){
+        if ($this->list == 1) {
             $forward = "";
         }
-        if ($this->list == $this->numLists){
+        if ($this->list == $this->numLists) {
             $to = $this->numRecords;
             $backward = "";
         }
@@ -167,8 +173,9 @@ class c_listing_vlastnici {
     }
     
     //vypisovani chybovych hlasek
-    function error($errNum = 0){
-        if ($errNum != 0){
+    function error($errNum = 0)
+    {
+        if ($errNum != 0) {
             echo $this->befError.$this->errName[$errNum].$this->aftError;
         }
     }

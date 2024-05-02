@@ -6,7 +6,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class platbyController extends adminatorController {
+class platbyController extends adminatorController
+{
     var $conn_mysql;
     var $smarty;
 
@@ -19,26 +20,26 @@ class platbyController extends adminatorController {
         $this->logger->info("platbyController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-	  }
+    }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->info("platbyController\cat called");
+        $this->logger->info("platbyController\cat called");
 
-      $this->checkLevel(92, $this->adminator);
+        $this->checkLevel(92, $this->adminator);
 
-      $this->smarty->assign("page_title","Adminator3 :: Platby");
+        $this->smarty->assign("page_title", "Adminator3 :: Platby");
 
-      $this->header($request, $response, $this->adminator);
+        $this->header($request, $response, $this->adminator);
       
-      $body .= "Prosím vyberte z podkategorie výše....";
+        $body .= "Prosím vyberte z podkategorie výše....";
 
-      $this->smarty->assign("body",$body);
+        $this->smarty->assign("body", $body);
       
-      $this->smarty->assign("link_a2_platby",fix_link_to_another_adminator("/platby.php"));
-      $this->smarty->assign("link_a2_faktury",fix_link_to_another_adminator("/faktury.php"));
+        $this->smarty->assign("link_a2_platby", fix_link_to_another_adminator("/platby.php"));
+        $this->smarty->assign("link_a2_faktury", fix_link_to_another_adminator("/faktury.php"));
       
-      $this->smarty->display('platby/platby-cat.tpl');
+        $this->smarty->display('platby/platby-cat.tpl');
 
     }
 
@@ -49,7 +50,7 @@ class platbyController extends adminatorController {
         
         $this->checkLevel();
 
-        $this->smarty->assign("page_title","Adminator3 :: Platby");
+        $this->smarty->assign("page_title", "Adminator3 :: Platby");
 
         $this->header($request, $response);
 
@@ -64,11 +65,11 @@ class platbyController extends adminatorController {
         
         $this->checkLevel(107, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: Faktury Neuhrazene");
+        $this->smarty->assign("page_title", "Adminator3 :: Faktury Neuhrazene");
 
         $this->header($request, $response, $this->adminator);
 
-        $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('platby/fn.tpl');
 
@@ -81,7 +82,7 @@ class platbyController extends adminatorController {
         
         $this->checkLevel(149, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: N.F. :: Kontrola omezeni vs. platby");
+        $this->smarty->assign("page_title", "Adminator3 :: N.F. :: Kontrola omezeni vs. platby");
 
         $this->header($request, $response, $this->adminator);
 
@@ -93,13 +94,13 @@ class platbyController extends adminatorController {
         $dotaz_vlastnici_num = $ret[0];
         $zaznam = $ret[1];
 
-        $this->smarty->assign("nadpis","Kontrola omezení objektu vs. neuhr. fakturám");
+        $this->smarty->assign("nadpis", "Kontrola omezení objektu vs. neuhr. fakturám");
 
-        $this->smarty->assign("faktury_pocet",$pocet_synchro_faktur);
+        $this->smarty->assign("faktury_pocet", $pocet_synchro_faktur);
         
-        $this->smarty->assign("vlastnici_pocet",$dotaz_vlastnici_num);
+        $this->smarty->assign("vlastnici_pocet", $dotaz_vlastnici_num);
         
-        $this->smarty->assign("pole_data",$zaznam);
+        $this->smarty->assign("pole_data", $zaznam);
 
         $this->smarty->display('faktury/fn-kontrola-omezeni.tpl');
 

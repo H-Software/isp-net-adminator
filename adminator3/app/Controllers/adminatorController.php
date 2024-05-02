@@ -6,7 +6,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
-class adminatorController extends Controller {
+class adminatorController extends Controller
+{
 
     var $conn_mysql;
     var $smarty;
@@ -14,21 +15,22 @@ class adminatorController extends Controller {
     
     public function __construct($conn_mysql, $smarty, $logger)
     {
-		$this->conn_mysql = $conn_mysql;
+        $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
         
         $this->logger->info("adminatorController\__construct called");
-	}
+    }
 
-    public function jsonRender(ServerRequestInterface $request, ResponseInterface $response, $data, $status = 200, $msg = '') {
+    public function jsonRender(ServerRequestInterface $request, ResponseInterface $response, $data, $status = 200, $msg = '')
+    {
         
         // $this->logger->info("JsonViewer\\render called");
         // $this->logger->info("JsonViewer\\render response dump: " . var_export($data, true));
 
         $status = intval($status);
         $_response = ['code' => $status, 'data' => null, 'msg' => ''];
-        if(200 == $status or 418 == $status){
+        if(200 == $status or 418 == $status) {
             $_response['data'] = $data;
         }else{
             $_response['msg'] = $msg;
@@ -46,21 +48,21 @@ class adminatorController extends Controller {
     //     $this->_response->withJson($response);
     // }
     
-    public function renderNoLogin ()
+    public function renderNoLogin()
     {
-        $this->smarty->assign("page_title","Adminator3 - chybny level");
+        $this->smarty->assign("page_title", "Adminator3 - chybny level");
 
         $this->header();
 
-        $this->smarty->assign("body","<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+        $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $this->smarty->display('global/no-level.tpl');
         
         exit;
     }
-    public function checkLevel($page_level_id = 0, $adminator = null){
+    public function checkLevel($page_level_id = 0, $adminator = null)
+    {
 
-        if(is_object($adminator))
-        {
+        if(is_object($adminator)) {
             $a = $adminator;
         }
         else
@@ -68,7 +70,7 @@ class adminatorController extends Controller {
             $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
 
-        if ($page_level_id == 0){
+        if ($page_level_id == 0) {
             $this->renderNoLogin();
             return false;
         }
@@ -81,13 +83,14 @@ class adminatorController extends Controller {
         
         $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
-        if($checkLevel === false){
+        if($checkLevel === false) {
             $this->renderNoLogin();
             return false;
         }
     }
 
-    public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false){
+    public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
+    {
         
             $ret = array();
 
@@ -98,15 +101,14 @@ class adminatorController extends Controller {
             $csrf_name = $request->getAttribute($csrf_nameKey);
             $csrf_value = $request->getAttribute($csrf_valueKey);
 
-            if($return_form_html === true)
+        if($return_form_html === true) {
+            $ret[0] = '<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">'
+                       . '<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">';
+        }
+        else
             {
-                $ret[0] = '<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">'
-                           . '<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">';
-            }
-            else
-            {
-                $ret = array("", $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
-            }
+            $ret = array("", $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
+        }
 
             return $ret;
     }
@@ -114,8 +116,7 @@ class adminatorController extends Controller {
     function header(ServerRequestInterface $request = null, ResponseInterface $response = null, $adminator = null)
     {
 
-        if(is_object($adminator))
-        {
+        if(is_object($adminator)) {
             $a = $adminator;
         }
         else
@@ -127,19 +128,19 @@ class adminatorController extends Controller {
         $this->logger->debug("adminatorController\\header: logged user info: " . $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
 
         $this->smarty->assign("nick_a_level", $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
-        $this->smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
+        $this->smarty->assign("login_ip", $_SERVER['REMOTE_ADDR']);
 
         //kategorie
 
         $uri=$_SERVER["REQUEST_URI"];
-        $uri_replace = str_replace ("adminator3", "", $uri);
+        $uri_replace = str_replace("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka, $mapa) = $a->zobraz_kategorie($uri,$uri_replace);
+        list($kategorie, $kat_2radka, $mapa) = $a->zobraz_kategorie($uri, $uri_replace);
 
-        $this->smarty->assign("kategorie",$kategorie);
-        $this->smarty->assign("kat_2radka",$kat_2radka);
+        $this->smarty->assign("kategorie", $kategorie);
+        $this->smarty->assign("kat_2radka", $kat_2radka);
 
-        if(is_object($request) and is_object($response)){
+        if(is_object($request) and is_object($response)) {
             $csrf = $this->generateCsrfToken($request, $response, true);
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             $this->smarty->assign("kat_csrf_html", $csrf[0]);
@@ -154,18 +155,19 @@ class adminatorController extends Controller {
 
         $show_se_cat = $_POST["show_se_cat"];
 
-        if( $show_se_cat == 0 )
-        { $this->smarty->assign("show_se_cat_selected", "0"); }
+        if($show_se_cat == 0 ) { $this->smarty->assign("show_se_cat_selected", "0"); 
+        }
         else
-        { $this->smarty->assign("show_se_cat_selected", "1"); }
+        { $this->smarty->assign("show_se_cat_selected", "1"); 
+        }
 
-        $this->smarty->assign("show_se_cat",$show_se_cat);
+        $this->smarty->assign("show_se_cat", $show_se_cat);
 
         $se_cat_adminator_link = $_SERVER['HTTP_HOST'];
         $se_cat_adminator_link = str_replace("adminator3", "adminator2", $se_cat_adminator_link);
 
-        $this->smarty->assign("se_cat_adminator","adminator2");
-        $this->smarty->assign("se_cat_adminator_link",$se_cat_adminator_link);
+        $this->smarty->assign("se_cat_adminator", "adminator2");
+        $this->smarty->assign("se_cat_adminator_link", $se_cat_adminator_link);
 
         // $prihl_uziv = $a->vypis_prihlasene_uziv();
 

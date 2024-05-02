@@ -8,7 +8,10 @@ use App\Models\PageLevel;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-class adminator {
+use Exception;
+
+class adminator
+{
     var $conn_mysql;
     var $smarty;
     var $logger;
@@ -51,8 +54,7 @@ class adminator {
     {
         foreach($a as $key => $val)
         {
-            if( empty($val) and !in_array($key, $exclude))
-            {
+            if(empty($val) and !in_array($key, $exclude)) {
                 $a[$key] = 0;
             }
         }
@@ -60,13 +62,13 @@ class adminator {
     }
 
     public function getUserLevel()
-	{
-		$rs = User::where(
-                            "email",
-                            isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
-                        )->first(['level']);
-        if(is_object($rs))
-        {
+    {
+        $rs = User::where(
+            "email",
+            isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
+        )->first(['level']);
+        
+        if(is_object($rs)) {
             // $this->logger->info("adminator\getUserLevel dump db: " . var_export($rs, true));
             $a = $rs->toArray();
             return $a['level'];
@@ -74,9 +76,9 @@ class adminator {
         else{
             return false;
         }
-	}
+    }
 
-	function checkLevel($page_level_id_custom = 0, $display_no_level_page = true)
+    function checkLevel($page_level_id_custom = 0, $display_no_level_page = true)
     {
 
         // co mame
@@ -89,58 +91,59 @@ class adminator {
 
         $this->userIdentityLevel = $this->getUserLevel();
 
-        $this->logger->info("adminator\check_level: called with
+        $this->logger->info(
+            "adminator\check_level: called with
                                     [page_level_id_custom => " . $page_level_id_custom
                                     . ", page_level_id => " . $this->page_level_id
                                     . ", user_name => " . $this->userIdentityUsername
                                     . ", user_level => " . $this->userIdentityLevel
-                                    . "]");
+            . "]"
+        );
 
-        if(intval($page_level_id_custom) > 0){
+        if(intval($page_level_id_custom) > 0) {
             $pl = $page_level_id_custom;
         }
         else{
             $pl = $this->page_level_id;
         }
 
-        $page_level_rs = $this->find_page_level($this->logger,$pl);
-        if($page_level_rs === false or !is_int($page_level_rs)){
+           $page_level_rs = $this->find_page_level($this->logger, $pl);
+        if($page_level_rs === false or !is_int($page_level_rs)) {
             $rs = false;
         }
-        elseif($this->userIdentityLevel >= $page_level_rs){
+        elseif($this->userIdentityLevel >= $page_level_rs) {
             $rs = true; 
         }
         else{
             $rs = false;
         }
 
-        $this->logger->info("adminator\check_level: find_page_level: pl_id: " . $pl . ", level: " . var_export($page_level_rs, true));
-        $this->logger->info("adminator\check_level: result: " . var_export($rs, true));
+           $this->logger->info("adminator\check_level: find_page_level: pl_id: " . $pl . ", level: " . var_export($page_level_rs, true));
+           $this->logger->info("adminator\check_level: result: " . var_export($rs, true));
 
-        if( $rs === false) {
+        if($rs === false) {
             // user nema potrebny level
-			return false;
+            return false;
         }
         else{
             return true;
         }
     }
 
-	function find_page_level($logger,$page_id)
+    function find_page_level($logger,$page_id)
     {
 
         $page_level = 0;
 
         $rs = PageLevel::find(isset($page_id) ? $page_id : 0, ['level']);
-		if(is_object($rs))
-        {
+        if(is_object($rs)) {
             $a = $rs->toArray();
             $page_level = $a['level'];
         }
 
         $this->logger->info("adminator\\find_page_level: find result: " . var_export($page_level, true));
 
-        if($page_level > 0){
+        if($page_level > 0) {
             return $page_level;
         }
         else{
@@ -153,8 +156,7 @@ class adminator {
 
         $this->logger->info("adminator\getTarifIptvListForForm called");
 
-        if($show_zero_value === true)
-        {
+        if($show_zero_value === true) {
             $tarifs[0] = "Není vybráno";
         }
 
@@ -162,8 +164,7 @@ class adminator {
     
         $num_rows = $q->num_rows;
         
-        if($num_rows < 1)
-        {
+        if($num_rows < 1) {
             $tarifs[0] =  "nelze zjistit / žádný tarif nenalezen";
             return $tarifs;
         }
@@ -183,13 +184,13 @@ class adminator {
 
         $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" );
 
-        if( preg_match("/^\/vlastnici.*/", $uri) or preg_match("/^\/vypovedi.*/", $uri) )
-        { $kategorie[0]["barva"] = "silver"; }
+        if(preg_match("/^\/vlastnici.*/", $uri) or preg_match("/^\/vypovedi.*/", $uri) ) { $kategorie[0]["barva"] = "silver"; 
+        }
 
         $kategorie[1] = array( "nazev" => "Služby", "url" => "/objekty/cat", "align" => "center", "width" => "18%" );
 
-        if( preg_match("/^\/objekty.*/", $uri) )
-        { $kategorie[1]["barva"] = "silver"; }
+        if(preg_match("/^\/objekty.*/", $uri) ) { $kategorie[1]["barva"] = "silver"; 
+        }
 
         $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby/cat", "align" => "center", "width" => "18%" );
 
@@ -255,8 +256,7 @@ class adminator {
         //prvne vypisem prihlaseneho
         $MSQ_USER_NICK = $this->conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '" . $this->userIdentityUsername . "' ");
 
-        if ($MSQ_USER_NICK->num_rows <> 1)
-        {
+        if ($MSQ_USER_NICK->num_rows <> 1) {
             $ret[100] = true;
             $ret[101] = "Chyba! Vyber nicku nelze provest.";
         }
@@ -264,8 +264,8 @@ class adminator {
         {
             while ($data_user_nick = $MSQ_USER_NICK->fetch_array() )
             {
-            $ret[1] = $data_user_nick["nick"];
-            $ret[2] = $data_user_nick["level"];
+                $ret[1] = $data_user_nick["nick"];
+                $ret[2] = $data_user_nick["level"];
             }
         } // konec else
 
@@ -306,7 +306,7 @@ class adminator {
             $dotaz_fn_radku = $dotaz_fn->num_rows;
             $ret[0] = $dotaz_fn_radku;
         } catch (Exception $e) {
-            die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
         try {
@@ -314,7 +314,7 @@ class adminator {
             $dotaz_fn4_radku = $dotaz_fn4->num_rows;
             $ret[1] = $dotaz_fn4_radku;
         } catch (Exception $e) {
-            die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
         try {
@@ -322,24 +322,25 @@ class adminator {
             $dotaz_fn2_radku = $dotaz_fn2->num_rows;
             $ret[2] = $dotaz_fn2_radku;
         } catch (Exception $e) {
-            die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
         try {
             $dotaz_fn3 = $this->conn_mysql->query("SELECT datum,DATE_FORMAT(datum, '%d.%m.%Y %H:%i:%s') as datum FROM fn_import_log order by id");
             $dotaz_fn3_radku = $dotaz_fn3->num_rows;
         } catch (Exception $e) {
-            die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
-         while( $data3=$dotaz_fn3->fetch_array() )
-         { $datum_fn3=$data3["datum"]; }
+        while( $data3=$dotaz_fn3->fetch_array() )
+         { $datum_fn3=$data3["datum"]; 
+        }
         
-         if(strlen($datum_fn3) > 0){
+        if(strlen($datum_fn3) > 0) {
             $ret[3] = $datum_fn3;
-         } else{
+        } else{
             $ret[3] = "Unknown";
-         }
+        }
          
         return $ret;
     }
@@ -349,38 +350,38 @@ class adminator {
         $r = array();
       
         $rs=$conn_mysql->query(
-          "SELECT nick, date, ip FROM login_log ORDER BY date DESC LIMIT 5"
+            "SELECT nick, date, ip FROM login_log ORDER BY date DESC LIMIT 5"
         );
       
         while ($data=$rs->fetch_array()){
-           $datum = strftime("%d.%m.%Y %H:%M:%S", $data["date"] );
-           $logged_users[] = array( "nick" => $data["nick"], "datum" => $datum, "ip" => $data["ip"]);    
+            $datum = strftime("%d.%m.%Y %H:%M:%S", $data["date"]);
+            $logged_users[] = array( "nick" => $data["nick"], "datum" => $datum, "ip" => $data["ip"]);    
         }
        
-        if($action == "assign"){
-          $smarty->assign("logged_users",$logged_users);
-          $r[0] = TRUE;
+        if($action == "assign") {
+            $smarty->assign("logged_users", $logged_users);
+            $r[0] = true;
         }
-        elseif($action == "fetch"){
-          $smarty->assign("logged_users",$logged_users);
-          $render = $smarty->fetch("inc.home.list-logged-users.tpl");
-          $r[0] = TRUE;
-          $r[1] = $render;
+        elseif($action == "fetch") {
+            $smarty->assign("logged_users", $logged_users);
+            $render = $smarty->fetch("inc.home.list-logged-users.tpl");
+            $r[0] = true;
+            $r[1] = $render;
         }
         else{
-          $r[0] = FALSE;
-          $r[1] = "unknown action";
+            $r[0] = false;
+            $r[1] = "unknown action";
         }
       
         return $r;
     }
 
-    public static function convertIntToBoolTextCs ($v)
+    public static function convertIntToBoolTextCs($v)
     {
-        if ( $v == 1 ){
+        if ($v == 1 ) {
             return "Ano"; 
         }
-        elseif ( $v == 0 ){
+        elseif ($v == 0 ) {
             return "Ne"; 
         }
         else{
@@ -388,15 +389,15 @@ class adminator {
         }
     }
 
-    public static function convertIntToTextPrioCs ($v)
+    public static function convertIntToTextPrioCs($v)
     {
-        if ( $v == 0 ){
+        if ($v == 0 ) {
             return "Nízká"; 
         }
-        elseif ( $v == 1 ){
+        elseif ($v == 1 ) {
             return "Normální"; 
         }
-        elseif ( $v == 2){
+        elseif ($v == 2) {
             return "Vysoká";
         }
         else{
@@ -409,9 +410,7 @@ class adminator {
      * 
      * base is stolen from: https://stackoverflow.com/a/75755710/19497107
      * appends for queryString is here: https://stackoverflow.com/questions/24891276/how-to-automatically-append-query-string-to-laravel-pagination-links
-     * 
      */
-
     public function collectionPaginate($items, $perPage = 15, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
@@ -441,13 +440,13 @@ class adminator {
     {
         $output = "<div align=\"center\" style=\"font-size: 0.8rem; padding-top: 5px; padding-bottom: 5px;\">";
 
-        if($linkPreviousPage != NULL){
+        if($linkPreviousPage != null) {
             $output .= "<span><a href=\"".$linkPreviousPage."\" >previous</a></span> | ";
         }
-        if($linkCurrentPage != NULL){
+        if($linkCurrentPage != null) {
             $output .= "<span style=\"margin-left: 10px: margin-right: 10px;\">" . $linkCurrentPage . "</span>";
         }
-        if($linkNextPage != NULL){
+        if($linkNextPage != null) {
             $output .= " | <span><a href=\"".$linkNextPage."\" >next</a></span>";
         }
 

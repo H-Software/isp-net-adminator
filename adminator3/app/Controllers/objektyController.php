@@ -6,7 +6,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class objektyController extends adminatorController {
+class objektyController extends adminatorController
+{
     var $conn_mysql;
     var $smarty;
     var $logger;
@@ -23,21 +24,21 @@ class objektyController extends adminatorController {
         $this->logger->info("objektyController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-	}
+    }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-      $this->logger->info("objektyController\cat called");
+        $this->logger->info("objektyController\cat called");
 
-      $this->checkLevel(93, $this->adminator);
+        $this->checkLevel(93, $this->adminator);
 
-      $this->smarty->assign("page_title","Adminator3 :: Objekty");
+        $this->smarty->assign("page_title", "Adminator3 :: Objekty");
 
-      $this->header($request, $response, $this->adminator);
+        $this->header($request, $response, $this->adminator);
       
-      $this->smarty->assign("body","Prosím vyberte z podkategorie výše....");
+        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
-      $this->smarty->display('objekty/subcat.tpl');
+        $this->smarty->display('objekty/subcat.tpl');
 
     }
 
@@ -52,7 +53,7 @@ class objektyController extends adminatorController {
         
         $this->checkLevel(135, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: Objekty STB");
+        $this->smarty->assign("page_title", "Adminator3 :: Objekty STB");
 
         $this->header($request, $response, $this->adminator);
 
@@ -66,7 +67,7 @@ class objektyController extends adminatorController {
 
         $rs = $stb->stbListGetBodyContent();
 
-        $this->smarty->assign("body",$rs[0]);
+        $this->smarty->assign("body", $rs[0]);
 
         $this->smarty->display('objekty/stb.tpl');
 
@@ -80,7 +81,7 @@ class objektyController extends adminatorController {
         
         $this->checkLevel(136, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: STB :: Actions");
+        $this->smarty->assign("page_title", "Adminator3 :: STB :: Actions");
 
         $this->header($request, $response, $this->adminator);
 
@@ -90,7 +91,7 @@ class objektyController extends adminatorController {
 
         $rs = $stb->stbAction($request, $response, $csrf);
 
-        if (isset($rs[1])){
+        if (isset($rs[1])) {
             // view form
             $this->smarty->assign($rs[0]);
 
@@ -111,14 +112,15 @@ class objektyController extends adminatorController {
         
         $this->checkLevel(1, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: Objekty");
+        $this->smarty->assign("page_title", "Adminator3 :: Objekty");
 
         $this->header($request, $response, $this->adminator);
       
         $dns_find = $_GET['dns_find'];
         $ip_find = $_GET['ip_find'];
 
-        if( (strlen($dns_find) ==0 ) ){ $dns_find = "%"; }
+        if((strlen($dns_find) ==0 ) ) { $dns_find = "%"; 
+        }
 
         $this->smarty->assign("es", $_GET['es']);
         $this->smarty->assign("mod_vypisu", $_GET['mod_vypisu']);
@@ -135,7 +137,7 @@ class objektyController extends adminatorController {
 
         list($output, $errors, $exportLink) = $objekt->listGetBodyContent();
 
-        if(strlen($errors) > 0){
+        if(strlen($errors) > 0) {
             $this->smarty->assign("body", $errors);
         }
         else{
@@ -153,7 +155,7 @@ class objektyController extends adminatorController {
         
         $this->checkLevel(2, $this->adminator);
 
-        $this->smarty->assign("page_title","Adminator3 :: Objekty :: Action");
+        $this->smarty->assign("page_title", "Adminator3 :: Objekty :: Action");
 
         $this->header($request, $response, $this->adminator);
         
@@ -168,8 +170,7 @@ class objektyController extends adminatorController {
         
         $objekt->actionPrepareVars();
 
-        if($objekt->mod_objektu == 2)
-        {
+        if($objekt->mod_objektu == 2) {
             $output = $objekt->actionFiber();
         }
         else

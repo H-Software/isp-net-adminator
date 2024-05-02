@@ -6,7 +6,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class HomeController extends adminatorController {
+class HomeController extends adminatorController
+{
     var $conn_mysql;
     var $smarty;
     var $logger;
@@ -22,7 +23,7 @@ class HomeController extends adminatorController {
         $this->logger->info("homeController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-	}
+    }
     
     public function home(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {            
@@ -35,7 +36,7 @@ class HomeController extends adminatorController {
             $this->logger->debug("homeController\home post data: ".var_export($data, true));    
         }
 
-        $this->smarty->assign("page_title","Adminator3 :: úvodní stránka");
+        $this->smarty->assign("page_title", "Adminator3 :: úvodní stránka");
 
         $this->header($request, $response, $this->adminator);
 
@@ -51,9 +52,9 @@ class HomeController extends adminatorController {
         //informace z modulu neuhrazené faktury
         //
         $neuhr_faktury_pole = $this->adminator->show_stats_faktury_neuhr();
-        $this->logger->info("show_stats_faktury_neuhr: result: " . var_export( $neuhr_faktury_pole, true ));
+        $this->logger->info("show_stats_faktury_neuhr: result: " . var_export($neuhr_faktury_pole, true));
 
-        $this->smarty->assign("d",$neuhr_faktury_pole[0]);
+        $this->smarty->assign("d", $neuhr_faktury_pole[0]);
 
         $this->smarty->assign("count_total", $neuhr_faktury_pole[0]);
         $this->smarty->assign("count_ignored", $neuhr_faktury_pole[1]);
@@ -70,14 +71,15 @@ class HomeController extends adminatorController {
         return $response;
     }
 
-    function board(){
+    function board()
+    {
         //generovani zprav z nastenky
 
         if ($this->adminator->checkLevel(87, false) === true) {
             $this->logger->info("homeController\board allowed");
 
-            $this->smarty->assign("nastenka_povoleno",1);
-            $this->smarty->assign("datum",date("j. m. Y"));
+            $this->smarty->assign("nastenka_povoleno", 1);
+            $this->smarty->assign("datum", date("j. m. Y"));
             // $this->smarty->assign("sid",);
             
             $nastenka = new \board($this->conn_mysql, $this->logger);
@@ -88,16 +90,17 @@ class HomeController extends adminatorController {
             
             $zpravy = $nastenka->show_messages();
             
-            $this->smarty->assign("zpravy",$zpravy);
+            $this->smarty->assign("zpravy", $zpravy);
             
             $page = $nastenka->show_pages();
             
-            $this->smarty->assign("strany",$page);
+            $this->smarty->assign("strany", $page);
             
         }
     }
 
-    function opravy_a_zavady(){
+    function opravy_a_zavady()
+    {
         //opravy a zavady vypis
         $pocet_bunek = 11;
 
@@ -108,37 +111,37 @@ class HomeController extends adminatorController {
             $vyreseno_filtr = $_GET["vyreseno_filtr"];
             $limit = $_GET["limit"];
 
-            if( !isset($v_reseni_filtr) ){ $v_reseni_filtr="99"; }
-            if( !isset($vyreseno_filtr) ){ $vyreseno_filtr="0"; }
+            if(!isset($v_reseni_filtr) ) { $v_reseni_filtr="99"; 
+            }
+            if(!isset($vyreseno_filtr) ) { $vyreseno_filtr="0"; 
+            }
 
-            if( !isset($limit) ){ $limit="10"; }
+            if(!isset($limit) ) { $limit="10"; 
+            }
 
             // vypis
-            $this->smarty->assign("opravy_povoleno",1);
+            $this->smarty->assign("opravy_povoleno", 1);
 
-            $this->smarty->assign("pocet_bunek",$pocet_bunek);
+            $this->smarty->assign("pocet_bunek", $pocet_bunek);
             
-            $this->smarty->assign("vyreseno_filtr",$vyreseno_filtr);
-            $this->smarty->assign("v_reseni_filtr",$v_reseni_filtr);
-            $this->smarty->assign("limit",$limit);
+            $this->smarty->assign("vyreseno_filtr", $vyreseno_filtr);
+            $this->smarty->assign("v_reseni_filtr", $v_reseni_filtr);
+            $this->smarty->assign("limit", $limit);
             
-            $this->smarty->assign("action",$_SERVER['SCRIPT_URL']);
+            $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
             
             $opravy = new \opravy($this->conn_mysql, $this->logger);
          
             $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
             // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));    
 
-            if($rs_vypis)
-            {
-                if (strlen($rs_vypis[0]) > 0)
-                {
+            if($rs_vypis) {
+                if (strlen($rs_vypis[0]) > 0) {
                     // no records in DB
                     $this->logger->info("homeController\opravy_a_zavady list: no records found in database.");    
                     $content_opravy_a_zavady = $rs_vypis[0];
                 }
-                elseif(strlen($rs_vypis[1]) > 0)
-                {
+                elseif(strlen($rs_vypis[1]) > 0) {
                     // raw html
                     $content_opravy_a_zavady = $rs_vypis[1];
                 }

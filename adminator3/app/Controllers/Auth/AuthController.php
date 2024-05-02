@@ -28,16 +28,15 @@ class AuthController extends Controller
     protected RouteParserInterface $routeParser;
 
      /**
-     * @var Twig
-     */
+      * @var Twig
+      */
     protected Twig $view;
 
     public function __construct(
         ContainerInterface $container,
         Messages $flash,
         RouteParserInterface $routeParser,
-        )
-    {
+    ) {
         $this->container = $container;
         $this->routeParser = $routeParser;
         $this->flash = $container->get('flash');
@@ -45,23 +44,25 @@ class AuthController extends Controller
         $this->view = $container->get('view');
 
         $this->logger->info("authController\__construct called");
-	}
+    }
 
-	public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
-	{
-        if ($request->getMethod() == "POST") 
-        {
+    public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        if ($request->getMethod() == "POST") {
             $data = array(
                     'email' => $request->getParsedBody()['slimUsername'],
                     'password' => $request->getParsedBody()['slimPassword'],
             );
 
             try {
-                if (
-                    !Sentinel::authenticate($this->array_clean($data, [
-                        'email',
-                        'password',
-                    ]), isset($data['persist']))
+                if (!Sentinel::authenticate(
+                    $this->array_clean(
+                        $data, [
+                            'email',
+                            'password',
+                            ]
+                    ), isset($data['persist'])
+                )
                 ) {
                     throw new Exception('Incorrect email or password.');
                 }
@@ -76,10 +77,10 @@ class AuthController extends Controller
             }
         }
 
-        if (isset($this->flash->getMessages()["oldNow"][0]['slimUsername'])){
+        if (isset($this->flash->getMessages()["oldNow"][0]['slimUsername'])) {
             $username = $this->flash->getMessages()["oldNow"][0]['slimUsername'];
         }
-        elseif(isset($this->flash->getMessages()["old"][0]['slimUsername']) ){
+        elseif(isset($this->flash->getMessages()["old"][0]['slimUsername']) ) {
             $username = $this->flash->getMessages()["old"][0]['slimUsername'];
         }
         else{
@@ -91,10 +92,10 @@ class AuthController extends Controller
         // echo "<pre>END OLD NOW: " . var_export($this->flash->getMessages()["oldNow"], true) . "</pre>";
 
         return $this->view->render($response, 'auth\signin.twig', array('username' => @$username));
-	}
+    }
 
-	public function signout($request, $response, array $args)
-	{
+    public function signout($request, $response, array $args)
+    {
         $this->logger->info("AuthController/signout called");
         $this->logger->debug("AuthController/signout: dump user identity: ".var_export(Sentinel::getUser()->email, true));
     
@@ -109,7 +110,7 @@ class AuthController extends Controller
         //redirect
         $url = $this->routeParser->urlFor('home');
         return $response->withStatus(302)->withHeader('Location', $url);
-	}
+    }
 
     /**
      * @param array $array The array
