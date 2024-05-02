@@ -3,10 +3,12 @@
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__)
     ->exclude([
-        '/include/font',
+        'config',
+        'database',
+        'include/font',
         'templates_c',
         'tests/fixtures',
-        '/plugins/serializer'
+        'plugins'
     ])
     ->notPath([
         'test.php',
@@ -15,7 +17,8 @@ $finder = (new PhpCsFixer\Finder())
 
 return (new PhpCsFixer\Config())
     ->setRules([
-        '@PhpCsFixer' => true,
+        // '@PhpCsFixer' => true,
+        '@PSR12' => true,
     ])
     ->setFinder($finder)
 ;
