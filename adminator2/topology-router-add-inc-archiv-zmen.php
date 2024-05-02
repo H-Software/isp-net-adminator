@@ -139,7 +139,7 @@
        
   $pole .= "".$pole3;
   
-  if( $uprava == 1){ $vysledek_write="1"; }
+  if( $uprava == 1){ $vysledek_write=1; }
   
   $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
 		    "('".$conn_mysql->real_escape_string($pole)."',".

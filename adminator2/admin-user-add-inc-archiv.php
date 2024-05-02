@@ -44,7 +44,7 @@
    //debug:
    //$pole2 .= "count pole_puvodni_data: ".count($pole_puvodni_data);
     
-   if($res == 1){ $vysledek_write="1"; }  
+   if($res == 1){ $vysledek_write=1; }  
    
    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
 		    "('".$conn_mysql->real_escape_string($pole2)."','".

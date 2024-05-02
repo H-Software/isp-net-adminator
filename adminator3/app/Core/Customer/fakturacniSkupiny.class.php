@@ -232,8 +232,8 @@ class fakturacniSkupiny extends adminator
             
                     $output .= "<div style=\"font-weight: bold; font-size: 18px; \">Změny je třeba dát vědět účetní!</div>";
                     
-                    if ($res === true){ $vysledek_write="1"; }
-                    else{ $vysledek_write="0"; }
+                    if ($res === true){ $vysledek_write=1; }
+                    else{ $vysledek_write=0; }
 
                     //ted vlozime do archivu zmen (inkrementarne)
                     $params = array(
@@ -265,7 +265,7 @@ class fakturacniSkupiny extends adminator
                     else
                     { $output .= "<br><H3><div style=\"color: red;\" >Chyba! Fakturační skupinu nelze přidat.</div></H3>\n"; }	
 
-                    if($res === true){ $vysledek_write="1"; }
+                    if($res === true){ $vysledek_write=1; }
 
                     // pridame to do archivu zmen
                     $az = new ArchivZmen($this->container, $this->smarty);

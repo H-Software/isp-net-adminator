@@ -107,7 +107,7 @@ class zmeny_ucetni {
       $pole="<b>akce: pridani zmeny pro ucetni; </b><br>";
       $pole .= "[typ_id]=> ".$this->typ.", [text]=> ".$this->text."";
       
-      if ( $add == 1){ $vysledek_write="1"; }
+      if ( $add == 1){ $vysledek_write=1; }
       try {
         $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('" . $pole . "','" . $this->loggedUserEmail . "','" . $vysledek_write . "')");
       } catch (Exception $e) {

@@ -279,7 +279,7 @@ if( !( isset($fail) ) )
 	$pole=$pole." [login]=> ".$login_jmeno.", [name]=> ".$jmeno;
 	$pole=$pole.", [email]=> ".$email.", [level]=> ".$login_level.", [smb_user]=> ".$smb_user;
     
-	if( !($res === false) ){ $vysledek_write="1"; }
+	if( !($res === false) ){ $vysledek_write=1; }
         
 	$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
                     "('".$conn_mysql->real_escape_string($pole)."',".

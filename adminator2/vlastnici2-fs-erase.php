@@ -99,7 +99,7 @@ include ("include/charset.php");
     $pole = "<b>akce: smazani fakt. skupiny; </b><br>".$pole2;
     // $pole .= $pole2.", akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
 
-    if ( $res == 1){ $vysledek_write="1"; }   		   
+    if ( $res == 1){ $vysledek_write=1; }   		   
     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write' )");
 
   }

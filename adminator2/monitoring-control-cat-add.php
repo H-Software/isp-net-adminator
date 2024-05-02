@@ -48,13 +48,13 @@ include ("include/charset.php");
   <?php
   
   
-   $cat_jmeno=mysql_real_escape_string($_POST["cat_jmeno"]);
+   $cat_jmeno=$conn_mysql->real_escape_string($_POST["cat_jmeno"]);
 
 if ( $cat_jmeno )
 {
 // ukladame
-  $jmeno=mysql_real_escape_string($_POST["cat_jmeno"]);
-  $sablona=mysql_real_escape_string($_POST["cat_sablona"]);
+  $jmeno=$conn_mysql->real_escape_string($_POST["cat_jmeno"]);
+  $sablona=$conn_mysql->real_escape_string($_POST["cat_sablona"]);
 
    echo "<H3>Zadáno: </H3><br>";
 

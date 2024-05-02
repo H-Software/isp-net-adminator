@@ -71,7 +71,7 @@ include ("include/charset.php");
      $pole3 .= " [id_komplu]=> ".$objekt.", [id_vlastnika] => ".$id_vlastnika;
      // $pole3 .= ", akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle postgre: ".$res.", datum provedeni akce: ".$datum;
      
-     if ( $res == 1){ $vysledek_write="1"; }
+     if ( $res == 1){ $vysledek_write=1; }
       
      $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
       

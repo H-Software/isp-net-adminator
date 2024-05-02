@@ -106,7 +106,7 @@ include ($cesta."include/charset.php");
    $pole2 .= "[erase_id] => ".$erase_id.", [cislo] => ".$cislo.", [typ_systemu] => ".$typ_systemu;
    $pole2 .= ", [id_vlastnika] => ".$id_vlastnika.". ";
    
-   if ( $erase == 1){ $vysledek_write="1"; }
+   if ( $erase == 1){ $vysledek_write=1; }
 
   } // konec if isset update_id
  

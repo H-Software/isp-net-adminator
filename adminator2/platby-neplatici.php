@@ -468,7 +468,7 @@ elseif( isset($vybrano) )
 	$pole2 .= " puvodni data: [id_cloveka]=> ".$id_cloveka." ,";
 	$pole2 .= "<br>stavajici data: [email] => ".$email.", [jmeno] => ".$jmeno.", [dluzne_mesice] => ".$dluzne_obdobi;
 	
-	if( $mail_send_ok == 1 ){ $vysledek_write="1"; }
+	if( $mail_send_ok == 1 ){ $vysledek_write=1; }
 	
 	$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 															  	 
@@ -552,7 +552,7 @@ elseif( isset($vybrano) )
 	$pole2 .= " puvodni data: [id_cloveka]=> ".$id_cloveka." ,";
 	$pole2 .= "<br>stavajici data: [tel] => ".$telefon.", [dluzne_mesice] => ".$_POST[$promenna];
 	
-	if( $aut_sms_stav = "OK" ){ $vysledek_write="1"; }
+	if( $aut_sms_stav = "OK" ){ $vysledek_write=1; }
 	
 	$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 	
@@ -636,7 +636,7 @@ elseif( isset($vybrano) )
 		$pole2 .= " puvodni data: [id_komplu]=> ".$id_objektu;
 		$pole2 .= "<br>stavajici data: [sikana_status] => a, [sikana_cas] => 8, [sikana_text] => ".$sikana_text;
 
-	        if ( $res == 1){ $vysledek_write="1"; }
+	        if ( $res == 1){ $vysledek_write=1; }
 
 		$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 
