@@ -3,8 +3,10 @@
 $finder = (new PhpCsFixer\Finder())
     ->in(__DIR__)
     ->exclude([
+        '/include/font',
         'templates_c',
         'tests/fixtures',
+        '/plugins/serializer'
     ])
     ->notPath([
         'test.php',
