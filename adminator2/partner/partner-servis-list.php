@@ -90,6 +90,8 @@ require ($cesta."include/charset.php");
 
   $dotaz_sql .= $dotaz_limit;
 
+  $logger->info("parner-service-list: final SQL: " . var_export($dotaz_sql, true));
+
   $listovani->listInterval();
 
   $ps->list_show_legend(); // promena vyrizeni a update asi zde prazdne
