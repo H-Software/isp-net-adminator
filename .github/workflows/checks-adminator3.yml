@@ -1,4 +1,4 @@
-name: CI
+name: checks-A3
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
           coverage: none
 
       - name: Print PHP version
-        run: echo ${{ steps.setup-php.outputs.php-version }}
+        run: php -v
 
       - name: Install dependencies
         run: composer install --ignore-platform-reqs
@@ -43,11 +43,24 @@ jobs:
           composer \
           run \
             phpcs \
+              -- \
+              --standard=PSR12 \
               app \
               boostrap \
               print \
               rss
             
+      - name: PHP CodeSniffer Fix
+        run: |
+          composer \
+            run \
+              phpcbf \
+                boostrap \
+                config \
+                resources \
+                templates \
+                app
+
       - name: PHP-CS-Fixer
         run: |
           php \
