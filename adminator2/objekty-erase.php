@@ -90,11 +90,11 @@ include ("include/charset.php");
     foreach ($obj_erase_eq as $key => $val) { $pole .= " [".$key."] => ".$val."\n"; }
     $pole .= $pole2;
     
-    //.", akci provedl: ".$nick.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
+    //.", akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle postgre: ".$res.", datum akce: ".$datum;
 		   
     if( $res == 1 ){ $vysledek_write="1"; }
     
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write') "); 
+    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email','$vysledek_write') "); 
   
   }
   else 

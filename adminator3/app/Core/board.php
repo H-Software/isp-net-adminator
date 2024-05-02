@@ -30,7 +30,7 @@ class board{
 
     function prepare_vars($nick){
       if( !isset($this->author) )
-      { $this->author=$nick; }
+      { $this->author=\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email; }
       
       if ( ( (!isset($this->action)) and (!isset($this->send)) ) ) $this->action = "view"; //ještě není zinicializována proměnná $action
       if (!isset($this->what)) $this->what = "new"; //ještě není zinicializována proměnná $what
