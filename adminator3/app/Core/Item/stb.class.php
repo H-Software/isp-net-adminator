@@ -54,8 +54,8 @@ class stb extends adminator
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->validator = $container->validator;
-        $this->conn_mysql = $container->connMysql;   
+        $this->validator = $container->get('validator');
+        $this->conn_mysql = $container->get('connMysql');   
         $this->logger = $container->get('logger');
 
         $i = $container->auth->getIdentity();

@@ -94,8 +94,8 @@ class objekt extends adminator
     function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->validator = $container->validator;
-        $this->conn_mysql = $container->connMysql;
+        $this->validator = $container->get('validator');
+        $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->connPgsql;   
 
         $this->logger = $container->get('logger');
@@ -326,7 +326,7 @@ class objekt extends adminator
         $objekt_a2 = new \objekt_a2;
         $objekt_a2->echo = false;
         $objekt_a2->conn_mysql = $this->conn_mysql;
-        $objekt_a2->conn_pgsql = $this->container->connPgsql;
+        $objekt_a2->conn_pgsql = $this->container->get('connPgsql');
         $objekt_a2->csrf_html = $this->csrf_html;
 
         // checking levels for update/erase/..

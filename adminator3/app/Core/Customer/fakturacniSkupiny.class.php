@@ -31,7 +31,7 @@ class fakturacniSkupiny extends adminator
         $i = $container->auth->getIdentity();
         $this->loggedUserEmail = $i['username'];
 
-        $this->conn_mysql = $container->connMysql;
+        $this->conn_mysql = $container->get('connMysql');
 
     }
 
