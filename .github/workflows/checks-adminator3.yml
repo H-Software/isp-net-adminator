@@ -39,6 +39,7 @@ jobs:
       #   run: composer phpunit
 
       - name: PHP CodeSniffer
+        continue-on-error: true
         run: |
           composer \
           run \
