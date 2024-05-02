@@ -1,24 +1,16 @@
 <?php
 
-require __DIR__ . "/../include/main.function.shared.php";
-require __DIR__ . "/../app/config.php";
+require __DIR__ . '/../vendor/autoload.php';
 
-$smarty = new Smarty;
-$smarty->compile_check = true;
-//$smarty->debugging = true;
+// init db functions defs
+require "../include/main.function.shared.php";
+// autoload, init DB conns, init Illuminate\Database
+require "../app/bootstrap.php";
 
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
-$app = new \Slim\App(['settings' => $slim_config]);
-
-require __DIR__ ."/../app/bootstrap-doctrine.php";
-
-require __DIR__ ."/../app/dependencies.php";
-
-require __DIR__ ."/../app/routing.php";
+// end of app bootstrap
 
 $logger = $container->get('logger');
+$smarty = $container->get('smarty');
 
 $logger->info("others-smlouva-pdf called");
 

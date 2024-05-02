@@ -14,7 +14,6 @@ $smarty = $container->get('smarty');
 
 $logger->info("others-web-simelon called");
         
-// $this->checkLevel(95);
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
@@ -77,7 +76,7 @@ else
 try {
 	$count = $conn_mysql->select_db("simelonnet");
 } catch (Exception $e) {
-	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database select failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 }
 
 //tab qestions
@@ -87,7 +86,7 @@ try {
 	FROM questions ORDER BY id_question
 	");
 } catch (Exception $e) {
-	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed (table questions)! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 }
 
   $pole_q = array();
@@ -114,7 +113,7 @@ try {
 	FROM orders ORDER BY id_order
 	");
 } catch (Exception $e) {
-	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+	die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed (table orders)! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
 }
 
   $pole_o = array();
