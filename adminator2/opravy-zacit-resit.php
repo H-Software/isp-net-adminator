@@ -60,7 +60,7 @@ if ( $ok == "OK" )
 
  echo "<br>";
 	
-	 $uprava=mysql_query("UPDATE opravy SET v_reseni='1', v_reseni_kym = '$nick' where id_opravy = '$id_opravy' Limit 1 ");
+	 $uprava=mysql_query("UPDATE opravy SET v_reseni='1', v_reseni_kym = '" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "' where id_opravy = '$id_opravy' Limit 1 ");
 	 
          if ($uprava){ echo "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně upraven.</span><br><br>"; }
           else { echo "<span style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze upravit v databázi. </span>"; }

@@ -340,7 +340,7 @@ require("include/charset.php");
 	  $pole .= " alarm: ".$alarm.", parent_router: ".$parent_router.", mac: ".$mac.", filtrace: ".$filtrace.", id_nodu: ".$selected_nod;
 
 	  if( $add == 1 ){ $vysledek_write="1"; }	
-          $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write') ");
+          $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
   
           Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
           Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)

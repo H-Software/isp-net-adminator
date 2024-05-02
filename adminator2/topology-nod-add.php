@@ -130,7 +130,7 @@ if( ( isset($_POST["jmeno"]) and !isset($error) ) )
   
   if ( $add == 1){ $vysledek_write="1"; }
   $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-                    "('".mysql_real_escape_string($pole)."','".
+                    "('".$conn_mysql->real_escape_string($pole)."','".
                 	mysql_real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."','".
                 	mysql_real_escape_string($vysledek_write)."') ");
                                                                     

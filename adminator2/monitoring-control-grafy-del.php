@@ -4,7 +4,7 @@ require_once ("include/config.php");
 require_once ("include/check_login.php");
 
 require_once ("include/check_level.php");
-require_once ("include/class.php");
+
 
 if ( !( check_level($level,58) ) )
 {
@@ -41,7 +41,8 @@ require ("include/charset.php");
  </tr>
   
   <tr>
-  <td colspan="2">  
+  <td colspan="2">
+  
   <!-- zacatek vlastniho obsahu -->
   
   <?php
@@ -73,10 +74,10 @@ require ("include/charset.php");
 	    if( $res == 1) $res_w = 1; 
 	    else $res_w = 0;
 	    
-	    $pole = mysql_real_escape_string($pole);
-	    $nick = mysql_real_escape_string($nick);
-	    
-	    $add=mysql_query("INSERT INTO archiv_zmen (akce, provedeno_kym, vysledek) VALUES ('$pole','$nick', '$res_w')");
+	    $pole = $conn_mysql->real_escape_string($pole);
+	    $loggedUser = $conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email);
+
+	    $add=mysql_query("INSERT INTO archiv_zmen (akce, provedeno_kym, vysledek) VALUES ('$pole','" . $loggedUser . "', '$res_w')");
 	
 	    Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
 	    Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart      		     

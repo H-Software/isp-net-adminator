@@ -3,6 +3,8 @@
 class Aglobal
 {
     
+	var $conn_mysql;
+
     function synchro_router_list()
     {
 	global $nick;
@@ -41,7 +43,7 @@ class Aglobal
 	return $output;
     }
     
-    public static function work_handler($item_id, $nick)
+    public function work_handler($item_id, $nick)
     {
 	
 	//item_id - cislo ktery odpovida vzdy nejaky akci :)
@@ -78,7 +80,7 @@ class Aglobal
 	    $akce_az .= ", [<b>item_name</b>] => ".$item_name;
 	    
 	    $sql_az = "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-		      "('".mysql_real_escape_string($akce_az)."','".mysql_real_escape_string($nick)."','".intval($rs_write)."')";
+		      "('".$this->conn_mysql->real_escape_string($akce_az)."','".$this->conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."','".intval($rs_write)."')";
 		      
 	    $add_az = mysql_query($sql_az);
 	
@@ -94,7 +96,6 @@ class Aglobal
 	    else
 	    { 
 		echo " - <span style=\"color: red;\"> chyba při přidání požadavku do archivu změn.</span>"; 
-		echo "</div><div> chyba: ".mysql_errno()." : ".mysql_error()."\n";
 		echo "</div><div> sql: ".$sql_az."\n";
 	    }
 	    

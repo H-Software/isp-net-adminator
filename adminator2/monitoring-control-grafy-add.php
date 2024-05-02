@@ -5,7 +5,7 @@ require_once ("include/check_login.php");
 
 require_once ("include/check_level.php");
 
-require_once ("include/class.php");
+
 
 if( !( check_level($level,56) ) )
 {
@@ -149,7 +149,7 @@ require ("include/charset.php");
      
     }
         
-     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write') ");
+     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 
      //zde reset monitoringu 2
      Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart

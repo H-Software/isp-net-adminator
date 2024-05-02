@@ -240,7 +240,7 @@ else
     $vysl .= "stav odeslani emailu: ".intval($aut_email_stav);
     
     //ted ulozime do archivu poslani emailu
-    $log=mysql_query("INSERT INTO fn_aut_email_log (zprava) VALUES ('".mysql_real_escape_string($vysl)."') ");
+    $log=mysql_query("INSERT INTO fn_aut_email_log (zprava) VALUES ('".$conn_mysql->real_escape_string($vysl)."') ");
     
     $aut_email_stav="";
     

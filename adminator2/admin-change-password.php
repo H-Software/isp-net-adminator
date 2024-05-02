@@ -113,14 +113,13 @@ require ("include/charset.php");
     $new_pass=md5($new_pass);
     	  
     // uz to upravime
-    $add=mysql_query("UPDATE users_old SET password ='$new_pass' WHERE login = '".mysql_real_escape_string($nick)."' ");
+    $add=mysql_query("UPDATE users_old SET password ='$new_pass' WHERE login = '".$conn_mysql->real_escape_string($nick)."' ");
 
     if($add) 
     { echo "<br><H3><div style=\"color: green; \" >Heslo v databázi úspěšně změněno.</div></H3>\n"; }
     else
     { 
-	echo "<br><H3><div style=\"color: red; \">Chyba! Heslo v databázi nelze změnit. </div></h3>\n"; 
-	echo "chyba: ".mysql_errno($MC) . ": " . mysql_error($MC) . "\n";
+	    echo "<br><H3><div style=\"color: red; \">Chyba! Heslo v databázi nelze změnit. </div></h3>\n"; 
     }
 
     echo "<br>";	   				   

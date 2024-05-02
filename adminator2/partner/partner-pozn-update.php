@@ -110,7 +110,7 @@ require ($cesta."include/charset.php");
     if( $_GET["odeslat"] == "OK" )
     {   //budem ukladat
 	    
-	$pozn = mysql_real_escape_string($_GET["pozn"]);
+	$pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
 	$id = intval($_GET["id"]);
 	
         $uprava=mysql_query("UPDATE partner_klienti SET akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");

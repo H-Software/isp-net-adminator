@@ -106,7 +106,7 @@ require("include/charset.php");
     
     if( $dotaz_v_r === true){ $vysledek_write = 1; }
     
-    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
    
     if( $dotaz_v_r ) { 
 	echo "<br><H3><div style=\"color: green; \" >Data úspěšně upraveny.</div></H3>\n"; 

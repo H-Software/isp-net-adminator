@@ -73,7 +73,7 @@ include ("include/charset.php");
      
      if ( $res == 1){ $vysledek_write="1"; }
       
-     $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','$nick','$vysledek_write')");
+     $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
       
   }
   else

@@ -82,7 +82,7 @@ $time = strftime("%d/%m/%Y %H:%M:%S", time());
 	$pole2 .= ", rs: ".$res;
 	      
 	 $add=mysql_query("INSERT INTO archiv_zmen (akce, provedeno_kym, vysledek) 
-			    VALUES ('".mysql_real_escape_string($pole2)."', 'system', '".intval($res)."')");
+			    VALUES ('".$conn_mysql->real_escape_string($pole2)."', 'system', '".intval($res)."')");
 	
 	$pole2 = "";
 				 

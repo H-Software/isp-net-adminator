@@ -88,16 +88,16 @@ if( isset($odeslano2) )
      if ( (mysql_num_rows($dotaz_vice_fa) > 1) )
      { 
       $sikana_text = "Máte nedoplatek za více faktur. ";
-      $sikana_text .= "Dostavte se na naši provozovnu - Žižkova 247, popř. tel. 391 009 400.";
+      $sikana_text .= "Dostavte se na naši provozovnu.";
      }
      else
      {
       $sikana_text = "Máte nedoplatek za fakturu č. ".htmlspecialchars($cislo_faktury)." v období ".htmlspecialchars($dluzne_obdobi).". ";
-      $sikana_text .= "Dostavte se na naši provozovnu - Žižkova 247, popř. tel. 391 009 400.";
+      $sikana_text .= "Dostavte se na naši provozovnu.";
      }
      
       $obj_upd = array( "sikana_status" => "a", "sikana_cas" => "8", 
-    			"sikana_text" => mysql_real_escape_string($sikana_text));
+    			"sikana_text" => $conn_mysql->real_escape_string($sikana_text));
 			
      $obj_id = array( "id_komplu" => $id_objektu );
      $res = pg_update($db_ok2, 'objekty', $obj_upd, $obj_id);
@@ -112,8 +112,8 @@ if( isset($odeslano2) )
     if ( $res == 1){ $vysledek_write="1"; }
      
     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
-			"VALUES ('".mysql_real_escape_string($pole2)."', '".mysql_real_escape_string($nick)."', ".
-			"'".mysql_real_escape_string($vysledek_write)."') ");
+			"VALUES ('".$conn_mysql->real_escape_string($pole2)."', '".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."', ".
+			"'".$conn_mysql->real_escape_string($vysledek_write)."') ");
     
     echo "<div>";
      	

@@ -82,10 +82,10 @@ require ($cesta."include/charset.php");
     {
     //budem ukladat
 	    
-	$pozn = mysql_real_escape_string($_GET["pozn"]);
+	$pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
 	$id = intval($_GET["id"]);
 	
-        $uprava=mysql_query("UPDATE partner_klienti SET akceptovano='1', akceptovano_kym='".mysql_real_escape_string($nick)."', ".
+        $uprava=mysql_query("UPDATE partner_klienti SET akceptovano='1', akceptovano_kym='".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."', ".
     			     " akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
   
        if ($uprava == 1) { 

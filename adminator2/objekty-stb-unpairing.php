@@ -84,8 +84,8 @@ require ("include/charset.php");
     $az_akce .= " <b>[id_stb]</b> => ".$id_stb."";
     
     $rs_az_add = mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-                            "('".mysql_real_escape_string($az_akce)."',".
-                            "'".mysql_real_escape_string($nick)."',".
+                            "('".$conn_mysql->real_escape_string($az_akce)."',".
+                            "'".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."',".
                             "'".intval($vysledek_write)."')");
    
     if( $rs_az_add === true){

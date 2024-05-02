@@ -142,7 +142,7 @@ include ($cesta."include/charset.php");
 		 
      if ( $vysl == 0){ $vysledek_write="1"; }
 
-     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
+     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
     
      echo "<div style=\"padding-top: 20px; \"><a href=\"voip-online-dial-cust-add.php\">Zpět</a></div>";
          
