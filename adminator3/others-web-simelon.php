@@ -1,28 +1,16 @@
 <?php
 
+require __DIR__ . '/vendor/autoload.php';
+
 // init db functions defs
 require "include/main.function.shared.php";
 // autoload, init DB conns, init Illuminate\Database
-require "app/config.php";
-// slim config
-require "app/settings.php";
+require "app/bootstrap.php";
 
-$smarty = new Smarty;
-$smarty->compile_check = true;
-//$smarty->debugging = true;
-
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
-$app = new \Slim\App($config);
-
-require __DIR__ ."/app/bootstrap-doctrine.php";
-
-require "app/dependencies.php";
-
-require "app/routing.php";
+// end of app bootstrap
 
 $logger = $container->get('logger');
+$smarty = $container->get('smarty');
 
 $logger->info("others-web-simelon called");
         
@@ -31,8 +19,6 @@ $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
 $auth->checkLevel(151, $a);
-
-// $ac = new adminatorController($conn_mysql, $smarty, $logger, $auth);
 
 $smarty->assign("page_title","Adminator3 :: Ostatní :: Web Simelon");
 

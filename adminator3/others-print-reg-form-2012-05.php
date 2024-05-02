@@ -1,26 +1,17 @@
 <?php
 
+require __DIR__ . '/vendor/autoload.php';
+
+// init db functions defs
 require "include/main.function.shared.php";
-require "app/config.php";
+// autoload, init DB conns, init Illuminate\Database
+require "app/bootstrap.php";
 
-$smarty = new Smarty;
-$smarty->compile_check = true;
-//$smarty->debugging = true;
-
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
-
-$app = new \Slim\App(['settings' => $slim_config]);
-
-require __DIR__ ."/app/bootstrap-doctrine.php";
-
-require "app/dependencies.php";
-
-require "app/routing.php";
-
+// end of app bootstrap
 $logger = $container->get('logger');
+$smarty = $container->get('smarty');
 
-$logger->info("others-print called");
+$logger->info("others-print-reg-form-2012-05 called");
         
 $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 
