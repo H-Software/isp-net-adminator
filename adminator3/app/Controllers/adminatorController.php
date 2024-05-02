@@ -11,14 +11,12 @@ class adminatorController extends Controller {
     var $conn_mysql;
     var $smarty;
     var $logger;
-    var $auth;
     
     public function __construct($conn_mysql, $smarty, $logger)
     {
 		$this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
-        // $this->auth = $auth;
         
         $this->logger->info("adminatorController\__construct called");
 	}
