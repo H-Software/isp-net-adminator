@@ -17,7 +17,7 @@ echo "datum2: $caslogin <br><br>";
    $obj_add = array( "dns_jmeno" => "naky dns jmeno", "ip" => $ip, "mac" => $mac,
           "rra" => $rra, "vezeni" => $vezeni_w, "dov_net" => $dov_net_w, "swz" => $swz_w,
            "sc" => $sc_w, "typ" => $typ, "poznamka" => $pozn, "verejna" => $verejna_w,
-            "pridal" => $nick , "rb_ip" => $rb_ip, "rb_mac" => $rb_mac, "id_nodu" => $selected_nod );
+            "pridal" => \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email , "rb_ip" => $rb_ip, "rb_mac" => $rb_mac, "id_nodu" => $selected_nod );
 
     echo "vypis pole: ";
    $pole=print_r($obj_add);

@@ -186,7 +186,7 @@ use Illuminate\Database\Capsule\Manager as DB;
    					->insertGetId([
 						'akce' => $pole2,
 						'vysledek' => $vysledek_write,
-						'provedeno_kym' => $nick
+						'provedeno_kym' => \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email
 						]);
 
 	if( $id > 0 )

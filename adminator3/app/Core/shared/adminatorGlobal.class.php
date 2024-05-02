@@ -7,7 +7,6 @@ class Aglobal
 
     function synchro_router_list()
     {
-	global $nick;
 	
 	//pro duplikaci tabulky router_list do Postgre DB
     
@@ -43,7 +42,7 @@ class Aglobal
 	return $output;
     }
     
-    public function work_handler($item_id, $nick)
+    public function work_handler($item_id, $nothing = null)
     {
 	
 	//item_id - cislo ktery odpovida vzdy nejaky akci :)

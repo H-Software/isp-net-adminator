@@ -444,7 +444,7 @@ if ( $update_status =="1" )
               ->insertGetId([
              'akce' => $pole,
              'vysledek' => $vysledek_write,
-             'provedeno_kym' => $nick
+             'provedeno_kym' => \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email
              ]);
  
    if( $id > 0 )
