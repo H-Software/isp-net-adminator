@@ -41,7 +41,8 @@ require ("include/charset.php");
  </tr>
   
   <tr>
-  <td colspan="2">  
+  <td colspan="2">
+  
   <!-- zacatek vlastniho obsahu -->
   
   <?php
@@ -75,7 +76,7 @@ require ("include/charset.php");
 	    
 	    $pole = mysql_real_escape_string($pole);
 	    $nick = mysql_real_escape_string($nick);
-	    
+	    '" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "'
 	    $add=mysql_query("INSERT INTO archiv_zmen (akce, provedeno_kym, vysledek) VALUES ('$pole','$nick', '$res_w')");
 	
 	    Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart

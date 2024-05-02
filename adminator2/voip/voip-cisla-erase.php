@@ -110,7 +110,7 @@ include ($cesta."include/charset.php");
 
   } // konec if isset update_id
  
-    $add_2=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
+    $add_2=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
     				   
  } // konec if isset odeslano and ! isset error
  else

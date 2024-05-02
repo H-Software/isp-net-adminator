@@ -157,7 +157,7 @@ include ("include/charset.php");
 
 		    if ( $res == 1){ $vysledek_write="1"; }
 		
-		    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write') ");	
+		    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");	
 		
     		} // konec foru
 		
@@ -189,7 +189,7 @@ include ("include/charset.php");
 		     
 		if ( $res == 1){ $vysledek_write="1"; }
 		
-	        $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write') ");
+	        $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 	
 		echo "<a href=\"platby-akce-tisk.php";
 		echo "?tisk=ok&send=ok&klient=".$klient."&firma=".$firma."&castka=".$castka."&zaplaceno_za=".$zaplaceno_za."\">TISK ÚDAJŮ</A>";

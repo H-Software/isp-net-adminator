@@ -132,7 +132,7 @@ include ($cesta."include/charset.php");
     // zapis do archivu
     if( $vysledek == 1 ){ $vysledek_write="1"; }  
     $pole2 = "<b>akce: import voip vypisu, typ systemu: ".$typ_systemu." </b><br>";
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','$nick','$vysledek_write')");
+    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
    
    } //konec 
    
