@@ -191,6 +191,11 @@ echo " <tr>
 
          $dotaz_klienti = pg_query("SELECT * FROM vlastnici ".$select1.$select2." order by prijmeni ");
 
+         if (!$dotaz_klienti) {
+            echo "<div>Chyba! Vlastniky nelze vypsat. </div>";
+            echo "<div>" . pg_last_error() . "</div";
+         }
+
          $radku_klienti = pg_num_rows($dotaz_klienti);
 
          if ( $radku_klienti == 0 )
