@@ -9,7 +9,7 @@ require_once ($cesta."include/check_level.php");
 
 $level_col = "lvl_partner_servis_accept";
 
-if( !( check_level2($level,$level_col) ) )
+if( !( check_level($level, 306) ) )
 { // neni level
   header("Location: ".$cesta."nolevelpage.php");
 
