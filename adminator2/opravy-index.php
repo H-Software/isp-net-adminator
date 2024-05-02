@@ -136,7 +136,7 @@ if( ( isset($odeslano) and !(isset($error) ) ) )
     $pole .= ", v_reseni: ".$v_reseni.", v_reseni_kym: ".$v_reseni_kym.", vyreseno: ".$vyreseno.", vyreseno_kym: ".$vyreseno_kym;
     $pole .= ", text: ".$text.", <br> ";
 
-    if ( $add == 1){ $vysledek_write="1"; }
+    if ( $add == 1){ $vysledek_write=1; }
     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
 
     //zkusime poslat email

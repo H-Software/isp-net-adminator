@@ -109,7 +109,7 @@ if( isset($odeslano2) )
     $pole2 .= " puvodni data: [id_komplu]=> ".$id_objektu;
     $pole2 .= "<br>stavajici data: [sikana_status] => a, [sikana_cas] => 8, [sikana_text] => ".$sikana_text;
     
-    if ( $res == 1){ $vysledek_write="1"; }
+    if ( $res == 1){ $vysledek_write=1; }
      
     $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
 			"VALUES ('".$conn_mysql->real_escape_string($pole2)."', '".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."', ".

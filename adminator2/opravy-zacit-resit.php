@@ -72,7 +72,7 @@ if ( $ok == "OK" )
 //        $pole .= "<br>aktuální data: nazev: ".$nazev.", ip adresa: ".$ip_adresa.", monitoring: ".$monitoring.", alarm: ".$alarm;
 //        $pole .= ", parent_router: ".$parent_router.", mac: ".$mac;
 
-//        $pole .= ",<br> akci provedl: ".$nick.", vysledek akce dle mysql: ".$uprava.", datum akce: ".$datum;
+//        $pole .= ",<br> akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle mysql: ".$uprava.", datum akce: ".$datum;
 
 //        $add=mysql_query("INSERT INTO archiv_zmen (akce) VALUES ('$pole')");
 

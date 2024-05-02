@@ -114,7 +114,7 @@ include ($cesta."include/charset.php");
    $pole2 = "<b>akce: pridani voip cisla; </b><br>"; 
    $pole2 .= "[cislo] => ".$cislo.", [typ_systemu] => ".$typ_systemu.", [id_vlastnika] => ".$id_vlastnika.". ";
    
-   if ( $add == 1){ $vysledek_write="1"; }
+   if ( $add == 1){ $vysledek_write=1; }
 
   } // konec if isset update_id
   else
@@ -125,7 +125,7 @@ include ($cesta."include/charset.php");
    if ($uprava){ echo "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně upraven.</span><br><br>"; }
    else { echo "<span style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze upravit v databázi. </span>"; }
 
-   if ( $uprava == 1 ){ $vysledek_write="1"; }
+   if ( $uprava == 1 ){ $vysledek_write=1; }
 
    //odkaz zpet
    echo "<div><a href=\"voip-cisla.php?typ_systemu=".$typ_systemu."\" >Zpět</a></div>";

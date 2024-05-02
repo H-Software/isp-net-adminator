@@ -128,7 +128,7 @@ require ("include/charset.php");
      $pole .= "data: [typ_grafu]=> 2, [ip]=> ".$ip." , [jmeno_grafu]=> ".$jmeno_grafu;
      $pole .= " , [kategorie]=> ".$kategorie." ,[sablona_grafu]=> ".$sablona_grafu.", ping_size: ".$ping_size.", [alarm]=> ".$alarm."";
     
-     if ( $uprava == 1){ $vysledek_write="1"; }
+     if ( $uprava == 1){ $vysledek_write=1; }
     
     }
     else
@@ -145,7 +145,7 @@ require ("include/charset.php");
      $pole .= "data: [typ_grafu]=> 2, [ip]=> ".$ip." , [jmeno_grafu]=> ".$jmeno_grafu;
      $pole .= " , [kategorie]=> ".$kategorie." ,[sablona_grafu]=> ".$sablona_grafu." , [alarm]=> ".$alarm."";
     
-     if ( $add == 1){ $vysledek_write="1"; }
+     if ( $add == 1){ $vysledek_write=1; }
      
     }
         

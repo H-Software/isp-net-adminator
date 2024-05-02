@@ -70,7 +70,7 @@ class othersController extends adminatorController {
         $nastenka->subject = $_POST["subject"];
         $nastenka->body = $_POST["body"];
 
-        $nastenka->prepare_vars($_SESSION['user']);
+        $nastenka->prepare_vars();
 
         if($nastenka->action == "view"):
 
@@ -126,7 +126,7 @@ class othersController extends adminatorController {
                 $this->smarty->assign("mod",2); //zobrazujeme formular pro zadavani dat
                 $this->smarty->assign("mod_hlaska", "->> Přidat zprávu");
 
-                $this->smarty->assign("nick",$_SESSION['user']); 
+                $this->smarty->assign("nick",\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email); 
 
                 $this->smarty->assign("email",$nastenka->email); 
                 $this->smarty->assign("subject",$nastenka->subject); 

@@ -171,7 +171,7 @@ include ($cesta."include/charset.php");
       $pole2 .= ", [balance] => ".$balance.", [companyname] => ".$companyname;
       $pole2 .= ", [phone] => ".$phone.", [email] => ".$email.", [note] => ".$note;
 		 
-     if ( $vysl == 0){ $vysledek_write="1"; }
+     if ( $vysl == 0){ $vysledek_write=1; }
      $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
     
      echo "<div style=\"padding-top: 20px; \"><a href=\"voip-online-dial-account-add.php\">Zpět</a></div>";

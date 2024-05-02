@@ -602,7 +602,7 @@ class stb extends adminator
                 $pole .= "[mac_adresa]=> ".$data['mac'].", [ip_adresa]=> ".$data['ip'].", [puk]=> ".$data['puk'].", [popis]=> ".$data['popis'];
                 $pole .= ", [id_nodu]=> ".$data['id_nodu'].", [sw_port]=> ".$data['port_id']." [pozn]=> ".$data['pozn'].", [id_tarifu]=> ".$data['id_tarifu'];
     
-                if( $res == 1 ){ $vysledek_write="1"; }
+                if( $res == 1 ){ $vysledek_write=1; }
     
                 $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
                     "VALUES ('".$this->conn_mysql->real_escape_string($pole)."',".

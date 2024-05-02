@@ -66,7 +66,7 @@ require ("include/charset.php");
     
     if( $rs === true ){
     
-	$vysledek_write="1";
+	$vysledek_write=1;
 	echo "<div style=\"color: green; font-weight: bold;\">SetTopBox úspešně smazán.</div>";
     }
     else{

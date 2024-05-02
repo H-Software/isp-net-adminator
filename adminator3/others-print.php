@@ -22,7 +22,7 @@ $auth->checkLevel(146, $a);
 
 $smarty->assign("page_title","Adminator3 :: Ostatní :: Tisk");
 
-$smarty->assign("nick_a_level",$nick." (".$level.")");
+$smarty->assign("nick_a_level",\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email." (".$level.")");
 $smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
 
 //kategorie

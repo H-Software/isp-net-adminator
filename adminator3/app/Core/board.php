@@ -28,7 +28,7 @@ class board{
 		$this->logger = $logger;
 	}
 
-    function prepare_vars($nick){
+    function prepare_vars($nothing = null){
       if( !isset($this->author) )
       { $this->author=\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email; }
       

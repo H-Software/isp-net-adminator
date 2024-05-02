@@ -69,9 +69,9 @@ include ("include/charset.php");
     else { echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>\n".pg_last_error($db_ok2); }
 		   
      $pole3 .= " [id_komplu]=> ".$objekt.", [id_vlastnika] => ".$id_vlastnika;
-     // $pole3 .= ", akci provedl: ".$nick.", vysledek akce dle postgre: ".$res.", datum provedeni akce: ".$datum;
+     // $pole3 .= ", akci provedl: ".\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email.", vysledek akce dle postgre: ".$res.", datum provedeni akce: ".$datum;
      
-     if ( $res == 1){ $vysledek_write="1"; }
+     if ( $res == 1){ $vysledek_write=1; }
       
      $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole3','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
       
