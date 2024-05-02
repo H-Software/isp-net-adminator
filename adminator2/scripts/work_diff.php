@@ -61,8 +61,8 @@ fclose($soubor);
 if( (strlen($output_main) > 150) )
 {
   $set = array();
-  $set["akce"] = "'" . mysql_real_escape_string($output_main) . "'";
-  //$set["provedeno_kym"] = "'" . mysql_real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email) . "'";
+  $set["akce"] = "'" . $conn_mysql->real_escape_string($output_main) . "'";
+  //$set["provedeno_kym"] = "'" . $conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email) . "'";
 
   // a další spolu s případným ošetřením hodnot
   $rs_archiv = mysql_query("INSERT INTO archiv_zmen_work (" . implode(", ", array_keys($set)) . ") VALUES (" . implode(", ", $set) . ")");

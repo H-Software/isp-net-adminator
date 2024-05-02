@@ -221,7 +221,7 @@ if( !( isset($fail) ) )
 	if($zmenit_heslo == 1)
 	{ 
 	    $password=md5($login_password);
-    	    $zaklad2=", password='".mysql_real_escape_string($password)."' "; 
+    	    $zaklad2=", password='".$conn_mysql->real_escape_string($password)."' "; 
     	}
 
 	if( $zmenit_samba_heslo == 1 )
@@ -282,8 +282,8 @@ if( !( isset($fail) ) )
 	if( !($res === false) ){ $vysledek_write="1"; }
         
 	$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-                    "('".mysql_real_escape_string($pole)."',".
-                    "'".mysql_real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."',".
+                    "('".$conn_mysql->real_escape_string($pole)."',".
+                    "'".$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."',".
                     "'".intval($vysledek_write)."')");                                                                                                
     
 	// tady pridat do samba systému
