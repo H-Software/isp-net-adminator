@@ -9,7 +9,7 @@ require ($cesta."include/check_level.php");
 
 $level_col = "lvl_partner_servis_pozn_update";
 
-if( !( check_level2($level,$level_col) ) )
+if( !( check_level($level, 307) ) )
 { // neni level
   header("Location: ".$cesta."nolevelpage.php");
 
@@ -77,21 +77,21 @@ require ($cesta."include/charset.php");
 
         $poradek = "filtr_akceptovano=".$filtr_akceptovano."&filtr_prio=".$filtr_prio;
 
-        $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
+        // $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
 
-        //vytvoreni objektu
-        $listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+        // //vytvoreni objektu
+        // $listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 
-        if(($list == "")||($list == "1")){ $bude_chybet = 0; }
-        else{ $bude_chybet = (($list-1) * $listovani->interval); }
+        // if(($list == "")||($list == "1")){ $bude_chybet = 0; }
+        // else{ $bude_chybet = (($list-1) * $listovani->interval); }
 
-        $interval = $listovani->interval;
+        // $interval = $listovani->interval;
 
-        $dotaz_limit = " LIMIT ".intval($interval)." OFFSET ".intval($bude_chybet)." ";
+        // $dotaz_limit = " LIMIT ".intval($interval)." OFFSET ".intval($bude_chybet)." ";
 
-        $dotaz_sql .= $dotaz_limit;
+        // $dotaz_sql .= $dotaz_limit;
 
-        $listovani->listInterval();
+        // $listovani->listInterval();
 
 	$ps->update = true;
 
@@ -99,7 +99,7 @@ require ($cesta."include/charset.php");
         
 	$ps->list_show_items($filtr_akceptovano,$filtr_prio,$dotaz_sql);
 
-	$listovani->listInterval();
+	// $listovani->listInterval();
 
    } //konec if update_id > 0
    else
@@ -109,7 +109,7 @@ require ($cesta."include/charset.php");
                <span style=\"border-bottom: 1px solid grey; \" >Změna poznámky technika</span>
 	    </div>";
 	
-    if ( !( ereg('^([[:digit:]])+$',$_GET["id"]) ) )
+    if ( !( preg_match('/^([[:digit:]])+$/',$_GET["id"]) ) )
     {
       echo "<div style=\"color: red; font-weight: bold; padding-left: 20px; padding-bottom: 20px; \">
         Chyba! Zákazníka nelze akceptovat! Vstupní data jsou ve špatném formátu! </div> ";
@@ -121,8 +121,8 @@ require ($cesta."include/charset.php");
     {
     //budem ukladat
 	    
-	$pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
-	$id = intval($_GET["id"]);
+        $pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
+        $id = intval($_GET["id"]);
 	
         $uprava=$conn_mysql->query("UPDATE partner_klienti_servis SET akceptovano_pozn = '".$pozn."' WHERE id=".$id." Limit 1 ");
   

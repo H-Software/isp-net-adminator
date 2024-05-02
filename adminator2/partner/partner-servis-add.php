@@ -7,11 +7,9 @@ require ($cesta."include/config.php");
 require ($cesta."include/check_login.php");
 require ($cesta."include/check_level.php");
 
-require_once ($cesta."include/class.php");
+// $level_col = "lvl_partner_servis_add";
 
-$level_col = "lvl_partner_servis_add";
-
-if( !( check_level2($level,$level_col) ) )
+if( !( check_level($level, 304) ) )
 { // neni level
   header("Location: ".$cesta."nolevelpage.php");
 

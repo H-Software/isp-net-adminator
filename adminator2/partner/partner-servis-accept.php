@@ -9,7 +9,7 @@ require_once ($cesta."include/check_level.php");
 
 $level_col = "lvl_partner_servis_accept";
 
-if( !( check_level2($level,$level_col) ) )
+if( !( check_level($level, 306) ) )
 { // neni level
   header("Location: ".$cesta."nolevelpage.php");
 
@@ -75,29 +75,31 @@ require ($cesta."include/charset.php");
 
 	$poradek = "filtr_akceptovano=".$filtr_akceptovano."&filtr_prio=".$filtr_prio;
 
-	$format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
+	// $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
 
-	//vytvoreni objektu
-	$listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+	// //vytvoreni objektu
+	// $listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 
-	if(($list == "")||($list == "1")){ $bude_chybet = 0; }
-	else{ $bude_chybet = (($list-1) * $listovani->interval); }
+	// if(($list == "")||($list == "1")){ $bude_chybet = 0; }
+	// else{ $bude_chybet = (($list-1) * $listovani->interval); }
 
-	$interval = $listovani->interval;
+	// $interval = $listovani->interval;
 
-        $dotaz_limit = " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+  //       $dotaz_limit = " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-	$dotaz_sql .= $dotaz_limit;
+	// $dotaz_sql .= $dotaz_limit;
 
-	$listovani->listInterval();
+	// $listovani->listInterval();
 
 	$ps->vyrizeni = true;
 	
 	$ps->list_show_legend();
 
+  $logger->info("partner-servis-accept: List SQL: " . var_export($dotaz_sql,true));
+
 	$ps->list_show_items("2",$filtr_prio,$dotaz_sql);
 
-	$listovani->listInterval();
+	// $listovani->listInterval();
    
    } //konec if update_id > 0
    else
@@ -122,8 +124,12 @@ require ($cesta."include/charset.php");
       $pozn = $conn_mysql->real_escape_string($_GET["pozn"]);
       $id = intval($_GET["id"]);
 	
-        $uprava=$conn_mysql->query("UPDATE partner_klienti_servis SET akceptovano='1', akceptovano_kym='".
-        $conn_mysql->real_escape_string($nick)."', akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
+      $sql = "UPDATE partner_klienti_servis SET akceptovano='1', akceptovano_kym='".
+      $conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email). "', akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ";
+
+        $logger->info("partner-servis-accept: Update SQL: " . var_export($sql,true));
+
+        $uprava=$conn_mysql->query($sql);
   
        if ($uprava) { echo "<br><H3><div style=\"color: green; padding-left: 20px;\" >Zákazník úspěšně akceptován.</div></H3><br>\n"; }
        else

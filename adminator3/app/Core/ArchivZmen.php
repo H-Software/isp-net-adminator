@@ -15,8 +15,8 @@ class ArchivZmen {
 
     public function __construct(ContainerInterface $container, $smarty)
     {
-        $this->conn_mysql = $container->connMysql;
-        $this->logger = $container->logger;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->logger = $container->get('logger');
         $this->smarty = $smarty;
         
         $this->logger->info("archivZmen\__construct called");

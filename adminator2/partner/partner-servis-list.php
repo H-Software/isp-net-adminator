@@ -7,9 +7,9 @@ require_once ($cesta."include/config.php");
 require ($cesta."include/check_login.php");
 require ($cesta."include/check_level.php");
 
-$level_col = "lvl_partner_servis_list";
+// $level_col = "lvl_partner_servis_list";
 
-if( !( check_level2($level,$level_col) ) )
+if( !( check_level($level, 305) ) )
 { // neni level
   header("Location: ".$cesta."nolevelpage.php");
 
@@ -76,27 +76,29 @@ require ($cesta."include/charset.php");
  
   $poradek = "filtr_akceptovano=".$filtr_akceptovano."&filtr_prio=".$filtr_prio;
 
-  $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
+  // $format_css = "font-size: 13px; padding-top: 5px; padding-bottom: 15px; ";
 
   //vytvoreni objektu
-  $listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
+  // $listovani = new c_listing_partner_servis($conn_mysql, "./partner-servis-list.php?".$poradek, 30, $list, "<center><div style=\"".$format_css."\">\n", "</div></center>\n", $dotaz_sql);
 
-  if(($list == "")||($list == "1")){ $bude_chybet = 0; }
-  else{ $bude_chybet = (($list-1) * $listovani->interval); }
+  // if(($list == "")||($list == "1")){ $bude_chybet = 0; }
+  // else{ $bude_chybet = (($list-1) * $listovani->interval); }
   
-  $interval = $listovani->interval;
+  // $interval = $listovani->interval;
   
-  $dotaz_limit = " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+  // $dotaz_limit = " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-  $dotaz_sql .= $dotaz_limit;
+  // $dotaz_sql .= $dotaz_limit;
 
-  $listovani->listInterval();
+  $logger->info("parner-service-list: final SQL: " . var_export($dotaz_sql, true));
+
+  // $listovani->listInterval();
 
   $ps->list_show_legend(); // promena vyrizeni a update asi zde prazdne
 
   $ps->list_show_items($filtr_akceptovano,$filtr_prio,$dotaz_sql);
 
-  $listovani->listInterval();
+  // $listovani->listInterval();
  
 ?>
     <!-- konec vnejsi tabulky -->

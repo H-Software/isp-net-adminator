@@ -283,7 +283,7 @@ if( !( isset($fail) ) )
         
 	$add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
                     "('".mysql_real_escape_string($pole)."',".
-                    "'".mysql_real_escape_string($nick)."',".
+                    "'".mysql_real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."',".
                     "'".intval($vysledek_write)."')");                                                                                                
     
 	// tady pridat do samba systému

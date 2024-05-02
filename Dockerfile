@@ -113,3 +113,5 @@ COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/te
 COPY adminator3/templates/inc.home.list-logged-users.tpl /var/www/html/adminator2/templates/inc.home.list-logged-users.tpl
 
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
+
+RUN chmod 1777 /tmp

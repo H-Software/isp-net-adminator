@@ -4,7 +4,7 @@ require("include/main.function.shared.php");
 require("include/config.php"); 
 require("include/check_login.php");
 require("include/check_level.php");
-require_once("include/class.php");
+
 
 $level_col = "lvl_admin_login_iptv";
 

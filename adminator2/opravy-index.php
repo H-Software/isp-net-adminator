@@ -95,11 +95,11 @@ if( ( isset($odeslano) and !(isset($error) ) ) )
 
   if ( $vyreseno == 1 and $v_reseni != 1){ $v_reseni="1"; }
 
-  if( $v_reseni == 1){ $v_reseni_kym = $nick; }
-  if( $vyreseno == 1){ $vyreseno_kym = $nick; }
+  if( $v_reseni == 1){ $v_reseni_kym = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email; }
+  if( $vyreseno == 1){ $vyreseno_kym = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email; }
 
   $add=mysql_query("INSERT INTO opravy (id_vlastnika,id_predchozi_opravy, datum_vlozeni, priorita, v_reseni, v_reseni_kym, vyreseno, vyreseno_kym,text,vlozil )
-                    VALUES ('$id_vlastnika','$id_predchozi_opravy','$datum_vlozeni','$priorita','$v_reseni','$v_reseni_kym','$vyreseno','$vyreseno_kym','$text','$nick' ) ");
+                    VALUES ('$id_vlastnika','$id_predchozi_opravy','$datum_vlozeni','$priorita','$v_reseni','$v_reseni_kym','$vyreseno','$vyreseno_kym','$text','\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email' ) ");
 
  if( $id_predchozi_opravy > 0)
  {
@@ -137,7 +137,7 @@ if( ( isset($odeslano) and !(isset($error) ) ) )
     $pole .= ", text: ".$text.", <br> ";
 
     if ( $add == 1){ $vysledek_write="1"; }
-    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','$nick','$vysledek_write')");
+    $add=mysql_query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email','$vysledek_write')");
 
     //zkusime poslat email
         

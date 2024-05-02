@@ -48,7 +48,7 @@
    
    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
 		    "('".$conn_mysql->real_escape_string($pole2)."','".
-			$conn_mysql->real_escape_string($nick)."','".
+			$conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."','".
 			$conn_mysql->real_escape_string($vysledek_write)."') ");
     
 ?>

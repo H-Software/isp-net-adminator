@@ -5,7 +5,7 @@ require_once("include/check_login.php");
 
 require_once("include/check_level.php");
 
-require_once("include/class.php");
+
 
 if( !( check_level($level,152) ) )
 {
