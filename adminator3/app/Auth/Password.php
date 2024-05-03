@@ -10,7 +10,7 @@ use Respect\Validation\Validator as v;
 class passwordHelper
 {
     private $container;
-    
+
     public $requestData;
 
     public $loggedUserData;
