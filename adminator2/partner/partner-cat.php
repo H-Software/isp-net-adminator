@@ -44,7 +44,7 @@ require ($cesta."include/charset.php");
  <tr>
  <td colspan="2" height="20" bgcolor="silver" >
 
-    <span style="margin-left: 40px; "><a href="partner.php" >Připojování nových klientů</a></span> 
+    <span style="margin-left: 40px; "><a href="partner-vyrizeni.php" >Připojování nových klientů</a></span> 
 
     <span style="margin-left: 40px; "><a href="partner-servis-add.php" >Servisní zásahy</a></span> 
  	

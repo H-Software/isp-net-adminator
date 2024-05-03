@@ -1,4 +1,8 @@
 {
+    "name": "hsoftware/isp-net-adminator2-a2",
+    "type": "project",
+    "homepage": "https://github.com/H-Software/isp-net-adminator",
+    "license": "MIT",
     "require": {
         "nette/robot-loader": "^3.4",
         "smarty/smarty": "^4.5.2",
@@ -14,5 +18,14 @@
         "odan/session": "^6.1",
         "phpmailer/phpmailer": "^6.9.1",
         "evilfreelancer/routeros-api-php": "1.5.2"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^v3.5.0",
+        "overtrue/phplint": "^4.1.0",
+        "phpstan/phpstan": "^1.4.2",
+        "squizlabs/php_codesniffer": "*",
+        "symfony/var-dumper": "^v6.0.2",
+        "symplify/easy-coding-standard": "^v12.1",
+        "symplify/coding-standard": "^v12.1"
     }
 }
