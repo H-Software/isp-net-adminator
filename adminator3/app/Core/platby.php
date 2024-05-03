@@ -63,14 +63,14 @@ class platby
 
             //vlozeni do PG
             $fn_add = array( "id" => $id, "cislo" => $Cislo,"varsym" => $VarSym, "datum" => $Datum,
-                                "datsplat" => $DatSplat, "kccelkem" => $KcCelkem, "kclikv" => $KcLikv,
-                                "firma" => $Firma, "jmeno" => $Jmeno , "ico" => $ICO, "dic" => $DIC,
-                                "par_id_vlastnika" => $par_id_vlastnika, "par_stav" => $par_stav,
-                                "datum_vlozeni" => $datum_vlozeni, "overeno" => $overeno,
-                                "aut_email_stav" => $aut_email_stav, "aut_email_datum" => $aut_email_datum,
-                                "aut_sms_stav" => $aut_sms_stav, "aut_sms_datum" => $aut_sms_datum,
-                                "ignorovat" => $ignorovat, "po_splatnosti_vlastnik" => $po_splatnosti_vlastnik
-                );
+                "datsplat" => $DatSplat, "kccelkem" => $KcCelkem, "kclikv" => $KcLikv,
+                "firma" => $Firma, "jmeno" => $Jmeno , "ico" => $ICO, "dic" => $DIC,
+                "par_id_vlastnika" => $par_id_vlastnika, "par_stav" => $par_stav,
+                "datum_vlozeni" => $datum_vlozeni, "overeno" => $overeno,
+                "aut_email_stav" => $aut_email_stav, "aut_email_datum" => $aut_email_datum,
+                "aut_sms_stav" => $aut_sms_stav, "aut_sms_datum" => $aut_sms_datum,
+                "ignorovat" => $ignorovat, "po_splatnosti_vlastnik" => $po_splatnosti_vlastnik
+            );
 
 
             $res = pg_insert($db_ok2, 'faktury_neuhrazene', $fn_add);

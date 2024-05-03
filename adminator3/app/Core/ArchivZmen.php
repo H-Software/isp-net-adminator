@@ -141,9 +141,9 @@ class ArchivZmen
 
         $item = Model::create(
             [
-            'akce' => $actionBody,
-            'vysledek' => $actionResult,
-            'provedeno_kym' => $loggedUserEmail
+                'akce' => $actionBody,
+                'vysledek' => $actionResult,
+                'provedeno_kym' => $loggedUserEmail
             ]
         );
 
@@ -179,9 +179,9 @@ class ArchivZmen
 
         $item = Model::create(
             [
-            'akce' => $actionBody,
-            'vysledek' => $args[0]['actionResult'],
-            'provedeno_kym' => $args[0]['loggedUserEmail']
+                'akce' => $actionBody,
+                'vysledek' => $args[0]['actionResult'],
+                'provedeno_kym' => $args[0]['loggedUserEmail']
             ]
         );
 

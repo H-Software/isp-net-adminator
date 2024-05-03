@@ -18,31 +18,32 @@ $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
 $auth = new auth_service($container, $conn_mysql, $smarty, $logger);
 $auth->checkLevel(146, $a);
 
-$smarty->assign("page_title","Adminator3 :: Ostatní :: Tisk");
+$smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk");
 
-$smarty->assign("nick_a_level",\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email." (".$level.")");
-$smarty->assign("login_ip",$_SERVER['REMOTE_ADDR']);
+$smarty->assign("nick_a_level", \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email." (".$level.")");
+$smarty->assign("login_ip", $_SERVER['REMOTE_ADDR']);
 
 //kategorie
-$uri=$_SERVER["REQUEST_URI"];
-$uri_replace = str_replace ("adminator3", "", $uri);
+$uri = $_SERVER["REQUEST_URI"];
+$uri_replace = str_replace("adminator3", "", $uri);
 
 // list($kategorie, $kat_2radka, $mapa) = $ac->zobraz_kategorie($uri,$uri_replace);
 
-$smarty->assign("kategorie",$kategorie);
-$smarty->assign("kat_2radka",$kat_2radka);
+$smarty->assign("kategorie", $kategorie);
+$smarty->assign("kat_2radka", $kat_2radka);
 
 $smarty->assign("show_se_cat_values", array("0","1"));
 $smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
 
 $show_se_cat = $_POST["show_se_cat"];
 
-if( $show_se_cat == 0 )
-{ $smarty->assign("show_se_cat_selected", "0"); }
-else
-{ $smarty->assign("show_se_cat_selected", "1"); }
+if($show_se_cat == 0) {
+    $smarty->assign("show_se_cat_selected", "0");
+} else {
+    $smarty->assign("show_se_cat_selected", "1");
+}
 
-$smarty->assign("show_se_cat",$show_se_cat);
+$smarty->assign("show_se_cat", $show_se_cat);
 
 // $prihl_uziv = $ac->vypis_prihlasene_uziv();
 
@@ -63,7 +64,7 @@ $smarty->assign("show_se_cat",$show_se_cat);
 
 // // velikost okna
 // $smarty->assign("windowdelka2","170");
-// $smarty->assign("windowpadding2","40");	 
+// $smarty->assign("windowpadding2","40");
 // // pozice okna
 // $smarty->assign("windowtop2","150");
 // $smarty->assign("windowleft2","350");
@@ -76,40 +77,38 @@ $smarty->assign("show_se_cat",$show_se_cat);
 
 function nacti_soubory($find_string)
 {
- $handle=opendir('print/temp/'); 
- $i=0;
+    $handle = opendir('print/temp/');
+    $i = 0;
 
- while (false!==($file = readdir($handle))) 
- { 
-    if ( $file!="." && $file!=".." && !is_dir($file) && preg_match('/'.$find_string."/",$file) ) 
-    { 
-        $soubor[$i]="$file";
-        $i++;
-    } 
- }
- closedir($handle); 
+    while (false !== ($file = readdir($handle))) {
+        if ($file != "." && $file != ".." && !is_dir($file) && preg_match('/'.$find_string."/", $file)) {
+            $soubor[$i] = "$file";
+            $i++;
+        }
+    }
+    closedir($handle);
 
- if(is_array($soubor)){
-  sort($soubor);
- }
- 
- return $soubor;
- 
+    if(is_array($soubor)) {
+        sort($soubor);
+    }
+
+    return $soubor;
+
 }
 
-$smarty->assign("action","others-print-redirect.php");
+$smarty->assign("action", "others-print-redirect.php");
 
 $soubor3 = nacti_soubory("smlouva-fiber");
-$smarty->assign("soubory_smlouvy_new",$soubor3);
+$smarty->assign("soubory_smlouvy_new", $soubor3);
 
 $soubor4 = nacti_soubory("reg-form-pdf");
-$smarty->assign("soubory_regform_new",$soubor4);
+$smarty->assign("soubory_regform_new", $soubor4);
 
 $soubor5 = nacti_soubory("smlouva-v3");
-$smarty->assign("soubory_smlouva_v3",$soubor5);
+$smarty->assign("soubory_smlouva_v3", $soubor5);
 
 $soubor6 = nacti_soubory("reg-form-v3");
-$smarty->assign("soubory_reg_form_2012_05",$soubor6);
+$smarty->assign("soubory_reg_form_2012_05", $soubor6);
 
 
 $smarty->display('others/print.tpl');

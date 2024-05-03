@@ -78,9 +78,9 @@ class partner extends adminator
             $this->paginateItemsPerPage,
             $_GET['page'],
             [   // $options
-                                    'path' => LengthAwarePaginator::resolveCurrentPath(strtok($_SERVER["REQUEST_URI"], '?')),
-                                    'pageName' => 'page',
-                                ]
+                'path' => LengthAwarePaginator::resolveCurrentPath(strtok($_SERVER["REQUEST_URI"], '?')),
+                'pageName' => 'page',
+            ]
         );
 
         $data = $this->listItems->toArray();
@@ -94,20 +94,20 @@ class partner extends adminator
         }
 
         $headers = ['id',
-                    'telefon',
-                    'jmeno',
-                    'adresa',
-                    'email',
-                    'poznamka',
-                    'priorita',
-                    'vlozil kdo',
-                    'datum vlozeni',
-                    'pripojeno',
-                    'pripojeno linka',
-                    'typ balicku',
-                    'typ linky',
-                    'akceptovano'
-                    // 'datum vlozeni2'
+            'telefon',
+            'jmeno',
+            'adresa',
+            'email',
+            'poznamka',
+            'priorita',
+            'vlozil kdo',
+            'datum vlozeni',
+            'pripojeno',
+            'pripojeno linka',
+            'typ balicku',
+            'typ linky',
+            'akceptovano'
+            // 'datum vlozeni2'
         ] ;
 
         $attributes = 'class="a-common-table a-common-table-1line" '

@@ -50,8 +50,8 @@ class passwordHelper
         $validationNew = $this->validator->validate(
             array('password' => $this->requestData['password']),
             [
-                                        'password' => v::noWhitespace()->notEmpty()->length(7, null),
-                                    ],
+                'password' => v::noWhitespace()->notEmpty()->length(7, null),
+            ],
             " ",
             " "
         );
@@ -72,9 +72,9 @@ class passwordHelper
     {
 
         $this->loggedUserData = array(
-                                      "email" => (string) Sentinel::getUser()->email,
-                                      "password" => (string) Sentinel::getUser()->password
-                                    );
+            "email" => (string) Sentinel::getUser()->email,
+            "password" => (string) Sentinel::getUser()->password
+        );
         // $this->logger->debug("passwordHelper\changePassword current data: " . var_export($this->loggedUserData,true));
 
         $valRes = $this->validatePassword();

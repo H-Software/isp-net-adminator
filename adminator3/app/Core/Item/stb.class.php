@@ -442,15 +442,15 @@ class stb extends adminator
         $validation = $this->validator->validate(
             $input_data,
             [
-            'Popis objektu#popis' => v::noWhitespace()->notEmpty()->alnum("-")->length(3, 20),
-            'IP adresa#ip' => v::noWhitespace()->notEmpty()->ip(),
-            'Přípojný bod#id_nodu' => v::number()->greaterThan(0),
-            'MAC adresa#mac' => v::notEmpty()->macAddress(),
-            // 'puk' => v::number(),
-            // 'pin1' => v::number(),
-            // 'pin2' => v::number(),
-            'Číslo portu (ve switchi)#port_id' => v::number(),
-            'Tarif#id_tarifu' => v::number()->greaterThan(0),
+                'Popis objektu#popis' => v::noWhitespace()->notEmpty()->alnum("-")->length(3, 20),
+                'IP adresa#ip' => v::noWhitespace()->notEmpty()->ip(),
+                'Přípojný bod#id_nodu' => v::number()->greaterThan(0),
+                'MAC adresa#mac' => v::notEmpty()->macAddress(),
+                // 'puk' => v::number(),
+                // 'pin1' => v::number(),
+                // 'pin2' => v::number(),
+                'Číslo portu (ve switchi)#port_id' => v::number(),
+                'Tarif#id_tarifu' => v::number()->greaterThan(0),
             ]
         );
 

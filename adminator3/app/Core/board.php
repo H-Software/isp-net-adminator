@@ -70,9 +70,9 @@ class board
         //vypíšeme tabulky se zprávami
         while($entry = $message->fetch_array()) {
             $zpravy[] = array("id" => $entry["id"],"author" => $entry["author"],
-             "email" => $entry["email"], "subject" => $entry["subject"],
-             "body" => $entry["body"], "from_date" => $entry["from_date2"],
-             "to_date" => $entry["to_date2"] );
+                "email" => $entry["email"], "subject" => $entry["subject"],
+                "body" => $entry["body"], "from_date" => $entry["from_date2"],
+                "to_date" => $entry["to_date2"] );
         }
 
         return $zpravy;

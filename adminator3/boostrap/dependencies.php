@@ -7,7 +7,8 @@ use Slim\Csrf\Guard;
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
 $container->set(
-    'csrf', function () use ($responseFactory) {
+    'csrf',
+    function () use ($responseFactory) {
         return new Guard($responseFactory);
     }
 );
@@ -22,7 +23,8 @@ $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 $app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
 
 $container->set(
-    'AuthController', function ($container) {
+    'AuthController',
+    function ($container) {
         return new \App\Controllers\Auth\AuthController($container);
     }
 );
@@ -32,67 +34,78 @@ $container->set(
 // };
 
 $container->set(
-    'HomeController', function ($container) {
+    'HomeController',
+    function ($container) {
         return new \App\Controllers\HomeController($container);
     }
 );
 
 $container->set(
-    'aboutController', function ($c) {
+    'aboutController',
+    function ($c) {
         return new \App\Controllers\aboutController($c);
     }
 );
 
 $container->set(
-    'adminController', function ($c) {
+    'adminController',
+    function ($c) {
         return new \App\Controllers\adminController($c);
     }
 );
 
 $container->set(
-    'archivZmenController', function ($c) {
+    'archivZmenController',
+    function ($c) {
         return new \App\Controllers\archivZmenController($c);
     }
 );
 
 $container->set(
-    'othersController', function ($c) {
+    'othersController',
+    function ($c) {
         return new \App\Controllers\othersController($c);
     }
 );
 
 $container->set(
-    'objektyController', function ($c) {
+    'objektyController',
+    function ($c) {
         return new \App\Controllers\objektyController($c);
     }
 );
 
 $container->set(
-    'partnerController', function ($c) {
+    'partnerController',
+    function ($c) {
         return new \App\Controllers\partnerController($c);
     }
 );
 
 $container->set(
-    'platbyController', function ($c) {
+    'platbyController',
+    function ($c) {
         return new \App\Controllers\platbyController($c);
     }
 );
 
 $container->set(
-    'topologyController', function ($container) {
+    'topologyController',
+    function ($container) {
         return new \App\Controllers\topologyController($container);
     }
 );
 
 $container->set(
-    'vlastniciController', function ($c) {
+    'vlastniciController',
+    function ($c) {
         return new \App\Controllers\vlastniciController($c);
     }
 );
 
 $container->set(
-    'workController', function ($c) {
+    'workController',
+    function ($c) {
         return new \App\Controllers\workController($c);
     }
 );

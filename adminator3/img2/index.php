@@ -7,7 +7,7 @@
 	<meta http-equiv="Content-Language" content="en-us" />
 
 
-<? header("Location: /"); ?>
+<?php header("Location: /"); ?>
 
 </head>
 </html>

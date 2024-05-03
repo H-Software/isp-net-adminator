@@ -28,9 +28,9 @@ class Stb extends Model
      */
     protected $attributes = [
         'id_cloveka' => 0,
-    'mac_adresa' => null,
-    'puk' => null,
-    'ip_adresa' => null,
+        'mac_adresa' => null,
+        'puk' => null,
+        'ip_adresa' => null,
         // TODO: add the of columns
     ];
 }

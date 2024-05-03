@@ -27,9 +27,9 @@ class ArchivZmen extends Model
      * @var array
      */
     protected $attributes = [
-    'akce' => null,
-    // 'provedeno_kdy' => 'CURRENT_TIMESTAMP',
-    'provedeno_kym' => null,
+        'akce' => null,
+        // 'provedeno_kdy' => 'CURRENT_TIMESTAMP',
+        'provedeno_kym' => null,
         'vysledek' => 0
     ];
 

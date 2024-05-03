@@ -1,0 +1,85 @@
+name: checks-A3
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+defaults:
+ run:
+  working-directory: ./adminator3
+
+permissions:
+  pull-requests: write
+
+jobs:
+  basic-checks:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        php-versions: ['8.2']
+
+    name: Test on ${{ matrix.os }} with PHP ${{ matrix.php-versions }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: none
+
+      - name: Print PHP version
+        run: php -v
+
+      - name: Install dependencies
+        run: composer install --ignore-platform-reqs
+
+      # - name: Run the tests
+      #   run: composer phpunit
+
+      - name: PHP CodeSniffer
+        id: phpcs
+        continue-on-error: true
+        run: |
+          composer \
+          run \
+            phpcs \
+              -- \
+              --standard=PSR12 \
+              app \
+              boostrap \
+              print \
+              rss
+      
+      - uses: mainmatter/continue-on-error-comment@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          outcome: ${{ steps.phpcs.outcome }}
+          test-id: Step Php-CS Failed on OS ${{ matrix.os }} and PHP ${{ matrix.php-versions }}
+
+      # - name: PHP CodeSniffer Fix
+      #   run: |
+      #     composer \
+      #       run \
+      #         phpcbf \
+      #           -- \
+      #           --standard=PSR12 \
+      #           boostrap \
+      #           config \
+      #           resources \
+      #           templates \
+      #           app
+
+      - name: PHP-CS-Fixer
+        if: always()
+        run: |
+          php \
+          vendor/friendsofphp/php-cs-fixer/php-cs-fixer \
+          check \
+          --show-progress=dots \
+          -v
+

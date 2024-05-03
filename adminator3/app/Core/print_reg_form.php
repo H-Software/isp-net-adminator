@@ -27,10 +27,10 @@ class print_reg_form
         $key = key($array);
         $value = current($array);
         $each = is_null($key) ? false : [
-        1        => $value,
-        'value'    => $value,
-        0        => $key,
-        'key'    => $key,
+            1        => $value,
+            'value'    => $value,
+            0        => $key,
+            'key'    => $key,
         ];
         next($array);
         return $each;

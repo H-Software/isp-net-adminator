@@ -108,6 +108,9 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/Slim
 - https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Logs/Monolog
 
+### Github Actions
+- https://github.com/marketplace/actions/continue-on-error-comment
+
 ## Author
 Patrik Majer
 
