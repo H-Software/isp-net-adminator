@@ -8,10 +8,13 @@ $finder = (new PhpCsFixer\Finder())
         'include/font',
         'templates_c',
         'tests/fixtures',
-        'plugins'
+        'plugins',
+        'temp',
     ])
     ->notPath([
         'test.php',
+        'app/Core/shared/objekt_a2.class.php', // TypeError: Illegal offset type 
+        'vlastnici-cross.php', // TypeError: Illegal offset type 
     ])
 ;
 

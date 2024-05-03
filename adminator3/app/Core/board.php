@@ -72,7 +72,7 @@ class board
 
         $this->logger->debug("board\show_messages: SQL dump: " . var_export($sql, true));
 
-        if($message === false){
+        if($message === false) {
             $this->logger->error("board\show_messages: db query failed! (Error description: " . $this->conn_mysql->error. ")");
         }
         //vypíšeme tabulky se zprávami

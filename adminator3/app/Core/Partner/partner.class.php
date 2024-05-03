@@ -147,13 +147,13 @@ class partner extends adminator
 
     private function addPrepareVars()
     {
-        $this->form_jmeno_klienta = $_POST["jmeno_klienta"]; 
+        $this->form_jmeno_klienta = $_POST["jmeno_klienta"];
         $this->form_bydliste = $_POST["bydliste"];
         $this->form_email = $_POST["email"];
         $this->form_tel = $_POST["tel"];
         $this->form_typ_balicku = intval($_POST["typ_balicku"]);
         $this->form_typ_linky = intval($_POST["typ_linky"]);
-       
+
         $this->form_pozn = $_POST["pozn"];
         $this->form_odeslat = $_POST["odeslat"];
 
@@ -184,8 +184,7 @@ class partner extends adminator
                     'vlozil' => $this->loggedUserEmail
                 ]
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $item = $e->getMessage();
         }
 
@@ -225,7 +224,7 @@ class partner extends adminator
 
         $this->addPrepareVars();
 
-        if( ( isset($this->form_odeslat) and ($this->form_fail == false) ) ) { 
+        if((isset($this->form_odeslat) and ($this->form_fail == false))) {
             // mod ukladani
 
             list($insertRs, $insertedData) = $this->addSaveData();
@@ -246,12 +245,11 @@ class partner extends adminator
 
             $this->smarty->display('partner/order-add.tpl');
             return true;
-        }
-        else { 
+        } else {
             // zobrazime formular
 
-            if( isset($this->form_odeslat) ){
-                $this->smarty->assign("form_error_message", $this->form_error); 
+            if(isset($this->form_odeslat)) {
+                $this->smarty->assign("form_error_message", $this->form_error);
             }
 
             $form_data = $this->addRenderForm();

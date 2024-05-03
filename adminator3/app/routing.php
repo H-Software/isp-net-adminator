@@ -15,7 +15,7 @@ use App\Controllers\partnerController;
 
 $app->get(
     '/',
-    function (ServerRequestInterface $request, ResponseInterface $response, $args) use($app) {
+    function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($app) {
         $routeParser = $app->getRouteCollector()->getRouteParser();
         $url = $routeParser->urlFor('home');
         return $response->withStatus(302)->withHeader('Location', $url);

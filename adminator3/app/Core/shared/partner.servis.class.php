@@ -64,7 +64,7 @@ class partner_servis
 
             $vlastnici = $this->find_clients($this->klient_hledat);
 
-            if( is_countable($vlastnici) && count($vlastnici) == 0 ) {
+            if(is_countable($vlastnici) && count($vlastnici) == 0) {
                 echo "Žádné výsledky dle hledaného výrazu \n";
             } elseif(is_countable($vlastnici) && count($vlastnici) > 200) {
 
@@ -176,7 +176,7 @@ class partner_servis
 
         $rs_vlastnici = pg_query("SELECT id_cloveka, jmeno, prijmeni, ulice, mesto FROM vlastnici ".$select."");
 
-        if($rs_vlastnici === false){
+        if($rs_vlastnici === false) {
             $RetArray[] = "<div>Nelze vypsat vlastniky. DB chyba! (" . pg_last_error() . ")</div>";
         }
 
