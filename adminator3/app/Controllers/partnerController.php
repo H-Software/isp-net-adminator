@@ -42,6 +42,8 @@ class partnerController extends adminatorController
         $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('partner/partner-cat.tpl');
+
+        return $response;
     }
 
     public function orderCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -57,6 +59,8 @@ class partnerController extends adminatorController
         $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('partner/order-cat.tpl');
+
+        return $response;
     }
 
     public function orderList(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -75,5 +79,7 @@ class partnerController extends adminatorController
         $this->smarty->assign("body", $listOutput[0]);
 
         $this->smarty->display('partner/order-list.tpl');
+
+        return $response;
     }
 }

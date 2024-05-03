@@ -14,7 +14,7 @@ $time = strftime("%d/%m/%Y %H:%M:%S", time());
 
 // prvne zjistime jestli je funkce zapnuta a pak kdy se ma vykonavat
     $vysl_cas=$conn_mysql->query("select * from automatika WHERE vec LIKE 'sikana_net_n' ");
-    $radku_cas=mysql_num_rows($vysl_cas);
+    $radku_cas = $vysl_cas->num_rows();
      
     if ($radku_cas==0) { echo "chyba - nelze zjistit stav"; }
     else

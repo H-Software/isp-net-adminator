@@ -125,6 +125,7 @@ class adminController extends adminatorController
 
         $this->smarty->display('admin/level-action.tpl');
 
+        return $response;
     }
 
     public function adminTarify(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -144,6 +145,8 @@ class adminController extends adminatorController
         $this->smarty->assign("body", $rs[0]);
 
         $this->smarty->display('admin/tarify.tpl');
+
+        return $response;
     }
 
     public function adminTarifyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -164,5 +167,7 @@ class adminController extends adminatorController
         $this->smarty->assign("body", $rs[0]);
 
         $this->smarty->display('admin/tarify.tpl');
+
+        return $response;
     }
 }

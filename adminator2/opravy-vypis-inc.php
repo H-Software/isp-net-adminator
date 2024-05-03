@@ -308,7 +308,7 @@ else
     $id_opravy_S3=$data_S2["id_opravy"];
     
   $dotaz_S3=$conn_mysql->query("SELECT * FROM opravy WHERE id_predchozi_opravy = '$id_opravy_S3' "); 
-   $dotaz_radku_S3=mysql_num_rows($dotaz_S3);
+   $dotaz_radku_S3 = $dotaz_S3->num_rows();
  
 // neni jiste jestli barveni ma bejt zde
   

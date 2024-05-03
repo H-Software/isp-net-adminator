@@ -63,7 +63,7 @@ include ("include/charset.php");
   if ( !($send) )
   {
   $vysledek=$conn_mysql->query("select * from automatika where vec LIKE 'kontrola_fn_vlastnik' " );
-  $radku=mysql_num_rows($vysledek);
+  $radku = $vysledek->num_rows();
 	    
     if ($radku==0) { echo "Chyba! Stav se nepodarilo zjistit "; }
     else

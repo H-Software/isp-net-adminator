@@ -48,7 +48,7 @@ include ("include/charset.php");
   <?php
  
    $vysledek=$conn_mysql->query("select * from kategorie" );
-   $radku=mysql_num_rows($vysledek);
+   $radku = $vysledek->num_rows();
 
     if ($radku ==0) { echo "<br><br><span style=\"color: red; font-size: 18px; \"> Chyba! Žádné kategorie nenalezeny. </span>"; }
     else

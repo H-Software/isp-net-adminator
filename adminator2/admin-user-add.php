@@ -77,7 +77,7 @@ if ( ( $update_status==1 and !( isset($send) ) ) )
     // rezim upravy
     //
     $dotaz_upd = $conn_mysql->query("SELECT * FROM users_old WHERE id = '".intval($update_id)."' ");
-    $radku_upd=mysql_num_rows($dotaz_upd);
+    $radku_upd = $dotaz_upd->num_rows();
  
     if( $radku_upd==0 ) echo "Chyba! Původní data o uživateli nelze načíst! <span style=\"color: grey; \">id: ".intval($update_id)."</span>";
     else
@@ -121,7 +121,7 @@ if ( ( $update_status!=1 ) )
 {
 
  $dupl=$conn_mysql->query("SELECT login_name FROM users_old WHERE login like '$login_jmeno' ");
- $dupl_radku=mysql_num_rows($dupl);
+ $dupl_radku = $dupl->num_rows();
  
  if ($dupl_radku >= 1)
  { 
@@ -136,7 +136,7 @@ if ( ( $update_status==1 and (isset($odeslano)) ) )
 {
 
  $dupl=$conn_mysql->query("SELECT login_name FROM users_old WHERE ( login like '$login_jmeno' and id != '$update_id' ) ");
- $dupl_radku=mysql_num_rows($dupl);
+ $dupl_radku = $dupl->num_rows();
  
  if ($dupl_radku >= 1)
  { 

@@ -41,6 +41,7 @@ class vlastniciController extends adminatorController
 
         $this->smarty->display('vlastnici/vlastnici-cat.tpl');
 
+        return $response;
     }
 
     public function vlastnici2(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -132,6 +133,7 @@ class vlastniciController extends adminatorController
 
         $this->smarty->display('vlastnici/fakturacni-skupiny/list.tpl');
 
+        return $response;
     }
 
     public function fakturacniSkupinyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -154,6 +156,8 @@ class vlastniciController extends adminatorController
         $this->smarty->assign("body", $fs_action_body);
 
         $this->smarty->display('vlastnici/fakturacni-skupiny/action.tpl');
+
+        return $response;
     }
 
 }

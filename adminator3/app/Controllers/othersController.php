@@ -143,5 +143,6 @@ class othersController extends adminatorController
 
         $this->smarty->display('others/board.tpl');
 
+        return $response;
     }
 }
