@@ -94,11 +94,13 @@ class partnerController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         // CSRF token name and value for update form
-        list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
 
-        $this->logger->info("partnerController\orderAdd: csrf generated: ".var_export($csrf_name, true));
+        $this->logger->debug("partnerController\orderAdd: csrf generated: ".var_export($csrf_html, true));
 
         $partner = new partner($this->container);
+        $partner->csrf_html = $csrf_html;
+
         $rs = $partner->add();
 
 

@@ -20,11 +20,26 @@ class partner extends adminator
 
     public $adminator; // handler for instance of adminator class
 
+    public $csrf_html;
+
     public $url_params;
 
     public $listItems;
 
     public $paginateItemsPerPage = 15;
+
+    private $form_fail = false;
+
+    private $form_error;
+
+    private $form_jmeno_klienta;
+    private $form_bydliste;
+    private $form_email;
+    private $form_tel;
+    private $form_typ_balicku;
+    private $form_typ_linky;
+    private $form_pozn;
+    private $form_odeslat;
 
     public function __construct(ContainerInterface $container)
     {
@@ -126,9 +141,54 @@ class partner extends adminator
         return array($output);
     }
 
+    private function addPrepareVars()
+    {
+        $this->form_jmeno_klienta = $_POST["jmeno_klienta"]; 
+        $this->form_bydliste = $_POST["bydliste"];
+        $this->form_email = $_POST["email"];
+        $this->form_tel = $_POST["tel"];
+        $this->form_typ_balicku = $_POST["typ_balicku"];
+        $this->form_typ_linky = $_POST["typ_linky"];
+       
+        $this->form_pozn = $_POST["pozn"];
+        $this->form_odeslat = $_POST["odeslat"];
+    }
+
     public function add()
     {
+        $this->logger->info("partner\add called");
+
+        $bodyContent = "";
+
+        $this->addPrepareVars();
+
+        if( ( isset($this->form_odeslat) and ($this->form_fail == false) ) )
+        { // mod ukladani
+       
+           // require($cesta."vlozeni-ukladani-inc.php");
+           $bodyContent .= "<div> missing saving code</div>";
+        }
+        else
+        { // zobrazime formular
+       
+            $bodyContent .= "<form action=\"\" method=\"post\" >";
+
+           if( isset($this->form_odeslat) ){
+            $this->smarty->assign("form_error_message", $this->form_error); 
+           }
+       
+           // require($cesta."vlozeni-form-inc.php");
+           $bodyContent .=  "<div> missing form code</div>";
+       
+           $bodyContent .=  "</form>";
+       
+        }
+       
+        // $this->logger->debug("partner\add: bodyContent: " . var_export($bodyContent, true));
+
+        $this->smarty->assign("body", $bodyContent);
         $this->smarty->display('partner/order-add.tpl');
+        
         return true;
     }
 }

@@ -117,7 +117,7 @@ class adminController extends adminatorController
         // CSRF token name and value for update form
         list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
 
-        $this->logger->info("adminController\adminLevelAction: csrf generated: ".var_export($csrf_name, true));
+        $this->logger->debug("adminController\adminLevelAction: csrf generated: ".var_export($csrf_name, true));
 
         $rs = $this->admin->levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
 
