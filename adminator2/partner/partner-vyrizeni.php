@@ -60,8 +60,9 @@ require ($cesta."include/charset.php");
    
     $filtr_akceptovano = "2";
    
-    require("/var/www/html/virtuals/partner/vypis-inc.php");
-   
+    //require("/var/www/html/virtuals/partner/vypis-inc.php");
+    echo "<div>missing list code</div>";
+
    } //konec if update_id > 0
    else
    {
@@ -115,7 +116,7 @@ require ($cesta."include/charset.php");
 	    </div>"; 
      
     	echo "<input type=\"hidden\" name=\"accept\" value=\"1\"> 
-		<input type=\"hidden\" name=\"id\" value=\"".intval($_GET["id"])."\" >";
+		    <input type=\"hidden\" name=\"id\" value=\"".intval($_GET["id"])."\" >";
        echo "</form>";
        
      } // konec else odeslat == OK

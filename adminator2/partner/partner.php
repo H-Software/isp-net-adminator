@@ -69,24 +69,25 @@ require ($cesta."include/charset.php");
     
 //  require($cesta."vlozeni-kontrola-inc.php");
 
-//  if( ( isset($odeslat) and ($fail == false) ) )
-//  { // mod ukladani
+ if( ( isset($odeslat) and ($fail == false) ) )
+ { // mod ukladani
 
-//     require($cesta."vlozeni-ukladani-inc.php");
+    // require($cesta."vlozeni-ukladani-inc.php");
+    echo "<div> missing saving code</div>";
+ }
+ else
+ { // zobrazime formular
 
-//  }
-//  else
-//  { // zobrazime formular
+    echo "<form action=\"\" method=\"post\" >";
 
-//     echo "<form action=\"\" method=\"post\" >";
+    if( isset($odeslat) ){ echo $error; }
 
-//     if( isset($odeslat) ){ echo $error; }
+    // require($cesta."vlozeni-form-inc.php");
+      echo "<div> missing form code</div>";
 
-//     require($cesta."vlozeni-form-inc.php");
- 
-//     echo "</form>";
+    echo "</form>";
 
-//  }
+ }
 
 ?>
   

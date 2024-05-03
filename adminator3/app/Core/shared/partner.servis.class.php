@@ -64,9 +64,9 @@ class partner_servis
 
             $vlastnici = $this->find_clients($this->klient_hledat);
 
-            if((count($vlastnici) == 0)) {
+            if( is_countable($vlastnici) && count($vlastnici) == 0 ) {
                 echo "Žádné výsledky dle hledaného výrazu \n";
-            } elseif((count($vlastnici) > 200)) {
+            } elseif(is_countable($vlastnici) && count($vlastnici) > 200) {
 
                 echo "<span>více nalezených klientů, prosím specifikujte hledání</span>\n";
             } elseif(is_array($vlastnici)) {
@@ -175,6 +175,10 @@ class partner_servis
         $select .= " OR ulice LIKE '$fs' OR mesto LIKE '$fs' OR poznamka LIKE '$fs' )";
 
         $rs_vlastnici = pg_query("SELECT id_cloveka, jmeno, prijmeni, ulice, mesto FROM vlastnici ".$select."");
+
+        if($rs_vlastnici === false){
+            $RetArray[] = "<div>Nelze vypsat vlastniky. DB chyba! (" . pg_last_error() . ")</div>";
+        }
 
         while($array = pg_fetch_array($rs_vlastnici)) {
 
@@ -373,7 +377,7 @@ class partner_servis
         if(isset($user)) {
             $user_plaint = $_SESSION["user_plaint"];
         } else {
-            $user_plaint = $_SESSION["db_nick"];
+            $user_plaint = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
         }
 
         $tel = $this->conn_mysql->real_escape_string($this->tel);
