@@ -66,7 +66,7 @@ class partner_servis
 
             if( is_countable($vlastnici) && count($vlastnici) == 0 ) {
                 echo "Žádné výsledky dle hledaného výrazu \n";
-            } elseif((count($vlastnici) > 200)) {
+            } elseif(is_countable($vlastnici) && count($vlastnici) > 200) {
 
                 echo "<span>více nalezených klientů, prosím specifikujte hledání</span>\n";
             } elseif(is_array($vlastnici)) {
