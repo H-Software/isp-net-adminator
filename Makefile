@@ -35,3 +35,25 @@ run-composer-local:
 		&& php \
 			composer.phar \
 			install
+
+.PHONY: run-a3-phpstan
+run-a3-phpstan:
+	cd adminator3 \
+		&& php \
+			vendor/phpstan/phpstan/phpstan.phar \
+			analyse \
+				app \
+				boostrap \
+				config \
+				include/main.function.shared.php \
+				print \
+				public \
+				resources \
+				rss \
+				templates \
+				ecs.php \
+				ind*.php \
+				other*.php \
+				vl*.php \
+				w*.php \
+				--memory-limit 512M

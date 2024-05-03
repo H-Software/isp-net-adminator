@@ -1,4 +1,4 @@
-name: checks-A3
+name: checks-A2
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 defaults:
  run:
-  working-directory: ./adminator3
+  working-directory: ./adminator2
 
 permissions:
   pull-requests: write
@@ -74,12 +74,12 @@ jobs:
       #           templates \
       #           app
 
-      - name: PHP-CS-Fixer
-        if: always()
-        run: |
-          php \
-          vendor/friendsofphp/php-cs-fixer/php-cs-fixer \
-          check \
-          --show-progress=dots \
-          -v
+      # - name: PHP-CS-Fixer
+      #   if: always()
+      #   run: |
+      #     php \
+      #     vendor/friendsofphp/php-cs-fixer/php-cs-fixer \
+      #     check \
+      #     --show-progress=dots \
+      #     -v
 
