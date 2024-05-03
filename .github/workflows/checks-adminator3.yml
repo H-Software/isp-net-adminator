@@ -41,7 +41,8 @@ jobs:
       # - name: Run the tests
       #   run: composer phpunit
 
-      - name: PHP-CodeSniffer
+      - name: PHP CodeSniffer
+        id: phpcs
         continue-on-error: true
         run: |
           composer \
@@ -57,7 +58,7 @@ jobs:
       - uses: mainmatter/continue-on-error-comment@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          outcome: ${{ steps.PHP-CodeSniffer.outcome }}
+          outcome: ${{ steps.phpcs.outcome }}
           test-id: Error code ${{ matrix.code }}
 
       # - name: PHP CodeSniffer Fix
