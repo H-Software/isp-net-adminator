@@ -59,7 +59,7 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           outcome: ${{ steps.phpcs.outcome }}
-          test-id: Error code ${{ matrix.code }}
+          test-id: Step Php-CS Failed on ${{ matrix.os }} and ${{ matrix.php-versions }}
 
       # - name: PHP CodeSniffer Fix
       #   run: |
