@@ -87,4 +87,5 @@ jobs:
         if: always()
         run: |
           make \
-          run-a3-phpstan
+            -f ../Makefile \
+            run-a3-phpstan
