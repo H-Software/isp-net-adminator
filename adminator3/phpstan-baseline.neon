@@ -1,0 +1,646 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Access to an undefined property App\\\\Auth\\\\passwordHelper\\:\\:\\$container\\.$#"
+			count: 1
+			path: app/Auth/Password.php
+
+		-
+			message: "#^Access to an undefined property auth_service\\:\\:\\$container\\.$#"
+			count: 1
+			path: app/Auth/serviceHelper.php
+
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 1
+			path: app/Controllers/archivZmenController.php
+
+		-
+			message: "#^Undefined variable\\: \\$sid$#"
+			count: 1
+			path: app/Controllers/othersController.php
+
+		-
+			message: "#^Undefined variable\\: \\$body$#"
+			count: 1
+			path: app/Controllers/platbyController.php
+
+		-
+			message: "#^Undefined variable\\: \\$r$#"
+			count: 2
+			path: app/Core/ArchivZmen.php
+
+		-
+			message: "#^Access to an undefined property zmeny_ucetni\\:\\:\\$logger\\.$#"
+			count: 3
+			path: app/Core/ArchivZmenUcetni.php
+
+		-
+			message: "#^Undefined variable\\: \\$sql$#"
+			count: 1
+			path: app/Core/ArchivZmenUcetni.php
+
+		-
+			message: "#^Undefined variable\\: \\$error$#"
+			count: 2
+			path: app/Core/Customer/fakturacniSkupiny.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$fu_sql_select$#"
+			count: 1
+			path: app/Core/Customer/fakturacniSkupiny.class.php
+
+		-
+			message: "#^Access to an undefined property vlastnik2\\:\\:\\$listFindId\\.$#"
+			count: 2
+			path: app/Core/Customer/vlastnik2.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$find$#"
+			count: 1
+			path: app/Core/Customer/vlastnik2.class.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Core\\\\objekt\\:\\:\\$container\\.$#"
+			count: 2
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Core\\\\objekt\\:\\:\\$validator\\.$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Regex pattern is invalid\\: Unknown modifier '\\)' in pattern\\: /\\^\\(\\[\\[\\:digit\\:\\]\\]\\|\\\\\\.\\|/\\)\\+\\$/$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$_get$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$error$#"
+			count: 4
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$find_tarif$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$garant$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$id$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$info$#"
+			count: 4
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$ip_rozsah$#"
+			count: 2
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$najdi$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$output$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$pole2$#"
+			count: 4
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$pole3$#"
+			count: 2
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$sql$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$tarif$#"
+			count: 2
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$tunnel_pass$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$tunnel_user$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Function mysql_fetch_array not found\\.$#"
+			count: 1
+			path: app/Core/Item/objektypridani.class.php
+
+		-
+			message: "#^Function mysql_num_rows not found\\.$#"
+			count: 1
+			path: app/Core/Item/objektypridani.class.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 1
+			path: app/Core/Item/objektypridani.class.php
+
+		-
+			message: "#^Function split not found\\.$#"
+			count: 2
+			path: app/Core/Item/objektypridani.class.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Core\\\\stb\\:\\:\\$validator\\.$#"
+			count: 2
+			path: app/Core/Item/stb.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$output$#"
+			count: 4
+			path: app/Core/Item/stb.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$rs$#"
+			count: 2
+			path: app/Core/Item/stb.class.php
+
+		-
+			message: "#^Deprecated in PHP 8\\.0\\: Required parameter \\$conAfter follows optional parameter \\$conList\\.$#"
+			count: 1
+			path: app/Core/PagingGlobal.php
+
+		-
+			message: "#^Deprecated in PHP 8\\.0\\: Required parameter \\$conBefore follows optional parameter \\$conList\\.$#"
+			count: 1
+			path: app/Core/PagingGlobal.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Partner\\\\partner\\:\\:\\$container\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.class.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Partner\\\\partner\\:\\:\\$validator\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$colspan_stav$#"
+			count: 4
+			path: app/Core/Topology.php
+
+		-
+			message: "#^Access to an undefined property admin\\:\\:\\$logger\\.$#"
+			count: 2
+			path: app/Core/admin.php
+
+		-
+			message: "#^Undefined variable\\: \\$error$#"
+			count: 1
+			path: app/Core/admin.php
+
+		-
+			message: "#^Undefined variable\\: \\$output$#"
+			count: 4
+			path: app/Core/admin.php
+
+		-
+			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;/ii&gt;$#"
+			count: 1
+			path: app/Core/board.php
+
+		-
+			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;/iu&gt;$#"
+			count: 1
+			path: app/Core/board.php
+
+		-
+			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;\\\\//ii&gt;$#"
+			count: 1
+			path: app/Core/board.php
+
+		-
+			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;\\\\//iu&gt;$#"
+			count: 1
+			path: app/Core/board.php
+
+		-
+			message: "#^Regex pattern is invalid\\: Unknown modifier '/' in pattern\\: /\\(http\\://\\[\\^ \\]\\+\\\\\\.\\[\\^ \\]\\+\\)/i$#"
+			count: 1
+			path: app/Core/board.php
+
+		-
+			message: "#^Regex pattern is invalid\\: Unknown modifier '\\]' in pattern\\: /\\[\\^/\\]\\(www\\\\\\.\\[\\^ \\]\\+\\\\\\.\\[\\^ \\]\\+\\)/i$#"
+			count: 1
+			path: app/Core/board.php
+
+		-
+			message: "#^Regex pattern is invalid\\: Unknown modifier 'b' in pattern\\: /&lt;/ib&gt;$#"
+			count: 1
+			path: app/Core/board.php
+
+		-
+			message: "#^Regex pattern is invalid\\: Unknown modifier 'b' in pattern\\: /&lt;\\\\//ib&gt;$#"
+			count: 1
+			path: app/Core/board.php
+
+		-
+			message: "#^Undefined variable\\: \\$class$#"
+			count: 10
+			path: app/Core/opravy.php
+
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 1
+			path: app/Core/platby.php
+
+		-
+			message: "#^Function ereg_replace not found\\.$#"
+			count: 1
+			path: app/Core/platby.php
+
+		-
+			message: "#^Function split not found\\.$#"
+			count: 2
+			path: app/Core/platby.php
+
+		-
+			message: "#^Undefined variable\\: \\$poznamka2$#"
+			count: 1
+			path: app/Core/print_reg_form.php
+
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 1
+			path: app/Core/rss.php
+
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 1
+			path: app/Core/shared/adminatorGlobal.class.php
+
+		-
+			message: "#^Function mysql_num_rows not found\\.$#"
+			count: 1
+			path: app/Core/shared/adminatorGlobal.class.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 6
+			path: app/Core/shared/adminatorGlobal.class.php
+
+		-
+			message: "#^Function mysql_result not found\\.$#"
+			count: 5
+			path: app/Core/shared/adminatorGlobal.class.php
+
+		-
+			message: "#^Instantiated class RouterOS not found\\.$#"
+			count: 1
+			path: app/Core/shared/adminatorGlobal.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$output$#"
+			count: 1
+			path: app/Core/shared/adminatorGlobal.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$output$#"
+			count: 1
+			path: app/Core/shared/objekt_a2.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$tarif_sql$#"
+			count: 4
+			path: app/Core/shared/objekt_a2.class.php
+
+		-
+			message: "#^Access to an undefined property partner_servis\\:\\:\\$mod\\.$#"
+			count: 1
+			path: app/Core/shared/partner.servis.class.php
+
+		-
+			message: "#^Access to an undefined property partner_servis\\:\\:\\$user\\.$#"
+			count: 1
+			path: app/Core/shared/partner.servis.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$mod$#"
+			count: 1
+			path: app/Core/shared/partner.servis.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$user$#"
+			count: 1
+			path: app/Core/shared/partner.servis.class.php
+
+		-
+			message: "#^Access to an undefined property mk_synchro_qos\\:\\:\\$arr_global_diff_mis\\.$#"
+			count: 3
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Access to an undefined property mk_synchro_qos\\:\\:\\$chain\\.$#"
+			count: 4
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 15
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Function mysql_fetch_array not found\\.$#"
+			count: 1
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 1
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Undefined variable\\: \\$add_qt_q$#"
+			count: 1
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Undefined variable\\: \\$add_qt_q2$#"
+			count: 2
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Undefined variable\\: \\$add_qt_q_dwn$#"
+			count: 1
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Undefined variable\\: \\$erase$#"
+			count: 1
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Undefined variable\\: \\$sql_obj_where$#"
+			count: 1
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Undefined variable\\: \\$sql_where$#"
+			count: 1
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 1
+			path: app/Core/shared/ros_api_restriction.php
+
+		-
+			message: "#^Undefined variable\\: \\$sql_obj_where$#"
+			count: 1
+			path: app/Core/shared/ros_api_restriction.php
+
+		-
+			message: "#^Undefined variable\\: \\$sql_where$#"
+			count: 1
+			path: app/Core/shared/ros_api_restriction.php
+
+		-
+			message: "#^Static call to instance method fakturacni\\:\\:vypis\\(\\)\\.$#"
+			count: 1
+			path: app/Core/shared/vlastnik.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$db_ok2$#"
+			count: 1
+			path: app/Core/shared/vlastnik.class.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 1
+			path: app/Core/shared/vlastnik2_a2.class.php
+
+		-
+			message: "#^Function mysql_result not found\\.$#"
+			count: 1
+			path: app/Core/shared/vlastnik2_a2.class.php
+
+		-
+			message: "#^Undefined variable\\: \\$db_ok2$#"
+			count: 1
+			path: app/Core/shared/vlastnikarchiv.class.php
+
+		-
+			message: "#^Access to an undefined property voip\\:\\:\\$dotaz_rs\\.$#"
+			count: 2
+			path: app/Core/shared/voip.class.php
+
+		-
+			message: "#^Access to an undefined property voip\\:\\:\\$dotaz_rs_radku\\.$#"
+			count: 1
+			path: app/Core/shared/voip.class.php
+
+		-
+			message: "#^Function mysql_fetch_array not found\\.$#"
+			count: 1
+			path: app/Core/shared/voip.class.php
+
+		-
+			message: "#^Function mysql_num_rows not found\\.$#"
+			count: 1
+			path: app/Core/shared/voip.class.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 1
+			path: app/Core/shared/voip.class.php
+
+		-
+			message: "#^Class App\\\\Core\\\\adminator referenced with incorrect case\\: App\\\\Core\\\\Adminator\\.$#"
+			count: 3
+			path: app/Models/PartnerOrder.php
+
+		-
+			message: "#^Class App\\\\Models\\\\Email not found\\.$#"
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: "#^Call to static method createHelperSet\\(\\) on an unknown class Doctrine\\\\ORM\\\\Tools\\\\Console\\\\ConsoleRunner\\.$#"
+			count: 1
+			path: app/cli-config.php
+
+		-
+			message: "#^Class aboutController not found\\.$#"
+			count: 3
+			path: app/routing.php
+
+		-
+			message: "#^Class adminController not found\\.$#"
+			count: 7
+			path: app/routing.php
+
+		-
+			message: "#^Class archivZmenController not found\\.$#"
+			count: 4
+			path: app/routing.php
+
+		-
+			message: "#^Class objektyController not found\\.$#"
+			count: 5
+			path: app/routing.php
+
+		-
+			message: "#^Class othersController not found\\.$#"
+			count: 2
+			path: app/routing.php
+
+		-
+			message: "#^Class platbyController not found\\.$#"
+			count: 3
+			path: app/routing.php
+
+		-
+			message: "#^Class topologyController not found\\.$#"
+			count: 3
+			path: app/routing.php
+
+		-
+			message: "#^Class vlastniciController not found\\.$#"
+			count: 4
+			path: app/routing.php
+
+		-
+			message: "#^Class workController not found\\.$#"
+			count: 1
+			path: app/routing.php
+
+		-
+			message: "#^Class App\\\\Controllers\\\\Auth\\\\AuthController constructor invoked with 1 parameter, 3 required\\.$#"
+			count: 1
+			path: boostrap/dependencies.php
+
+		-
+			message: "#^Function mysql_fetch_array not found\\.$#"
+			count: 1
+			path: include/main.function.shared.php
+
+		-
+			message: "#^Function mysql_num_rows not found\\.$#"
+			count: 1
+			path: include/main.function.shared.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 1
+			path: include/main.function.shared.php
+
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 1
+			path: print/inc.reg.form.gen.prepare.vars.2.php
+
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 1
+			path: print/inc.reg.form.gen.prepare.vars.php
+
+		-
+			message: "#^Function mysql_fetch_array not found\\.$#"
+			count: 5
+			path: print/inc.smlouva.input.form.2.php
+
+		-
+			message: "#^Function mysql_num_rows not found\\.$#"
+			count: 2
+			path: print/inc.smlouva.input.form.2.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 5
+			path: print/inc.smlouva.input.form.2.php
+
+		-
+			message: "#^Function mysql_fetch_array not found\\.$#"
+			count: 4
+			path: print/inc.smlouva.input.form.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 4
+			path: print/inc.smlouva.input.form.php
+
+		-
+			message: "#^Function mysql_fetch_array not found\\.$#"
+			count: 2
+			path: print/reg-form-2012-05.php
+
+		-
+			message: "#^Function mysql_num_rows not found\\.$#"
+			count: 2
+			path: print/reg-form-2012-05.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 3
+			path: print/reg-form-2012-05.php
+
+		-
+			message: "#^Function mysql_result not found\\.$#"
+			count: 3
+			path: print/reg-form-2012-05.php
+
+		-
+			message: "#^Function mysql_fetch_array not found\\.$#"
+			count: 2
+			path: print/reg-form-pdf.php
+
+		-
+			message: "#^Function mysql_num_rows not found\\.$#"
+			count: 2
+			path: print/reg-form-pdf.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 3
+			path: print/reg-form-pdf.php
+
+		-
+			message: "#^Function mysql_result not found\\.$#"
+			count: 3
+			path: print/reg-form-pdf.php
+
+		-
+			message: "#^Function mysql_fetch_array not found\\.$#"
+			count: 1
+			path: print/smlouva-2012-05.php
+
+		-
+			message: "#^Function mysql_query not found\\.$#"
+			count: 1
+			path: print/smlouva-2012-05.php
+
+		-
+			message: "#^Class rss_wrong_login does not have a constructor and must be instantiated without any parameters\\.$#"
+			count: 1
+			path: rss/rss_2_0.php
