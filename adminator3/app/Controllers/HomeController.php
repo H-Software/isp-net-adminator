@@ -84,11 +84,13 @@ class HomeController extends adminatorController
 
             $nastenka = new \board($this->conn_mysql, $this->logger);
 
-            $nastenka->prepare_vars("");
+            $rs = $nastenka->prepare_vars();
+            $this->logger->debug("homeController\board: prepare_vars result: " . var_export($rs, true));
 
             $nastenka->view_number = 10; //zprávy budou zobrazeny po ...
 
             $zpravy = $nastenka->show_messages();
+            $this->logger->debug("homeController\board: show_messages result: " . var_export($zpravy, true));
 
             $this->smarty->assign("zpravy", $zpravy);
 

@@ -3,6 +3,9 @@
 class board
 {
     public $conn_mysql;
+
+    public $logger;
+
     public $what;
     public $action;
     public $page;
@@ -67,6 +70,11 @@ class board
 
         $message = $this->conn_mysql->query($sql);
 
+        $this->logger->debug("board\show_messages: SQL dump: " . var_export($sql, true));
+
+        if($message === false){
+            $this->logger->error("board\show_messages: db query failed! (Error description: " . $this->conn_mysql->error. ")");
+        }
         //vypíšeme tabulky se zprávami
         while($entry = $message->fetch_array()) {
             $zpravy[] = array("id" => $entry["id"],"author" => $entry["author"],
@@ -130,15 +138,15 @@ class board
         //$body = wordwrap($body, 90, "\n", 1); //rozdělíme dlouhá slova
 
         //vytvoříme odkazy
-        $this->body = eregi_replace("(http://[^ ]+\.[^ ]+)", " <a href=\\1>\\1</a>", $this->body);
-        $this->body = eregi_replace("[^/](www\.[^ ]+\.[^ ]+)", " <a href=http://\\1>\\1</a>", $this->body);
+        $this->body = preg_replace("/(http://[^ ]+\.[^ ]+)/i", " <a href=\\1>\\1</a>", $this->body);
+        $this->body = preg_replace("/[^/](www\.[^ ]+\.[^ ]+)/i", " <a href=http://\\1>\\1</a>", $this->body);
 
         //povolíme tyto tagy - <b> <u> <i>, možnost přidat další
         $tag = array("b", "u", "i");
 
         for($y = 0;$y < count($tag);$y++):
-            $this->body = eregi_replace("&lt;" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
-            $this->body = eregi_replace("&lt;/" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);
+            $this->body = preg_replace("/&lt;/i" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
+            $this->body = preg_replace("/&lt;\//i" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);
         endfor;
 
         //prevedeni datumu
@@ -161,7 +169,7 @@ class board
             // die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
-        $this->logger->addWarning("board\\insert_into_db: query result: " . var_export($add, true));
+        $this->logger->info("board\\insert_into_db: query result: " . var_export($add, true));
 
         if($add === null or $add === false) {
             $this->error .= "<div>Došlo k chybě při zpracování SQL dotazu v databázi!</div>\n";
