@@ -176,6 +176,10 @@ class partner_servis
 
         $rs_vlastnici = pg_query("SELECT id_cloveka, jmeno, prijmeni, ulice, mesto FROM vlastnici ".$select."");
 
+        if($rs_vlastnici === false){
+            $RetArray[] = "<div>Nelze vypsat vlastniky. DB chyba! (" . pg_last_error() . ")</div>";
+        }
+        
         while($array = pg_fetch_array($rs_vlastnici)) {
 
             $row = array();
@@ -373,7 +377,7 @@ class partner_servis
         if(isset($user)) {
             $user_plaint = $_SESSION["user_plaint"];
         } else {
-            $user_plaint = $_SESSION["db_nick"];
+            $user_plaint = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
         }
 
         $tel = $this->conn_mysql->real_escape_string($this->tel);
