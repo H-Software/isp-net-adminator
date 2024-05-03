@@ -28,7 +28,11 @@ class partner extends adminator
 
     public $paginateItemsPerPage = 15;
 
+    private $action_form;
+
     private $form_fail = false;
+
+    public $form_uri;
 
     private $form_error;
 
@@ -154,6 +158,32 @@ class partner extends adminator
         $this->form_odeslat = $_POST["odeslat"];
     }
 
+    private function addRenderForm()
+    {
+        $form_id = "partner-order-add";
+
+        $this->action_form = $this->formInit();
+
+        $form_data['f_open'] = $this->action_form->open($form_id, $form_id, $this->form_uri, '', '', $this->csrf_html);
+
+        $form_data['f_close'] = $this->action_form->close();
+        $form_data['f_submit_button'] = $this->action_form->input_submit('odeslano', '', 'OK / Odeslat / Uložit');
+
+        $form_data['f_input_popis'] = $this->action_form->text('popis', 'Popis objektu', $data['popis']);
+
+        $form_data['f_input_nod_find'] = $this->action_form->text('nod_find', 'Přípojný bod - filtr', $data['nod_find']);
+
+        $form_data['f_input_nod_find_button'] = $this->action_form->input_submit(
+            'g1',
+            '',
+            'Hledat (nody)',
+            '',
+            'class="btn btn-secondary" '
+        );
+
+        return $form_data;
+    }
+
     public function add()
     {
         $this->logger->info("partner\add called");
@@ -162,31 +192,30 @@ class partner extends adminator
 
         $this->addPrepareVars();
 
-        if( ( isset($this->form_odeslat) and ($this->form_fail == false) ) )
-        { // mod ukladani
-       
-           // require($cesta."vlozeni-ukladani-inc.php");
+        if( ( isset($this->form_odeslat) and ($this->form_fail == false) ) ) { 
+        // mod ukladani
            $bodyContent .= "<div> missing saving code</div>";
         }
-        else
-        { // zobrazime formular
-       
-            $bodyContent .= "<form action=\"\" method=\"post\" >";
+        else { 
+            // zobrazime formular
 
-           if( isset($this->form_odeslat) ){
-            $this->smarty->assign("form_error_message", $this->form_error); 
-           }
-       
-           // require($cesta."vlozeni-form-inc.php");
-           $bodyContent .=  "<div> missing form code</div>";
-       
-           $bodyContent .=  "</form>";
-       
+            if( isset($this->form_odeslat) ){
+                $this->smarty->assign("form_error_message", $this->form_error); 
+            }
+
+            $form_data = $this->addRenderForm();
+
+            // $bodyContent .=  print_r($form_data);
+            $this->smarty->assign("form_data", $form_data);
+
+            // $this->logger->debug("partner\add: bodyContent: " . var_export($bodyContent, true));
+            $this->smarty->assign("body", $bodyContent);
+
+            $this->smarty->display('partner/order-add-form.tpl');
+
+            return false;
         }
-       
-        // $this->logger->debug("partner\add: bodyContent: " . var_export($bodyContent, true));
 
-        $this->smarty->assign("body", $bodyContent);
         $this->smarty->display('partner/order-add.tpl');
         
         return true;

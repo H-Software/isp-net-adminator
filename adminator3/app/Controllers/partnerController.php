@@ -100,6 +100,7 @@ class partnerController extends adminatorController
 
         $partner = new partner($this->container);
         $partner->csrf_html = $csrf_html;
+        $partner->form_uri = $request->getUri();
 
         $rs = $partner->add();
 
