@@ -10,6 +10,9 @@ defaults:
  run:
   working-directory: ./adminator3
 
+permissions:
+  pull-requests: write
+
 jobs:
   basic-checks:
     runs-on: ${{ matrix.os }}
@@ -39,6 +42,7 @@ jobs:
       #   run: composer phpunit
 
       - name: PHP CodeSniffer
+        continue-on-error: true
         run: |
           composer \
           run \
@@ -49,7 +53,13 @@ jobs:
               boostrap \
               print \
               rss
-            
+      
+      - uses: mainmatter/continue-on-error-comment@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          outcome: ${{ steps.build.outcome }}
+          test-id: Error code ${{ matrix.code }}
+
       # - name: PHP CodeSniffer Fix
       #   run: |
       #     composer \
@@ -64,7 +74,6 @@ jobs:
       #           app
 
       - name: PHP-CS-Fixer
-        continue-on-error: true
         run: |
           php \
           vendor/friendsofphp/php-cs-fixer/php-cs-fixer \
