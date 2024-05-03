@@ -40,9 +40,14 @@ class PartnerOrder extends Model
      * @var array
      */
     protected $fillable = [
-        // 'akce',
-        // 'provedeno_kym',
-        // 'vysledek'
+        'jmeno',
+        'adresa',
+        'email',
+        'tel',
+        'poznamky',
+        'typ_balicku',
+        'typ_linky',
+        'vlozil'
     ];
 
     /**

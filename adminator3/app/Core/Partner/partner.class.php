@@ -151,11 +151,40 @@ class partner extends adminator
         $this->form_bydliste = $_POST["bydliste"];
         $this->form_email = $_POST["email"];
         $this->form_tel = $_POST["tel"];
-        $this->form_typ_balicku = $_POST["typ_balicku"];
-        $this->form_typ_linky = $_POST["typ_linky"];
+        $this->form_typ_balicku = intval($_POST["typ_balicku"]);
+        $this->form_typ_linky = intval($_POST["typ_linky"]);
        
         $this->form_pozn = $_POST["pozn"];
         $this->form_odeslat = $_POST["odeslat"];
+
+        // TODO: add validation
+
+    }
+
+    private function addSaveData()
+    {
+        $data['Jméno a příjmení klienta'] = $this->form_jmeno_klienta;
+        $data['Bydliště/přípojné místo'] = $this->form_bydliste;
+        $data['Emailová adresa'] = $this->form_email;
+        $data['Telefon'] = $this->form_tel;
+        $data['Typ balícku'] = $this->form_typ_balicku;
+        $data['Typ linky'] = $this->form_typ_linky;
+        $data['Poznámka'] = $this->form_pozn;
+
+        $item = PartnerOrder::create(
+            [
+                'jmeno' => $this->form_jmeno_klienta,
+                'adresa' => $this->form_bydliste,
+                'email' => $this->form_email,
+                'tel' => $this->form_tel,
+                'poznamky' => $this->form_pozn,
+                'typ_balicku' => $this->form_typ_balicku,
+                'typ_linky' => $this->form_typ_linky,
+                'vlozil' => $this->loggedUserEmail
+            ]
+        );
+
+        return [$item, $data];
     }
 
     private function addRenderForm()
@@ -164,22 +193,23 @@ class partner extends adminator
 
         $this->action_form = $this->formInit();
 
+        $form_data['f_csrf'] = $this->csrf_html;
         $form_data['f_open'] = $this->action_form->open($form_id, $form_id, $this->form_uri, '', '', $this->csrf_html);
-
         $form_data['f_close'] = $this->action_form->close();
-        $form_data['f_submit_button'] = $this->action_form->input_submit('odeslano', '', 'OK / Odeslat / Uložit');
 
-        $form_data['f_input_popis'] = $this->action_form->text('popis', 'Popis objektu', $data['popis']);
+        $form_data['f_submit_button'] = $this->action_form->input_submit('odeslat', '', 'OK');
 
-        $form_data['f_input_nod_find'] = $this->action_form->text('nod_find', 'Přípojný bod - filtr', $data['nod_find']);
+        $form_data['f_input_jmeno_klienta'] = $this->action_form->text('jmeno_klienta', 'Jméno a příjmení klienta', $this->form_jmeno_klienta);
+        $form_data['f_input_bydliste'] = $this->action_form->text('bydliste', 'Bydliště/přípojné místo', $this->form_bydliste);
 
-        $form_data['f_input_nod_find_button'] = $this->action_form->input_submit(
-            'g1',
-            '',
-            'Hledat (nody)',
-            '',
-            'class="btn btn-secondary" '
-        );
+        $form_data['f_input_email'] = $this->action_form->email('email', 'Emailová adresa', $this->form_email, '', 'w-75 p-3', '');
+        $form_data['f_input_tel'] = $this->action_form->tel('tel', 'Telefon', $this->form_tel);
+
+        $form_data['f_input_typ_balicku'] = $this->action_form->number('typ_balicku', 'Typ balícku', $this->form_typ_balicku);
+        $form_data['f_input_typ_linky'] = $this->action_form->number('typ_linky', 'Typ linky', $this->form_typ_linky);
+
+        $form_data['f_input_pozn'] = $this->action_form->textarea('pozn', 'Poznámka', $this->form_pozn, 'rows="5" wrap="soft"');
+
 
         return $form_data;
     }
@@ -188,13 +218,26 @@ class partner extends adminator
     {
         $this->logger->info("partner\add called");
 
-        $bodyContent = "";
-
         $this->addPrepareVars();
 
         if( ( isset($this->form_odeslat) and ($this->form_fail == false) ) ) { 
-        // mod ukladani
-           $bodyContent .= "<div> missing saving code</div>";
+            // mod ukladani
+
+            list($insertedItem, $insertedData) = $this->addSaveData();
+
+            if(is_object($insertedItem)) {
+                $insertRs = '<div class="alert alert-success pb-2" role="alert" >Data byla úspěšně uložena.</div>';
+            } else {
+                $insertRs = '<div class="alert alert-danger pb-2" role="alert" >Chyba! Data se nepodařilo uložit.</div>';
+            }
+
+            // $this->logger->info("partner\add insertedData: " . var_export($insertedData, true));
+
+            $this->smarty->assign("insertedData", $insertedData);
+            $this->smarty->assign("insertRs", $insertRs);
+
+            $this->smarty->display('partner/order-add.tpl');
+            return true;
         }
         else { 
             // zobrazime formular
@@ -204,20 +247,11 @@ class partner extends adminator
             }
 
             $form_data = $this->addRenderForm();
-
             // $bodyContent .=  print_r($form_data);
-            $this->smarty->assign("form_data", $form_data);
-
-            // $this->logger->debug("partner\add: bodyContent: " . var_export($bodyContent, true));
-            $this->smarty->assign("body", $bodyContent);
+            $this->smarty->assign($form_data);
 
             $this->smarty->display('partner/order-add-form.tpl');
-
-            return false;
+            return true;
         }
-
-        $this->smarty->display('partner/order-add.tpl');
-        
-        return true;
     }
 }

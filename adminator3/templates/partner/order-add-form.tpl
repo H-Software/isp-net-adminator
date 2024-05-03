@@ -16,7 +16,34 @@
 </div>
 {/if}
 
-{$body}
+{$f_open}
+{$f_csrf}
+
+<div class="row form-group">
+    <div class="col-1"></div>
+    <div class="col-5" style="padding-top: 15px">
+
+    {$f_input_jmeno_klienta}
+
+    {$f_input_bydliste}
+
+    {$f_input_email}
+
+    {$f_input_tel}
+
+    {$f_input_pozn}
+
+    {$f_input_typ_balicku}
+
+    {$f_input_typ_linky}
+
+    {$f_submit_button}
+
+    </div>
+    <div class="col-5"></div>
+</div>
+
+{$f_close}
 
 </div>
 
