@@ -57,7 +57,7 @@ jobs:
       - uses: mainmatter/continue-on-error-comment@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          outcome: ${{ steps.build.outcome }}
+          outcome: ${{ steps.basic-checks.outcome }}
           test-id: Error code ${{ matrix.code }}
 
       # - name: PHP CodeSniffer Fix
@@ -74,6 +74,7 @@ jobs:
       #           app
 
       - name: PHP-CS-Fixer
+        if: always()
         run: |
           php \
           vendor/friendsofphp/php-cs-fixer/php-cs-fixer \
