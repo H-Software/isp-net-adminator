@@ -82,4 +82,28 @@ class partnerController extends adminatorController
 
         return $response;
     }
+
+    public function orderAdd(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info("partnerController\orderAdd called");
+
+        $this->checkLevel(75, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Add");
+
+        $this->header($request, $response, $this->adminator);
+
+        // CSRF token name and value for update form
+        list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
+
+        $this->logger->info("partnerController\orderAdd: csrf generated: ".var_export($csrf_name, true));
+
+        // $rs = $this->admin->levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
+
+        // $this->smarty->assign("body", $rs[0]);
+
+        // $this->smarty->display('admin/level-action.tpl');
+
+        return $response;
+    }
 }
