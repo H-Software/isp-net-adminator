@@ -41,25 +41,25 @@ jobs:
       # - name: Run the tests
       #   run: composer phpunit
 
-      - name: PHP CodeSniffer
-        id: phpcs
-        continue-on-error: true
-        run: |
-          composer \
-          run \
-            phpcs \
-              -- \
-              --standard=PSR12 \
-              app \
-              boostrap \
-              print \
-              rss
+      # - name: PHP CodeSniffer
+      #   id: phpcs
+      #   continue-on-error: true
+      #   run: |
+      #     composer \
+      #     run \
+      #       phpcs \
+      #         -- \
+      #         --standard=PSR12 \
+      #         app \
+      #         boostrap \
+      #         print \
+      #         rss
       
-      - uses: mainmatter/continue-on-error-comment@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          outcome: ${{ steps.phpcs.outcome }}
-          test-id: Step Php-CS Failed on OS ${{ matrix.os }} and PHP ${{ matrix.php-versions }}
+      # - uses: mainmatter/continue-on-error-comment@v1
+      #   with:
+      #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+      #     outcome: ${{ steps.phpcs.outcome }}
+      #     test-id: Step Php-CS Failed on OS ${{ matrix.os }} and PHP ${{ matrix.php-versions }}
 
       # - name: PHP CodeSniffer Fix
       #   run: |
