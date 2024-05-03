@@ -1,7 +1,7 @@
 <?php
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Routing\RouteCollectorProxy;
 
@@ -14,8 +14,10 @@ use App\Controllers\Auth\PasswordController;
 
 $app->get(
     '/',
-    function ($request, $response, $args) {
-        return $request->withStatus(302)->withHeader('Location', '/home');
+    function (ServerRequestInterface $request, ResponseInterface $response, $args) use($app) {
+        $routeParser = $app->getRouteCollector()->getRouteParser();
+        $url = $routeParser->urlFor('home');
+        return $response->withStatus(302)->withHeader('Location', $url);
     }
 )->setName('index');
 
