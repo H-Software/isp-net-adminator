@@ -102,14 +102,7 @@ class partnerController extends adminatorController
         $partner->csrf_html = $csrf_html;
         $partner->form_uri = $request->getUri();
 
-        $rs = $partner->add();
-
-
-        // $rs = $this->admin->levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
-
-        // $this->smarty->assign("body", $rs[0]);
-
-        // $this->smarty->display('admin/level-action.tpl');
+        $partner->add();
 
         return $response;
     }
