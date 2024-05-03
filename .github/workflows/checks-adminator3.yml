@@ -86,6 +86,6 @@ jobs:
       - name: phpstan
         if: always()
         run: |
+          cd ../ && \
           make \
-            -f ../Makefile \
             run-a3-phpstan
