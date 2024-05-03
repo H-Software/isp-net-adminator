@@ -12,6 +12,7 @@ $finder = (new PhpCsFixer\Finder())
         'temp',
     ])
     ->notPath([
+        'phpstan-baseline.php',
         'test.php',
         'app/Core/shared/objekt_a2.class.php', // TypeError: Illegal offset type 
         'vlastnici-cross.php', // TypeError: Illegal offset type 
