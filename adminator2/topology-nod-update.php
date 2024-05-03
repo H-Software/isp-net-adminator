@@ -122,7 +122,7 @@ if( ( $_POST["B1"] == "OK") )
   //$pole .= "puvodni data: ";
 	  
   $vysledek=$conn_mysql->query("select * from nod_list where id=".$id_new );
-  $radku=mysql_num_rows($vysledek);
+  $radku = $vysledek->num_rows();
 	
   if ($radku==0)
   { 

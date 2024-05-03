@@ -230,7 +230,7 @@ require("include/charset.php");
 					monitoring_cat, alarm, filtrace, id_nodu, poznamka 
 				FROM router_list WHERE id = '".intval($update_id)."' ");
 				
-        $dotaz_top_radku=mysql_num_rows($dotaz_top);
+        $dotaz_top_radku = $dotaz_top->num_rows();
 
         if( $dotaz_top_radku < 1)
         { 

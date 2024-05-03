@@ -66,7 +66,7 @@ include ("include/charset.php");
   if ( !($send) )
   {
   $vysledek=$conn_mysql->query("select * from automatika where vec LIKE 'sikana_net_n' " );
-  $radku=mysql_num_rows($vysledek);
+  $radku = $vysledek->num_rows();
 	    
     if ($radku==0) { echo "Chyba! Stav se nepodarilo zjistit "; }
     else

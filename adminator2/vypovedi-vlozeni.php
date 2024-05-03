@@ -252,7 +252,7 @@ include ("include/charset.php");
 	echo "<b>důvod výpovědi: </b>".$duvod_vypovedi."<br>";
 	
 	$dotaz_klient=$conn_mysql->query("SELECT * FROM vypovedi WHERE id_vlastnika LIKE '$klient' ");
-	$dotaz_klient_radku=mysql_num_rows($dotaz_klient);
+	$dotaz_klient_radku = $dotaz_klient->num_rows();
 	
 	if ( $dotaz_klient_radku > 0 )
 	{

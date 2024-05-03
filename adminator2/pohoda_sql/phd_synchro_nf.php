@@ -244,7 +244,7 @@ require($cesta."include/charset.php");
 	$sql2 .= "and ICO LIKE '$ico' and DIC LIKE '$dic' AND po_splatnosti_vlastnik = '1') ";  
 	
 	$dotaz2=$conn_mysql->query($sql2);
-	$dotaz2_radku=mysql_num_rows($dotaz2);
+	$dotaz2_radku = $dotaz2->num_rows();
   
 	if( $dotaz2_radku == 1 )
 	{   // faktura existuje, zjistime id a upravime

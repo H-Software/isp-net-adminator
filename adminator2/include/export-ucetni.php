@@ -250,7 +250,7 @@ for ($p = 0; $p < count($fakt_skupiny_pole); $p++)
     $fakturacni_skupina_id = $fakt_skupiny_pole[$p];
     
     $dotaz_fakt_skup=$conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '$fakturacni_skupina_id' ");
-    $dotaz_fakt_skup_radku=mysql_num_rows($dotaz_fakt_skup);
+    $dotaz_fakt_skup_radku = $dotaz_fakt_skup->num_rows();
     
     while( $data_fakt_skup=mysql_fetch_array($dotaz_fakt_skup) )
     {

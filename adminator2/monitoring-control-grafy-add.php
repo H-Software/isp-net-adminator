@@ -218,7 +218,7 @@ require ("include/charset.php");
   // sem kategorii
   $dotaz_cat=$conn_mysql->query("select * from kategorie where sablona=2" );
   
-  $dotaz_cat_radku=mysql_num_rows($dotaz_cat);
+  $dotaz_cat_radku = $dotaz_cat->num_rows();
    
   if ($dotaz_cat_radku==0) echo "Žádná kategorie v databázi.";
     else
