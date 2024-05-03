@@ -40,6 +40,7 @@ class objektyController extends adminatorController
 
         $this->smarty->display('objekty/subcat.tpl');
 
+        return $response;
     }
 
     public function stb(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -71,6 +72,7 @@ class objektyController extends adminatorController
 
         $this->smarty->display('objekty/stb.tpl');
 
+        return $response;
     }
 
 
@@ -102,6 +104,7 @@ class objektyController extends adminatorController
             $this->smarty->display('objekty/stb-action.tpl');
         }
 
+        return $response;
     }
 
     public function objekty(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -145,6 +148,8 @@ class objektyController extends adminatorController
         }
 
         $this->smarty->display('objekty/list.tpl');
+
+        return $response;
     }
 
     public function objektyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -178,5 +183,6 @@ class objektyController extends adminatorController
         $this->smarty->assign("body", $output);
         $this->smarty->display('objekty/action.tpl');
 
+        return $response;
     }
 }

@@ -41,6 +41,7 @@ class platbyController extends adminatorController
 
         $this->smarty->display('platby/platby-cat.tpl');
 
+        return $response;
     }
 
     public function platby(ServerRequestInterface $request, ResponseInterface $response, array $args)

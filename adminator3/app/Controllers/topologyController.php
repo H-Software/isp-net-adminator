@@ -40,6 +40,8 @@ class topologyController extends adminatorController
         $this->smarty->assign("body", $output);
 
         $this->smarty->display('topology/node-list.tpl');
+
+        return $response;
     }
 
     public function routerList(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -59,5 +61,7 @@ class topologyController extends adminatorController
         $this->smarty->assign("body", $output);
 
         $this->smarty->display('topology/router-list.tpl');
+
+        return $response;
     }
 }
