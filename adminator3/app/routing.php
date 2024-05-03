@@ -9,6 +9,7 @@ use App\Middleware\RedirectIfNotAuthenticated;
 use App\Controllers\HomeController;
 use App\Controllers\Auth\AuthController;
 use App\Controllers\Auth\PasswordController;
+use App\Controllers\partnerController;
 
 // routes
 
@@ -70,16 +71,16 @@ $app->group(
         $group->map(['GET', 'POST'], '/objekty/stb', \objektyController::class . ':stb');
         $group->map(['GET', 'POST'], '/objekty/stb/action', \objektyController::class . ':stbAction');
 
-        $group->map(['GET', 'POST'], '/partner', \partnerController::class . ':cat');
-        $group->map(['GET', 'POST'], '/partner/cat', \partnerController::class . ':cat');
-        $group->map(['GET', 'POST'], '/partner/order', \partnerController::class . ':orderCat');
-        $group->map(['GET', 'POST'], '/partner/order/cat', \partnerController::class . ':orderCat');
+        $group->map(['GET', 'POST'], '/partner', partnerController::class . ':cat');
+        $group->map(['GET', 'POST'], '/partner/cat', partnerController::class . ':cat');
+        $group->map(['GET', 'POST'], '/partner/order', partnerController::class . ':orderCat');
+        $group->map(['GET', 'POST'], '/partner/order/cat', partnerController::class . ':orderCat');
 
-        $group->map(['GET', 'POST'], '/partner/order/add', \partnerController::class . ':orderAdd');
-        $group->map(['GET', 'POST'], '/partner/order/list', \partnerController::class . ':orderList');
-        $group->map(['GET', 'POST'], '/partner/order/accept', \partnerController::class . ':orderAccept');
-        $group->map(['GET', 'POST'], '/partner/order/change-status', \partnerController::class . ':orderChangeStatus');
-        $group->map(['GET', 'POST'], '/partner/order/change-desc', \partnerController::class . ':orderChangeDesc');
+        $group->map(['GET', 'POST'], '/partner/order/add', partnerController::class . ':orderAdd');
+        $group->map(['GET', 'POST'], '/partner/order/list', partnerController::class . ':orderList');
+        $group->map(['GET', 'POST'], '/partner/order/accept', partnerController::class . ':orderAccept');
+        $group->map(['GET', 'POST'], '/partner/order/change-status', partnerController::class . ':orderChangeStatus');
+        $group->map(['GET', 'POST'], '/partner/order/change-desc', partnerController::class . ':orderChangeDesc');
 
         $group->map(['GET', 'POST'], '/platby/cat', \platbyController::class . ':cat');
         $group->map(['GET', 'POST'], '/platby/fn', \platbyController::class . ':fn');
