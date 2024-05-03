@@ -2,11 +2,11 @@
 
 namespace App\Partner;
 
+use Exception;
 use App\Models\PartnerOrder;
 use App\Core\adminator;
 use Psr\Container\ContainerInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
-
 use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 
 class partner extends adminator
@@ -171,18 +171,23 @@ class partner extends adminator
         $data['Typ linky'] = $this->form_typ_linky;
         $data['Poznámka'] = $this->form_pozn;
 
-        $item = PartnerOrder::create(
-            [
-                'jmeno' => $this->form_jmeno_klienta,
-                'adresa' => $this->form_bydliste,
-                'email' => $this->form_email,
-                'tel' => $this->form_tel,
-                'poznamky' => $this->form_pozn,
-                'typ_balicku' => $this->form_typ_balicku,
-                'typ_linky' => $this->form_typ_linky,
-                'vlozil' => $this->loggedUserEmail
-            ]
-        );
+        try {
+            $item = PartnerOrder::create(
+                [
+                    'jmeno' => $this->form_jmeno_klienta,
+                    'adresa' => $this->form_bydliste,
+                    'email' => $this->form_email,
+                    'tel' => $this->form_tel,
+                    'poznamky' => $this->form_pozn,
+                    'typ_balicku' => $this->form_typ_balicku,
+                    'typ_linky' => $this->form_typ_linky,
+                    'vlozil' => $this->loggedUserEmail
+                ]
+            );
+        }
+        catch (Exception $e) {
+            $item = $e->getMessage();
+        }
 
         return [$item, $data];
     }
@@ -223,18 +228,21 @@ class partner extends adminator
         if( ( isset($this->form_odeslat) and ($this->form_fail == false) ) ) { 
             // mod ukladani
 
-            list($insertedItem, $insertedData) = $this->addSaveData();
+            list($insertRs, $insertedData) = $this->addSaveData();
 
-            if(is_object($insertedItem)) {
-                $insertRs = '<div class="alert alert-success pb-2" role="alert" >Data byla úspěšně uložena.</div>';
+            if(is_object($insertRs)) {
+                $insertMsg = '<div class="alert alert-success pb-2" role="alert" >Data byla úspěšně uložena.</div>';
+                $this->logger->info("partner\add: insert into database was successful");
             } else {
-                $insertRs = '<div class="alert alert-danger pb-2" role="alert" >Chyba! Data se nepodařilo uložit.</div>';
+                $insertMsg = '<div class="alert alert-danger pb-2" role="alert" >Chyba! Data se nepodařilo uložit. </div>'
+                             .'<div class="alert alert-secondary pb-2" role="alert" >' . $insertRs . ')</div>';
+                $this->logger->error("partner\add: insert into database has failed. Error message: " . var_export($insertRs, true));
             }
 
             // $this->logger->info("partner\add insertedData: " . var_export($insertedData, true));
 
             $this->smarty->assign("insertedData", $insertedData);
-            $this->smarty->assign("insertRs", $insertRs);
+            $this->smarty->assign("insertMsg", $insertMsg);
 
             $this->smarty->display('partner/order-add.tpl');
             return true;

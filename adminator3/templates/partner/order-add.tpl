@@ -6,16 +6,15 @@
 
 {include file="partner/inc.order.add.banner.tpl"}
 
-{if $insertRs|count_characters > 1}
+{if $insertMsg|count_characters > 1}
     <div class="row">
         <div class="col-2"></div>
         <div class="col-8" style="padding-top: 15px">
-        {$insertRs}
+        {$insertMsg}
         </div>
         <div class="col-2"></div>
     </div>
 {/if}
-
 
 <div class="row justify-content-center">
 <div class="col-8 pb-2 fs-5 alert alert-primary" role="alert">
