@@ -98,6 +98,10 @@ class partnerController extends adminatorController
 
         $this->logger->info("partnerController\orderAdd: csrf generated: ".var_export($csrf_name, true));
 
+        $partner = new partner($this->container);
+        $rs = $partner->add();
+
+
         // $rs = $this->admin->levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
 
         // $this->smarty->assign("body", $rs[0]);

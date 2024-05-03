@@ -32,7 +32,7 @@ class partner extends adminator
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->logger = $container->get('logger');
-
+        $this->smarty = $container->get('smarty');
 
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
@@ -126,4 +126,9 @@ class partner extends adminator
         return array($output);
     }
 
+    public function add()
+    {
+        $this->smarty->display('partner/order-add.tpl');
+        return true;
+    }
 }
