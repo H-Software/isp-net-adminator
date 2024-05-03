@@ -42,17 +42,18 @@ run-a3-phpstan:
 		&& php \
 			vendor/phpstan/phpstan/phpstan.phar \
 			analyse \
-			app \
-			boostrap \
-			config \
-			include/main.function.shared.php \
-			print \
-			public \
-			rss \
-			resources \
-			templates \
-			index*.php \
-			other*.php \
-			vl*.php \
-			w*.php \
-			--memory-limit 512M
+				app \
+				boostrap \
+				config \
+				include/main.function.shared.php \
+				print \
+				public \
+				resources \
+				rss \
+				templates \
+				ecs.php \
+				ind*.php \
+				other*.php \
+				vl*.php \
+				w*.php \
+				--memory-limit 512M

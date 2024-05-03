@@ -61,7 +61,7 @@
         "migrate": "vendor/bin/phinx migrate -c config/phinx.php -e default --ansi",
         "rollback": "vendor/bin/phinx rollback -c config/phinx.php -e default --ansi -t 0",
         "phplint": "phplint --no-cache",
-        "phpstan": "phpstan analyse",
+        "phpstan": "vendor/phpstan/phpstan/phpstan.phar analyse",
         "phpcbf": "phpcbf",
         "phpcs": "phpcs -s"
     }

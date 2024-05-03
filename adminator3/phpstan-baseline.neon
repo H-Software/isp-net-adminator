@@ -1,9 +1,9 @@
 parameters:
 	ignoreErrors:
-		-
-			message: "#^Access to an undefined property App\\\\Auth\\\\passwordHelper\\:\\:\\$container\\.$#"
-			count: 1
-			path: app/Auth/Password.php
+		# -
+		# 	message: "#^Access to an undefined property App\\\\Auth\\\\passwordHelper\\:\\:\\$container\\.$#"
+		# 	count: 1
+		# 	path: app/Auth/Password.php
 
 		-
 			message: "#^Access to an undefined property auth_service\\:\\:\\$container\\.$#"

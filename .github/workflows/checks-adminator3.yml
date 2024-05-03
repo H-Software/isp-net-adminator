@@ -83,3 +83,8 @@ jobs:
           --show-progress=dots \
           -v
 
+      - name: phpstan
+        if: always()
+        run: |
+          make \
+          run-a3-phpstan
