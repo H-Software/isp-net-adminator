@@ -113,6 +113,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/marketplace/actions/continue-on-error-comment
 - https://github.com/peter-evans/docker-compose-actions-workflow
 - https://github.com/marketplace/actions/junit-report-action
+- https://github.com/dorny/test-reporter
 
 ## Author
 Patrik Majer
