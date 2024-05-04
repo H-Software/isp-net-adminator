@@ -47,7 +47,11 @@ class AuthController extends Controller
 
     public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
+        $redirect = $request->getQueryParams()['redirect'];
+
         if ($request->getMethod() == "POST") {
+
+            $redirect = $request->getParsedBody()['redirect'];
             $data = array(
                 'email' => $request->getParsedBody()['slimUsername'],
                 'password' => $request->getParsedBody()['slimPassword'],
@@ -67,8 +71,15 @@ class AuthController extends Controller
                 ) {
                     throw new Exception('Incorrect email or password.');
                 } else {
+                    // login OK
+                    $this->logger->info("authController\signin: authentication was successful, email: "
+                                        . var_export(Sentinel::getUser()->email, true)
+                                        . ", redirect URL: "
+                                        . var_export($redirect, true)
+                                    );
+
                     $url = $this->routeParser->urlFor('home');
-                    return $response->withStatus(302)->withHeader('Location', $url);
+                    return $response->withStatus(302)->withHeader('Location', $redirect ?: $url);
                 }
             } catch (Exception $e) {
                 $this->flash->addMessageNow('error', $e->getMessage());
@@ -88,7 +99,16 @@ class AuthController extends Controller
         // echo "<pre>END OLD: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
         // echo "<pre>END OLD NOW: " . var_export($this->flash->getMessages()["oldNow"], true) . "</pre>";
 
-        return $this->view->render($response, 'auth\signin.twig', array('username' => @$username));
+        $this->logger->debug("AuthController/signin: redirect url: " . var_export($redirect, true));
+
+        return $this->view->render(
+                                $response,
+                                'auth\signin.twig', 
+                                array(
+                                    'username' => @$username,
+                                    'redirect' => $redirect
+                                )
+                            );
     }
 
     public function signout($request, $response, array $args)
