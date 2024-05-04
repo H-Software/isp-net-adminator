@@ -55,7 +55,7 @@ $container->set(
 
 $container->set(
     'csrf',
-    function () use ($responseFactory){
+    function () use ($responseFactory) {
 
         // $storage = [];
 
@@ -64,10 +64,16 @@ $container->set(
         $guardMock->shouldReceive('getTokenNameKey')->andReturn(42);
         $guardMock->shouldReceive('getTokenValueKey')->andReturn(42);
         // $guardMock->shouldReceive('foo')->andReturn(42);
-        
+
         return $guardMock;
         // return new Guard($responseFactory);
 
     }
 );
 
+$container->set(
+    'flash',
+    function ($container) {
+        return new \Slim\Flash\Messages();
+    }
+);

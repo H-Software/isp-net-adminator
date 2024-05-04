@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\DbUnit\DataSet\MockDataSet;
 use PDO;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Intercept;
 
 class HomeControllerTest extends TestCase
 {
@@ -102,9 +103,10 @@ class HomeControllerTest extends TestCase
             array(
                 array(),
                 array()
-            ));
+            )
+        );
         $adminatorMock->shouldReceive('list_logged_users')->andReturn("");
-        
+
         $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
         $homeController = new HomeController($container, $adminatorMock);
@@ -112,8 +114,23 @@ class HomeControllerTest extends TestCase
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         $response = $this->createMock(ResponseInterface::class);
 
-        $rs = $homeController->home($serverRequest, $response, []);
+        ob_start(); // Start output buffering
 
-        
+        $homeController->home($serverRequest, $response, []);
+
+        $output = ob_get_contents();
+
+        ob_end_clean();
+
+        $outputKeywords = array(
+            '<html lang="en">',
+            '<title>Adminator3 :: úvodní stránka</title>',
+            'bootstrap.min.css" rel="stylesheet"',
+            'Jste přihlášeni v administračním systému',
+        );
+
+        foreach ($outputKeywords as $w) {
+            self::assertStringContainsString($output, $w);
+        }
     }
 }

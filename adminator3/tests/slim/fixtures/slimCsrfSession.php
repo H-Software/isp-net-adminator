@@ -4,6 +4,7 @@
 
 namespace Slim\Csrf;
 
-function session_status() {
+function session_status()
+{
     return PHP_SESSION_ACTIVE;
 }
