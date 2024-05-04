@@ -101,6 +101,10 @@ jobs:
       #   if: always()
       #   run: ls -lh build
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: JUnit Report Action
         if: always()
         uses: mikepenz/action-junit-report@v4
@@ -108,6 +112,8 @@ jobs:
           check_name: "JUnit Test Report :: OS ${{ matrix.os }} :: PHP ${{ matrix.php-versions }}"
           include_passed: true
           detailed_summary: true
+          summary: '<table><thead><tr><th> Application (src/applications) </th></tr></thead><tbody><tr><td> test </td></tr></tbody></table>'
+          check_title_template: '{{SUITE_NAME}} | {{TEST_NAME}}'
           report_paths: 'adminator3/build/report.*.xml'
       
       - name: Publish Test Results
