@@ -29,6 +29,15 @@ use Cartalyst\Sentinel\Cookies\IlluminateCookie;
 
 class IlluminateCookieTest extends TestCase
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function tearUp(): void
+    {
+        $this->markTestSkipped( 'looks like adminator dont need this' );
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -40,8 +49,6 @@ class IlluminateCookieTest extends TestCase
     /** @test */
     public function it_can_put_a_cookie()
     {
-        $this->markTestSkipped( 'looks like adminator dont need this' );
-
         $jar = new CookieJar();
 
         $request = m::mock(Request::class);
