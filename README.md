@@ -114,6 +114,8 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/peter-evans/docker-compose-actions-workflow
 - https://github.com/marketplace/actions/junit-report-action
 - https://github.com/dorny/test-reporter
+  - not compatible with java-junit
+- https://github.com/EnricoMi/publish-unit-test-result-action
 
 ## Author
 Patrik Majer

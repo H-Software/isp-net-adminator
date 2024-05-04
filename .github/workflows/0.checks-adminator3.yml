@@ -36,6 +36,12 @@ jobs:
       - name: Print PHP version
         run: php -v
 
+      # - name: Cache Composer dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ./vendor
+      #     key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
       - name: Install dependencies
         run: composer install --ignore-platform-reqs
 
@@ -102,10 +108,17 @@ jobs:
           detailed_summary: true
           report_paths: 'adminator3/build/report.*.xml'
       
-      - name: Test Report
-        uses: dorny/test-reporter@v1
-        if: success() || failure()    # run this step even if previous step failed
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
         with:
-          name: PHPUnit Tests            # Name of the check run which will be created
-          path: adminator3/build/report.*.xml    # Path to test results
-          reporter: java-junit        # Format of test results
+          files: |
+            adminator3/build/report.*.xml
+
+      # - name: Test Report
+      #   uses: dorny/test-reporter@v1
+      #   if: success() || failure()    # run this step even if previous step failed
+      #   with:
+      #     name: PHPUnit Tests            # Name of the check run which will be created
+      #     path: adminator3/build/report.*.xml    # Path to test results
+      #     reporter: java-junit        # Format of test results
