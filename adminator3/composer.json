@@ -43,7 +43,7 @@
         "robmorgan/phinx": "^0.12.10"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^10.0",
         "friendsofphp/php-cs-fixer": "^v3.54.0",
         "overtrue/phplint": "^4.1.0",
         "phpstan/phpstan": "^1.4.2",
@@ -51,7 +51,8 @@
         "symfony/var-dumper": "^v6.0.2",
         "symplify/easy-coding-standard": "^v12.1",
         "symplify/coding-standard": "^v12.1",
-        "mockery/mockery": "^1.0"
+        "mockery/mockery": "^1.0",
+        "phpspec/prophecy-phpunit": "^2.2"
     },
     "suggest": {
         "illuminate/database": "By default, Sentinel utilizes the powerful Illuminate database layer.",
