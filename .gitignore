@@ -27,6 +27,15 @@ extras/documentation
 .DS_Store
 /.idea/
 
+# logs
+a3-logs/
+
+# caches
+adminator3/.php-cs-fixer.cache
+adminator3/.php_cs.cache
+adminator3/.phpunit.result.cache
+/adminator3/templates_c/
+
 # App
 /adminator2/vypisy/
 /adminator2/files2/dokumenty/
@@ -34,10 +43,6 @@ extras/documentation
 /adminator2/files2/ostatni/
 /adminator2/files2/soubory/
 /adminator2/export/
-/adminator3/templates_c/
-/adminator3/export/objekty.xls
 
-adminator3/.php_cs.cache
-a3-logs/
-adminator3/export/vlastnici-sro.xls
-adminator3/.php-cs-fixer.cache
+adminator3/build/
+adminator3/export/

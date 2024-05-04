@@ -16,13 +16,13 @@
          verbose="true"
 >
     <testsuites>
-        <testsuite name="Sentinel Test Suite">
+        <testsuite name="Adminator3 Test Suite">
             <directory suffix="Test.php">./tests/</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">./src/</directory>
+            <directory suffix=".php">./app/</directory>
         </whitelist>
     </filter>
     <logging>

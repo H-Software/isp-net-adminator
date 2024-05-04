@@ -50,7 +50,8 @@
         "squizlabs/php_codesniffer": "*",
         "symfony/var-dumper": "^v6.0.2",
         "symplify/easy-coding-standard": "^v12.1",
-        "symplify/coding-standard": "^v12.1"
+        "symplify/coding-standard": "^v12.1",
+        "mockery/mockery": "^1.0"
     },
     "suggest": {
         "illuminate/database": "By default, Sentinel utilizes the powerful Illuminate database layer.",
