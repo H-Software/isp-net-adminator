@@ -101,9 +101,9 @@ jobs:
       #   if: always()
       #   run: ls -lh build
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
 
       - name: JUnit Report Action
         if: always()
@@ -125,7 +125,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: phpunit-junit-adminator3-report
+          name: "phpunit-junit-adminator3-os-${{ matrix.os }}-php-${{ matrix.php-versions }}-report"
           path: adminator3/build/report.*.xml
           compression-level: 0
 
