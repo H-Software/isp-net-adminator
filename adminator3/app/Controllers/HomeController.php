@@ -9,6 +9,9 @@ use Psr\Http\Message\ServerRequestInterface;
 class HomeController extends adminatorController
 {
     public $conn_mysql;
+
+    public $conn_pgsql;
+
     public $smarty;
     public $logger;
 

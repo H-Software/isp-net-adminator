@@ -17,7 +17,6 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\DbUnit\DataSet\MockDataSet;
 use PDO;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Intercept;
 
 class HomeControllerTest extends TestCase
 {
@@ -123,7 +122,7 @@ class HomeControllerTest extends TestCase
         ob_end_clean();
 
         $this->assertNotEmpty($output);
-        
+
         // $outputKeywords = array(
         //     '<html lang="en">',
         //     '<title>Adminator3 :: úvodní stránka</title>',
