@@ -99,4 +99,4 @@ jobs:
         if: always()
         uses: mikepenz/action-junit-report@v4
         with:
-          report_paths: 'adminator3/build/report-*.xml'
+          report_paths: '**/adminator3/build/report-*.xml'
