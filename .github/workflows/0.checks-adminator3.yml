@@ -109,7 +109,7 @@ jobs:
         if: always()
         uses: mikepenz/action-junit-report@v4
         with:
-          check_name: "JUnit Test Report :: OS ${{ matrix.os }} :: PHP ${{ matrix.php-versions }}"
+          check_name: "JUnit Test Report :: OS: ${{ matrix.os }} :: PHP: ${{ matrix.php-versions }}"
           include_passed: true
           detailed_summary: true
           check_title_template: '{{SUITE_NAME}} | {{TEST_NAME}}'
@@ -119,9 +119,15 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
-          check_name: "Test Results for OS: ${{ matrix.os }} and PHP ${{ matrix.php-versions }}"
+          check_name: "Test Results :: OS: ${{ matrix.os }} :: PHP: ${{ matrix.php-versions }}"
           files: |
             adminator3/build/report.*.xml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: phpunit-junit-adminator3-report
+          path: adminator3/build/report.*.xml
+          compression-level: 0
 
       # - name: Test Report
       #   uses: dorny/test-reporter@v1
