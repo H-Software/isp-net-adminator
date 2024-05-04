@@ -126,14 +126,14 @@ class adminatorController extends Controller
         $this->logger->debug("adminatorController\\header: logged user info: " . $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
 
         $this->smarty->assign("nick_a_level", $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
-        $this->smarty->assign("login_ip", $_SERVER['REMOTE_ADDR']);
+        $this->smarty->assign("login_ip", $a->userIPAddress);
 
         //kategorie
 
-        $uri = $_SERVER["REQUEST_URI"];
+        $uri = $a->getServerUri();
         $uri_replace = str_replace("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka, $mapa) = $a->zobraz_kategorie($uri, $uri_replace);
+        list($kategorie, $kat_2radka) = $a->zobraz_kategorie($uri, $uri_replace);
 
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);

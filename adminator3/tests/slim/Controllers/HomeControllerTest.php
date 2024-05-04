@@ -90,18 +90,20 @@ class HomeControllerTest extends TestCase
         $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
         $this->assertIsObject($container->get('smarty'));
 
-        $adminatorInstance = \Mockery::mock(
+        $adminatorMock = \Mockery::mock(
             \App\Core\adminator::class,
             [
                 $container->get('connMysql'),
                 $container->get('smarty'),
-                $container->get('logger')
+                $container->get('logger'),
+                '127.0.0.1', // userIPAddress
             ]
         );
 
-        $adminatorInstance->userIdentityUsername = 'test@test';
+        $adminatorMock->userIdentityUsername = 'test@test';
+        $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
 
-        $homeController = new HomeController($container, $adminatorInstance);
+        $homeController = new HomeController($container, $adminatorMock);
 
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         $response = $this->createMock(ResponseInterface::class);
