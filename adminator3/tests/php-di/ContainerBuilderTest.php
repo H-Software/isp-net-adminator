@@ -21,13 +21,13 @@ use Psr\Container\ContainerInterface;
 class ContainerBuilderTest extends TestCase
 {
     use EasyMock;
-	
-	private static function getProperty(object $object, string $propertyName)
-	{
-		return (function (string $propertyName) {
-			return $this->$propertyName;
-		})->bindTo($object, $object)($propertyName);
-	}
+
+    private static function getProperty(object $object, string $propertyName)
+    {
+        return (function (string $propertyName) {
+            return $this->$propertyName;
+        })->bindTo($object, $object)($propertyName);
+    }
 
     /**
      * @test

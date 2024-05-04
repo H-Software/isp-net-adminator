@@ -75,10 +75,10 @@ class adminatorController extends Controller
 
         $a->page_level_id = $page_level_id;
 
-        if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null){
+        if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
             $a->userIdentityUsername = Sentinel::getUser()->email;
         }
-        
+
         $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($a->userIdentityUsername, true));
 
         $checkLevel = $a->checkLevel();

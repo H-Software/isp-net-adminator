@@ -24,9 +24,9 @@ class HomeController extends adminatorController
         $this->logger = $this->container->get('logger');
         $this->logger->info("homeController\__construct called");
 
-        if(isset($adminatorInstance)){
+        if(isset($adminatorInstance)) {
             $this->adminator = $adminatorInstance;
-        } else{
+        } else {
             $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
     }

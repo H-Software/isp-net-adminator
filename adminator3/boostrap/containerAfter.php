@@ -71,7 +71,7 @@ $container->set(
     'connPgsql',
     function ($c) {
         return init_postgres("Adminator3");
-    }    
+    }
 );
 
 $container->set(

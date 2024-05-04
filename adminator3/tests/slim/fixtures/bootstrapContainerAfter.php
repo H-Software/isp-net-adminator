@@ -29,6 +29,17 @@ $container->set(
 );
 
 $container->set(
+    'connPgsql',
+    function ($c) {
+
+        $db = new PDO('sqlite::memory:');
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        return $db;
+    }
+);
+
+$container->set(
     'smarty',
     function ($c) {
         $smarty = new Smarty();

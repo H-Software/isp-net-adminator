@@ -66,7 +66,7 @@ class HomeControllerTest extends TestCase
 
         // $container = new Container;
 
-        // 
+        //
 
         // $builder->wrapContainer($otherContainer);
 
@@ -75,11 +75,11 @@ class HomeControllerTest extends TestCase
         // $container = $builder->build();
 
 
-        
+
         $builder = new ContainerBuilder();
         $builder->addDefinitions('tests/slim/fixtures/bootstrapContainer.php');
         $container = $builder->build();
-        
+
         require_once __DIR__ . '/../fixtures/bootstrapContainerAfter.php';
 
         // Not compiled
@@ -90,7 +90,16 @@ class HomeControllerTest extends TestCase
         $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
         $this->assertIsObject($container->get('smarty'));
 
-        $adminatorInstance = \Mockery::mock(\App\Core\adminator::class);
+        $adminatorInstance = \Mockery::mock(
+            \App\Core\adminator::class,
+            [
+                $container->get('connMysql'),
+                $container->get('smarty'),
+                $container->get('logger')
+            ]
+        );
+
+        $adminatorInstance->userIdentityUsername = 'test@test';
 
         $homeController = new HomeController($container, $adminatorInstance);
 

@@ -19,7 +19,7 @@ class ContainerGetTest extends TestCase
 {
     public function testSetGet()
     {
-        $container = new Container;
+        $container = new Container();
         $dummy = new stdClass();
         $container->set('key', $dummy);
         $this->assertSame($dummy, $container->get('key'));
@@ -28,7 +28,7 @@ class ContainerGetTest extends TestCase
     public function testGetNotFound()
     {
         $this->expectException(NotFoundException::class);
-        $container = new Container;
+        $container = new Container();
         $container->get('key');
     }
 
@@ -37,20 +37,20 @@ class ContainerGetTest extends TestCase
         $closure = function () {
             return 'hello';
         };
-        $container = new Container;
+        $container = new Container();
         $container->set('key', $closure);
         $this->assertEquals('hello', $container->get('key'));
     }
 
     public function testGetWithClassName()
     {
-        $container = new Container;
+        $container = new Container();
         $this->assertInstanceOf('stdClass', $container->get('stdClass'));
     }
 
     public function testGetResolvesEntryOnce()
     {
-        $container = new Container;
+        $container = new Container();
         $this->assertSame($container->get('stdClass'), $container->get('stdClass'));
     }
 
