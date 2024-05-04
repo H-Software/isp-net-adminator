@@ -72,11 +72,12 @@ class AuthController extends Controller
                     throw new Exception('Incorrect email or password.');
                 } else {
                     // login OK
-                    $this->logger->info("authController\signin: authentication was successful, email: "
+                    $this->logger->info(
+                        "authController\signin: authentication was successful, email: "
                                         . var_export(Sentinel::getUser()->email, true)
                                         . ", redirect URL: "
                                         . var_export($redirect, true)
-                                    );
+                    );
 
                     $url = $this->routeParser->urlFor('home');
                     return $response->withStatus(302)->withHeader('Location', $redirect ?: $url);
@@ -102,13 +103,13 @@ class AuthController extends Controller
         $this->logger->debug("AuthController/signin: redirect url: " . var_export($redirect, true));
 
         return $this->view->render(
-                                $response,
-                                'auth\signin.twig', 
-                                array(
-                                    'username' => @$username,
-                                    'redirect' => $redirect
-                                )
-                            );
+            $response,
+            'auth\signin.twig',
+            array(
+                'username' => @$username,
+                'redirect' => $redirect
+            )
+        );
     }
 
     public function signout($request, $response, array $args)

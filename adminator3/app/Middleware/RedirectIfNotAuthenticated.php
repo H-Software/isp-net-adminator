@@ -84,15 +84,14 @@ class RedirectIfNotAuthenticated
                                 '?' .
                                 http_build_query(['redirect' => $request->getUri()->getPath()])
                 );
-        }
-        else{
+        } else {
             // prune old persistence data (in database)
 
             // from https://github.com/cartalyst/sentinel/issues/519#issuecomment-559742227
             $currentLoggedInUser = Sentinel::getUser();
             Sentinel::getPersistenceRepository()->flush($currentLoggedInUser, false);
         }
-        
+
         return $handler->handle($request);
     }
 }
