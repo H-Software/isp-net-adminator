@@ -139,7 +139,7 @@ class adminatorController extends Controller
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             $this->smarty->assign("kat_csrf_html", $csrf[0]);
         } else {
-            $this->logger->addWarning("adminatorController\\header: no required vars for generateCsrfToken");
+            $this->logger->warning("adminatorController\\header: no required vars for generateCsrfToken");
         }
 
         $this->smarty->assign("show_se_cat_values", array("0","1"));
