@@ -112,6 +112,7 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
+          check_name: "Test Results for OS: ${{ matrix.os }} and PHP ${{ matrix.php-versions }}"
           files: |
             adminator3/build/report.*.xml
 
