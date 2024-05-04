@@ -46,7 +46,7 @@ class opravy
         try {
             $dotaz = $this->conn_mysql->query($sf);
         } catch (Exception $e) {
-            $this->logger->addError('opravy\vypis_opravy mysql_query dotaz failed! Caught exception: ' . $e->getMessage());
+            $this->logger->error('opravy\vypis_opravy mysql_query dotaz failed! Caught exception: ' . $e->getMessage());
             die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
@@ -81,7 +81,7 @@ class opravy
                 $dotaz_S1 = $this->conn_mysql->query("SELECT * FROM opravy WHERE id_predchozi_opravy = '" . intval($id_opravy) . "' ");
                 $dotaz_radku_S1 = $dotaz_S1->num_rows;
             } catch (Exception $e) {
-                $this->logger->addError("opravy\vypis_opravy mysql_query dotaz_S1 failed! Caught exception: " . $e->getMessage());
+                $this->logger->error("opravy\vypis_opravy mysql_query dotaz_S1 failed! Caught exception: " . $e->getMessage());
                 die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
             }
 
@@ -167,7 +167,7 @@ class opravy
 
             } // konec elseif vyreseno_filtr == 0
             else {
-                $this->logger->addWarning("opravy\\vypis_opravy: vyreseno_filtr not set! ");
+                $this->logger->warning("opravy\\vypis_opravy: vyreseno_filtr not set! ");
             }
 
             if (($v_reseni_filtr == 99 and $vyreseno_filtr == 99)) {

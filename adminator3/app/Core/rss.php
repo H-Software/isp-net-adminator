@@ -39,7 +39,7 @@ class rss
             try {
                 $MSQ_S = $this->conn_mysql->query("SELECT * FROM users");
             } catch (Exception $e) {
-                $this->logger->addError("rss\check_login_rss mysql_query MSQ_S failed! Caught exception: " . $e->getMessage());
+                $this->logger->error("rss\check_login_rss mysql_query MSQ_S failed! Caught exception: " . $e->getMessage());
                 return false;
             }
 
@@ -69,7 +69,7 @@ class rss
         try {
             $q = $this->conn_mysql->query("SELECT * FROM board ORDER BY id DESC LIMIT 0,50");
         } catch (Exception $e) {
-            $this->logger->addError("rss\\exportRSS mysql_query q failed! Caught exception: " . $e->getMessage());
+            $this->logger->error("rss\\exportRSS mysql_query q failed! Caught exception: " . $e->getMessage());
             return false;
         }
 

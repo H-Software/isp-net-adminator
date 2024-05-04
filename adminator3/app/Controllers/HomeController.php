@@ -150,10 +150,10 @@ class HomeController extends adminatorController
                     $content_opravy_a_zavady = $rs_vypis[1];
                 } else {
                     // ??
-                    $this->logger->addError("homeController\opravy_a_zavady unexpected return value");
+                    $this->logger->error("homeController\opravy_a_zavady unexpected return value");
                 }
             } else {
-                $this->logger->addError("homeController\opravy_a_zavady no return value from vypis_opravy call");
+                $this->logger->error("homeController\opravy_a_zavady no return value from vypis_opravy call");
             }
 
             $this->smarty->assign("content_opravy_a_zavady", $content_opravy_a_zavady);

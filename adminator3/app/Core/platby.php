@@ -75,7 +75,7 @@ class platby
 
             $res = pg_insert($db_ok2, 'faktury_neuhrazene', $fn_add);
             if($res === false) {
-                $this->logger->addError("platby\\synchro_db_nf pg_insert res failed! ".pg_last_error($db_ok2));
+                $this->logger->error("platby\\synchro_db_nf pg_insert res failed! ".pg_last_error($db_ok2));
             } else {
                 $res_rows = pg_affected_rows($res);
                 $this->logger->info(
@@ -127,7 +127,7 @@ class platby
 
         $dotaz_vlastnici = pg_query($sql_dotaz);
         if ($dotaz_vlastnici === false) {
-            $this->logger->addError("platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici failed! ".pg_last_error($db_ok2));
+            $this->logger->error("platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici failed! ".pg_last_error($db_ok2));
             return $ret;
         } else {
             $dotaz_vlastnici_num = pg_num_rows($dotaz_vlastnici);
@@ -185,7 +185,7 @@ class platby
                 if(($duvod == "sikana") and ($nf_cislo == $cislo_faktury_sikana)) {
                     $platba_dotaz = pg_query("SELECT * FROM platby WHERE ( id_cloveka = '$id_cloveka' AND zaplaceno_za LIKE '$nf_datum2' ) ");
                     if ($platba_dotaz === false) {
-                        $this->logger->addError("platby\\fn_kontrola_omezeni pg_query platba_dotaz failed! ".pg_last_error($db_ok2));
+                        $this->logger->error("platby\\fn_kontrola_omezeni pg_query platba_dotaz failed! ".pg_last_error($db_ok2));
                     }
 
                     $platba_dotaz_num = pg_num_rows($platba_dotaz);

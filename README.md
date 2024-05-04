@@ -17,6 +17,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 
 ## links
 - https://hub.docker.com/_/php/tags?page=&page_size=&ordering=&name=5.6
+- https://containrrr.dev/watchtower/
 
 ### devcontainers
 - https://github.com/microsoft/vscode-remote-try-php
@@ -110,6 +111,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 
 ### Github Actions
 - https://github.com/marketplace/actions/continue-on-error-comment
+- https://github.com/peter-evans/docker-compose-actions-workflow
 
 ## Author
 Patrik Majer
