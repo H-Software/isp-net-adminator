@@ -35,6 +35,11 @@ adminator3/.php-cs-fixer.cache
 adminator3/.php_cs.cache
 adminator3/.phpunit.result.cache
 /adminator3/templates_c/
+adminator3/.phpunit.cache/
+
+# phpunit
+adminator3/phpunit.xml.bak
+adminator3/build/
 
 # App
 /adminator2/vypisy/
@@ -44,8 +49,6 @@ adminator3/.phpunit.result.cache
 /adminator2/files2/soubory/
 /adminator2/export/
 
-adminator3/build/
 adminator3/export/
 adminator3/tests2/
-adminator3/phpunit.xml.bak
-adminator3/.phpunit.cache/
+

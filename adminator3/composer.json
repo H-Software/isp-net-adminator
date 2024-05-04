@@ -43,7 +43,7 @@
         "robmorgan/phinx": "^0.12.10"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.0",
+        "phpunit/phpunit": "^9.0",
         "friendsofphp/php-cs-fixer": "^v3.54.0",
         "overtrue/phplint": "^4.1.0",
         "phpstan/phpstan": "^1.4.2",
@@ -52,12 +52,19 @@
         "symplify/easy-coding-standard": "^v12.1",
         "symplify/coding-standard": "^v12.1",
         "mockery/mockery": "^1.0",
-        "phpspec/prophecy-phpunit": "^2.2"
+        "phpspec/prophecy-phpunit": "^2.2",
+        "mnapoli/phpunit-easymock": "^1.3"
     },
     "suggest": {
         "illuminate/database": "By default, Sentinel utilizes the powerful Illuminate database layer.",
         "illuminate/events": "To hook into various events across Sentinel, we recommend using Illuminate's event dispatcher.",
         "symfony/http-foundation": "Required for native implementations."
+    },
+    "autoload-dev": {
+        "psr-4": {
+          "App\\Tests\\": "tests/slim",
+          "DI\\Test\\UnitTest\\Fixtures\\": "tests/php-di"
+        }
     },
     "scripts": {
         "dump": "composer dump-autoload -a",
