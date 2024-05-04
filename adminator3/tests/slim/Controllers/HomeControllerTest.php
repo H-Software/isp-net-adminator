@@ -123,15 +123,15 @@ class HomeControllerTest extends TestCase
 
         $this->assertNotEmpty($output);
 
-        // $outputKeywords = array(
-        //     '<html lang="en">',
-        //     '<title>Adminator3 :: úvodní stránka</title>',
-        //     'bootstrap.min.css" rel="stylesheet"',
-        //     'Jste přihlášeni v administračním systému',
-        // );
+        $outputKeywords = array(
+            '<html lang="en">',
+            '<title>Adminator3 :: úvodní stránka</title>',
+            'bootstrap.min.css" rel="stylesheet"',
+            'Jste přihlášeni v administračním systému',
+        );
 
-        // foreach ($outputKeywords as $w) {
-        //     $this->assertStringContainsString($output, $w);
-        // }
+        foreach ($outputKeywords as $w) {
+            // $this->assertStringContainsString($output, $w);
+        }
     }
 }

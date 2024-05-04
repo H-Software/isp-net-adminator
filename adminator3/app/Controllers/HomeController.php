@@ -50,8 +50,8 @@ class HomeController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         // messages from change-password an etc
-        // $flashMessages = $this->container->get('flash')->getMessages();
-        // $this->smarty->assign("flash_messages", $flashMessages);
+        $flashMessages = $this->container->get('flash')->getMessages();
+        $this->smarty->assign("flash_messages", $flashMessages);
 
         //echo "<pre>" . var_export($flashMessages, true) ."</pre>";
 
