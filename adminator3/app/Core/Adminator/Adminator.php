@@ -35,7 +35,7 @@ class adminator
         $this->smarty = $smarty;
 
         if($userIPAddress == null) {
-            $userIPAddress = $_SERVER['REMOTE_ADDR'];
+            $this->userIPAddress = $_SERVER['REMOTE_ADDR'];
         }
     }
 
