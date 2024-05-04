@@ -12,6 +12,7 @@ defaults:
 
 permissions:
   pull-requests: write
+  checks: write
 
 jobs:
   basic-checks:
@@ -35,11 +36,14 @@ jobs:
       - name: Print PHP version
         run: php -v
 
+      # - name: Cache Composer dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ./vendor
+      #     key: composer-${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
       - name: Install dependencies
         run: composer install --ignore-platform-reqs
-
-      # - name: Run the tests
-      #   run: composer phpunit
 
       # - name: PHP CodeSniffer
       #   id: phpcs
@@ -75,7 +79,6 @@ jobs:
       #           app
 
       - name: PHP-CS-Fixer
-        if: always()
         run: |
           php \
           vendor/friendsofphp/php-cs-fixer/php-cs-fixer \
@@ -89,3 +92,47 @@ jobs:
           cd ../ && \
           make \
             run-a3-phpstan
+
+      - name: Run the tests
+        if: always()
+        run: composer run test
+
+      # - name: check junit report
+      #   if: always()
+      #   run: ls -lh build
+
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+
+      - name: JUnit Report Action
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          check_name: "JUnit Test Report :: OS: ${{ matrix.os }} :: PHP: ${{ matrix.php-versions }}"
+          include_passed: true
+          detailed_summary: true
+          check_title_template: '{{SUITE_NAME}} | {{TEST_NAME}}'
+          report_paths: 'adminator3/build/report.*.xml'
+      
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          check_name: "Test Results :: OS: ${{ matrix.os }} :: PHP: ${{ matrix.php-versions }}"
+          files: |
+            adminator3/build/report.*.xml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: "phpunit-junit-adminator3-os-${{ matrix.os }}-php-${{ matrix.php-versions }}-report"
+          path: adminator3/build/report.*.xml
+          compression-level: 0
+
+      # - name: Test Report
+      #   uses: dorny/test-reporter@v1
+      #   if: success() || failure()    # run this step even if previous step failed
+      #   with:
+      #     name: PHPUnit Tests            # Name of the check run which will be created
+      #     path: adminator3/build/report.*.xml    # Path to test results
+      #     reporter: java-junit        # Format of test results
