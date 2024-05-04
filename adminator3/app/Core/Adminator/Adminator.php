@@ -353,7 +353,7 @@ class adminator
         }
 
         $this->smarty->assign("logged_users", $logged_users);
-     
+
         return true;
     }
 
