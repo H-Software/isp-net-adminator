@@ -44,7 +44,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
-        "friendsofphp/php-cs-fixer": "^v3.5.0",
+        "friendsofphp/php-cs-fixer": "^v3.54.0",
         "overtrue/phplint": "^4.1.0",
         "phpstan/phpstan": "^1.4.2",
         "squizlabs/php_codesniffer": "*",
@@ -52,11 +52,12 @@
         "symplify/easy-coding-standard": "^v12.1",
         "symplify/coding-standard": "^v12.1"
     },
+    "suggest": {
+        "illuminate/database": "By default, Sentinel utilizes the powerful Illuminate database layer.",
+        "illuminate/events": "To hook into various events across Sentinel, we recommend using Illuminate's event dispatcher.",
+        "symfony/http-foundation": "Required for native implementations."
+    },
     "scripts": {
-        "cleanup": [
-            "phpcbf",
-            "vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --show-progress=dots -vvv"
-        ],
         "dump": "composer dump-autoload -a",
         "post-update-cmd": "composer dump-autoload -o",
         "create-migration": "vendor/bin/phinx create -c config/phinx.php --ansi -- ",
@@ -65,6 +66,9 @@
         "phplint": "phplint --no-cache",
         "phpstan": "vendor/phpstan/phpstan/phpstan.phar analyse",
         "phpcbf": "phpcbf",
-        "phpcs": "phpcs -s"
+        "phpcs": "phpcs -s",
+        "cs:check": "./vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots --diff --dry-run",
+        "cs:fix": "./vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots",
+        "test": "./vendor/bin/phpunit --colors=always"
     }
 }
