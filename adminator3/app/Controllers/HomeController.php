@@ -14,15 +14,21 @@ class HomeController extends adminatorController
 
     public $adminator;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->container = $container;
         $this->conn_mysql = $this->container->get('connMysql');
+        $this->conn_pgsql = $this->container->get('connPgsql');
+
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
         $this->logger->info("homeController\__construct called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        if(isset($adminatorInstance)){
+            $this->adminator = $adminatorInstance;
+        } else{
+            $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        }
     }
 
     public function home(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -135,7 +141,7 @@ class HomeController extends adminatorController
 
             $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
 
-            $opravy = new \opravy($this->conn_mysql, $this->logger);
+            $opravy = new \opravy($this->conn_mysql, $this->conn_pgsql, $this->logger);
 
             $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
             // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));

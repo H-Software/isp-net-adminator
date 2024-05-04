@@ -60,9 +60,19 @@ $container->set(
     }
 );
 
-$container->set('connMysql', $conn_mysql);
+$container->set(
+    'connMysql',
+    function ($c) {
+        return init_mysql("Adminator3");
+    }
+);
 
-$container->set('connPgsql', $db_ok2);
+$container->set(
+    'connPgsql',
+    function ($c) {
+        return init_postgres("Adminator3");
+    }    
+);
 
 $container->set(
     'db',

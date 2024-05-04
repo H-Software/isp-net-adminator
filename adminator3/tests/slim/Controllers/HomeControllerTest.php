@@ -6,25 +6,24 @@ namespace App\Tests;
 
 use PHPUnit\Framework\TestCase;
 use App\Controllers\HomeController;
-use App\Preferences;
-use Prophecy\Argument;
-use Prophecy\Prophecy\MethodProphecy;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Views\Twig;
 use DI\CompiledContainer;
 use DI\ContainerBuilder;
-use DI\Test\UnitTest\Fixtures\FakeContainer;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use DI\DependencyException;
-
-// https://github.com/adriansuter/Slim4-Skeleton/blob/master/tests/Controllers/HomeControllerTest.php
+use PHPUnit\DbUnit\DataSet\MockDataSet;
+use PDO;
 
 class HomeControllerTest extends TestCase
 {
     use EasyMock;
+
+    protected function setUp(): void
+    {
+    }
 
     public function testHome()
     {
@@ -89,12 +88,15 @@ class HomeControllerTest extends TestCase
         $this->assertInstanceOf(ContainerInterface::class, $container);
 
         $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
+        $this->assertIsObject($container->get('smarty'));
 
-        $homeController = new HomeController($container);
+        $adminatorInstance = \Mockery::mock(\App\Core\adminator::class);
+
+        $homeController = new HomeController($container, $adminatorInstance);
 
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         $response = $this->createMock(ResponseInterface::class);
 
-        $homeController($serverRequest, $response, []);
+        $homeController->home($serverRequest, $response, []);
     }
 }
