@@ -105,6 +105,8 @@ jobs:
         if: always()
         uses: mikepenz/action-junit-report@v4
         with:
+          check_name: "JUnit Test Report :: OS ${{ matrix.os }} :: PHP ${{ matrix.php-versions }}"
+          include_passed: true
           detailed_summary: true
           report_paths: 'adminator3/build/report.*.xml'
       
