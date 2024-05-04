@@ -38,9 +38,6 @@ jobs:
       - name: Install dependencies
         run: composer install --ignore-platform-reqs
 
-      # - name: Run the tests
-      #   run: composer phpunit
-
       # - name: PHP CodeSniffer
       #   id: phpcs
       #   continue-on-error: true
@@ -89,3 +86,7 @@ jobs:
           cd ../ && \
           make \
             run-a3-phpstan
+
+      - name: Run the tests
+        if: always()
+        run: composer run phpunit
