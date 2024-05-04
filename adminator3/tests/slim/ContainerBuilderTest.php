@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace DI\Test\UnitTest;
 
-require __DIR__ ."/../php-di/FakeContainer.php";
-
 use DI\CompiledContainer;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionArray;
