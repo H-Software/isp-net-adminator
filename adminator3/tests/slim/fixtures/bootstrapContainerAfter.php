@@ -3,6 +3,7 @@
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\DbUnit\DataSet\DataSet;
+use Slim\Csrf\Guard;
 
 $container->set(
     'logger',
@@ -49,3 +50,24 @@ $container->set(
         return $smarty;
     }
 );
+
+// require __DIR__ .'/slimCsrfSession.php';
+
+$container->set(
+    'csrf',
+    function () use ($responseFactory){
+
+        // $storage = [];
+
+        $guardMock = \Mockery::mock('Guard');
+
+        $guardMock->shouldReceive('getTokenNameKey')->andReturn(42);
+        $guardMock->shouldReceive('getTokenValueKey')->andReturn(42);
+        // $guardMock->shouldReceive('foo')->andReturn(42);
+        
+        return $guardMock;
+        // return new Guard($responseFactory);
+
+    }
+);
+

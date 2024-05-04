@@ -16,13 +16,21 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use PHPUnit\DbUnit\DataSet\MockDataSet;
 use PDO;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 class HomeControllerTest extends TestCase
 {
     use EasyMock;
+    use \phpmock\phpunit\PHPMock;
 
     protected function setUp(): void
     {
+        $_POST = array();
+        $_POST['show_se_cat'] = "null";
+
+        $_SERVER = array();
+        $_SERVER['HTTP_HOST'] = "127.0.0.1";
+
     }
 
     public function testHome()
@@ -74,11 +82,26 @@ class HomeControllerTest extends TestCase
         // /** @var FakeContainer $container */
         // $container = $builder->build();
 
-
+        $session_status = $this->getFunctionMock("Slim\Csrf", "session_status");
+        $session_status->expects($this->once())->willReturn(PHP_SESSION_ACTIVE);
 
         $builder = new ContainerBuilder();
         $builder->addDefinitions('tests/slim/fixtures/bootstrapContainer.php');
         $container = $builder->build();
+
+        // $appMock = \Mockery::mock(
+        //     \Slim\Factory\AppFactory::create(),
+        //     [
+        //         null,
+        //         $container
+        //     ]
+        // );
+
+        // $appMock->shouldReceive('getResponseFactory')->andReturn();
+
+        // $responseFactory = $appMock->getResponseFactory();
+        $rfMock = \Mockery::mock(ResponseFactoryInterface::class);
+        $responseFactory = $rfMock;
 
         require_once __DIR__ . '/../fixtures/bootstrapContainerAfter.php';
 
@@ -102,6 +125,15 @@ class HomeControllerTest extends TestCase
 
         $adminatorMock->userIdentityUsername = 'test@test';
         $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
+        $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
+        $adminatorMock->shouldReceive('zobraz_kategorie')->andReturn(
+            array(
+                array(),
+                array()
+            ));
+        $adminatorMock->shouldReceive('list_logged_users')->andReturn("");
+        
+        $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
         $homeController = new HomeController($container, $adminatorMock);
 

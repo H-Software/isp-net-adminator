@@ -47,8 +47,8 @@ class HomeController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         // messages from change-password an etc
-        $flashMessages = $this->container->get('flash')->getMessages();
-        $this->smarty->assign("flash_messages", $flashMessages);
+        // $flashMessages = $this->container->get('flash')->getMessages();
+        // $this->smarty->assign("flash_messages", $flashMessages);
 
         //echo "<pre>" . var_export($flashMessages, true) ."</pre>";
 
@@ -67,9 +67,9 @@ class HomeController extends adminatorController
         $this->smarty->assign("count_unknown", $neuhr_faktury_pole[2]);
         $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
 
-        $this->opravy_a_zavady();
+        // $this->opravy_a_zavady();
 
-        $this->board();
+        // $this->board();
 
         $this->logger->info("homeController\home: end of rendering");
         $this->smarty->display('home.tpl');

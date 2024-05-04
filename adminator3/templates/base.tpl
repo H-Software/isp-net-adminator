@@ -13,18 +13,18 @@
 
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.4/dist/bootstrap-table.min.css">
 
-{if $enable_calendar == 1}
+{if $enable_calendar|default:'0' == 1}
  <script language="JavaScript" src="/plugins/tigra_calendar/calendar_eu.js"></script>
  <link rel="stylesheet" href="/plugins/tigra_calendar/calendar.css">
 {/if}
 
 
-{if $enable_work == 1}
+{if $enable_work|default:'0' == 1}
  <script language="JavaScript" src="/public/js/work.js" ></script>
 {/if}
 
 {* // probably unused *}
-{if $enable_fn_check == 1}
+{if $enable_fn_check|default:'0' == 1}
  <script language="JavaScript" src="/public/js/fn_check.js" ></script>
 {/if}
 
