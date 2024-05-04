@@ -4,6 +4,7 @@
     "homepage": "https://github.com/H-Software/isp-net-adminator",
     "license": "MIT",
     "require": {
+        "php": "^8.2",
         "nette/robot-loader": "^3.4",
         "smarty/smarty": "^4.5.2",
         "monolog/monolog": "^3.6.0",
@@ -20,6 +21,7 @@
         "evilfreelancer/routeros-api-php": "1.5.2"
     },
     "require-dev": {
+        "phpunit/phpunit": "^9.0",
         "friendsofphp/php-cs-fixer": "^v3.5.0",
         "overtrue/phplint": "^4.1.0",
         "phpstan/phpstan": "^1.4.2",
