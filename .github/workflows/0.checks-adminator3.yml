@@ -91,8 +91,12 @@ jobs:
         if: always()
         run: composer run test
 
+      - name: check junit report
+        if: always()
+        run: ls -lh build
+
       - name: JUnit Report Action
         if: always()
         uses: mikepenz/action-junit-report@v4
         with:
-          report_paths: 'adminator3/build/report-*.xml'
+          report_paths: 'build/report-*.xml'
