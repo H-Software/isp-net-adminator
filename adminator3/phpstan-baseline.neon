@@ -1,15 +1,5 @@
 parameters:
 	ignoreErrors:
-		# -
-		# 	message: "#^Access to an undefined property App\\\\Auth\\\\passwordHelper\\:\\:\\$container\\.$#"
-		# 	count: 1
-		# 	path: app/Auth/Password.php
-
-		-
-			message: "#^Access to an undefined property auth_service\\:\\:\\$container\\.$#"
-			count: 1
-			path: app/Auth/serviceHelper.php
-
 		-
 			message: "#^Function ereg not found\\.$#"
 			count: 1

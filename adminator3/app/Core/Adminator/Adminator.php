@@ -335,33 +335,26 @@ class adminator
         return $ret;
     }
 
-    public function list_logged_users_history($conn_mysql, $smarty, $action = "assign")
+    public function list_logged_users()
     {
         $r = array();
 
-        $rs = $conn_mysql->query(
-            "SELECT nick, date, ip FROM login_log ORDER BY date DESC LIMIT 5"
-        );
+        $sql = "SELECT users.email, users_persistences.updated_at, DATE_FORMAT(users_persistences.updated_at, \"%d.%m.%Y %H:%i:%S\") as updated_at_f
+                    FROM users_persistences
+                    INNER JOIN users ON users_persistences.user_id = users.id
+                    ORDER BY updated_at DESC LIMIT 5
+            ";
+
+        $rs = $this->conn_mysql->query($sql);
 
         while ($data = $rs->fetch_array()) {
-            $datum = strftime("%d.%m.%Y %H:%M:%S", $data["date"]);
-            $logged_users[] = array( "nick" => $data["nick"], "datum" => $datum, "ip" => $data["ip"]);
+            // $date = strftime("%d.%m.%Y %H:%M:%S", $data["updated_at"]);
+            $logged_users[] = array( "email" => $data["email"], "date" => $data['updated_at_f']);
         }
 
-        if($action == "assign") {
-            $smarty->assign("logged_users", $logged_users);
-            $r[0] = true;
-        } elseif($action == "fetch") {
-            $smarty->assign("logged_users", $logged_users);
-            $render = $smarty->fetch("inc.home.list-logged-users.tpl");
-            $r[0] = true;
-            $r[1] = $render;
-        } else {
-            $r[0] = false;
-            $r[1] = "unknown action";
-        }
-
-        return $r;
+        $this->smarty->assign("logged_users", $logged_users);
+     
+        return true;
     }
 
     public static function convertIntToBoolTextCs($v)

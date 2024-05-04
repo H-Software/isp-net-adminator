@@ -15,7 +15,7 @@
 {/foreach}
 
 {* vypis poslednich prihlasenych *}
-{include file="inc.home.list-logged-users.tpl"}
+{include file="partials/inc.home.list-logged-users.tpl"}
 
  {if $opravy_povoleno eq "1"}
  
