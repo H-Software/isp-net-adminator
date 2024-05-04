@@ -25,7 +25,13 @@ namespace Cartalyst\Sentinel\Cookies
     function setcookie($name, $value, $expires, $path, $domain, $secure, $httponly)
     {
         return NativeCookieTest::$globalFunctions->setcookie(
-            $name, $value, $expires, $path, $domain, $secure, $httponly
+            $name,
+            $value,
+            $expires,
+            $path,
+            $domain,
+            $secure,
+            $httponly
         );
     }
 }

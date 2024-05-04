@@ -12,6 +12,7 @@ defaults:
 
 permissions:
   pull-requests: write
+  checks: write
 
 jobs:
   basic-checks:
