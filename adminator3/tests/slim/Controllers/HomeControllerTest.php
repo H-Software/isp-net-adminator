@@ -17,6 +17,8 @@ use DI\ContainerBuilder;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
 use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use DI\DependencyException;
 
 // https://github.com/adriansuter/Slim4-Skeleton/blob/master/tests/Controllers/HomeControllerTest.php
 
@@ -59,20 +61,36 @@ class HomeControllerTest extends TestCase
         // $preferences = $preferencesProphecy->reveal();
 
         // Make the ContainerBuilder use our fake class to catch constructor parameters
-        $builder = new ContainerBuilder(FakeContainer::class);
+        // $builder = new ContainerBuilder(FakeContainer::class);
 
-        $otherContainer = $this->easyMock(ContainerInterface::class);
-        $builder->wrapContainer($otherContainer);
+        // $otherContainer = $this->easyMock(ContainerInterface::class);
 
-        /** @var FakeContainer $container */
+        // $container = new Container;
+
+        // 
+
+        // $builder->wrapContainer($otherContainer);
+
+
+        // /** @var FakeContainer $container */
+        // $container = $builder->build();
+
+
+        
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions('tests/slim/fixtures/bootstrapContainer.php');
         $container = $builder->build();
+        
+        require_once __DIR__ . '/../fixtures/bootstrapContainerAfter.php';
 
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);
 
-        $this->assertInstanceOf(ContainerInterface::class, $container->wrapperContainer);
+        $this->assertInstanceOf(ContainerInterface::class, $container);
 
-        $homeController = new HomeController($container->wrapperContainer);
+        $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
+
+        $homeController = new HomeController($container);
 
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         $response = $this->createMock(ResponseInterface::class);
