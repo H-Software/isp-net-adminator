@@ -15,11 +15,15 @@ use Slim\Views\Twig;
 use DI\CompiledContainer;
 use DI\ContainerBuilder;
 use DI\Test\UnitTest\Fixtures\FakeContainer;
+use EasyMock\EasyMock;
+use Psr\Container\ContainerInterface;
 
 // https://github.com/adriansuter/Slim4-Skeleton/blob/master/tests/Controllers/HomeControllerTest.php
 
 class HomeControllerTest extends TestCase
 {
+    use EasyMock;
+
     public function testHome()
     {
         // $this->markTestSkipped('under construction');
@@ -56,13 +60,19 @@ class HomeControllerTest extends TestCase
 
         // Make the ContainerBuilder use our fake class to catch constructor parameters
         $builder = new ContainerBuilder(FakeContainer::class);
+
+        $otherContainer = $this->easyMock(ContainerInterface::class);
+        $builder->wrapContainer($otherContainer);
+
         /** @var FakeContainer $container */
         $container = $builder->build();
 
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);
 
-        $homeController = new HomeController($container);
+        $this->assertInstanceOf(ContainerInterface::class, $container->wrapperContainer);
+
+        $homeController = new HomeController($container->wrapperContainer);
 
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         $response = $this->createMock(ResponseInterface::class);

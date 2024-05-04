@@ -63,7 +63,7 @@
     "autoload-dev": {
         "psr-4": {
           "App\\Controllers\\": "app\\Controllers",
-          "DI\\Test\\UnitTest\\Fixtures\\": "tests/php-di"
+          "DI\\Test\\UnitTest\\Fixtures\\": "tests/php-di/fixtures"
         }
     },
     "scripts": {
