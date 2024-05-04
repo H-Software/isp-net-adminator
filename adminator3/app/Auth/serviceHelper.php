@@ -8,6 +8,8 @@ class auth_service
 {
     public $conn_mysql;
 
+    private $container;
+
     public $smarty;
     public $logger;
 

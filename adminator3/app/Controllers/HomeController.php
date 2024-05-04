@@ -47,7 +47,7 @@ class HomeController extends adminatorController
         //echo "<pre>" . var_export($flashMessages, true) ."</pre>";
 
         //vlozeni prihlasovaci historie
-        $this->adminator->list_logged_users_history($this->conn_mysql, $this->smarty);
+        $this->adminator->list_logged_users();
 
         //informace z modulu neuhrazené faktury
         //
