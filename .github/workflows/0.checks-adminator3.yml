@@ -101,3 +101,11 @@ jobs:
         with:
           detailed_summary: true
           report_paths: 'adminator3/build/report.*.xml'
+      
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+          name: PHPUnit Tests            # Name of the check run which will be created
+          path: adminator3/build/report-*.xml    # Path to test results
+          reporter: jest-junit        # Format of test results
