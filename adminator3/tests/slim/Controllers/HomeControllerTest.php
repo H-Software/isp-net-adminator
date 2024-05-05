@@ -133,7 +133,7 @@ class HomeControllerTest extends TestCase
         ob_end_clean();
 
         echo $output;
-        
+
         $this->assertNotEmpty($output);
 
         $outputKeywords = array(
@@ -142,6 +142,8 @@ class HomeControllerTest extends TestCase
             'bootstrap.min.css" rel="stylesheet"',
             'Jste přihlášeni v administračním systému',
             '<div class="home-vypis-useru-napis" >Přihlašení uživatelé: </div>',
+            'Výpis Závad/oprav',
+            'Bulletin Board - Nástěnka',
             '</body>',
             '</html>'
         );
