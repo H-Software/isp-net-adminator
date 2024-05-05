@@ -9,20 +9,29 @@ use Psr\Http\Message\ServerRequestInterface;
 class HomeController extends adminatorController
 {
     public $conn_mysql;
+
+    public $conn_pgsql;
+
     public $smarty;
     public $logger;
 
     public $adminator;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->container = $container;
         $this->conn_mysql = $this->container->get('connMysql');
+        $this->conn_pgsql = $this->container->get('connPgsql');
+
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
         $this->logger->info("homeController\__construct called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        if(isset($adminatorInstance)) {
+            $this->adminator = $adminatorInstance;
+        } else {
+            $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        }
     }
 
     public function home(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -80,7 +89,7 @@ class HomeController extends adminatorController
 
             $this->smarty->assign("nastenka_povoleno", 1);
             $this->smarty->assign("datum", date("j. m. Y"));
-            // $this->smarty->assign("sid",);
+            $this->smarty->assign("sid", "");
 
             $nastenka = new \board($this->conn_mysql, $this->logger);
 
@@ -91,6 +100,10 @@ class HomeController extends adminatorController
 
             $zpravy = $nastenka->show_messages();
             $this->logger->debug("homeController\board: show_messages result: " . var_export($zpravy, true));
+
+            if(isset($nastenka->query_error)) {
+                $this->smarty->assign("query_error", $nastenka->query_error);
+            }
 
             $this->smarty->assign("zpravy", $zpravy);
 
@@ -135,7 +148,7 @@ class HomeController extends adminatorController
 
             $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
 
-            $opravy = new \opravy($this->conn_mysql, $this->logger);
+            $opravy = new \opravy($this->conn_mysql, $this->conn_pgsql, $this->logger);
 
             $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
             // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));

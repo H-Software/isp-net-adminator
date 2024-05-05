@@ -84,6 +84,11 @@ sqlcmd query "SELECT Name from sys.databases;"
 #### phinx
 - https://siipo.la/blog/how-to-use-eloquent-orm-migrations-outside-laravel
 - https://book.cakephp.org/phinx/0/en/migrations.html#custom-column-types-default-values
+- https://book.cakephp.org/3/fr/phinx/commands.html#using-phinx-with-phpunit
+
+#### testing
+- https://github.com/adriansuter/Slim4-Skeleton/blob/master/tests/Controllers/HelloControllerTest.php
+- https://medium.com/@selieshjksofficial/simplifying-database-unit-testing-in-php-with-phpunit-and-mock-databases-e251ab08f4eb
 
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html

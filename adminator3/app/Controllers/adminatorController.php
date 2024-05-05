@@ -74,7 +74,11 @@ class adminatorController extends Controller
         }
 
         $a->page_level_id = $page_level_id;
-        $a->userIdentityUsername = Sentinel::getUser()->email;
+
+        if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
+            $a->userIdentityUsername = Sentinel::getUser()->email;
+        }
+
         $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($a->userIdentityUsername, true));
 
         $checkLevel = $a->checkLevel();
@@ -122,14 +126,14 @@ class adminatorController extends Controller
         $this->logger->debug("adminatorController\\header: logged user info: " . $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
 
         $this->smarty->assign("nick_a_level", $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
-        $this->smarty->assign("login_ip", $_SERVER['REMOTE_ADDR']);
+        $this->smarty->assign("login_ip", $a->userIPAddress);
 
         //kategorie
 
-        $uri = $_SERVER["REQUEST_URI"];
+        $uri = $a->getServerUri();
         $uri_replace = str_replace("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka, $mapa) = $a->zobraz_kategorie($uri, $uri_replace);
+        list($kategorie, $kat_2radka) = $a->zobraz_kategorie($uri, $uri_replace);
 
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
@@ -161,29 +165,5 @@ class adminatorController extends Controller
         $this->smarty->assign("se_cat_adminator", "adminator2");
         $this->smarty->assign("se_cat_adminator_link", $se_cat_adminator_link);
 
-        // $prihl_uziv = $a->vypis_prihlasene_uziv();
-
-        // if( $prihl_uziv[100] == true ){
-        //     $this->smarty->assign("pocet_prihl_uziv",0);
-        // }
-        // else{
-        //     $this->smarty->assign("pocet_prihl_uziv",$prihl_uziv[0]);
-
-        //     $this->smarty->assign("prvni_jmeno",$prihl_uziv[1]);
-        //     $this->smarty->assign("prvni_level",$prihl_uziv[2]);
-        // }
-
-        //button na vypis vsech prihl. uziv.
-        // $this->smarty->assign("windowtext2",$prihl_uziv[3]);
-
-        // // velikost okna
-        // $this->smarty->assign("windowdelka2","170");
-        // $this->smarty->assign("windowpadding2","40");
-
-        // // pozice okna
-        // $this->smarty->assign("windowtop2","150px");
-        // $this->smarty->assign("windowleft2","50%");
-
-        // $this->smarty->assign("subcat_select",0);
     }
 }

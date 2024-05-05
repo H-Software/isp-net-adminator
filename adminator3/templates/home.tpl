@@ -4,20 +4,22 @@
 
 {* slim-flash messages *}
 
-{foreach $flash_messages as $m}
-      {if $m@key eq 'info'}
-            {foreach $m as $i}
-                  <div class="alert alert-info">
-                  {$i}
-                  </div>
-            {/foreach}
-      {/if}
-{/foreach}
+{if $flash_messages|default:'0' }
+      {foreach $flash_messages as $m}
+            {if $m@key eq 'info'}
+                  {foreach $m as $i}
+                        <div class="alert alert-info">
+                        {$i}
+                        </div>
+                  {/foreach}
+            {/if}
+      {/foreach}
+{/if}
 
 {* vypis poslednich prihlasenych *}
 {include file="partials/inc.home.list-logged-users.tpl"}
 
- {if $opravy_povoleno eq "1"}
+ {if $opravy_povoleno|default:'0' eq "1"}
  
     {include file="inc.opravy.tpl"}
  
@@ -27,11 +29,11 @@
  
  {include file="faktury/faktury-for-home.tpl"}
 
- <div>{$body}</div>
+ <div>{$body|default:''}</div>
 
 </div>
 
-{if $nastenka_povoleno eq "1"}
+{if $nastenka_povoleno|default:'0' eq "1"}
       {include file="others/inc.board-header.tpl"}
 
       {include file="others/inc.board-listing.tpl"}

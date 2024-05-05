@@ -1,5 +1,7 @@
 <?php
 
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+
 class board
 {
     public $conn_mysql;
@@ -25,6 +27,8 @@ class board
     public $view_number;
     public $sql;
 
+    public $query_error;
+
     public $write; //jestli opravdu budem zapisovat, ci zobrazime form pro opraveni hodnot
 
     public function __construct($conn_mysql, $logger)
@@ -36,7 +40,9 @@ class board
     public function prepare_vars($nothing = null)
     {
         if(!isset($this->author)) {
-            $this->author = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+            if(is_callable(Sentinel::getUser())) {
+                $this->author = Sentinel::getUser()->email;
+            }
         }
 
         if (((!isset($this->action)) and (!isset($this->send)))) {
@@ -55,6 +61,8 @@ class board
     public function show_messages()
     {
 
+        $zpravy = array();
+
         if($this->what == "new") {
             $this->sql = " from_date <= NOW() AND to_date >= NOW() ";
         } else {
@@ -68,13 +76,21 @@ class board
 
         $sql = $sql_base." FROM board WHERE ".$this->sql." ORDER BY id DESC LIMIT ".$start.",".$this->view_number;
 
-        $message = $this->conn_mysql->query($sql);
-
         $this->logger->debug("board\show_messages: SQL dump: " . var_export($sql, true));
 
-        if($message === false) {
-            $this->logger->error("board\show_messages: db query failed! (Error description: " . $this->conn_mysql->error. ")");
+        try {
+            $message = $this->conn_mysql->query($sql);
+        } catch(Exception $e) {
+            $this->logger->error("board\show_messages: db query failed! (Error: " . var_export($e->getMessage(), true) . ")");
+            $this->query_error = "Board messages listing error! <br>db query failed: " . var_export($e->getMessage(), true);
+
+            return $zpravy;
         }
+
+        // if($message === false) {
+        //     $this->logger->error("board\show_messages: db query failed! (Error description: " . $this->conn_mysql->error. ")");
+        // }
+
         //vypíšeme tabulky se zprávami
         while($entry = $message->fetch_array()) {
             $zpravy[] = array("id" => $entry["id"],"author" => $entry["author"],
@@ -94,7 +110,8 @@ class board
         try {
             $count = $this->conn_mysql->query("SELECT id FROM board WHERE ".$this->sql); //vybíráme zprávy
         } catch (Exception $e) {
-            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            $this->logger->error("board\show_pages: Database query failed! Caught exception: " . $e->getMessage());
+            return $stranek;
         }
 
         $page_count = ceil($count->num_rows / $this->view_number); //počet stran, na kterých se zprávy zobrazí
@@ -166,7 +183,7 @@ class board
 			'$this->to_date', '$this->subject', '$this->body')"
             );
         } catch (Exception $e) {
-            // die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            $this->logger->error("board\\insert_into_db: query failed: Catched Exception " . var_export($e->getMessage(), true));
         }
 
         $this->logger->info("board\\insert_into_db: query result: " . var_export($add, true));

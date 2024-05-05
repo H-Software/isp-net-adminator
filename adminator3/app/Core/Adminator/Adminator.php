@@ -18,19 +18,25 @@ class adminator
 
     public $userIdentityUsername;
 
+    public $userIPAddress;
+
     public $page_level_id;
 
     public $userIdentityLevel;
 
     public $loggedUserEmail;
 
-    public function __construct($conn_mysql, $smarty, $logger)
+    public function __construct($conn_mysql, $smarty, $logger, $userIPAddress = null)
     {
+        $this->logger = $logger;
+        $this->logger->info("adminator\__construct called");
+
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
-        $this->logger = $logger;
 
-        $this->logger->info("adminator\__construct called");
+        if($userIPAddress == null) {
+            $this->userIPAddress = $_SERVER['REMOTE_ADDR'];
+        }
     }
 
     public function formInit()
@@ -143,6 +149,11 @@ class adminator
         }
     }
 
+    public function getServerUri()
+    {
+        return $_SERVER["REQUEST_URI"];
+    }
+
     public function getTarifIptvListForForm($show_zero_value = true)
     {
 
@@ -168,7 +179,7 @@ class adminator
         return $tarifs;
     }
 
-    public function zobraz_kategorie($uri, $uri_replace)
+    public function zobraz_kategorie($uri, $uri_replace = null)
     {
 
         $kategorie = array();

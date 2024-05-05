@@ -15,7 +15,7 @@
         </td>
         <td colspan="8" class="opravy-form-control-items">
 
-          <input type="hidden" name="typ" value="{$typ}" >
+          <input type="hidden" name="typ" value="{$typ|default: ''}" >
 
           <span style="padding-left: 10px; padding-right: 10px; " >V řešení: </span>
 

@@ -51,12 +51,22 @@
         "symfony/var-dumper": "^v6.0.2",
         "symplify/easy-coding-standard": "^v12.1",
         "symplify/coding-standard": "^v12.1",
-        "mockery/mockery": "^1.0"
+        "mockery/mockery": "^1.0",
+        "phpspec/prophecy-phpunit": "^2.2",
+        "mnapoli/phpunit-easymock": "^1.3",
+        "misantron/dbunit": "^5.3",
+        "php-mock/php-mock-phpunit": "^2.10"
     },
     "suggest": {
         "illuminate/database": "By default, Sentinel utilizes the powerful Illuminate database layer.",
         "illuminate/events": "To hook into various events across Sentinel, we recommend using Illuminate's event dispatcher.",
         "symfony/http-foundation": "Required for native implementations."
+    },
+    "autoload-dev": {
+        "psr-4": {
+          "App\\Controllers\\": "app\\Controllers",
+          "DI\\Test\\UnitTest\\Fixtures\\": "tests/php-di/fixtures"
+        }
     },
     "scripts": {
         "dump": "composer dump-autoload -a",

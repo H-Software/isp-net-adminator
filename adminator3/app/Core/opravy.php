@@ -4,13 +4,16 @@ class opravy
 {
     public $conn_mysql;
 
+    public $conn_pgsql;
+
     public $logger;
 
     public $vypis_opravy_content_html;
 
-    public function __construct($conn_mysql, $logger)
+    public function __construct($conn_mysql, $conn_pgsql, $logger)
     {
         $this->conn_mysql = $conn_mysql;
+        $this->conn_pgsql = $conn_pgsql;
         $this->logger = $logger;
     }
 
@@ -47,7 +50,9 @@ class opravy
             $dotaz = $this->conn_mysql->query($sf);
         } catch (Exception $e) {
             $this->logger->error('opravy\vypis_opravy mysql_query dotaz failed! Caught exception: ' . $e->getMessage());
-            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+
+            $ret[0] = "<tr><td colspan=\"".$pocet_bunek."\" >>Error: Database query failed! Caught exception: " . $e->getMessage() . "</td></tr>";
+            return $ret;
         }
 
         $dotaz_radku = $dotaz->num_rows;
@@ -214,7 +219,7 @@ class opravy
 
                 $id_cloveka = $data["id_vlastnika"];
 
-                $vlastnik_dotaz = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($id_cloveka) . "'");
+                $vlastnik_dotaz = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($id_cloveka) . "'");
                 $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
 
                 $this->logger->info("opravy\\vypis_opravy: pq query vlastnik_dotaz: num_rows: " . var_export($vlastnik_radku, true));
