@@ -7,6 +7,8 @@ class board
 {
     private $container;
 
+    public $pdoMysql;
+
     public $conn_mysql;
 
     public $logger;
@@ -40,6 +42,8 @@ class board
         $this->conn_mysql = $container->get('connMysql');
         $this->logger = $container->get('logger');
         $this->settings = $container->get('settings');
+        $this->pdoMysql = $container->get('pdoMysql');
+
     }
 
     public function prepare_vars($nothing = null)
@@ -95,7 +99,7 @@ class board
         $this->logger->debug("board\show_messages: SQL dump: " . var_export($sql, true));
 
         try {
-            $message = $this->conn_mysql->query($sql);
+            $message = $this->pdoMysql->query($sql);
         } catch(Exception $e) {
             $this->logger->error("board\show_messages: db query failed! (Error: " . var_export($e->getMessage(), true) . ")");
             $this->query_error = "Board messages listing error! <br>db query failed: " . var_export($e->getMessage(), true);
@@ -103,17 +107,8 @@ class board
             return $zpravy;
         }
 
-        // if($message === false) {
-        //     $this->logger->error("board\show_messages: db query failed! (Error description: " . $this->conn_mysql->error. ")");
-        // }
-
         //vypíšeme tabulky se zprávami
-        while($entry = $message->fetch_array()) {
-            $zpravy[] = array("id" => $entry["id"],"author" => $entry["author"],
-                "email" => $entry["email"], "subject" => $entry["subject"],
-                "body" => $entry["body"], "from_date" => $entry["from_date2"],
-                "to_date" => $entry["to_date2"] );
-        }
+        $zpravy = $message->fetchAll(PDO::FETCH_ASSOC);
 
         return $zpravy;
     }
