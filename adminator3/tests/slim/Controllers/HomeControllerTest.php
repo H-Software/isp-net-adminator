@@ -118,19 +118,19 @@ final class HomeControllerTest extends AdminatorTestCase
 
 
         // // test sqlite migration
-        // $sql = 'pragma table_info(\'users\');';
+        // $sql = 'pragma table_info(\'board\');';
         // $sql2 = "SELECT sql
         // FROM sqlite_schema
         // WHERE name = 'users';";
         // $rs = self::$pdoMysql->query($sql);
-        // var_dump(print_r($rs->fetchAll()));
+        // print_r($rs->fetchAll());
 
         $output = ob_get_contents();
 
         ob_end_clean();
 
         // debug
-        // echo $output;
+        echo $output;
 
         $this->assertNotEmpty($output);
 

@@ -6,6 +6,13 @@ use PHPUnit\DbUnit\DataSet\DataSet;
 use Slim\Csrf\Guard;
 
 $container->set(
+    'settings',
+    function () {
+        return require __DIR__ . '/../../../config/settings-tests.php';
+    }
+);
+
+$container->set(
     'logger',
     function ($c) {
 
@@ -20,13 +27,11 @@ $container->set(
 
 $container->set(
     'connMysql',
-    // function ($c) {
+    self::$pdoMysql
+);
 
-    //     $db = new PDO('sqlite::memory:');
-    //     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    //     return $db;
-    // }
+$container->set(
+    'pdoMysql',
     self::$pdoMysql
 );
 
@@ -52,19 +57,14 @@ $container->set(
     }
 );
 
-// require __DIR__ .'/slimCsrfSession.php';
-
 $container->set(
     'csrf',
     function () use ($responseFactory) {
-
-        // $storage = [];
 
         $guardMock = \Mockery::mock('Guard');
 
         $guardMock->shouldReceive('getTokenNameKey')->andReturn(42);
         $guardMock->shouldReceive('getTokenValueKey')->andReturn(42);
-        // $guardMock->shouldReceive('foo')->andReturn(42);
 
         return $guardMock;
         // return new Guard($responseFactory);

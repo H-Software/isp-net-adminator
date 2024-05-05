@@ -1,13 +1,17 @@
 <?php
 
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Psr\Container\ContainerInterface;
 
 class board
 {
+    private $container;
+
     public $conn_mysql;
 
     public $logger;
 
+    public $settings;
     public $what;
     public $action;
     public $page;
@@ -31,10 +35,11 @@ class board
 
     public $write; //jestli opravdu budem zapisovat, ci zobrazime form pro opraveni hodnot
 
-    public function __construct($conn_mysql, $logger)
+    public function __construct(ContainerInterface $container)
     {
-        $this->conn_mysql = $conn_mysql;
-        $this->logger = $logger;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->logger = $container->get('logger');
+        $this->settings = $container->get('settings');
     }
 
     public function prepare_vars($nothing = null)
@@ -64,13 +69,24 @@ class board
         $zpravy = array();
 
         if($this->what == "new") {
-            $this->sql = " from_date <= NOW() AND to_date >= NOW() ";
+            $this->sql = $this->settings['db']['driver'] === 'sqlite' ?
+                " from_date <= date(\"Y-m-s H:i:s\", time()) AND to_date >= date(\"Y-m-s H:i:s\", time()) ":
+                " from_date <= NOW() AND to_date >= NOW() ";
         } else {
-            $this->sql = " to_date < NOW() ";
+            $this->sql = $this->settings['db']['driver'] === 'sqlite' ?
+                " to_date < date(\"Y-m-s H:i:s\", time()) " :
+                " to_date < NOW() ";
         }
 
-        $sql_base = "SELECT *,DATE_FORMAT(from_date, '%d.%m.%Y') as from_date2";
-        $sql_base .= ",DATE_FORMAT(to_date, '%d.%m.%Y') as to_date2 ";
+        $sql_date1 = $this->settings['db']['driver'] === 'sqlite' ?
+            'strftime("%d.%m.%Y", from_date) as from_date2' :
+            'date_format(from_date, "%d.%m.%Y") as from_date2';
+
+        $sql_date2 = $this->settings['db']['driver'] === 'sqlite' ?
+            'strftime("%d.%m.%Y", to_date) as to_date2' :
+            'date_format(to_date, "%d.%m.%Y") as to_date2';
+
+        $sql_base = "SELECT *," . $sql_date1."," . $sql_date2;
 
         $start = $this->page * $this->view_number; //první zpráva, která se zobrazí
 
