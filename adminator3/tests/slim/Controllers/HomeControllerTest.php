@@ -25,13 +25,6 @@ final class HomeControllerTest extends AdminatorTestCase
     use EasyMock;
     use \phpmock\phpunit\PHPMock;
 
-
-    // public static function setUpBeforeClass(): void
-    // {
-    //     parent::setUpBeforeClass();
-    // }
-
-    #[\PHPUnit\Framework\Attributes\Before]
     protected function setUp(): void
     {
 
@@ -64,7 +57,6 @@ final class HomeControllerTest extends AdminatorTestCase
 
     }
 
-    #[\PHPUnit\Framework\Attributes\After]    
     protected function tearDown(): void
     {
     }
