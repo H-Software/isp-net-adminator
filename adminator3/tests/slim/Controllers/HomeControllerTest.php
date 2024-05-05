@@ -30,6 +30,8 @@ class HomeControllerTest extends TestCase
     {
         global $pdoMysql;
 
+        require __DIR__ . "/../../fixtures/bootstrapDatabase.php";
+
         $pdoMysql = $capsule->connection("default")->getPdo();
 
         $pdoConfig[ 'environments' ][ 'test' ] = [
