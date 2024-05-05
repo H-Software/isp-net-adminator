@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use PDO;
 use Phinx\Config\Config;
 use Phinx\Migration\Manager;
 use PHPUnit\Framework\TestCase;
@@ -21,25 +20,17 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\DbUnit\DataSet\MockDataSet;
 use Psr\Http\Message\ResponseFactoryInterface;
 
-class HomeControllerTest extends TestCase
+final class HomeControllerTest extends AdminatorTestCase
 {
     use EasyMock;
     use \phpmock\phpunit\PHPMock;
 
     protected function setUp(): void
     {
-        global $pdoMysql;
-
-        require __DIR__ . "/../fixtures/bootstrapDatabase.php";
-
-        // $pdoMysql = new PDO('sqlite::memory:');
-        // $pdoMysql->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $pdoMysql = $capsule->connection("default")->getPdo();
 
         $pdoConfig[ 'environments' ][ 'test' ] = [
             'adapter' => 'sqlite',
-            'connection' => $pdoMysql,
+            'connection' => self::$pdoMysql,
             'table_prefix' => ''
         ];
         $pdoConfig["paths"] = [
@@ -47,16 +38,10 @@ class HomeControllerTest extends TestCase
             'seeds'      => 'database/seeds',
         ];
 
-        $config = new Config( $pdoConfig );
-        $manager = new Manager( $config, new StringInput( ' ' ), new NullOutput() );
-        $manager->migrate( 'test' );
-        $manager->seed( 'test' );
-
-        // require_once __DIR__ .'/../../fixtures/PDODbImporter.php';
-
-        // $mysqlFile = __DIR__ .'/../../../../mysql-db-init-adminator2.sql';
-
-        // $importerMysql = \PDODbImporter::importSQL($mysqlFile, $pdoMysql);
+        $config = new Config($pdoConfig);
+        $manager = new Manager($config, new StringInput(' '), new NullOutput());
+        $manager->migrate('test');
+        $manager->seed('test');
 
         $_POST = array();
         $_POST['show_se_cat'] = "null";
@@ -70,53 +55,22 @@ class HomeControllerTest extends TestCase
         $_SERVER['HTTP_HOST'] = "127.0.0.1";
         $_SERVER['SCRIPT_URL'] = "/home";
 
-        // function init_helper_base_html()
-        // {
-        //     return 1;
-        // }
+    }
 
+    protected function tearDown(): void
+    {
     }
 
     public function testHome()
     {
         // $this->markTestSkipped('under construction');
-        // global $pdoMysql;
-
         $self = $this;
 
-        // Make the ContainerBuilder use our fake class to catch constructor parameters
-        // $builder = new ContainerBuilder(FakeContainer::class);
-
-        // $otherContainer = $this->easyMock(ContainerInterface::class);
-
-        // $container = new Container;
-
-        //
-
-        // $builder->wrapContainer($otherContainer);
-
-
-        // /** @var FakeContainer $container */
-        // $container = $builder->build();
-
-        // $session_status = $this->getFunctionMock("Slim\Csrf", "session_status");
-        // $session_status->expects($this->once())->willReturn(PHP_SESSION_ACTIVE);
-
+        // prepare DI
         $builder = new ContainerBuilder();
         $builder->addDefinitions('tests/slim/fixtures/bootstrapContainer.php');
         $container = $builder->build();
 
-        // $appMock = \Mockery::mock(
-        //     \Slim\Factory\AppFactory::create(),
-        //     [
-        //         null,
-        //         $container
-        //     ]
-        // );
-
-        // $appMock->shouldReceive('getResponseFactory')->andReturn();
-
-        // $responseFactory = $appMock->getResponseFactory();
         $rfMock = \Mockery::mock(ResponseFactoryInterface::class);
         $responseFactory = $rfMock;
 
@@ -130,6 +84,7 @@ class HomeControllerTest extends TestCase
         $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
         $this->assertIsObject($container->get('smarty'));
 
+        // mock "underlaying" class for helper functions/logic
         $adminatorMock = \Mockery::mock(
             \App\Core\adminator::class,
             [
@@ -150,7 +105,6 @@ class HomeControllerTest extends TestCase
             )
         );
         $adminatorMock->shouldReceive('list_logged_users')->andReturn("");
-
         $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
         $homeController = new HomeController($container, $adminatorMock);
@@ -163,12 +117,12 @@ class HomeControllerTest extends TestCase
         $homeController->home($serverRequest, $response, []);
 
 
-        // test sqlite migration
+        // // test sqlite migration
         // $sql = 'pragma table_info(\'users\');';
-        // $sql2 = "SELECT sql 
-        // FROM sqlite_schema 
+        // $sql2 = "SELECT sql
+        // FROM sqlite_schema
         // WHERE name = 'users';";
-        // $rs = $pdoMysql->query($sql);
+        // $rs = self::$pdoMysql->query($sql);
         // var_dump(print_r($rs->fetchAll()));
 
         $output = ob_get_contents();
@@ -176,7 +130,7 @@ class HomeControllerTest extends TestCase
         ob_end_clean();
 
         // debug
-        echo $output;
+        // echo $output;
 
         $this->assertNotEmpty($output);
 

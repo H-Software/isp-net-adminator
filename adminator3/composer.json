@@ -60,13 +60,18 @@
     "suggest": {
         "illuminate/database": "By default, Sentinel utilizes the powerful Illuminate database layer.",
         "illuminate/events": "To hook into various events across Sentinel, we recommend using Illuminate's event dispatcher.",
-        "symfony/http-foundation": "Required for native implementations."
+        "symfony/http-foundation": "Required for native implementations.",
+        "monolog/monolog": "Allows more advanced logging of the application flow"
     },
     "autoload-dev": {
         "psr-4": {
           "App\\Controllers\\": "app\\Controllers",
-          "DI\\Test\\UnitTest\\Fixtures\\": "tests/php-di/fixtures"
-        }
+          "DI\\Test\\UnitTest\\Fixtures\\": "tests/php-di/Fixtures"
+        },
+        "files": [
+            "tests/AdminatorTestCase.php"
+        ]
+        
     },
     "scripts": {
         "dump": "composer dump-autoload -a",

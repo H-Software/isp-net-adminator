@@ -18,8 +18,6 @@ $container->set(
     }
 );
 
-global $pdoMysql;
-
 $container->set(
     'connMysql',
     // function ($c) {
@@ -29,7 +27,7 @@ $container->set(
 
     //     return $db;
     // }
-    $pdoMysql
+    self::$pdoMysql
 );
 
 $container->set(
