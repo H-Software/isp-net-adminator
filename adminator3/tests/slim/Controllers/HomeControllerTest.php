@@ -132,6 +132,8 @@ class HomeControllerTest extends TestCase
 
         ob_end_clean();
 
+        echo $output;
+        
         $this->assertNotEmpty($output);
 
         $outputKeywords = array(
@@ -162,6 +164,5 @@ class HomeControllerTest extends TestCase
             $this->assertFalse(true, "found some word(s), which indicates error(s)");
         }
 
-        // echo $output;
     }
 }

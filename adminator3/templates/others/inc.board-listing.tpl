@@ -3,8 +3,14 @@
     <div class="col-8">
 
 
-        <div class="tableheading typ-zprav" >{$mod_hlaska}</div>
+        <div class="tableheading typ-zprav" >{$mod_hlaska|default:''}</div>
         
+        {if strlen($query_error|default:'') gt 0}
+          <div class="alert alert-danger pt-15" role="alert">
+              {$query_error}
+          </div>
+       {/if}
+
         {section name="entry" loop=$zpravy}
 
           <div class="tableheading" style="padding-top: 2px; " >zpráva č. {$zpravy[entry].id}</div>
