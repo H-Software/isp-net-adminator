@@ -134,8 +134,12 @@ class HomeControllerTest extends TestCase
         );
 
         foreach ($outputKeywords as $w) {
-            
+
+            /*
             // N.B.: this causes printing output to stdout
+            // maybe will works "assertThat()"
+            // -> https://docs.phpunit.de/en/9.6/assertions.html#assertthat
+            */
             // $this->assertStringContainsString($output, $w);
 
             if (!str_contains($output, $w)) {
