@@ -1,5 +1,7 @@
 <?php
 
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+
 class board
 {
     public $conn_mysql;
@@ -36,7 +38,9 @@ class board
     public function prepare_vars($nothing = null)
     {
         if(!isset($this->author)) {
-            $this->author = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+            if(is_callable(Sentinel::getUser())){
+                $this->author = Sentinel::getUser()->email;
+            }
         }
 
         if (((!isset($this->action)) and (!isset($this->send)))) {

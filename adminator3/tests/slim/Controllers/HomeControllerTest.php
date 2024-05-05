@@ -158,6 +158,10 @@ class HomeControllerTest extends TestCase
             }
         }
 
+        if (preg_match("/(failed|chyba|error)+/i", $output)) {
+            $this->assertFalse(true, "found some word(s), which indicates error(s)");
+        }
+
         // echo $output;
     }
 }
