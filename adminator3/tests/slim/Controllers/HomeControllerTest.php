@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use PDO;
 use Phinx\Config\Config;
 use Phinx\Migration\Manager;
 use PHPUnit\Framework\TestCase;
@@ -49,12 +48,6 @@ class HomeControllerTest extends TestCase
         $manager->migrate( 'test' );
         $manager->seed( 'test' );
 
-        // require_once __DIR__ .'/../../fixtures/PDODbImporter.php';
-
-        // $mysqlFile = __DIR__ .'/../../../../mysql-db-init-adminator2.sql';
-
-        // $importerMysql = \PDODbImporter::importSQL($mysqlFile, $pdoMysql);
-
         $_POST = array();
         $_POST['show_se_cat'] = "null";
 
@@ -67,53 +60,20 @@ class HomeControllerTest extends TestCase
         $_SERVER['HTTP_HOST'] = "127.0.0.1";
         $_SERVER['SCRIPT_URL'] = "/home";
 
-        // function init_helper_base_html()
-        // {
-        //     return 1;
-        // }
-
+        parent::setUp();
     }
 
     public function testHome()
     {
         // $this->markTestSkipped('under construction');
-        // global $pdoMysql;
 
         $self = $this;
 
-        // Make the ContainerBuilder use our fake class to catch constructor parameters
-        // $builder = new ContainerBuilder(FakeContainer::class);
-
-        // $otherContainer = $this->easyMock(ContainerInterface::class);
-
-        // $container = new Container;
-
-        //
-
-        // $builder->wrapContainer($otherContainer);
-
-
-        // /** @var FakeContainer $container */
-        // $container = $builder->build();
-
-        // $session_status = $this->getFunctionMock("Slim\Csrf", "session_status");
-        // $session_status->expects($this->once())->willReturn(PHP_SESSION_ACTIVE);
-
+        // prepare DI
         $builder = new ContainerBuilder();
         $builder->addDefinitions('tests/slim/fixtures/bootstrapContainer.php');
         $container = $builder->build();
 
-        // $appMock = \Mockery::mock(
-        //     \Slim\Factory\AppFactory::create(),
-        //     [
-        //         null,
-        //         $container
-        //     ]
-        // );
-
-        // $appMock->shouldReceive('getResponseFactory')->andReturn();
-
-        // $responseFactory = $appMock->getResponseFactory();
         $rfMock = \Mockery::mock(ResponseFactoryInterface::class);
         $responseFactory = $rfMock;
 
@@ -127,6 +87,7 @@ class HomeControllerTest extends TestCase
         $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
         $this->assertIsObject($container->get('smarty'));
 
+        // mock "underlaying" class for helper functions/logic
         $adminatorMock = \Mockery::mock(
             \App\Core\adminator::class,
             [
@@ -147,7 +108,6 @@ class HomeControllerTest extends TestCase
             )
         );
         $adminatorMock->shouldReceive('list_logged_users')->andReturn("");
-
         $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
         $homeController = new HomeController($container, $adminatorMock);
@@ -173,7 +133,7 @@ class HomeControllerTest extends TestCase
         ob_end_clean();
 
         // debug
-        echo $output;
+        // echo $output;
 
         $this->assertNotEmpty($output);
 
