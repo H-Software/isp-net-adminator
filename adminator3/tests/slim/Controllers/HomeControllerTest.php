@@ -17,6 +17,10 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\DbUnit\DataSet\MockDataSet;
 use PDO;
 use Psr\Http\Message\ResponseFactoryInterface;
+use phinx\Config\Config;
+use phinx\Migration\Manager;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 class HomeControllerTest extends TestCase
 {
@@ -25,6 +29,31 @@ class HomeControllerTest extends TestCase
 
     protected function setUp(): void
     {
+        global $pdoMysql;
+
+        $pdoMysql = new PDO('sqlite::memory:');
+        $pdoMysql->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $pdoConfig[ 'environments' ][ 'test' ] = [
+            'adapter' => 'sqlite',
+            'connection' => $pdoMysql,
+            'table_prefix' => 'nx24_2_'
+        ];
+        $pdoConfig["paths"] = [
+            "migrations" => __DIR__ . "../../../database/migrations",
+        ];
+
+        // $config = new Config( $pdoConfig );
+        // $manager = new Manager( $config, new StringInput( ' ' ), new NullOutput() );
+        // $manager->migrate( 'test' );
+        // $manager->seed( 'test' );
+
+        // require_once __DIR__ .'/../../fixtures/PDODbImporter.php';
+
+        // $mysqlFile = __DIR__ .'/../../../../mysql-db-init-adminator2.sql';
+
+        // $importerMysql = \PDODbImporter::importSQL($mysqlFile, $pdoMysql);
+
         $_POST = array();
         $_POST['show_se_cat'] = "null";
 

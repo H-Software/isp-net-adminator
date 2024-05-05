@@ -18,15 +18,18 @@ $container->set(
     }
 );
 
+global $pdoMysql;
+
 $container->set(
     'connMysql',
-    function ($c) {
+    // function ($c) {
 
-        $db = new PDO('sqlite::memory:');
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //     $db = new PDO('sqlite::memory:');
+    //     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        return $db;
-    }
+    //     return $db;
+    // }
+    $pdoMysql
 );
 
 $container->set(

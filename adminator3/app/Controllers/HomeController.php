@@ -101,7 +101,7 @@ class HomeController extends adminatorController
             $zpravy = $nastenka->show_messages();
             $this->logger->debug("homeController\board: show_messages result: " . var_export($zpravy, true));
 
-            if(isset($nastenka->query_error)){
+            if(isset($nastenka->query_error)) {
                 $this->smarty->assign("query_error", $nastenka->query_error);
             }
 
