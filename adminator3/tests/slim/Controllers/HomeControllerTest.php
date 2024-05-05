@@ -20,22 +20,24 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\DbUnit\DataSet\MockDataSet;
 use Psr\Http\Message\ResponseFactoryInterface;
 
-class HomeControllerTest extends AdminatorTestCase
+final class HomeControllerTest extends AdminatorTestCase
 {
     use EasyMock;
     use \phpmock\phpunit\PHPMock;
 
+
+    // public static function setUpBeforeClass(): void
+    // {
+    //     parent::setUpBeforeClass();
+    // }
+
+    #[\PHPUnit\Framework\Attributes\Before]
     protected function setUp(): void
     {
-        global $pdoMysql;
-
-        require __DIR__ . "/../../fixtures/bootstrapDatabase.php";
-
-        $pdoMysql = $capsule->connection("default")->getPdo();
 
         $pdoConfig[ 'environments' ][ 'test' ] = [
             'adapter' => 'sqlite',
-            'connection' => $pdoMysql,
+            'connection' => self::$pdoMysql,
             'table_prefix' => ''
         ];
         $pdoConfig["paths"] = [
@@ -60,13 +62,16 @@ class HomeControllerTest extends AdminatorTestCase
         $_SERVER['HTTP_HOST'] = "127.0.0.1";
         $_SERVER['SCRIPT_URL'] = "/home";
 
-        parent::setUp();
+    }
+
+    #[\PHPUnit\Framework\Attributes\After]    
+    protected function tearDown(): void
+    {
     }
 
     public function testHome()
     {
         // $this->markTestSkipped('under construction');
-
         $self = $this;
 
         // prepare DI
@@ -120,12 +125,12 @@ class HomeControllerTest extends AdminatorTestCase
         $homeController->home($serverRequest, $response, []);
 
 
-        // test sqlite migration
+        // // test sqlite migration
         // $sql = 'pragma table_info(\'users\');';
         // $sql2 = "SELECT sql
         // FROM sqlite_schema
         // WHERE name = 'users';";
-        // $rs = $pdoMysql->query($sql);
+        // $rs = self::$pdoMysql->query($sql);
         // var_dump(print_r($rs->fetchAll()));
 
         $output = ob_get_contents();

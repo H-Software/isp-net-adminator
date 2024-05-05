@@ -6,9 +6,19 @@ namespace App\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-class AdminatorTestCase extends TestCase
+abstract class AdminatorTestCase extends TestCase
 {
-    protected function setUp(): void
+    public static $pdoMysql;
+
+    public static function setUpBeforeClass(): void
     {
+        require __DIR__ . "/fixtures/bootstrapDatabase.php";
+
+        self::$pdoMysql = $capsule->connection("default")->getPdo();
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        self::$pdoMysql = null;
     }
 }
