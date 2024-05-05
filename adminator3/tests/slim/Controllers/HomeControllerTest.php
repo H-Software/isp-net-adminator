@@ -132,7 +132,8 @@ class HomeControllerTest extends TestCase
 
         ob_end_clean();
 
-        echo $output;
+        // debug
+        // echo $output;
 
         $this->assertNotEmpty($output);
 
