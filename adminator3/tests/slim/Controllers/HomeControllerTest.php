@@ -28,8 +28,19 @@ class HomeControllerTest extends TestCase
         $_POST = array();
         $_POST['show_se_cat'] = "null";
 
+        $_GET = array();
+        $_GET["v_reseni_filtr"] = 99;
+        $_GET["vyreseno_filtr"] = 0;
+        $_GET["limit"] = 10;
+
         $_SERVER = array();
         $_SERVER['HTTP_HOST'] = "127.0.0.1";
+        $_SERVER['SCRIPT_URL'] = "/home";
+
+        // function init_helper_base_html()
+        // {
+        //     return 1;
+        // }
 
     }
 
@@ -113,7 +124,7 @@ class HomeControllerTest extends TestCase
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         $response = $this->createMock(ResponseInterface::class);
 
-        ob_start(); // Start output buffering
+        ob_start();
 
         $homeController->home($serverRequest, $response, []);
 
@@ -146,5 +157,7 @@ class HomeControllerTest extends TestCase
                 $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
             }
         }
+
+        // echo $output;
     }
 }

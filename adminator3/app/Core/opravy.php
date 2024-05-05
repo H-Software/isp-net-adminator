@@ -50,7 +50,9 @@ class opravy
             $dotaz = $this->conn_mysql->query($sf);
         } catch (Exception $e) {
             $this->logger->error('opravy\vypis_opravy mysql_query dotaz failed! Caught exception: ' . $e->getMessage());
-            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+
+            $ret[0] = "<tr><td colspan=\"".$pocet_bunek."\" >>Error: Database query failed! Caught exception: " . $e->getMessage() . "</td></tr>";
+            return $ret;
         }
 
         $dotaz_radku = $dotaz->num_rows;

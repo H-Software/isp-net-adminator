@@ -94,7 +94,8 @@ class board
         try {
             $count = $this->conn_mysql->query("SELECT id FROM board WHERE ".$this->sql); //vybíráme zprávy
         } catch (Exception $e) {
-            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            $this->logger->error("board\show_pages: Database query failed! Caught exception: " . $e->getMessage());
+            return $stranek;
         }
 
         $page_count = ceil($count->num_rows / $this->view_number); //počet stran, na kterých se zprávy zobrazí
