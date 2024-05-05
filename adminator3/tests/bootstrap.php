@@ -22,4 +22,6 @@ $loader->addDirectory(__DIR__ . '/../app/Migration');
 $loader->setTempDirectory(__DIR__ . '/../temp');
 $loader->register();
 
+require __DIR__ . "/fixtures/bootstrapDatabase.php";
+
 define('SLIM_MODE', 'testing');
