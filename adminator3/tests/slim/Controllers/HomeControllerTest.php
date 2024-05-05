@@ -128,6 +128,9 @@ class HomeControllerTest extends TestCase
             '<title>Adminator3 :: úvodní stránka</title>',
             'bootstrap.min.css" rel="stylesheet"',
             'Jste přihlášeni v administračním systému',
+            '<div class="home-vypis-useru-napis" >Přihlašení uživatelé: </div>',
+            '</body>',
+            '</html>'
         );
 
         foreach ($outputKeywords as $w) {
