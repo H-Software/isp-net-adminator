@@ -131,7 +131,13 @@ class HomeControllerTest extends TestCase
         );
 
         foreach ($outputKeywords as $w) {
+            
+            // N.B.: this causes printing output to stdout
             // $this->assertStringContainsString($output, $w);
+
+            if (!str_contains($output, $w)) {
+                $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
+            }
         }
     }
 }
