@@ -20,7 +20,7 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\DbUnit\DataSet\MockDataSet;
 use Psr\Http\Message\ResponseFactoryInterface;
 
-class HomeControllerTest extends TestCase
+class HomeControllerTest extends AdminatorTestCase
 {
     use EasyMock;
     use \phpmock\phpunit\PHPMock;
@@ -43,10 +43,10 @@ class HomeControllerTest extends TestCase
             'seeds'      => 'database/seeds',
         ];
 
-        $config = new Config( $pdoConfig );
-        $manager = new Manager( $config, new StringInput( ' ' ), new NullOutput() );
-        $manager->migrate( 'test' );
-        $manager->seed( 'test' );
+        $config = new Config($pdoConfig);
+        $manager = new Manager($config, new StringInput(' '), new NullOutput());
+        $manager->migrate('test');
+        $manager->seed('test');
 
         $_POST = array();
         $_POST['show_se_cat'] = "null";
@@ -122,8 +122,8 @@ class HomeControllerTest extends TestCase
 
         // test sqlite migration
         // $sql = 'pragma table_info(\'users\');';
-        // $sql2 = "SELECT sql 
-        // FROM sqlite_schema 
+        // $sql2 = "SELECT sql
+        // FROM sqlite_schema
         // WHERE name = 'users';";
         // $rs = $pdoMysql->query($sql);
         // var_dump(print_r($rs->fetchAll()));
