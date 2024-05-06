@@ -368,54 +368,54 @@ class adminator
         //opravy a zavady vypis
         $pocet_bunek = 11;
 
-            $this->logger->info("adminator\get_opravy_a_zavady called");
+        $this->logger->info("adminator\get_opravy_a_zavady called");
 
-            $v_reseni_filtr = $_GET["v_reseni_filtr"];
-            $vyreseno_filtr = $_GET["vyreseno_filtr"];
-            $limit = $_GET["limit"];
+        $v_reseni_filtr = $_GET["v_reseni_filtr"];
+        $vyreseno_filtr = $_GET["vyreseno_filtr"];
+        $limit = $_GET["limit"];
 
-            if(!isset($v_reseni_filtr)) {
-                $v_reseni_filtr = "99";
-            }
-            if(!isset($vyreseno_filtr)) {
-                $vyreseno_filtr = "0";
-            }
+        if(!isset($v_reseni_filtr)) {
+            $v_reseni_filtr = "99";
+        }
+        if(!isset($vyreseno_filtr)) {
+            $vyreseno_filtr = "0";
+        }
 
-            if(!isset($limit)) {
-                $limit = "10";
-            }
+        if(!isset($limit)) {
+            $limit = "10";
+        }
 
-            // vypis
-            $this->smarty->assign("opravy_povoleno", 1);
+        // vypis
+        $this->smarty->assign("opravy_povoleno", 1);
 
-            $this->smarty->assign("pocet_bunek", $pocet_bunek);
+        $this->smarty->assign("pocet_bunek", $pocet_bunek);
 
-            $this->smarty->assign("vyreseno_filtr", $vyreseno_filtr);
-            $this->smarty->assign("v_reseni_filtr", $v_reseni_filtr);
-            $this->smarty->assign("limit", $limit);
+        $this->smarty->assign("vyreseno_filtr", $vyreseno_filtr);
+        $this->smarty->assign("v_reseni_filtr", $v_reseni_filtr);
+        $this->smarty->assign("limit", $limit);
 
-            $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
+        $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
 
-            $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
-            // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));
+        $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
+        // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));
 
-            if($rs_vypis) {
-                if (strlen($rs_vypis[0]) > 0) {
-                    // no records in DB
-                    $this->logger->info("homeController\opravy_a_zavady list: no records found in database.");
-                    $content_opravy_a_zavady = $rs_vypis[0];
-                } elseif(strlen($rs_vypis[1]) > 0) {
-                    // raw html
-                    $content_opravy_a_zavady = $rs_vypis[1];
-                } else {
-                    // ??
-                    $this->logger->error("homeController\opravy_a_zavady unexpected return value");
-                }
+        if($rs_vypis) {
+            if (strlen($rs_vypis[0]) > 0) {
+                // no records in DB
+                $this->logger->info("homeController\opravy_a_zavady list: no records found in database.");
+                $content_opravy_a_zavady = $rs_vypis[0];
+            } elseif(strlen($rs_vypis[1]) > 0) {
+                // raw html
+                $content_opravy_a_zavady = $rs_vypis[1];
             } else {
-                $this->logger->error("homeController\opravy_a_zavady no return value from vypis_opravy call");
+                // ??
+                $this->logger->error("homeController\opravy_a_zavady unexpected return value");
             }
+        } else {
+            $this->logger->error("homeController\opravy_a_zavady no return value from vypis_opravy call");
+        }
 
-            $this->smarty->assign("content_opravy_a_zavady", $content_opravy_a_zavady);
+        $this->smarty->assign("content_opravy_a_zavady", $content_opravy_a_zavady);
     }
 
     public static function convertIntToBoolTextCs($v)

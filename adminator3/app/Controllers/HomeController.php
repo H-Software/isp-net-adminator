@@ -50,8 +50,7 @@ class HomeController extends adminatorController
 
         if(isset($opravyInstance)) {
             $this->opravyInstance = $opravyInstance;
-        }
-        else{
+        } else {
             $this->opravyInstance = new \opravy($this->container);
         }
     }
@@ -98,7 +97,7 @@ class HomeController extends adminatorController
         if ($this->adminator->checkLevel(101, false) === true) {
             $this->logger->info("homeController\opravy_a_zavady allowed");
             $this->adminator->get_opravy_a_zavady($this->opravyInstance);
-        } else{
+        } else {
             $this->logger->warning("homeController\opravy_a_zavady not allowed");
         }
 
