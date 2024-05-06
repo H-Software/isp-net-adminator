@@ -51,8 +51,10 @@ final class HomeControllerTest extends AdminatorTestCase
                 $container->get('smarty'),
                 $container->get('logger'),
                 '127.0.0.1', // userIPAddress
+                $container->get('pdoMysql'),
+                $container->get('settings'),
             ]
-        );
+        )->makePartial();
 
         $adminatorMock->userIdentityUsername = 'test@test';
         $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
@@ -63,7 +65,7 @@ final class HomeControllerTest extends AdminatorTestCase
                 array()
             )
         );
-        $adminatorMock->shouldReceive('list_logged_users')->andReturn("");
+        // $adminatorMock->shouldReceive('list_logged_users')->andReturn("");
         $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
         $homeController = new HomeController($container, $adminatorMock);
@@ -78,7 +80,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         // // test sqlite migration
         // $sql = 'pragma table_info(\'board\');';
-        // $sql2 = "SELECT * FROM board";
+        // $sql2 = "SELECT * FROM users";
         // $rs = self::$pdoMysql->query($sql2);
         // print_r($rs->fetchAll());
 
@@ -96,7 +98,8 @@ final class HomeControllerTest extends AdminatorTestCase
             '<title>Adminator3 :: úvodní stránka</title>',  // adminator head rendered
             'bootstrap.min.css" rel="stylesheet"',  // adminator head rendered
             'Jste přihlášeni v administračním systému', // adminator header rendered
-            '<div class="home-vypis-useru-napis" >Přihlašení uživatelé: </div>',
+            '<div class="home-vypis-useru-napis" >Přihlašení uživatelé: </div>', // loggeduser banner
+            'uživatel: <span class="home-vypis-useru-font1" >', // logger user row
             'Výpis Závad/oprav',
             'Bulletin Board - Nástěnka', // board header exists
             '<div class="table zprava-main" >', // board message exists

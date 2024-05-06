@@ -16,9 +16,9 @@ class adminator
     public $smarty;
     public $logger;
 
-    private $pdoMysql;
+    public $pdoMysql;
 
-    private $settings;
+    public $settings;
 
     public $userIdentityUsername;
 
@@ -166,7 +166,16 @@ class adminator
         $formatedDate = $this->settings['db']['driver'] === 'sqlite' ?
             'strftime("' . $format .'", '. $column .')' :
             'date_format(' . $column . ', "'.$format.'")';
-        
+
+        return $formatedDate;
+    }
+
+    public function getSqlTimestampFormat($column, $format = "%d.%m.%Y")
+    {
+        $formatedDate = $this->settings['db']['driver'] === 'sqlite' ?
+            'strftime("' . $format .'", datetime('. $column .', \'unixepoch\'))' :
+            'date_format(' . $column . ', "'.$format.'")';
+
         return $formatedDate;
     }
 
@@ -322,35 +331,37 @@ class adminator
         return $ret;
     }
 
-    public function list_logged_users()
+    public function list_logged_users(): void
     {
-        $r = array();
+        $data = array();
+        $rs = "";
 
-        $sql = "SELECT email, ". $this->getSqlDateFormat("last_login") . " as date
+        $sql = "SELECT email, ". $this->getSqlTimestampFormat("last_login") . " as date
                     FROM users
                     ORDER BY last_login DESC 
                     LIMIT 5
             ";
 
         try {
-            $this->logger->debug(__CLASS__ . '\\' .__FUNCTION__ 
+            $this->logger->debug(__CLASS__ . '\\' .__FUNCTION__
                                     . ": SQL dump: "
                                     . var_export($sql, true));
 
             $rs = $this->pdoMysql->query($sql);
-        }
-        catch (Exception $e) {
-            $this->logger->error(__CLASS__ . '\\' .__FUNCTION__ 
-                            . ": PDO query failed! Catched Error: " . var_export($e->getMessage(),true));
-            return false;
+        } catch (Exception $e) {
+            $error_message = "PDO query failed! Catched Error: " . var_export($e->getMessage(), true);
+
+            $this->logger->error(__CLASS__ . '\\' .__FUNCTION__ . ": " . $error_message);
+
+            $this->smarty->assign("logged_users_error_message", $error_message);      
         }
 
-        $data = $rs->fetchAll();
-        // echo "<pre>" . var_export($data, true) . "</pre>";
+        if(is_object($rs)){
+            $data = $rs->fetchAll();
+        }
 
+        // $this->smarty->assign("logged_users_error_message", $sql);   
         $this->smarty->assign("logged_users", $data);
-
-        return true;
     }
 
     public static function convertIntToBoolTextCs($v)
