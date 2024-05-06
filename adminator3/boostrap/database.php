@@ -2,26 +2,30 @@
 
 $capsule = new Illuminate\Database\Capsule\Manager();
 
+$settings = require __DIR__ . '/../config/settings.php';
+
 // Mysql init
 //
+$db = $settings['db'];
 
 $capsule->addConnection(
     [
-        'driver' => 'mysql',
-        'host' => getenv("MYSQL_SERVER") ? getenv("MYSQL_SERVER") : "localhost",
-        'database' => 'adminator2',
-        'username' => getenv("MYSQL_USER") ? getenv("MYSQL_USER") : "root",
-        'password' => getenv("MYSQL_PASSWD") ? getenv("MYSQL_PASSWD") : "password",
-        'charset' => 'utf8',
-        'port' => '3306',
-        'collation' => 'utf8_unicode_ci',
-        'prefix' => ''
+        'driver'    => $db['driver'],
+        'host'      => $db['host'] ?? "localhost",
+        'port'      => $db['port'] ?? '3306',
+        'database'  => $db['database'],
+        'username'  => $db['username'],
+        'password'  => $db['password'],
+        'charset'   => $db['charset'],
+        'collation' => $db['collation'],
+        'prefix'    => $db['prefix'],
     ],
     "default"
 );
 
 // PgSQL init
 //
+$db2 = $settings['db2'];
 
 // https://stackoverflow.com/questions/34649181/multiple-database-connection-using-illuminate-database-eloquent-orm-in-codeignit/34650166#34650166
 $capsule->addConnection(

@@ -48,6 +48,9 @@ $settings = [
                 PDO::ATTR_PERSISTENT         => false,
             ],
         ],
+        'db2' => [
+            // TODO: move all postgres config here
+        ],
         'phinx' => [
             'paths' => [
                 'migrations' => 'database/migrations',
@@ -59,7 +62,7 @@ $settings = [
                 'default_database' => 'dev',
                 'test' => [
                     'adapter' => 'sqlite',
-                    'connection' => self::$pdoMysql,
+                    // 'connection' => self::$pdoMysql,
                     'table_prefix' => ''
                 ]
             ]

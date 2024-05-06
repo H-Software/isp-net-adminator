@@ -30,20 +30,12 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $settings = require __DIR__ . '/../../../config/settings.php';
 
-        // $pdoConfig[ 'environments' ][ 'test' ] = [
-        //     'adapter' => 'sqlite',
-        //     'connection' => self::$pdoMysql,
-        //     'table_prefix' => ''
-        // ];
-        // $pdoConfig["paths"] = [
-        //     "migrations" => "database/migrations",
-        //     'seeds'      => 'database/seeds',
-        // ];
+        $settings['phinx']['environments']['test']['connection'] = self::$pdoMysql;
 
         $config = new Config($settings['phinx']);
         $manager = new Manager($config, new StringInput(' '), new NullOutput());
         $manager->migrate('test');
-        $manager->seed('test');
+        // $manager->seed('test');
 
         $_POST = array();
         $_POST['show_se_cat'] = "null";
