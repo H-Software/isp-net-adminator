@@ -2,7 +2,6 @@
 
 class platby
 {
-
     private $container;
     private $conn_mysql;
 

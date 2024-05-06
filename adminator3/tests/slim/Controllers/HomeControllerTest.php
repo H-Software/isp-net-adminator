@@ -8,7 +8,6 @@ use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-
 final class HomeControllerTest extends AdminatorTestCase
 {
     protected function setUp(): void
@@ -85,7 +84,7 @@ final class HomeControllerTest extends AdminatorTestCase
         ob_end_clean();
 
         // debug
-        echo $output;
+        // echo $output;
 
         $this->assertNotEmpty($output);
 

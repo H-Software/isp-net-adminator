@@ -190,10 +190,10 @@ class Aglobal
 
         $sql = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".$owner_id."' ";
 
-        if($conn_pgsql != null){
+        if($conn_pgsql != null) {
             $vlastnik_dotaz = pg_query($conn_pgsql, $sql);
 
-        } else{
+        } else {
             $vlastnik_dotaz = pg_query($sql);
         }
 

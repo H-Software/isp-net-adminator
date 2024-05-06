@@ -285,21 +285,18 @@ class adminator
     // 4. chybove hlasky
     public function show_stats_faktury_neuhr()
     {
-        $error_messages = ""; 
+        $error_messages = "";
         $ret = array();
         $dotaz_fn = "";
 
         for ($i = 0; $i < 4; $i++) {
-            if($i == 0){
+            if($i == 0) {
                 $sql = "SELECT * FROM faktury_neuhrazene";
-            }
-            elseif($i == 1){
+            } elseif($i == 1) {
                 $sql = "SELECT * FROM faktury_neuhrazene WHERE ( ignorovat = '1' ) order by id";
-            }
-            elseif($i == 2){
+            } elseif($i == 2) {
                 $sql = "SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '0' ";
-            }
-            elseif($i == 3){
+            } elseif($i == 3) {
                 $sql = "SELECT datum,DATE_FORMAT(datum, '%d.%m.%Y %H:%i:%s') as datum FROM fn_import_log order by id";
             }
 
@@ -311,15 +308,15 @@ class adminator
                 $error_message = "PDO query failed! Catched Error: " . var_export($e->getMessage(), true);
                 $error_messages .= "<div>" . $error_message . "</div>\n";
                 $this->logger->error(__CLASS__ . '\\' .__FUNCTION__ . ": " . $error_message);
-    
+
                 $ret[$i] = 0;
             }
 
-            if($i == 3 and is_object($dotaz_fn)){
+            if($i == 3 and is_object($dotaz_fn)) {
                 $data3 = $dotaz_fn->fetchAll();
 
                 $datum_fn3 = (isset($data3[0])) ? $data3[0]["datum"] : "";
-                
+
                 if(strlen($datum_fn3) > 0) {
                     $ret[3] = $datum_fn3;
                 } else {
@@ -328,7 +325,7 @@ class adminator
             }
         }
 
-        if(strlen($error_messages) > 0){
+        if(strlen($error_messages) > 0) {
             $ret[4] = $error_messages;
         }
 

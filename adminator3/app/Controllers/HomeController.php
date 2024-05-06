@@ -84,7 +84,7 @@ class HomeController extends adminatorController
         $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
 
         $this->smarty->assign("stats_faktury_neuhr_error_messages", $neuhr_faktury_pole[4]);
-        
+
         $this->opravy_a_zavady();
 
         $this->board();
