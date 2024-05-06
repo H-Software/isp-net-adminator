@@ -119,14 +119,50 @@ else:
     // prihlasovaci dialog ...
     echo '
     <style>
-        body{font-family:arial ce;font-size:12;background-color:#000066;border-color:#000066}
-        b{font-size:12;font-weight:bolder}
-        table{border-width:1;border-color:#000066;background-color:white;color:#000066}
-        input{font-family:arial ce;font-size:12;color:#000066;border-color:#000066; }
+        body
+        {
+            font-family:arial ce;
+            font-size:12;
 
-        td{border-width:0}
-        .submit{font-family:arial ce;font-size:12;color:#000066;font-weight:bolder;border-width:1;border-color:#000066}
-        .big{font-size:14;color:black}
+        }
+        b
+        {
+            font-size:12;
+            font-weight:bolder
+        }
+        table
+        {
+            border-width:1;
+            border-color:#000066;
+            background-color:white;
+            color:#000066
+        }
+        input
+        {
+            font-family:arial ce;
+            font-size:12;
+            color:#000066;
+            border-color:#000066; 
+        }
+
+        td
+        {
+            border-width:0
+        }
+        .submit
+        {
+            font-family:arial ce;
+            font-size:12;
+            color:#000066;
+            font-weight: bolder;
+            border-width: 1;
+            border-color: #000066
+        }
+        .big
+        {
+            font-size:14;
+            color:black
+        }
     </style>
 
     </head>
