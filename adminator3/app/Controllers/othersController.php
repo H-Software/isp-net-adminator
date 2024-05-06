@@ -50,7 +50,7 @@ class othersController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        $nastenka = new \board($this->conn_mysql, $this->logger);
+        $nastenka = new \board($this->container);
 
         $this->smarty->assign("datum", date("j. m. Y"));
         $this->smarty->assign("sid", $sid);

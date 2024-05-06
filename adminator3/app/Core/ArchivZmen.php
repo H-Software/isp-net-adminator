@@ -7,7 +7,10 @@ use Psr\Container\ContainerInterface;
 
 class ArchivZmen
 {
-    public $conn_mysql;
+    private $conn_mysql;
+
+    private $conn_pgsql;
+
     public $smarty;
     public $logger;
 
@@ -16,6 +19,8 @@ class ArchivZmen
     public function __construct(ContainerInterface $container, $smarty)
     {
         $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+
         $this->logger = $container->get('logger');
         $this->smarty = $smarty;
 

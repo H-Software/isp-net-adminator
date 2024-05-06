@@ -227,12 +227,20 @@ class Aglobal
 
     // } //end of function pg_last_inserted_id
 
-    public static function create_link_to_owner($owner_id)
+    public static function create_link_to_owner($owner_id, $conn_pgsql = null)
     {
 
         $owner_id = intval($owner_id);
 
-        $vlastnik_dotaz = pg_query("SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".$owner_id."' ");
+        $sql = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".$owner_id."' ";
+
+        if($conn_pgsql != null){
+            $vlastnik_dotaz = pg_query($conn_pgsql, $sql);
+
+        } else{
+            $vlastnik_dotaz = pg_query($sql);
+        }
+
         $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
 
         while($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {

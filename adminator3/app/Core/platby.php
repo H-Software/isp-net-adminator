@@ -2,22 +2,29 @@
 
 class platby
 {
-    public $conn_mysql;
+
+    private $container;
+    private $conn_mysql;
+
+    private $conn_pgsql;
 
     public $logger;
 
-    public function __construct($conn_mysql, $logger)
+    public function __construct($container)
     {
-        $this->conn_mysql = $conn_mysql;
-        $this->logger = $logger;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+
+        $this->logger = $container->get('logger');
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ ." called");
+
     }
 
     public function synchro_db_nf()
     {
         // synchro tabulky neuhr. faktur mezi MySQL a Postgresem :)
         $this->logger->info("platby\synchro_db_nf called");
-
-        global $db_ok2;
 
         $pocet_cyklu = 0;
 
@@ -73,9 +80,9 @@ class platby
             );
 
 
-            $res = pg_insert($db_ok2, 'faktury_neuhrazene', $fn_add);
+            $res = pg_insert($this->conn_pgsql, 'faktury_neuhrazene', $fn_add);
             if($res === false) {
-                $this->logger->error("platby\\synchro_db_nf pg_insert res failed! ".pg_last_error($db_ok2));
+                $this->logger->error("platby\\synchro_db_nf pg_insert res failed! ".pg_last_error($this->conn_pgsql));
             } else {
                 $res_rows = pg_affected_rows($res);
                 $this->logger->info(
@@ -95,8 +102,6 @@ class platby
     public function fn_kontrola_omezeni()
     {
         $ret = array();
-
-        global $db_ok2;
 
         $this->logger->info("platby\\fn_kontrola_omezeni called");
 
@@ -127,7 +132,7 @@ class platby
 
         $dotaz_vlastnici = pg_query($sql_dotaz);
         if ($dotaz_vlastnici === false) {
-            $this->logger->error("platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici failed! ".pg_last_error($db_ok2));
+            $this->logger->error("platby\\fn_kontrola_omezeni pg_query dotaz_vlastnici failed! ".pg_last_error($this->conn_pgsql));
             return $ret;
         } else {
             $dotaz_vlastnici_num = pg_num_rows($dotaz_vlastnici);
@@ -185,7 +190,7 @@ class platby
                 if(($duvod == "sikana") and ($nf_cislo == $cislo_faktury_sikana)) {
                     $platba_dotaz = pg_query("SELECT * FROM platby WHERE ( id_cloveka = '$id_cloveka' AND zaplaceno_za LIKE '$nf_datum2' ) ");
                     if ($platba_dotaz === false) {
-                        $this->logger->error("platby\\fn_kontrola_omezeni pg_query platba_dotaz failed! ".pg_last_error($db_ok2));
+                        $this->logger->error("platby\\fn_kontrola_omezeni pg_query platba_dotaz failed! ".pg_last_error($this->conn_pgsql));
                     }
 
                     $platba_dotaz_num = pg_num_rows($platba_dotaz);

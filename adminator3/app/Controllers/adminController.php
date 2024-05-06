@@ -8,6 +8,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class adminController extends adminatorController
 {
+    public $container;
+
     public $conn_mysql;
     public $smarty;
     public $logger;
@@ -26,7 +28,7 @@ class adminController extends adminatorController
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
-        $this->admin = new \admin($this->conn_mysql, $this->logger);
+        $this->admin = new \admin($this->container);
 
     }
 
