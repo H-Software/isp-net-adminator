@@ -16,6 +16,10 @@ class adminator
     public $smarty;
     public $logger;
 
+    private $pdoMysq;
+    
+    private $settings;
+
     public $userIdentityUsername;
 
     public $userIPAddress;
@@ -26,13 +30,16 @@ class adminator
 
     public $loggedUserEmail;
 
-    public function __construct($conn_mysql, $smarty, $logger, $userIPAddress = null)
+    public function __construct($conn_mysql, $smarty, $logger, $userIPAddress = null, $pdoMysql = null, $settings = null)
     {
         $this->logger = $logger;
         $this->logger->info("adminator\__construct called");
 
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
+
+        $this->pdoMysql = $pdoMysql;
+        $this->settings = $settings;
 
         if($userIPAddress == null) {
             $this->userIPAddress = $_SERVER['REMOTE_ADDR'];
@@ -152,6 +159,13 @@ class adminator
     public function getServerUri()
     {
         return $_SERVER["REQUEST_URI"];
+    }
+
+    public function getSqlDateFormat($column, $format = "%d.%m.%Y")
+    {
+        return $this->settings['db']['driver'] === 'sqlite' ?
+            'strftime("' . $format .'", '. $column .')' :
+            'date_format(' . $column . ', "'.$format.'")';
     }
 
     public function getTarifIptvListForForm($show_zero_value = true)
@@ -350,13 +364,13 @@ class adminator
     {
         $r = array();
 
-        $sql = "SELECT users.email, users_persistences.updated_at, DATE_FORMAT(users_persistences.updated_at, \"%d.%m.%Y %H:%i:%S\") as updated_at_f
+        $sql = "SELECT users.email, users_persistences.updated_at, ". $this->getSqlDateFormat("users_persistences.updated_at") . " as updated_at_f
                     FROM users_persistences
                     INNER JOIN users ON users_persistences.user_id = users.id
                     ORDER BY updated_at DESC LIMIT 5
             ";
 
-        $rs = $this->conn_mysql->query($sql);
+        $rs = $this->pdoMysql->query($sql);
 
         while ($data = $rs->fetch_array()) {
             // $date = strftime("%d.%m.%Y %H:%M:%S", $data["updated_at"]);
