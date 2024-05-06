@@ -121,21 +121,21 @@ else:
     <style>
         body
         {
-            font-family:arial ce;
-            font-size:12;
+            font-family: arial ce;
+            font-size: 12;
 
         }
         b
         {
-            font-size:12;
-            font-weight:bolder
+            font-size: 12;
+            font-weight: bolder
         }
         table
         {
-            border-width:1;
-            border-color:#000066;
-            background-color:white;
-            color:#000066
+            border-width: 1;
+            border-color: #000066;
+            background-color: white;
+            color: #000066
         }
         input
         {
