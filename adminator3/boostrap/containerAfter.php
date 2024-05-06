@@ -69,7 +69,7 @@ $container->set(
 
 $container->set(
     'pdoMysql',
-    function () use($capsule) {
+    function () use ($capsule) {
         return $capsule->connection("default")->getPdo();
     }
 );

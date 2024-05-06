@@ -48,6 +48,22 @@ $settings = [
                 PDO::ATTR_PERSISTENT         => false,
             ],
         ],
+        'phinx' => [
+            'paths' => [
+                'migrations' => 'database/migrations',
+                'seeds'      => 'database/seeds',
+            ],
+            'migration_base_class' => 'App\Migration\Migration',
+            'environments' => [
+                'default_migration_table' => 'phinxlog',
+                'default_database' => 'dev',
+                'test' => [
+                    'adapter' => 'sqlite',
+                    'connection' => self::$pdoMysql,
+                    'table_prefix' => ''
+                ]
+            ]
+        ]
 ];
 
 return $settings;

@@ -74,7 +74,7 @@ class board
 
         if($this->what == "new") {
             $this->sql = $this->settings['db']['driver'] === 'sqlite' ?
-                " from_date <= date(\"Y-m-s H:i:s\", time()) AND to_date >= date(\"Y-m-s H:i:s\", time()) ":
+                " from_date <= date(\"Y-m-s H:i:s\", time()) AND to_date >= date(\"Y-m-s H:i:s\", time()) " :
                 " from_date <= NOW() AND to_date >= NOW() ";
         } else {
             $this->sql = $this->settings['db']['driver'] === 'sqlite' ?

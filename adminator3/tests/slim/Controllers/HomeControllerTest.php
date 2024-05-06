@@ -28,17 +28,19 @@ final class HomeControllerTest extends AdminatorTestCase
     protected function setUp(): void
     {
 
-        $pdoConfig[ 'environments' ][ 'test' ] = [
-            'adapter' => 'sqlite',
-            'connection' => self::$pdoMysql,
-            'table_prefix' => ''
-        ];
-        $pdoConfig["paths"] = [
-            "migrations" => "database/migrations",
-            'seeds'      => 'database/seeds',
-        ];
+        $settings = require __DIR__ . '/../../../config/settings.php';
 
-        $config = new Config($pdoConfig);
+        // $pdoConfig[ 'environments' ][ 'test' ] = [
+        //     'adapter' => 'sqlite',
+        //     'connection' => self::$pdoMysql,
+        //     'table_prefix' => ''
+        // ];
+        // $pdoConfig["paths"] = [
+        //     "migrations" => "database/migrations",
+        //     'seeds'      => 'database/seeds',
+        // ];
+
+        $config = new Config($settings['phinx']);
         $manager = new Manager($config, new StringInput(' '), new NullOutput());
         $manager->migrate('test');
         $manager->seed('test');
