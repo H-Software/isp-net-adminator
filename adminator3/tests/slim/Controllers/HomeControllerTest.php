@@ -28,17 +28,11 @@ final class HomeControllerTest extends AdminatorTestCase
     protected function setUp(): void
     {
 
-        $pdoConfig[ 'environments' ][ 'test' ] = [
-            'adapter' => 'sqlite',
-            'connection' => self::$pdoMysql,
-            'table_prefix' => ''
-        ];
-        $pdoConfig["paths"] = [
-            "migrations" => "database/migrations",
-            'seeds'      => 'database/seeds',
-        ];
+        $settings = require __DIR__ . '/../../../config/settings.php';
 
-        $config = new Config($pdoConfig);
+        $settings['phinx']['environments']['test']['connection'] = self::$pdoMysql;
+
+        $config = new Config($settings['phinx']);
         $manager = new Manager($config, new StringInput(' '), new NullOutput());
         $manager->migrate('test');
         $manager->seed('test');
@@ -118,12 +112,10 @@ final class HomeControllerTest extends AdminatorTestCase
 
 
         // // test sqlite migration
-        // $sql = 'pragma table_info(\'users\');';
-        // $sql2 = "SELECT sql
-        // FROM sqlite_schema
-        // WHERE name = 'users';";
-        // $rs = self::$pdoMysql->query($sql);
-        // var_dump(print_r($rs->fetchAll()));
+        // $sql = 'pragma table_info(\'board\');';
+        // $sql2 = "SELECT * FROM board";
+        // $rs = self::$pdoMysql->query($sql2);
+        // print_r($rs->fetchAll());
 
         $output = ob_get_contents();
 
@@ -136,14 +128,15 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $outputKeywords = array(
             '<html lang="en">',
-            '<title>Adminator3 :: úvodní stránka</title>',
-            'bootstrap.min.css" rel="stylesheet"',
-            'Jste přihlášeni v administračním systému',
+            '<title>Adminator3 :: úvodní stránka</title>',  // adminator head rendered
+            'bootstrap.min.css" rel="stylesheet"',  // adminator head rendered
+            'Jste přihlášeni v administračním systému', // adminator header rendered
             '<div class="home-vypis-useru-napis" >Přihlašení uživatelé: </div>',
             'Výpis Závad/oprav',
-            'Bulletin Board - Nástěnka',
-            '</body>',
-            '</html>'
+            'Bulletin Board - Nástěnka', // board header exists
+            '<div class="table zprava-main" >', // board message exists
+            '</body>', // smarty rendered whole page
+            '</html>' // smarty rendered whole page
         );
 
         foreach ($outputKeywords as $w) {

@@ -10,7 +10,11 @@ class HomeController extends adminatorController
 {
     public $conn_mysql;
 
+    public $pdoMysql;
+
     public $conn_pgsql;
+
+    public $settings;
 
     public $smarty;
     public $logger;
@@ -22,6 +26,8 @@ class HomeController extends adminatorController
         $this->container = $container;
         $this->conn_mysql = $this->container->get('connMysql');
         $this->conn_pgsql = $this->container->get('connPgsql');
+        $this->settings = $this->container->get('settings');
+        $this->pdoMysql = $this->container->get('pdoMysql');
 
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
@@ -91,7 +97,7 @@ class HomeController extends adminatorController
             $this->smarty->assign("datum", date("j. m. Y"));
             $this->smarty->assign("sid", "");
 
-            $nastenka = new \board($this->conn_mysql, $this->logger);
+            $nastenka = new \board($this->container);
 
             $rs = $nastenka->prepare_vars();
             $this->logger->debug("homeController\board: prepare_vars result: " . var_export($rs, true));

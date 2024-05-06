@@ -10,7 +10,7 @@ use App\Middleware\FlashOldFormDataMiddleware;
 $container->set(
     'settings',
     function () {
-        return include __DIR__ . '/../config/settings.php';
+        return require __DIR__ . '/../config/settings.php';
     }
 );
 
@@ -64,6 +64,13 @@ $container->set(
     'connMysql',
     function ($c) {
         return init_mysql("Adminator3");
+    }
+);
+
+$container->set(
+    'pdoMysql',
+    function () use ($capsule) {
+        return $capsule->connection("default")->getPdo();
     }
 );
 

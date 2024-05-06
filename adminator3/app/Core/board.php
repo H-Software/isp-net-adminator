@@ -1,13 +1,19 @@
 <?php
 
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Psr\Container\ContainerInterface;
 
 class board
 {
+    private $container;
+
+    public $pdoMysql;
+
     public $conn_mysql;
 
     public $logger;
 
+    public $settings;
     public $what;
     public $action;
     public $page;
@@ -31,10 +37,13 @@ class board
 
     public $write; //jestli opravdu budem zapisovat, ci zobrazime form pro opraveni hodnot
 
-    public function __construct($conn_mysql, $logger)
+    public function __construct(ContainerInterface $container)
     {
-        $this->conn_mysql = $conn_mysql;
-        $this->logger = $logger;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->logger = $container->get('logger');
+        $this->settings = $container->get('settings');
+        $this->pdoMysql = $container->get('pdoMysql');
+
     }
 
     public function prepare_vars($nothing = null)
@@ -64,13 +73,24 @@ class board
         $zpravy = array();
 
         if($this->what == "new") {
-            $this->sql = " from_date <= NOW() AND to_date >= NOW() ";
+            $this->sql = $this->settings['db']['driver'] === 'sqlite' ?
+                " from_date <= date('now') AND to_date >= date('now') " :
+                " from_date <= NOW() AND to_date >= NOW() ";
         } else {
-            $this->sql = " to_date < NOW() ";
+            $this->sql = $this->settings['db']['driver'] === 'sqlite' ?
+                " to_date < date(\"Y-m-s H:i:s\", time()) " :
+                " to_date < NOW() ";
         }
 
-        $sql_base = "SELECT *,DATE_FORMAT(from_date, '%d.%m.%Y') as from_date2";
-        $sql_base .= ",DATE_FORMAT(to_date, '%d.%m.%Y') as to_date2 ";
+        $sql_date1 = $this->settings['db']['driver'] === 'sqlite' ?
+            'strftime("%d.%m.%Y", from_date) as from_date2' :
+            'date_format(from_date, "%d.%m.%Y") as from_date2';
+
+        $sql_date2 = $this->settings['db']['driver'] === 'sqlite' ?
+            'strftime("%d.%m.%Y", to_date) as to_date2' :
+            'date_format(to_date, "%d.%m.%Y") as to_date2';
+
+        $sql_base = "SELECT *," . $sql_date1."," . $sql_date2;
 
         $start = $this->page * $this->view_number; //první zpráva, která se zobrazí
 
@@ -79,7 +99,9 @@ class board
         $this->logger->debug("board\show_messages: SQL dump: " . var_export($sql, true));
 
         try {
-            $message = $this->conn_mysql->query($sql);
+            $message = $this->pdoMysql->query($sql);
+            // $this->query_error = "Board messages debug: <br>SQL DUMP: " . var_export($sql, true);
+
         } catch(Exception $e) {
             $this->logger->error("board\show_messages: db query failed! (Error: " . var_export($e->getMessage(), true) . ")");
             $this->query_error = "Board messages listing error! <br>db query failed: " . var_export($e->getMessage(), true);
@@ -87,17 +109,8 @@ class board
             return $zpravy;
         }
 
-        // if($message === false) {
-        //     $this->logger->error("board\show_messages: db query failed! (Error description: " . $this->conn_mysql->error. ")");
-        // }
-
         //vypíšeme tabulky se zprávami
-        while($entry = $message->fetch_array()) {
-            $zpravy[] = array("id" => $entry["id"],"author" => $entry["author"],
-                "email" => $entry["email"], "subject" => $entry["subject"],
-                "body" => $entry["body"], "from_date" => $entry["from_date2"],
-                "to_date" => $entry["to_date2"] );
-        }
+        $zpravy = $message->fetchAll();
 
         return $zpravy;
     }
@@ -108,13 +121,15 @@ class board
         $stranek = array();
 
         try {
-            $count = $this->conn_mysql->query("SELECT id FROM board WHERE ".$this->sql); //vybíráme zprávy
+            $count = $this->pdoMysql->query("SELECT id FROM board WHERE ".$this->sql); //vybíráme zprávy
         } catch (Exception $e) {
             $this->logger->error("board\show_pages: Database query failed! Caught exception: " . $e->getMessage());
             return $stranek;
         }
 
-        $page_count = ceil($count->num_rows / $this->view_number); //počet stran, na kterých se zprávy zobrazí
+        $count_num_rows = count($count->fetchAll());
+
+        $page_count = ceil($count_num_rows / $this->view_number); //počet stran, na kterých se zprávy zobrazí
 
         for($i = 0;$i < $page_count;$i++) {
             $stranek[] = array("what" => $this->what, "i" => $i, "i2" => ($i + 1), "i_akt" => $this->page);
