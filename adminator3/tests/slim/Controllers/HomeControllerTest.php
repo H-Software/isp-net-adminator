@@ -122,7 +122,7 @@ final class HomeControllerTest extends AdminatorTestCase
         ob_end_clean();
 
         // debug
-        echo $output;
+        // echo $output;
 
         $this->assertNotEmpty($output);
 
