@@ -30,14 +30,14 @@ $db2 = $settings['db2'];
 // https://stackoverflow.com/questions/34649181/multiple-database-connection-using-illuminate-database-eloquent-orm-in-codeignit/34650166#34650166
 $capsule->addConnection(
     [
-        'driver' => 'pgsql',
-        'host' => getenv("POSTGRES_SERVER") ? getenv("POSTGRES_SERVER") : "localhost",
-        'database' => 'adminator.new',
-        'username' => getenv("POSTGRES_USER") ? getenv("POSTGRES_USER") : "root",
-        'password' => getenv("POSTGRES_PASSWD") ? getenv("POSTGRES_PASSWD") : "password",
-        'charset' => 'utf8',
-        'collation' => 'utf8_unicode_ci',
-        'prefix' => '',
+        'driver'    => $db2['driver'],
+        'host'      => $db2['host'],
+        'database'  => $db2['database'],
+        'username'  => $db2['username'],
+        'password'  => $db2['password'],
+        'charset'   => $db2['charset'],
+        'collation' => $db2['collation'],
+        'prefix'    => $db2['prefix'],
     ],
     "pgsql"
 );

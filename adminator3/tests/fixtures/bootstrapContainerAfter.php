@@ -8,7 +8,7 @@ use Slim\Csrf\Guard;
 $container->set(
     'settings',
     function () {
-        return require __DIR__ . '/../../../config/settings-tests.php';
+        return require __DIR__ . '/../../config/settings-tests.php';
     }
 );
 

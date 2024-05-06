@@ -4,39 +4,21 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use Phinx\Config\Config;
-use Phinx\Migration\Manager;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\NullOutput;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use DI\CompiledContainer;
 use DI\ContainerBuilder;
-use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use PHPUnit\DbUnit\DataSet\MockDataSet;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
-    use EasyMock;
-    use \phpmock\phpunit\PHPMock;
-
     protected function setUp(): void
     {
-
-        $settings = require __DIR__ . '/../../../config/settings.php';
-
-        $settings['phinx']['environments']['test']['connection'] = self::$pdoMysql;
-
-        $config = new Config($settings['phinx']);
-        $manager = new Manager($config, new StringInput(' '), new NullOutput());
-        $manager->migrate('test');
-        $manager->seed('test');
-
+        // prepare data for forms
+        //
         $_POST = array();
         $_POST['show_se_cat'] = "null";
 
@@ -48,7 +30,6 @@ final class HomeControllerTest extends AdminatorTestCase
         $_SERVER = array();
         $_SERVER['HTTP_HOST'] = "127.0.0.1";
         $_SERVER['SCRIPT_URL'] = "/home";
-
     }
 
     protected function tearDown(): void
@@ -60,23 +41,7 @@ final class HomeControllerTest extends AdminatorTestCase
         // $this->markTestSkipped('under construction');
         $self = $this;
 
-        // prepare DI
-        $builder = new ContainerBuilder();
-        $builder->addDefinitions('tests/slim/fixtures/bootstrapContainer.php');
-        $container = $builder->build();
-
-        $rfMock = \Mockery::mock(ResponseFactoryInterface::class);
-        $responseFactory = $rfMock;
-
-        require_once __DIR__ . '/../fixtures/bootstrapContainerAfter.php';
-
-        // Not compiled
-        $this->assertNotInstanceOf(CompiledContainer::class, $container);
-
-        $this->assertInstanceOf(ContainerInterface::class, $container);
-
-        $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
-        $this->assertIsObject($container->get('smarty'));
+        $container = self::initDIcontainer();
 
         // mock "underlaying" class for helper functions/logic
         $adminatorMock = \Mockery::mock(
@@ -142,11 +107,14 @@ final class HomeControllerTest extends AdminatorTestCase
         foreach ($outputKeywords as $w) {
 
             /*
-            // N.B.: this causes printing output to stdout
-            // maybe will works "assertThat()"
-            // -> https://docs.phpunit.de/en/9.6/assertions.html#assertthat
+            // N.B.:
+            // assert below causes printing output to stdout
+            // workaround is using this foraech with assertFalse
             */
             // $this->assertStringContainsString($output, $w);
+
+            // TODO: maybe will works "assertThat()"
+            // -> https://docs.phpunit.de/en/9.6/assertions.html#assertthat
 
             if (!str_contains($output, $w)) {
                 $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
