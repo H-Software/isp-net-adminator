@@ -353,14 +353,13 @@ class adminator
 
             $this->logger->error(__CLASS__ . '\\' .__FUNCTION__ . ": " . $error_message);
 
-            $this->smarty->assign("logged_users_error_message", $error_message);      
+            $this->smarty->assign("logged_users_error_message", $error_message);
         }
 
-        if(is_object($rs)){
+        if(is_object($rs)) {
             $data = $rs->fetchAll();
         }
 
-        // $this->smarty->assign("logged_users_error_message", $sql);   
         $this->smarty->assign("logged_users", $data);
     }
 
