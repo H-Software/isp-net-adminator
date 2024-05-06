@@ -163,7 +163,7 @@ class HomeController extends adminatorController
 
             $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
 
-            $opravy = new \opravy($this->conn_mysql, $this->conn_pgsql, $this->logger);
+            $opravy = new \opravy($this->container);
 
             $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
             // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));

@@ -297,7 +297,8 @@ class adminator
             } elseif($i == 2) {
                 $sql = "SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '0' ";
             } elseif($i == 3) {
-                $sql = "SELECT datum,DATE_FORMAT(datum, '%d.%m.%Y %H:%i:%s') as datum FROM fn_import_log order by id";
+                // $sql = "SELECT datum,DATE_FORMAT(datum, '%d.%m.%Y %H:%i:%s') as datum FROM fn_import_log order by id";
+                $sql = "SELECT datum, " . $this->getSqlDateFormat('datum'). " as datum FROM fn_import_log order by id";
             }
 
             try {
@@ -325,9 +326,7 @@ class adminator
             }
         }
 
-        if(strlen($error_messages) > 0) {
-            $ret[4] = $error_messages;
-        }
+        $ret[4] = $error_messages;
 
         return $ret;
     }
