@@ -108,7 +108,7 @@ class board
         }
 
         //vypíšeme tabulky se zprávami
-        $zpravy = $message->fetchAll(PDO::FETCH_ASSOC);
+        $zpravy = $message->fetchAll();
 
         return $zpravy;
     }
@@ -119,13 +119,15 @@ class board
         $stranek = array();
 
         try {
-            $count = $this->conn_mysql->query("SELECT id FROM board WHERE ".$this->sql); //vybíráme zprávy
+            $count = $this->pdoMysql->query("SELECT id FROM board WHERE ".$this->sql); //vybíráme zprávy
         } catch (Exception $e) {
             $this->logger->error("board\show_pages: Database query failed! Caught exception: " . $e->getMessage());
             return $stranek;
         }
 
-        $page_count = ceil($count->num_rows / $this->view_number); //počet stran, na kterých se zprávy zobrazí
+        $count_num_rows = count($count->fetchAll());
+
+        $page_count = ceil($count_num_rows / $this->view_number); //počet stran, na kterých se zprávy zobrazí
 
         for($i = 0;$i < $page_count;$i++) {
             $stranek[] = array("what" => $this->what, "i" => $i, "i2" => ($i + 1), "i_akt" => $this->page);

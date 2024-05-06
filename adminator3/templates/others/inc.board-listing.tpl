@@ -12,18 +12,14 @@
        {/if}
 
         {section name="entry" loop=$zpravy}
-
           <div class="tableheading" style="padding-top: 2px; " >zpráva č. {$zpravy[entry].id}</div>
 
           <div class="table zprava-main" >
             <a href="mailto:{$zpravy[entry].email}" ><b>{$zpravy[entry].author}</b></a>
             <br>
             <b>{$zpravy[entry].subject}</b> [{$zpravy[entry].from_date} - {$zpravy[entry].to_date}]
-            <br><br>{$zpravy[entry].body}
+            <div class="board-message-body">{$zpravy[entry].body}</div>
           </div>
-
-          <br>
-
         {/section}
           
         <div style="text-align: right; border-top: 1px solid #7D7642; padding-top: 5px; " class="table" >
