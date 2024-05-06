@@ -63,7 +63,12 @@ final class HomeControllerTest extends AdminatorTestCase
         // $adminatorMock->shouldReceive('list_logged_users')->andReturn("");
         // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
-        $homeController = new HomeController($container, $adminatorMock);
+        $opravyMock = \Mockery::mock(
+            \opravy::class,
+        );
+        $opravyMock->shouldReceive('vypis_opravy')->andReturn(["mock -> no data"]);
+
+        $homeController = new HomeController($container, $adminatorMock, $opravyMock);
 
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         $response = $this->createMock(ResponseInterface::class);
@@ -84,7 +89,7 @@ final class HomeControllerTest extends AdminatorTestCase
         ob_end_clean();
 
         // debug
-        // echo $output;
+        echo $output;
 
         $this->assertNotEmpty($output);
 
