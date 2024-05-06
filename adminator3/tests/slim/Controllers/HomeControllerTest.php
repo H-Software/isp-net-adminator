@@ -142,11 +142,14 @@ final class HomeControllerTest extends AdminatorTestCase
         foreach ($outputKeywords as $w) {
 
             /*
-            // N.B.: this causes printing output to stdout
-            // maybe will works "assertThat()"
-            // -> https://docs.phpunit.de/en/9.6/assertions.html#assertthat
+            // N.B.:
+            // assert below causes printing output to stdout
+            // workaround is using this foraech with assertFalse
             */
             // $this->assertStringContainsString($output, $w);
+
+            // TODO: maybe will works "assertThat()"
+            // -> https://docs.phpunit.de/en/9.6/assertions.html#assertthat
 
             if (!str_contains($output, $w)) {
                 $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");

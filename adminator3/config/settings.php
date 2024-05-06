@@ -49,7 +49,15 @@ $settings = [
             ],
         ],
         'db2' => [
-            // TODO: move all postgres config here
+            // postgres config
+            'driver' => 'pgsql',
+            'host' => getenv("POSTGRES_SERVER") ? getenv("POSTGRES_SERVER") : "localhost",
+            'database' => 'adminator.new',
+            'username' => getenv("POSTGRES_USER") ? getenv("POSTGRES_USER") : "root",
+            'password' => getenv("POSTGRES_PASSWD") ? getenv("POSTGRES_PASSWD") : "password",
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
         ],
         'phinx' => [
             'paths' => [
