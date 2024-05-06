@@ -74,7 +74,7 @@ class board
 
         if($this->what == "new") {
             $this->sql = $this->settings['db']['driver'] === 'sqlite' ?
-                " from_date <= date(\"Y-m-s H:i:s\", time()) AND to_date >= date(\"Y-m-s H:i:s\", time()) " :
+                " from_date <= date('now') AND to_date >= date('now') " :
                 " from_date <= NOW() AND to_date >= NOW() ";
         } else {
             $this->sql = $this->settings['db']['driver'] === 'sqlite' ?
@@ -100,6 +100,8 @@ class board
 
         try {
             $message = $this->pdoMysql->query($sql);
+            // $this->query_error = "Board messages debug: <br>SQL DUMP: " . var_export($sql, true);
+
         } catch(Exception $e) {
             $this->logger->error("board\show_messages: db query failed! (Error: " . var_export($e->getMessage(), true) . ")");
             $this->query_error = "Board messages listing error! <br>db query failed: " . var_export($e->getMessage(), true);
