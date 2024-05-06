@@ -5,6 +5,15 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Phinx\Config\Config;
+use Phinx\Migration\Manager;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
+use DI\CompiledContainer;
+use DI\ContainerBuilder;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -12,9 +21,44 @@ abstract class AdminatorTestCase extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        require __DIR__ . "/fixtures/bootstrapDatabase.php";
+        $settings = require __DIR__ . '/../config/settings.php';
 
+        // boot ORM and get DB handler
+        require __DIR__ . "/fixtures/bootstrapDatabase.php";
         self::$pdoMysql = $capsule->connection("default")->getPdo();
+
+        // override DB connection to sqlite
+        $settings['phinx']['environments']['test']['connection'] = self::$pdoMysql;
+
+        // prepare DB structure and data
+        $config = new Config($settings['phinx']);
+        $manager = new Manager($config, new StringInput(' '), new NullOutput());
+        $manager->migrate('test');
+        $manager->seed('test');
+
+    }
+
+    public function initDIcontainer()
+    {
+        // prepare DI
+        $builder = new ContainerBuilder();
+        $builder->addDefinitions('tests/fixtures/bootstrapContainer.php');
+        $container = $builder->build();
+
+        $rfMock = \Mockery::mock(ResponseFactoryInterface::class);
+        $responseFactory = $rfMock;
+
+        require_once __DIR__ . '/../tests/fixtures/bootstrapContainerAfter.php';
+
+        // Not compiled
+        $this->assertNotInstanceOf(CompiledContainer::class, $container);
+
+        $this->assertInstanceOf(ContainerInterface::class, $container);
+
+        $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
+        $this->assertIsObject($container->get('smarty'));
+
+        return $container;
     }
 
     public static function tearDownAfterClass(): void

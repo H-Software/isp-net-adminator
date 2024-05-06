@@ -4,39 +4,22 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use Phinx\Config\Config;
-use Phinx\Migration\Manager;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\NullOutput;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use DI\CompiledContainer;
 use DI\ContainerBuilder;
-use EasyMock\EasyMock;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use PHPUnit\DbUnit\DataSet\MockDataSet;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
-    use EasyMock;
-    use \phpmock\phpunit\PHPMock;
 
     protected function setUp(): void
     {
-
-        $settings = require __DIR__ . '/../../../config/settings.php';
-
-        $settings['phinx']['environments']['test']['connection'] = self::$pdoMysql;
-
-        $config = new Config($settings['phinx']);
-        $manager = new Manager($config, new StringInput(' '), new NullOutput());
-        $manager->migrate('test');
-        $manager->seed('test');
-
+        // prepare data for forms
+        //
         $_POST = array();
         $_POST['show_se_cat'] = "null";
 
@@ -60,23 +43,7 @@ final class HomeControllerTest extends AdminatorTestCase
         // $this->markTestSkipped('under construction');
         $self = $this;
 
-        // prepare DI
-        $builder = new ContainerBuilder();
-        $builder->addDefinitions('tests/slim/fixtures/bootstrapContainer.php');
-        $container = $builder->build();
-
-        $rfMock = \Mockery::mock(ResponseFactoryInterface::class);
-        $responseFactory = $rfMock;
-
-        require_once __DIR__ . '/../fixtures/bootstrapContainerAfter.php';
-
-        // Not compiled
-        $this->assertNotInstanceOf(CompiledContainer::class, $container);
-
-        $this->assertInstanceOf(ContainerInterface::class, $container);
-
-        $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
-        $this->assertIsObject($container->get('smarty'));
+        $container = self::initDIcontainer();
 
         // mock "underlaying" class for helper functions/logic
         $adminatorMock = \Mockery::mock(
