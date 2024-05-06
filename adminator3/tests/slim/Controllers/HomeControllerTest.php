@@ -15,7 +15,6 @@ use Psr\Http\Message\ResponseFactoryInterface;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
-
     protected function setUp(): void
     {
         // prepare data for forms
@@ -31,7 +30,6 @@ final class HomeControllerTest extends AdminatorTestCase
         $_SERVER = array();
         $_SERVER['HTTP_HOST'] = "127.0.0.1";
         $_SERVER['SCRIPT_URL'] = "/home";
-
     }
 
     protected function tearDown(): void

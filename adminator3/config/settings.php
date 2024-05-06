@@ -27,9 +27,9 @@ $settings = [
         'db' => [
             'driver'        => 'mysql',
             'use_socket'    => false,
-            'host'          => getenv("MYSQL_SERVER") ? getenv("MYSQL_SERVER") : "localhost",
+            'host'          => getenv("MYSQL_SERVER") ? getenv("MYSQL_SERVER") : null,
             'port'          => 3306,
-            'socket'        => 'localhost;unix_socket=/var/run/mysqld/mysqld.sock',
+            // 'socket'        => 'localhost;unix_socket=/var/run/mysqld/mysqld.sock',
             'database'      => 'adminator2',
             'username'      => getenv("MYSQL_USER") ? getenv("MYSQL_USER") : "root",
             'password'      => getenv("MYSQL_PASSWD") ? getenv("MYSQL_PASSWD") : "password",

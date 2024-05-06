@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require __DIR__ ."/../app/Migration/Migration.php";
+
 require __DIR__ ."/../boostrap/database.php";
 
 $settings = require __DIR__ . '/../config/settings.php';
