@@ -1,5 +1,5 @@
 
- <div style="width: 800px; position: relative; margin-left: auto; margin-right: auto; padding-bottom: 30px; padding-top: 20px; " >
+ <div style="width: 80%; position: relative; margin-left: auto; margin-right: auto; padding-bottom: 30px; padding-top: 20px; " >
 	    
    <div style="font-weight: bold; font-size: 15px; padding-bottom: 10px;" >
       Informace z modulu <!--<a href="fn.php" >-->"Neuhrazené faktury"<!--</a>-->

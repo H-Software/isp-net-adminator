@@ -287,6 +287,7 @@ class adminator
     {
         $error_messages = ""; 
         $ret = array();
+        $dotaz_fn = "";
 
         for ($i = 0; $i < 4; $i++) {
             if($i == 0){
@@ -303,22 +304,22 @@ class adminator
             }
 
             try {
-                $dotaz_fn = $this->conn_mysql->query($sql);
-                $dotaz_fn_radku = $dotaz_fn->num_rows;
+                $dotaz_fn = $this->pdoMysql->query($sql);
+                $dotaz_fn_radku = count($dotaz_fn->fetchAll());
                 $ret[$i] = $dotaz_fn_radku;
             } catch (Exception $e) {
                 $error_message = "PDO query failed! Catched Error: " . var_export($e->getMessage(), true);
-                $error_messages .= "<div>" . $error_message . "</div>";
+                $error_messages .= "<div>" . $error_message . "</div>\n";
                 $this->logger->error(__CLASS__ . '\\' .__FUNCTION__ . ": " . $error_message);
     
                 $ret[$i] = 0;
             }
 
             if($i == 3 and is_object($dotaz_fn)){
-                while($data3 = $dotaz_fn->fetch_array()) {
-                    $datum_fn3 = $data3["datum"];
-                }
-        
+                $data3 = $dotaz_fn->fetchAll();
+
+                $datum_fn3 = (isset($data3[0])) ? $data3[0]["datum"] : "";
+                
                 if(strlen($datum_fn3) > 0) {
                     $ret[3] = $datum_fn3;
                 } else {
