@@ -51,7 +51,7 @@ class opravy
         } catch (Exception $e) {
             $this->logger->error('opravy\vypis_opravy mysql_query dotaz failed! Caught exception: ' . $e->getMessage());
 
-            $ret[0] = "<tr><td colspan=\"".$pocet_bunek."\" >>Error: Database query failed! Caught exception: " . $e->getMessage() . "</td></tr>";
+            $ret[0] = "<tr><td colspan=\"".$pocet_bunek."\" >Error: Database query failed! Caught exception: " . $e->getMessage() . "</td></tr>";
             return $ret;
         }
 
