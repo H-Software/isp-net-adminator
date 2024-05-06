@@ -80,7 +80,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         // // test sqlite migration
         // $sql = 'pragma table_info(\'board\');';
-        // $sql2 = "SELECT * FROM users";
+        // $sql2 = "SELECT * FROM board";
         // $rs = self::$pdoMysql->query($sql2);
         // print_r($rs->fetchAll());
 
@@ -89,7 +89,7 @@ final class HomeControllerTest extends AdminatorTestCase
         ob_end_clean();
 
         // debug
-        echo $output;
+        // echo $output;
 
         $this->assertNotEmpty($output);
 

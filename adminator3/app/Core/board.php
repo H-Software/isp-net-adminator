@@ -109,7 +109,6 @@ class board
             return $zpravy;
         }
 
-        //vypíšeme tabulky se zprávami
         $zpravy = $message->fetchAll();
 
         return $zpravy;

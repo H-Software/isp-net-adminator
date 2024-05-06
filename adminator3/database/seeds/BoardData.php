@@ -25,7 +25,7 @@ class BoardData extends AbstractSeed
                 'email'         => $faker->email,
                 'subject'       => $faker->words(5, true),
                 'body'          => $faker->text(60),
-                'from_date'     => date('Y-m-d', strtotime('today')),
+                'from_date'     => date('Y-m-d', strtotime('yesterday')),
                 'to_date'       => date('Y-m-d', strtotime('+'. $i .' weeks')),
             ];
         }
