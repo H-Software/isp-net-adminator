@@ -16,9 +16,9 @@ class UsersAndPersistenceData extends AbstractSeed
     public function run()
     {
         $faker = Faker\Factory::create();
-        $data = [];
+        $dataUsers = [];
 
-        $data[] = [
+        $dataUsers[] = [
             'username'      => "administrator",
             'email'         => "admin@admin",
             'password'      => '$2y$10$uZ7ZBCl/Shp9sW.QRy10CuFxkO/Vg7Yr1kbVJzhSACNQoohChkxaW',
@@ -29,6 +29,18 @@ class UsersAndPersistenceData extends AbstractSeed
         ];
 
         // This is a cool short-hand method
-        $this->insert('users', $data);
+        $this->insert('users', $dataUsers);
+
+        $data2 = [];
+
+        $data2[] = [
+            'user_id'      => 1,
+            'code'          => $faker->sha1(),
+            'created_at'	=> $faker->unixTime($faker->dateTimeInInterval('-1 week', '+3 days')),
+            'updated_at'	=> $faker->unixTime($faker->dateTimeInInterval('-1 week', '+3 days')),
+        ];
+
+        // This is a cool short-hand method
+        $this->insert('users_persistences', $data2);
     }
 }
