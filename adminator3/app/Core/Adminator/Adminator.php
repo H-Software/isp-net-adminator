@@ -16,6 +16,10 @@ class adminator
     public $smarty;
     public $logger;
 
+    public $pdoMysql;
+
+    public $settings;
+
     public $userIdentityUsername;
 
     public $userIPAddress;
@@ -26,13 +30,16 @@ class adminator
 
     public $loggedUserEmail;
 
-    public function __construct($conn_mysql, $smarty, $logger, $userIPAddress = null)
+    public function __construct($conn_mysql, $smarty, $logger, $userIPAddress = null, $pdoMysql = null, $settings = null)
     {
         $this->logger = $logger;
         $this->logger->info("adminator\__construct called");
 
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
+
+        $this->pdoMysql = $pdoMysql;
+        $this->settings = $settings;
 
         if($userIPAddress == null) {
             $this->userIPAddress = $_SERVER['REMOTE_ADDR'];
@@ -154,6 +161,24 @@ class adminator
         return $_SERVER["REQUEST_URI"];
     }
 
+    public function getSqlDateFormat($column, $format = "%d.%m.%Y")
+    {
+        $formatedDate = $this->settings['db']['driver'] === 'sqlite' ?
+            'strftime("' . $format .'", '. $column .')' :
+            'date_format(' . $column . ', "'.$format.'")';
+
+        return $formatedDate;
+    }
+
+    public function getSqlTimestampFormat($column, $format = "%d.%m.%Y")
+    {
+        $formatedDate = $this->settings['db']['driver'] === 'sqlite' ?
+            'strftime("' . $format .'", datetime('. $column .', \'unixepoch\'))' :
+            'date_format(' . $column . ', "'.$format.'")';
+
+        return $formatedDate;
+    }
+
     public function getTarifIptvListForForm($show_zero_value = true)
     {
 
@@ -248,46 +273,6 @@ class adminator
         return $ret;
     }
 
-    public function vypis_prihlasene_uziv()
-    {
-        $ret = array();
-
-        $MSQ_USER2 = $this->conn_mysql->query("SELECT nick, level FROM autorizace");
-        $MSQ_USER_COUNT = $MSQ_USER2->num_rows;
-
-        $ret[0] = $MSQ_USER_COUNT;
-
-        //prvne vypisem prihlaseneho
-        $MSQ_USER_NICK = $this->conn_mysql->query("SELECT nick, level FROM autorizace WHERE nick LIKE '" . $this->userIdentityUsername . "' ");
-
-        if ($MSQ_USER_NICK->num_rows <> 1) {
-            $ret[100] = true;
-            $ret[101] = "Chyba! Vyber nicku nelze provest.";
-        } else {
-            while ($data_user_nick = $MSQ_USER_NICK->fetch_array()) {
-                $ret[1] = $data_user_nick["nick"];
-                $ret[2] = $data_user_nick["level"];
-            }
-        } // konec else
-
-        // ted najilejeme prihlaseny lidi ( vsecky ) do pop-up okna
-        // if ( $MSQ_USER_COUNT < 1 )
-        // { $obsah_pop_okna .= "Nikdo nepřihlášen. (divny)"; }
-        // else
-        // {
-
-        //     while ($data_user2 = $MSQ_USER2->fetch_array())
-        //     {
-        //         $obsah_pop_okna .= "jméno: ".$data_user2["nick"].", level: ".$data_user2["level"].", ";
-        //     } //konec while
-
-        //     $ret[3] = $obsah_pop_okna;
-
-        // } // konec if
-
-        return $ret;
-    }
-
     public function show_stats_faktury_neuhr()
     {
         //
@@ -346,26 +331,36 @@ class adminator
         return $ret;
     }
 
-    public function list_logged_users()
+    public function list_logged_users(): void
     {
-        $r = array();
+        $data = array();
+        $rs = "";
 
-        $sql = "SELECT users.email, users_persistences.updated_at, DATE_FORMAT(users_persistences.updated_at, \"%d.%m.%Y %H:%i:%S\") as updated_at_f
-                    FROM users_persistences
-                    INNER JOIN users ON users_persistences.user_id = users.id
-                    ORDER BY updated_at DESC LIMIT 5
+        $sql = "SELECT email, ". $this->getSqlTimestampFormat("last_login") . " as date
+                    FROM users
+                    ORDER BY last_login DESC 
+                    LIMIT 5
             ";
 
-        $rs = $this->conn_mysql->query($sql);
+        try {
+            $this->logger->debug(__CLASS__ . '\\' .__FUNCTION__
+                                    . ": SQL dump: "
+                                    . var_export($sql, true));
 
-        while ($data = $rs->fetch_array()) {
-            // $date = strftime("%d.%m.%Y %H:%M:%S", $data["updated_at"]);
-            $logged_users[] = array( "email" => $data["email"], "date" => $data['updated_at_f']);
+            $rs = $this->pdoMysql->query($sql);
+        } catch (Exception $e) {
+            $error_message = "PDO query failed! Catched Error: " . var_export($e->getMessage(), true);
+
+            $this->logger->error(__CLASS__ . '\\' .__FUNCTION__ . ": " . $error_message);
+
+            $this->smarty->assign("logged_users_error_message", $error_message);
         }
 
-        $this->smarty->assign("logged_users", $logged_users);
+        if(is_object($rs)) {
+            $data = $rs->fetchAll();
+        }
 
-        return true;
+        $this->smarty->assign("logged_users", $data);
     }
 
     public static function convertIntToBoolTextCs($v)

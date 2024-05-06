@@ -23,7 +23,7 @@ class UsersAndPersistenceData extends AbstractSeed
             'email'         => "admin@admin",
             'password'      => '$2y$10$uZ7ZBCl/Shp9sW.QRy10CuFxkO/Vg7Yr1kbVJzhSACNQoohChkxaW',
             'level'         => 101,
-            'last_login'    => $faker->unixTime(),
+            'last_login'    => $faker->unixTime($faker->dateTimeInInterval('-1 day', '+1 days')),
             'created_at'	=> $faker->unixTime($faker->dateTimeInInterval('-1 week', '+3 days')),
             'updated_at'	=> $faker->unixTime($faker->dateTimeInInterval('-1 week', '+3 days')),
         ];
