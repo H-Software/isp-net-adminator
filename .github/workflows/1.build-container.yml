@@ -39,7 +39,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      # - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v3
 
       # https://docs.docker.com/build/cache/backends/gha/#using-dockerbuild-push-action
       - name: Build and push
