@@ -681,16 +681,6 @@ parameters:
 			path: app/Middleware/SessionMiddleware.php
 
 		-
-			message: "#^PHPDoc type array of property App\\\\Models\\\\ArchivZmen\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
-			count: 1
-			path: app/Models/ArchivZmen.php
-
-		-
-			message: "#^PHPDoc type array of property App\\\\Models\\\\PartnerOrder\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
-			count: 1
-			path: app/Models/PartnerOrder.php
-
-		-
 			message: "#^Class aboutController not found\\.$#"
 			count: 3
 			path: app/routing.php

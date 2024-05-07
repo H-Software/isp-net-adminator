@@ -18,6 +18,11 @@ class PageLevel extends Model
 
     public $desc;
 
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'level',
         'desc',
