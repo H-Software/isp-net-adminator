@@ -41,6 +41,8 @@ services:
       # apache logs
       - /var/log/apache2/adminator:uid=33,gid=33
       # for smarty
+      - /var/www/html/adminator2/cache:uid=33,gid=33
+      - /var/www/html/adminator3/cache:uid=33,gid=33
       - /var/www/html/adminator2/templates_c:uid=33,gid=33
       - /var/www/html/adminator3/templates_c:uid=33,gid=33
       # for nette loader

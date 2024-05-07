@@ -4,4 +4,21 @@
 includes:
 	- phpstan-baseline.neon
 parameters:
-	level: 0
+	level: 5
+	excludePaths:
+		- app/Core/shared/voip.class.php
+		- app/Core/shared/ros_api_qos.php
+		- app/Core/shared/ros_api_restriction.php
+	ignoreErrors:
+	-
+		message: '#Undefined variable: \$.*#'
+		path: *
+	-
+		message: "#^Variable \\$.* might not be defined\\.$#"
+		path: *
+	-
+		message: "#^Function (mysql|ereg)_.* not found\\.$#"
+		path: print/*.php
+	-
+		message: "#^Function mysql_.* not found\\.$#"
+		path: include/main.function.shared.php
