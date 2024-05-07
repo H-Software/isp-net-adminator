@@ -84,10 +84,8 @@ class partner extends adminator
         return true;
     }
 
-    public function list($mode = null)
+    private function getItems($mode = null)
     {
-        $output = "";
-
         $this->listItems = PartnerOrder::get()
             ->sortByDesc('id');
 
@@ -107,6 +105,25 @@ class partner extends adminator
 
         list($linkPreviousPage, $linkCurrentPage, $linkNextPage) = adminator::paginateGetLinks($data);
         // echo "<pre>" . var_export($data, true) . "</pre>";
+
+        return array(
+            $data,
+            $linkPreviousPage,
+            $linkCurrentPage,
+            $linkNextPage
+        );
+    }
+
+    public function list($mode = null)
+    {
+        $output = "";
+
+        list(
+            $data,
+            $linkPreviousPage,
+            $linkCurrentPage,
+            $linkNextPage
+        ) = $this->getItems($mode);
 
         if(count($data) == 0) {
             $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
