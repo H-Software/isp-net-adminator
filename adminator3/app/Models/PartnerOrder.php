@@ -51,10 +51,9 @@ class PartnerOrder extends Model
         'vlozil'
     ];
 
+
     /**
      * present integer like a text value
-     *
-     * @var int
      */
     protected function akceptovano(): Attribute
     {
@@ -65,8 +64,6 @@ class PartnerOrder extends Model
 
     /**
      * present integer like a text value
-     *
-     * @var int
      */
     protected function pripojeno(): Attribute
     {
@@ -77,8 +74,6 @@ class PartnerOrder extends Model
 
     /**
      * present integer like a text value
-     *
-     * @var int
      */
     protected function prio(): Attribute
     {

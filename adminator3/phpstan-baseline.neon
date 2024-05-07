@@ -765,25 +765,21 @@ parameters:
 			count: 1
 			path: app/Models/ArchivZmen.php
 
-		-
-			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
-			count: 3
-			path: app/Models/PartnerOrder.php
+		# -
+		# 	message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+		# 	count: 3
+		# 	path: app/Models/PartnerOrder.php
 
-		-
-			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
-			count: 3
-			path: app/Models/PartnerOrder.php
+		# -
+		# 	message: "#^PHPDoc tag @var does not specify variable name\\.$#"
+		# 	count: 3
+		# 	path: app/Models/PartnerOrder.php
 
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\PartnerOrder\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/PartnerOrder.php
 
-		-
-			message: "#^Call to static method createHelperSet\\(\\) on an unknown class Doctrine\\\\ORM\\\\Tools\\\\Console\\\\ConsoleRunner\\.$#"
-			count: 1
-			path: app/cli-config.php
 
 		-
 			message: "#^Class aboutController not found\\.$#"
@@ -870,15 +866,15 @@ parameters:
 			count: 1
 			path: others-web-simelon.php
 
-		-
-			message: "#^Function ereg not found\\.$#"
-			count: 1
-			path: print/inc.reg.form.gen.prepare.vars.2.php
+		# -
+		# 	message: "#^Function ereg not found\\.$#"
+		# 	count: 1
+		# 	path: print/inc.reg.form.gen.prepare.vars.2.php
 
-		-
-			message: "#^Function ereg not found\\.$#"
-			count: 1
-			path: print/inc.reg.form.gen.prepare.vars.php
+		# -
+		# 	message: "#^Function ereg not found\\.$#"
+		# 	count: 1
+		# 	path: print/inc.reg.form.gen.prepare.vars.php
 
 		-
 			message: "#^Binary operation \"\\+\" between string and 1 results in an error\\.$#"
