@@ -4,4 +4,17 @@
 includes:
 	- phpstan-baseline.neon
 parameters:
-	level: 0
+	level: 5
+	ignoreErrors:
+	-
+		message: '#Undefined variable: \$.*#'
+		path: *
+	-
+		message: "#^Variable \\$.* might not be defined\\.$#"
+		path: *
+	-
+		message: "#^Function mysql_.* not found\\.$#"
+		path: print/*.php
+	-
+		message: "#^Function mysql_.* not found\\.$#"
+		path: include/main.function.shared.php

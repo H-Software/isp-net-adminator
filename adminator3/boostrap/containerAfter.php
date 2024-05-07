@@ -53,7 +53,8 @@ $container->set(
     'smarty',
     function ($c) {
         $smarty = new Smarty();
-        $smarty->compile_check = true;
+        $smarty->compile_check = Smarty::COMPILECHECK_ON;
+        $smarty->caching = Smarty::CACHING_LIFETIME_SAVED;
         //$smarty->debugging = true;
 
         return $smarty;

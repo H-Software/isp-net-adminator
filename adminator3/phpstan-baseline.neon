@@ -1,23 +1,163 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Auth/Password.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 2
+			path: app/Auth/Password.php
+
+		-
+			message: "#^Property App\\\\Auth\\\\passwordHelper\\:\\:\\$container is never read, only written\\.$#"
+			count: 1
+			path: app/Auth/Password.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: app/Auth/serviceHelper.php
+
+		-
+			message: "#^Property auth_service\\:\\:\\$container is never read, only written\\.$#"
+			count: 1
+			path: app/Auth/serviceHelper.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:authenticate\\(\\)\\.$#"
+			count: 1
+			path: app/Controllers/Auth/AuthController.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 2
+			path: app/Controllers/Auth/AuthController.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
+			count: 1
+			path: app/Controllers/Auth/AuthController.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:logout\\(\\)\\.$#"
+			count: 1
+			path: app/Controllers/Auth/AuthController.php
+
+		-
+			message: "#^Constructor of class App\\\\Controllers\\\\Auth\\\\AuthController has an unused parameter \\$flash\\.$#"
+			count: 1
+			path: app/Controllers/Auth/AuthController.php
+
+		-
+			message: "#^Offset 'persist' on array\\{email\\: mixed, password\\: mixed\\} in isset\\(\\) does not exist\\.$#"
+			count: 1
+			path: app/Controllers/Auth/AuthController.php
+
+		-
+			message: "#^Constructor of class App\\\\Controllers\\\\Auth\\\\PasswordController has an unused parameter \\$flash\\.$#"
+			count: 1
+			path: app/Controllers/Auth/PasswordController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Controllers\\\\aboutController\\:\\:\\$adminator\\.$#"
+			count: 7
+			path: app/Controllers/aboutController.php
+
+		-
+			message: "#^Call to an undefined method Psr\\\\Http\\\\Message\\\\ResponseInterface\\:\\:withJson\\(\\)\\.$#"
+			count: 1
+			path: app/Controllers/adminatorController.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: app/Controllers/adminatorController.php
+
+		-
 			message: "#^Function ereg not found\\.$#"
 			count: 1
 			path: app/Controllers/archivZmenController.php
 
 		-
-			message: "#^Undefined variable\\: \\$sid$#"
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: app/Controllers/archivZmenController.php
+
+		-
+			message: "#^Left side of && is always true\\.$#"
+			count: 1
+			path: app/Controllers/archivZmenController.php
+
+		-
+			message: "#^Variable \\$updated in isset\\(\\) is never defined\\.$#"
+			count: 1
+			path: app/Controllers/archivZmenController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Controllers\\\\othersController\\:\\:\\$adminator\\.$#"
+			count: 5
+			path: app/Controllers/othersController.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 			count: 1
 			path: app/Controllers/othersController.php
 
 		-
-			message: "#^Undefined variable\\: \\$body$#"
+			message: "#^If condition is always false\\.$#"
 			count: 1
+			path: app/Controllers/othersController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Controllers\\\\platbyController\\:\\:\\$adminator\\.$#"
+			count: 7
 			path: app/Controllers/platbyController.php
 
 		-
-			message: "#^Undefined variable\\: \\$r$#"
+			message: "#^Access to an undefined property App\\\\Controllers\\\\topologyController\\:\\:\\$adminator\\.$#"
+			count: 5
+			path: app/Controllers/topologyController.php
+
+		-
+			message: "#^Access to an undefined property App\\\\Controllers\\\\workController\\:\\:\\$adminator\\.$#"
+			count: 3
+			path: app/Controllers/workController.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\PageLevel\\:\\:find\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Adminator/Adminator.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Adminator/Adminator.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\ArchivZmen\\:\\:create\\(\\)\\.$#"
 			count: 2
+			path: app/Core/ArchivZmen.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 1
+			path: app/Core/ArchivZmen.php
+
+		-
+			message: "#^Property App\\\\Core\\\\ArchivZmen\\:\\:\\$conn_pgsql is never read, only written\\.$#"
+			count: 1
+			path: app/Core/ArchivZmen.php
+
+		-
+			message: "#^Variable \\$pocet in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: app/Core/ArchivZmen.php
+
+		-
+			message: "#^Variable \\$typ in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
 			path: app/Core/ArchivZmen.php
 
 		-
@@ -26,17 +166,47 @@ parameters:
 			path: app/Core/ArchivZmenUcetni.php
 
 		-
-			message: "#^Undefined variable\\: \\$sql$#"
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 			count: 1
 			path: app/Core/ArchivZmenUcetni.php
 
 		-
-			message: "#^Undefined variable\\: \\$error$#"
+			message: "#^Constructor of class zmeny_ucetni has an unused parameter \\$auth\\.$#"
+			count: 1
+			path: app/Core/ArchivZmenUcetni.php
+
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\FakturacniSkupina\\:\\:get\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Customer/fakturacniSkupiny.class.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Customer/fakturacniSkupiny.class.php
+
+		-
+			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
+			count: 1
+			path: app/Core/Customer/fakturacniSkupiny.class.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 1
+			path: app/Core/Customer/fakturacniSkupiny.class.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 3
+			path: app/Core/Customer/fakturacniSkupiny.class.php
+
+		-
+			message: "#^Left side of && is always true\\.$#"
 			count: 2
 			path: app/Core/Customer/fakturacniSkupiny.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$fu_sql_select$#"
+			message: "#^Variable \\$writed in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Core/Customer/fakturacniSkupiny.class.php
 
@@ -46,7 +216,7 @@ parameters:
 			path: app/Core/Customer/vlastnik2.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$find$#"
+			message: "#^Comparison operation \"\\>\" between 13\\|16\\|19\\|21 and 1 is always true\\.$#"
 			count: 1
 			path: app/Core/Customer/vlastnik2.class.php
 
@@ -61,83 +231,83 @@ parameters:
 			path: app/Core/Item/objekt.class.php
 
 		-
+			message: "#^Access to an undefined property objekt_a2\\:\\:\\$listAllowedActionGarant\\.$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Binary operation \"\\+\" between string and '0' results in an error\\.$#"
+			count: 3
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Binary operation \"\\+\" between string and '1' results in an error\\.$#"
+			count: 2
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Binary operation \"\\+\" between string and '128' results in an error\\.$#"
+			count: 4
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Binary operation \"\\+\" between string and '2' results in an error\\.$#"
+			count: 2
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Binary operation \"\\+\" between string and '3' results in an error\\.$#"
+			count: 2
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Binary operation \"\\+\" between string and 2 results in an error\\.$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Elseif condition is always true\\.$#"
+			count: 1
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^If condition is always false\\.$#"
+			count: 2
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 4
+			path: app/Core/Item/objekt.class.php
+
+		-
+			message: "#^Left side of && is always true\\.$#"
+			count: 4
+			path: app/Core/Item/objekt.class.php
+
+		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '\\)' in pattern\\: /\\^\\(\\[\\[\\:digit\\:\\]\\]\\|\\\\\\.\\|/\\)\\+\\$/$#"
 			count: 1
 			path: app/Core/Item/objekt.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$_get$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$error$#"
+			message: "#^Right side of && is always true\\.$#"
 			count: 4
 			path: app/Core/Item/objekt.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$find_tarif$#"
+			message: "#^Variable \\$find_tarif in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Core/Item/objekt.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$garant$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$id$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$info$#"
-			count: 4
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$ip_rozsah$#"
+			message: "#^Variable \\$writed in isset\\(\\) is never defined\\.$#"
 			count: 2
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$najdi$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$output$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$pole2$#"
-			count: 4
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$pole3$#"
-			count: 2
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$sql$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$tarif$#"
-			count: 2
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$tunnel_pass$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$tunnel_user$#"
-			count: 1
 			path: app/Core/Item/objekt.class.php
 
 		-
@@ -166,13 +336,33 @@ parameters:
 			path: app/Core/Item/stb.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$output$#"
-			count: 4
+			message: "#^Binary operation \"\\+\" between string and 2 results in an error\\.$#"
+			count: 1
 			path: app/Core/Item/stb.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$rs$#"
-			count: 2
+			message: "#^Call to an undefined static method App\\\\Models\\\\Stb\\:\\:where\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Item/stb.class.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Item/stb.class.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: app/Core/Item/stb.class.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, int given\\.$#"
+			count: 1
+			path: app/Core/Item/stb.class.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function urlencode expects string, int given\\.$#"
+			count: 4
 			path: app/Core/Item/stb.class.php
 
 		-
@@ -185,18 +375,95 @@ parameters:
 			count: 1
 			path: app/Core/PagingGlobal.php
 
-
+		-
+			message: "#^Call to an undefined static method App\\\\Models\\\\PartnerOrder\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$colspan_stav$#"
-			count: 4
+			message: "#^Call to an undefined static method App\\\\Models\\\\PartnerOrder\\:\\:get\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.class.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.class.php
+
+		-
+			message: "#^Property App\\\\Partner\\\\partner\\:\\:\\$container is never read, only written\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.class.php
+
+		-
+			message: "#^Property App\\\\Partner\\\\partner\\:\\:\\$form_error is never written, only read\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.class.php
+
+		-
+			message: "#^Property App\\\\Partner\\\\partner\\:\\:\\$validator is never read, only written\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.class.php
+
+		-
+			message: "#^Cannot access property \\$error on array\\|float\\|int\\|string\\|false\\.$#"
+			count: 1
 			path: app/Core/Topology.php
 
+		-
+			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, int given\\.$#"
+			count: 1
+			path: app/Core/Topology.php
 
 		-
-			message: "#^Undefined variable\\: \\$output$#"
-			count: 4
+			message: "#^Parameter \\#1 \\$string of function urlencode expects string, int given\\.$#"
+			count: 5
+			path: app/Core/Topology.php
+
+		-
+			message: "#^Variable \\$sql_filter_nod in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: app/Core/Topology.php
+
+		-
+			message: "#^Property admin\\:\\:\\$conn_pgsql is never read, only written\\.$#"
+			count: 1
 			path: app/Core/admin.php
+
+		-
+			message: "#^Property admin\\:\\:\\$container is unused\\.$#"
+			count: 1
+			path: app/Core/admin.php
+
+		-
+			message: "#^Variable \\$send in isset\\(\\) is never defined\\.$#"
+			count: 2
+			path: app/Core/admin.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 2
+			path: app/Core/board.php
+
+		-
+			message: "#^Parameter \\#4 \\$month of function mktime expects int\\|null, string given\\.$#"
+			count: 6
+			path: app/Core/board.php
+
+		-
+			message: "#^Parameter \\#5 \\$day of function mktime expects int\\|null, string given\\.$#"
+			count: 6
+			path: app/Core/board.php
+
+		-
+			message: "#^Parameter \\#6 \\$year of function mktime expects int\\|null, string given\\.$#"
+			count: 6
+			path: app/Core/board.php
+
+		-
+			message: "#^Property board\\:\\:\\$container is unused\\.$#"
+			count: 1
+			path: app/Core/board.php
 
 		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;/ii&gt;$#"
@@ -239,8 +506,18 @@ parameters:
 			path: app/Core/board.php
 
 		-
-			message: "#^Undefined variable\\: \\$class$#"
-			count: 10
+			message: "#^If condition is always false\\.$#"
+			count: 2
+			path: app/Core/opravy.php
+
+		-
+			message: "#^Property opravy\\:\\:\\$container is unused\\.$#"
+			count: 1
+			path: app/Core/opravy.php
+
+		-
+			message: "#^Right side of && is always false\\.$#"
+			count: 2
 			path: app/Core/opravy.php
 
 		-
@@ -259,14 +536,39 @@ parameters:
 			path: app/Core/platby.php
 
 		-
-			message: "#^Undefined variable\\: \\$poznamka2$#"
+			message: "#^Property platby\\:\\:\\$container is unused\\.$#"
 			count: 1
-			path: app/Core/print_reg_form.php
+			path: app/Core/platby.php
 
 		-
 			message: "#^Function ereg not found\\.$#"
 			count: 1
 			path: app/Core/rss.php
+
+		-
+			message: "#^Parameter \\#4 \\$month of function mktime expects int\\|null, string given\\.$#"
+			count: 1
+			path: app/Core/rss.php
+
+		-
+			message: "#^Parameter \\#5 \\$day of function mktime expects int\\|null, string given\\.$#"
+			count: 1
+			path: app/Core/rss.php
+
+		-
+			message: "#^Parameter \\#6 \\$year of function mktime expects int\\|null, string given\\.$#"
+			count: 1
+			path: app/Core/rss.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: app/Core/shared/adminatorGlobal.class.php
+
+		-
+			message: "#^Call to method connect\\(\\) on an unknown class RouterOS\\.$#"
+			count: 1
+			path: app/Core/shared/adminatorGlobal.class.php
 
 		-
 			message: "#^Function ereg not found\\.$#"
@@ -294,19 +596,19 @@ parameters:
 			path: app/Core/shared/adminatorGlobal.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$output$#"
+			message: "#^Offset 1 does not exist on array\\{false\\}\\.$#"
+			count: 4
+			path: app/Core/shared/adminatorGlobal.class.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(string e\\-mailová adresa\\)\\: Unexpected token \"e\\-mailová\", expected variable at offset 70$#"
 			count: 1
 			path: app/Core/shared/adminatorGlobal.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$output$#"
-			count: 1
-			path: app/Core/shared/objekt_a2.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$tarif_sql$#"
-			count: 4
-			path: app/Core/shared/objekt_a2.class.php
+			message: "#^Parameter \\#1 \\$string of function urlencode expects string, int given\\.$#"
+			count: 2
+			path: app/Core/shared/adminatorGlobal.class.php
 
 		-
 			message: "#^Access to an undefined property partner_servis\\:\\:\\$mod\\.$#"
@@ -319,12 +621,12 @@ parameters:
 			path: app/Core/shared/partner.servis.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$mod$#"
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$user$#"
+			message: "#^Variable \\$user in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
 
@@ -336,6 +638,16 @@ parameters:
 		-
 			message: "#^Access to an undefined property mk_synchro_qos\\:\\:\\$chain\\.$#"
 			count: 4
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Comparison operation \"\\>\" between int\\<1, max\\> and 0 is always true\\.$#"
+			count: 1
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Elseif condition is always true\\.$#"
+			count: 1
 			path: app/Core/shared/ros_api_qos.php
 
 		-
@@ -354,47 +666,22 @@ parameters:
 			path: app/Core/shared/ros_api_qos.php
 
 		-
-			message: "#^Undefined variable\\: \\$add_qt_q$#"
+			message: "#^If condition is always true\\.$#"
 			count: 1
 			path: app/Core/shared/ros_api_qos.php
 
 		-
-			message: "#^Undefined variable\\: \\$add_qt_q2$#"
+			message: "#^Left side of && is always true\\.$#"
+			count: 1
+			path: app/Core/shared/ros_api_qos.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
 			count: 2
 			path: app/Core/shared/ros_api_qos.php
 
 		-
-			message: "#^Undefined variable\\: \\$add_qt_q_dwn$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Undefined variable\\: \\$erase$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Undefined variable\\: \\$sql_obj_where$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Undefined variable\\: \\$sql_where$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
 			message: "#^Function ereg not found\\.$#"
-			count: 1
-			path: app/Core/shared/ros_api_restriction.php
-
-		-
-			message: "#^Undefined variable\\: \\$sql_obj_where$#"
-			count: 1
-			path: app/Core/shared/ros_api_restriction.php
-
-		-
-			message: "#^Undefined variable\\: \\$sql_where$#"
 			count: 1
 			path: app/Core/shared/ros_api_restriction.php
 
@@ -404,9 +691,9 @@ parameters:
 			path: app/Core/shared/vlastnik.class.php
 
 		-
-			message: "#^Undefined variable\\: \\$db_ok2$#"
+			message: "#^Access to an undefined property App\\\\Core\\\\stb\\:\\:\\$level\\.$#"
 			count: 1
-			path: app/Core/shared/vlastnik.class.php
+			path: app/Core/shared/vlastnik2_a2.class.php
 
 		-
 			message: "#^Function mysql_query not found\\.$#"
@@ -417,11 +704,6 @@ parameters:
 			message: "#^Function mysql_result not found\\.$#"
 			count: 1
 			path: app/Core/shared/vlastnik2_a2.class.php
-
-		-
-			message: "#^Undefined variable\\: \\$db_ok2$#"
-			count: 1
-			path: app/Core/shared/vlastnikarchiv.class.php
 
 		-
 			message: "#^Access to an undefined property voip\\:\\:\\$dotaz_rs\\.$#"
@@ -448,6 +730,55 @@ parameters:
 			count: 1
 			path: app/Core/shared/voip.class.php
 
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getPersistenceRepository\\(\\)\\.$#"
+			count: 1
+			path: app/Middleware/RedirectIfNotAuthenticated.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: app/Middleware/RedirectIfNotAuthenticated.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
+			count: 1
+			path: app/Middleware/RedirectIfNotAuthenticated.php
+
+		-
+			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
+			count: 1
+			path: app/Middleware/SessionMiddleware.php
+
+		-
+			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:regenerateId\\(\\)\\.$#"
+			count: 1
+			path: app/Middleware/SessionMiddleware.php
+
+		-
+			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:start\\(\\)\\.$#"
+			count: 1
+			path: app/Middleware/SessionMiddleware.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\ArchivZmen\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/ArchivZmen.php
+
+		-
+			message: "#^PHPDoc tag @var above a method has no effect\\.$#"
+			count: 3
+			path: app/Models/PartnerOrder.php
+
+		-
+			message: "#^PHPDoc tag @var does not specify variable name\\.$#"
+			count: 3
+			path: app/Models/PartnerOrder.php
+
+		-
+			message: "#^PHPDoc type array of property App\\\\Models\\\\PartnerOrder\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
+			count: 1
+			path: app/Models/PartnerOrder.php
 
 		-
 			message: "#^Call to static method createHelperSet\\(\\) on an unknown class Doctrine\\\\ORM\\\\Tools\\\\Console\\\\ConsoleRunner\\.$#"
@@ -500,24 +831,49 @@ parameters:
 			path: app/routing.php
 
 		-
+			message: "#^Property Smarty_Internal_TemplateBase\\:\\:\\$compile_check \\(int\\) does not accept true\\.$#"
+			count: 1
+			path: boostrap/containerAfter.php
+
+		-
 			message: "#^Class App\\\\Controllers\\\\Auth\\\\AuthController constructor invoked with 1 parameter, 3 required\\.$#"
 			count: 1
 			path: boostrap/dependencies.php
 
 		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
 			count: 1
 			path: include/main.function.shared.php
 
 		-
-			message: "#^Function mysql_num_rows not found\\.$#"
+			message: "#^Comparison operation \"\\>\" between int\\<2, max\\> and 1 is always true\\.$#"
 			count: 1
 			path: include/main.function.shared.php
 
 		-
-			message: "#^Function mysql_query not found\\.$#"
+			message: "#^Parameter \\#1 \\$connection of function pg_last_error expects PgSql\\\\Connection\\|null, false given\\.$#"
 			count: 1
 			path: include/main.function.shared.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: others-print-reg-form-2012-05.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: others-print.php
+
+		-
+			message: "#^If condition is always true\\.$#"
+			count: 1
+			path: others-print.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+			count: 1
+			path: others-web-simelon.php
 
 		-
 			message: "#^Function ereg not found\\.$#"
@@ -530,78 +886,18 @@ parameters:
 			path: print/inc.reg.form.gen.prepare.vars.php
 
 		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
-			count: 5
-			path: print/inc.smlouva.input.form.2.php
-
-		-
-			message: "#^Function mysql_num_rows not found\\.$#"
-			count: 2
-			path: print/inc.smlouva.input.form.2.php
-
-		-
-			message: "#^Function mysql_query not found\\.$#"
-			count: 5
-			path: print/inc.smlouva.input.form.2.php
-
-		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
-			count: 4
-			path: print/inc.smlouva.input.form.php
-
-		-
-			message: "#^Function mysql_query not found\\.$#"
-			count: 4
-			path: print/inc.smlouva.input.form.php
-
-		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
-			count: 2
-			path: print/reg-form-2012-05.php
-
-		-
-			message: "#^Function mysql_num_rows not found\\.$#"
-			count: 2
-			path: print/reg-form-2012-05.php
-
-		-
-			message: "#^Function mysql_query not found\\.$#"
-			count: 3
-			path: print/reg-form-2012-05.php
-
-		-
-			message: "#^Function mysql_result not found\\.$#"
-			count: 3
-			path: print/reg-form-2012-05.php
-
-		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
-			count: 2
-			path: print/reg-form-pdf.php
-
-		-
-			message: "#^Function mysql_num_rows not found\\.$#"
-			count: 2
-			path: print/reg-form-pdf.php
-
-		-
-			message: "#^Function mysql_query not found\\.$#"
-			count: 3
-			path: print/reg-form-pdf.php
-
-		-
-			message: "#^Function mysql_result not found\\.$#"
-			count: 3
-			path: print/reg-form-pdf.php
-
-		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
+			message: "#^Binary operation \"\\+\" between string and 1 results in an error\\.$#"
 			count: 1
-			path: print/smlouva-2012-05.php
+			path: print/reg-form-2012-05.php
 
 		-
-			message: "#^Function mysql_query not found\\.$#"
+			message: "#^Binary operation \"\\+\" between string and 1 results in an error\\.$#"
 			count: 1
-			path: print/smlouva-2012-05.php
+			path: print/reg-form-pdf.php
+
+		-
+			message: "#^Variable \\$int_pocet_zarizeni in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: print/reg-form-pdf.php
 
 

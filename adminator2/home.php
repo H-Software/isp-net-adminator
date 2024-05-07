@@ -6,7 +6,7 @@ require_once ("include/check_login.php");
 require_once ("include/check_level.php");
 
 $smarty = new Smarty;
-$smarty->compile_check = true;
+$smarty->compile_check = Smarty::COMPILECHECK_ON;
 //$smarty->debugging = true;
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">

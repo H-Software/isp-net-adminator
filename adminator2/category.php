@@ -90,7 +90,7 @@
           <td colspan="7" align="center">';
 
    $smarty_cat = new Smarty;
-   $smarty_cat->compile_check = true;
+   $smarty_cat->compile_check = Smarty::COMPILECHECK_ON;
     //  $smarty->debugging = true;
     $smarty_cat->setTemplateDir($cesta . "templates")
                 ->setCompileDir($cesta . "templates_c")
