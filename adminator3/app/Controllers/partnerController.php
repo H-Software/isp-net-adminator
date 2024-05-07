@@ -36,7 +36,7 @@ class partnerController extends adminatorController
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(75, $this->adminator);
 
@@ -53,7 +53,7 @@ class partnerController extends adminatorController
 
     public function orderCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(75, $this->adminator);
 
@@ -70,7 +70,7 @@ class partnerController extends adminatorController
 
     public function orderList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(76, $this->adminator);
 
@@ -89,7 +89,7 @@ class partnerController extends adminatorController
 
     public function orderAdd(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(75, $this->adminator);
 
@@ -112,7 +112,7 @@ class partnerController extends adminatorController
 
     public function orderAccept(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(77, $this->adminator);
 

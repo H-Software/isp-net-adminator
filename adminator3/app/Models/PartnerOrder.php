@@ -59,7 +59,7 @@ class PartnerOrder extends Model
     protected function akceptovano(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => adminator::convertIntToBoolTextCs($value),
+            get: fn (string|null $value) => is_null($value) ? null : adminator::convertIntToBoolTextCs($value),
         );
     }
 
