@@ -5,7 +5,7 @@
     
     <span style="margin-left: 40px; "><!--<a href="partner-vypis.php" >-->Výpis žádostí<!--</a>--></span>
         
-    <span style="margin-left: 40px; "><a href="partner-vyrizeni.php" >Akceptování žádosti</a></span>
+    <span style="margin-left: 40px; "><!--<a href="partner-vyrizeni.php" >-->Akceptování žádosti<!--</a>--></span>
             
     <span style="margin-left: 40px; "><a href="partner-pripojeni.php" >Změna stavu připojení</a></span>
                 

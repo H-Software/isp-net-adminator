@@ -130,5 +130,4 @@ class partnerController extends adminatorController
 
         return $response;
     }
-
 }
