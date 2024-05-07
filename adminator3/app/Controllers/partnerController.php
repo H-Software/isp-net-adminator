@@ -31,7 +31,7 @@ class partnerController extends adminatorController
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("partnerController\cat called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
 
         $this->checkLevel(75, $this->adminator);
 
@@ -48,7 +48,7 @@ class partnerController extends adminatorController
 
     public function orderCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("partnerController\orderCat called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
 
         $this->checkLevel(75, $this->adminator);
 
@@ -65,7 +65,7 @@ class partnerController extends adminatorController
 
     public function orderList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("partnerController\orderList called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
 
         $this->checkLevel(76, $this->adminator);
 
@@ -85,7 +85,7 @@ class partnerController extends adminatorController
 
     public function orderAdd(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("partnerController\orderAdd called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
 
         $this->checkLevel(75, $this->adminator);
 
@@ -103,6 +103,22 @@ class partnerController extends adminatorController
         $partner->form_uri = $request->getUri();
 
         $partner->add();
+
+        return $response;
+    }
+
+    public function orderAccept(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
+
+        $this->checkLevel(77, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Accept");
+
+        $this->header($request, $response, $this->adminator);
+
+        // CSRF token name and value for update form
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
 
         return $response;
     }
