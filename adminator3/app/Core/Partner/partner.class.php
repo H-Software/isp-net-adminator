@@ -81,7 +81,7 @@ class partner extends adminator
             $this->listItems = $this->listItems->where('vlozil', $_GET['user']);
         }
 
-        if($mode == "accept"){
+        if($mode == "accept") {
             $this->listItems = $this->listItems->select(
                 [
                     'jmeno',
@@ -304,11 +304,11 @@ class partner extends adminator
         }
     }
 
-    public function accept()
+    public function accept(): void
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        if ( $_GET["accept"] != 1 and !isset($_GET['id'])) {
+        if ($_GET["accept"] != 1 and !isset($_GET['id'])) {
             // list view
             $output = "";
 
@@ -321,7 +321,9 @@ class partner extends adminator
 
             if(count($data) == 0) {
                 $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
-                return array($output);
+                $this->smarty->assign("body", $output[0]);
+                $this->smarty->display('partner/order-accept.tpl');
+                return;
             }
 
             $headers = [
@@ -348,20 +350,63 @@ class partner extends adminator
             $output .= $listTable->generate($headers, $data['data'], $attributes);
 
             $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
-
-            $output = array($output);
-
-            $this->smarty->assign("body", $output[0]);
-
-            $this->smarty->display('partner/order-accept-list.tpl');
         } elseif ($_GET["accept"] != 1) {
             // confirm form
+            $output = "";
+
+            $output .= "<form action=\"\" method=\"GET\" >";
+
+
+            $output .=  "<div style=\"padding-left: 40px; padding-bottom: 20px; \" >Pokud je třeba, vložte poznámku: </div>";
+
+            $output .=  "<div style=\"padding-left: 40px; padding-bottom: 20px;\" >
+                <textarea name=\"pozn\" cols=\"50\" rows=\"6\"></textarea>
+            </div>";
+
+            $output .=  "<div style=\"padding-left: 40px; padding-bottom: 20px; \" >
+                <input type=\"submit\" name=\"odeslat\" value=\"OK\" >
+            </div>";
+
+            $output .=  "<input type=\"hidden\" name=\"accept\" value=\"1\"> 
+                <input type=\"hidden\" name=\"id\" value=\"".intval($_GET["id"])."\" >";
+            $output .=  "</form>";
 
         } elseif($_GET["accept"] == 1 and intval($_GET['id']) > 0) {
             // update item in DB
+            $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
+            $id = intval($_GET["id"]);
 
+            $uprava = $this->conn_mysql->query(
+                "UPDATE partner_klienti "
+                                . "SET akceptovano='1', "
+                                    . "akceptovano_kym='". $this->loggedUserEmail ."', "
+                                    . " akceptovano_pozn = '$pozn' "
+                                . "WHERE id = ".$id." Limit 1"
+            );
+
+            if ($uprava == 1) {
+                $output .= '<div 
+                class="alert alert-success" 
+                role="alert"
+                style="width: 80%; "
+                >'
+                ."Zákazník úspěšně akceptován.</div>\n";
+            } else {
+                $output .= '<div 
+                class="alert alert-danger" 
+                role="alert"
+                style="width: 80%; "
+                >'
+                ."Chyba! Zákazníka nelze akceptovat. Data nelze uložit do databáze. </div>\n";
+            }
         } else {
             // unknown mode
         }
+
+        $output = array($output);
+
+        $this->smarty->assign("body", $output[0]);
+
+        $this->smarty->display('partner/order-accept.tpl');
     }
 }
