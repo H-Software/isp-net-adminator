@@ -1,20 +1,23 @@
 <?php
 
+use Psr\Container\ContainerInterface;
+
 class opravy
 {
-    public $conn_mysql;
+    private $container;
+    private $conn_mysql;
 
-    public $conn_pgsql;
+    private $conn_pgsql;
 
-    public $logger;
+    private $logger;
 
     public $vypis_opravy_content_html;
 
-    public function __construct($conn_mysql, $conn_pgsql, $logger)
+    public function __construct(ContainerInterface $container)
     {
-        $this->conn_mysql = $conn_mysql;
-        $this->conn_pgsql = $conn_pgsql;
-        $this->logger = $logger;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+        $this->logger = $container->get('logger');
     }
 
     public function vypis_opravy($pocet_bunek)

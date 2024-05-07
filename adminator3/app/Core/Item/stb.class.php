@@ -13,6 +13,8 @@ class stb extends adminator
 {
     public $conn_mysql;
 
+    public $conn_pgsql;
+
     public $container;
 
     public $csrf_html;
@@ -55,8 +57,8 @@ class stb extends adminator
         $this->container = $container;
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
-
 
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
@@ -1132,7 +1134,7 @@ class stb extends adminator
                 //vlastnik - id cloveka
                 $id_cloveka = $data_vypis["id_cloveka"];
 
-                $rs_create_link = ($id_cloveka > 0 ? \Aglobal::create_link_to_owner($id_cloveka) : "");
+                $rs_create_link = ($id_cloveka > 0 ? \Aglobal::create_link_to_owner($id_cloveka, $this->conn_pgsql) : "");
 
                 $odkaz_data = ($rs_create_link === false ? "E_1" : $rs_create_link);
 

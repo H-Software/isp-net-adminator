@@ -19,9 +19,11 @@ class HomeController extends adminatorController
     public $smarty;
     public $logger;
 
-    public $adminator;
+    private $adminator;
 
-    public function __construct(ContainerInterface $container, $adminatorInstance = null)
+    private $opravyInstance;
+
+    public function __construct(ContainerInterface $container, $adminatorInstance = null, $opravyInstance = null)
     {
         $this->container = $container;
         $this->conn_mysql = $this->container->get('connMysql');
@@ -44,6 +46,12 @@ class HomeController extends adminatorController
                 $this->pdoMysql,
                 $this->settings,
             );
+        }
+
+        if(isset($opravyInstance)) {
+            $this->opravyInstance = $opravyInstance;
+        } else {
+            $this->opravyInstance = new \opravy($this->container);
         }
     }
 
@@ -83,7 +91,15 @@ class HomeController extends adminatorController
         $this->smarty->assign("count_unknown", $neuhr_faktury_pole[2]);
         $this->smarty->assign("date_last_import", $neuhr_faktury_pole[3]);
 
-        $this->opravy_a_zavady();
+        $this->smarty->assign("stats_faktury_neuhr_error_messages", $neuhr_faktury_pole[4]);
+
+
+        if ($this->adminator->checkLevel(101, false) === true) {
+            $this->logger->info("homeController\opravy_a_zavady allowed");
+            $this->adminator->get_opravy_a_zavady($this->opravyInstance);
+        } else {
+            $this->logger->warning("homeController\opravy_a_zavady not allowed");
+        }
 
         $this->board();
 
@@ -127,62 +143,5 @@ class HomeController extends adminatorController
         }
     }
 
-    public function opravy_a_zavady()
-    {
-        //opravy a zavady vypis
-        $pocet_bunek = 11;
 
-        if ($this->adminator->checkLevel(101, false) === true) {
-            $this->logger->info("homeController\opravy_a_zavady allowed");
-
-            $v_reseni_filtr = $_GET["v_reseni_filtr"];
-            $vyreseno_filtr = $_GET["vyreseno_filtr"];
-            $limit = $_GET["limit"];
-
-            if(!isset($v_reseni_filtr)) {
-                $v_reseni_filtr = "99";
-            }
-            if(!isset($vyreseno_filtr)) {
-                $vyreseno_filtr = "0";
-            }
-
-            if(!isset($limit)) {
-                $limit = "10";
-            }
-
-            // vypis
-            $this->smarty->assign("opravy_povoleno", 1);
-
-            $this->smarty->assign("pocet_bunek", $pocet_bunek);
-
-            $this->smarty->assign("vyreseno_filtr", $vyreseno_filtr);
-            $this->smarty->assign("v_reseni_filtr", $v_reseni_filtr);
-            $this->smarty->assign("limit", $limit);
-
-            $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
-
-            $opravy = new \opravy($this->conn_mysql, $this->conn_pgsql, $this->logger);
-
-            $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
-            // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));
-
-            if($rs_vypis) {
-                if (strlen($rs_vypis[0]) > 0) {
-                    // no records in DB
-                    $this->logger->info("homeController\opravy_a_zavady list: no records found in database.");
-                    $content_opravy_a_zavady = $rs_vypis[0];
-                } elseif(strlen($rs_vypis[1]) > 0) {
-                    // raw html
-                    $content_opravy_a_zavady = $rs_vypis[1];
-                } else {
-                    // ??
-                    $this->logger->error("homeController\opravy_a_zavady unexpected return value");
-                }
-            } else {
-                $this->logger->error("homeController\opravy_a_zavady no return value from vypis_opravy call");
-            }
-
-            $this->smarty->assign("content_opravy_a_zavady", $content_opravy_a_zavady);
-        }
-    }
 }

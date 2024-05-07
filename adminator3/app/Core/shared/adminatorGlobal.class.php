@@ -173,12 +173,6 @@ class Aglobal
      * @copyright Jakub Vrána, http://php.vrana.cz/
      */
 
-    // function check_email($email) {
-    //     $atom = '[-a-z0-9!#$%&\'*+/=?^_`{|}~]'; // znaky tvořící uživatelské jméno
-    //     $domain = '[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])'; // jedna komponenta domény
-    //     return preg_match("/^$atom+(\\.$atom+)*@($domain?\\.)+$domain\$/i", $email);
-    // }
-
     /*
     *    check email by w3s
     *
@@ -189,50 +183,20 @@ class Aglobal
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
-    // public static function pg_last_inserted_id($con, $table, $logger = ''){
-
-    //      //make the initial query
-    //      $sql = "SELECT * FROM " . $table;
-    //      //execute
-    //      $ret = pg_query($con, $sql);
-    //      //get the field name
-    //      $campoId = pg_field_name($ret, 0);
-
-    //      //change the query, using currval()
-    //      $sql = "SELECT currval('".$table."_".$campoId."_seq')";
-
-    //      //exec
-    //      $retorno =pg_query($con, $sql);
-
-    //      if(!$retorno){
-    //         if(is_object($logger))
-    //             $logger->info("Aglobal\pg_last_inserted_id: pg_query failed! sql: " . var_export($sql, true));
-
-    //         return false;
-    //      }
-
-    //      if(pg_num_rows($ret)>0){
-    //          //array
-    //          $s_dados = pg_fetch_all($retorno);
-
-    //          //vars
-    //          extract($s_dados[0],EXTR_OVERWRITE);
-
-    //          return $currval;
-
-    //      } else {
-    //          //case error, returns false
-    //          return false;
-    //      }
-
-    // } //end of function pg_last_inserted_id
-
-    public static function create_link_to_owner($owner_id)
+    public static function create_link_to_owner($owner_id, $conn_pgsql = null)
     {
 
         $owner_id = intval($owner_id);
 
-        $vlastnik_dotaz = pg_query("SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".$owner_id."' ");
+        $sql = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".$owner_id."' ";
+
+        if($conn_pgsql != null) {
+            $vlastnik_dotaz = pg_query($conn_pgsql, $sql);
+
+        } else {
+            $vlastnik_dotaz = pg_query($sql);
+        }
+
         $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
 
         while($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {

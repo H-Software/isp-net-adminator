@@ -4,12 +4,18 @@ use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 
 class admin
 {
-    public $conn_mysql;
+    private $container;
+    private $conn_mysql;
 
-    public function __construct($conn_mysql, $logger)
+    private $conn_pgsql;
+
+    private $logger;
+
+    public function __construct($container)
     {
-        $this->conn_mysql = $conn_mysql;
-        $this->logger = $logger;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+        $this->logger = $container->get('logger');
     }
 
     public function levelListDbQuery()
@@ -328,7 +334,7 @@ class admin
 
     public function tarifAction()
     {
-
+        $error = "";
         $update_id = $_GET["update_id"];
         $erase_id = $_GET["erase_id"];
 

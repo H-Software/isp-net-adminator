@@ -7,11 +7,6 @@ namespace App\Tests;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use DI\CompiledContainer;
-use DI\ContainerBuilder;
-use Psr\Container\ContainerInterface;
-use Psr\Log\LoggerInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
@@ -66,9 +61,14 @@ final class HomeControllerTest extends AdminatorTestCase
             )
         );
         // $adminatorMock->shouldReceive('list_logged_users')->andReturn("");
-        $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
+        // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
-        $homeController = new HomeController($container, $adminatorMock);
+        $opravyMock = \Mockery::mock(
+            \opravy::class,
+        );
+        $opravyMock->shouldReceive('vypis_opravy')->andReturn(["mock -> no data"]);
+
+        $homeController = new HomeController($container, $adminatorMock, $opravyMock);
 
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         $response = $this->createMock(ResponseInterface::class);
@@ -80,7 +80,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         // // test sqlite migration
         // $sql = 'pragma table_info(\'board\');';
-        // $sql2 = "SELECT * FROM users";
+        // $sql2 = "SELECT * FROM board";
         // $rs = self::$pdoMysql->query($sql2);
         // print_r($rs->fetchAll());
 
