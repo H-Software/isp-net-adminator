@@ -334,7 +334,7 @@ class admin
 
     public function tarifAction()
     {
-
+        $error = "";
         $update_id = $_GET["update_id"];
         $erase_id = $_GET["erase_id"];
 
