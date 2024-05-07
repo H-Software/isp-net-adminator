@@ -60,15 +60,15 @@ class partner extends adminator
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
 
-    public function listPrepareVars()
+    public function listPrepareVars($mode = null)
     {
         $filtr_akceptovano = intval($_GET["filtr_akceptovano"]);
         $filtr_pripojeno = intval($_GET["filtr_pripojeno"]);
 
         if($filtr_akceptovano == 1) {
-            $this->listItems = $this->listItems->where('akceptovano', 1);
-        } elseif($filtr_akceptovano == 2) {
-            $this->listItems = $this->listItems->where('akceptovano', 0);
+            $this->listItems = $this->listItems->where('akceptovano', "Ano");
+        } elseif($filtr_akceptovano == 2 or $mode == "accept") {
+            $this->listItems = $this->listItems->where('akceptovano', "Ne");
         }
 
         if($filtr_pripojeno == 1) {
@@ -81,20 +81,39 @@ class partner extends adminator
             $this->listItems = $this->listItems->where('vlozil', $_GET['user']);
         }
 
-        // old name poradek
-        // $this->url_params = "filtr_akceptovano=".$filtr_akceptovano."&filtr_pripojeno=".$filtr_pripojeno;
+        if($mode == "accept") {
+            $this->listItems = $this->listItems->select(
+                [
+                    'jmeno',
+                    'adresa',
+                    'tel',
+                    'email',
+                    'poznamky',
+                    'prio',
+                    'vlozil',
+                    'datum_vlozeni',
+                    'id'
+                ]
+            );
+
+            $this->listItems = $this->listItems->transform(
+                function ($item, $key) {
+                    $id = $item['id'];
+                    $item['id'] = "<a href=\"?id=" . $id . "\">ACCEPT</a>";
+                    return $item;
+                }
+            );
+        }
 
         return true;
     }
 
-    public function list()
+    private function getItems($mode = null)
     {
-        $output = "";
-
         $this->listItems = PartnerOrder::get()
             ->sortByDesc('id');
 
-        $this->listPrepareVars();
+        $this->listPrepareVars($mode);
 
         $this->listItems = adminator::collectionPaginate(
             $this->listItems,
@@ -111,12 +130,32 @@ class partner extends adminator
         list($linkPreviousPage, $linkCurrentPage, $linkNextPage) = adminator::paginateGetLinks($data);
         // echo "<pre>" . var_export($data, true) . "</pre>";
 
+        return array(
+            $data,
+            $linkPreviousPage,
+            $linkCurrentPage,
+            $linkNextPage
+        );
+    }
+
+    public function list($mode = null)
+    {
+        $output = "";
+
+        list(
+            $data,
+            $linkPreviousPage,
+            $linkCurrentPage,
+            $linkNextPage
+        ) = $this->getItems($mode);
+
         if(count($data) == 0) {
             $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
             return array($output);
         }
 
-        $headers = ['id',
+        $headers = [
+            'id',
             'telefon',
             'jmeno',
             'adresa',
@@ -263,5 +302,110 @@ class partner extends adminator
             $this->smarty->display('partner/order-add-form.tpl');
             return true;
         }
+    }
+
+    public function accept(): void
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        $output = "";
+
+        if ($_GET["accept"] != 1 and !isset($_GET['id'])) {
+            // list view
+
+            list(
+                $data,
+                $linkPreviousPage,
+                $linkCurrentPage,
+                $linkNextPage
+            ) = $this->getItems("accept");
+
+            if(count($data) == 0) {
+                $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
+                $this->smarty->assign("body", $output[0]);
+                $this->smarty->display('partner/order-accept.tpl');
+                return;
+            }
+
+            $headers = [
+                'jmeno',
+                'adresa',
+                'telefon',
+                'email',
+                'poznamka',
+                'priorita',
+                'vlozil kdo',
+                'datum vlozeni',
+                'akceptovat'
+            ] ;
+
+            $attributes = 'class="a-common-table a-common-table-1line" '
+                        . 'id="partner-order-table" '
+                        . 'style="width: 99%"'
+            ;
+
+            $listTable = new LaravelHtmlTableGenerator();
+
+            $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
+
+            $output .= $listTable->generate($headers, $data['data'], $attributes);
+
+            $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
+        } elseif ($_GET["accept"] != 1) {
+            // confirm form
+
+            $output .= "<form action=\"\" method=\"GET\" >";
+
+
+            $output .=  "<div style=\"padding-left: 40px; padding-bottom: 20px; \" >Pokud je třeba, vložte poznámku: </div>";
+
+            $output .=  "<div style=\"padding-left: 40px; padding-bottom: 20px;\" >
+                <textarea name=\"pozn\" cols=\"50\" rows=\"6\"></textarea>
+            </div>";
+
+            $output .=  "<div style=\"padding-left: 40px; padding-bottom: 20px; \" >
+                <input type=\"submit\" name=\"odeslat\" value=\"OK\" >
+            </div>";
+
+            $output .=  "<input type=\"hidden\" name=\"accept\" value=\"1\"> 
+                <input type=\"hidden\" name=\"id\" value=\"".intval($_GET["id"])."\" >";
+            $output .=  "</form>";
+
+        } elseif($_GET["accept"] == 1 and intval($_GET['id']) > 0) {
+            // update item in DB
+            $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
+            $id = intval($_GET["id"]);
+
+            $uprava = $this->conn_mysql->query(
+                "UPDATE partner_klienti "
+                                . "SET akceptovano='1', "
+                                    . "akceptovano_kym='". $this->loggedUserEmail ."', "
+                                    . " akceptovano_pozn = '$pozn' "
+                                . "WHERE id = ".$id." Limit 1"
+            );
+
+            if ($uprava == 1) {
+                $output .= '<div 
+                class="alert alert-success" 
+                role="alert"
+                style="width: 80%; "
+                >'
+                ."Zákazník úspěšně akceptován.</div>\n";
+            } else {
+                $output .= '<div 
+                class="alert alert-danger" 
+                role="alert"
+                style="width: 80%; "
+                >'
+                ."Chyba! Zákazníka nelze akceptovat. Data nelze uložit do databáze. </div>\n";
+            }
+        } else {
+            // unknown mode
+        }
+
+        $output = array($output);
+
+        $this->smarty->assign("body", $output[0]);
+
+        $this->smarty->display('partner/order-accept.tpl');
     }
 }

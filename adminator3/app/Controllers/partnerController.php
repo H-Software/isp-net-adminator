@@ -18,6 +18,8 @@ class partnerController extends adminatorController
 
     protected $adminator;
 
+    private $partnerInstance;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -27,11 +29,14 @@ class partnerController extends adminatorController
         $this->logger->info("partnerController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+
+        $this->partnerInstance = new partner($this->container);
+
     }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("partnerController\cat called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(75, $this->adminator);
 
@@ -48,7 +53,7 @@ class partnerController extends adminatorController
 
     public function orderCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("partnerController\orderCat called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(75, $this->adminator);
 
@@ -65,7 +70,7 @@ class partnerController extends adminatorController
 
     public function orderList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("partnerController\orderList called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(76, $this->adminator);
 
@@ -73,8 +78,7 @@ class partnerController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        $partner = new partner($this->container);
-        $listOutput = $partner->list();
+        $listOutput = $this->partnerInstance->list();
 
         $this->smarty->assign("body", $listOutput[0]);
 
@@ -85,7 +89,7 @@ class partnerController extends adminatorController
 
     public function orderAdd(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("partnerController\orderAdd called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(75, $this->adminator);
 
@@ -98,11 +102,25 @@ class partnerController extends adminatorController
 
         $this->logger->debug("partnerController\orderAdd: csrf generated: ".var_export($csrf_html, true));
 
-        $partner = new partner($this->container);
-        $partner->csrf_html = $csrf_html;
-        $partner->form_uri = $request->getUri();
+        $this->partnerInstance->csrf_html = $csrf_html;
+        $this->partnerInstance->form_uri = $request->getUri();
 
-        $partner->add();
+        $this->partnerInstance->add();
+
+        return $response;
+    }
+
+    public function orderAccept(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(77, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Accept");
+
+        $this->header($request, $response, $this->adminator);
+
+        $this->partnerInstance->accept();
 
         return $response;
     }
