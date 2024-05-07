@@ -307,10 +307,10 @@ class partner extends adminator
     public function accept(): void
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        $output = "";
 
         if ($_GET["accept"] != 1 and !isset($_GET['id'])) {
             // list view
-            $output = "";
 
             list(
                 $data,
@@ -352,7 +352,6 @@ class partner extends adminator
             $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
         } elseif ($_GET["accept"] != 1) {
             // confirm form
-            $output = "";
 
             $output .= "<form action=\"\" method=\"GET\" >";
 
