@@ -264,4 +264,21 @@ class partner extends adminator
             return true;
         }
     }
+
+    public function accept()
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
+
+        if(isset($this->form_odeslat)) {
+
+        }
+        else{
+            // list view
+            $listOutput = $this->list();
+
+            $this->smarty->assign("body", $listOutput[0]);
+
+            $this->smarty->display('partner/order-accept-list.tpl');
+        }
+    }
 }

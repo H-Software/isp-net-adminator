@@ -18,6 +18,8 @@ class partnerController extends adminatorController
 
     protected $adminator;
 
+    private $partnerInstance;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -27,6 +29,9 @@ class partnerController extends adminatorController
         $this->logger->info("partnerController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+
+        $this->partnerInstance = new partner($this->container);
+
     }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -73,8 +78,7 @@ class partnerController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        $partner = new partner($this->container);
-        $listOutput = $partner->list();
+        $listOutput = $this->partnerInstance->list();
 
         $this->smarty->assign("body", $listOutput[0]);
 
@@ -98,11 +102,10 @@ class partnerController extends adminatorController
 
         $this->logger->debug("partnerController\orderAdd: csrf generated: ".var_export($csrf_html, true));
 
-        $partner = new partner($this->container);
-        $partner->csrf_html = $csrf_html;
-        $partner->form_uri = $request->getUri();
+        $this->partnerInstance->csrf_html = $csrf_html;
+        $this->partnerInstance->form_uri = $request->getUri();
 
-        $partner->add();
+        $this->partnerInstance->add();
 
         return $response;
     }
@@ -120,6 +123,12 @@ class partnerController extends adminatorController
         // CSRF token name and value for update form
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
 
+        $this->partnerInstance->csrf_html = $csrf_html;
+        $this->partnerInstance->form_uri = $request->getUri();
+
+        $this->partnerInstance->accept();
+
         return $response;
     }
+
 }
