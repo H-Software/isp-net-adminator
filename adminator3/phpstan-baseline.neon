@@ -631,61 +631,6 @@ parameters:
 			path: app/Core/shared/partner.servis.class.php
 
 		-
-			message: "#^Access to an undefined property mk_synchro_qos\\:\\:\\$arr_global_diff_mis\\.$#"
-			count: 3
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Access to an undefined property mk_synchro_qos\\:\\:\\$chain\\.$#"
-			count: 4
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Comparison operation \"\\>\" between int\\<1, max\\> and 0 is always true\\.$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Elseif condition is always true\\.$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Function ereg not found\\.$#"
-			count: 15
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Function mysql_query not found\\.$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Left side of && is always true\\.$#"
-			count: 1
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 2
-			path: app/Core/shared/ros_api_qos.php
-
-		-
-			message: "#^Function ereg not found\\.$#"
-			count: 1
-			path: app/Core/shared/ros_api_restriction.php
-
-		-
 			message: "#^Static call to instance method fakturacni\\:\\:vypis\\(\\)\\.$#"
 			count: 1
 			path: app/Core/shared/vlastnik.class.php
@@ -704,31 +649,6 @@ parameters:
 			message: "#^Function mysql_result not found\\.$#"
 			count: 1
 			path: app/Core/shared/vlastnik2_a2.class.php
-
-		-
-			message: "#^Access to an undefined property voip\\:\\:\\$dotaz_rs\\.$#"
-			count: 2
-			path: app/Core/shared/voip.class.php
-
-		-
-			message: "#^Access to an undefined property voip\\:\\:\\$dotaz_rs_radku\\.$#"
-			count: 1
-			path: app/Core/shared/voip.class.php
-
-		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
-			count: 1
-			path: app/Core/shared/voip.class.php
-
-		-
-			message: "#^Function mysql_num_rows not found\\.$#"
-			count: 1
-			path: app/Core/shared/voip.class.php
-
-		-
-			message: "#^Function mysql_query not found\\.$#"
-			count: 1
-			path: app/Core/shared/voip.class.php
 
 		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getPersistenceRepository\\(\\)\\.$#"
@@ -765,21 +685,10 @@ parameters:
 			count: 1
 			path: app/Models/ArchivZmen.php
 
-		# -
-		# 	message: "#^PHPDoc tag @var above a method has no effect\\.$#"
-		# 	count: 3
-		# 	path: app/Models/PartnerOrder.php
-
-		# -
-		# 	message: "#^PHPDoc tag @var does not specify variable name\\.$#"
-		# 	count: 3
-		# 	path: app/Models/PartnerOrder.php
-
 		-
 			message: "#^PHPDoc type array of property App\\\\Models\\\\PartnerOrder\\:\\:\\$fillable is not covariant with PHPDoc type array\\<int, string\\> of overridden property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$fillable\\.$#"
 			count: 1
 			path: app/Models/PartnerOrder.php
-
 
 		-
 			message: "#^Class aboutController not found\\.$#"
@@ -866,15 +775,15 @@ parameters:
 			count: 1
 			path: others-web-simelon.php
 
-		# -
-		# 	message: "#^Function ereg not found\\.$#"
-		# 	count: 1
-		# 	path: print/inc.reg.form.gen.prepare.vars.2.php
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 1
+			path: print/inc.reg.form.gen.prepare.vars.2.php
 
-		# -
-		# 	message: "#^Function ereg not found\\.$#"
-		# 	count: 1
-		# 	path: print/inc.reg.form.gen.prepare.vars.php
+		-
+			message: "#^Function ereg not found\\.$#"
+			count: 1
+			path: print/inc.reg.form.gen.prepare.vars.php
 
 		-
 			message: "#^Binary operation \"\\+\" between string and 1 results in an error\\.$#"

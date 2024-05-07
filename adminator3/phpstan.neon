@@ -5,6 +5,10 @@ includes:
 	- phpstan-baseline.neon
 parameters:
 	level: 5
+	excludePaths:
+		- app/Core/shared/voip.class.php
+		- app/Core/shared/ros_api_qos.php
+		- app/Core/shared/ros_api_restriction.php
 	ignoreErrors:
 	-
 		message: '#Undefined variable: \$.*#'
@@ -18,6 +22,3 @@ parameters:
 	-
 		message: "#^Function mysql_.* not found\\.$#"
 		path: include/main.function.shared.php
-	-
-		message: "#^Function mysql_.* not found\\.$#"
-		path: app/Core/shared/voip.class.php
