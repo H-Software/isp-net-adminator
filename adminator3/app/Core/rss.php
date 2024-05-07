@@ -6,7 +6,7 @@ class rss_wrong_login
     public $body;
     public $author;
 
-    public function rss_wrong_login($subject, $body, $author)
+    public function __construct($subject, $body, $author)
     {
         $this->subject = $subject;
         $this->body = $body;

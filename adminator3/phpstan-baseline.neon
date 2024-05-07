@@ -456,10 +456,6 @@ parameters:
 			count: 1
 			path: app/Core/shared/voip.class.php
 
-		-
-			message: "#^Class App\\\\Core\\\\adminator referenced with incorrect case\\: App\\\\Core\\\\Adminator\\.$#"
-			count: 3
-			path: app/Models/PartnerOrder.php
 
 		-
 			message: "#^Class App\\\\Models\\\\Email not found\\.$#"
@@ -621,7 +617,4 @@ parameters:
 			count: 1
 			path: print/smlouva-2012-05.php
 
-		-
-			message: "#^Class rss_wrong_login does not have a constructor and must be instantiated without any parameters\\.$#"
-			count: 1
-			path: rss/rss_2_0.php
+

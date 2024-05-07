@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Core\adminator;
 
 class PartnerOrder extends Model
 {
@@ -58,7 +59,7 @@ class PartnerOrder extends Model
     protected function akceptovano(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => \App\Core\Adminator::convertIntToBoolTextCs($value),
+            get: fn (string $value) => adminator::convertIntToBoolTextCs($value),
         );
     }
 
@@ -70,7 +71,7 @@ class PartnerOrder extends Model
     protected function pripojeno(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => \App\Core\Adminator::convertIntToBoolTextCs($value),
+            get: fn (string $value) => adminator::convertIntToBoolTextCs($value),
         );
     }
 
@@ -82,7 +83,7 @@ class PartnerOrder extends Model
     protected function prio(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => \App\Core\Adminator::convertIntToTextPrioCs($value),
+            get: fn (string $value) => adminator::convertIntToTextPrioCs($value),
         );
     }
 }
