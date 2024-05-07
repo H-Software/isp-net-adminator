@@ -185,15 +185,7 @@ parameters:
 			count: 1
 			path: app/Core/PagingGlobal.php
 
-		-
-			message: "#^Access to an undefined property App\\\\Partner\\\\partner\\:\\:\\$container\\.$#"
-			count: 1
-			path: app/Core/Partner/partner.class.php
 
-		-
-			message: "#^Access to an undefined property App\\\\Partner\\\\partner\\:\\:\\$validator\\.$#"
-			count: 1
-			path: app/Core/Partner/partner.class.php
 
 		-
 			message: "#^Undefined variable\\: \\$colspan_stav$#"
@@ -456,11 +448,6 @@ parameters:
 			count: 1
 			path: app/Core/shared/voip.class.php
 
-
-		-
-			message: "#^Class App\\\\Models\\\\Email not found\\.$#"
-			count: 1
-			path: app/Models/User.php
 
 		-
 			message: "#^Call to static method createHelperSet\\(\\) on an unknown class Doctrine\\\\ORM\\\\Tools\\\\Console\\\\ConsoleRunner\\.$#"
