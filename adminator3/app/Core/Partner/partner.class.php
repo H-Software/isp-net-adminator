@@ -11,6 +11,10 @@ use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 
 class partner extends adminator
 {
+    private $container;
+
+    private $validator;
+
     public $conn_pgsql;
     public $conn_mysql;
 

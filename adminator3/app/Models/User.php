@@ -23,10 +23,10 @@ class User extends EloquentUser
     /**
      * @return HasMany
      */
-    public function email(): HasMany
-    {
-        return $this->hasMany(Email::class);
-    }
+    // public function email(): HasMany
+    // {
+    //     return $this->hasMany(Email::class);
+    // }
 
     // /**
     //  * @return HasMany
