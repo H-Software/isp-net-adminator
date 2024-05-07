@@ -60,15 +60,15 @@ class partner extends adminator
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
 
-    public function listPrepareVars()
+    public function listPrepareVars($mode = null)
     {
         $filtr_akceptovano = intval($_GET["filtr_akceptovano"]);
         $filtr_pripojeno = intval($_GET["filtr_pripojeno"]);
 
         if($filtr_akceptovano == 1) {
-            $this->listItems = $this->listItems->where('akceptovano', 1);
-        } elseif($filtr_akceptovano == 2) {
-            $this->listItems = $this->listItems->where('akceptovano', 0);
+            $this->listItems = $this->listItems->where('akceptovano', "Ano");
+        } elseif($filtr_akceptovano == 2 or $mode == "accept") {
+            $this->listItems = $this->listItems->where('akceptovano', "Ne");
         }
 
         if($filtr_pripojeno == 1) {
@@ -81,20 +81,17 @@ class partner extends adminator
             $this->listItems = $this->listItems->where('vlozil', $_GET['user']);
         }
 
-        // old name poradek
-        // $this->url_params = "filtr_akceptovano=".$filtr_akceptovano."&filtr_pripojeno=".$filtr_pripojeno;
-
         return true;
     }
 
-    public function list()
+    public function list($mode = null)
     {
         $output = "";
 
         $this->listItems = PartnerOrder::get()
             ->sortByDesc('id');
 
-        $this->listPrepareVars();
+        $this->listPrepareVars($mode);
 
         $this->listItems = adminator::collectionPaginate(
             $this->listItems,
@@ -269,16 +266,16 @@ class partner extends adminator
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . "called");
 
-        if(isset($this->form_odeslat)) {
+        if (! ($_GET["accept"] == 1)) {
 
-        }
-        else{
             // list view
-            $listOutput = $this->list();
+            $listOutput = $this->list("accept");
 
             $this->smarty->assign("body", $listOutput[0]);
 
             $this->smarty->display('partner/order-accept-list.tpl');
+        } else {
+
         }
     }
 }

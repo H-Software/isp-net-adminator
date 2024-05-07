@@ -123,8 +123,8 @@ class partnerController extends adminatorController
         // CSRF token name and value for update form
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
 
-        $this->partnerInstance->csrf_html = $csrf_html;
-        $this->partnerInstance->form_uri = $request->getUri();
+        // $this->partnerInstance->csrf_html = $csrf_html;
+        // $this->partnerInstance->form_uri = $request->getUri();
 
         $this->partnerInstance->accept();
 
