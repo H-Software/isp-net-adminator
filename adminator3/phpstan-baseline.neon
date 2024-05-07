@@ -831,11 +831,6 @@ parameters:
 			path: app/routing.php
 
 		-
-			message: "#^Property Smarty_Internal_TemplateBase\\:\\:\\$compile_check \\(int\\) does not accept true\\.$#"
-			count: 1
-			path: boostrap/containerAfter.php
-
-		-
 			message: "#^Class App\\\\Controllers\\\\Auth\\\\AuthController constructor invoked with 1 parameter, 3 required\\.$#"
 			count: 1
 			path: boostrap/dependencies.php
