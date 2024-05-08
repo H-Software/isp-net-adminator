@@ -65,9 +65,11 @@ RUN export MAKEFLAGS="-j $(nproc)" \
 RUN export MAKEFLAGS="-j $(nproc)" \
         && pecl install \
             opentelemetry \
+            protobuf \
             # grpc \
         && docker-php-ext-enable \
-            opentelemetry
+            opentelemetry \
+            protobuf
             # grpc
 
 # apache conf
