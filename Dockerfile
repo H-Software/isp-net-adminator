@@ -16,6 +16,8 @@ RUN apt-get update \
         git \
         libldap2-dev \
         libzip-dev \
+        libgrpc-dev \
+        libgrpc++-dev \
         gnupg \
         vim \
     && docker-php-ext-install mysqli \
@@ -52,11 +54,23 @@ RUN pecl install sqlsrv-5.11.1 \
             pdo_sqlsrv
 
 # Install APCu and APC backward compatibility
-RUN pecl install apcu \
+RUN export MAKEFLAGS="-j $(nproc)" \
+        && pecl install apcu \
         && docker-php-ext-enable apcu
 
 # RUN pecl install apcu_bc-1.0.5 \
         # && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
+
+# opentelemetry & grpc
+RUN export MAKEFLAGS="-j $(nproc)" \
+        && pecl install \
+            opentelemetry \
+            protobuf \
+            # grpc \
+        && docker-php-ext-enable \
+            opentelemetry \
+            protobuf
+            # grpc
 
 # apache conf
 RUN a2enmod ssl \
@@ -111,3 +125,5 @@ COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/te
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
 
 RUN chmod 1777 /tmp
+
+RUN ls -lh /usr/local/lib/php/extensions

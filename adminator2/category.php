@@ -15,11 +15,9 @@
       //   { echo '<td bgcolor="silver" '; }  else 
         { echo '<td '; }
       echo ' align="center" width="11%"><a class="cat" href="'.$cesta.'vlastnici-cat.php" target="_top">Zákazníci</a></td>'." \n";
-      
-      // if ( ereg("^.+objekty.",$_SERVER["REQUEST_URI"]) or ereg("^.+objekty-subcat.php",$_SERVER["REQUEST_URI"]))
-      //  { echo '<td bgcolor="silver" '; }  else 
+
        { echo '<td '; }
-      echo ' align="center" width="11%"><a class="cat" href="'.$cesta.'objekty-subcat.php" target="_top">Služby</a></td>'." \n";
+      echo ' align="center" width="11%"><!--<a class="cat" href="'.$cesta.'objekty-subcat.php" target="_top">-->Služby<!--</a>--></td>'." \n";
       
       // if ( ereg("^.+platby.php$",$_SERVER["REQUEST_URI"]) or ereg("^.+platby-subcat.php$",$_SERVER["REQUEST_URI"]) 
       // or ereg("^.+faktury.+$",$_SERVER["REQUEST_URI"]) or ereg("^.+fn.+$",$_SERVER["REQUEST_URI"]) )

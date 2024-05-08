@@ -9,7 +9,7 @@ $settings = [
         'logger' => [
             'name' => 'slim-app',
             'level' => Monolog\Logger::DEBUG,
-            'path' => __DIR__ . '/../../a3-logs/app.log',
+            'path' => __DIR__ . '/../logs/app.log',
             // the default date format is "Y-m-d\TH:i:sP"
             // https://www.php.net/manual/en/datetime.format.php
             'dateFormat' => 'Y-m-d \TH:i:sv \T\ZP',

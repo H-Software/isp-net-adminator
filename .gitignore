@@ -28,7 +28,8 @@ extras/documentation
 /.idea/
 
 # logs
-a3-logs/
+adminator2/logs/
+adminator3/logs/
 
 # caches
 adminator3/.php-cs-fixer.cache
@@ -36,6 +37,7 @@ adminator3/.php_cs.cache
 adminator3/.phpunit.result.cache
 /adminator3/templates_c/
 adminator3/.phpunit.cache/
+adminator3/cache/
 
 # phpunit
 adminator3/phpunit.xml.bak
@@ -51,5 +53,3 @@ adminator3/build/
 
 adminator3/export/
 adminator3/tests2/
-
-adminator3/cache/

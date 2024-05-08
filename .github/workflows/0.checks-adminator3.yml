@@ -32,9 +32,14 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: none
+          extensions: opentelemetry, grpc, protobuf
 
-      - name: Print PHP version
-        run: php -v
+      - name: Print PHP version and extensions
+        run: |
+          php -v \
+          && php --ri opentelemetry \
+          && php --ri grpc \
+          && php --ri protobuf
 
       # - name: Cache Composer dependencies
       #   uses: actions/cache@v3
