@@ -141,7 +141,13 @@ class partnerController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
+        $this->checkLevel(111, $this->adminator);
 
+        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Change Status");
+
+        $this->header($request, $response, $this->adminator);
+
+        $this->partnerInstance->changeStatus();
 
         return $response;
 

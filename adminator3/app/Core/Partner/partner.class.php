@@ -520,4 +520,161 @@ class partner extends adminator
         $this->smarty->display('partner/order-update-desc.tpl');
 
     }
+
+    public function changeStatus(): void
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        $output = "";
+
+        $id_zadosti = intval($_GET['id_zadosti']);
+        $pripojeno = intval($_GET["pripojeno"]);
+        $akt_tarif = intval($_GET["akt_tarif"]);
+
+        if(
+            $_GET["odeslat"] == "OK"
+            and (
+                $id_zadosti == 0
+                or
+                $pripojeno == 0
+                or
+                $akt_tarif == 0
+            )
+        ) {
+            $content  = "Chyba! Data nelze upravit, je třeba vyplnit všechny pole.";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", $content);
+        }
+
+        if (
+            $id_zadosti == 0
+            or
+            $pripojeno == 0
+            or
+            $akt_tarif == 0
+        ) {
+            // list view
+            $output .= "\n<form action=\"\" method=\"GET\" >\n"
+
+                . "<table border=\"0\" width=\"95%\" style=\"margin-top: 20px;\">
+                    <tr>\n"
+
+                . "<td width=\"30%\" valign=\"top\" >"
+
+                //prvni sloupec
+                . "<div style=\"padding-left: 20px; padding-bottom: 20px; font-weight: bold; \">
+                    Vyberte zákazníka: </div>\n\n"
+
+                . "	<select name=\"id_zadosti\" size=\"5\" >
+                        <option value=\"0\" class=\"select-nevybrano\" "
+                        . " selected "
+
+                . ">Nevybráno</option>\n";
+
+            $dotaz_zadosti = $this->conn_mysql->query("SELECT * FROM partner_klienti ORDER BY id DESC");
+
+            while($data = $dotaz_zadosti->fetch_array()) {
+                $output .= "<option value=\"".$data["id"]."\" ";
+                if ($id_zadosti == $data["id"]) {
+                    $output .= " selected ";
+                }
+
+                $output .= " > ".substr($data["jmeno"], 0, 22).",   ";
+
+                $output .= substr($data["adresa"], 0, 22)."</option>\n";
+            }
+
+            $output .= "</select>"
+
+                 . "</td>"
+
+                 . "<td valign=\"top\" width=\"30%\" >"
+
+                 . "<div style=\"padding-left: 20px; padding-bottom: 20px; font-weight: bold; \">
+              Vyberte stav pole \"Připojeno\": </div>\n"
+
+                 . "<div style=\"padding-left: 20px; \" >
+           
+                <select name=\"pripojeno\" size=\"1\" >
+                    <option value=\"0\" class=\"select-nevybrano\" ";
+            if ($pripojeno == 0) {
+                $output .= " selected ";
+            }
+            $output .= ">Nevybráno</option>\n
+               <option value=\"1\" >Ano</option>\n
+               <option value=\"2\" >Ne</option>\n
+              </select>"
+
+            . "<div style=\"padding-top: 20px; font-weight: bold; \">
+              Vyberte stav pole \"Aktuální linka\": </div>\n\n"
+
+            . "<div style=\"padding-top: 20px; padding-bottom: 20px; \" >
+           
+              <select name=\"akt_tarif\" size=\"1\" >
+               <option value=\"0\" class=\"select-nevybrano\" ";
+            if ($akt_tarif == 0) {
+                $output .= " selected ";
+            }
+            $output .= ">Nevybráno</option>\n
+               <option value=\"1\" ";
+            if ($akt_tarif == 1) {
+                $output .= " selected ";
+            }
+            $output .= ">SmallCity</option>\n
+               <option value=\"2\" ";
+            if ($akt_tarif == 2) {
+                $output .= " selected ";
+            }
+            $output .= " >Metropolitní</option>\n
+               <option value=\"3\" ";
+            if ($akt_tarif == 3) {
+                $output .= " selected ";
+            }
+            $output .= " >Jiná</option>\n
+               
+              </select>
+              </div>"
+
+              . "</div></td>"
+
+              . "<td valign=\"top\" width=\"30%\" >
+          
+                <div style=\"padding-left: 20px; padding-bottom: 20px; font-weight: bold; \">
+                    Potvrdit: </div>\n\n"
+
+              . "<div style=\"padding-left: 20px; \" >
+              <input type=\"submit\" name=\"odeslat\" value=\"OK\" >
+                 </div></td>"
+
+              . "</tr></table>"
+
+              . "</form>";
+        } elseif ($_GET["odeslat"] == "OK" and $id_zadosti > 1) {
+            try {
+                $this->conn_mysql->query(
+                    "UPDATE partner_klienti "
+                            . " SET pripojeno='$pripojeno', pripojeno_linka='$akt_tarif' "
+                            . " WHERE id=".$id_zadosti." Limit 1 "
+                );
+
+                $this->smarty->assign("alert_type", "success");
+                $this->smarty->assign("alert_content", "Pole \"Připojeno, Aktuální tarif\" úspěšně upraveno.");
+            } catch (Exception $e) {
+                $content  = "Chyba! Pole \"Připojeno, Aktuální tarif\" nelze upravit. </br> Data nelze uložit do databáze.";
+                $content .= '<div>(' . $e->getMessage() . ")</div>";
+
+                $this->smarty->assign("alert_type", "danger");
+                $this->smarty->assign("alert_content", $content);
+            }
+
+        } else {
+            // unknown state
+        }
+
+        $output = array($output);
+
+        $this->smarty->assign("body", $output[0]);
+
+        $this->smarty->display('partner/order-change-status.tpl');
+    }
 }
