@@ -5,9 +5,6 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
-use Illuminate\Database\Capsule\Manager as DB;
-
 use App\Partner\partner;
 
 class partnerController extends adminatorController
@@ -138,5 +135,15 @@ class partnerController extends adminatorController
         $this->partnerInstance->updateDesc();
 
         return $response;
+    }
+
+    public function orderChangeStatus(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+
+
+        return $response;
+
     }
 }

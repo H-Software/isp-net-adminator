@@ -33,7 +33,6 @@ class AuthController extends Controller
 
     public function __construct(
         ContainerInterface $container,
-        Messages $flash,
         RouteParserInterface $routeParser,
     ) {
         $this->container = $container;

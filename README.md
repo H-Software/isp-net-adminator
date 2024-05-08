@@ -1,6 +1,9 @@
 # isp-net-adminator
 administration system for Internet Service Provider (ISP)
 
+<!--ts-->
+<!--te-->
+
 ## description
 - T.B.A.
 ### sections
@@ -150,6 +153,7 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://packagist.org/packages/open-telemetry/opentelemetry-auto-slim
 - https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/Slim
 - https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Logs/Monolog
+- https://coralogix.com/docs/php-opentelemetry-instrumentation
 
 ### Github Actions
 - https://github.com/marketplace/actions/continue-on-error-comment

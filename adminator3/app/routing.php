@@ -10,6 +10,8 @@ use App\Controllers\HomeController;
 use App\Controllers\Auth\AuthController;
 use App\Controllers\Auth\PasswordController;
 use App\Controllers\partnerController;
+use App\Controllers\platbyController;
+use App\Controllers\runtimeController;
 
 // routes
 
@@ -43,6 +45,9 @@ $app->group(
     '',
     function (RouteCollectorProxy $group) {
         $group->map(['GET', 'POST'], '/home', HomeController::class . ':home')->setName('home');
+
+        $group->map(['GET'], '/runtime/opcache-gui', runtimeController::class . ':opcacheGui');
+
 
         $group->map(['GET', 'POST'], '/about', \aboutController::class . ':about');
         $group->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
@@ -82,9 +87,9 @@ $app->group(
         $group->map(['GET', 'POST'], '/partner/order/change-status', partnerController::class . ':orderChangeStatus');
         $group->map(['GET', 'POST'], '/partner/order/change-desc', partnerController::class . ':orderChangeDesc');
 
-        $group->map(['GET', 'POST'], '/platby/cat', \platbyController::class . ':cat');
-        $group->map(['GET', 'POST'], '/platby/fn', \platbyController::class . ':fn');
-        $group->map(['GET', 'POST'], '/platby/fn-kontrola-omezeni', \platbyController::class . ':fnKontrolaOmezeni');
+        $group->map(['GET', 'POST'], '/platby/cat', platbyController::class . ':cat');
+        $group->map(['GET', 'POST'], '/platby/fn', platbyController::class . ':fn');
+        $group->map(['GET', 'POST'], '/platby/fn-kontrola-omezeni', platbyController::class . ':fnKontrolaOmezeni');
 
         $group->map(['GET', 'POST'], '/vlastnici/cat', \vlastniciController::class . ':cat');
         $group->map(['GET', 'POST'], '/vlastnici2', \vlastniciController::class . ':vlastnici2');

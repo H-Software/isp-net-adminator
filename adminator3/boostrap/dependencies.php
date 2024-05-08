@@ -24,14 +24,10 @@ $app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
 
 $container->set(
     'AuthController',
-    function ($container) {
-        return new \App\Controllers\Auth\AuthController($container);
+    function ($container) use ($routeParser) {
+        return new \App\Controllers\Auth\AuthController($container, $routeParser);
     }
 );
-
-// $container['PasswordController'] = function($container) {
-//     return new \App\Controllers\Auth\PasswordController($container);
-// };
 
 $container->set(
     'HomeController',
