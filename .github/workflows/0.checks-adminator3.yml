@@ -38,7 +38,8 @@ jobs:
         run: |
           php -v \
           && php --ri opentelemetry || true \
-          && php --ri grpc || true
+          && php --ri grpc || true \
+          && php --ri protobuf || true
 
       # - name: Cache Composer dependencies
       #   uses: actions/cache@v3

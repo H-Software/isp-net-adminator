@@ -25,15 +25,17 @@ services:
     build: .
     # user: "www-data:www-data"
     environment:
-      #
+      # DB conn
       - MYSQL_SERVER=192.168.1.213
       - MYSQL_USER=root
       - MYSQL_PASSWD=isp-net-passwd
-      #
+      # DB conn 2
       - POSTGRES_SERVER=192.168.1.213
       - POSTGRES_USER=adminator
       - POSTGRES_PASSWD=isp-net-passwd
       - POSTGRES_DB=adminator.new
+      # otel
+      - OTEL_TRACES_EXPORTER=console
     volumes:
       - adminator-php-log:/var/log/php:uid=33,gid=33
       - adminator-tmp:/tmp:/tmp
