@@ -282,7 +282,7 @@ class partner extends adminator
 
             list($insertRs, $insertedData) = $this->addSaveData();
 
-            if(is_object($insertRs)) {                
+            if(is_object($insertRs)) {
                 $this->smarty->assign("alert_type", "success");
                 $this->smarty->assign("alert_content", "Data byla úspěšně uložena.");
 
