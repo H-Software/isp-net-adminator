@@ -87,6 +87,9 @@
         "phpcs": "phpcs -s",
         "cs:check": "./vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots --diff --dry-run",
         "cs:fix": "./vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots",
-        "test": "OTEL_PHP_DISABLED_INSTRUMENTATIONS=slim vendor/phpunit/phpunit/phpunit --colors=always"
+        "test": [
+            "@putenv OTEL_PHP_DISABLED_INSTRUMENTATIONS=slim",
+            "vendor/phpunit/phpunit/phpunit --colors=always"
+        ]
     }
 }
