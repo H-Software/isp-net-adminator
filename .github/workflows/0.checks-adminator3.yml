@@ -33,8 +33,10 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           coverage: none
 
-      - name: Print PHP version
-        run: php -v
+      - name: Print PHP version and extensions
+        run: |
+          php -v \
+          && php --ri opentelemetry
 
       # - name: Cache Composer dependencies
       #   uses: actions/cache@v3
