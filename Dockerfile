@@ -65,10 +65,10 @@ RUN export MAKEFLAGS="-j $(nproc)" \
 RUN export MAKEFLAGS="-j $(nproc)" \
         && pecl install \
             opentelemetry \
-            grpc \
+            # grpc \
         && docker-php-ext-enable \
-            opentelemetry \
-            grpc
+            opentelemetry
+            # grpc
 
 # apache conf
 RUN a2enmod ssl \
