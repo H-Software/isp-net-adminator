@@ -1,3 +1,4 @@
+# https://github.com/docker-library/php/blob/master/8.2/bookworm/apache/Dockerfile
 FROM php:8.2-apache AS php-ext
 
 ENV ACCEPT_EULA=Y
@@ -173,3 +174,12 @@ RUN chmod 1777 /tmp
 
 FROM scratch
 COPY --from=main / /
+
+ENTRYPOINT ["docker-php-entrypoint"]
+# https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
+STOPSIGNAL SIGWINCH
+
+WORKDIR /var/www/html
+
+EXPOSE 80
+CMD ["apache2-foreground"]
