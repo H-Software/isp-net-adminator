@@ -1,6 +1,11 @@
 <?php
 
+$app_mode = (isset($_ENV['MODE'])) ? $_ENV['MODE'] : "";
+
 $settings = [
+        'app' => [
+            "mode" => $app_mode,
+        ],
         'logger' => [
             'name' => 'slim-app',
             'level' => Monolog\Logger::DEBUG,
@@ -77,7 +82,7 @@ $settings = [
         ]
 ];
 
-if ($_ENV['MODE'] == "development"){
+if ($app_mode == "development"){
     $settings['smarty'] = [
         "compile_check" => Smarty::COMPILECHECK_OFF,
         "caching" =>  Smarty::CACHING_OFF,
