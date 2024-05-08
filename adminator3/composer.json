@@ -40,7 +40,8 @@
         "lloricode/laravel-html-table": "^2.1",
         "illuminate/pagination": "^10.48",
         "evilfreelancer/routeros-api-php": "1.5.2",
-        "robmorgan/phinx": "^0.12.10"
+        "robmorgan/phinx": "^0.12.10",
+        "open-telemetry/opentelemetry-auto-slim": "^1.0.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
