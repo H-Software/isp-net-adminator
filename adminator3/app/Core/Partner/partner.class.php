@@ -520,4 +520,16 @@ class partner extends adminator
         $this->smarty->display('partner/order-update-desc.tpl');
 
     }
+
+    public function changeStatus(): void
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        $output = "";
+
+        $output = array($output);
+
+        $this->smarty->assign("body", $output[0]);
+
+        $this->smarty->display('partner/order-change-status.tpl');
+    }
 }

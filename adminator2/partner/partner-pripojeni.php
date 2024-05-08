@@ -1,55 +1,5 @@
 <?php
 
-$cesta = "../";
-
-require ($cesta."include/main.function.shared.php");
-require ($cesta."include/config.php"); 
-require ($cesta."include/check_login.php");
-
-require ($cesta."include/check_level.php");
-
-if( !( check_level($level,111) ) )
-{
- // neni level
- $stranka='nolevelpage.php';
- header("Location: ".$stranka);
- 
- echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
- exit;
-      
-}
-
-echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
-      <html> 
-      <head> ';
-
-require ($cesta."include/charset.php"); 
-
-?>
-
-<title>Adminator 2 - partner - připojení</title> 
-
-</head> 
-
-<body> 
-
-<?php require ($cesta."head.php"); ?> 
-
-<?php require ($cesta."category.php"); ?> 
-
-<tr>
- <td colspan="2" height="20" bgcolor="silver" >
-
-    <?php require ("partner-klienti-cat.php"); ?>
-	  
- </td>
-</tr>
-	   
- <tr>
-   <td colspan="2" >
-	
-   <br>       
-<?php
 
     echo "<div style=\"padding-left: 40px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
                <span style=\"border-bottom: 1px solid grey; \" >Změna stavu připojení </span>
