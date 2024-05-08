@@ -173,11 +173,12 @@ COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/includ
 RUN chmod 1777 /tmp
 
 # workaround for squash
+#
 FROM scratch
 COPY --from=main / /
 
 # copy "original" statements for working image
-
+#
 ENV PHP_INI_DIR /usr/local/etc/php
 ENV APACHE_CONFDIR /etc/apache2
 ENV APACHE_ENVVARS $APACHE_CONFDIR/envvars
