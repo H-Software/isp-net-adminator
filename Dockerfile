@@ -16,6 +16,7 @@ RUN apt-get update \
         git \
         libldap2-dev \
         libzip-dev \
+        libgrpc-dev \
         gnupg \
         vim \
     && docker-php-ext-install mysqli \
@@ -52,16 +53,18 @@ RUN pecl install sqlsrv-5.11.1 \
             pdo_sqlsrv
 
 # Install APCu and APC backward compatibility
-RUN pecl install apcu \
+RUN export MAKEFLAGS="-j $(nproc)" \
+        && pecl install apcu \
         && docker-php-ext-enable apcu
 
 # RUN pecl install apcu_bc-1.0.5 \
         # && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
 # opentelemetry & grpc
-RUN pecl install \
-        opentelemetry \
-        grpc \
+RUN export MAKEFLAGS="-j $(nproc)" \
+        && pecl install \
+            opentelemetry \
+            grpc \
         && docker-php-ext-enable \
             opentelemetry \
             grpc
