@@ -179,28 +179,6 @@ class adminator
         return $formatedDate;
     }
 
-    public static function getHtmlBootstrapForCenterColumn($content)
-    {
-        return '<div class="container text-center">
-        <div class="row ">
-          <div class="col">
-          </div>
-          <div class="col-6">
-            ' . $content . '
-          </div>
-          <div class="col">
-          </div>
-        </div>
-      </div>';
-    }
-
-    public static function getHtmlBootstrapForAlertSuccess($content)
-    {
-        return '<div class="alert alert-success" role="alert" >'
-                . $content .
-                "</div>\n";
-    }
-
     public function getTarifIptvListForForm($show_zero_value = true)
     {
 

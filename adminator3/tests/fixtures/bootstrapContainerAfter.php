@@ -49,8 +49,11 @@ $container->set(
 $container->set(
     'smarty',
     function ($c) {
+        $settings = $c->get('settings');
+
         $smarty = new Smarty();
-        $smarty->compile_check = Smarty::COMPILECHECK_ON;
+        $smarty->compile_check = $settings['smarty']['compile_check'];
+        $smarty->caching       = $settings['smarty']['caching'];
         //$smarty->debugging = true;
 
         return $smarty;
