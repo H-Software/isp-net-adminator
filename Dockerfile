@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.2-apache AS php-ext
 
 ENV ACCEPT_EULA=Y
 
@@ -21,7 +21,6 @@ RUN apt-get update \
         gnupg \
         vim \
     && docker-php-ext-install mysqli \
-    && docker-php-ext-enable mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install \
             opcache \
@@ -42,35 +41,99 @@ RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor
         && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
         && apt-get update \
         && apt-get install -y \
-            msodbcsql17 \
+            # msodbcsql17 \
             unixodbc-dev \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pecl install sqlsrv-5.11.1 \
-        && pecl install pdo_sqlsrv-5.11.1 \
-        && docker-php-ext-enable \
-            sqlsrv \
-            pdo_sqlsrv
+RUN export MAKEFLAGS="-j $(nproc)" \
+        && pecl install sqlsrv-5.11.1 \
+        && pecl install pdo_sqlsrv-5.11.1
 
 # Install APCu and APC backward compatibility
 RUN export MAKEFLAGS="-j $(nproc)" \
-        && pecl install apcu \
-        && docker-php-ext-enable apcu
-
-# RUN pecl install apcu_bc-1.0.5 \
-        # && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
+        && pecl install apcu
 
 # opentelemetry & grpc
 RUN export MAKEFLAGS="-j $(nproc)" \
         && pecl install \
             opentelemetry \
-            protobuf \
-            # grpc \
-        && docker-php-ext-enable \
-            opentelemetry \
             protobuf
             # grpc
+
+FROM php:8.2-apache
+
+ENV ACCEPT_EULA=Y
+
+# Copy extensions from php-ext stage
+# COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/apcu.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/apcu.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/gd.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/gd.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/ldap.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/ldap.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/mysqli.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/mysqli.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/opcache.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/opcache.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/opentelemetry.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/opentelemetry.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pdo.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pdo.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pdo_mysql.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pdo_mysql.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pdo_pgsql.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pdo_pgsql.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pdo_sqlsrv.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pdo_sqlsrv.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pgsql.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/pgsql.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/protobuf.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/protobuf.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sockets.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sockets.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sodium.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sodium.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so
+
+# Enable extensions
+RUN docker-php-ext-enable \
+        apcu \
+        gd \
+        ldap \
+        mysqli \
+        opcache \
+        opentelemetry \
+        pdo \
+        pdo_pgsql \
+        pdo_mysql \
+        pdo_sqlsrv \
+        pgsql \
+        protobuf \
+        sockets \
+        sodium \
+        sqlsrv \
+        zip 
+        # grpc
+
+# packages required for php extensions
+# https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
+RUN apt-get update \
+    && apt-get install -y \
+        gnupg \
+    && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
+    && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update \
+    && apt-get install -y \
+        libzip4 \
+        libpng16-16 \
+        msodbcsql17 \
+        libpq5 \
+        diffutils \
+    && apt-get purge -y --allow-remove-essential \
+        libgcc-12-dev \
+        libstdc++-12-dev \
+        linux-libc-dev \
+        # util-linux \
+        # util-linux-extra \
+        curl \
+        gnupg \
+        make \
+        m4 \
+        # perl \
+        # perl-base \
+        # perl-modules-5.36 \
+    && apt autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # apache conf
 RUN a2enmod ssl \
@@ -81,25 +144,10 @@ RUN a2enmod ssl \
 # RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 
-COPY ./configs/php /usr/local/etc/php/conf.d/
+COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
 
-# ssh for composer custom repo(s)
-RUN mkdir /root/.ssh/ \
-    && touch /root/.ssh/known_hosts \
-    && ssh-keyscan github.com >> /root/.ssh/known_hosts
-COPY configs/ssh/* /root/.ssh
-RUN cd /root/.ssh/ \
-    && base64 -d priv > id_rsa \
-    && mv pub id_rsa.pub \
-    && chmod 600 /root/.ssh/id_rsa
-
-# composer
-#
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');" \
-    && mv composer.phar /usr/local/bin/composer
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN mkdir -p /var/www/html/adminator3/
 RUN mkdir -p /var/www/html/adminator2/
@@ -109,9 +157,6 @@ COPY adminator3/composer.json /var/www/html/adminator3/
 
 RUN cd adminator2 \
      && composer install
-
-# RUN cd adminator3 \
-#      && composer update
 
 RUN cd adminator3 \
     && composer install
@@ -125,5 +170,3 @@ COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/te
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
 
 RUN chmod 1777 /tmp
-
-RUN ls -lh /usr/local/lib/php/extensions

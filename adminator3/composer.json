@@ -9,12 +9,6 @@
             "php-http/discovery": false
         }
     },
-    "repositories": [
-        {
-            "url": "git@github.com:czhujer/slim-auth",
-            "type": "git"
-        }
-    ],
     "require": {
         "php": "^8.2",
         "nette/robot-loader": "^3.4",
