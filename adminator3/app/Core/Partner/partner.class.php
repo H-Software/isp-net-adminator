@@ -67,7 +67,7 @@ class partner extends adminator
 
         if($filtr_akceptovano == 1) {
             $this->listItems = $this->listItems->where('akceptovano', "Ano");
-        } elseif($filtr_akceptovano == 2 or $mode == "accept") {
+        } elseif($filtr_akceptovano == 2 or $mode == "accept" or $mode == "updateDesc") {
             $this->listItems = $this->listItems->where('akceptovano', "Ne");
         }
 
@@ -81,7 +81,7 @@ class partner extends adminator
             $this->listItems = $this->listItems->where('vlozil', $_GET['user']);
         }
 
-        if($mode == "accept") {
+        if($mode == "accept" or $mode == "updateDesc") {
             $this->listItems = $this->listItems->select(
                 [
                     'jmeno',
@@ -95,15 +95,21 @@ class partner extends adminator
                     'id'
                 ]
             );
+        }
 
+        if($mode == "accept" or $mode == "updateDesc") {
             $this->listItems = $this->listItems->transform(
-                function ($item, $key) {
+                function ($item, $key) use ($mode) {
+                    list($a, $b) = preg_split('/(?=[A-Z])/', $mode);
+                    $name = strtoupper($a . " " . $b);
                     $id = $item['id'];
-                    $item['id'] = "<a href=\"?id=" . $id . "\">ACCEPT</a>";
+
+                    $item['id'] = "<a href=\"?id=" . $id . "\">" . $name . "</a>";
                     return $item;
                 }
             );
         }
+
 
         return true;
     }
@@ -407,5 +413,66 @@ class partner extends adminator
         $this->smarty->assign("body", $output[0]);
 
         $this->smarty->display('partner/order-accept.tpl');
+    }
+
+    public function updateDesc(): void
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        $output = "";
+
+        if ($_GET["accept"] != 1 and !isset($_GET['id'])) {
+            // list view
+
+            list(
+                $data,
+                $linkPreviousPage,
+                $linkCurrentPage,
+                $linkNextPage
+            ) = $this->getItems("updateDesc");
+
+            if(count($data) == 0) {
+                $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
+                $this->smarty->assign("body", $output[0]);
+                $this->smarty->display('partner/order-update-desc.tpl');
+                return;
+            }
+
+            $headers = [
+                'jmeno',
+                'adresa',
+                'telefon',
+                'email',
+                'poznamka',
+                'priorita',
+                'vlozil kdo',
+                'datum vlozeni',
+                'akceptovat'
+            ] ;
+
+            $attributes = 'class="a-common-table a-common-table-1line" '
+                        . 'id="partner-order-table" '
+                        . 'style="width: 99%"'
+            ;
+
+            $listTable = new LaravelHtmlTableGenerator();
+
+            $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
+
+            $output .= $listTable->generate($headers, $data['data'], $attributes);
+
+            $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
+        } elseif ($_GET["accept"] != 1) {
+            // confirm form
+
+        } else {
+            // unknown mode
+        }
+
+        $output = array($output);
+
+        $this->smarty->assign("body", $output[0]);
+
+        $this->smarty->display('partner/order-update-desc.tpl');
+
     }
 }
