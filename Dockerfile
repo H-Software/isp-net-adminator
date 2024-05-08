@@ -129,9 +129,6 @@ RUN apt-get update \
         gnupg \
         make \
         m4 \
-        # perl \
-        # perl-base \
-        # perl-modules-5.36 \
         re2c \
         pkg-config \
         file \
