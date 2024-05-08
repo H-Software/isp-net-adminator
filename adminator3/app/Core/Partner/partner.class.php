@@ -617,19 +617,19 @@ class partner extends adminator
             }
             $output .= ">Nevybráno</option>\n
                <option value=\"1\" ";
-               if ($akt_tarif == 1) {
-                   $output .= " selected ";
-               }
+            if ($akt_tarif == 1) {
+                $output .= " selected ";
+            }
             $output .= ">SmallCity</option>\n
                <option value=\"2\" ";
-               if ($akt_tarif == 2) {
-                   $output .= " selected ";
-               }
+            if ($akt_tarif == 2) {
+                $output .= " selected ";
+            }
             $output .= " >Metropolitní</option>\n
                <option value=\"3\" ";
-               if ($akt_tarif == 3) {
-                   $output .= " selected ";
-               }
+            if ($akt_tarif == 3) {
+                $output .= " selected ";
+            }
             $output .= " >Jiná</option>\n
                
               </select>
