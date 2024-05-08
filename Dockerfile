@@ -123,8 +123,8 @@ RUN apt-get update \
         libgcc-12-dev \
         libstdc++-12-dev \
         linux-libc-dev \
-        # util-linux \
-        # util-linux-extra \
+        util-linux \
+        util-linux-extra \
         curl \
         gnupg \
         make \
@@ -132,6 +132,9 @@ RUN apt-get update \
         # perl \
         # perl-base \
         # perl-modules-5.36 \
+        re2c \
+        pkg-config \
+        file \
     && apt autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -172,8 +175,11 @@ COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/includ
 
 RUN chmod 1777 /tmp
 
+# workaround for squash
 FROM scratch
 COPY --from=main / /
+
+# copy "original" statements
 
 ENTRYPOINT ["docker-php-entrypoint"]
 # https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
