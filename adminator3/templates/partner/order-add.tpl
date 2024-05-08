@@ -6,14 +6,8 @@
 
 {include file="partner/inc.order.add.banner.tpl"}
 
-{if $insertMsg|count_characters > 1}
-    <div class="row">
-        <div class="col-2"></div>
-        <div class="col-8" style="padding-top: 15px">
-        {$insertMsg}
-        </div>
-        <div class="col-2"></div>
-    </div>
+{if $alert_type|count_characters > 1}
+    {include file="partials/bootstrap-alert-with-columns.tpl"}
 {/if}
 
 <div class="row justify-content-center">

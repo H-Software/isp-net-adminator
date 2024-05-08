@@ -282,19 +282,24 @@ class partner extends adminator
 
             list($insertRs, $insertedData) = $this->addSaveData();
 
-            if(is_object($insertRs)) {
-                $insertMsg = '<div class="alert alert-success pb-2" role="alert" >Data byla úspěšně uložena.</div>';
+            if(is_object($insertRs)) {                
+                $this->smarty->assign("alert_type", "success");
+                $this->smarty->assign("alert_content", "Data byla úspěšně uložena.");
+
                 $this->logger->info("partner\add: insert into database was successful");
             } else {
-                $insertMsg = '<div class="alert alert-danger pb-2" role="alert" >Chyba! Data se nepodařilo uložit. </div>'
-                             .'<div class="alert alert-secondary pb-2" role="alert" >' . $insertRs . ')</div>';
+                $content  = "Chyba! Data se nepodařilo uložit. <br> Data nelze uložit do databáze!";
+                $content .= '<div>(' . $insertRs . ")</div>";
+
+                $this->smarty->assign("alert_type", "danger");
+                $this->smarty->assign("alert_content", $content);
+
                 $this->logger->error("partner\add: insert into database has failed. Error message: " . var_export($insertRs, true));
             }
 
             // $this->logger->info("partner\add insertedData: " . var_export($insertedData, true));
 
             $this->smarty->assign("insertedData", $insertedData);
-            $this->smarty->assign("insertMsg", $insertMsg);
 
             $this->smarty->display('partner/order-add.tpl');
             return true;
@@ -385,28 +390,23 @@ class partner extends adminator
             $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
             $id = intval($_GET["id"]);
 
-            $uprava = $this->conn_mysql->query(
-                "UPDATE partner_klienti "
-                                . "SET akceptovano='1', "
-                                    . "akceptovano_kym='". $this->loggedUserEmail ."', "
-                                    . " akceptovano_pozn = '$pozn' "
-                                . "WHERE id = ".$id." Limit 1"
-            );
+            try {
+                $this->conn_mysql->query(
+                    "UPDATE partner_klienti "
+                                    . "SET akceptovano='1', "
+                                        . "akceptovano_kym='". $this->loggedUserEmail ."', "
+                                        . " akceptovano_pozn = '$pozn' "
+                                    . "WHERE id = ".$id." Limit 1"
+                );
 
-            if ($uprava == 1) {
-                $output .= '<div 
-                class="alert alert-success" 
-                role="alert"
-                style="width: 80%; "
-                >'
-                ."Zákazník úspěšně akceptován.</div>\n";
-            } else {
-                $output .= '<div 
-                class="alert alert-danger" 
-                role="alert"
-                style="width: 80%; "
-                >'
-                ."Chyba! Zákazníka nelze akceptovat. Data nelze uložit do databáze. </div>\n";
+                $this->smarty->assign("alert_type", "success");
+                $this->smarty->assign("alert_content", "Zákazník úspěšně akceptován.");
+            } catch (Exception $e) {
+                $content  = "Chyba! Zákazníka nelze akceptovat. </br> Data nelze uložit do databáze.";
+                $content .= '<div>(' . $e->getMessage() . ")</div>";
+
+                $this->smarty->assign("alert_type", "danger");
+                $this->smarty->assign("alert_content", $content);
             }
         } else {
             // unknown mode
@@ -496,24 +496,16 @@ class partner extends adminator
             $id = intval($_GET["id"]);
 
             try {
-                $uprava = $this->conn_mysql->query("UPDATE partner_klienti SET akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
+                $this->conn_mysql->query("UPDATE partner_klienti SET akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
 
-                $content = adminator::getHtmlBootstrapForAlertSuccess("Poznámka úspěšně upravena");
-                $output .= adminator::getHtmlBootstrapForCenterColumn($content);
+                $this->smarty->assign("alert_type", "success");
+                $this->smarty->assign("alert_content", "Poznámka úspěšně upravena");
             } catch (Exception $e) {
-                $content  = '<div 
-                class="alert alert-danger" 
-                role="alert"
+                $content  = "Chyba! Poznámku nelze upravit. <br> Data nelze uložit do databáze!";
+                $content .= '<div>(' . $e->getMessage() . ")</div>";
 
-                >'
-                ."Chyba! Poznámku nelze upravit. Data nelze uložit do databáze.</div>\n";
-
-                $content .= '<div 
-                class="alert alert-secondary" 
-                role="alert"
-                >'
-                ."(" . $e->getMessage() . ")</div>\n";
-                $output .= adminator::getHtmlBootstrapForCenterColumn($content);
+                $this->smarty->assign("alert_type", "danger");
+                $this->smarty->assign("alert_content", $content);
             }
 
         } else {
