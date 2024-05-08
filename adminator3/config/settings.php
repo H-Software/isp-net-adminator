@@ -77,4 +77,18 @@ $settings = [
         ]
 ];
 
+if ($_ENV['MODE'] == "development"){
+    $settings['smarty'] = [
+        "compile_check" => Smarty::COMPILECHECK_OFF,
+        "caching" =>  Smarty::CACHING_OFF,
+
+    ];
+}
+else{
+    $settings['smarty'] = [
+        "compile_check" => Smarty::COMPILECHECK_ON,
+        "caching" =>  Smarty::CACHING_LIFETIME_SAVED,
+    ];
+}
+
 return $settings;
