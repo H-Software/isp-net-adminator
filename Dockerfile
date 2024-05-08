@@ -61,7 +61,7 @@ RUN export MAKEFLAGS="-j $(nproc)" \
             protobuf
             # grpc
 
-FROM php:8.2-apache
+FROM php:8.2-apache AS main
 
 ENV ACCEPT_EULA=Y
 
