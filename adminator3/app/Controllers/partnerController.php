@@ -142,7 +142,7 @@ class partnerController extends adminatorController
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
 
-    
+
         return $response;
 
     }
