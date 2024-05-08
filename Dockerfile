@@ -17,6 +17,7 @@ RUN apt-get update \
         libldap2-dev \
         libzip-dev \
         libgrpc-dev \
+        libgrpc++-dev \
         gnupg \
         vim \
     && docker-php-ext-install mysqli \
@@ -122,3 +123,5 @@ COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/te
 COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
 
 RUN chmod 1777 /tmp
+
+RUN ls -lh /usr/local/lib/php/extensions
