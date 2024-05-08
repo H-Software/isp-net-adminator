@@ -128,7 +128,7 @@ class HomeController extends adminatorController
             $nastenka->view_number = 10; //zprávy budou zobrazeny po ...
 
             $zpravy = $nastenka->show_messages();
-            $this->logger->debug("homeController\board: show_messages result: " . var_export($zpravy, true));
+            // $this->logger->debug("homeController\board: show_messages result: " . var_export($zpravy, true));
 
             if(isset($nastenka->query_error)) {
                 $this->smarty->assign("query_error", $nastenka->query_error);

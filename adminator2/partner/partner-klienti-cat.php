@@ -9,5 +9,5 @@
             
     <span style="margin-left: 40px; "><!--<a href="partner-pripojeni.php" >-->Změna stavu připojení<!--</a>--></span>
 
-    <span style="margin-left: 40px; "><a href="partner-pozn-update.php" >Změna poznámky</a></span>
+    <span style="margin-left: 40px; "><!--<a href="partner-pozn-update.php" >-->Změna poznámky<!--</a>--></span>
  
