@@ -16,10 +16,11 @@
 
 {if strlen($alert_type) gt 0}
     {include file="partials/bootstrap-alert-with-columns.tpl"}
-{else}
-    {include file="partials/bootstrap-table-window-header.tpl"}
-    {$body|default: ''}
-    {include file="partials/bootstrap-table-window-footer.tpl"}
 {/if}
+
+{include file="partials/bootstrap-table-window-header.tpl"}
+{$body|default: ''}
+{include file="partials/bootstrap-table-window-footer.tpl"}
+
 
 {include file="base-end.tpl"}

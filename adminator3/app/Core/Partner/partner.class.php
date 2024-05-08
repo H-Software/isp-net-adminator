@@ -530,7 +530,29 @@ class partner extends adminator
         $pripojeno = intval($_GET["pripojeno"]);
         $akt_tarif = intval($_GET["akt_tarif"]);
 
-        if ($id_zadosti == 0) {
+        if(
+            $_GET["odeslat"] == "OK"
+            and (
+                $id_zadosti == 0
+                or
+                $pripojeno == 0
+                or
+                $akt_tarif == 0
+            )
+        ) {
+            $content  = "Chyba! Data nelze upravit, je třeba vyplnit všechny pole.";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", $content);
+        }
+
+        if (
+            $id_zadosti == 0
+            or
+            $pripojeno == 0
+            or
+            $akt_tarif == 0
+        ) {
             // list view
             $output .= "\n<form action=\"\" method=\"GET\" >\n"
 
@@ -552,7 +574,12 @@ class partner extends adminator
             $dotaz_zadosti = $this->conn_mysql->query("SELECT * FROM partner_klienti ORDER BY id DESC");
 
             while($data = $dotaz_zadosti->fetch_array()) {
-                $output .= "<option value=\"".$data["id"]."\" > ".substr($data["jmeno"], 0, 22).",   ";
+                $output .= "<option value=\"".$data["id"]."\" ";
+                if ($id_zadosti == $data["id"]) {
+                    $output .= " selected ";
+                }
+
+                $output .= " > ".substr($data["jmeno"], 0, 22).",   ";
 
                 $output .= substr($data["adresa"], 0, 22)."</option>\n";
             }
@@ -589,9 +616,21 @@ class partner extends adminator
                 $output .= " selected ";
             }
             $output .= ">Nevybráno</option>\n
-               <option value=\"1\" >SmallCity</option>\n
-               <option value=\"2\" >Metropolitní</option>\n
-               <option value=\"3\" >Jiná</option>\n
+               <option value=\"1\" ";
+               if ($akt_tarif == 1) {
+                   $output .= " selected ";
+               }
+            $output .= ">SmallCity</option>\n
+               <option value=\"2\" ";
+               if ($akt_tarif == 2) {
+                   $output .= " selected ";
+               }
+            $output .= " >Metropolitní</option>\n
+               <option value=\"3\" ";
+               if ($akt_tarif == 3) {
+                   $output .= " selected ";
+               }
+            $output .= " >Jiná</option>\n
                
               </select>
               </div>"
