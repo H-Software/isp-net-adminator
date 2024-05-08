@@ -545,12 +545,10 @@ class partner extends adminator
                     Vyberte zákazníka: </div>\n\n"
 
                 . "	<select name=\"id_zadosti\" size=\"5\" >
-                        <option value=\"0\" class=\"select-nevybrano\" ";
-            if ($id_zadosti == 0) {
-                $output .= " selected ";
-            }
+                        <option value=\"0\" class=\"select-nevybrano\" "
+                        . " selected "
 
-            $output .= ">Nevybráno</option>\n";
+                . ">Nevybráno</option>\n";
 
             $dotaz_zadosti = $this->conn_mysql->query("SELECT * FROM partner_klienti ORDER BY id DESC");
 
