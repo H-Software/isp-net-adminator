@@ -529,7 +529,6 @@ class partner extends adminator
         $id_zadosti = intval($_GET['id_zadosti']);
         $pripojeno = intval($_GET["pripojeno"]);
         $akt_tarif = intval($_GET["akt_tarif"]);
-        $pozn = $_GET["pozn"];
 
         if ($id_zadosti == 0) {
             // list view
@@ -611,6 +610,25 @@ class partner extends adminator
               . "</tr></table>"
 
               . "</form>";
+        } elseif ( $_GET["odeslat"] == "OK" and $id_zadosti > 1) {
+            try {
+                $this->conn_mysql->query(
+                            "UPDATE partner_klienti "
+                            . " SET pripojeno='$pripojeno', pripojeno_linka='$akt_tarif' "
+                            . " WHERE id=".$id_zadosti." Limit 1 ");
+
+                $this->smarty->assign("alert_type", "success");
+                $this->smarty->assign("alert_content", "Pole \"Připojeno, Aktuální tarif\" úspěšně upraveno.");
+            } catch (Exception $e) {
+                $content  = "Chyba! Pole \"Připojeno, Aktuální tarif\" nelze upravit. </br> Data nelze uložit do databáze.";
+                $content .= '<div>(' . $e->getMessage() . ")</div>";
+
+                $this->smarty->assign("alert_type", "danger");
+                $this->smarty->assign("alert_content", $content);
+            }
+
+        } else {
+            // unknown state
         }
 
         $output = array($output);
