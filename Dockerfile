@@ -58,9 +58,13 @@ RUN pecl install apcu \
 # RUN pecl install apcu_bc-1.0.5 \
         # && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
-# opentelemetry
-RUN pecl install opentelemetry \
-        && docker-php-ext-enable opentelemetry
+# opentelemetry & grpc
+RUN pecl install \
+        opentelemetry \
+        grpc \
+        && docker-php-ext-enable \
+            opentelemetry \
+            grpc
 
 # apache conf
 RUN a2enmod ssl \
