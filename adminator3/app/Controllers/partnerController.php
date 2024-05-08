@@ -124,4 +124,19 @@ class partnerController extends adminatorController
 
         return $response;
     }
+
+    public function orderChangeDesc(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(119, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Update Desc");
+
+        $this->header($request, $response, $this->adminator);
+
+        $this->partnerInstance->updateDesc();
+
+        return $response;
+    }
 }

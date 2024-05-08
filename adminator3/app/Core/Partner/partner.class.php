@@ -18,6 +18,8 @@ class partner extends adminator
     public $conn_pgsql;
     public $conn_mysql;
 
+    public $pdoMysql;
+
     public $logger;
 
     public $loggedUserEmail;
@@ -54,6 +56,8 @@ class partner extends adminator
         $this->container = $container;
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
+        $this->pdoMysql = $container->get('pdoMysql');
+
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
 
@@ -65,7 +69,7 @@ class partner extends adminator
         $filtr_akceptovano = intval($_GET["filtr_akceptovano"]);
         $filtr_pripojeno = intval($_GET["filtr_pripojeno"]);
 
-        if($filtr_akceptovano == 1) {
+        if($filtr_akceptovano == 1 or $mode == "updateDesc") {
             $this->listItems = $this->listItems->where('akceptovano', "Ano");
         } elseif($filtr_akceptovano == 2 or $mode == "accept") {
             $this->listItems = $this->listItems->where('akceptovano', "Ne");
@@ -81,7 +85,7 @@ class partner extends adminator
             $this->listItems = $this->listItems->where('vlozil', $_GET['user']);
         }
 
-        if($mode == "accept") {
+        if($mode == "accept" or $mode == "updateDesc") {
             $this->listItems = $this->listItems->select(
                 [
                     'jmeno',
@@ -95,15 +99,21 @@ class partner extends adminator
                     'id'
                 ]
             );
+        }
 
+        if($mode == "accept" or $mode == "updateDesc") {
             $this->listItems = $this->listItems->transform(
-                function ($item, $key) {
+                function ($item, $key) use ($mode) {
+                    list($a, $b) = preg_split('/(?=[A-Z])/', $mode);
+                    $name = strtoupper($a . " " . $b);
                     $id = $item['id'];
-                    $item['id'] = "<a href=\"?id=" . $id . "\">ACCEPT</a>";
+
+                    $item['id'] = "<a href=\"?id=" . $id . "\">" . $name . "</a>";
                     return $item;
                 }
             );
         }
+
 
         return true;
     }
@@ -407,5 +417,115 @@ class partner extends adminator
         $this->smarty->assign("body", $output[0]);
 
         $this->smarty->display('partner/order-accept.tpl');
+    }
+
+    public function updateDesc(): void
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        $output = "";
+
+        if ($_GET["accept"] != 1 and !isset($_GET['id'])) {
+            // list view
+
+            list(
+                $data,
+                $linkPreviousPage,
+                $linkCurrentPage,
+                $linkNextPage
+            ) = $this->getItems("updateDesc");
+
+            if(count($data) == 0) {
+                $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
+                $this->smarty->assign("body", $output[0]);
+                $this->smarty->display('partner/order-update-desc.tpl');
+                return;
+            }
+
+            $headers = [
+                'jmeno',
+                'adresa',
+                'telefon',
+                'email',
+                'poznamka',
+                'priorita',
+                'vlozil kdo',
+                'datum vlozeni',
+                'akceptovat'
+            ] ;
+
+            $attributes = 'class="a-common-table a-common-table-1line" '
+                        . 'id="partner-order-table" '
+                        . 'style="width: 99%"'
+            ;
+
+            $listTable = new LaravelHtmlTableGenerator();
+
+            $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
+
+            $output .= $listTable->generate($headers, $data['data'], $attributes);
+
+            $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
+        } elseif ($_GET["edit"] != 1) {
+            // update form
+
+            $id = intval($_GET['id']);
+            $dotaz = $this->pdoMysql->query("SELECT akceptovano_pozn FROM partner_klienti WHERE id = '" . $id. "' ");
+            $data = $dotaz->fetchAll();
+
+            $output .= "<form action=\"\" method=\"GET\" >"
+
+            . "<div style=\"padding-left: 40px; padding-bottom: 20px; padding-top: 20px; \" >Upravte poznámku: </div>"
+
+            . "<div style=\"padding-left: 40px; padding-bottom: 20px;\" >
+                <textarea name=\"pozn\" cols=\"50\" rows=\"6\">".htmlspecialchars($data[0]["akceptovano_pozn"])."</textarea>
+            </div>"
+
+            . "<div style=\"padding-left: 40px; padding-bottom: 20px; \" >
+                <input type=\"submit\" name=\"odeslat\" value=\"OK\" >
+            </div>"
+
+            . "<input type=\"hidden\" name=\"edit\" value=\"1\"> 
+            <input type=\"hidden\" name=\"id\" value=\"".$id."\" >"
+
+            . "</form>";
+
+        } elseif($_GET["edit"] == 1 and intval($_GET['id']) > 0) {
+            // update in DB
+
+            $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
+            $id = intval($_GET["id"]);
+
+            try {
+                $uprava = $this->conn_mysql->query("UPDATE partner_klienti SET akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
+
+                $content = adminator::getHtmlBootstrapForAlertSuccess("Poznámka úspěšně upravena");
+                $output .= adminator::getHtmlBootstrapForCenterColumn($content);
+            } catch (Exception $e) {
+                $content  = '<div 
+                class="alert alert-danger" 
+                role="alert"
+
+                >'
+                ."Chyba! Poznámku nelze upravit. Data nelze uložit do databáze.</div>\n";
+
+                $content .= '<div 
+                class="alert alert-secondary" 
+                role="alert"
+                >'
+                ."(" . $e->getMessage() . ")</div>\n";
+                $output .= adminator::getHtmlBootstrapForCenterColumn($content);
+            }
+
+        } else {
+            // unknown mode
+            $output .= "unknown mode";
+        }
+
+        $output = array($output);
+
+        $this->smarty->assign("body", $output[0]);
+
+        $this->smarty->display('partner/order-update-desc.tpl');
+
     }
 }
