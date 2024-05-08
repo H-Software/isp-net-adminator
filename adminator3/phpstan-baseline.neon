@@ -46,11 +46,6 @@ parameters:
 			path: app/Controllers/Auth/AuthController.php
 
 		-
-			message: "#^Constructor of class App\\\\Controllers\\\\Auth\\\\AuthController has an unused parameter \\$flash\\.$#"
-			count: 1
-			path: app/Controllers/Auth/AuthController.php
-
-		-
 			message: "#^Offset 'persist' on array\\{email\\: mixed, password\\: mixed\\} in isset\\(\\) does not exist\\.$#"
 			count: 1
 			path: app/Controllers/Auth/AuthController.php
@@ -705,10 +700,6 @@ parameters:
 			count: 2
 			path: app/routing.php
 
-		-
-			message: "#^Class platbyController not found\\.$#"
-			count: 3
-			path: app/routing.php
 
 		-
 			message: "#^Class topologyController not found\\.$#"
@@ -725,10 +716,6 @@ parameters:
 			count: 1
 			path: app/routing.php
 
-		-
-			message: "#^Class App\\\\Controllers\\\\Auth\\\\AuthController constructor invoked with 1 parameter, 3 required\\.$#"
-			count: 1
-			path: boostrap/dependencies.php
 
 		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
