@@ -531,7 +531,7 @@ class partner extends adminator
         $akt_tarif = intval($_GET["akt_tarif"]);
         $pozn = $_GET["pozn"];
 
-        if (!isset($_GET['id_zadosti'])) {
+        if ($id_zadosti == 0) {
             // list view
             $output .= "\n<form action=\"\" method=\"GET\" >\n"
 
@@ -546,7 +546,7 @@ class partner extends adminator
 
                 . "	<select name=\"id_zadosti\" size=\"5\" >
                         <option value=\"0\" class=\"select-nevybrano\" ";
-            if ($id_zadosti == 0 or !isset($id_zadosti)) {
+            if ($id_zadosti == 0) {
                 $output .= " selected ";
             }
 
@@ -573,7 +573,7 @@ class partner extends adminator
            
                 <select name=\"pripojeno\" size=\"1\" >
                     <option value=\"0\" class=\"select-nevybrano\" ";
-            if ($pripojeno == 0 or !isset($pripojeno)) {
+            if ($pripojeno == 0) {
                 $output .= " selected ";
             }
             $output .= ">Nevybráno</option>\n
@@ -588,7 +588,7 @@ class partner extends adminator
            
               <select name=\"akt_tarif\" size=\"1\" >
                <option value=\"0\" class=\"select-nevybrano\" ";
-            if ($akt_tarif == 0 or !isset($akt_tarif)) {
+            if ($akt_tarif == 0) {
                 $output .= " selected ";
             }
             $output .= ">Nevybráno</option>\n
