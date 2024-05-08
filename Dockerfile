@@ -181,6 +181,10 @@ COPY --from=main / /
 
 # copy "original" statements for working image
 
+ENV PHP_INI_DIR /usr/local/etc/php
+ENV APACHE_CONFDIR /etc/apache2
+ENV APACHE_ENVVARS $APACHE_CONFDIR/envvars
+
 ENTRYPOINT ["docker-php-entrypoint"]
 # https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
 STOPSIGNAL SIGWINCH
