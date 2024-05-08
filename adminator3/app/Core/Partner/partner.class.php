@@ -15,7 +15,7 @@ class partner extends adminator
 
     private $validator;
 
-    public$conn_pgsql;
+    public $conn_pgsql;
     public $conn_mysql;
 
     public $pdoMysql;
@@ -471,19 +471,19 @@ class partner extends adminator
             $id = intval($_GET['id']);
             $dotaz = $this->pdoMysql->query("SELECT akceptovano_pozn FROM partner_klienti WHERE id = '" . $id. "' ");
             $data = $dotaz->fetchAll();
-      
+
             $output .= "<form action=\"\" method=\"GET\" >"
-        
+
             . "<div style=\"padding-left: 40px; padding-bottom: 20px; padding-top: 20px; \" >Upravte poznámku: </div>"
-        
+
             . "<div style=\"padding-left: 40px; padding-bottom: 20px;\" >
                 <textarea name=\"pozn\" cols=\"50\" rows=\"6\">".htmlspecialchars($data[0]["akceptovano_pozn"])."</textarea>
             </div>"
-        
+
             . "<div style=\"padding-left: 40px; padding-bottom: 20px; \" >
                 <input type=\"submit\" name=\"odeslat\" value=\"OK\" >
-            </div>" 
-        
+            </div>"
+
             . "<input type=\"hidden\" name=\"edit\" value=\"1\"> 
             <input type=\"hidden\" name=\"id\" value=\"".$id."\" >"
 
@@ -494,14 +494,13 @@ class partner extends adminator
 
             $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
             $id = intval($_GET["id"]);
-        
+
             try {
-                $uprava=$this->conn_mysql->query("UPDATE partner_klienti SET akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
+                $uprava = $this->conn_mysql->query("UPDATE partner_klienti SET akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
 
                 $content = adminator::getHtmlBootstrapForAlertSuccess("Poznámka úspěšně upravena");
                 $output .= adminator::getHtmlBootstrapForCenterColumn($content);
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $content  = '<div 
                 class="alert alert-danger" 
                 role="alert"
