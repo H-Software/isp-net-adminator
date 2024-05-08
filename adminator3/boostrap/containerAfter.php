@@ -43,6 +43,9 @@ $container->set(
         $handler->registerFatalHandler();
 
         $logger->pushHandler($fingersCrossed);
+
+        $logger->info("app running in mode: " . var_export($_ENV['MODE'], true));
+
         return $logger;
     }
 );
@@ -52,10 +55,16 @@ $container->set(
 $container->set(
     'smarty',
     function ($c) {
+        $settings = $c->get('settings');
+        $logger = $c->get('logger');
+
         $smarty = new Smarty();
-        $smarty->compile_check = Smarty::COMPILECHECK_ON;
-        $smarty->caching = Smarty::CACHING_LIFETIME_SAVED;
+        $smarty->compile_check = $settings['smarty']['compile_check'];
+        $smarty->caching = $settings['smarty']['caching'];
         //$smarty->debugging = true;
+
+        $logger->debug("bootstrap\containerAfer: smarty compile_check: " . var_export($settings['smarty']['compile_check'], true));
+        $logger->debug("bootstrap\containerAfer: smarty caching: " . var_export($settings['smarty']['caching'], true));
 
         return $smarty;
     }

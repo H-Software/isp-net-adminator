@@ -10,6 +10,8 @@ export POSTGRES_USER=adminator
 export POSTGRES_PASSWD=isp-net-passwd
 export POSTGRES_DB=adminator.new
 
+export MODE=development
+
 # .PHONY: run-a2-php-local	
 # run-a2-php-local:
 # 	cp adminator3/include/main.function.shared.php adminator2/include/main.function.shared.php \

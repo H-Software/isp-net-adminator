@@ -145,17 +145,19 @@ CREATE TABLE `az_ucetni_typy` (
 INSERT INTO `az_ucetni_typy` (`zu_id_typ`, `zu_nazev_typ`) VALUES
 (1,	'ucetni typ 1');
 
+SET NAMES utf8mb4;
+
 DROP TABLE IF EXISTS `board`;
 CREATE TABLE `board` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `author` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `email` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `author` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `from_date` date NOT NULL,
   `to_date` date NOT NULL,
-  `subject` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `body` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `subject` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `body` varchar(4096) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `board` (`id`, `author`, `email`, `from_date`, `to_date`, `subject`, `body`) VALUES
 (5,	'admin',	'test',	'2024-04-08',	'2024-04-19',	'subject',	'text'),
@@ -163,7 +165,14 @@ INSERT INTO `board` (`id`, `author`, `email`, `from_date`, `to_date`, `subject`,
 (7,	'1',	'',	'2024-04-13',	'2024-04-27',	'test',	'rffff'),
 (8,	'1',	'',	'2024-04-13',	'2024-04-27',	'test',	'rffff'),
 (9,	'1',	'',	'2024-04-13',	'2024-04-27',	'test4',	'rffff4'),
-(10,	'1',	'x@xx',	'2024-04-20',	'2024-04-20',	'hu@hu',	'hu');
+(10,	'1',	'x@xx',	'2024-04-20',	'2024-04-20',	'hu@hu',	'hu'),
+(11,	'admin@admin',	'',	'2024-05-03',	'2024-06-01',	'test subject 11',	'nejake body'),
+(12,	'admin@admin',	'',	'2024-05-03',	'2024-06-01',	't',	''),
+(13,	'admin@admin',	'',	'2024-05-03',	'2024-06-01',	't2',	''),
+(14,	'admin@admin',	'',	'2024-05-03',	'2024-06-01',	't3',	''),
+(15,	'admin@admin',	'',	'2024-05-04',	'2024-05-04',	't4',	''),
+(16,	'admin@admin',	'',	'2024-05-04',	'2024-05-04',	't5',	''),
+(17,	'admin@admin',	'',	'2024-05-03',	'2024-05-10',	't4',	'');
 
 DROP TABLE IF EXISTS `fakturacni_skupiny`;
 CREATE TABLE `fakturacni_skupiny` (
@@ -477,20 +486,24 @@ CREATE TABLE `partner_klienti` (
   `poznamky` varchar(450) COLLATE utf8mb3_unicode_ci NOT NULL,
   `prio` int NOT NULL DEFAULT '0',
   `vlozil` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `datum_vlozeni` datetime NOT NULL,
+  `datum_vlozeni` datetime DEFAULT CURRENT_TIMESTAMP,
   `pripojeno` int NOT NULL DEFAULT '0',
   `pripojeno_linka` int NOT NULL DEFAULT '0',
   `typ_balicku` int NOT NULL DEFAULT '0',
   `typ_linky` int NOT NULL DEFAULT '0',
   `akceptovano` int NOT NULL DEFAULT '0',
+  `akceptovano_kym` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `akceptovano_pozn` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `partner_klienti` (`id`, `tel`, `jmeno`, `adresa`, `email`, `poznamky`, `prio`, `vlozil`, `datum_vlozeni`, `pripojeno`, `pripojeno_linka`, `typ_balicku`, `typ_linky`, `akceptovano`) VALUES
-(1,	'123456789',	'Petr Pavel',	'Hrad 1',	'me@hrad.gov.cz',	'celej areal + wifi',	0,	'backoffice',	'2024-04-27 17:21:54',	1,	0,	0,	0,	0),
-(2,	'608608608',	'Vratislav Mynar',	'Hrad 666',	'podatelna@hrad.gov.cz',	'presna lokace bude vyresena na miste',	0,	'admin',	'2024-04-27 20:40:33',	0,	0,	0,	0,	1),
-(3,	'608608608',	'Milan Balak',	'Obora 1',	'',	'',	0,	'hrad',	'2024-04-28 07:51:09',	0,	0,	0,	0,	0);
+INSERT INTO `partner_klienti` (`id`, `tel`, `jmeno`, `adresa`, `email`, `poznamky`, `prio`, `vlozil`, `datum_vlozeni`, `pripojeno`, `pripojeno_linka`, `typ_balicku`, `typ_linky`, `akceptovano`, `akceptovano_kym`, `akceptovano_pozn`) VALUES
+(1,	'123456789',	'Petr Pavel',	'Hrad 1',	'me@hrad.gov.cz',	'celej areal + wifi',	0,	'backoffice',	'2024-04-27 17:21:54',	1,	0,	0,	0,	0,	NULL,	NULL),
+(2,	'608608608',	'Vratislav Mynar',	'Hrad 666',	'podatelna@hrad.gov.cz',	'presna lokace bude vyresena na miste',	0,	'admin',	'2024-04-27 20:40:33',	0,	0,	0,	0,	1,	NULL,	NULL),
+(3,	'608608608',	'Milan Balak',	'Obora 1',	'',	'',	0,	'hrad',	'2024-04-28 07:51:09',	0,	0,	0,	0,	0,	NULL,	NULL),
+(4,	'112333444',	'test',	'testovic',	'hu@hu.hu',	'nowhere.',	0,	'admin@admin',	'2024-05-03 18:54:44',	0,	0,	1,	2,	0,	NULL,	NULL),
+(10,	'112333444',	'test',	'testovic',	'hu@hu.hu',	'nowhere.',	0,	'admin@admin',	'2024-05-03 19:03:51',	0,	0,	1,	2,	1,	'admin@admin',	'yes');
 
 DROP TABLE IF EXISTS `partner_klienti_servis`;
 CREATE TABLE `partner_klienti_servis` (
@@ -502,15 +515,16 @@ CREATE TABLE `partner_klienti_servis` (
   `poznamky` varchar(4096) COLLATE utf8mb3_unicode_ci NOT NULL,
   `prio` int NOT NULL DEFAULT '0',
   `vlozil` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `akceptovano` int NOT NULL DEFAULT '0',
+  `akceptovano` int NOT NULL DEFAULT '2',
   `akceptovano_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `akceptovano_pozn` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `datum_vlozeni` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `partner_klienti_servis` (`id`, `tel`, `jmeno`, `adresa`, `email`, `poznamky`, `prio`, `vlozil`, `akceptovano`, `akceptovano_kym`, `akceptovano_pozn`, `datum_vlozeni`) VALUES
-(1,	'112233222',	'xx,  V:0',	'kdesi 2',	'hu@hu.hu',	'nic',	2,	'admin',	1,	'admin@admin',	'vse OK 2',	'2024-05-02 00:50:11');
+(1,	'112233222',	'xx,  V:0',	'kdesi 2',	'hu@hu.hu',	'nic',	2,	'admin',	1,	'admin@admin',	'vse OK 2',	'2024-05-02 00:50:11'),
+(2,	'800888888',	'Petr 2,  V:2',	'Hrad 2',	'pavel@hrad.gov.cz',	'pripojit',	2,	'admin@admin',	1,	'admin@admin',	'a',	'2024-05-03 08:24:26');
 
 DROP TABLE IF EXISTS `partner_login`;
 CREATE TABLE `partner_login` (
@@ -534,7 +548,9 @@ CREATE TABLE `phinxlog` (
 
 INSERT INTO `phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `breakpoint`) VALUES
 (20240501120830,	'CreateUsersTable',	'2024-05-01 12:24:56',	'2024-05-01 12:24:57',	0),
-(20240501122737,	'CreatePersistencesTable',	'2024-05-01 12:41:33',	'2024-05-01 12:41:33',	0);
+(20240501122737,	'CreatePersistencesTable',	'2024-05-01 12:41:33',	'2024-05-01 12:41:33',	0),
+(20240506001301,	'CreateBoardTable',	'2024-05-06 14:03:54',	'2024-05-06 14:03:54',	0),
+(20240506001543,	'AddColumnsForNameToUsersTable',	'2024-05-06 14:03:54',	'2024-05-06 14:03:55',	0);
 
 DROP TABLE IF EXISTS `router_list`;
 CREATE TABLE `router_list` (
@@ -621,13 +637,16 @@ CREATE TABLE `users` (
   `level` int unsigned NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `first_name` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `last_name` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_username_unique` (`username`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `level`, `created_at`, `updated_at`) VALUES
-(1,	'Administrator',	'admin@admin',	'$2y$10$H1razrcagxKIoRQWbPmnLu5kUfOo0qeCVic2/J4kNliB8wmTX.6Vi',	NULL,	'2024-05-02 14:34:15',	101,	'2024-05-01 12:29:13',	'2024-05-02 14:34:15');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `level`, `created_at`, `updated_at`, `first_name`, `last_name`) VALUES
+(1,	'Administrator',	'admin@admin',	'$2y$10$uZ7ZBCl/Shp9sW.QRy10CuFxkO/Vg7Yr1kbVJzhSACNQoohChkxaW',	NULL,	'2024-05-07 21:47:26',	101,	'2024-05-01 12:29:13',	'2024-05-07 21:47:26',	NULL,	NULL),
+(2,	'admin2',	'admin2@admin',	'$2y$10$H1razrcagxKIoRQWbPmnLu5kUfOo0qeCVic2/J4kNliB8wmTX.6Vi',	NULL,	'2024-05-04 07:53:56',	99,	'2024-05-04 07:50:34',	'2024-05-04 07:53:56',	NULL,	NULL);
 
 DROP TABLE IF EXISTS `users_old`;
 CREATE TABLE `users_old` (
@@ -661,35 +680,11 @@ CREATE TABLE `users_persistences` (
   UNIQUE KEY `users_persistences_code_unique` (`code`),
   KEY `users_persistences_user_id_foreign` (`user_id`),
   CONSTRAINT `users_persistences_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `users_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
-(1,	1,	'fIiIc3IGLmRBfISXQapQ1yqedEX0rGuj',	'2024-05-01 12:51:55',	'2024-05-01 12:51:55'),
-(2,	1,	'dP0W0MpuBJbc3ZGiUlDOP4rcVddSaQFT',	'2024-05-01 12:54:28',	'2024-05-01 12:54:28'),
-(3,	1,	'gQMJ1UFmbSYos8NDzMiI3Jzrchj5Zpxp',	'2024-05-01 13:24:42',	'2024-05-01 13:24:42'),
-(4,	1,	'7Wf58wgvL4rr1qM456qyaiLP1ketMz35',	'2024-05-01 13:45:16',	'2024-05-01 13:45:16'),
-(5,	1,	'FmaesS1t8yBi4Afn4mUdauGQ9gyjxrdG',	'2024-05-01 15:31:37',	'2024-05-01 15:31:37'),
-(6,	1,	'GtWo2DfbQHUbvgWSPUYxQmm6FNas1kn6',	'2024-05-01 16:13:18',	'2024-05-01 16:13:18'),
-(10,	1,	'1m7W7tzlJePPGmt8GarAf6kRXDTd0vxo',	'2024-05-01 17:14:49',	'2024-05-01 17:14:49'),
-(12,	1,	'CL5O28WCV5ZqDcmn6cQ4Xp8p5HPVv9P5',	'2024-05-01 17:24:06',	'2024-05-01 17:24:06'),
-(13,	1,	'JR4ZjgpHm4MzBG3J6hMJuO44hy0f0sNG',	'2024-05-01 20:51:44',	'2024-05-01 20:51:44'),
-(15,	1,	'tEYcDpxqVKxjLD8B3gwjiICxBCBzCD3g',	'2024-05-01 21:08:06',	'2024-05-01 21:08:06'),
-(17,	1,	'8sh4hLqI4yRK5t50Kub7uhoxHiB8nI0y',	'2024-05-01 21:19:50',	'2024-05-01 21:19:50'),
-(18,	1,	'btMIBNZDdbOHKr4QmmxauMzms4Idzz1A',	'2024-05-01 21:31:52',	'2024-05-01 21:31:52'),
-(20,	1,	'eaMeTXMchqj5PqSljlO6XpOFSBF2IFMt',	'2024-05-01 21:41:58',	'2024-05-01 21:41:58'),
-(21,	1,	'FRKPoadgwXmfOfJ1Kl0jXIENlgI77HGy',	'2024-05-01 21:48:57',	'2024-05-01 21:48:57'),
-(22,	1,	'lN5o2L3ziIgneHgrfa7gfVh0PwgfAbsn',	'2024-05-01 21:51:04',	'2024-05-01 21:51:04'),
-(23,	1,	'Hy46gHLJdYh7IAL0l5K128orFjoPYF9O',	'2024-05-01 21:51:04',	'2024-05-01 21:51:04'),
-(24,	1,	'SpvbH8PhBSm41Miv3xcrxwYkNDnw2uvU',	'2024-05-01 21:53:02',	'2024-05-01 21:53:02'),
-(25,	1,	'MCoaf7L6GpC0oS9sWeDtxbLFohuTZtLU',	'2024-05-01 21:53:45',	'2024-05-01 21:53:45'),
-(26,	1,	'rVO6ih3j1pyb9T9VPS1gN5WPcYCevjVS',	'2024-05-01 23:43:33',	'2024-05-01 23:43:33'),
-(27,	1,	'E44VKoIGJH2miOCYtoJfopCulGKMIVim',	'2024-05-01 23:49:27',	'2024-05-01 23:49:27'),
-(28,	1,	'3hNsYjdQ2G1M5ooVZAQB4qmvaA1ew7UX',	'2024-05-01 23:54:26',	'2024-05-01 23:54:26'),
-(29,	1,	'nc2qILa6DeYl1tN19uhuEA9s9zNbgC1f',	'2024-05-01 23:58:37',	'2024-05-01 23:58:37'),
-(30,	1,	'2hpTj7sKhOnCSZUsrfk9TGq6ukOJ1tWd',	'2024-05-02 00:45:12',	'2024-05-02 00:45:12'),
-(31,	1,	'pTuoSY895n6gB4R6eC5nL1MJSZBNfe4b',	'2024-05-02 14:03:13',	'2024-05-02 14:03:13'),
-(32,	1,	'F2iqNOnNO2d7TAllJJr1AD7iBlpCM4ET',	'2024-05-02 14:09:13',	'2024-05-02 14:09:13'),
-(33,	1,	'9zug7E9bYOE8eFv4JZOkn71eaoIPnkGz',	'2024-05-02 14:34:15',	'2024-05-02 14:34:15');
+(49,	2,	'nAA1MFmnDLvgKzbKSP7j08GPkEgUrLZs',	'2024-05-04 07:53:56',	'2024-05-04 07:53:56'),
+(81,	1,	'Ku22KGoPpNruwuLa0s1yOOzPYgxhoI03',	'2024-05-07 21:47:26',	'2024-05-07 21:47:26');
 
 DROP TABLE IF EXISTS `vypovedi`;
 CREATE TABLE `vypovedi` (
@@ -737,4 +732,4 @@ CREATE TABLE `workzamek` (
 INSERT INTO `workzamek` (`id`, `zamek`) VALUES
 (1,	'ne');
 
--- 2024-05-02 15:45:41
+-- 2024-05-07 22:03:25
