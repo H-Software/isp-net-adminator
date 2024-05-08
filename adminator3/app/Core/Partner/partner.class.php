@@ -610,12 +610,13 @@ class partner extends adminator
               . "</tr></table>"
 
               . "</form>";
-        } elseif ( $_GET["odeslat"] == "OK" and $id_zadosti > 1) {
+        } elseif ($_GET["odeslat"] == "OK" and $id_zadosti > 1) {
             try {
                 $this->conn_mysql->query(
-                            "UPDATE partner_klienti "
+                    "UPDATE partner_klienti "
                             . " SET pripojeno='$pripojeno', pripojeno_linka='$akt_tarif' "
-                            . " WHERE id=".$id_zadosti." Limit 1 ");
+                            . " WHERE id=".$id_zadosti." Limit 1 "
+                );
 
                 $this->smarty->assign("alert_type", "success");
                 $this->smarty->assign("alert_content", "Pole \"Připojeno, Aktuální tarif\" úspěšně upraveno.");
