@@ -526,66 +526,71 @@ class partner extends adminator
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
         $output = "";
 
-        $id_zadosti = intval($_GET['id_zadosti']);		
-		$pripojeno = intval($_GET["pripojeno"]);
-		$akt_tarif = intval($_GET["akt_tarif"]);
+        $id_zadosti = intval($_GET['id_zadosti']);
+        $pripojeno = intval($_GET["pripojeno"]);
+        $akt_tarif = intval($_GET["akt_tarif"]);
         $pozn = $_GET["pozn"];
 
         if (!isset($_GET['id_zadosti'])) {
             // list view
             $output .= "\n<form action=\"\" method=\"GET\" >\n"
-	    
+
                 . "<table border=\"0\" width=\"95%\" style=\"margin-top: 20px;\">
                     <tr>\n"
-                
+
                 . "<td width=\"30%\" valign=\"top\" >"
 
                 //prvni sloupec
                 . "<div style=\"padding-left: 20px; padding-bottom: 20px; font-weight: bold; \">
                     Vyberte zákazníka: </div>\n\n"
-                
+
                 . "	<select name=\"id_zadosti\" size=\"5\" >
                         <option value=\"0\" class=\"select-nevybrano\" ";
-                        if ( $id_zadosti == 0 or !isset($id_zadosti) ){ $output .= " selected "; }
-              
-                $output .= ">Nevybráno</option>\n";
-                
-            $dotaz_zadosti=$this->conn_mysql->query("SELECT * FROM partner_klienti ORDER BY id DESC");
-            
-            while( $data=$dotaz_zadosti->fetch_array() )
-            { 
-                $output .= "<option value=\"".$data["id"]."\" > ".substr($data["jmeno"], 0, 22).",   ";
-                
-                $output .= substr($data["adresa"], 0, 22)."</option>\n"; 
+            if ($id_zadosti == 0 or !isset($id_zadosti)) {
+                $output .= " selected ";
             }
-           
-           $output .= "</select>"
-           
-                . "</td>"
-          
-                . "<td valign=\"top\" width=\"30%\" >"
-          
-                . "<div style=\"padding-left: 20px; padding-bottom: 20px; font-weight: bold; \">
+
+            $output .= ">Nevybráno</option>\n";
+
+            $dotaz_zadosti = $this->conn_mysql->query("SELECT * FROM partner_klienti ORDER BY id DESC");
+
+            while($data = $dotaz_zadosti->fetch_array()) {
+                $output .= "<option value=\"".$data["id"]."\" > ".substr($data["jmeno"], 0, 22).",   ";
+
+                $output .= substr($data["adresa"], 0, 22)."</option>\n";
+            }
+
+            $output .= "</select>"
+
+                 . "</td>"
+
+                 . "<td valign=\"top\" width=\"30%\" >"
+
+                 . "<div style=\"padding-left: 20px; padding-bottom: 20px; font-weight: bold; \">
               Vyberte stav pole \"Připojeno\": </div>\n"
-           
-                . "<div style=\"padding-left: 20px; \" >
+
+                 . "<div style=\"padding-left: 20px; \" >
            
                 <select name=\"pripojeno\" size=\"1\" >
                     <option value=\"0\" class=\"select-nevybrano\" ";
-                 if ( $pripojeno == 0 or !isset($pripojeno) ){ $output .= " selected "; }
+            if ($pripojeno == 0 or !isset($pripojeno)) {
+                $output .= " selected ";
+            }
             $output .= ">Nevybráno</option>\n
                <option value=\"1\" >Ano</option>\n
                <option value=\"2\" >Ne</option>\n
               </select>"
-          
+
             . "<div style=\"padding-top: 20px; font-weight: bold; \">
               Vyberte stav pole \"Aktuální linka\": </div>\n\n"
-          
+
             . "<div style=\"padding-top: 20px; padding-bottom: 20px; \" >
            
               <select name=\"akt_tarif\" size=\"1\" >
                <option value=\"0\" class=\"select-nevybrano\" ";
-                 if ( $akt_tarif == 0 or !isset($akt_tarif) ){ $output .= " selected "; }
+            if ($akt_tarif == 0 or !isset($akt_tarif)) {
+                $output .= " selected ";
+            }
             $output .= ">Nevybráno</option>\n
                <option value=\"1\" >SmallCity</option>\n
                <option value=\"2\" >Metropolitní</option>\n
@@ -593,20 +598,20 @@ class partner extends adminator
                
               </select>
               </div>"
-          
-              . "</div></td>" 
-          
+
+              . "</div></td>"
+
               . "<td valign=\"top\" width=\"30%\" >
           
                 <div style=\"padding-left: 20px; padding-bottom: 20px; font-weight: bold; \">
                     Potvrdit: </div>\n\n"
-           
+
               . "<div style=\"padding-left: 20px; \" >
               <input type=\"submit\" name=\"odeslat\" value=\"OK\" >
-                 </div></td>" 
-          
+                 </div></td>"
+
               . "</tr></table>"
-          
+
               . "</form>";
         }
 
