@@ -14,7 +14,6 @@
     <div class="col-7"></div>
 </div>
 
-
 {if strlen($alert_type) gt 0}
     {include file="partials/bootstrap-alert-with-columns.tpl"}
 {else}
