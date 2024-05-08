@@ -15,8 +15,10 @@ class partner extends adminator
 
     private $validator;
 
-    public $conn_pgsql;
+    public$conn_pgsql;
     public $conn_mysql;
+
+    public $pdoMysql;
 
     public $logger;
 
@@ -54,6 +56,8 @@ class partner extends adminator
         $this->container = $container;
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
+        $this->pdoMysql = $container->get('pdoMysql');
+
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
 
@@ -65,9 +69,9 @@ class partner extends adminator
         $filtr_akceptovano = intval($_GET["filtr_akceptovano"]);
         $filtr_pripojeno = intval($_GET["filtr_pripojeno"]);
 
-        if($filtr_akceptovano == 1) {
+        if($filtr_akceptovano == 1 or $mode == "updateDesc") {
             $this->listItems = $this->listItems->where('akceptovano', "Ano");
-        } elseif($filtr_akceptovano == 2 or $mode == "accept" or $mode == "updateDesc") {
+        } elseif($filtr_akceptovano == 2 or $mode == "accept") {
             $this->listItems = $this->listItems->where('akceptovano', "Ne");
         }
 
@@ -461,11 +465,61 @@ class partner extends adminator
             $output .= $listTable->generate($headers, $data['data'], $attributes);
 
             $output .= adminator::paginateRenderLinks($linkPreviousPage, $linkCurrentPage, $linkNextPage);
-        } elseif ($_GET["accept"] != 1) {
-            // confirm form
+        } elseif ($_GET["edit"] != 1) {
+            // update form
+
+            $id = intval($_GET['id']);
+            $dotaz = $this->pdoMysql->query("SELECT akceptovano_pozn FROM partner_klienti WHERE id = '" . $id. "' ");
+            $data = $dotaz->fetchAll();
+      
+            $output .= "<form action=\"\" method=\"GET\" >"
+        
+            . "<div style=\"padding-left: 40px; padding-bottom: 20px; padding-top: 20px; \" >Upravte poznámku: </div>"
+        
+            . "<div style=\"padding-left: 40px; padding-bottom: 20px;\" >
+                <textarea name=\"pozn\" cols=\"50\" rows=\"6\">".htmlspecialchars($data[0]["akceptovano_pozn"])."</textarea>
+            </div>"
+        
+            . "<div style=\"padding-left: 40px; padding-bottom: 20px; \" >
+                <input type=\"submit\" name=\"odeslat\" value=\"OK\" >
+            </div>" 
+        
+            . "<input type=\"hidden\" name=\"edit\" value=\"1\"> 
+            <input type=\"hidden\" name=\"id\" value=\"".$id."\" >"
+
+            . "</form>";
+
+        } elseif($_GET["edit"] == 1 and intval($_GET['id']) > 0) {
+            // update in DB
+
+            $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
+            $id = intval($_GET["id"]);
+        
+            try {
+                $uprava=$this->conn_mysql->query("UPDATE partner_klienti SET akceptovano_pozn = '$pozn' WHERE id=".$id." Limit 1 ");
+
+                $content = adminator::getHtmlBootstrapForAlertSuccess("Poznámka úspěšně upravena");
+                $output .= adminator::getHtmlBootstrapForCenterColumn($content);
+            }
+            catch (Exception $e) {
+                $content  = '<div 
+                class="alert alert-danger" 
+                role="alert"
+
+                >'
+                ."Chyba! Poznámku nelze upravit. Data nelze uložit do databáze.</div>\n";
+
+                $content .= '<div 
+                class="alert alert-secondary" 
+                role="alert"
+                >'
+                ."(" . $e->getMessage() . ")</div>\n";
+                $output .= adminator::getHtmlBootstrapForCenterColumn($content);
+            }
 
         } else {
             // unknown mode
+            $output .= "unknown mode";
         }
 
         $output = array($output);
