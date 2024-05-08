@@ -37,7 +37,8 @@ jobs:
       - name: Print PHP version and extensions
         run: |
           php -v \
-          && php --ri opentelemetry && true
+          && php --ri opentelemetry || true \
+          && php --ri grpc || true
 
       # - name: Cache Composer dependencies
       #   uses: actions/cache@v3
