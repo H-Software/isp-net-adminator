@@ -152,58 +152,58 @@ class objekt_a2
     public function export_vypis_odkaz()
     {
 
-        $fp=fopen("export/objekty.xls", "w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
-        fputs($fp, "<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
-        fputs($fp, "<tr>");   // Zapíšeme do souboru začátek řádky, kde budou názvy sloupců (polí)
+        // $fp=fopen("export/objekty.xls", "w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
+        // fputs($fp, "<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
+        // fputs($fp, "<tr>");   // Zapíšeme do souboru začátek řádky, kde budou názvy sloupců (polí)
 
-        $vysledek_pole=pg_query("SELECT column_name FROM information_schema.columns WHERE table_name ='objekty' ORDER BY ordinal_position ");
+        // $vysledek_pole=pg_query("SELECT column_name FROM information_schema.columns WHERE table_name ='objekty' ORDER BY ordinal_position ");
 
-        while ($vysledek_array_pole=pg_fetch_row($vysledek_pole) )
-        { fputs($fp, "<td><b> ".$vysledek_array_pole[0]." </b></td> \n"); 
-        }
+        // while ($vysledek_array_pole=pg_fetch_row($vysledek_pole) )
+        // { fputs($fp, "<td><b> ".$vysledek_array_pole[0]." </b></td> \n"); 
+        // }
 
-        fputs($fp, "</tr>");   // Zapíšeme do souboru konec řádky, kde jsou názvy sloupců (polí)
+        // fputs($fp, "</tr>");   // Zapíšeme do souboru konec řádky, kde jsou názvy sloupců (polí)
 
-        $vysledek = pg_query("SELECT * FROM objekty ORDER BY id_komplu ASC");
+        // $vysledek = pg_query("SELECT * FROM objekty ORDER BY id_komplu ASC");
 
-        while ($data=pg_fetch_array($vysledek) )
-        {
-            fputs($fp, "\n <tr>");
+        // while ($data=pg_fetch_array($vysledek) )
+        // {
+        //     fputs($fp, "\n <tr>");
 
-            fputs($fp, "<td> ".$data["id_komplu"]."</td> ");
-            fputs($fp, "<td> ".$data["id_tridy"]."</td> ");
-            fputs($fp, "<td> ".$data["id_cloveka"]."</td> ");
-            fputs($fp, "<td> ".$data["dns_jmeno"]."</td> ");
-            fputs($fp, "<td> ".$data["ip"]."</td> ");
-            fputs($fp, "<td> ".$data["mac"]."</td> ");
-            fputs($fp, "<td> ".$data["rra"]."</td> ");
-            fputs($fp, "<td> ".$data["vezeni"]."</td> ");
-            fputs($fp, "<td> ".$data["dov_net"]."</td> ");
-            fputs($fp, "<td> ".$data["swz"]."</td> ");
-            //     fputs($fp,"<td> ".$data["sc"]."</td> ");
-            fputs($fp, "<td> ".$data["typ"]."</td> ");
-            fputs($fp, "<td> ".$data["poznamka"]."</td> ");
-            fputs($fp, "<td> ".$data["verejna"]."</td> ");
-            fputs($fp, "<td> ".$data["ftp_update"]."</td> ");
-            fputs($fp, "<td> ".$data["pridano"]."</td> ");
-            fputs($fp, "<td> ".$data["id_nodu"]."</td> ");
-            fputs($fp, "<td> ".$data["rb_mac"]."</td> ");
-            fputs($fp, "<td> ".$data["rb_ip"]."</td> ");
-            fputs($fp, "<td> ".$data["pridal"]."</td> ");
-            fputs($fp, "<td> ".$data["upravil"]."</td> ");
-            fputs($fp, "<td> ".$data["sikana_status"]."</td> ");
-            fputs($fp, "<td> ".$data["sikana_cas"]."</td> ");
-            fputs($fp, "<td> ".$data["sikana_text"]."</td> ");
-            fputs($fp, "<td> ".$data["vip_snat"]."</td> ");
-            fputs($fp, "<td> ".$data["vip_snat_lip"]."</td> ");
+        //     fputs($fp, "<td> ".$data["id_komplu"]."</td> ");
+        //     fputs($fp, "<td> ".$data["id_tridy"]."</td> ");
+        //     fputs($fp, "<td> ".$data["id_cloveka"]."</td> ");
+        //     fputs($fp, "<td> ".$data["dns_jmeno"]."</td> ");
+        //     fputs($fp, "<td> ".$data["ip"]."</td> ");
+        //     fputs($fp, "<td> ".$data["mac"]."</td> ");
+        //     fputs($fp, "<td> ".$data["rra"]."</td> ");
+        //     fputs($fp, "<td> ".$data["vezeni"]."</td> ");
+        //     fputs($fp, "<td> ".$data["dov_net"]."</td> ");
+        //     fputs($fp, "<td> ".$data["swz"]."</td> ");
+        //     //     fputs($fp,"<td> ".$data["sc"]."</td> ");
+        //     fputs($fp, "<td> ".$data["typ"]."</td> ");
+        //     fputs($fp, "<td> ".$data["poznamka"]."</td> ");
+        //     fputs($fp, "<td> ".$data["verejna"]."</td> ");
+        //     fputs($fp, "<td> ".$data["ftp_update"]."</td> ");
+        //     fputs($fp, "<td> ".$data["pridano"]."</td> ");
+        //     fputs($fp, "<td> ".$data["id_nodu"]."</td> ");
+        //     fputs($fp, "<td> ".$data["rb_mac"]."</td> ");
+        //     fputs($fp, "<td> ".$data["rb_ip"]."</td> ");
+        //     fputs($fp, "<td> ".$data["pridal"]."</td> ");
+        //     fputs($fp, "<td> ".$data["upravil"]."</td> ");
+        //     fputs($fp, "<td> ".$data["sikana_status"]."</td> ");
+        //     fputs($fp, "<td> ".$data["sikana_cas"]."</td> ");
+        //     fputs($fp, "<td> ".$data["sikana_text"]."</td> ");
+        //     fputs($fp, "<td> ".$data["vip_snat"]."</td> ");
+        //     fputs($fp, "<td> ".$data["vip_snat_lip"]."</td> ");
 
-            fputs($fp, "</tr> \n ");
-            // echo "vysledek_array: ".$vysledek_array[$i];
+        //     fputs($fp, "</tr> \n ");
+        //     // echo "vysledek_array: ".$vysledek_array[$i];
 
-        }
+        // }
 
-        fputs($fp, "</table>");   // Zapíšeme do souboru konec tabulky
-        fclose($fp);   // Zavřeme soubor
+        // fputs($fp, "</table>");   // Zapíšeme do souboru konec tabulky
+        // fclose($fp);   // Zavřeme soubor
 
         if($this->echo === true ) {
             echo "<span style=\"padding-left: 25px; padding-right: 20px; \" >";

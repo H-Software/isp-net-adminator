@@ -179,7 +179,7 @@ RUN chmod 1777 /tmp
 FROM scratch
 COPY --from=main / /
 
-# copy "original" statements
+# copy "original" statements for working image
 
 ENTRYPOINT ["docker-php-entrypoint"]
 # https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
