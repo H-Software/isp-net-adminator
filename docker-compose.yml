@@ -35,7 +35,15 @@ services:
       - POSTGRES_PASSWD=isp-net-passwd
       - POSTGRES_DB=adminator.new
       # otel
+      - OTEL_PHP_AUTOLOAD_ENABLED=true
+      - OTEL_SERVICE_NAME=isp-adminator3
       - OTEL_TRACES_EXPORTER=console
+      # - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_LOGS_EXPORTER=none
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf # grpc
+      - OTEL_EXPORTER_OTLP_ENDPOINT="https://otel_endpoint>"
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3,application.name=isp-adminator3
     volumes:
       - adminator-php-log:/var/log/php:uid=33,gid=33
       - adminator-tmp:/tmp:/tmp
