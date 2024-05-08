@@ -1,7 +1,8 @@
 # isp-net-adminator
 administration system for Internet Service Provider (ISP)
 
-[[_TOC_]]
+<!--ts-->
+<!--te-->
 
 ## description
 - T.B.A.
