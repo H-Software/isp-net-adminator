@@ -4,9 +4,6 @@ namespace App\Print;
 
 class printRegForm
 {
-    //
-    // variables
-    //
     public $file_name;  //file name of generated pdf file
     public $id_cloveka; //internal key from DB, where if generate file for existing object
 
@@ -18,10 +15,6 @@ class printRegForm
     public $input_pozadovany_tarif;
 
     public $form_ec;
-
-    //
-    //  functions
-    //
 
     // stolen from https://www.php.net/manual/en/function.each.php#126076
     public function legacy_each($array)
@@ -41,10 +34,8 @@ class printRegForm
     //
     // load_input_vars
     //
-
     public function load_input_vars()
     {
-
         reset($_POST);
 
         while (list($name, $value) = $this->legacy_each($_POST)) {
@@ -64,7 +55,6 @@ class printRegForm
     //
     // generate_pdf_file
     //
-
     public function generate_pdf_file()
     {
 
