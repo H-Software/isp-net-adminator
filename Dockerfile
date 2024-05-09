@@ -75,7 +75,7 @@ FROM php:8.2-apache AS main
 ENV ACCEPT_EULA=Y
 
 # Copy extensions from php-ext stage
-# COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/apcu.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/apcu.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/gd.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/gd.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/ldap.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/ldap.so
