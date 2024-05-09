@@ -19,7 +19,7 @@ class printClass extends adminator
 
     public $logger;
 
-    public $loggedUserEmail;
+    // public $loggedUserEmail;
 
     public $adminator; // handler for instance of adminator class
 
