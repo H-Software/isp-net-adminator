@@ -1,2 +1,0 @@
-
-soubor: faktury/faktury-for-home.tpl - zakomentovan odkaz v prvni radce

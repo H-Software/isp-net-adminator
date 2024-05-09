@@ -67,5 +67,4 @@ run-a3-phpstan:
 				ind*.php \
 				other*.php \
 				vl*.php \
-				w*.php \
 				--memory-limit 512M
