@@ -150,8 +150,16 @@ COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN mkdir -p /var/www/html/adminator3/
-RUN mkdir -p /var/www/html/adminator2/
+RUN mkdir -p /var/www/html/adminator2/ \
+        && mkdir -p /var/log/apache2/adminator \
+        && cd /var/www/html/adminator2 \
+        && mkdir temp log \
+        && chown www-data:www-data temp log
+
+RUN mkdir -p /var/www/html/adminator3/ \
+        && cd /var/www/html/adminator3 \
+        && mkdir temp log logs \
+        && chown www-data:www-data temp log logs
 
 COPY adminator2/composer.json /var/www/html/adminator2/
 COPY adminator3/composer.json /var/www/html/adminator3/

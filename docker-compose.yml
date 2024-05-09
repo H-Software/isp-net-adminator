@@ -22,6 +22,7 @@ networks:
 services:
   adminator:
     image: h-software/isp-net-adminator
+    # image: ghcr.io/h-software/isp-net-adminator:pr-137
     build: .
     # user: "www-data:www-data"
     environment:
