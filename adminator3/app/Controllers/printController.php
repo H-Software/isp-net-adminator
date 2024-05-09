@@ -33,6 +33,8 @@ class printController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         $this->printInstance = new printClass($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $this->printInstance->csrf_html = $csrf_html;
 
         $this->printInstance->printListAll();
 
@@ -43,8 +45,21 @@ class printController extends adminatorController
     public function printRedirect(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
-        
-        $this->checkLevel(308, $this->adminator);
 
+        $this->checkLevel(308, $this->adminator);
+        if ($request->getMethod() == "POST") {
+
+            $soubory = $request->getParsedBody()['soubory'];
+            $url = "print/temp/" . htmlspecialchars($soubory);
+
+            return $response
+                ->withHeader('Location', $url)
+                ->withStatus(302);
+
+        } else {
+            $response->getBody()->write("Error! Missing POST parameter.");
+            $newResponse = $response->withStatus(500);
+            return $newResponse;
+        }
     }
 }

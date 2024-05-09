@@ -23,6 +23,7 @@ class printClass extends adminator
 
     public $adminator; // handler for instance of adminator class
 
+    public $csrf_html;
 
     public function __construct(ContainerInterface $container)
     {
@@ -64,6 +65,7 @@ class printClass extends adminator
     public function printListAll()
     {
         $this->smarty->assign("action", "/print/redirect");
+        $this->smarty->assign("csrf_html", $this->csrf_html);
 
         $soubor3 = $this->nacti_soubory("smlouva-fiber");
         $this->smarty->assign("soubory_smlouvy_new", $soubor3);
@@ -78,6 +80,6 @@ class printClass extends adminator
         $this->smarty->assign("soubory_reg_form_2012_05", $soubor6);
 
 
-        $this->smarty->display('others/print.tpl');
+        $this->smarty->display('print/list-all.tpl');
     }
 }
