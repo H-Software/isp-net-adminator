@@ -8,14 +8,14 @@ use Psr\Container\ContainerInterface;
 
 class printClass extends adminator
 {
-    private $container;
+    // private $container;
 
-    private $validator;
+    // private $validator;
 
-    public $conn_pgsql;
-    public $conn_mysql;
+    // public $conn_pgsql;
+    // public $conn_mysql;
 
-    public $pdoMysql;
+    // public $pdoMysql;
 
     public $logger;
 
