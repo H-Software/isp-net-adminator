@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Print;
+use Exception;
 
 class printRegForm
 {
@@ -58,12 +59,11 @@ class printRegForm
     public function generate_pdf_file()
     {
 
-
         define('FPDF_FONTPATH', "include/font/");
 
         //zaklad, vytvoreni objektu a pridani stranky
         try {
-            $pdf = new FPDF("P", "mm", "A4");
+            $pdf = new \FPDF("P", "mm", "A4");
         } catch (Exception $e) {
             die("cant create class for PDF: ".var_export($e->getMessage(), true));
         }
