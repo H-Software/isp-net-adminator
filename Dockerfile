@@ -195,10 +195,8 @@ RUN chmod 1777 /tmp
 FROM scratch
 COPY --from=main / /
 
-# fix root
-ARG USER=www-data:www-data
-ARG USER_UID=33
-ARG USER_GID=$USER_UID
+# dont run as root
+USER www-data:www-data
 
 # copy "original" statements for working image
 #
