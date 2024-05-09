@@ -93,10 +93,6 @@ COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sodi
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so
 
-# fix log
-RUN mkdir -p /var/log/php \
-    && chown -R www-data:www-data /var/log/php
-
 # packages required for php extensions
 #   MSSQL
 #    -> https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
@@ -196,13 +192,17 @@ COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/includ
 
 RUN chmod 1777 /tmp
 
+# fix logging
+RUN mkdir -p /var/log/php \
+    && chown -R www-data:www-data /var/log/php
+
 # workaround for squash
 #
 FROM scratch
 COPY --from=main / /
 
-# dont run as root
-USER www-data:www-data
+# # dont run as root
+# USER www-data:www-data
 
 # copy "original" statements for working image
 #
