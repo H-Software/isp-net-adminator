@@ -194,8 +194,9 @@ RUN chmod 1777 /tmp
 
 # fix logging
 RUN mkdir -p /var/log/php \
-    && chown -R www-data:www-data /var/log/php \
-    && echo '' > /var/log/php/error.log
+    && chown -R www-data:www-data /var/log/php
+    #  \
+    # && echo '' > /var/log/php/error.log
 
 # workaround for squash
 #
