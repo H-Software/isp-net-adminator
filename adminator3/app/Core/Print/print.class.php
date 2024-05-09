@@ -27,10 +27,10 @@ class printClass extends adminator
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->validator = $container->get('validator');
-        $this->conn_mysql = $container->get('connMysql');
-        $this->pdoMysql = $container->get('pdoMysql');
+        // $this->container = $container;
+        // $this->validator = $container->get('validator');
+        // $this->conn_mysql = $container->get('connMysql');
+        // $this->pdoMysql = $container->get('pdoMysql');
 
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
