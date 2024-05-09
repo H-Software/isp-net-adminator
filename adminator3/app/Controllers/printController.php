@@ -50,7 +50,7 @@ class printController extends adminatorController
         if ($request->getMethod() == "POST") {
 
             $soubory = $request->getParsedBody()['soubory'];
-            $url = "print/temp/" . htmlspecialchars($soubory);
+            $url = "/print/temp/" . htmlspecialchars($soubory);
 
             return $response
                 ->withHeader('Location', $url)
