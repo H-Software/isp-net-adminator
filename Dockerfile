@@ -190,8 +190,8 @@ RUN chmod 1777 /tmp
 
 # workaround for squash
 #
-FROM scratch
-COPY --from=main / /
+# FROM scratch
+# COPY --from=main / /
 
 # copy "original" statements for working image
 #
