@@ -94,7 +94,8 @@ COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqls
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so
 
 # fix log
-RUN chown www-data:www-data -R /var/log/php
+RUN mkdir -p /var/log/php \
+    && chown www-data:www-data -R /var/log/php
 
 # packages required for php extensions
 #   MSSQL
