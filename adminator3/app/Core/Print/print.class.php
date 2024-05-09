@@ -54,12 +54,9 @@ class printClass extends adminator
         }
         closedir($handle);
 
-        if(is_array($soubor)) {
-            sort($soubor);
-        }
+        sort($soubor);
 
         return $soubor;
-
     }
 
     public function printListAll()
