@@ -196,7 +196,7 @@ FROM scratch
 COPY --from=main / /
 
 # fix root
-ARG USERNAME=www-data
+ARG USER=www-data:www-data
 ARG USER_UID=33
 ARG USER_GID=$USER_UID
 
