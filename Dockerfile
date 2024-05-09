@@ -127,6 +127,7 @@ RUN apt-get update \
         libpng16-16 \
         msodbcsql17 \
         libpq5 \
+        libgrpc29 \
         diffutils \
     && apt-get purge -y --allow-remove-essential \
         libgcc-12-dev \
@@ -195,9 +196,9 @@ RUN chmod 1777 /tmp
 # COPY --from=main / /
 
 # fix root
-# ARG USERNAME=www-data
-# ARG USER_UID=1000
-# ARG USER_GID=$USER_UID
+ARG USERNAME=www-data
+ARG USER_UID=33
+ARG USER_GID=$USER_UID
 
 # copy "original" statements for working image
 #
@@ -211,5 +212,5 @@ STOPSIGNAL SIGWINCH
 
 WORKDIR /var/www/html
 
-EXPOSE 80
+EXPOSE 8080
 CMD ["apache2-foreground"]
