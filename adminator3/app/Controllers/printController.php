@@ -13,6 +13,8 @@ class printController extends adminatorController
 
     protected $adminator;
 
+    private $printInstance;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
