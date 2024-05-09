@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Print;
+
 use Exception;
 
 class printRegForm
