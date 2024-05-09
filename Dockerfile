@@ -93,26 +93,6 @@ COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sodi
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so
 
-# Enable extensions
-RUN docker-php-ext-enable \
-        apcu \
-        gd \
-        ldap \
-        mysqli \
-        opcache \
-        opentelemetry \
-        pdo \
-        pdo_pgsql \
-        pdo_mysql \
-        pdo_sqlsrv \
-        pgsql \
-        protobuf \
-        sockets \
-        sodium \
-        sqlsrv \
-        zip \
-        grpc
-
 # packages required for php extensions
 #   MSSQL
 #    -> https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
@@ -145,6 +125,26 @@ RUN apt-get update \
     && apt autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Enable extensions
+RUN docker-php-ext-enable \
+        apcu \
+        gd \
+        ldap \
+        mysqli \
+        opcache \
+        opentelemetry \
+        pdo \
+        pdo_pgsql \
+        pdo_mysql \
+        pdo_sqlsrv \
+        pgsql \
+        protobuf \
+        sockets \
+        sodium \
+        sqlsrv \
+        zip \
+        grpc
 
 # apache conf
 RUN a2enmod ssl \
