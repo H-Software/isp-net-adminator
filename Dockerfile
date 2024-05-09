@@ -108,23 +108,7 @@ RUN apt-get update \
         msodbcsql17 \
         libpq5 \
         libgrpc29 \
-        diffutils \
-    && apt-get purge -y --allow-remove-essential \
-        libgcc-12-dev \
-        libstdc++-12-dev \
-        linux-libc-dev \
-        util-linux \
-        util-linux-extra \
-        curl \
-        gnupg \
-        make \
-        m4 \
-        re2c \
-        pkg-config \
-        file \
-    && apt autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+        diffutils
 
 # Enable extensions
 RUN docker-php-ext-enable \
@@ -145,6 +129,24 @@ RUN docker-php-ext-enable \
         sqlsrv \
         zip \
         grpc
+
+# clean-up
+RUN apt-get purge -y --allow-remove-essential \
+        libgcc-12-dev \
+        libstdc++-12-dev \
+        linux-libc-dev \
+        util-linux \
+        util-linux-extra \
+        curl \
+        gnupg \
+        make \
+        m4 \
+        re2c \
+        pkg-config \
+        file \
+    && apt autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # apache conf
 RUN a2enmod ssl \
