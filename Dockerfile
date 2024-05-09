@@ -21,6 +21,7 @@ RUN apt-get update \
         libgrpc++-dev \
         gnupg \
         vim \
+        autoconf \
     && docker-php-ext-install mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install \
@@ -192,6 +193,11 @@ RUN chmod 1777 /tmp
 #
 # FROM scratch
 # COPY --from=main / /
+
+# fix root
+# ARG USERNAME=www-data
+# ARG USER_UID=1000
+# ARG USER_GID=$USER_UID
 
 # copy "original" statements for working image
 #
