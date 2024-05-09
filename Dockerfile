@@ -203,7 +203,7 @@ FROM scratch
 COPY --from=main / /
 
 # # dont run as root
-# USER www-data:www-data
+USER www-data:www-data
 
 # copy "original" statements for working image
 #
