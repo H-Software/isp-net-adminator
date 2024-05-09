@@ -54,7 +54,15 @@ RUN export MAKEFLAGS="-j $(nproc)" \
 RUN export MAKEFLAGS="-j $(nproc)" \
         && pecl install apcu
 
-# opentelemetry & grpc
+RUN git clone --depth 1 -b v1.63.0 https://github.com/grpc/grpc /tmp/grpc && \
+    cd /tmp/grpc/src/php/ext/grpc && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install && \
+    rm -rf /tmp/grpc
+
+# opentelemetry & protobuf
 RUN export MAKEFLAGS="-j $(nproc)" \
         && pecl install \
             opentelemetry \
