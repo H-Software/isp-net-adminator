@@ -74,6 +74,8 @@ class printController extends adminatorController
 
         $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Reg. Form. 2012-05");
 
+        $this->header($request, $response, $this->adminator);
+
         $rf = new printRegForm();
 
         $button_send = $_POST["send"];
