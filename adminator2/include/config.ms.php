@@ -67,6 +67,8 @@ if($mssql_db_ok == 1)
 		$mssqlQ = $mssqlConn->query('SELECT @@VERSION');
 		
 		// echo 'MSSQL VERSION: ' . $mssqlQ->fetchColumn() . '<br>';
+
+		$logger->info("config\MSSQL: PDO created. version: " . var_export($mssqlQ->fetchColumn(), true));
 	} catch (Exception $e) {
 		// Error message and terminate the script
 		print_r($e->getMessage()."<br>\n");
@@ -83,6 +85,7 @@ if($mssql_db_ok == 1)
 	// init "classic" connection
 	try {
 		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
+		$logger->info("config\sqlsrv_connect OK.");
 	} catch(Exception $e) {
 		// error_log("$e");
 		print_r($e->getMessage());
