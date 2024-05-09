@@ -110,8 +110,8 @@ RUN docker-php-ext-enable \
         sockets \
         sodium \
         sqlsrv \
-        zip 
-        # grpc
+        zip \
+        grpc
 
 # packages required for php extensions
 #   MSSQL
