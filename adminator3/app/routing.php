@@ -49,7 +49,6 @@ $app->group(
 
         $group->map(['GET'], '/runtime/opcache-gui', runtimeController::class . ':opcacheGui');
 
-
         $group->map(['GET', 'POST'], '/about', \aboutController::class . ':about');
         $group->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
         $group->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');

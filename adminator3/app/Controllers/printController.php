@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Print\printClass;
+use App\Print\printRegForm;
 
 class printController extends adminatorController
 {
@@ -49,6 +50,7 @@ class printController extends adminatorController
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(308, $this->adminator);
+
         if ($request->getMethod() == "POST") {
 
             $soubory = $request->getParsedBody()['soubory'];
@@ -63,5 +65,45 @@ class printController extends adminatorController
             $newResponse = $response->withStatus(500);
             return $newResponse;
         }
+    }
+
+    public function printRegForm201205(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(146, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Reg. Form. 2012-05");
+
+        $rf = new printRegForm();
+
+        $button_send = $_POST["send"];
+
+        if(isset($button_send)) {
+
+            //check a processing form
+            $rf->load_input_vars();
+
+            //generate pdf file
+            $rf->generate_pdf_file();
+
+            $smarty->assign("file_name", $rf->file_name);
+
+            //finalni zobrazeni sablony
+            $smarty->display('others/print-reg-form-2012-05.tpl');
+        } else {
+
+            //check a processing form
+            $rf->load_input_vars();
+
+            //zobrazeni formu a vyplneni hodnot
+            $smarty->assign("form_action", "");
+
+            $smarty->assign("input_ec", $rf->input_ec);
+
+            //finalni zobrazeni sablony
+            $smarty->display('others/print-reg-form-2012-05-form.tpl');
+        }
+
     }
 }

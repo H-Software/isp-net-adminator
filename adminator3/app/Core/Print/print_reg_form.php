@@ -1,6 +1,8 @@
 <?php
 
-class print_reg_form
+namespace App\Print;
+
+class printRegForm
 {
     //
     // variables
