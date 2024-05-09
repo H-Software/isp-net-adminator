@@ -35,8 +35,16 @@ class printController extends adminatorController
         $this->printInstance = new printClass($this->container);
 
         $this->printInstance->printListAll();
-        
+
         return $response;
+
+    }
+
+    public function printRedirect(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        
+        $this->checkLevel(308, $this->adminator);
 
     }
 }

@@ -93,6 +93,7 @@ $app->group(
         $group->map(['GET', 'POST'], '/platby/fn-kontrola-omezeni', platbyController::class . ':fnKontrolaOmezeni');
 
         $group->map(['GET'], '/print', printController::class . ':printListAll');
+        $group->map(['GET'], '/print/redirect', printController::class . ':printRedirect');
 
         $group->map(['GET', 'POST'], '/vlastnici/cat', \vlastniciController::class . ':cat');
         $group->map(['GET', 'POST'], '/vlastnici2', \vlastniciController::class . ':vlastnici2');

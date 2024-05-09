@@ -40,8 +40,44 @@ class printClass extends adminator
 
     }
 
+    private function nacti_soubory($find_string)
+    {
+        $handle = opendir('print/temp/');
+        $i = 0;
+
+        while (false !== ($file = readdir($handle))) {
+            if ($file != "." && $file != ".." && !is_dir($file) && preg_match('/'.$find_string."/", $file)) {
+                $soubor[$i] = "$file";
+                $i++;
+            }
+        }
+        closedir($handle);
+
+        if(is_array($soubor)) {
+            sort($soubor);
+        }
+
+        return $soubor;
+
+    }
+
     public function printListAll()
     {
+        $this->smarty->assign("action", "/print/redirect");
 
+        $soubor3 = $this->nacti_soubory("smlouva-fiber");
+        $this->smarty->assign("soubory_smlouvy_new", $soubor3);
+
+        $soubor4 = $this->nacti_soubory("reg-form-pdf");
+        $this->smarty->assign("soubory_regform_new", $soubor4);
+
+        $soubor5 = $this->nacti_soubory("smlouva-v3");
+        $this->smarty->assign("soubory_smlouva_v3", $soubor5);
+
+        $soubor6 = $this->nacti_soubory("reg-form-v3");
+        $this->smarty->assign("soubory_reg_form_2012_05", $soubor6);
+
+
+        $this->smarty->display('others/print.tpl');
     }
 }
