@@ -740,16 +740,6 @@ parameters:
 		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 			count: 1
-			path: others-print.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: others-print.php
-
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
 			path: others-web-simelon.php
 
 		-
