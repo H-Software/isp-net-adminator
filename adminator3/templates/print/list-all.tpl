@@ -90,7 +90,7 @@
     </div>
 
     <div class="col" style="float: left; width: 250px; " >Registrační formlulář - nový (2012-05) <br> (formát PDF)
-	    <a href="others-print-reg-form-2012-05.php">zde</a>
+	    <a href="/print/reg-form-2012-05">zde</a>
     </div>
     <div class="col" style="padding-left: 20px; padding-right: 20px; width: 250px; float: left; text-align: center;" >
         {* <a href="img2/print/2012-05-form-small.jpg" > *}

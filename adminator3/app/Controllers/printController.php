@@ -42,7 +42,6 @@ class printController extends adminatorController
         $this->printInstance->printListAll();
 
         return $response;
-
     }
 
     public function printRedirect(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -87,23 +86,24 @@ class printController extends adminatorController
             //generate pdf file
             $rf->generate_pdf_file();
 
-            $smarty->assign("file_name", $rf->file_name);
+            $this->smarty->assign("file_name", $rf->file_name);
 
             //finalni zobrazeni sablony
-            $smarty->display('others/print-reg-form-2012-05.tpl');
+            $this->smarty->display('others/print-reg-form-2012-05.tpl');
         } else {
 
             //check a processing form
             $rf->load_input_vars();
 
             //zobrazeni formu a vyplneni hodnot
-            $smarty->assign("form_action", "");
+            $this->smarty->assign("form_action", "");
 
-            $smarty->assign("input_ec", $rf->input_ec);
+            $this->smarty->assign("input_ec", $rf->input_ec);
 
             //finalni zobrazeni sablony
-            $smarty->display('others/print-reg-form-2012-05-form.tpl');
+            $this->smarty->display('others/print-reg-form-2012-05-form.tpl');
         }
 
+        return $response;
     }
 }
