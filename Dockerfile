@@ -4,7 +4,7 @@ FROM php:8.2-apache AS php-ext
 ENV ACCEPT_EULA=Y
 
 #
-# PHP stuff
+# install tools & PHP extensions
 #
 RUN apt-get update \
     && apt-get install -y \
@@ -21,6 +21,7 @@ RUN apt-get update \
         libgrpc++-dev \
         gnupg \
         vim \
+        autoconf \
     && docker-php-ext-install mysqli \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-install \
@@ -38,11 +39,10 @@ RUN apt-get update \
 
 # PHP MSSQL stuff
 # https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
-RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
-        && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
-        && apt-get update \
+# RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
+#         && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
+RUN apt-get update \
         && apt-get install -y \
-            # msodbcsql17 \
             unixodbc-dev \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -55,7 +55,15 @@ RUN export MAKEFLAGS="-j $(nproc)" \
 RUN export MAKEFLAGS="-j $(nproc)" \
         && pecl install apcu
 
-# opentelemetry & grpc
+RUN git clone --depth 1 -b v1.63.0 https://github.com/grpc/grpc /tmp/grpc && \
+    cd /tmp/grpc/src/php/ext/grpc && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install && \
+    rm -rf /tmp/grpc
+
+# opentelemetry & protobuf
 RUN export MAKEFLAGS="-j $(nproc)" \
         && pecl install \
             opentelemetry \
@@ -67,7 +75,7 @@ FROM php:8.2-apache AS main
 ENV ACCEPT_EULA=Y
 
 # Copy extensions from php-ext stage
-# COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/grpc.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/apcu.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/apcu.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/gd.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/gd.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/ldap.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/ldap.so
@@ -84,6 +92,23 @@ COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sock
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sodium.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sodium.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so
+
+# packages required for php extensions
+#   MSSQL
+#    -> https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
+RUN apt-get update \
+    && apt-get install -y \
+        gnupg \
+    && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
+    && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
+    && apt-get update \
+    && apt-get install -y \
+        libzip4 \
+        libpng16-16 \
+        msodbcsql17 \
+        libpq5 \
+        libgrpc29 \
+        diffutils
 
 # Enable extensions
 RUN docker-php-ext-enable \
@@ -102,24 +127,11 @@ RUN docker-php-ext-enable \
         sockets \
         sodium \
         sqlsrv \
-        zip 
-        # grpc
+        zip \
+        grpc
 
-# packages required for php extensions
-# https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
-RUN apt-get update \
-    && apt-get install -y \
-        gnupg \
-    && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
-    && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
-    && apt-get update \
-    && apt-get install -y \
-        libzip4 \
-        libpng16-16 \
-        msodbcsql17 \
-        libpq5 \
-        diffutils \
-    && apt-get purge -y --allow-remove-essential \
+# clean-up
+RUN apt-get purge -y --allow-remove-essential \
         libgcc-12-dev \
         libstdc++-12-dev \
         linux-libc-dev \
@@ -150,8 +162,16 @@ COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN mkdir -p /var/www/html/adminator3/
-RUN mkdir -p /var/www/html/adminator2/
+RUN mkdir -p /var/www/html/adminator2/ \
+        && mkdir -p /var/log/apache2/adminator \
+        && cd /var/www/html/adminator2 \
+        && mkdir temp log \
+        && chown www-data:www-data temp log
+
+RUN mkdir -p /var/www/html/adminator3/ \
+        && cd /var/www/html/adminator3 \
+        && mkdir temp log logs \
+        && chown www-data:www-data temp log logs
 
 COPY adminator2/composer.json /var/www/html/adminator2/
 COPY adminator3/composer.json /var/www/html/adminator3/
@@ -172,10 +192,19 @@ COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/includ
 
 RUN chmod 1777 /tmp
 
+# fix logging
+RUN mkdir -p /var/log/php \
+    && chown -R www-data:www-data /var/log/php
+    #  \
+    # && echo '' > /var/log/php/error.log
+
 # workaround for squash
 #
 FROM scratch
 COPY --from=main / /
+
+# # dont run as root
+USER www-data:www-data
 
 # copy "original" statements for working image
 #

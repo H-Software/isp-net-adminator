@@ -29,13 +29,13 @@ require_once($cesta."include/check_level.php");
 
 //require("phd_global_function.php");
 
-if( !( check_level2($level,$level_col) ) )
-{ // neni level
-  header("Location: ".$cesta."nolevelpage.php");
+// if( !( check_level2($level,$level_col) ) )
+// { // neni level
+//   header("Location: ".$cesta."nolevelpage.php");
     
-  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-  exit;
-}
+//   echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
+//   exit;
+// }
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
       <html> 

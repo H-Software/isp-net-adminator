@@ -67,6 +67,8 @@ if($mssql_db_ok == 1)
 		$mssqlQ = $mssqlConn->query('SELECT @@VERSION');
 		
 		// echo 'MSSQL VERSION: ' . $mssqlQ->fetchColumn() . '<br>';
+
+		$logger->info("config\MSSQL: PDO created. version: " . var_export($mssqlQ->fetchColumn(), true));
 	} catch (Exception $e) {
 		// Error message and terminate the script
 		print_r($e->getMessage()."<br>\n");
@@ -83,8 +85,8 @@ if($mssql_db_ok == 1)
 	// init "classic" connection
 	try {
 		$mssql_spojeni = sqlsrv_connect($mssql_host, $mssqlConnectionInfo);
+		$logger->info("config\sqlsrv_connect: connect to host \"" . $mssql_host . "\" OK.");
 	} catch(Exception $e) {
-		// error_log("$e");
 		print_r($e->getMessage());
 	}
 	
@@ -92,8 +94,7 @@ if($mssql_db_ok == 1)
 		echo "\nERROR: mssql_connect (host: ".$mssql_host.", db: " . $mssql_db. ") failed <br>\n";
 		print_r( sqlsrv_errors(), true);
 
-		// TODO: povolit toto, az bude funkcni MSSQL
-		// if( !($db_mssql_no_exit == 1) )
-		// { exit(); }
+		if( !($db_mssql_no_exit == 1) )
+		{ exit(); }
     }
 }
