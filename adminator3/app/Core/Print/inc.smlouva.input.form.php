@@ -2,6 +2,8 @@
 
 echo "<form method=\"POST\" action=\"\" name=\"form1\" >";
 
+echo $this->csrf_html;
+
 echo "<table border=\"0\" width=\"1000px\">
 
     <tr>
@@ -249,11 +251,11 @@ if($internet_sluzba == 1) {
         $sql_int = "";
     }
 
-    $dotaz_int_tarify = mysql_query("SELECT * FROM tarify_int ".$sql_int." ORDER BY id_tarifu");
+    $dotaz_int_tarify = $this->conn_mysql->query("SELECT * FROM tarify_int ".$sql_int." ORDER BY id_tarifu");
 
     echo "<select size=\"1\" name=\"int_tarify_id_tarifu\" onChange=\"self.document.forms.form1.submit()\" >";
 
-    while($data_int = mysql_fetch_array($dotaz_int_tarify)) {
+    while($data_int = $dotaz_int_tarify->fetch_array()) {
         echo "<option value=\"".$data_int["id_tarifu"]."\" ";
 
         if($int_tarify_id_tarifu == $data_int["id_tarifu"]) {
@@ -262,11 +264,9 @@ if($internet_sluzba == 1) {
 
         echo " >".$data_int["jmeno_tarifu"];
         echo " (".$data_int["zkratka_tarifu"].")</option>";
-
     }
 
     echo "</select>\n";
-
     echo "</td>";
 
 } else {
@@ -277,9 +277,9 @@ echo "</tr>";
 
 if($internet_sluzba == 1) {
 
-    $int_se = mysql_query("SELECT * FROM tarify_int WHERE id_tarifu = '$int_tarify_id_tarifu' ");
+    $int_se = $this->conn_mysql->query("SELECT * FROM tarify_int WHERE id_tarifu = '$int_tarify_id_tarifu' ");
 
-    while($data_int_se = mysql_fetch_array($int_se)) {
+    while($data_int_se = $int_se->fetch_array()) {
         $int_sluzba_tarif_text_db = $data_int_se["jmeno_tarifu"];
         $typ_tarifu_db = $data_int_se["typ_tarifu"];
         $garant_db = $data_int_se["garant"];
@@ -406,9 +406,9 @@ if($iptv_sluzba == 1) {
 		</td>";
 
 if($iptv_sluzba == 1) {
-    $iptv_se = mysql_query("SELECT * FROM tarify_iptv WHERE id_tarifu = '$iptv_sluzba_id_tarifu' ");
+    $iptv_se = $this->conn_mysql->query("SELECT * FROM tarify_iptv WHERE id_tarifu = '$iptv_sluzba_id_tarifu' ");
 
-    while($data_iptv_se = mysql_fetch_array($iptv_se)) {
+    while($data_iptv_se = $iptv_se->fetch_array()) {
         $iptv_sluzba_cena_bez_dph_db = $data_iptv_se["cena_bez_dph"];
         $iptv_sluzba_cena_s_dph_db = $data_iptv_se["cena_s_dph"];
     }
@@ -428,9 +428,9 @@ if($iptv_sluzba == 1) {
     echo "<td>
 		    <select size=\"1\" name=\"iptv_sluzba_id_tarifu\" onChange=\"self.document.forms.form1.submit()\" >";
 
-    $iptv_se = mysql_query("SELECT * FROM tarify_iptv ORDER BY zkratka_tarifu ");
+    $iptv_se = $this->conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY zkratka_tarifu ");
 
-    while($data_iptv_se = mysql_fetch_array($iptv_se)) {
+    while($data_iptv_se = $iptv_se->fetch_array()) {
         echo "<option value=\"".$data_iptv_se["id_tarifu"]."\" ";
         if($iptv_sluzba_id_tarifu == $data_iptv_se["id_tarifu"]) {
             echo " selected ";
@@ -756,7 +756,6 @@ echo "
 		<td>&nbsp;</td>
 		<td align=\"center\" colspan=\"2\" ><input type=\"submit\" name=\"reg\" value=\"PŘEPOČÍTAT FORMULÁŘ\" ></td>
 	</tr>
-							
 
 </table>
 </form>";
