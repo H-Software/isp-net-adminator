@@ -6,21 +6,6 @@ use Psr\Container\ContainerInterface;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Exception;
 
-class board_rss_wrong_login
-{
-    public $subject;
-    public $body;
-    public $author;
-
-    public function __construct($subject, $body, $author)
-    {
-        $this->subject = $subject;
-        $this->body = $body;
-        $this->author = $author;
-    }
-
-}
-
 class boardRss
 {
     public $conn_mysql;
@@ -72,9 +57,9 @@ class boardRss
     } //konec funkce check_login_rss
 
     // exportuje posledních 20 článků jako RSS
-    public function exportRSS()
+    public function exportRSS(): false|string
     {
-        $this->putHeader();
+        $output = $this->putHeader();
 
         try {
             $q = $this->conn_mysql->query("SELECT * FROM board ORDER BY id DESC LIMIT 0,50");
@@ -84,20 +69,23 @@ class boardRss
         }
 
         while ($row = $q->fetch_object()) {
-            $this->putItem($row);
+            $output .= $this->putItem($row);
         }
 
-        $this->putEnd();
+        $output .= $this->putEnd();
+
+        return $output;
     }
 
     // hlavička
-    public function putHeader()
+    public function putHeader(): string
     {
+        $output = "";
         // nastavení typu aplikace XML
-        header("Content-type: text/xml");
-        echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> \n ";
+        // header("Content-type: text/xml");
+        $output .= "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> \n ";
 
-        echo '
+        $output .=  '
         <rss version="2.0">
         <channel>
         <title>ISP Adminator3 :: Nástěnka 2.0 :: RSS 2.0</title>
@@ -108,6 +96,8 @@ class boardRss
         <copyright>(c) Patrik Majer</copyright>
         <category>Networking</category>
         ';
+
+        return $output;
     }
 
     // musíme odstranit XHTML tagy
@@ -127,8 +117,10 @@ class boardRss
     }
 
     // zapsání jedné položky
-    public function putItem($o)
+    public function putItem($o): string
     {
+        $output = "";
+
         // odstranění tagů..
         $itemtitle = $this->encode_xml($o->subject);
 
@@ -152,21 +144,22 @@ class boardRss
         $itempubdate = mktime(0, 0, 0, intval($date[1]), intval($date[2]), intval($date[0]));
         $itempubdate = gmdate('D, d M Y H:i:s', $itempubdate).' GMT';
 
-        echo "\n<item> \n";
-        echo "<title>".$itemtitle." [".$itemauthor."]</title> \n";
-        echo "<link>".$itemlink."</link> \n";
-        echo "<description>".$itembody."</description> \n";
-        echo "<pubDate>".$itempubdate."</pubDate> \n";
-        echo "</item> \n";
+        $output .= "\n<item> \n";
+        $output .= "<title>".$itemtitle." [".$itemauthor."]</title> \n";
+        $output .= "<link>".$itemlink."</link> \n";
+        $output .= "<description>".$itembody."</description> \n";
+        $output .= "<pubDate>".$itempubdate."</pubDate> \n";
+        $output .= "</item> \n";
 
+        return $output;
     }
 
 
     // patička
-    public function putEnd()
+    public function putEnd(): string
     {
-        echo "\n</channel> \n";
-        echo "</rss> \n";
+        return "\n</channel> \n"
+                . "</rss> \n";
     }
 
     public function unhtmlentities($string)

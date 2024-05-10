@@ -6,7 +6,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Board\boardRss;
-use App\Board\board_rss_wrong_login;
 
 class othersController extends adminatorController
 {
@@ -166,15 +165,45 @@ class othersController extends adminatorController
         $rs_check_login = $this->adminator->verifyUserToken($request);
 
         if($rs_check_login == false) {
-            $row = new board_rss_wrong_login("spatny login", "Špatný login, prosím přihlašte se do administračního systému.", "System");
+            $data = "";
 
-            $rss->putHeader();
-            $rss->putItem($row);
-            $rss->putEnd();
+            $row = new \stdClass();
+            $row->subject = "Unauthorized";
+            $row->body = "Wrong use token, please check the URL of RSS.";
+            $row->author = "System";
+
+            $data .= $rss->putHeader();
+            $data .= $rss->putItem($row);
+            $data .= $rss->putEnd();
+
+            $newResponse = $response
+                                ->withStatus(401)
+                                ->withHeader('Content-type', 'text/xml');
         } else {
-            $rss->exportRSS();
+            $rs = $rss->exportRSS();
+
+            if($rs === false) {
+                $newResponse = $response
+                                ->withStatus(500)
+                                ->withHeader('Content-type', 'text/xml');
+
+                $row = new \stdClass();
+                $row->subject = "Internal Server Error";
+                $row->body = "Error! Unable to load data from database.";
+                $row->author = "System";
+
+                $data .= $rss->putHeader();
+                $data .= $rss->putItem($row);
+                $data .= $rss->putEnd();
+
+            } else {
+                $newResponse = $response->withHeader('Content-type', 'text/xml');
+                $data = $rs;
+            }
         }
 
-        return $response;
+        $newResponse->getBody()->write($data);
+
+        return $newResponse;
     }
 }
