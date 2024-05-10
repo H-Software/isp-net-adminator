@@ -63,6 +63,5 @@ run-a3-phpstan:
 				templates \
 				ecs.php \
 				ind*.php \
-				other*.php \
 				vl*.php \
 				--memory-limit 512M
