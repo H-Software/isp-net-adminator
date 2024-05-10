@@ -169,4 +169,22 @@ class printController extends adminatorController
 
         return $response;
     }
+
+    public function printRegForm(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(146, $this->adminator);
+        
+        $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Reg. Form");
+
+        $this->header($request, $response, $this->adminator);
+
+        $this->printInstance = new printClass($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $this->printInstance->csrf_html = $csrf_html;
+
+        $this->printInstance->regForm();
+
+    }
 }
