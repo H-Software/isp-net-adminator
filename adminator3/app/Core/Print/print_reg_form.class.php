@@ -18,21 +18,6 @@ class printRegForm
 
     public $form_ec;
 
-    // stolen from https://www.php.net/manual/en/function.each.php#126076
-    public function legacy_each($array)
-    {
-        $key = key($array);
-        $value = current($array);
-        $each = is_null($key) ? false : [
-            1        => $value,
-            'value'    => $value,
-            0        => $key,
-            'key'    => $key,
-        ];
-        next($array);
-        return $each;
-    }
-
     //
     // load_input_vars
     //
@@ -40,19 +25,13 @@ class printRegForm
     {
         reset($_POST);
 
-        while (list($name, $value) = $this->legacy_each($_POST)) {
-
-            if(preg_match("/^input_/", $name) == 1) {
-
+        foreach ($_POST as $name => $value) {
+            if(preg_match("/^input\_/", $name) == 1) {
                 $this->$name = htmlspecialchars($value);
-
                 //zde pripadne doplnovani pomlcek
-
-            } //end of if(preg_math(...
-
-        } //end of while
-
-    } //end of function "load_input_vars"
+            }
+        }
+    }
 
     //
     // generate_pdf_file
@@ -130,12 +109,12 @@ class printRegForm
         $datum_nz = date('Y-m-d-H-i-s');
 
         if($this->id_cloveka > 0) {
-            $this->file_name = "print/temp/reg-form-v3-id-".$this->id_cloveka."-".$datum_nz.".pdf";
+            $this->file_name = "/print/temp/reg-form-v3-id-".$this->id_cloveka."-".$datum_nz.".pdf";
         } else {
-            $this->file_name = "print/temp/reg-form-v3-ec-".$this->form_ec."-".$datum_nz.".pdf";
+            $this->file_name = "/print/temp/reg-form-v3-ec-".$this->form_ec."-".$datum_nz.".pdf";
         }
 
-        $rs = $pdf->Output($this->file_name, "F");
+        $pdf->Output(__DIR__ . "/../../.." . $this->file_name, "F");
 
     } //end of function "generate_pdf_file"
 
