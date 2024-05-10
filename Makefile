@@ -60,7 +60,6 @@ run-a3-phpstan:
 				include/main.function.shared.php \
 				public \
 				resources \
-				rss \
 				templates \
 				ecs.php \
 				ind*.php \

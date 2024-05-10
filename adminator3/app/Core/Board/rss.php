@@ -1,6 +1,6 @@
 <?php
 
-class rss_wrong_login
+class board_rss_wrong_login
 {
     public $subject;
     public $body;
@@ -15,7 +15,7 @@ class rss_wrong_login
 
 }
 
-class rss
+class board_rss
 {
     public $conn_mysql;
 

@@ -145,4 +145,28 @@ class othersController extends adminatorController
 
         return $response;
     }
+
+    public function boardRss(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(309, $this->adminator);
+
+        //prvne pokus o autorizaci
+        $rss = new \board_rss($this->conn_mysql, $this->logger);
+
+        $rs_check_login = $rss->check_login_rss($_GET["sid"]);
+
+        if($rs_check_login == false) {
+            $row = new \board_rss_wrong_login("spatny login", "Špatný login, prosím přihlašte se do administračního systému.", "System");
+
+            $rss->putHeader();
+            $rss->putItem($row);
+            $rss->putEnd();
+        } else {
+            $rss->exportRSS();
+        }
+
+        return $response;
+    }
 }
