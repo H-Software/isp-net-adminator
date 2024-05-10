@@ -276,12 +276,12 @@ class printClass extends adminator
         if(((strlen($jmeno) < 2) or (!isset($odeslano)))) {
 
             echo '
-                
+                <html>
+                <head>
                 <link rel="stylesheet" type="text/css" href="/plugins/tigra_calendar/tcal.css" />
                 <script type="text/javascript" src="/plugins/tigra_calendar/tcal.js"></script>
                 <script type="text/javascript" src="/plugins/tigra_calendar/custom-a3-print.js"></script>
                 
-
 
                 <style>
 
@@ -326,10 +326,10 @@ class printClass extends adminator
             require(__DIR__ . "/inc.smlouva.gen.main.2.php");
 
             //zobrazeni odkazu dpdf soubor
-            $smarty->assign("file_name", "/".$nazev_souboru);
+            $this->smarty->assign("file_name", "/".$nazev_souboru);
 
             //finalni zobrazeni sablony
-            $smarty->display('print/smlouva-2012-05.tpl');
+            $this->smarty->display('print/smlouva-2012-05.tpl');
 
         } //konec else !isset nazev
     }

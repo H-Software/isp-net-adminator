@@ -11,7 +11,7 @@ $pdf->AddFont('arial', '', 'arial.php');
 // autor a podobny hemzy
 
 //Nastaví autora dokumentu.
-$pdf->SetAuthor("Simelon Adminator3");
+$pdf->SetAuthor("Adminator3");
 
 //Nastaví tvůrce dokumentu (většinou název aplikace)
 $pdf->SetCreator("Smlouva o poskytování služeb");
@@ -258,4 +258,4 @@ if($id_cloveka > 0) {
 
 $rs = $pdf->Output($nazev_souboru, "F");
 
-$logger->info("inc.smlouva.gen.main.2.php: dump var nazev_souboru: ".var_export($nazev_souboru, true));
+$this->logger->info("inc.smlouva.gen.main.2.php: dump var nazev_souboru: ".var_export($nazev_souboru, true));
