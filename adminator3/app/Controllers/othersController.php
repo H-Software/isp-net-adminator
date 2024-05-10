@@ -5,11 +5,14 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Board\boardRss;
 
 class othersController extends adminatorController
 {
     public $conn_mysql;
     public $smarty;
+
+    public $adminator;
 
     public function __construct(ContainerInterface $container)
     {
@@ -52,8 +55,13 @@ class othersController extends adminatorController
 
         $nastenka = new \board($this->container);
 
+        $rss_token = $this->adminator->getUserToken();
+        if($rss_token !== false) {
+            $this->smarty->assign("token", $rss_token);
+        } else {
+            $this->logger->error("othersController\board: getUserToken failed");
+        }
         $this->smarty->assign("datum", date("j. m. Y"));
-        $this->smarty->assign("sid", $sid);
 
         $nastenka->what = $_GET["what"];
         $nastenka->action = $_GET["action"];
@@ -144,5 +152,58 @@ class othersController extends adminatorController
         $this->smarty->display('others/board.tpl');
 
         return $response;
+    }
+
+    public function boardRss(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(309, $this->adminator);
+
+        $rss = new boardRss($this->container);
+
+        $rs_check_login = $this->adminator->verifyUserToken($request);
+
+        if($rs_check_login == false) {
+            $data = "";
+
+            $row = new \stdClass();
+            $row->subject = "Unauthorized";
+            $row->body = "Wrong use token, please check the URL of RSS.";
+            $row->author = "System";
+
+            $data .= $rss->putHeader();
+            $data .= $rss->putItem($row);
+            $data .= $rss->putEnd();
+
+            $newResponse = $response
+                                ->withStatus(401)
+                                ->withHeader('Content-type', 'text/xml');
+        } else {
+            $rs = $rss->exportRSS();
+
+            if($rs === false) {
+                $newResponse = $response
+                                ->withStatus(500)
+                                ->withHeader('Content-type', 'text/xml');
+
+                $row = new \stdClass();
+                $row->subject = "Internal Server Error";
+                $row->body = "Error! Unable to load data from database.";
+                $row->author = "System";
+
+                $data .= $rss->putHeader();
+                $data .= $rss->putItem($row);
+                $data .= $rss->putEnd();
+
+            } else {
+                $newResponse = $response->withHeader('Content-type', 'text/xml');
+                $data = $rs;
+            }
+        }
+
+        $newResponse->getBody()->write($data);
+
+        return $newResponse;
     }
 }

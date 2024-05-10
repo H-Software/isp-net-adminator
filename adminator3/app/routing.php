@@ -13,6 +13,7 @@ use App\Controllers\partnerController;
 use App\Controllers\platbyController;
 use App\Controllers\runtimeController;
 use App\Controllers\printController;
+use App\Controllers\othersController;
 
 // routes
 
@@ -67,8 +68,9 @@ $app->group(
         $group->map(['GET', 'POST'], '/archiv-zmen/work', \archivZmenController::class . ':archivZmenWork');
         $group->map(['GET', 'POST'], '/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
 
-        $group->map(['GET', 'POST'], '/others', \othersController::class . ':others');
-        $group->map(['GET', 'POST'], '/others/board', \othersController::class . ':board');
+        $group->map(['GET', 'POST'], '/others', othersController::class . ':others');
+        $group->map(['GET', 'POST'], '/others/board', othersController::class . ':board');
+        $group->map(['GET'], '/board/rss', othersController::class . ':boardRss');
 
         $group->map(['GET', 'POST'], '/objekty/cat', \objektyController::class . ':cat');
         $group->map(['GET', 'POST'], '/objekty', \objektyController::class . ':objekty');

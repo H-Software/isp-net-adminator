@@ -33,6 +33,7 @@ class auth_service
         $this->logger = $logger;
     }
 
+
     public function checkLevel($page_level_id = 0, $adminator = null)
     {
 

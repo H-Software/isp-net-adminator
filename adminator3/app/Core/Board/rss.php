@@ -1,36 +1,31 @@
 <?php
 
-class rss_wrong_login
-{
-    public $subject;
-    public $body;
-    public $author;
+namespace App\Board;
 
-    public function __construct($subject, $body, $author)
-    {
-        $this->subject = $subject;
-        $this->body = $body;
-        $this->author = $author;
-    }
+use Psr\Container\ContainerInterface;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Exception;
 
-}
-
-class rss
+class boardRss
 {
     public $conn_mysql;
 
     public $logger;
 
-    public function __construct($conn_mysql, $logger)
+    // private $loggedUserEmail;
+
+    public function __construct(ContainerInterface $container)
     {
-        $this->conn_mysql = $conn_mysql;
-        $this->logger = $logger;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->logger = $container->get('logger');
+
+        // $this->loggedUserEmail = Sentinel::getUser()->email;
     }
 
     public function check_login_rss($get_sid)
     {
 
-        if(!(ereg('^([[:alnum:]]|_|-)+$', $get_sid))) {
+        if(!(preg_match('/^([[:alnum:]]|_|-)+$/', $get_sid))) {
             return false;
             //exit;
         } else {
@@ -62,9 +57,9 @@ class rss
     } //konec funkce check_login_rss
 
     // exportuje posledních 20 článků jako RSS
-    public function exportRSS()
+    public function exportRSS(): false|string
     {
-        $this->putHeader();
+        $output = $this->putHeader();
 
         try {
             $q = $this->conn_mysql->query("SELECT * FROM board ORDER BY id DESC LIMIT 0,50");
@@ -74,20 +69,23 @@ class rss
         }
 
         while ($row = $q->fetch_object()) {
-            $this->putItem($row);
+            $output .= $this->putItem($row);
         }
 
-        $this->putEnd();
+        $output .= $this->putEnd();
+
+        return $output;
     }
 
     // hlavička
-    public function putHeader()
+    public function putHeader(): string
     {
+        $output = "";
         // nastavení typu aplikace XML
-        header("Content-type: text/xml");
-        echo "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> \n ";
+        // header("Content-type: text/xml");
+        $output .= "<?xml version=\"1.0\" encoding=\"UTF-8\" ?> \n ";
 
-        echo '
+        $output .=  '
         <rss version="2.0">
         <channel>
         <title>ISP Adminator3 :: Nástěnka 2.0 :: RSS 2.0</title>
@@ -98,6 +96,8 @@ class rss
         <copyright>(c) Patrik Majer</copyright>
         <category>Networking</category>
         ';
+
+        return $output;
     }
 
     // musíme odstranit XHTML tagy
@@ -117,8 +117,10 @@ class rss
     }
 
     // zapsání jedné položky
-    public function putItem($o)
+    public function putItem($o): string
     {
+        $output = "";
+
         // odstranění tagů..
         $itemtitle = $this->encode_xml($o->subject);
 
@@ -130,7 +132,7 @@ class rss
 
         $itembody = Str_Replace("&", "&amp;", $itembody);
 
-        $itemlink = 'http://' . $_SERVER['HTTP_HOST'] . '/others-board.php?item_id='.$o->id;
+        $itemlink = 'http://' . $_SERVER['HTTP_HOST'] . '/others/board?item_id='.$o->id;
 
         // datum jako Sat, 15 May 2004 01:20:56 +0200
         $itempubdate = $o->from_date;
@@ -139,24 +141,25 @@ class rss
         $date = explode("-", $val);
         // $time = explode(":",$val[1]);
 
-        $itempubdate = mktime(0, 0, 0, $date[1], $date[2], $date[0]);
+        $itempubdate = mktime(0, 0, 0, intval($date[1]), intval($date[2]), intval($date[0]));
         $itempubdate = gmdate('D, d M Y H:i:s', $itempubdate).' GMT';
 
-        echo "\n<item> \n";
-        echo "<title>".$itemtitle." [".$itemauthor."]</title> \n";
-        echo "<link>".$itemlink."</link> \n";
-        echo "<description>".$itembody."</description> \n";
-        echo "<pubDate>".$itempubdate."</pubDate> \n";
-        echo "</item> \n";
+        $output .= "\n<item> \n";
+        $output .= "<title>".$itemtitle." [".$itemauthor."]</title> \n";
+        $output .= "<link>".$itemlink."</link> \n";
+        $output .= "<description>".$itembody."</description> \n";
+        $output .= "<pubDate>".$itempubdate."</pubDate> \n";
+        $output .= "</item> \n";
 
+        return $output;
     }
 
 
     // patička
-    public function putEnd()
+    public function putEnd(): string
     {
-        echo "\n</channel> \n";
-        echo "</rss> \n";
+        return "\n</channel> \n"
+                . "</rss> \n";
     }
 
     public function unhtmlentities($string)
