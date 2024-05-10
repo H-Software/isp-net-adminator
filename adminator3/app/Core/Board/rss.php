@@ -27,14 +27,14 @@ class boardRss
 
     public $logger;
 
-    private $loggedUserEmail;
+    // private $loggedUserEmail;
 
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
         $this->logger = $container->get('logger');
 
-        $this->loggedUserEmail = Sentinel::getUser()->email;
+        // $this->loggedUserEmail = Sentinel::getUser()->email;
     }
 
     public function check_login_rss($get_sid)
@@ -149,7 +149,7 @@ class boardRss
         $date = explode("-", $val);
         // $time = explode(":",$val[1]);
 
-        $itempubdate = mktime(0, 0, 0, $date[1], $date[2], intval($date[0]));
+        $itempubdate = mktime(0, 0, 0, intval($date[1]), intval($date[2]), intval($date[0]));
         $itempubdate = gmdate('D, d M Y H:i:s', $itempubdate).' GMT';
 
         echo "\n<item> \n";
