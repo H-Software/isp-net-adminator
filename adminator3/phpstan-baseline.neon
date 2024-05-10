@@ -737,19 +737,3 @@ parameters:
 			count: 1
 			path: others-web-simelon.php
 
-		-
-			message: "#^Function ereg not found\\.$#"
-			count: 1
-			path: print/inc.reg.form.gen.prepare.vars.php
-
-		-
-			message: "#^Binary operation \"\\+\" between string and 1 results in an error\\.$#"
-			count: 1
-			path: print/reg-form-pdf.php
-
-		-
-			message: "#^Variable \\$int_pocet_zarizeni in isset\\(\\) always exists and is not nullable\\.$#"
-			count: 1
-			path: print/reg-form-pdf.php
-
-
