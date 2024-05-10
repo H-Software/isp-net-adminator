@@ -453,11 +453,6 @@ parameters:
 			path: app/Core/Board/board.php
 
 		-
-			message: "#^Property board\\:\\:\\$container is unused\\.$#"
-			count: 1
-			path: app/Core/Board/board.php
-
-		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;/ii&gt;$#"
 			count: 1
 			path: app/Core/Board/board.php
