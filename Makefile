@@ -58,7 +58,6 @@ run-a3-phpstan:
 				boostrap \
 				config \
 				include/main.function.shared.php \
-				print \
 				public \
 				resources \
 				rss \

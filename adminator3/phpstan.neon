@@ -18,9 +18,6 @@ parameters:
 		path: *
 	-
 		message: "#^Function (mysql|ereg)_.* not found\\.$#"
-		path: print/*.php
-	-
-		message: "#^Function (mysql|ereg)_.* not found\\.$#"
 		path: app/Core/Print/inc.*.php
 	-
 		message: "#^Function mysql_.* not found\\.$#"
