@@ -186,5 +186,6 @@ class printController extends adminatorController
 
         $this->printInstance->regForm();
 
+        return $response;
     }
 }
