@@ -1288,7 +1288,9 @@ class printClass extends adminator
                     //zjistovani typu optika/wifi (z tarifu)
 
                     $rs_tarif = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '$id_tarifu' ");
-                    $typ_tarifu = mysql_result($rs_tarif, 0, 0);
+                    // $typ_tarifu = mysql_result($rs_tarif, 0, 0);
+                    $rs_tarif->data_seek(0);
+                    $typ_tarifu = $rs_tarif->fetch_row();
 
                     if($typ_tarifu == 0) {
                         $prip_tech = 3;
@@ -1399,7 +1401,7 @@ class printClass extends adminator
 
                     }
 
-                    if((!isset($int_pocet_zarizeni)) or ($int_pocet_zarizeni == 0)) {
+                    if((!isset($int_pocet_zarizeni))) {
                         $int_pocet_zarizeni = 1;
                     }
 
