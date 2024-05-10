@@ -121,10 +121,9 @@ class HomeController extends adminatorController
             $nastenka = new \board($this->container);
 
             $rss_token = $this->adminator->getUserToken();
-            if($rss_token !== false){
+            if($rss_token !== false) {
                 $this->smarty->assign("token", $rss_token);
-            }
-            else{
+            } else {
                 $this->logger->error("othersController\board: getUserToken failed");
             }
             $this->smarty->assign("datum", date("j. m. Y"));
