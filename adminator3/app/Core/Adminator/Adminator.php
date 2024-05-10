@@ -5,6 +5,7 @@ namespace App\Core;
 use App\Models\User;
 use App\Models\PageLevel;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -106,7 +107,7 @@ class adminator
         }
     }
 
-    public function getUserToken()
+    public function getUserToken(): false|string
     {
         $rs = User::where(
             "email",
@@ -122,11 +123,60 @@ class adminator
         }
 
         if($token == null or $token == 0 or strlen($token) < 2) {
-            // TODO: generate token
-            $token = $this->getRandomStringBin2hex();
+            $rs = $this->setuserToken();
+            if($rs === false) {
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": setuserToken failed.");
+                return false;
+            } else {
+                $token = $rs;
+            }
         }
 
         return $token;
+    }
+
+    public function setUserToken(): false|string
+    {
+        $token = $this->getRandomStringBin2hex();
+
+        $affRows = User::where(
+            "email",
+            isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
+        )
+        ->update(['token' => $token]);
+
+        if($affRows <> 1) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": update data in database failed (affRows ". var_export($affRows, true) .")");
+            return false;
+        } else {
+            $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": UserToken updated.");
+        }
+
+        return $token;
+    }
+
+    public function verifyUserToken(ServerRequestInterface $request): bool
+    {
+        $token = $request->getQueryParams()['token'] ?? '';
+
+        if (empty($token)) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": empty request param");
+            return false;
+        }
+
+        $rs = User::where(
+            "email",
+            isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
+        )->where('token', $token)
+        ->first(['id']);
+
+        if(is_object($rs)) {
+            $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": verifyUserToken: \"OK\" for " . var_export($this->userIdentityUsername, true));
+            return true;
+        } else {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": verifyUserToken: \"FAIL\" for " . var_export($this->userIdentityUsername, true));
+            return false;
+        }
     }
 
     public function checkLevel($page_level_id_custom = 0, $display_no_level_page = true)
