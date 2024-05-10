@@ -96,6 +96,7 @@ $app->group(
         $group->map(['GET', 'POST'], '/print/reg-form-2012-05', printController::class . ':printRegForm201205Old');
         $group->map(['GET', 'POST'], '/print/smlouva-2012-05', printController::class . ':printSmlouva201205');
         $group->map(['GET', 'POST'], '/print/smlouva', printController::class . ':printSmlouva');
+        $group->map(['GET', 'POST'], '/print/reg-form', printController::class . ':printRegForm');
 
         $group->map(['GET', 'POST'], '/vlastnici/cat', \vlastniciController::class . ':cat');
         $group->map(['GET', 'POST'], '/vlastnici2', \vlastniciController::class . ':vlastnici2');
