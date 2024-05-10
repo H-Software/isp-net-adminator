@@ -47,7 +47,7 @@ class othersController extends adminatorController
     public function companyWeb(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
-        $this->logger->info("othersController\others called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(151, $this->adminator);
 
@@ -55,11 +55,17 @@ class othersController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        //zacatek vlastniho obsahu
         try {
-            $count = $this->conn_mysql->select_db("simelonnet");
+            $this->conn_mysql->select_db("company-web");
         } catch (Exception $e) {
-            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database select failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            $content  = "Error: Database select failed!";
+            $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", $content);
+
+            $this->smarty->display("others/company-web-alert.tpl");
+            return $response;
         }
 
         //tab qestions
@@ -69,7 +75,14 @@ class othersController extends adminatorController
             FROM questions ORDER BY id_question
             ");
         } catch (Exception $e) {
-            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed (table questions)! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            $content  = "Error: Database query failed (table questions)!";
+            $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", $content);
+
+            $this->smarty->display("others/company-web-alert.tpl");
+            return $response;
         }
 
         $pole_q = array();
@@ -95,7 +108,14 @@ class othersController extends adminatorController
             FROM orders ORDER BY id_order
             ");
         } catch (Exception $e) {
-            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed (table orders)! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            $content  = "Error: Database query failed (table orders)!";
+            $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", $content);
+
+            $this->smarty->display("others/company-web-alert.tpl");
+            return $response;
         }
 
         $pole_o = array();
@@ -126,7 +146,6 @@ class othersController extends adminatorController
 
         //finalni zobrazeni stranky
         $this->smarty->display("others/company-web.tpl");
-
 
         return $response;
     }

@@ -7,7 +7,7 @@
 
     <span style="padding-left: 20px; "><a class="cat2" href="/print">Tisk</a></span>
 
-    <span style="padding-left: 20px; "><a class="cat2" href="/others-web-simelon.php">Web Simelon.net</a></span>
+    <span style="padding-left: 20px; "><a class="cat2" href="/others/company-web">Company Web</a></span>
     
     <div style="padding-left: 40px; ">
 
