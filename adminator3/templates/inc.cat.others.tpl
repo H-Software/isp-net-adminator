@@ -5,7 +5,7 @@
     
     <span style="padding-left: 20px; "><a class="cat2" href="/others/board">Nástěnka</a></span>
 
-    <span style="padding-left: 20px; "><a class="cat2" href="/others-print.php">Tisk</a></span>
+    <span style="padding-left: 20px; "><a class="cat2" href="/print">Tisk</a></span>
 
     <span style="padding-left: 20px; "><a class="cat2" href="/others-web-simelon.php">Web Simelon.net</a></span>
     

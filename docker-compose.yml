@@ -23,7 +23,9 @@ services:
   adminator:
     image: h-software/isp-net-adminator
     # image: ghcr.io/h-software/isp-net-adminator:pr-137
-    build: .
+    build:
+      context: ./
+      target: main
     # user: "www-data:www-data"
     environment:
       # DB conn

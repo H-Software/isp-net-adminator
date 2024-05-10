@@ -1,10 +1,11 @@
 <?php
 
-class print_reg_form
+namespace App\Print;
+
+use Exception;
+
+class printRegForm
 {
-    //
-    // variables
-    //
     public $file_name;  //file name of generated pdf file
     public $id_cloveka; //internal key from DB, where if generate file for existing object
 
@@ -16,10 +17,6 @@ class print_reg_form
     public $input_pozadovany_tarif;
 
     public $form_ec;
-
-    //
-    //  functions
-    //
 
     // stolen from https://www.php.net/manual/en/function.each.php#126076
     public function legacy_each($array)
@@ -39,10 +36,8 @@ class print_reg_form
     //
     // load_input_vars
     //
-
     public function load_input_vars()
     {
-
         reset($_POST);
 
         while (list($name, $value) = $this->legacy_each($_POST)) {
@@ -62,16 +57,14 @@ class print_reg_form
     //
     // generate_pdf_file
     //
-
     public function generate_pdf_file()
     {
-
 
         define('FPDF_FONTPATH', "include/font/");
 
         //zaklad, vytvoreni objektu a pridani stranky
         try {
-            $pdf = new FPDF("P", "mm", "A4");
+            $pdf = new \FPDF("P", "mm", "A4");
         } catch (Exception $e) {
             die("cant create class for PDF: ".var_export($e->getMessage(), true));
         }

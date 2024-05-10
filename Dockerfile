@@ -198,6 +198,11 @@ RUN mkdir -p /var/log/php \
     #  \
     # && echo '' > /var/log/php/error.log
 
+RUN rm -rf /usr/bin/composer
+
+# # dont run as root
+USER www-data:www-data
+
 # workaround for squash
 #
 FROM scratch

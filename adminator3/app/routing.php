@@ -12,6 +12,7 @@ use App\Controllers\Auth\PasswordController;
 use App\Controllers\partnerController;
 use App\Controllers\platbyController;
 use App\Controllers\runtimeController;
+use App\Controllers\printController;
 
 // routes
 
@@ -47,7 +48,6 @@ $app->group(
         $group->map(['GET', 'POST'], '/home', HomeController::class . ':home')->setName('home');
 
         $group->map(['GET'], '/runtime/opcache-gui', runtimeController::class . ':opcacheGui');
-
 
         $group->map(['GET', 'POST'], '/about', \aboutController::class . ':about');
         $group->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
@@ -90,6 +90,10 @@ $app->group(
         $group->map(['GET', 'POST'], '/platby/cat', platbyController::class . ':cat');
         $group->map(['GET', 'POST'], '/platby/fn', platbyController::class . ':fn');
         $group->map(['GET', 'POST'], '/platby/fn-kontrola-omezeni', platbyController::class . ':fnKontrolaOmezeni');
+
+        $group->map(['GET', ], '/print', printController::class . ':printListAll');
+        $group->map(['GET', 'POST'], '/print/redirect', printController::class . ':printRedirect');
+        $group->map(['GET', 'POST'], '/print/reg-form-2012-05', printController::class . ':printRegForm201205');
 
         $group->map(['GET', 'POST'], '/vlastnici/cat', \vlastniciController::class . ':cat');
         $group->map(['GET', 'POST'], '/vlastnici2', \vlastniciController::class . ':vlastnici2');
