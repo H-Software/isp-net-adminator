@@ -77,8 +77,6 @@ class printController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         $rf = new printRegForm();
-        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
-        $rf->csrf_html = $csrf_html;
 
         $button_send = $_POST["send"];
 
@@ -103,6 +101,9 @@ class printController extends adminatorController
             $this->smarty->assign("form_action", "");
 
             $this->smarty->assign("input_ec", $rf->input_ec);
+
+            list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+            $this->smarty->assign("csrf_html", $csrf_html);
 
             //finalni zobrazeni sablony
             $this->smarty->display('others/print-reg-form-2012-05-form.tpl');

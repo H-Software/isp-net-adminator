@@ -18,8 +18,6 @@ class printRegForm
 
     public $form_ec;
 
-    public $csrf_html;
-
     // stolen from https://www.php.net/manual/en/function.each.php#126076
     public function legacy_each($array)
     {
