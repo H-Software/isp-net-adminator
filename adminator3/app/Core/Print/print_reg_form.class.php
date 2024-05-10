@@ -109,9 +109,9 @@ class printRegForm
         $datum_nz = date('Y-m-d-H-i-s');
 
         if($this->id_cloveka > 0) {
-            $this->file_name = "print/temp/reg-form-v3-id-".$this->id_cloveka."-".$datum_nz.".pdf";
+            $this->file_name = "../print/temp/reg-form-v3-id-".$this->id_cloveka."-".$datum_nz.".pdf";
         } else {
-            $this->file_name = "print/temp/reg-form-v3-ec-".$this->form_ec."-".$datum_nz.".pdf";
+            $this->file_name = "..//print/temp/reg-form-v3-ec-".$this->form_ec."-".$datum_nz.".pdf";
         }
 
         $rs = $pdf->Output($this->file_name, "F");
