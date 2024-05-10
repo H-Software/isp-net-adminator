@@ -62,6 +62,24 @@ class adminator
         return $result;
     }
 
+    /**
+     * Get bytes of using random_bytes or openssl_random_pseudo_bytes
+     * then using bin2hex to get a random string.
+     *
+     * @param int $length
+     * @return string
+     */
+    function getRandomStringBin2hex($length = 16)
+    {
+        if (function_exists('random_bytes')) {
+            $bytes = random_bytes($length / 2);
+        } else {
+            $bytes = openssl_random_pseudo_bytes($length / 2);
+        }
+        $randomString = bin2hex($bytes);
+        return $randomString;
+    }
+
     public function fillEmptyVarsInArray(array $a, array $exclude = [])
     {
         foreach($a as $key => $val) {
@@ -106,7 +124,7 @@ class adminator
         if($token == null or $token == 0 or strlen($token) < 2) {
 
             // TODO: generate token
-
+            $token = $this->getRandomStringBin2hex();
         } else {
             return $token;
         }
