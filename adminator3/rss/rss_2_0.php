@@ -1,8 +1,11 @@
 <?php
 
-require "../include/main.function.shared.php";
-require "../include/config.php";
-require "../include/main.function.php";
+require __DIR__ . '/../vendor/autoload.php';
+
+require __DIR__ ."/../boostrap/netteLoader.php";
+
+// require __DIR__ . "/../include/main.function.shared.php";
+require __DIR__ . "/../boostrap/database.php";
 
 //prvne pokus o autorizaci
 $rss = new rss($conn_mysql, $logger);

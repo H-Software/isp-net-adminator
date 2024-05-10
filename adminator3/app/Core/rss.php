@@ -30,7 +30,7 @@ class rss
     public function check_login_rss($get_sid)
     {
 
-        if(!(ereg('^([[:alnum:]]|_|-)+$', $get_sid))) {
+        if(!(preg_match('/^([[:alnum:]]|_|-)+$/', $get_sid))) {
             return false;
             //exit;
         } else {
@@ -139,7 +139,7 @@ class rss
         $date = explode("-", $val);
         // $time = explode(":",$val[1]);
 
-        $itempubdate = mktime(0, 0, 0, $date[1], $date[2], $date[0]);
+        $itempubdate = mktime(0, 0, 0, $date[1], $date[2], intval($date[0]));
         $itempubdate = gmdate('D, d M Y H:i:s', $itempubdate).' GMT';
 
         echo "\n<item> \n";
