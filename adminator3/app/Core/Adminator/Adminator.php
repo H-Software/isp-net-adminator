@@ -122,12 +122,11 @@ class adminator
         }
 
         if($token == null or $token == 0 or strlen($token) < 2) {
-
             // TODO: generate token
             $token = $this->getRandomStringBin2hex();
-        } else {
-            return $token;
         }
+
+        return $token;
     }
 
     public function checkLevel($page_level_id_custom = 0, $display_no_level_page = true)

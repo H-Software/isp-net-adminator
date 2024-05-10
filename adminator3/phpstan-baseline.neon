@@ -528,11 +528,6 @@ parameters:
 			path: app/Core/platby.php
 
 		-
-			message: "#^Function ereg not found\\.$#"
-			count: 1
-			path: app/Core/rss.php
-
-		-
 			message: "#^Parameter \\#4 \\$month of function mktime expects int\\|null, string given\\.$#"
 			count: 1
 			path: app/Core/rss.php
@@ -544,6 +539,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#6 \\$year of function mktime expects int\\|null, string given\\.$#"
+			count: 1
+			path: app/Core/rss.php
+
+		-
+			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 			count: 1
 			path: app/Core/rss.php
 
