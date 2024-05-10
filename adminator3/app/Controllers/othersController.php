@@ -164,7 +164,7 @@ class othersController extends adminatorController
         //prvne pokus o autorizaci
         $rss = new boardRss($this->container);
 
-        $rs_check_login = $rss->check_login_rss($_GET["sid"]);
+        $rs_check_login = $rss->check_login_rss($_GET["token"]);
 
         if($rs_check_login == false) {
             $row = new board_rss_wrong_login("spatny login", "Špatný login, prosím přihlašte se do administračního systému.", "System");
