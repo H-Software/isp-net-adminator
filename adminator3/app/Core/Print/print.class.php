@@ -154,9 +154,9 @@ class printClass extends adminator
 
             if($iptv_sluzba_id_tarifu > 0) {
 
-                $rs_iptv = mysql_query("SELECT id_tarifu, jmeno_tarifu, cena_s_dph FROM tarify_iptv WHERE id_tarifu = '".intval($iptv_sluzba_id_tarifu)."' ");
+                $rs_iptv = $this->conn_mysql->query("SELECT id_tarifu, jmeno_tarifu, cena_s_dph FROM tarify_iptv WHERE id_tarifu = '".intval($iptv_sluzba_id_tarifu)."' ");
 
-                while($data_iptv = mysql_fetch_array($rs_iptv)) {
+                while($data_iptv = $this->conn_mysql->fetch_array($rs_iptv)) {
 
                     if((strlen($iptv_tarif_nazev) == 0)) {
                         $iptv_tarif_nazev = $data_iptv["jmeno_tarifu"];
