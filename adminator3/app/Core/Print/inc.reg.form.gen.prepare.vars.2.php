@@ -75,7 +75,7 @@ if((strlen($vas_technik) >= 1)) {
 if((strlen($vas_technik_tel) >= 1)) {
 
     //check formátu
-    if(!(ereg('^([[:digit:]])+$', $vas_technik_tel)) or (strlen($vas_technik_tel) <> 9)) {
+    if(!(preg_match('/^([[:digit:]])+$/', $vas_technik_tel)) or (strlen($vas_technik_tel) <> 9)) {
 
         $vas_technik_tel = "- - - - - - -";
 
