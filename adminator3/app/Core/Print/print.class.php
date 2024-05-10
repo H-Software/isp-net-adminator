@@ -1115,7 +1115,7 @@ class printClass extends adminator
 
             //finalni zobrazeni sablony
             $this->smarty->display('print/smlouva.tpl');
-            
+
         } //konec else !isset nazev
     }
 }
