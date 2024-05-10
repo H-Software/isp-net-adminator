@@ -69,6 +69,8 @@ $app->group(
         $group->map(['GET', 'POST'], '/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
 
         $group->map(['GET', 'POST'], '/others', othersController::class . ':others');
+        $group->map(['GET', 'POST'], '/others/company-web', othersController::class . ':companyWeb');
+
         $group->map(['GET', 'POST'], '/others/board', othersController::class . ':board');
         $group->map(['GET'], '/board/rss', othersController::class . ':boardRss');
 
