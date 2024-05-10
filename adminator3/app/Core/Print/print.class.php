@@ -83,7 +83,7 @@ class printClass extends adminator
     public function printSmlouva201205()
     {
         $output = "";
-        
+
         $ec = $_POST["ec"];
 
         $jmeno = $_POST["jmeno"];
