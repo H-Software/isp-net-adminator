@@ -149,6 +149,18 @@ class printController extends adminatorController
         $this->printInstance->printSmlouva201205();
 
         return $response;
+    }
 
+    public function printSmlouva(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(146, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Smlouva");
+
+        $this->header($request, $response, $this->adminator);
+
+        return $response;
     }
 }

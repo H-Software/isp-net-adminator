@@ -11,7 +11,7 @@
  <div class="row" style="padding-bottom: 20px; " >
 
     <div class="col" style="float: left; width: 250px;" >Smlouva - optika/wifi (formát PDF)
-        <a href="print/smlouva-pdf.php" target="_new" >zde</a>
+        <a href="print/smlouva" target="_new" >zde</a>
     </div>
     <div class="col" style="float: left; padding-left: 20px; padding-right: 20px; text-align: center;" >
         {* <a href="img2/print/2011-10-24-smlouva_small.jpg" > *}
