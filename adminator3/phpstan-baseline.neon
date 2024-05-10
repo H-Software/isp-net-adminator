@@ -435,67 +435,67 @@ parameters:
 		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 			count: 2
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Parameter \\#4 \\$month of function mktime expects int\\|null, string given\\.$#"
 			count: 6
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Parameter \\#5 \\$day of function mktime expects int\\|null, string given\\.$#"
 			count: 6
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Parameter \\#6 \\$year of function mktime expects int\\|null, string given\\.$#"
 			count: 6
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Property board\\:\\:\\$container is unused\\.$#"
 			count: 1
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;/ii&gt;$#"
 			count: 1
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;/iu&gt;$#"
 			count: 1
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;\\\\//ii&gt;$#"
 			count: 1
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '&' in pattern\\: /&lt;\\\\//iu&gt;$#"
 			count: 1
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '/' in pattern\\: /\\(http\\://\\[\\^ \\]\\+\\\\\\.\\[\\^ \\]\\+\\)/i$#"
 			count: 1
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '\\]' in pattern\\: /\\[\\^/\\]\\(www\\\\\\.\\[\\^ \\]\\+\\\\\\.\\[\\^ \\]\\+\\)/i$#"
 			count: 1
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier 'b' in pattern\\: /&lt;/ib&gt;$#"
 			count: 1
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier 'b' in pattern\\: /&lt;\\\\//ib&gt;$#"
 			count: 1
-			path: app/Core/board.php
+			path: app/Core/Board/board.php
 
 		-
 			message: "#^If condition is always false\\.$#"
