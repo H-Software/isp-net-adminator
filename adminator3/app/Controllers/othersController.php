@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Board\boardRss;
+use Exception;
 
 class othersController extends adminatorController
 {
@@ -39,6 +40,112 @@ class othersController extends adminatorController
         $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
 
         $this->smarty->display('others-cat.tpl');
+
+        return $response;
+    }
+
+    public function companyWeb(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(151, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Company Web");
+
+        $this->header($request, $response, $this->adminator);
+
+        try {
+            $this->conn_mysql->select_db("company-web");
+        } catch (Exception $e) {
+            $content  = "Error: Database select failed!";
+            $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", $content);
+
+            $this->smarty->display("others/company-web-alert.tpl");
+            return $response;
+        }
+
+        //tab qestions
+        try {
+            $dotaz_q = $this->conn_mysql->query("
+            SELECT id_question, jmeno, prijmeni, telefon, email, vs, dotaz, text, datum_vlozeni
+            FROM questions ORDER BY id_question
+            ");
+        } catch (Exception $e) {
+            $content  = "Error: Database query failed (table questions)!";
+            $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", $content);
+
+            $this->smarty->display("others/company-web-alert.tpl");
+            return $response;
+        }
+
+        $pole_q = array();
+
+        while($data_q = $dotaz_q->fetch_array()) {
+            $pole_q[] = array(
+                "id_question" => $data_q["id_question"], "jmeno" => $data_q["jmeno"],
+                "prijmeni" => $data_q["prijmeni"], "telefon" => $data_q["telefon"],
+                "email" => $data_q["email"], "vs" => $data_q["vs"],
+                "dotaz" => $data_q["dotaz"], "text" => $data_q["text"],
+                "datum_vlozeni" => $data_q["datum_vlozeni"]
+            );
+        }
+
+        $this->smarty->assign("data_q", $pole_q);
+
+        //tab orders
+        try {
+            $dotaz_o = $this->conn_mysql->query("
+            SELECT id_order, jmeno, prijmeni, adresa, telefon, email,
+                internet, text_internet, iptv, balicek, text_iptv,
+                voipcislo, voip, text_voip, poznamka, datum_vlozeni
+            FROM orders ORDER BY id_order
+            ");
+        } catch (Exception $e) {
+            $content  = "Error: Database query failed (table orders)!";
+            $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", $content);
+
+            $this->smarty->display("others/company-web-alert.tpl");
+            return $response;
+        }
+
+        $pole_o = array();
+
+        while($data_o = $dotaz_o->fetch_array()) {
+            $pole_o[] = array(
+                "id_order" => $data_o["id_order"], "jmeno" => $data_o["jmeno"],
+                "prijmeni" => $data_o["prijmeni"], "adresa" => $data_o["adresa"],
+                "telefon" => $data_o["telefon"], "email" => $data_o["email"],
+                "internet" => $data_o["internet"], "text_internet" => $data_o["text_internet"],
+                "iptv" => $data_o["iptv"], "balicek" => $data_o["balicek"],
+                "text_iptv" => $data_o["text_iptv"], "voipcislo" => $data_o["voipcislo"],
+                "voip" => $data_o["voip"], "text_voip" => $data_o["text_voip"],
+                "poznamka" => $data_o["poznamka"], "datum_vlozeni" => $data_o["datum_vlozeni"]
+            );
+        }
+
+        $this->smarty->assign("data_o", $pole_o);
+
+        //print_r($pole_o);
+
+        //zpatky default DB
+        try {
+            $count = $this->conn_mysql->select_db("adminator2");
+        } catch (Exception $e) {
+            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+        }
+
+        //finalni zobrazeni stranky
+        $this->smarty->display("others/company-web.tpl");
 
         return $response;
     }

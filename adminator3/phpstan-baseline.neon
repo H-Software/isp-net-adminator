@@ -703,8 +703,3 @@ parameters:
 			count: 1
 			path: include/main.function.shared.php
 
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: others-web-simelon.php
-

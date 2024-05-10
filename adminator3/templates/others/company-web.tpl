@@ -3,7 +3,7 @@
  {include file="inc.cat.others.tpl"}
 
  <div style="padding-top: 10px; padding-left: 10px; font-size: 18px; text-decoration: underline; ">
-    Výpis informací z odeslaných firmulářů z webu www.simelon.net
+    Informace z odeslaných formulářů z webu spolecnosti
  </div>
  
  <div style="padding-top: 10px; padding-left: 10px;" >
@@ -107,7 +107,7 @@
        </div>
        
     {sectionelse}
-	<div style="padding-top: 10px; color: red; font-size: 16px;" >V databázi nejsou žádné údaje.</div>
+	<div style="clear: both; padding-top: 10px; color: red; font-size: 16px;" >V databázi nejsou žádné údaje.</div>
     {/section}
       	   
  </div>
