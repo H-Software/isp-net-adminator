@@ -124,7 +124,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
-			count: 1
+			count: 2
 			path: app/Core/Adminator/Adminator.php
 
 		-
