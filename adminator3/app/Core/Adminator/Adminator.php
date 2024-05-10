@@ -88,6 +88,30 @@ class adminator
         }
     }
 
+    public function getUserToken()
+    {
+        $rs = User::where(
+            "email",
+            isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
+        )->first(['token']);
+
+        if(is_object($rs)) {
+            $a = $rs->toArray();
+            $token = $a['token'];
+        } else {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": failed to load data from database (result is not object)");
+            return false;
+        }
+
+        if($token == null or $token == 0 or strlen($token) < 2) {
+
+            // TODO: generate token
+
+        } else {
+            return $token;
+        }
+    }
+
     public function checkLevel($page_level_id_custom = 0, $display_no_level_page = true)
     {
 

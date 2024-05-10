@@ -55,6 +55,7 @@ class othersController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         $nastenka = new \board($this->container);
+
         $rss = new boardRss($this->container);
         $rss_token = $rss->getToken();
 

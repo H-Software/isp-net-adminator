@@ -35,12 +35,6 @@ class boardRss
         $this->logger = $container->get('logger');
 
         $this->loggedUserEmail = Sentinel::getUser()->email;
-
-    }
-
-    public function getToken()
-    {
-
     }
 
     public function check_login_rss($get_sid)
