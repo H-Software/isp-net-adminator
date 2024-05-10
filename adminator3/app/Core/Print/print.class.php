@@ -1287,7 +1287,7 @@ class printClass extends adminator
 
                     //zjistovani typu optika/wifi (z tarifu)
 
-                    $rs_tarif = mysql_query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '$id_tarifu' ");
+                    $rs_tarif = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '$id_tarifu' ");
                     $typ_tarifu = mysql_result($rs_tarif, 0, 0);
 
                     if($typ_tarifu == 0) {
@@ -1301,18 +1301,18 @@ class printClass extends adminator
                     }
 
                     //zjistovani pole POZNAMKA, z vypisu nodu
-                    $rs_nod = mysql_query("SELECT jmeno, ip_rozsah FROM nod_list WHERE id = '".intval($id_nodu)."' ");
-                    $rs_nod_num = mysql_num_rows($rs_nod);
+                    $rs_nod = $this->conn_mysql->query("SELECT jmeno, ip_rozsah FROM nod_list WHERE id = '".intval($id_nodu)."' ");
+                    $rs_nod_num = $rs_nod->num_rows;
 
                     if($rs_nod_num <> 1) {
                         echo "<div style=\"font-weight: bold; color: red;\" >".
                             "Chyba! Nelze načíst údaje z databáze lokalit pro id_nodu ".intval($id_nodu).". (rows: ".$rs_nod_num.")</div>";
                     } else {
 
-                        while($data_nod = mysql_fetch_array($rs_nod)) {
+                        while($data_nod = $rs_nod->fetch_array()) {
 
-                            $poznamka = " NOD: ".mysql_result($rs_nod, 0, 0);
-                            $ip_rozsah = mysql_result($rs_nod, 0, 1);
+                            $poznamka = " NOD: ".$data_nod['jmeno'];
+                            $ip_rozsah = $data_nod['ip_rozsah'];
                         }
                     }
 
@@ -1350,7 +1350,7 @@ class printClass extends adminator
                         //verejky - wifi - obecně
 
                         $ip_maska = "255.255.255.252";
-                        $ip_brana = $ip_arr[0].".".$ip_arr[1].".".$ip_arr[2].".".($ip_arr[3] + 1);
+                        $ip_brana = $ip_arr[0].".".$ip_arr[1].".".$ip_arr[2].".".(intval($ip_arr[3]) + 1);
                     } elseif($ip_arr[0] == "82") {
                         //verejky optika
                         $ip_maska = "255.255.255.224";
