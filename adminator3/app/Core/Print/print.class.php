@@ -576,7 +576,8 @@ class printClass extends adminator
                         //verejky - wifi - obecně
 
                         $ip_maska = "255.255.255.252";
-                        $ip_brana = $ip_arr[0].".".$ip_arr[1].".".$ip_arr[2].".".($ip_arr[3] + 1);
+                        $d = $ip_arr[3];
+                        $ip_brana = $ip_arr[0].".".$ip_arr[1].".".$ip_arr[2].".".($d + 1);
                     } elseif($ip_arr[0] == "82") {
                         //verejky optika
                         $ip_maska = "255.255.255.224";
@@ -625,7 +626,7 @@ class printClass extends adminator
 
                     }
 
-                    if((!isset($int_pocet_zarizeni)) or ($int_pocet_zarizeni == 0)) {
+                    if((!isset($int_pocet_zarizeni))) {
                         $int_pocet_zarizeni = 1;
                     }
 
