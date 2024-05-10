@@ -1102,15 +1102,20 @@ class printClass extends adminator
 
             //presmerovani na dpdf soubor
 
-            echo '<html>
-                <head>
-                    <title>Tisk smlouvy</title>
-                </head>
-            <body>
-                Vygenerovany soubor je <a href="/'.$nazev_souboru.'" >zde</a>.
-            </body>
-            </html>';
+            // echo '<html>
+            //     <head>
+            //         <title>Tisk smlouvy</title>
+            //     </head>
+            // <body>
+            //     Vygenerovany soubor je <a href="/'.$nazev_souboru.'" >zde</a>.
+            // </body>
+            // </html>';
 
+            $this->smarty->assign("file_name", '/'.$nazev_souboru);
+
+            //finalni zobrazeni sablony
+            $this->smarty->display('print/smlouva.tpl');
+            
         } //konec else !isset nazev
     }
 }
