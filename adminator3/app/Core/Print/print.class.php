@@ -1401,7 +1401,7 @@ class printClass extends adminator
 
                     }
 
-                    if((!isset($int_pocet_zarizeni))) {
+                    if($int_pocet_zarizeni == 0) {
                         $int_pocet_zarizeni = 1;
                     }
 
