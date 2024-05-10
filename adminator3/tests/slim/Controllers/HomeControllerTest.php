@@ -60,7 +60,7 @@ final class HomeControllerTest extends AdminatorTestCase
                 array()
             )
         );
-        // $adminatorMock->shouldReceive('list_logged_users')->andReturn("");
+        $adminatorMock->shouldReceive('getUserToken')->andReturn(false);
         // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
         $opravyMock = \Mockery::mock(
