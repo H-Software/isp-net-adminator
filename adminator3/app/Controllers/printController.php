@@ -161,6 +161,12 @@ class printController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
+        $this->printInstance = new printClass($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $this->printInstance->csrf_html = $csrf_html;
+
+        $this->printInstance->printSmlouva();
+
         return $response;
     }
 }
