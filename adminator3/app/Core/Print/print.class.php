@@ -1500,8 +1500,8 @@ class printClass extends adminator
                 $sql_where = " id_cloveka = '$id_cloveka' ";
             }
             //zjistovani stb
-            $rs_stb = mysql_query("SELECT ip_adresa, mac_adresa, puk, popis FROM objekty_stb WHERE ".$sql_where);
-            $rs_stb_num = mysql_num_rows($rs_stb);
+            $rs_stb = $this->conn_mysql->query("SELECT ip_adresa, mac_adresa, puk, popis FROM objekty_stb WHERE ".$sql_where);
+            $rs_stb_num = $rs_stb->num_rows;
 
             if($rs_stb_num > 3) {
 
@@ -1518,7 +1518,7 @@ class printClass extends adminator
 
                 $i = 1;
 
-                while($data_stb = mysql_fetch_array($rs_stb)) {
+                while($data_stb = $rs_stb->fetch_array()) {
 
                     $iptv_zarizeni = "iptv_zarizeni_".$i;
                     $iptv_zarizeni_ip = "iptv_zarizeni_".$i."_ip";
@@ -1610,14 +1610,19 @@ class printClass extends adminator
 
             //presmerovani na dpdf soubor
 
-            echo '<html>
-                <head>
-                    <title>Tisk Registračního formuláře</title>
-                </head>
-            <body>
-                Vygenerovany soubor je <a href="/'.$nazev_souboru.'" >zde</a>.
-            </body>
-            </html>';
+            // echo '<html>
+            //     <head>
+            //         <title>Tisk Registračního formuláře</title>
+            //     </head>
+            // <body>
+            //     Vygenerovany soubor je <a href="/'.$nazev_souboru.'" >zde</a>.
+            // </body>
+            // </html>';
+
+            $this->smarty->assign("file_name", '/'.$nazev_souboru);
+
+            //finalni zobrazeni sablony
+            $this->smarty->display('print/reg-form.tpl');
 
         } //konec else !isset nazev
 
