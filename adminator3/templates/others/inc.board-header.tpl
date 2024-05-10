@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="col-md-2 text-start">
-                <span class="board-rss"><a href="/board/rss?token={$token|default:'' }" >RSS 2.0</a></span>
+                <span class="board-rss"><a href="/board/rss?token={$token}" >RSS 2.0</a></span>
             </div>
         </div>
     </div>

@@ -69,7 +69,7 @@ class adminator
      * @param int $length
      * @return string
      */
-    function getRandomStringBin2hex($length = 16)
+    public function getRandomStringBin2hex($length = 32)
     {
         if (function_exists('random_bytes')) {
             $bytes = random_bytes($length / 2);

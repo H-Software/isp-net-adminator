@@ -117,10 +117,17 @@ class HomeController extends adminatorController
             $this->logger->info("homeController\board allowed");
 
             $this->smarty->assign("nastenka_povoleno", 1);
-            $this->smarty->assign("datum", date("j. m. Y"));
-            $this->smarty->assign("sid", "");
 
             $nastenka = new \board($this->container);
+
+            $rss_token = $this->adminator->getUserToken();
+            if($rss_token !== false){
+                $this->smarty->assign("token", $rss_token);
+            }
+            else{
+                $this->logger->error("othersController\board: getUserToken failed");
+            }
+            $this->smarty->assign("datum", date("j. m. Y"));
 
             $rs = $nastenka->prepare_vars();
             $this->logger->debug("homeController\board: prepare_vars result: " . var_export($rs, true));
