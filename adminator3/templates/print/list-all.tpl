@@ -81,7 +81,7 @@
  <div class="row" style="padding-bottom: 20px; " >
 
     <div class="col" style="float: left; width: 250px; " >Smlouva - nová (2012-05) (formát PDF)
-        <a href="print/smlouva-2012-05.php" target="_new" >zde</a>
+        <a href="/print/smlouva-2012-05" target="_new" >zde</a>
     </div>
     <div class="col" style="float: left; padding-left: 20px; padding-right: 20px; text-align: center;" >
         {* <a href="img2/print/2012-05-31-smlouva_small.jpg" > *}

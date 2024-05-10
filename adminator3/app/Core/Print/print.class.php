@@ -308,7 +308,7 @@ class printClass extends adminator
             //
             //  zobrazeni hlavni casti formu
             //
-            require("inc.smlouva.input.form.2.php");
+            require __DIR__ . "/inc.smlouva.input.form.2.php";
 
             echo "</body>
         </html>";
@@ -317,19 +317,19 @@ class printClass extends adminator
         else { //budeme generovat
 
             // konverze promennych
-            require("inc.smlouva.gen.prepare.vars.2.php");
+            require(__DIR__ . "/inc.smlouva.gen.prepare.vars.2.php");
             // konec pripravy promennych
 
             // opravdovy zacatek generovani
             define('FPDF_FONTPATH', "include/font/");
 
-            require("inc.smlouva.gen.main.2.php");
+            require(__DIR__ . "/inc.smlouva.gen.main.2.php");
 
             //zobrazeni odkazu dpdf soubor
             $smarty->assign("file_name", "/".$nazev_souboru);
 
             //finalni zobrazeni sablony
-            $smarty->display('others/print-smlouva-2012-05.tpl');
+            $smarty->display('print/smlouva-2012-05.tpl');
 
         } //konec else !isset nazev
     }
