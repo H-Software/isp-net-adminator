@@ -175,7 +175,7 @@ class printController extends adminatorController
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(146, $this->adminator);
-        
+
         $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Reg. Form");
 
         $this->header($request, $response, $this->adminator);
