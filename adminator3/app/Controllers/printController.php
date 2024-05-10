@@ -77,6 +77,8 @@ class printController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         $rf = new printRegForm();
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $rf->csrf_html = $csrf_html;
 
         $button_send = $_POST["send"];
 
@@ -107,5 +109,26 @@ class printController extends adminatorController
         }
 
         return $response;
+    }
+
+    public function printSmlouva201205(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(146, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Smlouva 2012-05");
+
+        $this->header($request, $response, $this->adminator);
+
+        $this->printInstance = new printClass($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $this->printInstance->csrf_html = $csrf_html;
+
+        $this->printInstance->printSmlouva201205();
+
+        return $response;
+
     }
 }
