@@ -2,6 +2,8 @@
 
 echo "\n\n<form method=\"POST\" name=\"form1\" >\n";
 
+echo $this->csrf_html;
+
 echo "<table border=\"1\" width=\"1000px\">
 
     <tr>
