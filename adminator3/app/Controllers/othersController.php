@@ -56,11 +56,10 @@ class othersController extends adminatorController
 
         $nastenka = new \board($this->container);
 
-        $rss = new boardRss($this->container);
-        $rss_token = $rss->getToken();
+        $rss_token = $this->adminator->getUserToken();
 
         $this->smarty->assign("datum", date("j. m. Y"));
-        // $this->smarty->assign("token", $sid);
+        $this->smarty->assign("token", $rss_token);
 
         $nastenka->what = $_GET["what"];
         $nastenka->action = $_GET["action"];
