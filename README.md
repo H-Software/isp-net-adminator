@@ -132,6 +132,9 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/adriansuter/Slim4-Skeleton/blob/master/tests/Controllers/HelloControllerTest.php
 - https://medium.com/@selieshjksofficial/simplifying-database-unit-testing-in-php-with-phpunit-and-mock-databases-e251ab08f4eb
 
+#### SimpleXML
+- https://www.sanwebe.com/2013/08/creating-rss-feed-using-php-simplexml
+
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html
 
