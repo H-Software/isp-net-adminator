@@ -11,6 +11,8 @@ class othersController extends adminatorController
     public $conn_mysql;
     public $smarty;
 
+    public $adminator;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -53,7 +55,7 @@ class othersController extends adminatorController
         $nastenka = new \board($this->container);
 
         $this->smarty->assign("datum", date("j. m. Y"));
-        $this->smarty->assign("sid", $sid);
+        // $this->smarty->assign("token", $sid);
 
         $nastenka->what = $_GET["what"];
         $nastenka->action = $_GET["action"];
@@ -153,7 +155,7 @@ class othersController extends adminatorController
         $this->checkLevel(309, $this->adminator);
 
         //prvne pokus o autorizaci
-        $rss = new \board_rss($this->conn_mysql, $this->logger);
+        $rss = new \board_rss($this->container);
 
         $rs_check_login = $rss->check_login_rss($_GET["sid"]);
 

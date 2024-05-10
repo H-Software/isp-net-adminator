@@ -1,5 +1,8 @@
 <?php
 
+use Psr\Container\ContainerInterface;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
+
 class board_rss_wrong_login
 {
     public $subject;
@@ -21,10 +24,15 @@ class board_rss
 
     public $logger;
 
-    public function __construct($conn_mysql, $logger)
+    private $loggedUserEmail;
+
+    public function __construct(ContainerInterface $container)
     {
-        $this->conn_mysql = $conn_mysql;
-        $this->logger = $logger;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->logger = $container->get('logger');
+
+        $this->loggedUserEmail = Sentinel::getUser()->email;
+
     }
 
     public function check_login_rss($get_sid)
@@ -130,7 +138,7 @@ class board_rss
 
         $itembody = Str_Replace("&", "&amp;", $itembody);
 
-        $itemlink = 'http://' . $_SERVER['HTTP_HOST'] . '/others-board.php?item_id='.$o->id;
+        $itemlink = 'http://' . $_SERVER['HTTP_HOST'] . '/others/board?item_id='.$o->id;
 
         // datum jako Sat, 15 May 2004 01:20:56 +0200
         $itempubdate = $o->from_date;
