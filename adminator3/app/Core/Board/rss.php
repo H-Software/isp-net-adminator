@@ -1,7 +1,10 @@
 <?php
 
+namespace App\Board;
+
 use Psr\Container\ContainerInterface;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Exception;
 
 class board_rss_wrong_login
 {
@@ -18,7 +21,7 @@ class board_rss_wrong_login
 
 }
 
-class board_rss
+class boardRss
 {
     public $conn_mysql;
 
@@ -32,6 +35,11 @@ class board_rss
         $this->logger = $container->get('logger');
 
         $this->loggedUserEmail = Sentinel::getUser()->email;
+
+    }
+
+    public function getToken()
+    {
 
     }
 

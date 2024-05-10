@@ -5,6 +5,8 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Board\boardRss;
+use App\Board\board_rss_wrong_login;
 
 class othersController extends adminatorController
 {
@@ -53,6 +55,8 @@ class othersController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         $nastenka = new \board($this->container);
+        $rss = new boardRss($this->container);
+        $rss_token = $rss->getToken();
 
         $this->smarty->assign("datum", date("j. m. Y"));
         // $this->smarty->assign("token", $sid);
@@ -155,12 +159,12 @@ class othersController extends adminatorController
         $this->checkLevel(309, $this->adminator);
 
         //prvne pokus o autorizaci
-        $rss = new \board_rss($this->container);
+        $rss = new boardRss($this->container);
 
         $rs_check_login = $rss->check_login_rss($_GET["sid"]);
 
         if($rs_check_login == false) {
-            $row = new \board_rss_wrong_login("spatny login", "Špatný login, prosím přihlašte se do administračního systému.", "System");
+            $row = new board_rss_wrong_login("spatny login", "Špatný login, prosím přihlašte se do administračního systému.", "System");
 
             $rss->putHeader();
             $rss->putItem($row);

@@ -5,7 +5,7 @@ use Psr\Container\ContainerInterface;
 
 class board
 {
-    private $container;
+    // private $container;
 
     public $pdoMysql;
 
