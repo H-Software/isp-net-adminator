@@ -287,7 +287,7 @@ class vlastnik2
             . "</head>
                 <body>";
         
-        if( $akce == 0 or !isset($akce) )
+        if($akce == 0)
         { 
             $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
             

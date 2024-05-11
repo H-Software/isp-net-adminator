@@ -64,7 +64,7 @@ class vlastniciController extends adminatorController
             $this->smarty->assign("alert_content", $vlastnik2->alert_content);
 
             $this->smarty->display("vlastnici/cross-alert.tpl");
-        } else{
+        } else {
             $rs = $vlastnik2->crossRun();
         }
 
