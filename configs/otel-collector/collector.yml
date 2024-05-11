@@ -1,0 +1,291 @@
+extensions:
+  basicauth/gc-traces:
+    client_auth:
+      username: 733786
+      password: ${env:GRAFANA_CLOUD_KEY}
+  basicauth/gc-metrics:
+    client_auth:
+      username: 1271273
+      password: ${env:GRAFANA_CLOUD_KEY}
+  basicauth/gc-logs:
+    client_auth:
+      username: 734682
+      password: ${env:GRAFANA_CLOUD_KEY}
+  health_check:
+  pprof:
+  zpages:
+  memory_ballast:
+    size_mib: 512
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+#        compression: snappy
+      http:
+
+  docker_stats:
+    endpoint: unix:///var/run/docker.sock
+    collection_interval: 10s
+    timeout: 20s
+    api_version: 1.25 # 1.42
+
+  hostmetrics:
+    collection_interval: 10s
+    scrapers:
+      cpu:
+        metrics:
+          system.cpu.utilization:
+            enabled: true
+      paging:
+      load:
+#      process:
+#      processes:
+#      filesystem:
+#      network:
+#      memory:
+      memory:
+        metrics:
+          system.memory.utilization:
+            enabled: true
+    root_path: /hostfs
+  hostmetrics/disk:
+    collection_interval: 1m
+    scrapers:
+      disk:
+      filesystem:
+    root_path: /hostfs
+
+  prometheus:
+    config:
+      global:
+        scrape_interval: 10s
+        scrape_timeout: 5s
+        evaluation_interval: 10s
+      scrape_configs:
+       - job_name: 'otel-collector'
+         scrape_interval: 15s
+         static_configs:
+           - targets: ['localhost:8888']
+#        - job_name: 'grafana'
+#          scrape_interval: 15s
+#          static_configs:
+#            - targets: ['grafana:3000']
+#         # https://prometheus.io/docs/prometheus/latest/federation/
+#         - job_name: 'federate'
+#           scrape_interval: 5s
+#           # !! honor_labels: "true" is not really working (with federate)
+#           # some labels are "mismatched"
+#           # similar https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/8355
+#           honor_labels: false
+#           metrics_path: '/federate'
+#           params:
+#             'match[]':
+#               - '{__name__=~"[a-z0-9A-Z].*",__name__!~"(scrape_.*|up)"}'
+# #              - '{__name__=~"[a-z0-9A-Z].*",__name__!~"(scrape_.*|up)"}'
+# #              - '{__name__=~"k6.*"}'
+#           static_configs:
+#             - targets:
+#                 - 'prometheus:9090'
+
+#  filelog:
+#    include:
+#      - /hostfs/var/lib/docker/containers/*/*.log
+#    start_at: end
+#    include_file_path: true
+#    include_file_name: false
+#    operators:
+#      # Find out which format is used by kubernetes
+#      - type: router
+#        id: get-format
+#        routes:
+#          - output: parser-docker
+#            expr: 'body matches "^\\{"'
+#          - output: parser-crio
+#            expr: 'body matches "^[^ Z]+ "'
+#          - output: parser-containerd
+#            expr: 'body matches "^[^ Z]+Z"'
+#      # Parse CRI-O format
+#      - type: regex_parser
+#        id: parser-crio
+#        regex: '^(?P<time>[^ Z]+) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+#        output: extract_metadata_from_filepath
+#        timestamp:
+#          parse_from: attributes.time
+#          layout_type: gotime
+#          layout: '2006-01-02T15:04:05.999999999Z07:00'
+#      # Parse CRI-Containerd format
+#      - type: regex_parser
+#        id: parser-containerd
+#        regex: '^(?P<time>[^ ^Z]+Z) (?P<stream>stdout|stderr) (?P<logtag>[^ ]*) ?(?P<log>.*)$'
+#        output: extract_metadata_from_filepath
+#        timestamp:
+#          parse_from: attributes.time
+#          layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+#      # Parse Docker format
+#      - type: json_parser
+#        id: parser-docker
+#        output: extract_metadata_from_filepath
+#        timestamp:
+#          parse_from: attributes.time
+#          layout: '%Y-%m-%dT%H:%M:%S.%LZ'
+#      # Extract metadata from file path
+#      - type: regex_parser
+#        id: extract_metadata_from_filepath
+#        regex: '^.*\/(?P<namespace>[^_]+)_(?P<pod_name>[^_]+)_(?P<uid>[a-f0-9\-]{36})\/(?P<container_name>[^\._]+)\/(?P<restart_count>\d+)\.log$'
+#        parse_from: attributes["log.file.path"]
+#        cache:
+#          size: 128  # default maximum amount of Pods per Node is 110
+#      # Update body field after finishing all parsing
+#      - type: move
+#        from: attributes.log
+#        to: body
+#      # Rename attributes
+#      - type: move
+#        from: attributes.stream
+#        to: attributes["log.iostream"]
+#      - type: move
+#        from: attributes.container_name
+#        to: resource["k8s.container.name"]
+#      - type: move
+#        from: attributes.namespace
+#        to: resource["k8s.namespace.name"]
+#      - type: move
+#        from: attributes.pod_name
+#        to: resource["k8s.pod.name"]
+#      - type: move
+#        from: attributes.restart_count
+#        to: resource["k8s.container.restart_count"]
+#      - type: move
+#        from: attributes.uid
+#        to: resource["k8s.pod.uid"]
+
+processors:
+  batch:
+  resourcedetection/system:
+    detectors: [ "system" ]
+    system:
+      hostname_sources:
+        - "dns"
+        - "os"
+  probabilistic_sampler/sampleAll:
+    sampling_percentage: 100
+  attributes/addServiceEnvironment:
+    actions:
+      - key: service.environment
+        value: sandbox
+        action: insert
+  attributes/addServiceCluster:
+    actions:
+      - key: service.cluster
+        value: isp-adminator-local
+        action: insert
+  # for some bugs around prometheus federate and otel collector logic
+  # https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/8355
+  attributes/fixPrometheusLabelNames:
+    actions:
+      - key: service.name
+        from_attribute: exported_job
+        action: upsert
+      # "fixing" wrong extraction with federate+honored_labels: false
+      # https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/prometheusreceiver/internal/prom_to_otlp.go
+      # "action: delete" looks like it's not working for generated labels in prom_to_otlp.go
+      - key: net.host.port
+        value: "-"
+        action: upsert
+      - key: net.host.name
+        from_attribute: exported_instance
+        action: upsert
+#      - key: packeta_service_name
+#        action: delete
+
+exporters:
+  logging:
+    loglevel: debug
+#  otlp/lighstep:
+#    endpoint: ingest.lightstep.com:443
+#  # https://opentelemetry.io/docs/collector/configuration/#configuration-environment-variables
+#    headers: { "lightstep-access-token": "${env:LS_ACCESS_TOKEN}" }
+  otlp/grafanacloud:
+    endpoint: tempo-prod-10-prod-eu-west-2.grafana.net:443
+    tls:
+      insecure: false
+    auth:
+      authenticator: basicauth/gc-traces
+  # otlp/newrelic:
+  #   endpoint: https://otlp.eu01.nr-data.net:4317
+  #   headers:
+  #     api-key: ${env:NEW_RELIC_LICENSE_KEY}
+  loki/gc:
+    endpoint: https://logs-prod-012.grafana.net/loki/api/v1/push
+    auth:
+      authenticator: basicauth/gc-logs
+
+  # https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/prometheusremotewriteexporter/README.md
+  prometheusremotewrite/grafanacloud:
+    endpoint: https://prometheus-prod-24-prod-eu-west-2.grafana.net/api/prom/push
+    auth:
+      authenticator: basicauth/gc-metrics
+#  prometheusremotewrite/newrelic:
+#    endpoint: https://metric-api.newrelic.com/prometheus/v1/write?prometheus_server={$env:PROMETHEUS_CLUSTER_NAME}
+#    authorization:
+#      credentials:
+#        key: value
+#        name: nr-license-key
+service:
+  extensions:
+    - basicauth/gc-traces
+    - basicauth/gc-metrics
+    - basicauth/gc-logs
+    - health_check
+#  telemetry:
+#    logs:
+#      level: DEBUG
+  pipelines:
+    traces:
+      receivers:
+        - otlp
+      processors:
+        - attributes/addServiceEnvironment
+        - attributes/addServiceCluster
+        - batch
+      exporters:
+#        - logging
+        - otlp/grafanacloud
+#        - otlp/newrelic
+#    metrics/otlp:
+#      receivers: [ otlp ]
+#      processors: [ batch ]
+#      exporters: [logging, prometheusremotewrite/grafanacloud ]
+#      exporters: [ otlp/grafanacloud ]
+    metrics/federatedprometheus:
+      receivers:
+        - prometheus
+      processors:
+        - resourcedetection/system
+        - attributes/addServiceEnvironment
+        - attributes/addServiceCluster
+        - attributes/fixPrometheusLabelNames
+        - batch
+      exporters:
+        - prometheusremotewrite/grafanacloud
+#        - otlp/lighstep
+#        - logging
+    metrics/system:
+      receivers:
+        - hostmetrics
+#        - hostmetrics/disk
+        - docker_stats
+      processors:
+        - attributes/addServiceEnvironment
+        - attributes/addServiceCluster
+        - batch
+      exporters:
+        - prometheusremotewrite/grafanacloud
+#        - otlp/lighstep
+#    logs:
+#      receivers:
+#        - filelog
+#      exporters:
+#        - loki/gc

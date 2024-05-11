@@ -15,9 +15,9 @@ networks:
     # name: playground-monitoring
     external: false
 
-# configs:
-#   collector_conf:
-#     file: ./confs/collector.yml
+configs:
+  collector_conf:
+    file: ./configs/otel-collector/collector.yml
 
 services:
   adminator:
@@ -40,12 +40,12 @@ services:
       # otel
       - OTEL_PHP_AUTOLOAD_ENABLED=true
       - OTEL_SERVICE_NAME=isp-adminator3
-      - OTEL_TRACES_EXPORTER=console
-      # - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_TRACES_EXPORTER=otlp # otlp OR console
       - OTEL_METRICS_EXPORTER=none
       - OTEL_LOGS_EXPORTER=none
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf # grpc
-      - OTEL_EXPORTER_OTLP_ENDPOINT="https://otel_endpoint>"
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf # grpc OR http/protobuf
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
       - OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3,application.name=isp-adminator3
     volumes:
       - adminator-php-log:/var/log/php:uid=33,gid=33
@@ -152,31 +152,30 @@ services:
       - "18728:8728"
       - "18729:8729"
 
-  # otel-collector:
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 125M
-  #   ports:
-  #     - "4317"          # OTLP over gRPC receiver
-  #     - "4318"          # OTLP over HTTP receiver
-  #   # https://hub.docker.com/r/otel/opentelemetry-collector-contrib/tags
-  #   image: otel/opentelemetry-collector-contrib:0.88.0
-  #   configs:
-  #     - source: collector_conf
-  #       target: /conf/collector.yml
-  #   command: ["--config=/conf/collector.yml"]
-  #   # https://docs.docker.com/compose/environment-variables/set-environment-variables/#use-the-environment-attribute
-  #   environment:
-  #     # lightstep stuff
-  #     - LS_ACCESS_TOKEN=${LS_ACCESS_TOKEN}
-  #     # new relic stuff
-  #     # https://docs.newrelic.com/docs/infrastructure/prometheus-integrations/install-configure-remote-write/set-your-prometheus-remote-write-integration/
-  #     - PROMETHEUS_CLUSTER_NAME="k6-playground-prometheus"
-  #     - NEW_RELIC_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY}
-  #   volumes:
-  #     - /:/hostfs
-  #     - "/var/run/docker.sock.raw:/var/run/docker.sock"
+  otel-collector:
+    deploy:
+      resources:
+        limits:
+          memory: 125M
+    ports:
+      - "4317:4317"          # OTLP over gRPC receiver
+      - "4318:4318"          # OTLP over HTTP receiver
+      - "8888:8888"     # metrics
+      - "1888:1888"     # pprof extension
+      - "13133:13133"   # health_check extension
+    # https://hub.docker.com/r/otel/opentelemetry-collector-contrib/tags
+    image: otel/opentelemetry-collector-contrib:0.100.0
+    configs:
+      - source: collector_conf
+        target: /conf/collector.yml
+    command: ["--config=/conf/collector.yml"]
+    # https://docs.docker.com/compose/environment-variables/set-environment-variables/#use-the-environment-attribute
+    environment:
+      # grafana cloud
+      - GRAFANA_CLOUD_KEY=${GRAFANA_CLOUD_KEY}
+    volumes:
+      - /:/hostfs
+      - "/var/run/docker.sock.raw:/var/run/docker.sock"
 
 #   grafana:
 #     labels:
