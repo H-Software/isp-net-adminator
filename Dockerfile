@@ -158,19 +158,18 @@ COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN mkdir -p /var/www/html/adminator2/ \
-        && mkdir -p /var/log/apache2/adminator \
-        && cd /var/www/html/adminator2 \
+RUN mkdir -p /srv/www/adminator2/ \
+        && cd /srv/www/adminator2 \
         && mkdir temp log \
         && chown www-data:www-data temp log
 
-RUN mkdir -p /var/www/html/adminator3/ \
-        && cd /var/www/html/adminator3 \
+RUN mkdir -p /srv/www/adminator3/ \
+        && cd /srv/www/adminator3 \
         && mkdir temp log logs \
         && chown www-data:www-data temp log logs
 
-COPY adminator2/composer.json /var/www/html/adminator2/
-COPY adminator3/composer.json /var/www/html/adminator3/
+COPY adminator2/composer.json /srv/www/adminator2/
+COPY adminator3/composer.json /srv/www/adminator3/
 
 RUN cd adminator2 \
      && composer install
@@ -179,8 +178,8 @@ RUN cd adminator3 \
     && composer install
 
 # app code
-COPY adminator2/ /var/www/html/adminator2/
-COPY adminator3/ /var/www/html/adminator3/
+COPY adminator2/ /srv/www/adminator2/
+COPY adminator3/ /srv/www/adminator3/
 
 # shared stuff
 COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/templates/inc.intro.category-ext.tpl
@@ -199,6 +198,8 @@ RUN rm -rf /usr/bin/composer
 # # dont run as root
 # USER www-data:www-data
 
+WORKDIR /srv/www
+
 # workaround for squash
 #
 FROM scratch
@@ -212,7 +213,7 @@ COPY --from=main / /
 ENV PHP_INI_DIR /usr/local/etc/php
 
 ENTRYPOINT ["docker-php-entrypoint"]
-WORKDIR /var/www/html
+WORKDIR /srv/www
 
 # Override stop signal to stop process gracefully
 # https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163
