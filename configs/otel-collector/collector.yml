@@ -238,6 +238,7 @@ service:
     - basicauth/gc-traces
     - basicauth/gc-metrics
     - basicauth/gc-logs
+    - health_check
 #  telemetry:
 #    logs:
 #      level: DEBUG
