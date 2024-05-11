@@ -677,10 +677,6 @@ parameters:
 			count: 3
 			path: app/routing.php
 
-		-
-			message: "#^Class vlastniciController not found\\.$#"
-			count: 4
-			path: app/routing.php
 
 		-
 			message: "#^Class workController not found\\.$#"

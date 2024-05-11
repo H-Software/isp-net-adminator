@@ -6,6 +6,8 @@ class vlastnik2
 {
     public $conn_mysql;
 
+    public $conn_pgsql;
+
     public $logger;
 
     public $container; // for calling stb class over vlastnik2_a2 class
@@ -285,7 +287,7 @@ class vlastnik2
         
         if( $akce == 0 or !isset($akce) )
         { 
-            $dotaz_vlastnik_pom = pg_query($db_ok2, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
+            $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
             
             while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom) )
             { $firma_vlastnik=$data_vlastnik_pom["firma"]; $archiv_vlastnik=$data_vlastnik_pom["archiv"]; }
@@ -304,7 +306,7 @@ class vlastnik2
         { $stranka = "vlastnici2-add-fakt.php?id_vlastnika=".$id_cloveka; }
         elseif( $akce == 3 )
         { 
-            $rs_vl = pg_query($db_ok2, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
+            $rs_vl = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
             
             while($data_vl = pg_fetch_array($rs_vl) )
             { $fakturacni_id = $data_vl["fakturacni"]; }
@@ -313,7 +315,7 @@ class vlastnik2
         }
         elseif( $akce == 4 )
         { 
-            $rs_vl = pg_query($db_ok2, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
+            $rs_vl = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
             
             while($data_vl = pg_fetch_array($rs_vl) )
             { $fakturacni_id = $data_vl["fakturacni"]; }
@@ -332,7 +334,7 @@ class vlastnik2
         $url = "/adminator3/print/smlouva-2012-05.php";
         echo "<form action=\"".$url."\" method=\"post\" name=\"frm\" >\n\n";
 
-        $rs_vl1 = pg_query($db_ok2, "SELECT fakturacni_skupina_id FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
+        $rs_vl1 = pg_query($this->conn_pgsql, "SELECT fakturacni_skupina_id FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
         
         while($data = pg_fetch_array($rs_vl1) )
         { $fakturacni_skupina_id = $data["fakturacni_skupina_id"]; }
@@ -350,7 +352,7 @@ class vlastnik2
                         FROM ( vlastnici AS t1 LEFT JOIN fakturacni AS t2 ON t1.fakturacni=t2.id )
                         WHERE id_cloveka = '".intval($id_cloveka)."'";
                         
-        $rs_vl = pg_query($db_ok2, $sql);
+        $rs_vl = pg_query($this->conn_pgsql, $sql);
             
         while($data_vl = pg_fetch_array($rs_vl))
         { 
@@ -419,7 +421,7 @@ class vlastnik2
             if($rs_fs_r[1] == 1){  //sluzba internet - ANO                
                 
                 //zjisteni poctu objektu
-                $rs_obj = pg_query($db_ok2, "SELECT * FROM objekty WHERE id_cloveka = '".intval($id_cloveka)."' ");
+                $rs_obj = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_cloveka = '".intval($id_cloveka)."' ");
                 $rs_obj_num = pg_num_rows($rs_obj);
                 
                 if($rs_obj_num == 1){
