@@ -17,6 +17,8 @@ class vlastnik2
 
     public $alert_content;
 
+    public $csrf_html;
+
     public $listItemsContent;
 
     public $listMode; // original local variable "co"
@@ -309,7 +311,7 @@ class vlastnik2
         } elseif($akce == 1) {
             $stranka = "vlastnici2-add-obj.php?id_vlastnika=".$id_cloveka;
         } elseif($akce == 2) {
-            $stranka = "vlastnici2-add-fakt.php?id_vlastnika=".$id_cloveka;
+            $stranka = "vlastnici2/fakturacni-skupiny/action?id_vlastnika=".$id_cloveka;
         } elseif($akce == 3) {
             $rs_vl = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
 
@@ -325,7 +327,7 @@ class vlastnik2
                 $fakturacni_id = $data_vl["fakturacni"];
             }
 
-            $stranka = "vlastnici2-change-fakt.php?id=".$fakturacni_id;
+            $stranka = "vlastnici2/fakturacni-skupiny/action?update_id=".$fakturacni_id;
         } elseif($akce == 5) {
             $stranka = "opravy-index.php?typ=1&id_vlastnika=".$id_cloveka;
         } elseif($akce == 6) {
@@ -333,8 +335,10 @@ class vlastnik2
         } elseif($akce == 7) { //tisk smlouvy
             echo $html_init;
 
-            $url = "/adminator3/print/smlouva-2012-05.php";
+            $url = "/print/smlouva-2012-05";
             echo "<form action=\"".$url."\" method=\"post\" name=\"frm\" >\n\n";
+
+            echo $this->csrf_html;
 
             $rs_vl1 = pg_query($this->conn_pgsql, "SELECT fakturacni_skupina_id FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
 
