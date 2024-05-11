@@ -148,15 +148,10 @@ RUN apt-get purge -y --allow-remove-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# apache conf
-# RUN a2enmod ssl \
-#     && a2enmod rewrite \
-#     && a2enmod proxy \
-#     && a2enmod proxy_http
+# fpm conf
 
-# RUN mkdir -p /etc/apache2/ssl
 # RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-# COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
+COPY configs/php-fpm/ /usr/local/etc/php-fpm.d
 
 COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
 
