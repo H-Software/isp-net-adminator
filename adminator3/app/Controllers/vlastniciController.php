@@ -56,9 +56,9 @@ class vlastniciController extends adminatorController
 
         $vlastnik2 = new \vlastnik2($this->container);
 
-        list($csrf_html)= $this->generateCsrfToken($request, $response, true);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $vlastnik2->csrf_html = $csrf_html;
-        
+
         $rs = $vlastnik2->crossCheckVars();
 
         if($rs === false) {
