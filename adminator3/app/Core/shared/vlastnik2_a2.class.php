@@ -748,6 +748,4 @@ class vlastnik2_a2
         } //konec if export_povolen
 
     } //end of function export
-
-    //konec class-y vlastnik2
 }

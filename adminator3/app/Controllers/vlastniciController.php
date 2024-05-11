@@ -44,6 +44,29 @@ class vlastniciController extends adminatorController
         return $response;
     }
 
+    public function cross(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(92, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Rozcestnik");
+
+        $this->header($request, $response, $this->adminator);
+
+
+        $vlastnik2 = new \vlastnik2($this->container);
+        $rs = $vlastnik2->crossCheckVars();
+
+        if($rs === true) {
+            $this->smarty->assign("alert_type", $vlastnik2->alert_type);
+            $this->smarty->assign("alert_content", $vlastnik2->alert_content);
+
+            $this->smarty->display("vlastnici/cross-alert.tpl");
+        }
+
+    }
+
     public function vlastnici2(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 

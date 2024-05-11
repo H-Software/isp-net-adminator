@@ -1,45 +1,11 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
 
-// init db functions defs
-require "include/main.function.shared.php";
-// autoload, init DB conns, init Illuminate\Database
-require "app/bootstrap.php";
-
-// end of app bootstrap
-
-$logger = $container->get('logger');
-$smarty = $container->get('smarty');
-
-$logger->info("vlastnici-cross called");
-
-$a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
-
-$auth = new auth_service($container, $conn_mysql, $smarty, $logger);
-$auth->checkLevel(302, $a);
-
-$html_init .= "
-  <html>
-	<head>
-	    <title>Vlastníci rozcestník</title>"
-. "</head>
-    <body>";
 
 $akce = $_GET["akce"];
 $id_cloveka = $_GET["id_cloveka"];
 
-if( !( preg_match('/^([[:digit:]]+)$/', $id_cloveka) ) )
-{
- echo $html_init . "Chyba! Nesouhlasi vstupni data. (id cloveka) ";
- exit;
-}
-  
-if( !( preg_match('/^([[:digit:]]+)$/', $akce) ) )
-{
- echo $html_init . "Chyba! Nesouhlasi vstupni data. (akce) ";
- exit;
-}
+
 
 if( $akce == 0 or !isset($akce) )
 { 

@@ -11,6 +11,10 @@ class vlastnik2
     public $container; // for calling stb class over vlastnik2_a2 class
     public $adminator; // handler for instance of adminator class
 
+    public $alert_type;
+
+    public $alert_content;
+
     public $listItemsContent;
 
     public $listMode; // original local variable "co"
@@ -244,6 +248,25 @@ class vlastnik2
         $this->listItemsContent .= $listovani->listPart(false);
 
         return $this->listItemsContent;
+    }
+
+    public function crossCheckVars(): bool
+    {
+        $akce = $_GET["akce"];
+        $id_cloveka = $_GET["id_cloveka"];
+
+        if(!(preg_match('/^([[:digit:]]+)$/', $id_cloveka))) {
+            $this->alert_type = "danger";
+            $this->alert_content = "Chyba! Nesouhlasi vstupni data. (id cloveka) ";
+            return false;
+        }
+
+        if(!(preg_match('/^([[:digit:]]+)$/', $akce))) {
+            $this->alert_type = "danger";
+            $this->alert_content = "Chyba! Nesouhlasi vstupni data. (akce) ";
+            return false;
+        }
+        return true;
     }
 
 } //konec tridy vlastnik2
