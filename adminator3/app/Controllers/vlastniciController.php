@@ -54,17 +54,19 @@ class vlastniciController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-
         $vlastnik2 = new \vlastnik2($this->container);
         $rs = $vlastnik2->crossCheckVars();
 
-        if($rs === true) {
+        if($rs === false) {
+            $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": crossCheckVars failed.");
+
             $this->smarty->assign("alert_type", $vlastnik2->alert_type);
             $this->smarty->assign("alert_content", $vlastnik2->alert_content);
 
             $this->smarty->display("vlastnici/cross-alert.tpl");
         }
 
+        return $response;
     }
 
     public function vlastnici2(ServerRequestInterface $request, ResponseInterface $response, array $args)

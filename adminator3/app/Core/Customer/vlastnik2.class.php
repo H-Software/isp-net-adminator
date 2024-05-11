@@ -188,6 +188,7 @@ class vlastnik2
         $vlastnik->container = $this->container;
         $vlastnik->logger = $this->logger;
         $vlastnik->echo = false;
+        $vlastnik->cross_url = "/vlastnici/cross";
 
         $this->listPrepareVars($vlastnik);
 
