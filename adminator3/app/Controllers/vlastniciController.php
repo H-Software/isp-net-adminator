@@ -58,7 +58,7 @@ class vlastniciController extends adminatorController
         $rs = $vlastnik2->crossCheckVars();
 
         if($rs === false) {
-            $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": crossCheckVars failed.");
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": crossCheckVars failed.");
 
             $this->smarty->assign("alert_type", $vlastnik2->alert_type);
             $this->smarty->assign("alert_content", $vlastnik2->alert_content);

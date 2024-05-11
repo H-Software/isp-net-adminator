@@ -275,8 +275,10 @@ class vlastnik2
 
     public function crossRun()
     {
-        $akce = $_GET["akce"];
-        $id_cloveka = $_GET["id_cloveka"];
+        $akce = intval($_GET["akce"]);
+        $id_cloveka = intval($_GET["id_cloveka"]);
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $html_init = "
                 <html>
@@ -541,7 +543,7 @@ class vlastnik2
 
         $full_url = $prot . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"]. '/' . $stranka;
 
-        $logger->info("vlastnici-cross: redirecting to URL: " . var_export($full_url, true));
+        $this->logger->info("vlastnici-cross: redirecting to URL: " . var_export($full_url, true));
 
         header("Location: ".$full_url);
 
