@@ -339,7 +339,7 @@ class vlastnik2
         while($data = pg_fetch_array($rs_vl1) )
         { $fakturacni_skupina_id = $data["fakturacni_skupina_id"]; }
         
-        $rs_fs = $conn_mysql->query("SELECT typ_sluzby FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
+        $rs_fs = $this->conn_mysql->query("SELECT typ_sluzby FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
         while($data = $rs_fs->fetch_array() )
         { $fakturacni_skupina_typ = $data["typ_sluzby"]; }
         
@@ -405,7 +405,7 @@ class vlastnik2
         }
         
         //FS
-        $rs_fs = $conn_mysql->query("SELECT typ_sluzby, sluzba_int, sluzba_int_id_tarifu, nazev, 
+        $rs_fs = $this->conn_mysql->query("SELECT typ_sluzby, sluzba_int, sluzba_int_id_tarifu, nazev, 
                         sluzba_iptv, sluzba_iptv_id_tarifu, sluzba_voip 
                         FROM fakturacni_skupiny 
                         WHERE id = '".intval($data_vl["fakturacni_skupina_id"])."'");
