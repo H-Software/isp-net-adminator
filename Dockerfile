@@ -72,6 +72,8 @@ RUN export MAKEFLAGS="-j $(nproc)" \
 
 FROM php:8.2-fpm AS main
 
+WORKDIR /srv/www
+
 ENV ACCEPT_EULA=Y
 
 # Copy extensions from php-ext stage
@@ -197,8 +199,6 @@ RUN rm -rf /usr/bin/composer
 
 # # dont run as root
 # USER www-data:www-data
-
-WORKDIR /srv/www
 
 # workaround for squash
 #
