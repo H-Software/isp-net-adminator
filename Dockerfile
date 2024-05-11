@@ -1,5 +1,5 @@
-# https://github.com/docker-library/php/blob/master/8.2/bookworm/apache/Dockerfile
-FROM php:8.2-apache AS php-ext
+# https://github.com/docker-library/php/blob/master/8.2/bookworm/fpm/Dockerfile
+FROM php:8.2-fpm AS php-ext
 
 ENV ACCEPT_EULA=Y
 
@@ -70,7 +70,7 @@ RUN export MAKEFLAGS="-j $(nproc)" \
             protobuf
             # grpc
 
-FROM php:8.2-apache AS main
+FROM php:8.2-fpm AS main
 
 ENV ACCEPT_EULA=Y
 
