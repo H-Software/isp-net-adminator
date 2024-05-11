@@ -14,6 +14,7 @@ use App\Controllers\platbyController;
 use App\Controllers\runtimeController;
 use App\Controllers\printController;
 use App\Controllers\othersController;
+use App\Controllers\vlastniciController;
 
 // routes
 
@@ -102,10 +103,12 @@ $app->group(
         $group->map(['GET', 'POST'], '/print/smlouva', printController::class . ':printSmlouva');
         $group->map(['GET', 'POST'], '/print/reg-form', printController::class . ':printRegForm');
 
-        $group->map(['GET', 'POST'], '/vlastnici/cat', \vlastniciController::class . ':cat');
-        $group->map(['GET', 'POST'], '/vlastnici2', \vlastniciController::class . ':vlastnici2');
-        $group->map(['GET', 'POST'], '/vlastnici2/fakturacni-skupiny', \vlastniciController::class . ':fakturacniSkupiny');
-        $group->map(['GET', 'POST'], '/vlastnici2/fakturacni-skupiny/action', \vlastniciController::class . ':fakturacniSkupinyAction');
+        $group->map(['GET', 'POST'], '/vlastnici/cat', vlastniciController::class . ':cat');
+        $group->map(['GET', 'POST'], '/vlastnici/cross', vlastniciController::class . ':cross');
+
+        $group->map(['GET', 'POST'], '/vlastnici2', vlastniciController::class . ':vlastnici2');
+        $group->map(['GET', 'POST'], '/vlastnici2/fakturacni-skupiny', vlastniciController::class . ':fakturacniSkupiny');
+        $group->map(['GET', 'POST'], '/vlastnici2/fakturacni-skupiny/action', vlastniciController::class . ':fakturacniSkupinyAction');
 
         $group->map(['GET', 'POST'], '/topology', \topologyController::class . ':nodeList');
         $group->map(['GET', 'POST'], '/topology/node-list', \topologyController::class . ':nodeList');
