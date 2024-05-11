@@ -24,9 +24,6 @@ services:
     image: nginx:stable-otel
     volumes:
       - ./adminator2/:/srv/www/adminator2/
-      # - ./adminator2/include/img:/srv/www/adminator2/include/img
-      # - ./adminator2/include/js:/srv/www/adminator2/include/js
-      # - ./adminator3/img2:/srv/www/adminator3/img2
       - ./adminator3:/srv/www/adminator3
       - ./configs/nginx/vhosts/:/etc/nginx/conf.d/
     ports:
@@ -64,23 +61,21 @@ services:
       - adminator-php-log:/var/log/php:uid=33,gid=33
       - adminator-tmp:/tmp:/tmp
     tmpfs:
-      # apache logs
-      - /var/log/apache2/adminator:uid=33,gid=33
       # for smarty
-      - /var/www/html/adminator2/cache:uid=33,gid=33
-      - /var/www/html/adminator3/cache:uid=33,gid=33
-      - /var/www/html/adminator2/templates_c:uid=33,gid=33
-      - /var/www/html/adminator3/templates_c:uid=33,gid=33
+      - /srv/www/adminator2/cache:uid=33,gid=33
+      - /srv/www/adminator3/cache:uid=33,gid=33
+      - /srv/www/adminator2/templates_c:uid=33,gid=33
+      - /srv/www/adminator3/templates_c:uid=33,gid=33
       # for nette loader
-      - /var/www/html/adminator2/temp:uid=33,gid=33
-      - /var/www/html/adminator3/temp:uid=33,gid=33
+      - /srv/www/adminator2/temp:uid=33,gid=33
+      - /srv/www/adminator3/temp:uid=33,gid=33
       # monolog + some scripts log files
-      - /var/www/html/adminator3/logs:uid=33,gid=33
-      - /var/www/html/adminator2/log:uid=33,gid=33
+      - /srv/www/adminator3/logs:uid=33,gid=33
+      - /srv/www/adminator2/log:uid=33,gid=33
       # adminator print
-      - /var/www/html/adminator3/print/temp:uid=33,gid=33
+      - /srv/www/adminator3/print/temp:uid=33,gid=33
       # adminator export xls
-      - /var/www/html/adminator2/export:uid=33,gid=33
+      - /srv/www/adminator2/export:uid=33,gid=33
       # - /var/www/html/adminator3/export:uid=33,gid=33
     ports:
       - "9001:9001"
