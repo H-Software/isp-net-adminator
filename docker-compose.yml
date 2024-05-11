@@ -160,6 +160,8 @@ services:
     ports:
       - "4317"          # OTLP over gRPC receiver
       - "4318"          # OTLP over HTTP receiver
+      - "1888:1888"     # pprof extension
+      - "13133:13133"   # health_check extension
     # https://hub.docker.com/r/otel/opentelemetry-collector-contrib/tags
     image: otel/opentelemetry-collector-contrib:0.100.0
     configs:
@@ -167,7 +169,9 @@ services:
         target: /conf/collector.yml
     command: ["--config=/conf/collector.yml"]
     # https://docs.docker.com/compose/environment-variables/set-environment-variables/#use-the-environment-attribute
-    # environment:
+    environment:
+      # grafana cloud
+      - GRAFANA_CLOUD_KEY=${GRAFANA_CLOUD_KEY}
     volumes:
       - /:/hostfs
       - "/var/run/docker.sock.raw:/var/run/docker.sock"
