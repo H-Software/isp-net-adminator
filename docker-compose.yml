@@ -23,8 +23,8 @@ services:
   nginx:
     image: nginx:stable-otel
     volumes:
-      - ./img2:/srv/www/img2
-      - ./public:/srv/www
+      - ./adminator3/img2:/srv/www/adminator3/img2
+      - ./adminator3/public:/srv/www/adminator3
       - ./configs/nginx/vhosts/:/etc/nginx/conf.d/
     ports:
       - 80:80
