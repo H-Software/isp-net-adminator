@@ -23,11 +23,11 @@ services:
   nginx:
     image: nginx:stable-otel
     volumes:
-      - ./adminator2/img2:/srv/www/adminator2/img2
-      - ./adminator2/include/img:/srv/www/adminator2/include/img
-      - ./adminator2/include/js:/srv/www/adminator2/include/js
-      - ./adminator3/img2:/srv/www/adminator3/img2
-      - ./adminator3/public:/srv/www/adminator3
+      - ./adminator2/:/srv/www/adminator2/
+      # - ./adminator2/include/img:/srv/www/adminator2/include/img
+      # - ./adminator2/include/js:/srv/www/adminator2/include/js
+      # - ./adminator3/img2:/srv/www/adminator3/img2
+      - ./adminator3:/srv/www/adminator3
       - ./configs/nginx/vhosts/:/etc/nginx/conf.d/
     ports:
       - 80:80
