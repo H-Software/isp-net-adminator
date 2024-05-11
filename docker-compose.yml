@@ -158,8 +158,8 @@ services:
         limits:
           memory: 125M
     ports:
-      - "4317"          # OTLP over gRPC receiver
-      - "4318"          # OTLP over HTTP receiver
+      - "4317:4317"          # OTLP over gRPC receiver
+      - "4318:4318"          # OTLP over HTTP receiver
       - "8888:8888"     # metrics
       - "1888:1888"     # pprof extension
       - "13133:13133"   # health_check extension
