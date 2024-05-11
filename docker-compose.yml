@@ -25,8 +25,7 @@ services:
     volumes:
       - ./img2:/srv/www/img2
       - ./public:/srv/www
-      - ./configs/nginx/vhosts/001-adminator2.conf:/etc/nginx/conf.d/001-adminator2.conf
-      - ./configs/nginx/vhosts/002-adminator3.conf:/etc/nginx/conf.d/002-adminator3.conf
+      - ./configs/nginx/vhosts/:/etc/nginx/conf.d/
     ports:
       - 80:80
       - 443:443
