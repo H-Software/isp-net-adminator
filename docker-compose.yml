@@ -20,8 +20,17 @@ configs:
     file: ./configs/otel-collector/collector.yml
 
 services:
-  adminator:
-    image: h-software/isp-net-adminator
+  nginx:
+    image: nginx:stable-otel
+    volumes:
+      - ./:/srv/www
+      - ./configs/nginx/vhosts:/etc/nginx/conf.d/
+    ports:
+      - 80:80
+      - 443:443
+  
+  fpm:
+    image: h-software/isp-net-adminator-fpm
     # image: ghcr.io/h-software/isp-net-adminator:pr-137
     build:
       context: ./
@@ -70,7 +79,8 @@ services:
       - /var/www/html/adminator2/export:uid=33,gid=33
       # - /var/www/html/adminator3/export:uid=33,gid=33
     ports:
-      - "8080:80"
+      - "9001:9001"
+      - "9002:9002"
 
   mysql:
     image: mysql:8.0
