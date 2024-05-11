@@ -150,13 +150,6 @@ RUN apt-get purge -y --allow-remove-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# fpm conf
-
-# RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-COPY configs/php-fpm/ /usr/local/etc/php-fpm.d
-
-COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
-
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -184,14 +177,21 @@ COPY adminator2/ /srv/www/adminator2/
 COPY adminator3/ /srv/www/adminator3/
 
 # shared stuff
-COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/templates/inc.intro.category-ext.tpl
-COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
+COPY adminator3/templates/inc.intro.category-ext.tpl /srv/www/adminator2/templates/inc.intro.category-ext.tpl
+COPY adminator3/include/main.function.shared.php /srv/www//adminator2/include/main.function.shared.php
 
 RUN chmod 1777 /tmp
 
+# fpm conf
+
+# RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+COPY configs/php-fpm/ /usr/local/etc/php-fpm.d
+
+COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
+
 # fix logging
-RUN mkdir -p /var/log/php \
-    && chown -R www-data:www-data /var/log/php
+# RUN mkdir -p /var/log/php \
+#     && chown -R www-data:www-data /var/log/php
     #  \
     # && echo '' > /var/log/php/error.log
 
