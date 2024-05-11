@@ -52,37 +52,37 @@ receivers:
       filesystem:
     root_path: /hostfs
 
-  prometheus:
-    config:
-      global:
-        scrape_interval: 10s
-        scrape_timeout: 5s
-        evaluation_interval: 10s
-      scrape_configs:
-#        - job_name: 'otel-collector'
-#          scrape_interval: 15s
-#          static_configs:
-#            - targets: ['localhost:8888']
-#        - job_name: 'grafana'
-#          scrape_interval: 15s
-#          static_configs:
-#            - targets: ['grafana:3000']
-        # https://prometheus.io/docs/prometheus/latest/federation/
-        - job_name: 'federate'
-          scrape_interval: 5s
-          # !! honor_labels: "true" is not really working (with federate)
-          # some labels are "mismatched"
-          # similar https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/8355
-          honor_labels: false
-          metrics_path: '/federate'
-          params:
-            'match[]':
-              - '{__name__=~"[a-z0-9A-Z].*",__name__!~"(scrape_.*|up)"}'
-#              - '{__name__=~"[a-z0-9A-Z].*",__name__!~"(scrape_.*|up)"}'
-#              - '{__name__=~"k6.*"}'
-          static_configs:
-            - targets:
-                - 'prometheus:9090'
+#   prometheus:
+#     config:
+#       global:
+#         scrape_interval: 10s
+#         scrape_timeout: 5s
+#         evaluation_interval: 10s
+#       scrape_configs:
+# #        - job_name: 'otel-collector'
+# #          scrape_interval: 15s
+# #          static_configs:
+# #            - targets: ['localhost:8888']
+# #        - job_name: 'grafana'
+# #          scrape_interval: 15s
+# #          static_configs:
+# #            - targets: ['grafana:3000']
+#         # https://prometheus.io/docs/prometheus/latest/federation/
+#         - job_name: 'federate'
+#           scrape_interval: 5s
+#           # !! honor_labels: "true" is not really working (with federate)
+#           # some labels are "mismatched"
+#           # similar https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/8355
+#           honor_labels: false
+#           metrics_path: '/federate'
+#           params:
+#             'match[]':
+#               - '{__name__=~"[a-z0-9A-Z].*",__name__!~"(scrape_.*|up)"}'
+# #              - '{__name__=~"[a-z0-9A-Z].*",__name__!~"(scrape_.*|up)"}'
+# #              - '{__name__=~"k6.*"}'
+#           static_configs:
+#             - targets:
+#                 - 'prometheus:9090'
 
 #  filelog:
 #    include:
@@ -174,7 +174,7 @@ processors:
   attributes/addServiceCluster:
     actions:
       - key: service.cluster
-        value: patrik-majer-playground
+        value: isp-adminator-local
         action: insert
   # for some bugs around prometheus federate and otel collector logic
   # https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/8355
@@ -208,10 +208,10 @@ exporters:
       insecure: false
     auth:
       authenticator: basicauth/gc-traces
-  otlp/newrelic:
-    endpoint: https://otlp.eu01.nr-data.net:4317
-    headers:
-      api-key: ${env:NEW_RELIC_LICENSE_KEY}
+  # otlp/newrelic:
+  #   endpoint: https://otlp.eu01.nr-data.net:4317
+  #   headers:
+  #     api-key: ${env:NEW_RELIC_LICENSE_KEY}
   loki/gc:
     endpoint: https://logs-prod-012.grafana.net/loki/api/v1/push
     auth:
