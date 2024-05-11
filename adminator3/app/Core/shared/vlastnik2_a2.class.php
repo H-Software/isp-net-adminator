@@ -28,6 +28,8 @@ class vlastnik2_a2
 
     public $vlastnici_update_povolen = false;
 
+    public $cross_url = null;
+
     public function vypis_tab($par)
     {
         $output = "";
@@ -502,8 +504,12 @@ class vlastnik2_a2
 
                 $output .= "<td colspan=\"1\">";
 
+                if($this->cross_url != null) {
+                    $output .= "<form action=\"" . $this->cross_url . "\" method=\"get\" >";
 
-                $output .= "<form action=\"vlastnici-cross.php\" method=\"get\" >";
+                } else {
+                    $output .= "<form action=\"vlastnici-cross.php\" method=\"get\" >";
+                }
 
                 $output .= "<select name=\"akce\" size=\"1\" >";
 
@@ -748,6 +754,4 @@ class vlastnik2_a2
         } //konec if export_povolen
 
     } //end of function export
-
-    //konec class-y vlastnik2
 }
