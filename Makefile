@@ -18,7 +18,7 @@ export OTEL_TRACES_EXPORTER=otlp # otlp OR console
 export OTEL_METRICS_EXPORTER=none
 export OTEL_LOGS_EXPORTER=none
 export OTEL_EXPORTER_OTLP_PROTOCOL=grpc  # grpc OR http/protobuf
-export OTEL_EXPORTER_OTLP_ENDPOINT="http://192.168.1.213:4327"
+export OTEL_EXPORTER_OTLP_ENDPOINT="http://192.168.1.213:4317"
 export OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3,application.name=isp-adminator3
 
 # .PHONY: run-a2-php-local	

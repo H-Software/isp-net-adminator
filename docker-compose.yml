@@ -43,8 +43,9 @@ services:
       - OTEL_TRACES_EXPORTER=otlp # otlp OR console
       - OTEL_METRICS_EXPORTER=none
       - OTEL_LOGS_EXPORTER=none
-      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc # grpc OR http/protobuf
-      - OTEL_EXPORTER_OTLP_ENDPOINT="http://otel-collector:4317"
+      - OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=http/protobuf # grpc OR http/protobuf
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT="http://otel-collector:4318/v1/traces"
+      # - OTEL_EXPORTER_OTLP_ENDPOINT="http://otel-collector:4317"
       - OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3,application.name=isp-adminator3
     volumes:
       - adminator-php-log:/var/log/php:uid=33,gid=33
