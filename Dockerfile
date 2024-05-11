@@ -149,13 +149,14 @@ RUN apt-get purge -y --allow-remove-essential \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # apache conf
-RUN a2enmod ssl \
-    && a2enmod rewrite \
-    && a2enmod proxy \
-    && a2enmod proxy_http
+# RUN a2enmod ssl \
+#     && a2enmod rewrite \
+#     && a2enmod proxy \
+#     && a2enmod proxy_http
+
 # RUN mkdir -p /etc/apache2/ssl
 # RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
+# COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
 
 COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
 
@@ -201,7 +202,7 @@ RUN mkdir -p /var/log/php \
 RUN rm -rf /usr/bin/composer
 
 # # dont run as root
-USER www-data:www-data
+# USER www-data:www-data
 
 # workaround for squash
 #
@@ -209,19 +210,19 @@ FROM scratch
 COPY --from=main / /
 
 # # dont run as root
-USER www-data:www-data
+# USER www-data:www-data
 
 # copy "original" statements for working image
 #
 ENV PHP_INI_DIR /usr/local/etc/php
-ENV APACHE_CONFDIR /etc/apache2
-ENV APACHE_ENVVARS $APACHE_CONFDIR/envvars
 
 ENTRYPOINT ["docker-php-entrypoint"]
-# https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
-STOPSIGNAL SIGWINCH
-
 WORKDIR /var/www/html
 
-EXPOSE 80
-CMD ["apache2-foreground"]
+# Override stop signal to stop process gracefully
+# https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163
+STOPSIGNAL SIGQUIT
+
+EXPOSE 9000
+CMD ["php-fpm"]
+
