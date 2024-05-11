@@ -9,7 +9,7 @@ use Respect\Validation\Validator as v;
 
 class passwordHelper
 {
-    private $container;
+    // private $container;
 
     public $requestData;
 
@@ -23,7 +23,7 @@ class passwordHelper
 
     public function __construct(ContainerInterface $container, $requestData)
     {
-        $this->container = $container;
+        // $this->container = $container;
         $this->logger = $container->get('logger');
         $this->validator = $container->get('validator');
 
