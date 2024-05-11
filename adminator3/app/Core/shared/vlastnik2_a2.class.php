@@ -504,10 +504,10 @@ class vlastnik2_a2
 
                 $output .= "<td colspan=\"1\">";
 
-                if($this->cross_url != null){
+                if($this->cross_url != null) {
                     $output .= "<form action=\"" . $this->cross_url . "\" method=\"get\" >";
 
-                } else{
+                } else {
                     $output .= "<form action=\"vlastnici-cross.php\" method=\"get\" >";
                 }
 
