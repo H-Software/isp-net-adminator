@@ -1,5 +1,5 @@
 ---
-version: "3.8"
+version: "3.9"
 
 volumes:
   adminator-php-log:
@@ -24,7 +24,8 @@ services:
     image: nginx:stable-otel
     volumes:
       - ./:/srv/www
-      - ./configs/nginx/vhosts:/etc/nginx/conf.d/
+      - ./configs/nginx/vhosts/001-adminator2.conf:/etc/nginx/conf.d/001-adminator2.conf
+      - ./configs/nginx/vhosts/002-adminator3.conf:/etc/nginx/conf.d/002-adminator3.conf
     ports:
       - 80:80
       - 443:443
