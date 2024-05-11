@@ -1,7 +1,7 @@
 extensions:
   basicauth/gc-traces:
     client_auth:
-      username: 792635
+      username: 733786
       password: ${env:GRAFANA_CLOUD_KEY}
   basicauth/gc-metrics:
     client_auth:
