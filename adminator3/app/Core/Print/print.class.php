@@ -1417,11 +1417,10 @@ class printClass extends adminator
                                                 "	    AND ".
                                                 "	(tunnelling_ip = 1) ) ");
 
-                        if($rs_tunel){
+                        if($rs_tunel) {
                             $rs_tunel_num = pg_num_rows($rs_tunel);
                         }
-                    }
-                    catch (Exception $e) {
+                    } catch (Exception $e) {
                         $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . " pg_query for tunel. verejka failed! Caught error: " . pg_last_error($this->conn_pgsql));
                     }
 
