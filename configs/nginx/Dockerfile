@@ -5,7 +5,7 @@ FROM nginx:mainline-otel
 # WORKDIR /srv/www
 
 # config
-COPY ./vhosts /etc/nginx/conf.d/
+COPY configs/nginx/vhosts /etc/nginx/conf.d/
 
 # RUN mkdir -p /srv/www/adminator2/ \
 #         && cd /srv/www/adminator2 \
@@ -18,7 +18,7 @@ COPY ./vhosts /etc/nginx/conf.d/
 #         && chown www-data:www-data temp log logs
 
 # app code
-COPY ./../../adminator2/ /srv/www/adminator2/
+COPY adminator2/ /srv/www/adminator2/
 # COPY ../../adminator3/ /srv/www/adminator3/
 
 # shared stuff

@@ -22,7 +22,8 @@ services:
   nginx:
     # image: nginx:mainline-otel
     build:
-      context: ./configs/nginx
+      context: ./
+      dockerfile: ./configs/nginx/Dockerfile
     develop:
       watch: 
         - path: ./
