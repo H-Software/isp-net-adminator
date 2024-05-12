@@ -137,10 +137,9 @@ class adminatorController extends Controller
 
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
-
-
+        
         $uri = $request->getUri();
-        $current_url = $uri->getPath() . "?" . $uri->getQuery();
+        $current_url = $uri->getPath(); // . "?" . $uri->getQuery();
 
         $this->smarty->assign("se_cat_form_action", $current_url);
 
