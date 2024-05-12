@@ -640,6 +640,7 @@ class vlastnik2_a2
             // $fp = fopen("export/vlastnici-sro.xls", "w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
 
             $fp = false;
+            // @phpstan-ignore-next-line
             if($fp === false) {
                 // echo "<div style=\"color: red; font-weight: bold; \">Chyba: Soubor pro export nelze otevřít </div>\n";
             } else {
