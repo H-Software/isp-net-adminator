@@ -139,10 +139,12 @@ class adminatorController extends Controller
         $this->smarty->assign("kat_2radka", $kat_2radka);
 
 
-        if(is_object($request)) {
-            $current_url = $request->getUri();
-            $this->smarty->assign("se_cat_form_action", $current_url);
-        }
+
+        $uri = $request->getUri();
+        $current_url = $uri->getPath(); // . $uri->getQuery();
+
+        $this->smarty->assign("se_cat_form_action", $current_url);
+
 
         if(is_object($request) and is_object($response)) {
             $csrf = $this->generateCsrfToken($request, $response, true);
