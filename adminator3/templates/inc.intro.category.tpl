@@ -42,8 +42,8 @@
 
 <div class="cara-kategorie" ></div>
 
-  {if $show_se_cat eq "1" or $show_se_cat eq 1 }
+  {if $show_se_cat eq "1"}
     {include file="inc.intro.category-ext.tpl"}
   {else}
-    <div>show_se_cat: {$show_se_cat}</div>
+    <!--<div>form data show_se_cat: {$show_se_cat}</div>-->
   {/if}

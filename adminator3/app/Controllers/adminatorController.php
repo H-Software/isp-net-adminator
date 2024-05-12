@@ -166,7 +166,7 @@ class adminatorController extends Controller
             $this->smarty->assign("show_se_cat_selected", "0");
         }
 
-        $this->logger->debug("adminatorController\\header: show_se_cat value: ".$show_se_cat);
+        // $this->logger->debug("adminatorController\\header: show_se_cat value: ".$show_se_cat);
 
         $this->smarty->assign("show_se_cat", $show_se_cat);
 
