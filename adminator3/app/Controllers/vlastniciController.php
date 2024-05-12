@@ -126,6 +126,8 @@ class vlastniciController extends adminatorController
         // main table
         $bodyContent = $vlastnik2->listItems();
 
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": vlastnik2->listSql: " . var_export($vlastnik2->listSql, true));
+
         $this->smarty->assign("form_search_value", preg_replace('/^(%)(.*)(%)$/', '\2', $vlastnik2->listSql));
 
         $this->smarty->assign("body", $bodyContent);
