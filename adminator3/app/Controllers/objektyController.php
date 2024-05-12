@@ -66,6 +66,10 @@ class objektyController extends adminatorController
             $stb->enable_unpair_action = true;
         }
 
+        if ($this->adminator->checkLevel(310, false) === true) {
+            $stb->enable_delete_action = true;
+        }
+
         $rs = $stb->stbListGetBodyContent();
 
         $this->smarty->assign("body", $rs[0]);
