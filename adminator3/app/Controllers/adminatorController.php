@@ -137,7 +137,7 @@ class adminatorController extends Controller
 
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
-        
+
         // $uri = $request->getUri();
         // $current_url = $uri->getPath(); // . "?" . $uri->getQuery();
 
@@ -157,7 +157,9 @@ class adminatorController extends Controller
         // $show_se_cat = $_POST["show_se_cat"];
         if ($request->getMethod() == "POST") {
             $show_se_cat = $request->getParsedBody()['show_se_cat'];
-            $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat,true));
+            $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat, true));
+        } else {
+            $show_se_cat = 0;
         }
 
         if($show_se_cat == 1) {
