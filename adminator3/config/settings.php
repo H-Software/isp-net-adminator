@@ -92,7 +92,8 @@ if ($app_mode == "development"){
 else{
     $settings['smarty'] = [
         "compile_check" => Smarty::COMPILECHECK_OFF,
-        "caching" =>  Smarty::CACHING_LIFETIME_SAVED,
+        "caching" =>  Smarty::CACHING_OFF,
+        // "caching" =>  Smarty::CACHING_LIFETIME_SAVED,
     ];
 }
 

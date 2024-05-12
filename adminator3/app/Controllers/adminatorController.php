@@ -48,11 +48,11 @@ class adminatorController extends Controller
     //     $this->_response->withJson($response);
     // }
 
-    public function renderNoLogin()
+    public function renderNoLogin(ServerRequestInterface $request = null, ResponseInterface $response = null)
     {
         $this->smarty->assign("page_title", "Adminator3 - chybny level");
 
-        $this->header();
+        $this->header($request, $response);
 
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $this->smarty->display('global/no-level.tpl');
@@ -113,7 +113,7 @@ class adminatorController extends Controller
         return $ret;
     }
 
-    public function header(ServerRequestInterface $request = null, ResponseInterface $response = null, $adminator = null)
+    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminator = null)
     {
 
         if(is_object($adminator)) {
@@ -138,10 +138,15 @@ class adminatorController extends Controller
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
 
+        // $uri = $request->getUri();
+        // $current_url = $uri->getPath(); // . "?" . $uri->getQuery();
+
+        // $this->smarty->assign("se_cat_form_action", $current_url);
+
         if(is_object($request) and is_object($response)) {
-            $csrf = $this->generateCsrfToken($request, $response, true);
+            list($csrf_html) = $this->generateCsrfToken($request, $response, true);
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
-            $this->smarty->assign("kat_csrf_html", $csrf[0]);
+            $this->smarty->assign("kat_csrf_html", $csrf_html);
         } else {
             $this->logger->warning("adminatorController\\header: no required vars for generateCsrfToken");
         }
@@ -149,21 +154,28 @@ class adminatorController extends Controller
         $this->smarty->assign("show_se_cat_values", array("0","1"));
         $this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
 
-        $show_se_cat = $_POST["show_se_cat"];
-
-        if($show_se_cat == 0) {
-            $this->smarty->assign("show_se_cat_selected", "0");
+        // $show_se_cat = $_POST["show_se_cat"];
+        if ($request->getMethod() == "POST") {
+            $show_se_cat = $request->getParsedBody()['show_se_cat'];
+            $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat, true));
         } else {
-            $this->smarty->assign("show_se_cat_selected", "1");
+            $show_se_cat = 0;
         }
+        $this->smarty->assign("show_se_cat_selected", $show_se_cat);
+
+        // $this->logger->debug("adminatorController\\header: show_se_cat value: ".$show_se_cat);
 
         $this->smarty->assign("show_se_cat", $show_se_cat);
 
         $se_cat_adminator_link = $_SERVER['HTTP_HOST'];
         $se_cat_adminator_link = str_replace("adminator3", "adminator2", $se_cat_adminator_link);
+        if (isset($_SERVER['HTTPS'])) {
+            $se_cat_adminator_link = "https://" . $se_cat_adminator_link;
+        } else {
+            $se_cat_adminator_link = "http://" . $se_cat_adminator_link;
+        }
 
         $this->smarty->assign("se_cat_adminator", "adminator2");
         $this->smarty->assign("se_cat_adminator_link", $se_cat_adminator_link);
-
     }
 }

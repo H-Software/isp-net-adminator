@@ -1,5 +1,4 @@
 ---
-version: "3.8"
 
 volumes:
   adminator-php-log:
@@ -20,13 +19,32 @@ configs:
     file: ./configs/otel-collector/collector.yml
 
 services:
-  adminator:
-    image: h-software/isp-net-adminator
+  nginx:
+    # image: nginx:stable-otel
+    image: nginx:mainline-otel
+    volumes:
+      - ./adminator2/:/srv/www/adminator2/
+      - ./adminator3:/srv/www/adminator3
+      - ./configs/nginx/vhosts/:/etc/nginx/conf.d/
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      fpm:
+        condition: service_healthy
+        restart: true
+
+  fpm:
+    image: h-software/isp-net-adminator-fpm
     # image: ghcr.io/h-software/isp-net-adminator:pr-137
     build:
       context: ./
       target: main
     # user: "www-data:www-data"
+    develop:
+      watch: 
+        - path: ./
+          action: rebuild
     environment:
       # DB conn
       - MYSQL_SERVER=192.168.1.213
@@ -51,26 +69,34 @@ services:
       - adminator-php-log:/var/log/php:uid=33,gid=33
       - adminator-tmp:/tmp:/tmp
     tmpfs:
-      # apache logs
-      - /var/log/apache2/adminator:uid=33,gid=33
       # for smarty
-      - /var/www/html/adminator2/cache:uid=33,gid=33
-      - /var/www/html/adminator3/cache:uid=33,gid=33
-      - /var/www/html/adminator2/templates_c:uid=33,gid=33
-      - /var/www/html/adminator3/templates_c:uid=33,gid=33
+      - /srv/www/adminator2/cache:uid=33,gid=33
+      - /srv/www/adminator3/cache:uid=33,gid=33
+      - /srv/www/adminator2/templates_c:uid=33,gid=33
+      - /srv/www/adminator3/templates_c:uid=33,gid=33
       # for nette loader
-      - /var/www/html/adminator2/temp:uid=33,gid=33
-      - /var/www/html/adminator3/temp:uid=33,gid=33
+      - /srv/www/adminator2/temp:uid=33,gid=33
+      - /srv/www/adminator3/temp:uid=33,gid=33
       # monolog + some scripts log files
-      - /var/www/html/adminator3/logs:uid=33,gid=33
-      - /var/www/html/adminator2/log:uid=33,gid=33
+      - /srv/www/adminator3/logs:uid=33,gid=33
+      - /srv/www/adminator2/log:uid=33,gid=33
       # adminator print
-      - /var/www/html/adminator3/print/temp:uid=33,gid=33
+      - /srv/www/adminator3/print/temp:uid=33,gid=33
       # adminator export xls
-      - /var/www/html/adminator2/export:uid=33,gid=33
+      - /srv/www/adminator2/export:uid=33,gid=33
       # - /var/www/html/adminator3/export:uid=33,gid=33
     ports:
-      - "8080:80"
+      - "9001:9001"
+      - "9002:9002"
+    # https://docs.docker.com/compose/compose-file/05-services/#healthcheck
+    # https://docs.docker.com/reference/dockerfile/#healthcheck
+    healthcheck:
+      test: "(FCGI_CONNECT=localhost:9001 php-fpm-healthcheck && FCGI_CONNECT=localhost:9002 php-fpm-healthcheck --accepted-conn=100)"
+      interval: 1m
+      timeout: 2s
+      retries: 3
+      start_period: 10s
+      start_interval: 1s
 
   mysql:
     image: mysql:8.0
@@ -113,7 +139,14 @@ services:
       - POSTGRES_PASSWORD=isp-net-passwd
       - POSTGRES_USER=adminator
       - POSTGRES_DB=adminator.new
- 
+    healthcheck:
+      test: "(pg_isready -U postgres || exit 1)"
+      interval: 1m
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+      start_interval: 5s
+
   # fix permissions: echo "host all all all $POSTGRES_HOST_AUTH_METHOD" >> pg_hba.conf
   pgadmin:
     image: dpage/pgadmin4

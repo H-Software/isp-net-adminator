@@ -10,6 +10,41 @@ export POSTGRES_USER=adminator
 export POSTGRES_PASSWD=isp-net-passwd
 export POSTGRES_DB=adminator.new
 
+run-composer-local:
+	cd adminator3 \
+		&& php \
+			composer.phar \
+			install
+
+.PHONY: run-a3-phpstan
+run-a3-phpstan:
+	cd adminator3 \
+		&& php \
+			vendor/phpstan/phpstan/phpstan.phar \
+			analyse \
+				app \
+				boostrap \
+				config \
+				include/main.function.shared.php \
+				public \
+				resources \
+				templates \
+				ecs.php \
+				ind*.php \
+				--memory-limit 512M
+
+.PHONY: a3-rebuild-and-run-fpm
+a3-rebuild-and-run-fpm:
+	git pull \
+	&& docker compose \
+		down \
+		fpm \
+	&& docker compose \
+		up \
+		fpm \
+		--build \
+		-d
+
 export MODE=development
 
 export OTEL_PHP_AUTOLOAD_ENABLED=true
@@ -40,26 +75,3 @@ run-a3-php-local:
 			 -c ../configs/php/local.ini \
 			 -S localhost:8080 \
 			 index-local-router.php
-
-run-composer-local:
-	cd adminator3 \
-		&& php \
-			composer.phar \
-			install
-
-.PHONY: run-a3-phpstan
-run-a3-phpstan:
-	cd adminator3 \
-		&& php \
-			vendor/phpstan/phpstan/phpstan.phar \
-			analyse \
-				app \
-				boostrap \
-				config \
-				include/main.function.shared.php \
-				public \
-				resources \
-				templates \
-				ecs.php \
-				ind*.php \
-				--memory-limit 512M

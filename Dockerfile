@@ -1,5 +1,5 @@
-# https://github.com/docker-library/php/blob/master/8.2/bookworm/apache/Dockerfile
-FROM php:8.2-apache AS php-ext
+# https://github.com/docker-library/php/blob/master/8.2/bookworm/fpm/Dockerfile
+FROM php:8.2-fpm AS php-ext
 
 ENV ACCEPT_EULA=Y
 
@@ -70,7 +70,9 @@ RUN export MAKEFLAGS="-j $(nproc)" \
             protobuf
             # grpc
 
-FROM php:8.2-apache AS main
+FROM php:8.2-fpm AS main
+
+WORKDIR /srv/www
 
 ENV ACCEPT_EULA=Y
 
@@ -99,6 +101,8 @@ COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.
 RUN apt-get update \
     && apt-get install -y \
         gnupg \
+        libfcgi-bin \
+        util-linux \
     && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
     && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
@@ -135,8 +139,6 @@ RUN apt-get purge -y --allow-remove-essential \
         libgcc-12-dev \
         libstdc++-12-dev \
         linux-libc-dev \
-        util-linux \
-        util-linux-extra \
         curl \
         gnupg \
         make \
@@ -148,33 +150,21 @@ RUN apt-get purge -y --allow-remove-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# apache conf
-RUN a2enmod ssl \
-    && a2enmod rewrite \
-    && a2enmod proxy \
-    && a2enmod proxy_http
-# RUN mkdir -p /etc/apache2/ssl
-# RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-COPY configs/apache2/vhosts/ /etc/apache2/sites-enabled/
-
-COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
-
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN mkdir -p /var/www/html/adminator2/ \
-        && mkdir -p /var/log/apache2/adminator \
-        && cd /var/www/html/adminator2 \
+RUN mkdir -p /srv/www/adminator2/ \
+        && cd /srv/www/adminator2 \
         && mkdir temp log \
         && chown www-data:www-data temp log
 
-RUN mkdir -p /var/www/html/adminator3/ \
-        && cd /var/www/html/adminator3 \
+RUN mkdir -p /srv/www/adminator3/ \
+        && cd /srv/www/adminator3 \
         && mkdir temp log logs \
         && chown www-data:www-data temp log logs
 
-COPY adminator2/composer.json /var/www/html/adminator2/
-COPY adminator3/composer.json /var/www/html/adminator3/
+COPY adminator2/composer.json /srv/www/adminator2/
+COPY adminator3/composer.json /srv/www/adminator3/
 
 RUN cd adminator2 \
      && composer install
@@ -183,25 +173,39 @@ RUN cd adminator3 \
     && composer install
 
 # app code
-COPY adminator2/ /var/www/html/adminator2/
-COPY adminator3/ /var/www/html/adminator3/
+COPY adminator2/ /srv/www/adminator2/
+COPY adminator3/ /srv/www/adminator3/
 
 # shared stuff
-COPY adminator3/templates/inc.intro.category-ext.tpl /var/www/html/adminator2/templates/inc.intro.category-ext.tpl
-COPY adminator3/include/main.function.shared.php /var/www/html/adminator2/include/main.function.shared.php
+COPY adminator3/templates/inc.intro.category-ext.tpl /srv/www/adminator2/templates/inc.intro.category-ext.tpl
+COPY adminator3/include/main.function.shared.php /srv/www//adminator2/include/main.function.shared.php
 
 RUN chmod 1777 /tmp
 
+# fpm conf
+
+# RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+COPY configs/php-fpm/ /usr/local/etc/php-fpm.d
+
+COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
+
+# Enable php fpm status page
+RUN set -xe && echo "pm.status_path = /status" >> /usr/local/etc/php-fpm.d/zz-docker.conf
+
+COPY ./configs/php-fpm-healthcheck /usr/local/bin/php-fpm-healthcheck
+
+RUN chmod +x /usr/local/bin/php-fpm-healthcheck
+
 # fix logging
-RUN mkdir -p /var/log/php \
-    && chown -R www-data:www-data /var/log/php
+# RUN mkdir -p /var/log/php \
+#     && chown -R www-data:www-data /var/log/php
     #  \
     # && echo '' > /var/log/php/error.log
 
 RUN rm -rf /usr/bin/composer
 
 # # dont run as root
-USER www-data:www-data
+# USER www-data:www-data
 
 # workaround for squash
 #
@@ -209,19 +213,19 @@ FROM scratch
 COPY --from=main / /
 
 # # dont run as root
-USER www-data:www-data
+# USER www-data:www-data
 
 # copy "original" statements for working image
 #
 ENV PHP_INI_DIR /usr/local/etc/php
-ENV APACHE_CONFDIR /etc/apache2
-ENV APACHE_ENVVARS $APACHE_CONFDIR/envvars
 
 ENTRYPOINT ["docker-php-entrypoint"]
-# https://httpd.apache.org/docs/2.4/stopping.html#gracefulstop
-STOPSIGNAL SIGWINCH
+WORKDIR /srv/www
 
-WORKDIR /var/www/html
+# Override stop signal to stop process gracefully
+# https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163
+STOPSIGNAL SIGQUIT
 
-EXPOSE 80
-CMD ["apache2-foreground"]
+EXPOSE 9000
+CMD ["php-fpm"]
+
