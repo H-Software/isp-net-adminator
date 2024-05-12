@@ -21,7 +21,8 @@ configs:
 
 services:
   nginx:
-    image: nginx:stable-otel
+    # image: nginx:stable-otel
+    image: nginx:mainline-otel
     volumes:
       - ./adminator2/:/srv/www/adminator2/
       - ./adminator3:/srv/www/adminator3
