@@ -105,7 +105,7 @@ class vlastnik2
             if($sql != "%") {
                 $sql = "%".$sql."%";
             }
-            
+
             $select1 = " WHERE (firma is not NULL) AND ( archiv = 0 or archiv is null ) AND ";
             $select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";
             $select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
