@@ -1160,7 +1160,7 @@ class stb extends adminator
                     if((intval($id_komplu) > 0)) {
 
                         $output .= "<td style=\"".$class_stb_sude."\" >".
-                        "<a href=\"/print/reg-form-pdf.php?".urlencode("id_vlastnika")."=".intval($id_komplu)."\">R.F.</a>".
+                        "<a href=\"/print/reg-form?".urlencode("id_vlastnika")."=".intval($id_komplu)."\">R.F.</a>".
                         "</td>";
 
                     } else {
@@ -1169,7 +1169,7 @@ class stb extends adminator
 
                 } else {
                     $output .= "<td style=\"".$class_stb_sude."\" >".
-                    "<a href=\"/print/reg-form-pdf.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\">R.F.</a>".
+                    "<a href=\"/print/reg-form?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\">R.F.</a>".
                     "</td>";
                 }
 
