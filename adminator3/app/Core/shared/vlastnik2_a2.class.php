@@ -414,8 +414,8 @@ class vlastnik2_a2
                     $co = "3";
 
                     $output .= "<tr>
-	    <td colspan=\"1\" bgcolor=\"#99FF99\" align=\"center\" >W
-	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
+                                <td colspan=\"1\" bgcolor=\"#99FF99\" align=\"center\" >W
+                                <td colspan=\"10\" bgcolor=\"#99FF99\" >";
                     $output .= "<table border=\"0\" width=\"100%\" >";
 
                     $output .= $objekt->vypis($sql, $co, $id);
@@ -445,6 +445,8 @@ class vlastnik2_a2
                 if($this-> echo === false) {
                     $stb = new App\Core\stb($this->container);
 
+                    $stb->enable_modify_action = $this->objektStbListAllowedActionUpdate;
+                    $stb->enable_delete_action = $this->objektStbListAllowedActionErase;
                     $stb->level = $this->level;
 
                     $pocet_stb = $stb->zjistipocetobj($id);

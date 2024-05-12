@@ -64,7 +64,7 @@ class vlastnik2
             $vlastnik->export_povolen = true;
         }
 
-        //promenne pro update objektu
+        //promenne pro akce objektu
         if ($this->adminator->checkLevel(29, false) === true) {
             $this->objektListAllowedActionUpdate = true;
         }
@@ -73,6 +73,14 @@ class vlastnik2
         }
         if ($this->adminator->checkLevel(34, false) === true) {
             $this->objektListAllowedActionGarant = true;
+        }
+
+        // akce objekty STB
+        if ($this->adminator->checkLevel(137, false) === true) {
+            $this->objektStbListAllowedActionUpdate = true;
+        }
+        if ($this->adminator->checkLevel(310, false) === true) {
+            $this->objektStbListAllowedActionErase = true;
         }
 
         // promeny pro mazani, zmenu vlastniku
