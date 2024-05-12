@@ -30,7 +30,7 @@
       {/section}
 
       <div class="cat-select-odkazy" >
-        <form name="form2" method="POST" action="" >
+        <form name="form2" method="POST" >
           {$kat_csrf_html}
           <select name="show_se_cat" size="1" onChange="self.document.forms.form2.submit()" style="font-size: 10px; " >
            {html_options values=$show_se_cat_values selected=$show_se_cat_selected output=$show_se_cat_output}

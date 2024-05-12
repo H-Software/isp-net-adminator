@@ -138,6 +138,12 @@ class adminatorController extends Controller
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
 
+
+        if(is_object($request)) {
+            $current_url = $request->getUri();
+            $this->smarty->assign("se_cat_form_action", $current_url);
+        }
+
         if(is_object($request) and is_object($response)) {
             $csrf = $this->generateCsrfToken($request, $response, true);
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
@@ -164,6 +170,5 @@ class adminatorController extends Controller
 
         $this->smarty->assign("se_cat_adminator", "adminator2");
         $this->smarty->assign("se_cat_adminator_link", $se_cat_adminator_link);
-
     }
 }
