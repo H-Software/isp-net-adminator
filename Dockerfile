@@ -139,7 +139,6 @@ RUN apt-get purge -y --allow-remove-essential \
         libgcc-12-dev \
         libstdc++-12-dev \
         linux-libc-dev \
-        util-linux-extra \
         curl \
         gnupg \
         make \
