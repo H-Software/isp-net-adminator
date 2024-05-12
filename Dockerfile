@@ -101,6 +101,8 @@ COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.
 RUN apt-get update \
     && apt-get install -y \
         gnupg \
+        libfcgi-bin \
+        util-linux \
     && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
     && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
@@ -137,7 +139,6 @@ RUN apt-get purge -y --allow-remove-essential \
         libgcc-12-dev \
         libstdc++-12-dev \
         linux-libc-dev \
-        util-linux \
         util-linux-extra \
         curl \
         gnupg \

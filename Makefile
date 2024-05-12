@@ -63,3 +63,15 @@ run-a3-phpstan:
 				ecs.php \
 				ind*.php \
 				--memory-limit 512M
+
+.PHONY: a3-rebuild-and-run-fpm
+a3-rebuild-and-run-fpm:
+	git pull \
+	&& docker compose \
+		down \
+		fpm \
+	&& docker compose \
+		up \
+		fpm \
+		--build \
+		-d
