@@ -642,7 +642,7 @@ class vlastnik2_a2
             $fp = false;
             if($fp === false) {
                 // echo "<div style=\"color: red; font-weight: bold; \">Chyba: Soubor pro export nelze otevřít </div>\n";
-            // @phpstan-ignore-next-line
+                // @phpstan-ignore-next-line
             } else {
                 fputs($fp, "<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
 
