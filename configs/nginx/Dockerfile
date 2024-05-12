@@ -7,16 +7,6 @@ FROM nginx:mainline-otel
 # config
 COPY configs/nginx/vhosts /etc/nginx/conf.d/
 
-# RUN mkdir -p /srv/www/adminator2/ \
-#         && cd /srv/www/adminator2 \
-#         && mkdir temp log \
-#         && chown www-data:www-data temp log
-
-# RUN mkdir -p /srv/www/adminator3/ \
-#         && cd /srv/www/adminator3 \
-#         && mkdir temp log logs \
-#         && chown www-data:www-data temp log logs
-
 # app code
 COPY adminator2/ /srv/www/adminator2/
 COPY adminator3/ /srv/www/adminator3/
