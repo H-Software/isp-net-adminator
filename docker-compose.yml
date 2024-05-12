@@ -30,10 +30,10 @@ services:
     ports:
       - 80:80
       - 443:443
-    depends_on:
-      fpm:
-        condition: service_healthy
-        restart: true
+    # depends_on:
+    #   fpm:
+    #     condition: service_healthy
+    #     restart: true
 
   fpm:
     image: h-software/isp-net-adminator-fpm
