@@ -158,6 +158,7 @@ class adminatorController extends Controller
         // $show_se_cat = $_POST["show_se_cat"];
         if ($request->getMethod() == "POST") {
             $show_se_cat = $request->getParsedBody()['show_se_cat'];
+            $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat,true));
         }
 
         if($show_se_cat == 0) {
