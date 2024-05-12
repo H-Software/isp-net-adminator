@@ -84,13 +84,15 @@ services:
     ports:
       - "9001:9001"
       - "9002:9002"
+    # https://docs.docker.com/compose/compose-file/05-services/#healthcheck
+    # https://docs.docker.com/reference/dockerfile/#healthcheck
     healthcheck:
       test: "(FCGI_CONNECT=localhost:9001 php-fpm-healthcheck && FCGI_CONNECT=localhost:9002 php-fpm-healthcheck --accepted-conn=100)"
       interval: 1m
       timeout: 2s
       retries: 3
       start_period: 10s
-      start_interval: 3s
+      start_interval: 1s
 
   mysql:
     image: mysql:8.0
@@ -133,7 +135,14 @@ services:
       - POSTGRES_PASSWORD=isp-net-passwd
       - POSTGRES_USER=adminator
       - POSTGRES_DB=adminator.new
- 
+    healthcheck:
+      test: "(pg_isready -U postgres || exit 1)"
+      interval: 1m
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+      start_interval: 5s
+
   # fix permissions: echo "host all all all $POSTGRES_HOST_AUTH_METHOD" >> pg_hba.conf
   pgadmin:
     image: dpage/pgadmin4
