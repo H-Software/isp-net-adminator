@@ -161,12 +161,7 @@ class adminatorController extends Controller
         } else {
             $show_se_cat = 0;
         }
-
-        if($show_se_cat == 1) {
-            $this->smarty->assign("show_se_cat_selected", "1");
-        } else {
-            $this->smarty->assign("show_se_cat_selected", "0");
-        }
+        $this->smarty->assign("show_se_cat_selected", $show_se_cat);
 
         // $this->logger->debug("adminatorController\\header: show_se_cat value: ".$show_se_cat);
 
