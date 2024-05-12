@@ -41,6 +41,10 @@ services:
       context: ./
       target: main
     # user: "www-data:www-data"
+    develop:
+      watch: 
+        - path: ./
+          action: rebuild
     environment:
       # DB conn
       - MYSQL_SERVER=192.168.1.213
