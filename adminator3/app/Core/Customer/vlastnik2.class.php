@@ -98,9 +98,9 @@ class vlastnik2
         }
 
         if($this->listMode == 1) {
-            if(empty($sql)){
+            if(empty($sql)) {
                 $sql = "%";
-            } else{
+            } else {
                 $sql = "%".$sql."%";
             }
 
