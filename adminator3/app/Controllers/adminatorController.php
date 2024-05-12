@@ -157,7 +157,10 @@ class adminatorController extends Controller
         $this->smarty->assign("show_se_cat_values", array("0","1"));
         $this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
 
-        $show_se_cat = $_POST["show_se_cat"];
+        // $show_se_cat = $_POST["show_se_cat"];
+        if ($request->getMethod() == "POST") {
+            $show_se_cat = $request->getParsedBody()['show_se_cat'];
+        }
 
         if($show_se_cat == 0) {
             $this->smarty->assign("show_se_cat_selected", "0");
