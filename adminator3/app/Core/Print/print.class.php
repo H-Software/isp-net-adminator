@@ -1465,6 +1465,7 @@ class printClass extends adminator
 
             if($id_stb > 0) {
 
+                // TODO: send this to smarty template/vars
                 echo "<div style=\"color: blue;\">INFO: generování údajů z adminátora ...</div>";
 
                 /*
