@@ -37,6 +37,9 @@ class vlastnik2
 
     public $vlastnikAllowedUnassignObject = false;
 
+    public $objektStbListAllowedActionUpdate = false;
+    public $objektStbListAllowedActionErase = false;
+
     public $vlastnici_erase_povolen = false;
 
     public $vlastnici_update_povolen = false;
@@ -211,6 +214,9 @@ class vlastnik2
         $vlastnik->objektListAllowedActionUpdate = $this->objektListAllowedActionUpdate;
         $vlastnik->objektListAllowedActionErase = $this->objektListAllowedActionErase;
         $vlastnik->objektListAllowedActionGarant = $this->objektListAllowedActionGarant;
+
+        $vlastnik->objektStbListAllowedActionUpdate = $this->objektStbListAllowedActionUpdate;
+        $vlastnik->objektStbListAllowedActionErase = $this->objektStbListAllowedActionErase;
 
         // generovani exportu
         if($vlastnik->export_povolen) {
