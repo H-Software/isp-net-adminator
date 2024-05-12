@@ -12,7 +12,7 @@ class printClass extends adminator
 
     // private $validator;
 
-    // public $conn_pgsql;
+    public $conn_pgsql;
     public $conn_mysql;
 
     // public $pdoMysql;
@@ -30,6 +30,8 @@ class printClass extends adminator
         // $this->container = $container;
         // $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+
         // $this->pdoMysql = $container->get('pdoMysql');
 
         $this->logger = $container->get('logger');

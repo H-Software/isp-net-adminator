@@ -7,7 +7,7 @@ require("include/check_level.php");
 
 // require("include/c_listing-objekty.php");
 
-if( !( check_level2($level, "lvl_objekty_stb_erase") ) )
+if( !( check_level($level, 310) ) )
 { 
     // neni level
     header("Location: ".$cesta."nolevelpage.php");
