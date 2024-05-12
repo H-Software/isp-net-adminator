@@ -29,7 +29,11 @@ services:
     ports:
       - 80:80
       - 443:443
-  
+    depends_on:
+      fpm:
+        condition: service_healthy
+        restart: true
+
   fpm:
     image: h-software/isp-net-adminator-fpm
     # image: ghcr.io/h-software/isp-net-adminator:pr-137

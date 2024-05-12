@@ -189,6 +189,13 @@ COPY configs/php-fpm/ /usr/local/etc/php-fpm.d
 
 COPY ./configs/php/docker.ini /usr/local/etc/php/conf.d/
 
+# Enable php fpm status page
+RUN set -xe && echo "pm.status_path = /status" >> /usr/local/etc/php-fpm.d/zz-docker.conf
+
+COPY ./configs/php-fpm-healthcheck /usr/local/bin/php-fpm-healthcheck
+
+RUN chmod +x /usr/local/bin/php-fpm-healthcheck
+
 # fix logging
 # RUN mkdir -p /var/log/php \
 #     && chown -R www-data:www-data /var/log/php
