@@ -637,10 +637,11 @@ class vlastnik2_a2
         // tafy generovani exportu
         if($this->export_povolen === true) {
 
-            $fp = fopen("export/vlastnici-sro.xls", "w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
+            // $fp = fopen("export/vlastnici-sro.xls", "w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
 
+            $fp = false;
             if($fp === false) {
-                echo "<div style=\"color: red; font-weight: bold; \">Chyba: Soubor pro export nelze otevřít </div>\n";
+                // echo "<div style=\"color: red; font-weight: bold; \">Chyba: Soubor pro export nelze otevřít </div>\n";
             } else {
                 fputs($fp, "<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
 
