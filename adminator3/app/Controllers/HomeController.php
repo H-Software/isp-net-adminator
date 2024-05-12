@@ -55,7 +55,7 @@ class HomeController extends adminatorController
         }
     }
 
-    public function home(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    public function home(ServerRequestInterface|null $request, ResponseInterface|null $response, array $args): ResponseInterface
     {
         $this->logger->info("homeController\home called");
 

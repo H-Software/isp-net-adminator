@@ -52,7 +52,7 @@ class adminatorController extends Controller
     {
         $this->smarty->assign("page_title", "Adminator3 - chybny level");
 
-        $this->header();
+        $this->header(null, null);
 
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $this->smarty->display('global/no-level.tpl');
