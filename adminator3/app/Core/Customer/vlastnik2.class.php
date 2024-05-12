@@ -41,6 +41,8 @@ class vlastnik2
 
     public $vlastnici_update_povolen = false;
 
+    public $form_find;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -85,25 +87,25 @@ class vlastnik2
         }
 
         $find_id = $_GET["find_id"];
-        $find    = $_GET["find"];
+        $find    = $this->form_find;
 
         // $delka_find_id=strlen($find_id);
         if((strlen($find_id) > 0)) {
             $this->listMode = 3;
-            /* hledani podle id_cloveka */   $sql = intval($find_id);
+            /* hledani podle id_cloveka */
+            $sql = intval($find_id);
         } elseif((strlen($find) > 0)) {
             $this->listMode = 1;
-            /* hledani podle cehokoli */  $sql = $find;
+            /* hledani podle cehokoli */
+            $sql = $find;
         } else { /* cokoli dalsiho */
         }
 
         if($this->listMode == 1) {
-            if(empty($sql)) {
-                $sql = "%";
-            } else {
+            if($sql != "%") {
                 $sql = "%".$sql."%";
             }
-
+            
             $select1 = " WHERE (firma is not NULL) AND ( archiv = 0 or archiv is null ) AND ";
             $select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";
             $select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";

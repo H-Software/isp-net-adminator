@@ -111,16 +111,18 @@ class vlastniciController extends adminatorController
         $this->smarty->assign("razeni", $_GET['razeni']);
         $this->smarty->assign("razeni2", $_GET['razeni2']);
 
-        // test capsule
-        //
-        // $objekty = DB::connection('pgsql')->select("select * from objekty");
-
         if ($this->adminator->checkLevel(63, false) === true) {
             $this->smarty->assign("vlastnici2_export_povolen", "true");
         }
 
         if ($this->adminator->checkLevel(40, false) === true) {
             $this->smarty->assign("vlastnici2_pridani_povoleno", "true");
+        }
+
+        if(empty($_GET["find"])) {
+            $vlastnik2->form_find = "%";
+        } else {
+            $vlastnik2->form_find = $this->conn_mysql->real_escape_string($_GET["find"]);
         }
 
         // main table
