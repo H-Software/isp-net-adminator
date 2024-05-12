@@ -113,7 +113,7 @@ class adminatorController extends Controller
         return $ret;
     }
 
-    public function header(ServerRequestInterface $request = null, ResponseInterface $response = null, $adminator = null)
+    public function header(ServerRequestInterface $request, ResponseInterface $response, $adminator = null)
     {
 
         if(is_object($adminator)) {
@@ -140,7 +140,7 @@ class adminatorController extends Controller
 
 
         $uri = $request->getUri();
-        $current_url = $uri->getPath() . $uri->getQuery();
+        $current_url = $uri->getPath() . "?" . $uri->getQuery();
 
         $this->smarty->assign("se_cat_form_action", $current_url);
 
