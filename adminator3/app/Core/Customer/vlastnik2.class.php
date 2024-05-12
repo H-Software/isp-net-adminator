@@ -225,7 +225,7 @@ class vlastnik2
         $this->listItemsContent .= '<div class="vlastnici2-table" style="padding-right: 5px; ">';
         $this->listItemsContent .= $vlastnik->vypis_tab(1);
 
-        $poradek = "find=".$find."&find_id=".$this->listFindId."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".
+        $poradek = "find=".$this->listSql."&find_id=".$this->listFindId."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".
                     $_GET["razeni"]."&razeni2=".$_GET["razeni2"]."&fakt_skupina=".$_GET["fakt_skupina"];
 
         if(strlen($_GET["list"]) > 0) {

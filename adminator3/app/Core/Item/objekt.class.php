@@ -7,9 +7,8 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class objekt extends adminator
 {
-
     public $container;
-    
+
     public $conn_pgsql;
     public $conn_mysql;
 
