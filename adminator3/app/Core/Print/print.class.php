@@ -1408,15 +1408,20 @@ class printClass extends adminator
                     }
 
                     //zjisteni zda vlastnik ma jeste tunel. verejku
-                    $rs_tunel = pg_query("SELECT ip, tunnel_user, tunnel_pass ".
-                            "FROM objekty ".
-                            "WHERE ((id_cloveka = '$id_cloveka') ".
-                            "	    AND ".
-                            "	(id_komplu != '$id_objektu') ".
-                            "	    AND ".
-                            "	(tunnelling_ip = 1) ) ");
+                    try {
+                        $rs_tunel = pg_query("SELECT ip, tunnel_user, tunnel_pass ".
+                                                "FROM objekty ".
+                                                "WHERE ((id_cloveka = '$id_cloveka') ".
+                                                "	    AND ".
+                                                "	(id_komplu != '$id_objektu') ".
+                                                "	    AND ".
+                                                "	(tunnelling_ip = 1) ) ");
 
-                    $rs_tunel_num = pg_num_rows($rs_tunel);
+                        $rs_tunel_num = pg_num_rows($rs_tunel);
+                    }
+                    catch (Exception $e) {
+                        $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . " pg_query for tunel. verejka failed! Caught error: " . pg_last_error($this->conn_pgsql));
+                    }
 
                     if($rs_tunel_num == 1) {
 
@@ -1444,8 +1449,6 @@ class printClass extends adminator
 
                         //$int_zarizeni_2 = $int_tunel." - vip-ka";
                     }
-
-
 
                 } //end else if rs_obj_num <> !
 
