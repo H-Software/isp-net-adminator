@@ -48,11 +48,11 @@ class adminatorController extends Controller
     //     $this->_response->withJson($response);
     // }
 
-    public function renderNoLogin()
+    public function renderNoLogin(ServerRequestInterface $request = null, ResponseInterface $response = null)
     {
         $this->smarty->assign("page_title", "Adminator3 - chybny level");
 
-        $this->header(null, null);
+        $this->header($request, $response);
 
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $this->smarty->display('global/no-level.tpl');
@@ -113,7 +113,7 @@ class adminatorController extends Controller
         return $ret;
     }
 
-    public function header(ServerRequestInterface $request, ResponseInterface $response, $adminator = null)
+    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminator = null)
     {
 
         if(is_object($adminator)) {
