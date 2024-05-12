@@ -86,11 +86,11 @@ services:
       - "9002:9002"
     healthcheck:
       test: ["CMD", "FCGI_CONNECT=localhost:9001 php-fpm-healthcheck && FCGI_CONNECT=localhost:9002 php-fpm-healthcheck"]
-      interval: 1m30s
-      timeout: 10s
+      interval: 1m
+      timeout: 2s
       retries: 3
-      start_period: 40s
-      start_interval: 5s
+      start_period: 10s
+      start_interval: 3s
 
   mysql:
     image: mysql:8.0
