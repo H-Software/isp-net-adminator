@@ -44,6 +44,4 @@
 
   {if $show_se_cat eq "1"}
     {include file="inc.intro.category-ext.tpl"}
-  {else}
-    <!--<div>form data show_se_cat: {$show_se_cat}</div>-->
   {/if}

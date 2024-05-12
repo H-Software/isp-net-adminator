@@ -138,10 +138,10 @@ class adminatorController extends Controller
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
         
-        $uri = $request->getUri();
-        $current_url = $uri->getPath(); // . "?" . $uri->getQuery();
+        // $uri = $request->getUri();
+        // $current_url = $uri->getPath(); // . "?" . $uri->getQuery();
 
-        $this->smarty->assign("se_cat_form_action", $current_url);
+        // $this->smarty->assign("se_cat_form_action", $current_url);
 
         if(is_object($request) and is_object($response)) {
             list($csrf_html) = $this->generateCsrfToken($request, $response, true);
@@ -172,6 +172,11 @@ class adminatorController extends Controller
 
         $se_cat_adminator_link = $_SERVER['HTTP_HOST'];
         $se_cat_adminator_link = str_replace("adminator3", "adminator2", $se_cat_adminator_link);
+        if (isset($_SERVER['HTTPS'])) {
+            $se_cat_adminator_link = "https://" . $se_cat_adminator_link;
+        } else {
+            $se_cat_adminator_link = "http://" . $se_cat_adminator_link;
+        }
 
         $this->smarty->assign("se_cat_adminator", "adminator2");
         $this->smarty->assign("se_cat_adminator_link", $se_cat_adminator_link);
