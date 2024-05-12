@@ -20,8 +20,13 @@ configs:
 
 services:
   nginx:
-    # image: nginx:stable-otel
-    image: nginx:mainline-otel
+    # image: nginx:mainline-otel
+    build:
+      context: ./config/nginx/
+    develop:
+      watch: 
+        - path: ./
+          action: rebuild
     volumes:
       - ./adminator2/:/srv/www/adminator2/
       - ./adminator3:/srv/www/adminator3
