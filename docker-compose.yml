@@ -27,10 +27,10 @@ services:
       watch: 
         - path: ./
           action: rebuild
-    volumes:
-      - ./adminator2/:/srv/www/adminator2/
-      - ./adminator3:/srv/www/adminator3
-      - ./configs/nginx/vhosts/:/etc/nginx/conf.d/
+    # volumes:
+    #   - ./adminator2/:/srv/www/adminator2/
+    #   - ./adminator3:/srv/www/adminator3
+    #   - ./configs/nginx/vhosts/:/etc/nginx/conf.d/
     ports:
       - 80:80
       - 443:443

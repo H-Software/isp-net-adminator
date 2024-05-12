@@ -4,6 +4,9 @@ FROM nginx:mainline-otel
 
 # WORKDIR /srv/www
 
+# config
+COPY configs/nginx/vhosts/ /etc/nginx/conf.d/
+
 # app code
 COPY adminator2/ /srv/www/adminator2/
 COPY adminator3/ /srv/www/adminator3/
