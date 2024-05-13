@@ -1139,11 +1139,11 @@ class stb extends adminator
                 //vlastnik - id cloveka
                 $id_cloveka = $data_vypis["id_cloveka"];
 
-                $rs_create_link = ($id_cloveka > 0 ? \Aglobal::create_link_to_owner($id_cloveka, $this->conn_pgsql) : "");
+                $rs_create_link = ($id_cloveka > 0 ? $this->create_link_to_owner($id_cloveka) : "");
 
                 $odkaz_data = ($rs_create_link === false ? "E_1" : $rs_create_link);
 
-                $output .= "<td style=\"".$class_stb_sude."\" >V: ".$rs_create_link."&nbsp;</td>";
+                $output .= "<td style=\"".$class_stb_sude."\" >V: ".$odkaz_data."&nbsp;</td>";
 
                 $output .= "<td style=\"".$class_stb_sude."\" >".$data_vypis["sw_port"]."&nbsp;</td>";
 

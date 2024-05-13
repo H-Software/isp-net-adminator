@@ -1,3 +1,7 @@
+#
+# ssh czhujer@192.168.1.213 "cd ~/Documents/repos/personal/h-software-isp-net-adminator; docker compose watch fpm nginx --no-up
+# ssh czhujer@192.168.1.213 "cd ~/Documents/repos/personal/h-software-isp-net-adminator; docker compose exec -ti fpm tail -f adminator3/logs/app.log"
+#
 export MYSQL_SERVER=192.168.1.213
 # export MYSQL_SERVER=127.0.0.1
 

@@ -14,6 +14,9 @@ use Exception;
 class adminator
 {
     public $conn_mysql;
+
+    public $conn_pgsql;
+
     public $smarty;
     public $logger;
 
@@ -31,15 +34,15 @@ class adminator
 
     public $loggedUserEmail;
 
-    public function __construct($conn_mysql, $smarty, $logger, $userIPAddress = null, $pdoMysql = null, $settings = null)
+    public function __construct($conn_mysql, $smarty, $logger, $userIPAddress = null, $pdoMysql = null, $settings = null, $conn_pgsql = null)
     {
         $this->logger = $logger;
         $this->logger->info("adminator\__construct called");
 
         $this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-
+        $this->conn_pgsql = $conn_pgsql;
         $this->pdoMysql = $pdoMysql;
+        $this->smarty = $smarty;
         $this->settings = $settings;
 
         if($userIPAddress == null) {
@@ -581,5 +584,40 @@ class adminator
         $output .= "</div>";
 
         return $output;
+    }
+
+    public function create_link_to_owner($owner_id)
+    {
+
+        $owner_id = intval($owner_id);
+
+        $sql = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".$owner_id."' ";
+
+        if($this->conn_pgsql != null) {
+            $vlastnik_dotaz = pg_query($this->conn_pgsql, $sql);
+
+        } else {
+            $vlastnik_dotaz = pg_query($sql);
+        }
+
+        $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
+
+        while($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
+            $firma_vlastnik = $data_vlastnik["firma"];
+            $archiv_vlastnik = $data_vlastnik["archiv"];
+        }
+
+        if($vlastnik_radku <= 0) {
+            return false;
+        }
+
+        if ($archiv_vlastnik == 1) {
+            $odkaz = "<a href=\"vlastnici-archiv.php?".urlencode("find_id")."=".urlencode($owner_id)."\" >".$owner_id."</a>\n";
+        } else {
+            $odkaz = "<a href=\"/vlastnici2?".urlencode("find_id")."=".urlencode($owner_id)."\" >".$owner_id."</a>\n";
+        }
+
+        return $odkaz;
+
     }
 }
