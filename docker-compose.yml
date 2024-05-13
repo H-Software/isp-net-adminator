@@ -9,6 +9,7 @@ volumes:
   mssql-data:
   adminator-tmp:
   adminator-export:
+  adminator-print-temp:
 
 networks:
   default:
@@ -70,6 +71,8 @@ services:
     volumes:
       - adminator-php-log:/var/log/php:uid=33,gid=33
       - adminator-export:/srv/www/adminator3/export:uid=33,gid=33
+      - adminator-print-temp:/srv/www/adminator3/print/temp:uid=33,gid=33
+
       - adminator-tmp:/tmp:/tmp
     tmpfs:
       # for smarty
