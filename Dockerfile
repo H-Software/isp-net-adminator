@@ -161,7 +161,7 @@ RUN mkdir -p /srv/www/adminator2/ \
 RUN mkdir -p /srv/www/adminator3/ \
         && cd /srv/www/adminator3 \
         && mkdir temp log logs \
-        && chown www-data:www-data temp log logs
+        && chown www-data:www-data temp log logs export
 
 COPY adminator2/composer.json /srv/www/adminator2/
 COPY adminator3/composer.json /srv/www/adminator3/
