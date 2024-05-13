@@ -157,7 +157,7 @@ class stb extends adminator
 
         $this->sql_query = $this->sql_query . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-        $this->logger->debug("stb\stbListGetBodyContent: dump var this->sql_query: ".var_export($this->sql_query, true));
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ .": dump var this->sql_query: ".var_export($this->sql_query, true));
 
         $output .= "<div id=\"objekty_stb_filter\" style=\"display: ".$display.";\" >";
 
