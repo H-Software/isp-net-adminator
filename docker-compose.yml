@@ -8,6 +8,7 @@ volumes:
   pgadmin-data:
   mssql-data:
   adminator-tmp:
+  adminator-export:
 
 networks:
   default:
@@ -68,6 +69,7 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3,application.name=isp-adminator3
     volumes:
       - adminator-php-log:/var/log/php:uid=33,gid=33
+      - adminator-export:/srv/www/adminator3/export:uid=33,gid=33
       - adminator-tmp:/tmp:/tmp
     tmpfs:
       # for smarty
