@@ -184,6 +184,7 @@ RUN chmod 1777 /tmp \
     && cd adminator3 \
     && chown www-data:www-data export \
     && cd print \
+    && mkdir -p temp \
     && chown www-data:www-data temp
 
 # fpm conf
