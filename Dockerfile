@@ -182,10 +182,11 @@ COPY adminator3/include/main.function.shared.php /srv/www//adminator2/include/ma
 
 RUN chmod 1777 /tmp \
     && cd adminator3 \
-    && chown www-data:www-data export \
-    && cd print \
-    && mkdir -p temp \
-    && chown www-data:www-data temp
+    && chown www-data:www-data export
+    #  \
+    # && cd print \
+    # && mkdir -p temp \
+    # && chown www-data:www-data temp
 
 # fpm conf
 
