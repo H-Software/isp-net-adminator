@@ -45,6 +45,8 @@ class printClass extends adminator
 
     private function nacti_soubory($find_string): false|array
     {
+        $soubor = array();
+
         $handle = opendir('print/temp/');
         $i = 0;
 
@@ -56,14 +58,13 @@ class printClass extends adminator
         }
         closedir($handle);
 
-        if(is_array($soubor)) {
+        if(count($soubor) > 1) {
             sort($soubor);
         } else {
             return false;
         }
 
         return $soubor;
-
     }
 
     public function printListAll()
