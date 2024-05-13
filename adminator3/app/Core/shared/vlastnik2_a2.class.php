@@ -10,6 +10,8 @@ class vlastnik2_a2
 
     public $container;
 
+    public $csrf_html;
+
     public $level;
 
     public $export_povolen = false;
@@ -448,6 +450,8 @@ class vlastnik2_a2
                     $stb->enable_modify_action = $this->objektStbListAllowedActionUpdate;
                     $stb->enable_delete_action = $this->objektStbListAllowedActionErase;
                     $stb->level = $this->level;
+                    $stb->csrf_html = $this->csrf_html;
+
 
                     $pocet_stb = $stb->zjistipocetobj($id);
 
