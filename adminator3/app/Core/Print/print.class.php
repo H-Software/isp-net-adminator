@@ -43,7 +43,7 @@ class printClass extends adminator
 
     }
 
-    private function nacti_soubory($find_string)
+    private function nacti_soubory($find_string): false|array
     {
         $handle = opendir('print/temp/');
         $i = 0;
@@ -56,9 +56,14 @@ class printClass extends adminator
         }
         closedir($handle);
 
-        sort($soubor);
+        if(is_array($soubor)){
+            sort($soubor);
+        } else {
+            return false;
+        }
 
         return $soubor;
+
     }
 
     public function printListAll()
@@ -67,17 +72,20 @@ class printClass extends adminator
         $this->smarty->assign("csrf_html", $this->csrf_html);
 
         $soubor3 = $this->nacti_soubory("smlouva-fiber");
-        $this->smarty->assign("soubory_smlouvy_new", $soubor3);
+        if($soubor3 != false)
+            $this->smarty->assign("soubory_smlouvy_new", $soubor3);
 
         $soubor4 = $this->nacti_soubory("reg-form-pdf");
-        $this->smarty->assign("soubory_regform_new", $soubor4);
+        if($soubor4 != false)
+            $this->smarty->assign("soubory_regform_new", $soubor4);
 
         $soubor5 = $this->nacti_soubory("smlouva-v3");
-        $this->smarty->assign("soubory_smlouva_v3", $soubor5);
+        if($soubor5 != false)
+            $this->smarty->assign("soubory_smlouva_v3", $soubor5);
 
         $soubor6 = $this->nacti_soubory("reg-form-v3");
-        $this->smarty->assign("soubory_reg_form_2012_05", $soubor6);
-
+        if($soubor6 != false)
+            $this->smarty->assign("soubory_reg_form_2012_05", $soubor6);
 
         $this->smarty->display('print/list-all.tpl');
     }
