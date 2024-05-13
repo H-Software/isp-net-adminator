@@ -16,9 +16,9 @@ parameters:
 	-
 		message: "#^Variable \\$.* might not be defined\\.$#"
 		path: *
-	-
-		message: "#^Function (mysql|ereg)_.* not found\\.$#"
-		path: app/Core/Print/inc.*.php
+	# -
+	# 	message: "#^Function (mysql|ereg)_.* not found\\.$#"
+	# 	path: app/Core/Print/inc.*.php
 	-
 		message: "#^Function mysql_.* not found\\.$#"
 		path: include/main.function.shared.php
