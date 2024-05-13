@@ -612,9 +612,9 @@ class adminator
         }
 
         if ($archiv_vlastnik == 1) {
-            $odkaz = "<a href=\"vlastnici-archiv.php?".urlencode("find_id")."=".urlencode($owner_id)."\" >".$owner_id."</a>\n";
+            $odkaz = "<a href=\"vlastnici-archiv.php?".urlencode("find_id")."=".urlencode(strval($owner_id))."\" >".$owner_id."</a>\n";
         } else {
-            $odkaz = "<a href=\"/vlastnici2?".urlencode("find_id")."=".urlencode($owner_id)."\" >".$owner_id."</a>\n";
+            $odkaz = "<a href=\"/vlastnici2?".urlencode("find_id")."=".urlencode(strval($owner_id))."\" >".$owner_id."</a>\n";
         }
 
         return $odkaz;
