@@ -7,7 +7,7 @@ require("include/check_level.php");
 
 // require("include/c_listing-objekty.php");
 
-if( !( check_level2($level, "lvl_objekty_stb_erase") ) )
+if( !( check_level($level, 310) ) )
 { 
     // neni level
     header("Location: ".$cesta."nolevelpage.php");
@@ -112,33 +112,33 @@ require ("include/charset.php");
     echo "<br><span style=\"font-size: 20px; \">Opravdu chcete smazat tento stb objekt? </span><br><br>";
 
     $rs = $conn_mysql->query("SELECT popis, ip_adresa FROM objekty_stb WHERE id_stb = '".intval($id_stb)."' ");
-    $rs_radku = mysql_num_rows($rs);
+
+    $rs_radku = $rs->num_rows;
 
     if( $rs_radku == 0 )
     {
-	echo "<br>Chyba! Nelze nacist puvodni data o objektu! <br>";
+	    echo "<br>Chyba! Nelze nacist puvodni data o objektu! <br>";
     }
     else
     {
-	echo "<form action=\"\" method=\"GET\" >";
+        echo "<form action=\"\" method=\"GET\" >";
 
-	while( $data=mysql_fetch_array($rs) )
-	{
+        while( $data=$rs->fetch_array() )
+        {
 
-	    echo "<b>dns jméno</b>: ".htmlspecialchars($data["popis"])."<br><br>";
+            echo "<b>dns jméno</b>: ".htmlspecialchars($data["popis"])."<br><br>";
 
-	    echo "<b>ip adresa</b>: ".htmlspecialchars($data["ip_adresa"])."<br>";
+            echo "<b>ip adresa</b>: ".htmlspecialchars($data["ip_adresa"])."<br>";
 
-	} // konec while
+        } // konec while
 
-	echo "<input type=\"hidden\" name=\"id_stb\" value=\"".intval($id_stb)."\" > ";
+        echo "<input type=\"hidden\" name=\"id_stb\" value=\"".intval($id_stb)."\" > ";
 
-	echo "<br><br><input type=\"submit\" value=\"OK\" name=\"odeslano\" >";
+        echo "<br><br><input type=\"submit\" value=\"OK\" name=\"odeslano\" >";
 
-	echo "</form>";
+        echo "</form>";
 
     } // konec jestli jestli je radku nula
- 
  }
  
 ?>

@@ -35,6 +35,8 @@ class stb extends adminator
 
     public $enable_unpair_action = false;
 
+    public $enable_delete_action = false;
+
     public $sql_query;
 
     //var $sql_query_listing;
@@ -1046,9 +1048,9 @@ class stb extends adminator
 
             while($data_vypis = $dotaz_vypis->fetch_array()) {
                 $output .= "
-           <tr>
-           <td style=\"".$class_stb_liche."\" >".$data_vypis["popis"]."&nbsp;</td>
-           <td style=\"".$class_stb_liche."\" >".$data_vypis["ip_adresa"]."&nbsp;</td>\n";
+                        <tr>
+                        <td style=\"".$class_stb_liche."\" >".$data_vypis["popis"]."&nbsp;</td>
+                        <td style=\"".$class_stb_liche."\" >".$data_vypis["ip_adresa"]."&nbsp;</td>\n";
 
                 //pozn
                 $output .= "<td style=\"".$class_stb_liche."\" ><span class=\"pozn\"><img title=\"poznamka\" src=\"/img2/poznamka3.png\" alt=\"poznamka\" ";
@@ -1077,7 +1079,6 @@ class stb extends adminator
                 //uprava
                 $output .= "<td style=\"".$class_stb_liche."\" >";
 
-                // if( !( check_level($this->level,137) ) )
                 if($this->enable_modify_action === true) {
                     $output .=
                     "<form method=\"POST\" action=\"/objekty/stb/action\" >\n"
@@ -1094,11 +1095,15 @@ class stb extends adminator
                 //smazani
                 $output .= "<td style=\"".$class_stb_liche."\" >\n";
 
-                $output .= "<div style=\"\" ><a href=\"" . fix_link_to_another_adminator(
-                    "/objekty-stb-erase.php?".
-                    urlencode("id_stb")."=".intval($data_vypis["id_stb"])
-                )."\" >smazání</a>".
-                     "</div>";
+                if($this->enable_delete_action === true) {
+                    $output .= "<div style=\"\" ><a href=\"" . fix_link_to_another_adminator(
+                        "/objekty-stb-erase.php?".
+                        urlencode("id_stb")."=".intval($data_vypis["id_stb"])
+                    )."\" >smazání</a>".
+                         "</div>";
+                } else {
+                    $output .= "<div style=\"\" >smazání</a></div>";
+                }
 
                 $output .= "</td>\n";
 
@@ -1160,7 +1165,7 @@ class stb extends adminator
                     if((intval($id_komplu) > 0)) {
 
                         $output .= "<td style=\"".$class_stb_sude."\" >".
-                        "<a href=\"/print/reg-form-pdf.php?".urlencode("id_vlastnika")."=".intval($id_komplu)."\">R.F.</a>".
+                        "<a href=\"/print/reg-form?".urlencode("id_vlastnika")."=".intval($id_komplu)."\">R.F.</a>".
                         "</td>";
 
                     } else {
@@ -1169,7 +1174,7 @@ class stb extends adminator
 
                 } else {
                     $output .= "<td style=\"".$class_stb_sude."\" >".
-                    "<a href=\"/print/reg-form-pdf.php?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\">R.F.</a>".
+                    "<a href=\"/print/reg-form?".urlencode("id_stb")."=".intval($data_vypis["id_stb"])."\">R.F.</a>".
                     "</td>";
                 }
 

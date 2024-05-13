@@ -12,7 +12,7 @@ class printClass extends adminator
 
     // private $validator;
 
-    // public $conn_pgsql;
+    public $conn_pgsql;
     public $conn_mysql;
 
     // public $pdoMysql;
@@ -30,6 +30,8 @@ class printClass extends adminator
         // $this->container = $container;
         // $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+
         // $this->pdoMysql = $container->get('pdoMysql');
 
         $this->logger = $container->get('logger');
@@ -1406,15 +1408,21 @@ class printClass extends adminator
                     }
 
                     //zjisteni zda vlastnik ma jeste tunel. verejku
-                    $rs_tunel = pg_query("SELECT ip, tunnel_user, tunnel_pass ".
-                            "FROM objekty ".
-                            "WHERE ((id_cloveka = '$id_cloveka') ".
-                            "	    AND ".
-                            "	(id_komplu != '$id_objektu') ".
-                            "	    AND ".
-                            "	(tunnelling_ip = 1) ) ");
+                    try {
+                        $rs_tunel = pg_query("SELECT ip, tunnel_user, tunnel_pass ".
+                                                "FROM objekty ".
+                                                "WHERE ((id_cloveka = '$id_cloveka') ".
+                                                "	    AND ".
+                                                "	(id_komplu != '$id_objektu') ".
+                                                "	    AND ".
+                                                "	(tunnelling_ip = 1) ) ");
 
-                    $rs_tunel_num = pg_num_rows($rs_tunel);
+                        if($rs_tunel) {
+                            $rs_tunel_num = pg_num_rows($rs_tunel);
+                        }
+                    } catch (Exception $e) {
+                        $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . " pg_query for tunel. verejka failed! Caught error: " . pg_last_error($this->conn_pgsql));
+                    }
 
                     if($rs_tunel_num == 1) {
 
@@ -1443,8 +1451,6 @@ class printClass extends adminator
                         //$int_zarizeni_2 = $int_tunel." - vip-ka";
                     }
 
-
-
                 } //end else if rs_obj_num <> !
 
             } //konec if else tunelling_ip
@@ -1458,6 +1464,7 @@ class printClass extends adminator
 
             if($id_stb > 0) {
 
+                // TODO: send this to smarty template/vars
                 echo "<div style=\"color: blue;\">INFO: generování údajů z adminátora ...</div>";
 
                 /*

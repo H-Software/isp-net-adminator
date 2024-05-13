@@ -197,10 +197,10 @@ parameters:
 			count: 1
 			path: app/Core/Customer/vlastnik2.class.php
 
-		-
-			message: "#^Access to an undefined property App\\\\Core\\\\objekt\\:\\:\\$container\\.$#"
-			count: 2
-			path: app/Core/Item/objekt.class.php
+		# -
+		# 	message: "#^Access to an undefined property App\\\\Core\\\\objekt\\:\\:\\$container\\.$#"
+		# 	count: 2
+		# 	path: app/Core/Item/objekt.class.php
 
 		-
 			message: "#^Access to an undefined property App\\\\Core\\\\objekt\\:\\:\\$validator\\.$#"

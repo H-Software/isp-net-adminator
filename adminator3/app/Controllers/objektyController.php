@@ -66,6 +66,10 @@ class objektyController extends adminatorController
             $stb->enable_unpair_action = true;
         }
 
+        if ($this->adminator->checkLevel(310, false) === true) {
+            $stb->enable_delete_action = true;
+        }
+
         $rs = $stb->stbListGetBodyContent();
 
         $this->smarty->assign("body", $rs[0]);
@@ -135,8 +139,8 @@ class objektyController extends adminatorController
         $objekt->dns_find = $dns_find;
         $objekt->ip_find = $ip_find;
 
-        $csrf_html = $this->generateCsrfToken($request, $response, true);
-        $objekt->csrf_html = $csrf_html[0];
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $objekt->csrf_html = $csrf_html;
 
         list($output, $errors, $exportLink) = $objekt->listGetBodyContent();
 

@@ -707,16 +707,20 @@ class objekt_a2
                 }
                 // kdo pridal a kdo naposledy upravil 
                 $output .= "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
-                if((strlen($data["pridal"]) > 0) ) { $output .= $data["pridal"]; 
+                if((strlen($data["pridal"]) > 0) ) { 
+                    $output .= $data["pridal"]; 
                 }
-                else{ $output .= "<span style=\"color: #CC3366;\" >nezadáno</span>"; 
+                else{ 
+                    $output .= "<span style=\"color: #CC3366;\" >nezadáno</span>"; 
                 }
                 $output .= "</span></td> \n";
      
                 $output .= "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
-                if((strlen($data["upravil"]) > 0) ) { $output .= $data["upravil"]; 
+                if((strlen($data["upravil"]) > 0) ) { 
+                    $output .= $data["upravil"]; 
                 }
-                else{ $output .= "<span style=\"color: #CC3366;\" >nezadáno</span>"; 
+                else{ 
+                    $output .= "<span style=\"color: #CC3366;\" >nezadáno</span>"; 
                 }
                 $output .= "</span></td> \n";
     
@@ -729,12 +733,19 @@ class objekt_a2
                 $pridano_orez=$orezano[0].":".$orezano[1];
     
                 $output .= "<td class=\"tab-objekty\" colspan=\"3\" ><span class=\"objekty-2radka\" >".$pridano_orez."</span></td>
-    <td class=\"tab-objekty\" >
-     <form method=\"POST\" action=\"/print/reg-form-pdf.php\" >
-        <input type=\"hidden\" name=\"id_objektu\" value=\"".intval($data["id_komplu"])."\" >
-	<input type=\"submit\" name=\"odeslano_form\" value=\"R.F.\">
-     </form>
-    </td>\n";
+                            <td class=\"tab-objekty\" >
+                            <form method=\"POST\" action=\"/print/reg-form\" >";
+
+                if(strlen($this->csrf_html) > 0) {
+                    $output .= $this->csrf_html;
+                } else {
+                    $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": missing csrf_html");
+                }
+                
+                $output .= "<input type=\"hidden\" name=\"id_objektu\" value=\"".intval($data["id_komplu"])."\" >
+                            <input type=\"submit\" name=\"odeslano_form\" value=\"R.F.\">
+                            </form>
+                            </td>\n";
           
                 //sem odendat
                 if ($co==3 ) { 
@@ -745,7 +756,7 @@ class objekt_a2
                     else
                     {
                         $output .= "<td colspan=\"4\" style=\"font-size: 10px; font-family: arial; color: gray; \">
-	<div style=\"text-align: center; \">odendat</div> </td> \n"; 
+	                                    <div style=\"text-align: center; \">odendat</div> </td> \n"; 
                     }
     
                 }
@@ -758,7 +769,7 @@ class objekt_a2
                     else
                     {
                         $output .= "<td colspan=\"\" style=\"font-size: 10px; font-family: arial; color: gray; \">
-	<div style=\"text-align: center; \">odendat</div> </td> \n"; 
+	                                    <div style=\"text-align: center; \">odendat</div> </td> \n"; 
                     }
                 }
      

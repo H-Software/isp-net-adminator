@@ -37,9 +37,14 @@ class vlastnik2
 
     public $vlastnikAllowedUnassignObject = false;
 
+    public $objektStbListAllowedActionUpdate = false;
+    public $objektStbListAllowedActionErase = false;
+
     public $vlastnici_erase_povolen = false;
 
     public $vlastnici_update_povolen = false;
+
+    public $form_find;
 
     public function __construct(ContainerInterface $container)
     {
@@ -59,7 +64,7 @@ class vlastnik2
             $vlastnik->export_povolen = true;
         }
 
-        //promenne pro update objektu
+        //promenne pro akce objektu
         if ($this->adminator->checkLevel(29, false) === true) {
             $this->objektListAllowedActionUpdate = true;
         }
@@ -68,6 +73,14 @@ class vlastnik2
         }
         if ($this->adminator->checkLevel(34, false) === true) {
             $this->objektListAllowedActionGarant = true;
+        }
+
+        // akce objekty STB
+        if ($this->adminator->checkLevel(137, false) === true) {
+            $this->objektStbListAllowedActionUpdate = true;
+        }
+        if ($this->adminator->checkLevel(310, false) === true) {
+            $this->objektStbListAllowedActionErase = true;
         }
 
         // promeny pro mazani, zmenu vlastniku
@@ -85,20 +98,25 @@ class vlastnik2
         }
 
         $find_id = $_GET["find_id"];
-        $find    = $_GET["find"];
+        $find    = $this->form_find;
 
         // $delka_find_id=strlen($find_id);
         if((strlen($find_id) > 0)) {
             $this->listMode = 3;
-            /* hledani podle id_cloveka */   $sql = intval($find_id);
+            /* hledani podle id_cloveka */
+            $sql = intval($find_id);
         } elseif((strlen($find) > 0)) {
             $this->listMode = 1;
-            /* hledani podle cehokoli */  $sql = $find;
+            /* hledani podle cehokoli */
+            $sql = $find;
         } else { /* cokoli dalsiho */
         }
 
         if($this->listMode == 1) {
-            $sql = "%".$sql."%";
+            if($sql != "%") {
+                $sql = "%".$sql."%";
+            }
+
             $select1 = " WHERE (firma is not NULL) AND ( archiv = 0 or archiv is null ) AND ";
             $select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";
             $select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
@@ -205,6 +223,9 @@ class vlastnik2
         $vlastnik->objektListAllowedActionErase = $this->objektListAllowedActionErase;
         $vlastnik->objektListAllowedActionGarant = $this->objektListAllowedActionGarant;
 
+        $vlastnik->objektStbListAllowedActionUpdate = $this->objektStbListAllowedActionUpdate;
+        $vlastnik->objektStbListAllowedActionErase = $this->objektStbListAllowedActionErase;
+
         // generovani exportu
         if($vlastnik->export_povolen) {
             $vlastnik->export();
@@ -218,7 +239,7 @@ class vlastnik2
         $this->listItemsContent .= '<div class="vlastnici2-table" style="padding-right: 5px; ">';
         $this->listItemsContent .= $vlastnik->vypis_tab(1);
 
-        $poradek = "find=".$find."&find_id=".$this->listFindId."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".
+        $poradek = "find=".$this->listSql."&find_id=".$this->listFindId."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".
                     $_GET["razeni"]."&razeni2=".$_GET["razeni2"]."&fakt_skupina=".$_GET["fakt_skupina"];
 
         if(strlen($_GET["list"]) > 0) {

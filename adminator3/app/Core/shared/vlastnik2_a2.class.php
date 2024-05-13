@@ -24,6 +24,10 @@ class vlastnik2_a2
 
     public $vlastnikAllowedUnassignObject = false;
 
+    public $objektStbListAllowedActionUpdate = false;
+
+    public $objektStbListAllowedActionErase = false;
+
     public $vlastnici_erase_povolen = false;
 
     public $vlastnici_update_povolen = false;
@@ -410,8 +414,8 @@ class vlastnik2_a2
                     $co = "3";
 
                     $output .= "<tr>
-	    <td colspan=\"1\" bgcolor=\"#99FF99\" align=\"center\" >W
-	    <td colspan=\"10\" bgcolor=\"#99FF99\" >";
+                                <td colspan=\"1\" bgcolor=\"#99FF99\" align=\"center\" >W
+                                <td colspan=\"10\" bgcolor=\"#99FF99\" >";
                     $output .= "<table border=\"0\" width=\"100%\" >";
 
                     $output .= $objekt->vypis($sql, $co, $id);
@@ -441,6 +445,8 @@ class vlastnik2_a2
                 if($this-> echo === false) {
                     $stb = new App\Core\stb($this->container);
 
+                    $stb->enable_modify_action = $this->objektStbListAllowedActionUpdate;
+                    $stb->enable_delete_action = $this->objektStbListAllowedActionErase;
                     $stb->level = $this->level;
 
                     $pocet_stb = $stb->zjistipocetobj($id);
@@ -637,10 +643,12 @@ class vlastnik2_a2
         // tafy generovani exportu
         if($this->export_povolen === true) {
 
-            $fp = fopen("export/vlastnici-sro.xls", "w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
+            // $fp = fopen("export/vlastnici-sro.xls", "w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
 
+            $fp = false;
             if($fp === false) {
-                echo "<div style=\"color: red; font-weight: bold; \">Chyba: Soubor pro export nelze otevřít </div>\n";
+                // echo "<div style=\"color: red; font-weight: bold; \">Chyba: Soubor pro export nelze otevřít </div>\n";
+                // @phpstan-ignore-next-line
             } else {
                 fputs($fp, "<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
 
