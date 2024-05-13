@@ -188,8 +188,13 @@ if($internet_sluzba >= 1) {
 		    <td class=\"label-font\" style=\"width: 50px;\" >
 			<select name=\"int_select_1\" size=\"1\" style=\"width: 50px;\" onChange=\"self.document.forms.form1.submit()\" >";
 
-    $dotaz_int_1 = $this->conn_mysql->query("SELECT zkratka_tarifu, id_tarifu, jmeno_tarifu, cena_bez_dph, cena_s_dph FROM tarify_int_prodej ORDER BY id_tarifu");
-    $dotaz_int_1_radku = $dotaz_int_1->num_rows;
+    $dotaz_int_1 = $this->conn_mysql->query("SELECT zkratka_tarifu, id_tarifu, jmeno_tarifu, cena_bez_dph, cena_s_dph FROM tarify_int ORDER BY id_tarifu");
+
+	if($dotaz_int_1){
+		$dotaz_int_1_radku = $dotaz_int_1->num_rows;
+	} else {
+		$this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": pq_query failed (select tarify_int)! Error: " . var_export(pg_last_error(), true));
+	}
 
     if($dotaz_int_1_radku > 0) {
         echo "<option value=\"0\" >není vybráno</option>";
@@ -206,7 +211,12 @@ if($internet_sluzba >= 1) {
     echo "</select>\n";
 
     if($int_select_1 > 0) {
-        $dotaz_int_11 = $this->conn_mysql->query("SELECT jmeno_tarifu, cena_s_dph, speed FROM tarify_int_prodej WHERE id_tarifu = '".intval($int_select_1)."' ");
+		try {
+			$dotaz_int_11 = $this->conn_mysql->query("SELECT jmeno_tarifu, cena_s_dph, speed FROM tarify_int WHERE id_tarifu = '".intval($int_select_1)."' ");
+		}
+		catch (Exception $e) {
+			$this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": pq_query failed (select tarify_int)! Error: " . var_export($e->getMessage(), true));
+		}
 
         while($data_int_11 = $dotaz_int_11->fetch_array()) {
             if(strlen($int_1_nazev) == 0) {
