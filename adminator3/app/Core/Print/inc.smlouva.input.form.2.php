@@ -212,7 +212,7 @@ if($internet_sluzba >= 1) {
 
     if($int_select_1 > 0) {
 		try {
-			$dotaz_int_11 = $this->conn_mysql->query("SELECT jmeno_tarifu, cena_s_dph, speed FROM tarify_int WHERE id_tarifu = '".intval($int_select_1)."' ");
+			$dotaz_int_11 = $this->conn_mysql->query("SELECT jmeno_tarifu, cena_s_dph, speed_dwn FROM tarify_int WHERE id_tarifu = '".intval($int_select_1)."' ");
 		}
 		catch (Exception $e) {
 			$this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": pq_query failed (select tarify_int)! Error: " . var_export($e->getMessage(), true));
@@ -224,7 +224,7 @@ if($internet_sluzba >= 1) {
             }
 
             if(strlen($int_1_rychlost) == 0) {
-                $int_1_rychlost = $data_int_11["speed"];
+                $int_1_rychlost = $data_int_11["speed_dwn"];
             }
 
             if(strlen($int_1_cena_1) == 0) {

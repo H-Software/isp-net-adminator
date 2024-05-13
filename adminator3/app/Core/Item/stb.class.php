@@ -989,7 +989,7 @@ class stb extends adminator
 
         } //end of else if mod == 1
 
-        $this->logger->debug("stb\GenerateSqlQuery: dump var this->sql_query: ".var_export($this->sql_query, true));
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ .": dump var this->sql_query: ".var_export($this->sql_query, true));
 
     } //end of function generate_sql_query
 
@@ -1005,7 +1005,7 @@ class stb extends adminator
             $this->generate_sql_query();
         }
 
-        $this->logger->debug("stb\vypis: dump var this->sql_query: ".var_export($this->sql_query, true));
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ .": dump var this->sql_query: ".var_export($this->sql_query, true));
 
         $dotaz_vypis = $this->conn_mysql->query($this->sql_query);
         $dotaz_vypis_radku = $dotaz_vypis->num_rows;
