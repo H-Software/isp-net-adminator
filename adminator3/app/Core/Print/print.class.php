@@ -47,7 +47,7 @@ class printClass extends adminator
     {
         $soubor = array();
 
-        $handle = opendir('print/temp/');
+        $handle = opendir('print/temp');
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": opendir result: " . var_export($handle, true));
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": getcwd: " . var_export(getcwd(), true));
 
