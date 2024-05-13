@@ -157,7 +157,7 @@ class stb extends adminator
 
         $this->sql_query = $this->sql_query . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-        $this->logger->debug("stb\stbListGetBodyContent: dump var this->sql_query: ".var_export($this->sql_query, true));
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ .": dump var this->sql_query: ".var_export($this->sql_query, true));
 
         $output .= "<div id=\"objekty_stb_filter\" style=\"display: ".$display.";\" >";
 
@@ -989,7 +989,7 @@ class stb extends adminator
 
         } //end of else if mod == 1
 
-        $this->logger->debug("stb\GenerateSqlQuery: dump var this->sql_query: ".var_export($this->sql_query, true));
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ .": dump var this->sql_query: ".var_export($this->sql_query, true));
 
     } //end of function generate_sql_query
 
@@ -1005,7 +1005,7 @@ class stb extends adminator
             $this->generate_sql_query();
         }
 
-        $this->logger->debug("stb\vypis: dump var this->sql_query: ".var_export($this->sql_query, true));
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ .": dump var this->sql_query: ".var_export($this->sql_query, true));
 
         $dotaz_vypis = $this->conn_mysql->query($this->sql_query);
         $dotaz_vypis_radku = $dotaz_vypis->num_rows;
@@ -1139,11 +1139,11 @@ class stb extends adminator
                 //vlastnik - id cloveka
                 $id_cloveka = $data_vypis["id_cloveka"];
 
-                $rs_create_link = ($id_cloveka > 0 ? \Aglobal::create_link_to_owner($id_cloveka, $this->conn_pgsql) : "");
+                $rs_create_link = ($id_cloveka > 0 ? $this->create_link_to_owner($id_cloveka) : "");
 
                 $odkaz_data = ($rs_create_link === false ? "E_1" : $rs_create_link);
 
-                $output .= "<td style=\"".$class_stb_sude."\" >V: ".$rs_create_link."&nbsp;</td>";
+                $output .= "<td style=\"".$class_stb_sude."\" >V: ".$odkaz_data."&nbsp;</td>";
 
                 $output .= "<td style=\"".$class_stb_sude."\" >".$data_vypis["sw_port"]."&nbsp;</td>";
 

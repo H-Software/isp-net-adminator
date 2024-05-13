@@ -10,6 +10,8 @@ class vlastnik2_a2
 
     public $container;
 
+    public $csrf_html;
+
     public $level;
 
     public $export_povolen = false;
@@ -86,13 +88,13 @@ class vlastnik2_a2
 
             while($data = pg_fetch_array($dotaz)) {
                 $output .= "<tr><td colspan=\"16\"> <br> </td> </tr>
-	    <tr>
-		<td class=\"vlastnici-td-black\"><br></td>
-		 <td class=\"vlastnici-td-black\" colspan=\"3\" width=\"\" >
-	    
-	    id: [".$data["id_cloveka"]."]".
+                            <tr>
+                            <td class=\"vlastnici-td-black\"><br></td>
+                            <td class=\"vlastnici-td-black\" colspan=\"3\" width=\"\" >
+                            
+                            id: [".$data["id_cloveka"]."]".
 
-                ", Účetní index: [";
+                                    ", Účetní index: [";
 
                 if($data["archiv"] == 1) {
                     $output .= "27VYŘ";
@@ -110,10 +112,10 @@ class vlastnik2_a2
 
                 $output .= "], Splatnost ke dni: [".$data["splatnost"]."]</td>
 	    
-	    <td class=\"vlastnici-td-black\" colspan=\"2\">VS: ".$data["vs"]."</td>
-	
-	    <td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
-	    <td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"\" >";
+                            <td class=\"vlastnici-td-black\" colspan=\"2\">VS: ".$data["vs"]."</td>
+                        
+                            <td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
+                            <td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"\" >";
 
                 $output .= "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
 
@@ -127,7 +129,7 @@ class vlastnik2_a2
                 }
 
                 $output .= "</td>
-	<td class=\"vlastnici-td-black\" >";
+                            <td class=\"vlastnici-td-black\" >";
 
                 // 6-ta update
                 if($this->vlastnici_update_povolen === false) {
@@ -215,7 +217,7 @@ class vlastnik2_a2
                 $output .= "<tr>\n";
                 $output .= "<td class=\"vlastnici-td-black\" ><br></td>\n";
                 $output .= "<td class=\"vlastnici-td-black\" colspan=\"1\">
-		<div style=\"float: left; \">Pozastavené fakturace:</div>  ";
+		                    <div style=\"float: left; \">Pozastavené fakturace:</div>  ";
 
                 $output .= "<div style=\"text-align: right; padding-right: 20px;\">";
 
@@ -269,20 +271,20 @@ class vlastnik2_a2
                 $output .= "</tr>";
 
                 $output .= " 
-		<tr> 
-		 <td><br></td>
-		 <td colspan=\"3\" >".$data["jmeno"]." ".$data["prijmeni"]."<br>
-		 ".$data["ulice"]." ";
+                            <tr> 
+                            <td><br></td>
+                            <td colspan=\"3\" >".$data["jmeno"]." ".$data["prijmeni"]."<br>
+                            ".$data["ulice"]." ";
 
                 $output .= "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
 
                 $output .= "<br>".$data["mesto"]." ".$data["psc"]."</td>
-	 <td colspan=\"6\" >";
+                            <td colspan=\"6\" >";
 
                 //druhy sloupec - pomyslny
                 $output .= "icq: ".$data["icq"]." <br>
-	 mail: ".$data["mail"]." <br>
-	 tel: ".$data["telefon"]." </td>";
+                            mail: ".$data["mail"]." <br>
+                            tel: ".$data["telefon"]." </td>";
 
                 //treti sloupec - sluzby
                 $output .= "<td colspan=\"\" valign=\"top\" >";
@@ -313,8 +315,9 @@ class vlastnik2_a2
                     $sluzba_iptv_aktivni = "1";
 
                     //link portál
-                    $mq_prefix = mysql_query("SELECT value FROM settings WHERE name LIKE 'iptv_portal_sub_code_prefix' ");
-                    $iptv_prefix_name = mysql_result($mq_prefix, 0, 0);
+                    // $mq_prefix = mysql_query("SELECT value FROM settings WHERE name LIKE 'iptv_portal_sub_code_prefix' ");
+                    // $iptv_prefix_name = mysql_result($mq_prefix, 0, 0);
+                    $iptv_prefix_name = "";
 
                     $output .= "<div style=\"float: left; padding-left: 15px; \" >";
                     $output .= "<a href=\"http://app01.cho01.iptv.grapesc.cz:9080/admin/admin/provisioning/".
@@ -397,6 +400,7 @@ class vlastnik2_a2
                 $objekt->logger = $this->logger;
                 $objekt->conn_mysql = $this->conn_mysql;
                 $objekt->conn_pgsql = $this->conn_pgsql;
+                $objekt->csrf_html = $this->csrf_html;
 
                 $objekt->listAllowedActionUpdate = $this->objektListAllowedActionUpdate;
                 $objekt->listAllowedActionErase = $this->objektListAllowedActionErase;
@@ -448,6 +452,8 @@ class vlastnik2_a2
                     $stb->enable_modify_action = $this->objektStbListAllowedActionUpdate;
                     $stb->enable_delete_action = $this->objektStbListAllowedActionErase;
                     $stb->level = $this->level;
+                    $stb->csrf_html = $this->csrf_html;
+
 
                     $pocet_stb = $stb->zjistipocetobj($id);
 

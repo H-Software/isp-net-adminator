@@ -188,13 +188,18 @@ if($internet_sluzba >= 1) {
 		    <td class=\"label-font\" style=\"width: 50px;\" >
 			<select name=\"int_select_1\" size=\"1\" style=\"width: 50px;\" onChange=\"self.document.forms.form1.submit()\" >";
 
-    $dotaz_int_1 = mysql_query("SELECT zkratka_tarifu, id_tarifu, jmeno_tarifu, cena_bez_dph, cena_s_dph FROM tarify_int_prodej ORDER BY id_tarifu");
-    $dotaz_int_1_radku = mysql_num_rows($dotaz_int_1);
+    $dotaz_int_1 = $this->conn_mysql->query("SELECT zkratka_tarifu, id_tarifu, jmeno_tarifu, cena_bez_dph, cena_s_dph FROM tarify_int ORDER BY id_tarifu");
+
+    if($dotaz_int_1) {
+        $dotaz_int_1_radku = $dotaz_int_1->num_rows;
+    } else {
+        $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": pq_query failed (select tarify_int)! Error: " . var_export(pg_last_error(), true));
+    }
 
     if($dotaz_int_1_radku > 0) {
         echo "<option value=\"0\" >není vybráno</option>";
 
-        while($data1 = mysql_fetch_array($dotaz_int_1)) {
+        while($data1 = $dotaz_int_1->fetch_array()) {
             echo "<option value=\"".$data1["id_tarifu"]."\" ";
             if($int_select_1 == $data1["id_tarifu"]) {
                 echo " selected ";
@@ -203,19 +208,22 @@ if($internet_sluzba >= 1) {
         }
     }
 
-
     echo "</select>\n";
 
     if($int_select_1 > 0) {
-        $dotaz_int_11 = mysql_query("SELECT jmeno_tarifu, cena_s_dph, speed FROM tarify_int_prodej WHERE id_tarifu = '".intval($int_select_1)."' ");
+        try {
+            $dotaz_int_11 = $this->conn_mysql->query("SELECT jmeno_tarifu, cena_s_dph, speed_dwn FROM tarify_int WHERE id_tarifu = '".intval($int_select_1)."' ");
+        } catch (Exception $e) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": pq_query failed (select tarify_int)! Error: " . var_export($e->getMessage(), true));
+        }
 
-        while($data_int_11 = mysql_fetch_array($dotaz_int_11)) {
+        while($data_int_11 = $dotaz_int_11->fetch_array()) {
             if(strlen($int_1_nazev) == 0) {
                 $int_1_nazev = $data_int_11["jmeno_tarifu"];
             }
 
             if(strlen($int_1_rychlost) == 0) {
-                $int_1_rychlost = $data_int_11["speed"];
+                $int_1_rychlost = $data_int_11["speed_dwn"];
             }
 
             if(strlen($int_1_cena_1) == 0) {
@@ -251,17 +259,16 @@ if($internet_sluzba >= 1) {
 if($internet_sluzba == 2) {
 
     echo "<tr>
-	
 		    <td class=\"label-font\" style=\"width: 50px;\" >
 			<select name=\"int_select_2\" size=\"1\" style=\"width: 50px;\" onChange=\"self.document.forms.form1.submit()\" >";
 
-    $dotaz_int_1 = mysql_query("SELECT zkratka_tarifu, id_tarifu, jmeno_tarifu, cena_bez_dph, cena_s_dph FROM tarify_int_prodej ORDER BY id_tarifu");
-    $dotaz_int_1_radku = mysql_num_rows($dotaz_int_1);
+    $dotaz_int_1 = $this->conn_mysql->query("SELECT zkratka_tarifu, id_tarifu, jmeno_tarifu, cena_bez_dph, cena_s_dph FROM tarify_int_prodej ORDER BY id_tarifu");
+    $dotaz_int_1_radku = $dotaz_int_1->mysql_num_rows;
 
     if($dotaz_int_1_radku > 0) {
         echo "<option value=\"0\">není vybráno</option>";
 
-        while($data1 = mysql_fetch_array($dotaz_int_1)) {
+        while($data1 = $dotaz_int_1->fetch_array()) {
             echo "<option value=\"".$data1["id_tarifu"]."\" ";
             if($int_select_2 == $data1["id_tarifu"]) {
                 echo " selected ";
@@ -275,9 +282,9 @@ if($internet_sluzba == 2) {
 
 
     if($int_select_2 > 0) {
-        $dotaz_int_22 = mysql_query("SELECT jmeno_tarifu, cena_s_dph, speed FROM tarify_int_prodej WHERE id_tarifu = '".intval($int_select_2)."' ");
+        $dotaz_int_22 = $this->conn_mysql->query("SELECT jmeno_tarifu, cena_s_dph, speed FROM tarify_int_prodej WHERE id_tarifu = '".intval($int_select_2)."' ");
 
-        while($data_int_22 = mysql_fetch_array($dotaz_int_22)) {
+        while($data_int_22 = $dotaz_int_22->fetch_array()) {
             if(strlen($int_2_nazev) == 0) {
                 $int_2_nazev = $data_int_22["jmeno_tarifu"];
             }
@@ -354,11 +361,11 @@ if($iptv_sluzba == 1) {
     echo "<td>
 		    <select size=\"1\" name=\"iptv_sluzba_id_tarifu\" onChange=\"self.document.forms.form1.submit()\" >\n";
 
-    $iptv_se = mysql_query("SELECT id_tarifu, jmeno_tarifu, zkratka_tarifu FROM tarify_iptv ORDER BY zkratka_tarifu");
+    $iptv_se = $this->conn_mysql->query("SELECT id_tarifu, jmeno_tarifu, zkratka_tarifu FROM tarify_iptv ORDER BY zkratka_tarifu");
 
     echo "<option value=\"0\" >Není vybráno</option>\n";
 
-    while($data_iptv_se = mysql_fetch_array($iptv_se)) {
+    while($data_iptv_se = $iptv_se->fetch_array()) {
         echo "<option value=\"".$data_iptv_se["id_tarifu"]."\" ";
         if($iptv_sluzba_id_tarifu == $data_iptv_se["id_tarifu"]) {
             echo " selected ";

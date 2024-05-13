@@ -212,6 +212,7 @@ class vlastnik2
         $vlastnik->logger = $this->logger;
         $vlastnik->echo = false;
         $vlastnik->cross_url = "/vlastnici/cross";
+        $vlastnik->csrf_html = $this->csrf_html;
 
         $this->listPrepareVars($vlastnik);
 
