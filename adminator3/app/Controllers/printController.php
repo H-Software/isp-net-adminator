@@ -52,12 +52,22 @@ class printController extends adminatorController
 
         if ($request->getMethod() == "POST") {
 
-            $soubory = $request->getParsedBody()['soubory'];
-            $url = "/print/temp/" . htmlspecialchars($soubory);
+            $fileName = $request->getParsedBody()['soubory'];
+            $fullName = "print/temp/" . htmlspecialchars($fileName);
 
-            return $response
-                ->withHeader('Location', $url)
-                ->withStatus(302);
+            // return $response
+            //     ->withHeader('Location', $url)
+            //     ->withStatus(302);
+
+            $fh = fopen($fullName, "r");
+            $content = fread($fh, filesize($fullName )); 
+            fclose($fh);
+
+            $response = $response->withHeader('Content-type', 'application/pdf')
+                ->withAddedHeader('Content-Disposition', 'attachment; filename=' . $fileName);
+            $response->write($content);
+            
+            return $response;
 
         } else {
             $response->getBody()->write("Error! Missing POST parameter.");
