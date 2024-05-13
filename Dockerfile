@@ -180,7 +180,9 @@ COPY adminator3/ /srv/www/adminator3/
 COPY adminator3/templates/inc.intro.category-ext.tpl /srv/www/adminator2/templates/inc.intro.category-ext.tpl
 COPY adminator3/include/main.function.shared.php /srv/www//adminator2/include/main.function.shared.php
 
-RUN chmod 1777 /tmp
+RUN chmod 1777 /tmp \
+    && cd adminator3 \
+    && chown www-data:www-data export
 
 # fpm conf
 
