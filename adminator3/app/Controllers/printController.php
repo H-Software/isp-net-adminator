@@ -65,7 +65,7 @@ class printController extends adminatorController
 
             $response = $response->withHeader('Content-type', 'application/pdf')
                 ->withAddedHeader('Content-Disposition', 'attachment; filename=' . $fileName);
-            $response->write($content);
+            $response->getBody()->write($content);
 
             return $response;
 
