@@ -48,8 +48,9 @@ class printClass extends adminator
         $soubor = array();
 
         $handle = opendir('print/temp/');
-        $i = 0;
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": opendir result: " . var_export($handle, true));
 
+        $i = 0;
         while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != ".." && !is_dir($file) && preg_match('/'.$find_string."/", $file)) {
                 $soubor[$i] = "$file";

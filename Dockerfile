@@ -224,8 +224,12 @@ COPY --from=main / /
 #
 ENV PHP_INI_DIR /usr/local/etc/php
 
-ENTRYPOINT ["chown www-data:www-data adminator3/export", "chown www-data:www-data adminator3/print/temp", "docker-php-entrypoint"]
-WORKDIR /srv/www
+ENTRYPOINT [ \
+        "chown www-data:www-data adminator3/export", \
+        "chown www-data:www-data adminator3/print/temp", \
+        "docker-php-entrypoint"]
+
+        WORKDIR /srv/www
 
 # Override stop signal to stop process gracefully
 # https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163
