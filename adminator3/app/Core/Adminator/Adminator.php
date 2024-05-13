@@ -595,9 +595,9 @@ class adminator
 
         if($this->conn_pgsql != null) {
             $vlastnik_dotaz = pg_query($this->conn_pgsql, $sql);
-
         } else {
-            $vlastnik_dotaz = pg_query($sql);
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": missing pgsql handler");
+            return false;
         }
 
         $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
