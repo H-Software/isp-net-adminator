@@ -313,7 +313,7 @@ class printClass extends adminator
             require __DIR__ . "/inc.smlouva.input.form.2.php";
 
             echo "</body>
-        </html>";
+                </html>";
 
         } // konec if !isset nazev
         else { //budeme generovat
