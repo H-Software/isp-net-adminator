@@ -46,7 +46,7 @@ include("include/charset.php");
 
 <tr>
    <td colspan="2" height="25" >
-      <span style="font-weight: bold; font-size: 14px; " >Vlastníci - FO, Martin Lopušný</span></td>
+      <span style="font-weight: bold; font-size: 14px; " >Vlastníci - FO</span></td>
 </tr>
 
   <tr>
