@@ -289,7 +289,7 @@ input[type=button],
 input[type=submit] 
 .vlastnici-archiv-button {
     border: none;
-    font-size: 0.85rem !important;
+    font-size: 0.75rem !important;
 }
 
 .vlastnici-archiv-table table {
