@@ -43,8 +43,9 @@ class printClass extends adminator
 
     }
 
-    public function getFileContent($fileName): false|string
+    public function getFileContent($fileName): false|array
     {
+        // strip "print/temp" path and check "unallowed" chars
         $check = preg_match("/[\w|\-]+\.pdf/", $fileName, $checkRs);
 
         if($check != 1) {
@@ -75,7 +76,7 @@ class printClass extends adminator
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to read file (" . var_export($fullName, true) . ")");
             return false;
         } else {
-            return $content;
+            return [$fileName, $content];
         }
     }
 
