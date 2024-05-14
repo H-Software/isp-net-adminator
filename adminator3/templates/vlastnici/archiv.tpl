@@ -23,9 +23,17 @@
 {* hledaci a filtrovaci prvky *}
 {include file="vlastnici/archiv-inc.selectors.tpl"}
 
+{if count($listing_1|default: '') > 1}
+    <div class="text-center" >{$listing_1}</div>
+{/if}
+
 <div class="vlastnici-archiv-table" style="padding-right: 5px;" >
 {$body}
 </div>
+
+{if count($listing_2|default: '') > 1}
+    <div class="text-center" >{$listing_2}</div>
+{/if}
 
 {* konecny soubor *}
 {include file="base-end.tpl"}
