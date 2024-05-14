@@ -115,7 +115,7 @@ include ("include/charset.php");
 
 
           <tr>
-            <td> <input type="submit" value="NAJDI" name="najdi"> </td>
+            <td> </td>
             <td>  <label>Hledání : </label><input type="text" name="find"
             <?
             if (empty($_GET["find"]) )  { echo 'value="%"'; }

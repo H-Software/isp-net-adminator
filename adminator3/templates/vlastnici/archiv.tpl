@@ -21,9 +21,9 @@
 </div>
 
 {* hledaci a filtrovaci prvky *}
-{* {include file="vlastnici/inc.selectors.tpl"}
+{include file="vlastnici/archiv-inc.selectors.tpl"}
 
-{$body} *}
+{*  {$body} *}
 
 {* konecny soubor *}
 {include file="base-end.tpl"}
