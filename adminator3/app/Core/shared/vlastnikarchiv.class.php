@@ -261,7 +261,7 @@ class vlastnikarchiv
                     $output .= "<input type=\"hidden\" name=\"tarif\" value=\"3\" >";
                 }
 
-                $output .= "<input type=\"submit\" name=\"akce\" value=\"Tisk smlouvy\" >";
+                $output .= "<input type=\"submit\" name=\"akce\" value=\"Tisk smlouvy\" class=\"vlastnici-archiv-button\" >";
 
                 $output .= "</form>";
 
