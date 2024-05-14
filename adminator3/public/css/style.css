@@ -288,6 +288,7 @@ subcat-spacebody
 input[type=button], 
 input[type=submit] 
 .vlastnici-archiv-button {
+    border: none;
     font-size: 0.85rem !important;
 }
 
