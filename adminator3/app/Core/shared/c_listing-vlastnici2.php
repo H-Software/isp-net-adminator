@@ -119,10 +119,10 @@ class c_listing_vlastnici2
     //napr.:    1-10 | 11-20 | 21-30
     public function listInterval()
     {
+        $output = "";
         $this->dbSelect();
         $output .= $this->before;
         for ($i = 1; $i <= $this->numLists; $i++) {
-            $output = "";
             $isLink = 1;
             $spacer = " | ";
             $from = ($i * $this->interval) - ($this->interval - 1);
