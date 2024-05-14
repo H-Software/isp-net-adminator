@@ -179,13 +179,13 @@ class vlastniciController extends adminatorController
 
         //promena pro update objektu
         if ($this->adminator->checkLevel(29, false) === true) {
-            $update_povolen = "true";
+            $vlastnikArchiv->update_povolen = true;
         }
         if ($this->adminator->checkLevel(33, false) === true) {
-            $mazani_povoleno = "true";
+            $vlastnikArchiv->mazani_povoleno = true;
         }
         if ($this->adminator->checkLevel(34, false) === true) {
-            $garant_akce = "true";
+            $vlastnikArchiv->garant_akce = true;
         }
 
         // promeny pro mazani, zmenu vlastniku
@@ -264,6 +264,7 @@ class vlastniciController extends adminatorController
                 $select5 = " DESC ";
             }
 
+            // @phpstan-ignore-next-line
             if (strlen($select4) > 1) {
                 $select4 = $select4.$select5;
             }

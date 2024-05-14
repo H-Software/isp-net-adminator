@@ -13,6 +13,10 @@ class vlastnikarchiv
 
     public $odendani_povoleno = false;
 
+    public $objekt_update_povolen = false;
+    public $objekt_mazani_povoleno = false;
+    public $objekt_garant_akce = false;
+
     public function vypis_tab($par)
     {
         $output = "";
