@@ -739,7 +739,9 @@ class objekt_a2
                 if(strlen($this->csrf_html) > 0) {
                     $output .= $this->csrf_html;
                 } else {
-                    $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": missing csrf_html");
+                    if(is_object($this->logger)) {
+                        $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": missing csrf_html");
+                    }
                 }
                 
                 $output .= "<input type=\"hidden\" name=\"id_objektu\" value=\"".intval($data["id_komplu"])."\" >

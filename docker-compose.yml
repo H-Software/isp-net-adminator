@@ -66,7 +66,6 @@ services:
       - OTEL_LOGS_EXPORTER=none
       - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf # grpc OR http/protobuf
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
-      # - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
       - OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3,application.name=isp-adminator3
     volumes:
       - adminator-php-log:/var/log/php:uid=33,gid=33
@@ -85,11 +84,6 @@ services:
       # monolog + some scripts log files
       - /srv/www/adminator3/logs:uid=33,gid=33
       - /srv/www/adminator2/log:uid=33,gid=33
-      # adminator print
-      # - /srv/www/adminator3/print/temp:uid=33,gid=33
-      # adminator export xls
-      # - /srv/www/adminator2/export:uid=33,gid=33
-      # - /var/www/html/adminator3/export:uid=33,gid=33
     ports:
       - "9001:9001"
       - "9002:9002"
