@@ -141,7 +141,7 @@ if(($update_status == 1 and !(isset($send)))) { //rezim upravy
     $poznamka = $_POST["poznamka"];
     $ucetni_index = $_POST["ucetni_index"];
     $archiv = $_POST["archiv"];
-    $fakt_skupina = trim($_POST["fakt_skupina"]);
+    $fakt_skupina = intval($_POST["fakt_skupina"]);
     $splatnost = $_POST["splatnost"];
 
     $typ_smlouvy = intval($_POST["typ_smlouvy"]);
@@ -415,7 +415,7 @@ if (!(isset($fail))) {
             $vlast_upd["typ_smlouvy"] = 0;
         }
 
-        if (($fakturacni_skupina_id < 0)) {
+        if ($fakt_skupina < 1) {
           $vlast_upd["fakturacni_skupina_id"] = null;
         }
 
@@ -518,6 +518,10 @@ if (!(isset($fail))) {
             $vlastnik_add["datum_podpisu"] = $datum_podpisu;
         }
 
+        if ($fakt_skupina < 1) {
+          $vlast_upd["fakturacni_skupina_id"] = null;
+        }
+        
         if($sluzba_int == 1) {
             $vlast_add["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
         }
