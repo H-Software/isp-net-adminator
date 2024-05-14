@@ -62,7 +62,7 @@ class printController extends adminatorController
 
             $fileName = $request->getParsedBody()['soubory'];
 
-            $content = $this->printInstance->getFileContent($fullName);
+            $content = $this->printInstance->getFileContent($fileName);
 
             if($content === false){
                 $this->smarty->assign("alert_type", "danger");
