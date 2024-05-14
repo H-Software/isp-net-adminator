@@ -311,13 +311,13 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-        $bodyContent .= "<div class=\"text-center\" >" . $listovani->listInterval() . "</div>\n";
+        $bodyContent .= "<div class=\"\" >" . $listovani->listInterval() . "</div>\n";
 
         // $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
         $bodyContent .= $vlastnikArchiv->vypis_tab(2);
 
-        $bodyContent .= "<div class=\"text-center\" >" . $listovani->listInterval() . "</div>\n";
+        $bodyContent .= "<div class=\"\" >" . $listovani->listInterval() . "</div>\n";
 
         $this->smarty->assign("body", $bodyContent);
 
