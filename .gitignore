@@ -32,6 +32,7 @@ adminator2/logs/
 adminator3/logs/
 
 # caches
+adminator2/.php-cs-fixer.cache
 adminator3/.php-cs-fixer.cache
 adminator3/.php_cs.cache
 adminator3/.phpunit.result.cache

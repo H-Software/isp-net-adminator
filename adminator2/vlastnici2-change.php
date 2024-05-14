@@ -516,7 +516,7 @@ if (!(isset($fail))) {
         }
 
         if ($fakt_skupina < 1) {
-          $vlast_upd["fakturacni_skupina_id"] = null;
+            $vlast_upd["fakturacni_skupina_id"] = null;
         }
 
         if($sluzba_int == 1) {
