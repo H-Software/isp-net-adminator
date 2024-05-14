@@ -24,7 +24,7 @@
 {include file="vlastnici/archiv-inc.selectors.tpl"}
 
 {if $listing|count_characters > 1}
-    <div class="text-center" >{$listing| default: ''}</div>
+    <div class="text-center" >{$listing|default: ''}</div>
 {/if}
 
 <div class="vlastnici-archiv-table" style="padding-right: 5px;" >
@@ -32,7 +32,7 @@
 </div>
 
 {if $listing|count_characters > 1}
-    <div class="text-center" >{$listing| default: ''}</div>
+    <div class="text-center" >{$listing|default: ''}</div>
 {/if}
 
 {* konecny soubor *}
