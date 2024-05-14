@@ -24,7 +24,7 @@ class vlastnikarchiv
         $output = "";
 
         if ($par == 1) {
-            $output .= "\n".'<table border="1" width="100%" class="vlastniciArchiv-table">'."\n";
+            $output .= "\n".'<table border="1" width="100%">'."\n";
         } elseif ($par == 2) {
             $output .= "\n".'</table>'."\n";
         } else {
@@ -37,7 +37,6 @@ class vlastnikarchiv
             return $output;
         }
     }
-
 
     public function vypis($sql, $co, $dotaz_final)
     {

@@ -181,10 +181,9 @@ class vlastniciController extends adminatorController
         } else { /* cokoli dalsiho */
         }
 
-        if (empty($_GET["find"]) )  { 
+        if (empty($_GET["find"])) {
             $this->smarty->assign("form_find", "%");
-        }
-        else {  
+        } else {
             $this->smarty->assign("form_find", htmlspecialchars($_GET["find"]));
         }
 

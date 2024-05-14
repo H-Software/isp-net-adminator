@@ -23,7 +23,9 @@
 {* hledaci a filtrovaci prvky *}
 {include file="vlastnici/archiv-inc.selectors.tpl"}
 
+<div class="vlastniciArchiv-table" style="padding-right: 5px;">
 {$body}
+</div>
 
 {* konecny soubor *}
 {include file="base-end.tpl"}
