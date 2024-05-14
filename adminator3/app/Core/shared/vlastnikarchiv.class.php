@@ -204,7 +204,7 @@ class vlastnikarchiv
 
                 $output .= "</td>";
 
-                $output .= "<td colspan=\"3\">";
+                $output .= "<td colspan=\"2\">";
                 $output .= "<form method=\"POST\" action=\"platby-akce.php\" >";
 
                 $output .= "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
@@ -229,7 +229,7 @@ class vlastnikarchiv
 
                 //$output .= "<td colspan=\"3\"><br></td>";
 
-                $output .= "<td colspan=\"2\">";
+                $output .= "<td colspan=\"3\">";
                 // zde dalsi veci
                 $output .= "<span style=\"color: grey; padding-left: 10px; \" >H: </span>";
                 $output .= "<a href=\"/archiv-zmen?id_cloveka=".$data["id_cloveka"]."\">".$data["id_cloveka"]."</a>";
