@@ -317,7 +317,7 @@ class vlastniciController extends adminatorController
 
         $bodyContent .= $vlastnikArchiv->vypis_tab(2);
 
-        $bodyContent .= "<div class=\"text-center\" >" . $listovani->listInterval() . "</div>\n";
+       // $bodyContent .= "<div class=\"text-center\" >" . $listovani->listInterval() . "</div>\n";
 
         $this->smarty->assign("body", $bodyContent);
 
