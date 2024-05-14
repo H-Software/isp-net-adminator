@@ -397,7 +397,7 @@ if (!(isset($fail))) {
         if ($ucetni_index > 0) {
             $vlast_upd["ucetni_index"] = $ucetni_index;
         } else {
-            $vlast_upd["ucetni_index"] = "";
+            $vlast_upd["ucetni_index"] = null;
         }
 
         //if ( (strlen($poznamka) > 0 ) )
