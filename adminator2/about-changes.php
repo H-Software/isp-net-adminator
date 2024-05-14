@@ -483,7 +483,7 @@ include ("include/charset.php");
     
     <tr>
 	<td>14.2.2008</td>
-	<td><span class="changes-upraveno" > - upraveno: </span> tisk hotovostních plateb rozlišuje fy.  Simelon, s.r.o. a Martin Lopušný</td>
+	<td><span class="changes-upraveno" > - upraveno: </span> tisk hotovostních plateb rozlišuje typ firmy (S.r.o. a FO)</td>
     </tr>    
   
     <tr>

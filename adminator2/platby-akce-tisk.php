@@ -121,18 +121,18 @@ include ("include/charset.php");
 	
 	if ( $_GET["firma"] == 2)
 	{ 
-	    echo 'Simelon, s.r.o. <br>
-		  Žižkova 247 <br>
-		  397 01 Písek
+	    echo 'Company, s.r.o. <br>
+			Street 1 <br>
+			City
 		    </b>
 		    ';
 	}
 	else
 	{
 	    
-	    echo 'Martin Lopušný <br>
-		  Truhlářská 2161 <br>
-		  397 01 Písek
+	    echo 'John Doe <br>
+		  Street 1 <br>
+		  City
 		    </b>
 		    ';
 	}

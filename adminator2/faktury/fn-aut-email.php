@@ -197,7 +197,6 @@ else
     $mail->FromName = "Upozornění od společnosti Simelon, s.r.o."; // jméno odesílatele skriptu 
 
     $mail->AddAddress($prijemce);  // přidáme příjemce
-//    $mail->AddBCC("patrik.majer@simelon.net");  // přidáme příjemce
 
     $mail->Subject = $predmet; // nastavíme předmět e-mailu
 
