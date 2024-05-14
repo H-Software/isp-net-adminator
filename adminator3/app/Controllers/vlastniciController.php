@@ -156,7 +156,7 @@ class vlastniciController extends adminatorController
 
         if ((strlen($find_id) > 0)) {
             $co = 3;
-            /* hledani podle id_cloveka */   
+            /* hledani podle id_cloveka */
             $sql = $_GET["find_id"];
         } elseif ((strlen($find) > 0)) {
             $co = 1;
@@ -189,7 +189,7 @@ class vlastniciController extends adminatorController
             $odendani_povoleno = "true";
         }
 
-       \vlastnikarchiv::vypis_tab(1);
+        \vlastnikarchiv::vypis_tab(1);
 
         if ($co == 1) {
 
@@ -260,8 +260,13 @@ class vlastniciController extends adminatorController
         } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM vlastnici WHERE archiv = '1' AND id_cloveka = '$sql' ";
         } else {
-            echo "Zadejte výraz k vyhledání.... <br>";
-            exit;
+            $body = "Zadejte výraz k vyhledání.... <br>";
+
+            $this->smarty->assign("body", $body);
+
+            $this->smarty->display('vlastnici/archiv.tpl');
+
+            return $response;
         }
 
         global $list;
