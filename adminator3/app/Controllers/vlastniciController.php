@@ -183,13 +183,13 @@ class vlastniciController extends adminatorController
 
         //promena pro update objektu
         if ($this->adminator->checkLevel(29, false) === true) {
-            $vlastnikArchiv->update_povolen = true;
+            $vlastnikArchiv->objekt_update_povolen = true;
         }
         if ($this->adminator->checkLevel(33, false) === true) {
-            $vlastnikArchiv->mazani_povoleno = true;
+            $vlastnikArchiv->objekt_mazani_povoleno = true;
         }
         if ($this->adminator->checkLevel(34, false) === true) {
-            $vlastnikArchiv->garant_akce = true;
+            $vlastnikArchiv->objekt_garant_akce = true;
         }
 
         // promeny pro mazani, zmenu vlastniku
@@ -274,7 +274,7 @@ class vlastniciController extends adminatorController
             }
 
             $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
-        // @phpstan-ignore-next-line    
+            // @phpstan-ignore-next-line
         } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM vlastnici WHERE archiv = '1' AND id_cloveka = '$sql' ";
         } else {
