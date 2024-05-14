@@ -10,7 +10,7 @@
 
     <span style="padding-left: 30px; ">Globální hledání</span>
 
-    <span style="padding-left: 30px; ">Vlastníci - archiv</span>
+    <span style="padding-left: 30px; "><a class="cat2" href="/vlastnici/archiv" >Vlastníci - archiv</a></span>
 
     <span style="padding-left: 30px; ">Výpovědi smluv</span>
 

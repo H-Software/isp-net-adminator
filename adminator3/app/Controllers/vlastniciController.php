@@ -141,6 +141,11 @@ class vlastniciController extends adminatorController
         return $response;
     }
 
+    public function archiv(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+    }
+    
     public function fakturacniSkupiny(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
