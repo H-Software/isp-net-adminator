@@ -285,7 +285,9 @@ subcat-spacebody
     font-size: 0.9rem;
 }
 
-.vlastnici-archiv-button input {
+input[type=button], 
+input[type=submit] 
+.vlastnici-archiv-button {
     font-size: 0.85rem !important;
 }
 
