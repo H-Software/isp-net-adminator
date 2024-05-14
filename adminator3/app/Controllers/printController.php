@@ -23,6 +23,11 @@ class printController extends adminatorController
         $this->smarty = $this->container->get('smarty');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+
+        $this->printInstance = new printClass($this->container);
+
     }
 
     public function printListAll(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -35,7 +40,6 @@ class printController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        $this->printInstance = new printClass($this->container);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $this->printInstance->csrf_html = $csrf_html;
 
@@ -50,17 +54,43 @@ class printController extends adminatorController
 
         $this->checkLevel(308, $this->adminator);
 
+        $this->smarty->assign("page_title", "Adminator3 :: Print :: redirect");
+
+        $this->header($request, $response, $this->adminator);
+
         if ($request->getMethod() == "POST") {
 
-            $soubory = $request->getParsedBody()['soubory'];
-            $url = "/print/temp/" . htmlspecialchars($soubory);
+            $param_soubory = $request->getParsedBody()['soubory'];
 
-            return $response
-                ->withHeader('Location', $url)
-                ->withStatus(302);
+            $fileData = $this->printInstance->getFileContent($param_soubory);
 
+            if($fileData === false) {
+                $this->smarty->assign("alert_type", "danger");
+                $this->smarty->assign("alert_content", "Error! Unable to get file (" . var_export($param_soubory, true) . ")");
+                $this->smarty->display('print/redirect.tpl');
+
+                $newResponse = $response->withStatus(500);
+                return $newResponse;
+            } else {
+                $fileName = $fileData[0];
+                $content = $fileData[1];
+
+                $response = $response->withHeader('Content-type', 'application/pdf')
+                ->withAddedHeader('Content-Description', 'File Transfer')
+                ->withAddedHeader('Content-Disposition', 'attachment; filename=' . $fileName)
+                ->withAddedHeader('Expires', '0')
+                ->withAddedHeader('Cache-Control', 'must-revalidate')
+                ->withAddedHeader('Pragma', 'public');
+                $response->getBody()->write($content);
+
+                return $response;
+            }
         } else {
-            $response->getBody()->write("Error! Missing POST parameter.");
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", "Error! Missing POST parameter.");
+
+            $this->smarty->display('print/redirect.tpl');
+
             $newResponse = $response->withStatus(500);
             return $newResponse;
         }
@@ -91,7 +121,7 @@ class printController extends adminatorController
             $this->smarty->assign("file_name", $rf->file_name);
 
             //finalni zobrazeni sablony
-            $this->smarty->display('others/print-reg-form-2012-05.tpl');
+            $this->smarty->display('print/reg-form-2012-05.tpl');
         } else {
 
             //check a processing form
@@ -122,7 +152,6 @@ class printController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        $this->printInstance = new printClass($this->container);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $this->printInstance->csrf_html = $csrf_html;
 
@@ -142,7 +171,6 @@ class printController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        $this->printInstance = new printClass($this->container);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $this->printInstance->csrf_html = $csrf_html;
 
@@ -161,7 +189,6 @@ class printController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        $this->printInstance = new printClass($this->container);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $this->printInstance->csrf_html = $csrf_html;
 
@@ -180,7 +207,6 @@ class printController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        $this->printInstance = new printClass($this->container);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $this->printInstance->csrf_html = $csrf_html;
 

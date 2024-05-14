@@ -182,7 +182,10 @@ COPY adminator3/include/main.function.shared.php /srv/www//adminator2/include/ma
 
 RUN chmod 1777 /tmp \
     && cd adminator3 \
-    && chown www-data:www-data export
+    && chown www-data:www-data export \
+    && cd print \
+    && mkdir -p temp \
+    && chown www-data:www-data temp
 
 # fpm conf
 
@@ -221,8 +224,12 @@ COPY --from=main / /
 #
 ENV PHP_INI_DIR /usr/local/etc/php
 
-ENTRYPOINT ["docker-php-entrypoint"]
-WORKDIR /srv/www
+ENTRYPOINT [ \
+        "chown www-data:www-data adminator3/export", \
+        "chown www-data:www-data adminator3/print/temp", \
+        "docker-php-entrypoint"]
+
+        WORKDIR /srv/www
 
 # Override stop signal to stop process gracefully
 # https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163

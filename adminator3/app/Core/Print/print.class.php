@@ -43,13 +43,52 @@ class printClass extends adminator
 
     }
 
-    private function nacti_soubory($find_string): false|array
+    public function getFileContent($fileName): false|array
+    {
+        // strip "print/temp" path and check "unallowed" chars
+        $check = preg_match("/[\w|\-]+\.pdf/", $fileName, $checkRs);
+
+        if($check != 1) {
+            $this->logger->error(
+                __CLASS__ . "\\" . __FUNCTION__ . ": Error! Wrong format of file name. ",
+                [
+                    "check" => var_export($check, true),
+                    "fileName" =>  var_export($fileName, true),
+                ]
+            );
+            return false;
+        } else {
+            $fileName = $checkRs[0];
+        }
+
+        $fullName = __DIR__ . "/../../../print/temp/" . $fileName;
+
+        $fh = fopen($fullName, "r");
+        if($fh === false) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to open file (" . var_export($fullName, true) . ")");
+            return false;
+        } else {
+            $content = fread($fh, filesize($fullName));
+            fclose($fh);
+        }
+
+        if($content === false) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to read file (" . var_export($fullName, true) . ")");
+            return false;
+        } else {
+            return [$fileName, $content];
+        }
+    }
+
+    private function nacti_soubory($find_string): array
     {
         $soubor = array();
 
-        $handle = opendir('print/temp/');
-        $i = 0;
+        $handle = opendir('print/temp');
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": opendir result: " . var_export(gettype($handle), true));
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": find_string: " . var_export($find_string, true));
 
+        $i = 0;
         while (false !== ($file = readdir($handle))) {
             if ($file != "." && $file != ".." && !is_dir($file) && preg_match('/'.$find_string."/", $file)) {
                 $soubor[$i] = "$file";
@@ -58,11 +97,7 @@ class printClass extends adminator
         }
         closedir($handle);
 
-        if(count($soubor) > 1) {
-            sort($soubor);
-        } else {
-            return false;
-        }
+        sort($soubor);
 
         return $soubor;
     }
@@ -73,24 +108,16 @@ class printClass extends adminator
         $this->smarty->assign("csrf_html", $this->csrf_html);
 
         $soubor3 = $this->nacti_soubory("smlouva-fiber");
-        if($soubor3 != false) {
-            $this->smarty->assign("soubory_smlouvy_new", $soubor3);
-        }
+        $this->smarty->assign("soubory_smlouvy_new", $soubor3);
 
         $soubor4 = $this->nacti_soubory("reg-form-pdf");
-        if($soubor4 != false) {
-            $this->smarty->assign("soubory_regform_new", $soubor4);
-        }
+        $this->smarty->assign("soubory_regform_new", $soubor4);
 
         $soubor5 = $this->nacti_soubory("smlouva-v3");
-        if($soubor5 != false) {
-            $this->smarty->assign("soubory_smlouva_v3", $soubor5);
-        }
+        $this->smarty->assign("soubory_smlouva_v3", $soubor5);
 
         $soubor6 = $this->nacti_soubory("reg-form-v3");
-        if($soubor6 != false) {
-            $this->smarty->assign("soubory_reg_form_2012_05", $soubor6);
-        }
+        $this->smarty->assign("soubory_reg_form_2012_05", $soubor6);
 
         $this->smarty->display('print/list-all.tpl');
     }
@@ -336,12 +363,14 @@ class printClass extends adminator
             // konec pripravy promennych
 
             // opravdovy zacatek generovani
-            define('FPDF_FONTPATH', "include/font/");
+            // define('FPDF_FONTPATH', "include/font/");
 
             require(__DIR__ . "/inc.smlouva.gen.main.2.php");
 
             //zobrazeni odkazu dpdf soubor
             $this->smarty->assign("file_name", "/".$nazev_souboru);
+
+            $this->smarty->assign("csrf_html", $this->csrf_html);
 
             //finalni zobrazeni sablony
             $this->smarty->display('print/smlouva-2012-05.tpl');
@@ -846,7 +875,7 @@ class printClass extends adminator
             // konec pripravy promennych
 
             // opravdovy zacatek generovani
-            define('FPDF_FONTPATH', "include/font/");
+            // define('FPDF_FONTPATH', "include/font/");
 
             require("inc.reg.form.gen.main.2.php");
 
@@ -861,10 +890,12 @@ class printClass extends adminator
             // </body>
             // </html>';
 
-            $this->smarty->assign("file_name", '/'.$nazev_souboru);
+            $this->smarty->assign("csrf_html", $this->csrf_html);
+
+            $this->smarty->assign("file_name", $nazev_souboru);
 
             //finalni zobrazeni sablony
-            $this->smarty->display('others/print-reg-form-2012-05.tpl');
+            $this->smarty->display('print/reg-form-2012-05.tpl');
 
         } //konec else !isset nazev
     }
@@ -1110,7 +1141,7 @@ class printClass extends adminator
             // konec pripravy promennych
 
             // opravdovy zacatek generovani
-            define('FPDF_FONTPATH', "include/font/");
+            // define('FPDF_FONTPATH', "include/font/");
             // require("../include/fpdf.class.php");
 
             require("inc.smlouva.gen.main.php");
@@ -1127,6 +1158,8 @@ class printClass extends adminator
             // </html>';
 
             $this->smarty->assign("file_name", '/'.$nazev_souboru);
+
+            $this->smarty->assign("csrf_html", $this->csrf_html);
 
             //finalni zobrazeni sablony
             $this->smarty->display('print/smlouva.tpl');
@@ -1626,7 +1659,7 @@ class printClass extends adminator
             // konec pripravy promennych
 
             // opravdovy zacatek generovani
-            define('FPDF_FONTPATH', "include/font/");
+            // define('FPDF_FONTPATH', "include/font/");
 
             require("inc.reg.form.gen.main.php");
 
@@ -1642,6 +1675,8 @@ class printClass extends adminator
             // </html>';
 
             $this->smarty->assign("file_name", '/'.$nazev_souboru);
+
+            $this->smarty->assign("csrf_html", $this->csrf_html);
 
             //finalni zobrazeni sablony
             $this->smarty->display('print/reg-form.tpl');

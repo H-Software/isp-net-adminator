@@ -8,6 +8,8 @@ volumes:
   pgadmin-data:
   mssql-data:
   adminator-tmp:
+  adminator-export:
+  adminator-print-temp:
 
 networks:
   default:
@@ -68,6 +70,8 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3,application.name=isp-adminator3
     volumes:
       - adminator-php-log:/var/log/php:uid=33,gid=33
+      - adminator-export:/srv/www/adminator3/export:uid=33,gid=33
+      - adminator-print-temp:/srv/www/adminator3/print/temp:uid=33,gid=33
       - adminator-tmp:/tmp:/tmp
     tmpfs:
       # for smarty
@@ -82,9 +86,9 @@ services:
       - /srv/www/adminator3/logs:uid=33,gid=33
       - /srv/www/adminator2/log:uid=33,gid=33
       # adminator print
-      - /srv/www/adminator3/print/temp:uid=33,gid=33
+      # - /srv/www/adminator3/print/temp:uid=33,gid=33
       # adminator export xls
-      - /srv/www/adminator2/export:uid=33,gid=33
+      # - /srv/www/adminator2/export:uid=33,gid=33
       # - /var/www/html/adminator3/export:uid=33,gid=33
     ports:
       - "9001:9001"

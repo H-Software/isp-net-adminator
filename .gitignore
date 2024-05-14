@@ -13,7 +13,7 @@ data/logs/
 data/cache/
 data/sessions/
 data/tmp/
-temp/
+/temp/
 
 #Doctrine 2
 data/DoctrineORMModule/Proxy/
@@ -38,6 +38,7 @@ adminator3/.phpunit.result.cache
 /adminator3/templates_c/
 adminator3/.phpunit.cache/
 adminator3/cache/
+adminator3/temp/
 
 # phpunit
 adminator3/phpunit.xml.bak
@@ -53,3 +54,4 @@ adminator3/build/
 
 adminator3/export/
 adminator3/tests2/
+adminator3/print/temp

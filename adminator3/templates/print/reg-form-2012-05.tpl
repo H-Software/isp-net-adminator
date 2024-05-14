@@ -6,11 +6,7 @@
 
      <div style="font-size: 24px; font-weight: bold; padding-bottom: 30px;" >Průvodce tiskem registračního formuláře 2012-05</div>
     
-
-     <div>
-	Vygenerovaný soubor je <a href="{$file_name}" target="_new" >zde</a>.
-     </div>
-
+     {include file="print/inc-panel-generated-file.tpl"}
  </div>
 
 {include file="base-end.tpl"}
