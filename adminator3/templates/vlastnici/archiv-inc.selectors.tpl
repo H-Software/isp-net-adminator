@@ -1,5 +1,7 @@
 <form method="GET" >
 
+<div style="padding-top: 4px; " class="listing-selectors-line" >
+
 <input type="radio" name="select" value="1" ><label>Všichni</label> |
 
 <input type="radio" name="select" value="2" ><label>Fakturační</label> |
@@ -33,6 +35,8 @@
 <input type="submit" value="NAJDI" name="najdi"> 
 
 <label>Hledání : </label><input type="text" name="find" value="{$form_find|default: ''}">
+</div>
+
 </div>
 
 {* oddelovaci cara *}

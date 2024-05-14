@@ -286,7 +286,7 @@ subcat-spacebody
 }
 
 .vlastnici-archiv-button {
-    font-size: 0.9rem;
+    font-size: 0.85rem !important;
 }
 
 .vlastnici-archiv-table table {
