@@ -313,7 +313,7 @@ class vlastniciController extends adminatorController
 
         // $bodyContent .= "<div class=\"text-listing2 text-center\" >" . $listovani->listInterval() . "</div>";
 
-        // $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
+        $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
         $bodyContent .= $vlastnikArchiv->vypis_tab(2);
 
