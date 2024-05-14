@@ -24,7 +24,7 @@
 {include file="vlastnici/archiv-inc.selectors.tpl"}
 
 {if $listing|count_characters > 1}
-    <div class="text-center" >{$listing}</div>
+    <div style="border: 1px solid black; " >{$listing}</div>
 {/if}
 
 <div class="vlastnici-archiv-table" style="padding-right: 5px;" >
