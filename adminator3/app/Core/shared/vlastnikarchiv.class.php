@@ -233,7 +233,7 @@ class vlastnikarchiv
                 $output .= "<td colspan=\"1\">";
                 // zde dalsi veci
                 $output .= "<span style=\"color: grey; padding-left: 10px; \" >H: </span>";
-                $output .= "<a href=\"archiv-zmen.php?id_cloveka=".$data["id_cloveka"]."\">".$data["id_cloveka"]."</a>";
+                $output .= "<a href=\"/archiv-zmen?id_cloveka=".$data["id_cloveka"]."\">".$data["id_cloveka"]."</a>";
 
                 $output .= "</td>";
 
