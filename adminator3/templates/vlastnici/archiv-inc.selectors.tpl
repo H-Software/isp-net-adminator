@@ -35,4 +35,7 @@
 <label>Hledání : </label><input type="text" name="find" >
 </div>
 
+{* oddelovaci cara *}
+<div style="border-bottom: 2px solid black; padding-top: 5px; margin-bottom: 5px; height: 2px; width: 20%; " ></div>
+
 </form>
