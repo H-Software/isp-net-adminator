@@ -24,7 +24,7 @@
 {include file="vlastnici/archiv-inc.selectors.tpl"}
 
 <div class="vlastniciArchiv-table" style="padding-right: 5px;">
-{* {$body} *}
+{$body}
 </div>
 
 {* konecny soubor *}
