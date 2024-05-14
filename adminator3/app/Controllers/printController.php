@@ -61,6 +61,7 @@ class printController extends adminatorController
         if ($request->getMethod() == "POST") {
 
             $fileName = $request->getParsedBody()['soubory'];
+            list($fileName) = preg_match("/\/((\w|\-)\.pdf)/", $fileName);
 
             $content = $this->printInstance->getFileContent($fileName);
 
