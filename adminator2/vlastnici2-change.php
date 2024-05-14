@@ -445,14 +445,10 @@ if (!(isset($fail))) {
             $vlast_upd["billing_suspend_start"]  = null;
             $vlast_upd["billing_suspend_stop"] = null;
         }
-
-        // $vlast_id = array( "id_cloveka" => $update_id );
-
+        
         echo "<pre>" . var_export($vlast_upd, true) ."</pre>";
 
         // echo "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
-
-        // $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
 
         try {
           $affected = DB::connection('pgsql')
