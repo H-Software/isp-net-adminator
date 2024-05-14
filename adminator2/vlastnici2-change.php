@@ -114,12 +114,12 @@ if(($update_status == 1 and !(isset($send)))) { //rezim upravy
 
 } else { // rezim pridani, ukladani
 
-    $nick2 = $_POST["nick2"];
-    $vs = $_POST["vs"];
-    $k_platbe = $_POST["k_platbe"];
-    $jmeno = $_POST["jmeno"];
-    $prijmeni = $_POST["prijmeni"];
-    $ulice = $_POST["ulice"];
+    $nick2 = trim($_POST["nick2"]);
+    $vs = trim($_POST["vs"]);
+    $k_platbe = trim($_POST["k_platbe"]);
+    $jmeno = trim($_POST["jmeno"]);
+    $prijmeni = trim($_POST["prijmeni"]);
+    $ulice = trim($_POST["ulice"]);
 
     $mesto = $_POST["mesto"];
     $psc = $_POST["psc"];
