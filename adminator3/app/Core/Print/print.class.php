@@ -43,6 +43,25 @@ class printClass extends adminator
 
     }
 
+    public function getFileContent($fullName): false|string
+    {
+        $fh = fopen($fullName, "r");
+        if($fh === false ){
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to open file (" . var_export($fullName,true) . ")");
+            return false;
+        } else{
+            $content = fread($fh, filesize($fullName));
+            fclose($fh);
+        }
+
+        if($content === false){
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to read file (" . var_export($fullName,true) . ")");
+            return false;
+        } else {
+            return $content;
+        }
+    }
+
     private function nacti_soubory($find_string): false|array
     {
         $soubor = array();
