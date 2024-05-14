@@ -201,7 +201,7 @@ class vlastniciController extends adminatorController
             $vlastnikArchiv->odendani_povoleno = true;
         }
 
-        $vlastnikArchiv->vypis_tab(1);
+        $bodyContent .= $vlastnikArchiv->vypis_tab(1);
 
         if ($co == 1) {
 
