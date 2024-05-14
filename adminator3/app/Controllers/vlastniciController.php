@@ -143,9 +143,19 @@ class vlastniciController extends adminatorController
 
     public function archiv(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
+        $this->logger->info("vlastniciController\\fakturacniSkupiny called");
 
+        $this->checkLevel(99, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Archiv");
+
+        $this->header($request, $response, $this->adminator);
+
+        $this->smarty->display('vlastnici/archiv.tpl');
+
+        return $response;
     }
-    
+
     public function fakturacniSkupiny(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
