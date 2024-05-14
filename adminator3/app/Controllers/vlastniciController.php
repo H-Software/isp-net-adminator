@@ -11,6 +11,9 @@ use Illuminate\Database\Capsule\Manager as DB;
 class vlastniciController extends adminatorController
 {
     public $conn_mysql;
+
+    public $conn_pgsql;
+
     public $smarty;
     public $logger;
 
@@ -147,7 +150,7 @@ class vlastniciController extends adminatorController
     {
         $this->logger->info("vlastniciController\\fakturacniSkupiny called");
 
-        $this->checkLevel(99, $this->adminator);
+        $this->checkLevel(82, $this->adminator);
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Archiv");
 
@@ -271,7 +274,7 @@ class vlastniciController extends adminatorController
             return $response;
         }
 
-        global $list;
+        // global $list;
         $list = $_GET["list"];
 
         $poradek = "find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
@@ -301,6 +304,8 @@ class vlastniciController extends adminatorController
         \vlastnikarchiv::vypis_tab(2);
 
         $listovani->listInterval();
+
+        $this->smarty->assign("body", "");
 
         $this->smarty->display('vlastnici/archiv.tpl');
 
