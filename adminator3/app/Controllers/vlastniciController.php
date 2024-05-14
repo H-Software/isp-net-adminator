@@ -161,6 +161,10 @@ class vlastniciController extends adminatorController
         $vlastnikArchiv->conn_pgsql = $this->conn_pgsql;
         $vlastnikArchiv->echo = false;
 
+
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $vlastnikArchiv->csrf_html = $csrf_html;
+
         $bodyContent = "";
 
         $find_id = $_GET["find_id"];

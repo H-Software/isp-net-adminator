@@ -7,6 +7,8 @@ class vlastnikarchiv
 
     public $echo = true;
 
+    public $csrf_html;
+
     public $vlastnici_erase_povolen = false;
 
     public $vlastnici_update_povolen = false;
@@ -237,8 +239,8 @@ class vlastnikarchiv
 
                 $output .= "<td> ";
                 //tisk smlouvy
-                $output .= "<form method=\"POST\" action=\"/smlouva-pdf.php\" >";
-
+                $output .= "<form method=\"POST\" action=\"/print/smlouva\" >";
+                $output .= $this->csrf_html;
                 $output .= "<input type=\"hidden\" name=\"ec\" value=\"".$data["vs"]."\" >";
                 $output .= "<input type=\"hidden\" name=\"jmeno\" value=\"".$data["jmeno"]." ".$data["prijmeni"]."\" >";
                 $output .= "<input type=\"hidden\" name=\"ulice\" value=\"".$data["ulice"]."\" >";
