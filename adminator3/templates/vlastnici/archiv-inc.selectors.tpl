@@ -29,8 +29,10 @@
     <option value="2" > sestupně  </option>
 </select>
 
+<div>
 <input type="submit" value="NAJDI" name="najdi"> 
 
 <label>Hledání : </label><input type="text" name="find" >
+</div>
 
 </form>

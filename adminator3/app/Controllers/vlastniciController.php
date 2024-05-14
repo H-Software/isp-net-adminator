@@ -151,6 +151,150 @@ class vlastniciController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
+        $find_id = $_GET["find_id"];
+        $find = $_GET["find"];
+
+        if ((strlen($find_id) > 0)) {
+            $co = 3;
+            /* hledani podle id_cloveka */   
+            $sql = $_GET["find_id"];
+        } elseif ((strlen($find) > 0)) {
+            $co = 1;
+            /* hledani podle cehokoli */
+            $sql = $_GET["find"];
+        } else { /* cokoli dalsiho */
+        }
+
+        //promena pro update objektu
+        if (check_level($level, 29)) {
+            $update_povolen = "true";
+        }
+        if (check_level($level, 33)) {
+            $mazani_povoleno = "true";
+        }
+        if (check_level($level, 34)) {
+            $garant_akce = "true";
+        }
+
+        // promeny pro mazani, zmenu vlastniku
+        if (check_level($level, 45)) {
+            $vlastnici_erase_povolen = "true";
+        }
+        if (check_level($level, 30)) {
+            $vlastnici_update_povolen = "true";
+        }
+
+        // odendani objektu od vlastnika
+        if (check_level($level, 49)) {
+            $odendani_povoleno = "true";
+        }
+
+        vlastnikarchiv::vypis_tab(1);
+
+        if ($co == 1) {
+
+            $sql = "%".$sql."%";
+            $select1 = " WHERE archiv = '1' AND ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' OR ulice LIKE '$sql' OR mesto LIKE '$sql' ";
+            $select2 = " OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' OR vs LIKE '$sql' ) ";
+
+            if ($_GET["select"] == 2) {
+                $select3 = " AND fakturacni > 0 ";
+            }
+            if ($_GET["select"] == 3) {
+                $select3 = " AND fakturacni is NULL ";
+            }
+            if ($_GET["select"] == 4) {
+                $select3 = " AND k_platbe = 0 ";
+            }
+            if ($_GET["select"] == 5) {
+                $select3 = " AND k_platbe > 0 ";
+            }
+
+            if ($_GET["select"] == 2) {
+                $select3 = " AND fakturacni > 0 ";
+            }
+            if ($_GET["select"] == 3) {
+                $select3 = " AND fakturacni is NULL ";
+            }
+            if ($_GET["select"] == 4) {
+                $select3 = " AND k_platbe = 0 ";
+            }
+            if ($_GET["select"] == 5) {
+                $select3 = " AND k_platbe > 0 ";
+            }
+
+            if ($_GET["razeni"] == 1) {
+                $select4 = " order by id_cloveka ";
+            }
+            if ($_GET["razeni"] == 3) {
+                $select4 = " order by jmeno ";
+            }
+            if ($_GET["razeni"] == 4) {
+                $select4 = " order by prijmeni ";
+            }
+            if ($_GET["razeni"] == 5) {
+                $select4 = " order by ulice ";
+            }
+            if ($_GET["razeni"] == 6) {
+                $select4 = " order by mesto ";
+            }
+            if ($_GET["razeni"] == 14) {
+                $select4 = " order by vs ";
+            }
+            if ($_GET["razeni"] == 15) {
+                $select4 = " order by k_platbe ";
+            }
+
+            if ($_GET["razeni2"] == 1) {
+                $select5 = " ASC ";
+            }
+            if ($_GET["razeni2"] == 2) {
+                $select5 = " DESC ";
+            }
+
+            if ((strlen($select4) > 1)) {
+                $select4 = $select4.$select5;
+            }
+
+            $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
+        } elseif ($co == 3) {
+            $dotaz_source = "SELECT * FROM vlastnici WHERE archiv = '1' AND id_cloveka = '$sql' ";
+        } else {
+            echo "Zadejte výraz k vyhledání.... <br>";
+            exit;
+        }
+
+        global $list;
+        $list = $_GET["list"];
+
+        $poradek = "find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
+
+        //vytvoreni objektu
+        $listovani = new c_listing_vlastnici2("./vlastnici-archiv.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+
+        if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
+            $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
+        } else {
+            $bude_chybet = (($list - 1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
+        }
+
+        $interval = $listovani->interval;
+
+        $dotaz_final = $dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+
+
+        $listovani->listInterval();
+
+        $ip = new vlastnikarchiv();
+        $ip->conn_mysql = $conn_mysql;
+        $ip->conn_pgsql = $db_ok2;
+
+        $ip->vypis($sql, $co, $dotaz_final);
+
+        vlastnikarchiv::vypis_tab(2);
+
+        $listovani->listInterval();
+
         $this->smarty->display('vlastnici/archiv.tpl');
 
         return $response;
