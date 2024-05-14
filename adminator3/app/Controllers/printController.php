@@ -84,8 +84,6 @@ class printController extends adminatorController
             return $response;
 
         } else {
-            $response->getBody()->write("Error! Missing POST parameter.");
-
             $this->smarty->assign("alert_type", "danger");
             $this->smarty->assign("alert_content", "Error! Missing POST parameter.");
 
