@@ -6,6 +6,13 @@ class vlastnikarchiv
     public $conn_pgsql;
 
     public $echo = true;
+
+    public $vlastnici_erase_povolen = false;
+
+    public $vlastnici_update_povolen = false;
+
+    public $odendani_povoleno = false;
+
     public function vypis_tab($par)
     {
         $output = "";
@@ -28,7 +35,7 @@ class vlastnikarchiv
 
     public function vypis($sql, $co, $dotaz_final)
     {
-
+        $output = "";
         // co - co hledat, 1- podle dns, 2-podle ip
 
         $dotaz = pg_query($dotaz_final);
@@ -36,80 +43,69 @@ class vlastnikarchiv
         if($dotaz !== false) {
             $radku = pg_num_rows($dotaz);
         } else {
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+            $output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). "</div>";
         }
 
         if ($radku == 0) {
-            echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
+            $output .= "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
         } else {
 
             while($data = pg_fetch_array($dotaz)) {
-                echo "<tr><td colspan=\"14\"> <br> </td> </tr>
+                $output .= "<tr><td colspan=\"14\"> <br> </td> </tr>
 	    <tr> <td class=\"vlastnici-td-black\" colspan=\"2\" width=\"\" >id: [".$data["id_cloveka"]."] 
 	    nick: [".$data["nick"]."] účetní-index: [".sprintf("%05d", $data["ucetni_index"])."] </td>
 	    
 	    <td class=\"vlastnici-td-black\" colspan=\"2\">VS: [".$data["vs"]."] ";
 
                 if ($data["firma"] == 1) {
-                    echo " firma: [Company, s.r.o.]";
+                    $output .= " firma: [Company, s.r.o.]";
                 } else {
-                    echo " firma: [F.O.] ";
+                    $output .= " firma: [F.O.] ";
                 }
 
-                echo"</td>
-	
-	    <td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
-	    <td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"\" >";
+                $output .= "</td>	
+                        <td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
+                        <td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"\" >";
 
-                echo "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
+                $output .= "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
 
                 // sem mazani
-
-                global $vlastnici_erase_povolen;
-
-                if (! ($vlastnici_erase_povolen == "true")) {
-                    echo "<span style=\"\" > smazat </span> ";
+                if (! ($this->vlastnici_erase_povolen === true)) {
+                    $output .= "<span style=\"\" > smazat </span> ";
                 } else {
-                    echo "<form method=\"POST\" action=\"vlastnici2-erase.php\" >";
-                    echo "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_cloveka"]."\" >";
-                    echo "<input type=\"submit\" value=\"Smazat\" >";
-
-                    echo "</form> \n";
-
+                    $output .= "<form method=\"POST\" action=\"vlastnici2-erase.php\" >";
+                    $output .= "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_cloveka"]."\" >";
+                    $output .= "<input type=\"submit\" value=\"Smazat\" >";
+                    $output .="</form> \n";
                 }
-                echo "</td><td class=\"vlastnici-td-black\" >";
-
-                global $vlastnici_update_povolen;
+                $output .= "</td><td class=\"vlastnici-td-black\" >";
 
                 // 6-ta update
-
-                if (!($vlastnici_update_povolen == "true")) {
-                    echo "<span style=\"\" >  upravit  </span> \n";
+                if (!($this->vlastnici_update_povolen === true)) {
+                    $output .= "<span style=\"\" >  upravit  </span> \n";
                 } else {
-                    echo " <form method=\"POST\" action=\"vlastnici2-change.php\" >";
-                    echo "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
-                    echo "<input type=\"submit\" value=\"update\" >";
-
-                    echo "</form> \n";
-
+                    $output .= " <form method=\"POST\" action=\"vlastnici2-change.php\" >";
+                    $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
+                    $output .= "<input type=\"submit\" value=\"update\" >";
+                    $output .= "</form> \n";
                 }
 
-                echo "</td> </tr> </table>";
+                $output .= "</td> </tr> </table>";
 
-                echo "  </td>
-	        </tr>
-		  <tr> <td colspan=\"2\">".$data["jmeno"]." ".$data["prijmeni"]."<br>
-		 ".$data["ulice"]." ";
+                $output .= "</td>
+                            </tr>
+                        <tr>
+                        <td colspan=\"2\">".$data["jmeno"]." ".$data["prijmeni"]."<br>
+                        ".$data["ulice"]." ";
 
-                echo "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
+                $output .= "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
 
 
-                echo "<br>".$data["mesto"]." ".$data["psc"]."</td>
-		 <td colspan=\"12\">icq: ".$data["icq"]." <br>
-		 mail: ".$data["mail"]." <br>
-		 tel: ".$data["telefon"]." </td>
-		 </tr>";
-
+                $output .= "<br>".$data["mesto"]." ".$data["psc"]."</td>
+                            <td colspan=\"12\">icq: ".$data["icq"]." <br>
+                            mail: ".$data["mail"]." <br>
+                            tel: ".$data["telefon"]." </td>
+                            </tr>";
 
                 $id = $data["id_cloveka"];
                 $id_v = $id;
@@ -134,24 +130,20 @@ class vlastnikarchiv
 
                 $objekt_a2->vypis($sql, $co, $id);
 
-
-
                 //tady dalsi radka asi
+                $output .= "<tr>";
 
-
-                echo "<tr>";
-
-                echo "<td>další funkce: </td>
-	        <td colspan=\"13\">";
+                $output .= "<td>další funkce: </td>
+                        <td colspan=\"13\">";
 
                 //echo "<a href=\"vlastnici2-add-obj.php?id_vlastnika=".$data["id_cloveka"]."\">přidání objektu</a>";
-                echo "<span style=\"color: gray; \">přidání objektu</span>";
+                $output .= "<span style=\"color: gray; \">přidání objektu</span>";
 
-                echo "<span style=\"margin: 10px; \"></span>";
+                $output .= "<span style=\"margin: 10px; \"></span>";
 
-                echo "<a href=\"platby-vypis.php?id_vlastnika=".intval($data["id_cloveka"])."\" > výpis plateb - starý (do 2/2012)</a>";
+                $output .= "<a href=\"platby-vypis.php?id_vlastnika=".intval($data["id_cloveka"])."\" > výpis plateb - starý (do 2/2012)</a>";
 
-                echo "<span style=\"margin-left: 20px; \">
+                $output .= "<span style=\"margin-left: 20px; \">
 		    <a href=pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - (od 3/2012)</a>".
                 "</span>";
 
@@ -286,6 +278,11 @@ class vlastnikarchiv
             // konec else
         }
 
+        if($this->echo){
+            echo $output;
+        } else {
+            return $output;
+        }
         // konec funkce vypis
     }
 

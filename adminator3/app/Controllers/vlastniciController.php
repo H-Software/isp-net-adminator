@@ -160,7 +160,7 @@ class vlastniciController extends adminatorController
         $vlastnikArchiv->conn_mysql = $this->conn_mysql;
         $vlastnikArchiv->conn_pgsql = $this->conn_pgsql;
         $vlastnikArchiv->echo = false;
-        
+
         $bodyContent = "";
 
         $find_id = $_GET["find_id"];
@@ -190,15 +190,15 @@ class vlastniciController extends adminatorController
 
         // promeny pro mazani, zmenu vlastniku
         if ($this->adminator->checkLevel(45, false) === true) {
-            $vlastnici_erase_povolen = "true";
+            $vlastnikArchiv->vlastnici_erase_povolen = true;
         }
         if ($this->adminator->checkLevel(30, false) === true) {
-            $vlastnici_update_povolen = "true";
+            $vlastnikArchiv->vlastnici_update_povolen = true;
         }
 
         // odendani objektu od vlastnika
         if ($this->adminator->checkLevel(49, false) === true) {
-            $odendani_povoleno = "true";
+            $vlastnikArchiv->odendani_povoleno = true;
         }
 
         $vlastnikArchiv->vypis_tab(1);
