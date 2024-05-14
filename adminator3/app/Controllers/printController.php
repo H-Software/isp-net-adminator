@@ -61,20 +61,23 @@ class printController extends adminatorController
         if ($request->getMethod() == "POST") {
 
             $fileName = $request->getParsedBody()['soubory'];
-            $fullName = "print/temp/" . htmlspecialchars($fileName);
 
             $content = $this->printInstance->getFileContent($fullName);
 
             if($content === false){
                 $this->smarty->assign("alert_type", "danger");
-                $this->smarty->assign("alert_content", "Error! Unable to get file (" . var_export($fullName,true) . ")");
+                $this->smarty->assign("alert_content", "Error! Unable to get file (" . var_export($fileName,true) . ")");
                 $this->smarty->display('print/redirect.tpl');
 
                 $newResponse = $response->withStatus(500);
                 return $newResponse;
             } else {
                 $response = $response->withHeader('Content-type', 'application/pdf')
-                ->withAddedHeader('Content-Disposition', 'attachment; filename=' . $fileName);
+                ->withAddedHeader('Content-Description', 'File Transfer')
+                ->withAddedHeader('Content-Disposition', 'attachment; filename=' . $fileName)
+                ->withAddedHeader('Expires', '0')
+                ->withAddedHeader('Cache-Control', 'must-revalidate')
+                ->withAddedHeader('Pragma' ,'public');
                 $response->getBody()->write($content);
 
                 return $response;
