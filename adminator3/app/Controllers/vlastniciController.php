@@ -270,6 +270,7 @@ class vlastniciController extends adminatorController
             }
 
             $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
+        // @phpstan-ignore-next-line    
         } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM vlastnici WHERE archiv = '1' AND id_cloveka = '$sql' ";
         } else {
