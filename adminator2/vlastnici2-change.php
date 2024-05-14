@@ -454,18 +454,19 @@ if (!(isset($fail))) {
 
         // $res = pg_update($db_ok2, 'vlastnici', $vlast_upd, $vlast_id);
 
-        $affected = DB::connection('pgsql')
-                  ->table('vlastnici')
-                  ->where('id_cloveka', $update_id)
-                  ->update($vlast_upd);
+        try {
+          $affected = DB::connection('pgsql')
+                      ->table('vlastnici')
+                      ->where('id_cloveka', $update_id)
+                      ->update($vlast_upd);
+        } catch (Exception $e) {
+          $error = $e->getMessage();
+        }
 
         if($affected == 1) {
             echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . "\n";
         } else {
-            echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(affected: " . $affected . "\n";
-
-            // echo pg_last_error($db_ok2);
-            // echo pg_last_notice($db_ok2);
+            echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: : " . $error . "\n";
         }
 
         require("vlastnici2-change-archiv-zmen-inc.php");
@@ -521,7 +522,7 @@ if (!(isset($fail))) {
         if ($fakt_skupina < 1) {
           $vlast_upd["fakturacni_skupina_id"] = null;
         }
-        
+
         if($sluzba_int == 1) {
             $vlast_add["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
         }
