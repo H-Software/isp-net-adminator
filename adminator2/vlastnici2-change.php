@@ -375,44 +375,56 @@ if (!(isset($fail))) {
         } else {
             $vlast_upd["firma"] = null;
         } // u firmy else musi byt
+
         if ((strlen($email) > 0)) {
             $vlast_upd["mail"] = $email;
         } else {
             $vlast_upd["mail"] = null;
         }
+        
         if ($icq > 0) {
             $vlast_upd["icq"] = $icq;
         } else {
             $vlast_upd["icq"] = "";
         }
+        
         if ((strlen($tel) > 0)) {
             $vlast_upd["telefon"] = $tel;
         } else {
             $vlast_upd["telefon"] = null;
         }
+        
         if ($ucetni_index > 0) {
             $vlast_upd["ucetni_index"] = $ucetni_index;
         } else {
             $vlast_upd["ucetni_index"] = "";
         }
+        
         //if ( (strlen($poznamka) > 0 ) )
         { $vlast_upd["poznamka"] = $poznamka; }
+        
         if ((strlen($datum_podpisu) > 0)) {
             $vlast_upd["datum_podpisu"] = $datum_podpisu;
         } else {
             $vlast_upd["datum_podpisu"] = null;
         }
+        
         if ((strlen($typ_smlouvy) > 0)) {
             $vlast_upd["typ_smlouvy"] = $typ_smlouvy;
         } else {
             $vlast_upd["typ_smlouvy"] = 0;
         }
 
+        if (($fakturacni_skupina_id < 0)) {
+          $vlast_upd["fakturacni_skupina_id"] = null;
+        }
+
         if($sluzba_int == 1) {
             $vlast_upd["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
         }
+
         if($sluzba_iptv == 1) {
-            $vlast_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
+          $vlast_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
         }
 
         if($billing_suspend_status == 1) {
