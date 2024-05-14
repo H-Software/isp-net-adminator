@@ -39,7 +39,7 @@ class printRegForm
     public function generate_pdf_file()
     {
 
-        define('FPDF_FONTPATH', "include/font/");
+       // define('FPDF_FONTPATH', "include/font/");
 
         //zaklad, vytvoreni objektu a pridani stranky
         try {

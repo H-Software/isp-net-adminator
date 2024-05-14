@@ -326,7 +326,7 @@ class printClass extends adminator
             // konec pripravy promennych
 
             // opravdovy zacatek generovani
-            define('FPDF_FONTPATH', "include/font/");
+            // define('FPDF_FONTPATH', "include/font/");
 
             require(__DIR__ . "/inc.smlouva.gen.main.2.php");
 
@@ -836,7 +836,7 @@ class printClass extends adminator
             // konec pripravy promennych
 
             // opravdovy zacatek generovani
-            define('FPDF_FONTPATH', "include/font/");
+            // define('FPDF_FONTPATH', "include/font/");
 
             require("inc.reg.form.gen.main.2.php");
 
@@ -1100,7 +1100,7 @@ class printClass extends adminator
             // konec pripravy promennych
 
             // opravdovy zacatek generovani
-            define('FPDF_FONTPATH', "include/font/");
+            // define('FPDF_FONTPATH', "include/font/");
             // require("../include/fpdf.class.php");
 
             require("inc.smlouva.gen.main.php");
@@ -1616,7 +1616,7 @@ class printClass extends adminator
             // konec pripravy promennych
 
             // opravdovy zacatek generovani
-            define('FPDF_FONTPATH', "include/font/");
+            // define('FPDF_FONTPATH', "include/font/");
 
             require("inc.reg.form.gen.main.php");
 

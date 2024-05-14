@@ -22,3 +22,6 @@ Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/senti
 require __DIR__ ."/../boostrap/appFactory.php";
 
 require __DIR__ ."/../boostrap/dependencies.php";
+
+# FPDF
+define('FPDF_FONTPATH', "include/font/");
