@@ -120,7 +120,7 @@ class c_listing_vlastnici2
     public function listInterval()
     {
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         for ($i = 1; $i <= $this->numLists; $i++) {
             $output = "";
             $isLink = 1;
@@ -146,7 +146,7 @@ class c_listing_vlastnici2
             }
         }
         $output .= $this->after;
-        if($this->echo){
+        if($this->echo) {
             echo $output;
         } else {
             return $output;
