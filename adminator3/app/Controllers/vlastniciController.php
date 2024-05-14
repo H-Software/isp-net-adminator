@@ -298,7 +298,7 @@ class vlastniciController extends adminatorController
         $poradek = "find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
 
         //vytvoreni objektu
-        $listovani = new \c_listing_vlastnici2("./vlastnici-archiv.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\" style=\"border: 1px solid black;\">\n", "</div></center>\n", $dotaz_source);
+        $listovani = new \c_listing_vlastnici2("/vlastnici/archiv?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\" style=\"border: 1px solid black;\">\n", "</div></center>\n", $dotaz_source);
         $listovani->echo = false;
 
         if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
@@ -313,11 +313,13 @@ class vlastniciController extends adminatorController
 
         // $bodyContent .= "<div class=\"text-center\" >" . $listovani->listInterval() . "</div>\n";
 
+        $bodyContent .= "" . $listovani->listInterval() . "\n";
+
         $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
         $bodyContent .= $vlastnikArchiv->vypis_tab(2);
 
-        // $bodyContent .= "<div class=\"text-center\" >" . $listovani->listInterval() . "</div>\n";
+        $bodyContent .= "" . $listovani->listInterval() . "\n";
 
         $this->smarty->assign("body", $bodyContent);
 
