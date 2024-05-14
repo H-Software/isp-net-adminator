@@ -43,9 +43,11 @@ class printClass extends adminator
 
     }
 
-    public function getFileContent($fullName): false|string
+    public function getFileContent($fileName): false|string
     {
-        $fh = fopen("print/temp/" . $fullName, "r");
+        $fullName = __DIR__ . "/../../../print/temp/" . $fileName;
+
+        $fh = fopen($fullName, "r");
         if($fh === false ){
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to open file (" . var_export($fullName,true) . ")");
             return false;
