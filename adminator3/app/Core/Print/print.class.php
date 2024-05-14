@@ -45,6 +45,15 @@ class printClass extends adminator
 
     public function getFileContent($fileName): false|string
     {
+        $check = preg_match("/\/((\w|\-)\.pdf)/", $fileName, $checkRs);
+
+        if( $check != 1){
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Wrong format of file name. (check: " . var_export($check, true) . ")");
+            return false;    
+        } else{
+            $fileName = $checkRs[0];
+        }
+
         $fullName = __DIR__ . "/../../../print/temp/" . $fileName;
 
         $fh = fopen($fullName, "r");
