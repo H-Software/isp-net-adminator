@@ -45,28 +45,34 @@ class printClass extends adminator
 
     public function getFileContent($fileName): false|string
     {
-        $check = preg_match("/\/[\w|-]+\.pdf/", $fileName, $checkRs);
+        $check = preg_match("/[\w|\-]+\.pdf/", $fileName, $checkRs);
 
-        if( $check != 1){
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Wrong format of file name. (check: " . var_export($check, true) . ")");
-            return false;    
-        } else{
+        if($check != 1) {
+            $this->logger->error(
+                __CLASS__ . "\\" . __FUNCTION__ . ": Error! Wrong format of file name. ",
+                [
+                    "check" => var_export($check, true),
+                    "fileName" =>  var_export($fileName, true),
+                ]
+            );
+            return false;
+        } else {
             $fileName = $checkRs[0];
         }
 
         $fullName = __DIR__ . "/../../../print/temp/" . $fileName;
 
         $fh = fopen($fullName, "r");
-        if($fh === false ){
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to open file (" . var_export($fullName,true) . ")");
+        if($fh === false) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to open file (" . var_export($fullName, true) . ")");
             return false;
-        } else{
+        } else {
             $content = fread($fh, filesize($fullName));
             fclose($fh);
         }
 
-        if($content === false){
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to read file (" . var_export($fullName,true) . ")");
+        if($content === false) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to read file (" . var_export($fullName, true) . ")");
             return false;
         } else {
             return $content;

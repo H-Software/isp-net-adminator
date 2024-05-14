@@ -64,9 +64,9 @@ class printController extends adminatorController
 
             $content = $this->printInstance->getFileContent($fileName);
 
-            if($content === false){
+            if($content === false) {
                 $this->smarty->assign("alert_type", "danger");
-                $this->smarty->assign("alert_content", "Error! Unable to get file (" . var_export($fileName,true) . ")");
+                $this->smarty->assign("alert_content", "Error! Unable to get file (" . var_export($fileName, true) . ")");
                 $this->smarty->display('print/redirect.tpl');
 
                 $newResponse = $response->withStatus(500);
@@ -77,7 +77,7 @@ class printController extends adminatorController
                 ->withAddedHeader('Content-Disposition', 'attachment; filename=' . $fileName)
                 ->withAddedHeader('Expires', '0')
                 ->withAddedHeader('Cache-Control', 'must-revalidate')
-                ->withAddedHeader('Pragma' ,'public');
+                ->withAddedHeader('Pragma', 'public');
                 $response->getBody()->write($content);
 
                 return $response;
