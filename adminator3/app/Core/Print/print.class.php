@@ -79,7 +79,7 @@ class printClass extends adminator
         }
     }
 
-    private function nacti_soubory($find_string): false|array
+    private function nacti_soubory($find_string): array
     {
         $soubor = array();
 
