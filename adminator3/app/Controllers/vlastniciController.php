@@ -166,30 +166,30 @@ class vlastniciController extends adminatorController
         }
 
         //promena pro update objektu
-        if (check_level($level, 29)) {
+        if ($this->adminator->checkLevel(29, false) === true) {
             $update_povolen = "true";
         }
-        if (check_level($level, 33)) {
+        if ($this->adminator->checkLevel(33, false) === true) {
             $mazani_povoleno = "true";
         }
-        if (check_level($level, 34)) {
+        if ($this->adminator->checkLevel(34, false) === true) {
             $garant_akce = "true";
         }
 
         // promeny pro mazani, zmenu vlastniku
-        if (check_level($level, 45)) {
+        if ($this->adminator->checkLevel(45, false) === true) {
             $vlastnici_erase_povolen = "true";
         }
-        if (check_level($level, 30)) {
+        if ($this->adminator->checkLevel(30, false) === true) {
             $vlastnici_update_povolen = "true";
         }
 
         // odendani objektu od vlastnika
-        if (check_level($level, 49)) {
+        if ($this->adminator->checkLevel(49, false) === true) {
             $odendani_povoleno = "true";
         }
 
-        vlastnikarchiv::vypis_tab(1);
+       \vlastnikarchiv::vypis_tab(1);
 
         if ($co == 1) {
 
@@ -270,7 +270,7 @@ class vlastniciController extends adminatorController
         $poradek = "find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
 
         //vytvoreni objektu
-        $listovani = new c_listing_vlastnici2("./vlastnici-archiv.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+        $listovani = new \c_listing_vlastnici2("./vlastnici-archiv.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
 
         if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
             $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
@@ -285,13 +285,13 @@ class vlastniciController extends adminatorController
 
         $listovani->listInterval();
 
-        $ip = new vlastnikarchiv();
-        $ip->conn_mysql = $conn_mysql;
-        $ip->conn_pgsql = $db_ok2;
+        $ip = new \vlastnikarchiv();
+        $ip->conn_mysql = $this->conn_mysql;
+        $ip->conn_pgsql = $this->conn_pgsql;
 
         $ip->vypis($sql, $co, $dotaz_final);
 
-        vlastnikarchiv::vypis_tab(2);
+        \vlastnikarchiv::vypis_tab(2);
 
         $listovani->listInterval();
 
