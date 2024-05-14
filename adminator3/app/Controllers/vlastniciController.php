@@ -157,7 +157,10 @@ class vlastniciController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         $vlastnikArchiv = new \vlastnikarchiv();
-
+        $vlastnikArchiv->conn_mysql = $this->conn_mysql;
+        $vlastnikArchiv->conn_pgsql = $this->conn_pgsql;
+        $vlastnikArchiv->echo = false;
+        
         $bodyContent = "";
 
         $find_id = $_GET["find_id"];
@@ -284,9 +287,9 @@ class vlastniciController extends adminatorController
         $poradek = "find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
 
         //vytvoreni objektu
-        $listovani = new \c_listing_vlastnici2("./vlastnici-archiv.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+        $listovani = new \c_listing_vlastnici2("./vlastnici-archiv.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\" style=\"border: 1px solid black;\">\n", "</div></center>\n", $dotaz_source);
         $listovani->echo = false;
-        
+
         if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
             $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
         } else {
@@ -298,9 +301,6 @@ class vlastniciController extends adminatorController
         $dotaz_final = $dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
         $bodyContent .= $listovani->listInterval();
-
-        $vlastnikArchiv->conn_mysql = $this->conn_mysql;
-        $vlastnikArchiv->conn_pgsql = $this->conn_pgsql;
 
         $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
