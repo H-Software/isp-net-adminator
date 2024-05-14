@@ -158,6 +158,8 @@ class vlastniciController extends adminatorController
 
         $vlastnikArchiv = new \vlastnikarchiv();
 
+        $bodyContent = "";
+
         $find_id = $_GET["find_id"];
         $find = $_GET["find"];
 
@@ -283,7 +285,8 @@ class vlastniciController extends adminatorController
 
         //vytvoreni objektu
         $listovani = new \c_listing_vlastnici2("./vlastnici-archiv.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
-
+        $listovani->echo = false;
+        
         if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
             $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
         } else {
@@ -294,7 +297,7 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-        $listovani->listInterval();
+        $bodyContent .= $listovani->listInterval();
 
         $vlastnikArchiv->conn_mysql = $this->conn_mysql;
         $vlastnikArchiv->conn_pgsql = $this->conn_pgsql;
@@ -303,9 +306,9 @@ class vlastniciController extends adminatorController
 
         $vlastnikArchiv->vypis_tab(2);
 
-        $listovani->listInterval();
+        $bodyContent .= $listovani->listInterval();
 
-        $this->smarty->assign("body", "");
+        $this->smarty->assign("body", $bodyContent);
 
         $this->smarty->display('vlastnici/archiv.tpl');
 
