@@ -6,10 +6,7 @@
 
      <div style="font-size: 24px; font-weight: bold; padding-bottom: 30px;" >Průvodce tiskem smlouvy - nový typ</div>
     
-     <div>
-	Vygenerovaný soubor je <a href="{$file_name}" target="_new" >zde</a>.
-     </div>
-
+     {include file="print/inc-panel-generated-file.tpl"}
  </div>
 
 {include file="base-end.tpl"}
