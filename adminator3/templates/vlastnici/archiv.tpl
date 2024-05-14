@@ -24,10 +24,10 @@
 {include file="vlastnici/archiv-inc.selectors.tpl"}
 
 {if $listing|count_characters > 1}
-    <div style="border: 1px solid black; " >{$listing}</div>
+    <div style="border: 1px solid black; " >{$listing: default: ''}</div>
 {/if}
 
-<div class="vlastnici-archiv-table" style="padding-right: 5px;" >
+<div class="vlastnici-archiv-table" style="padding-right: 5px; border: 1px solid black; " >
 {$body}
 </div>
 
