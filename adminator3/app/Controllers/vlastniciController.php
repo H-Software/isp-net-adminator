@@ -302,9 +302,9 @@ class vlastniciController extends adminatorController
 
         $bodyContent .= $listovani->listInterval();
 
-        $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
+        $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
-        $vlastnikArchiv->vypis_tab(2);
+        $bodyContent .= $vlastnikArchiv->vypis_tab(2);
 
         $bodyContent .= $listovani->listInterval();
 
