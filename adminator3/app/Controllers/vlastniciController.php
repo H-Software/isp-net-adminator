@@ -313,7 +313,7 @@ class vlastniciController extends adminatorController
 
         $this->smarty->assign("listing_1", $listovani->listInterval());
 
-        // $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
+        $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
         $bodyContent .= $vlastnikArchiv->vypis_tab(2);
 
