@@ -311,13 +311,11 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-        $this->smarty->assign("listing_1", $listovani->listInterval());
+        // $this->smarty->assign("listing", $listovani->listInterval());
 
         $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
         $bodyContent .= $vlastnikArchiv->vypis_tab(2);
-
-        $this->smarty->assign("listing_2", $listovani->listInterval());
 
         $this->smarty->assign("body", $bodyContent);
 
