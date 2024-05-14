@@ -446,7 +446,7 @@ if (!(isset($fail))) {
             $vlast_upd["billing_suspend_stop"] = null;
         }
 
-        echo "<pre>" . var_export($vlast_upd, true) ."</pre>";
+       // echo "<pre>" . var_export($vlast_upd, true) ."</pre>";
 
         // echo "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
 
@@ -460,9 +460,9 @@ if (!(isset($fail))) {
         }
 
         if($affected == 1) {
-            echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . "\n";
+            echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . ")\n";
         } else {
-            echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: : " . $error . "\n";
+            echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error . ")\n";
         }
 
         require("vlastnici2-change-archiv-zmen-inc.php");

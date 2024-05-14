@@ -141,104 +141,104 @@ include ("include/charset.php");
     if ( $export_povolen)
     {
 
-    $fp=fopen("export/vlastnici-archiv.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
+    // $fp=fopen("export/vlastnici-archiv.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
 
-    fputs($fp,"<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
+    // fputs($fp,"<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
 
-    fputs($fp,"<tr>");   // Zapíšeme do souboru začátek řádky, kde budou názvy sloupců (polí)
+    // fputs($fp,"<tr>");   // Zapíšeme do souboru začátek řádky, kde budou názvy sloupců (polí)
 
-    $vysledek_pole=pg_query("SELECT column_name FROM information_schema.columns WHERE table_name ='vlastnici' ORDER BY ordinal_position ");
-    // Vybereme z databáze názvy polí tabulky tabulka a postupně je zapíšeme do souboru
+    // $vysledek_pole=pg_query("SELECT column_name FROM information_schema.columns WHERE table_name ='vlastnici' ORDER BY ordinal_position ");
+    // // Vybereme z databáze názvy polí tabulky tabulka a postupně je zapíšeme do souboru
 
-    // echo "vysledek_pole: $vysledek_pole ";
+    // // echo "vysledek_pole: $vysledek_pole ";
 
-     while ($vysledek_array_pole=pg_fetch_row($vysledek_pole) )
-      {  fputs($fp,"<td><b> ".$vysledek_array_pole[0]." </b></td> \n"); }
+    //  while ($vysledek_array_pole=pg_fetch_row($vysledek_pole) )
+    //   {  fputs($fp,"<td><b> ".$vysledek_array_pole[0]." </b></td> \n"); }
 
-      fputs($fp,"<td><b> id_f </b></td> \n");
-      fputs($fp,"<td><b> f. jméno </b></td> \n");
-      fputs($fp,"<td><b> f. ulice </b></td> \n");
-      fputs($fp,"<td><b> f. mesto </b></td> \n");
-      fputs($fp,"<td><b> f. PSČ </b></td> \n");
-      fputs($fp,"<td><b> f. ičo </b></td> \n");
-      fputs($fp,"<td><b> f. dič </b></td> \n");
-      fputs($fp,"<td><b> f. účet </b></td> \n");
-      fputs($fp,"<td><b> f. splatnost </b></td> \n");
-      fputs($fp,"<td><b> f. cetnost </b></td> \n");
+    //   fputs($fp,"<td><b> id_f </b></td> \n");
+    //   fputs($fp,"<td><b> f. jméno </b></td> \n");
+    //   fputs($fp,"<td><b> f. ulice </b></td> \n");
+    //   fputs($fp,"<td><b> f. mesto </b></td> \n");
+    //   fputs($fp,"<td><b> f. PSČ </b></td> \n");
+    //   fputs($fp,"<td><b> f. ičo </b></td> \n");
+    //   fputs($fp,"<td><b> f. dič </b></td> \n");
+    //   fputs($fp,"<td><b> f. účet </b></td> \n");
+    //   fputs($fp,"<td><b> f. splatnost </b></td> \n");
+    //   fputs($fp,"<td><b> f. cetnost </b></td> \n");
 
-        fputs($fp,"</tr>");   // Zapíšeme do souboru konec řádky, kde jsou názvy sloupců (polí)
+    //     fputs($fp,"</tr>");   // Zapíšeme do souboru konec řádky, kde jsou názvy sloupců (polí)
 
-        // $vysledek=pg_query("select * from platby where hotove='1' ");
-        // Vybereme z databáze všechny záznamy v tabulce tabulka a postupě je zapíšeme do souboru
+    //     // $vysledek=pg_query("select * from platby where hotove='1' ");
+    //     // Vybereme z databáze všechny záznamy v tabulce tabulka a postupě je zapíšeme do souboru
 
-        $vysledek = pg_query("SELECT * FROM vlastnici WHERE archiv='1' ORDER BY id_cloveka ASC");
+    //     $vysledek = pg_query("SELECT * FROM vlastnici WHERE archiv='1' ORDER BY id_cloveka ASC");
 
-        while ($data=pg_fetch_array($vysledek) )
-          {
-          fputs($fp,"\n <tr>");
+    //     while ($data=pg_fetch_array($vysledek) )
+    //       {
+    //       fputs($fp,"\n <tr>");
 
-          fputs($fp,"<td> ".$data["id_cloveka"]."</td> ");
-          fputs($fp,"<td> ".$data["nick"]."</td> ");
-          fputs($fp,"<td> ".$data["jmeno"]."</td> ");
-          fputs($fp,"<td> ".$data["prijmeni"]."</td> ");
-          fputs($fp,"<td> ".$data["ulice"]."</td> ");
-          fputs($fp,"<td> ".$data["mesto"]."</td> ");
-          fputs($fp,"<td> ".$data["psc"]."</td> ");
-          fputs($fp,"<td> ".$data["icq"]."</td> ");
-          fputs($fp,"<td> ".$data["mail"]."</td> ");
-          fputs($fp,"<td> ".$data["telefon"]."</td> ");
-          fputs($fp,"<td> ".$data["poznamka"]."</td> ");
-          fputs($fp,"<td> ".$data["zaplaceno"]."</td> ");
-          fputs($fp,"<td> ".$data["fakturacni"]."</td> ");
-          fputs($fp,"<td> ".$data["vs"]."</td> ");
-          fputs($fp,"<td> ".$data["k_platbe"]."</td> ");
-          fputs($fp,"<td> ".$data["firma"]."</td> ");
-
-
-    if ( $data["fakturacni"] > 0 )
-          {
-            $id_f=$data["fakturacni"];
-
-            $vysl_f=pg_query("SELECT * FROM fakturacni WHERE id = '".intval($id_f)."' ");
-
-            while ( $data_f=pg_fetch_array($vysl_f) )
-            {
+    //       fputs($fp,"<td> ".$data["id_cloveka"]."</td> ");
+    //       fputs($fp,"<td> ".$data["nick"]."</td> ");
+    //       fputs($fp,"<td> ".$data["jmeno"]."</td> ");
+    //       fputs($fp,"<td> ".$data["prijmeni"]."</td> ");
+    //       fputs($fp,"<td> ".$data["ulice"]."</td> ");
+    //       fputs($fp,"<td> ".$data["mesto"]."</td> ");
+    //       fputs($fp,"<td> ".$data["psc"]."</td> ");
+    //       fputs($fp,"<td> ".$data["icq"]."</td> ");
+    //       fputs($fp,"<td> ".$data["mail"]."</td> ");
+    //       fputs($fp,"<td> ".$data["telefon"]."</td> ");
+    //       fputs($fp,"<td> ".$data["poznamka"]."</td> ");
+    //       fputs($fp,"<td> ".$data["zaplaceno"]."</td> ");
+    //       fputs($fp,"<td> ".$data["fakturacni"]."</td> ");
+    //       fputs($fp,"<td> ".$data["vs"]."</td> ");
+    //       fputs($fp,"<td> ".$data["k_platbe"]."</td> ");
+    //       fputs($fp,"<td> ".$data["firma"]."</td> ");
 
 
-            fputs($fp,"<td> ".$data_f["id"]."</td> ");
-            fputs($fp,"<td> ".$data_f["ftitle"]."</td> ");
-            fputs($fp,"<td> ".$data_f["fulice"]."</td> ");
-            fputs($fp,"<td> ".$data_f["fmesto"]."</td> ");
-            fputs($fp,"<td> ".$data_f["fpsc"]."</td> ");
-            fputs($fp,"<td> ".$data_f["ico"]."</td> ");
-            fputs($fp,"<td> ".$data_f["dic"]."</td> ");
-            fputs($fp,"<td> ".$data_f["ucet"]."</td> ");
-            fputs($fp,"<td> ".$data_f["splatnost"]."</td> ");
-            fputs($fp,"<td> ".$data_f["cetnost"]."</td> ");
+    // if ( $data["fakturacni"] > 0 )
+    //       {
+    //         $id_f=$data["fakturacni"];
 
-            }
+    //         $vysl_f=pg_query("SELECT * FROM fakturacni WHERE id = '".intval($id_f)."' ");
 
-          }
-
-          fputs($fp,"</tr> \n ");
-          // echo "vysledek_array: ".$vysledek_array[$i];
-
-          }
-
-        fputs($fp,"</table>");   // Zapíšeme do souboru konec tabulky
-
-        fclose($fp);   // Zavřeme soubor
-
-        echo "<td>";
-
-        echo '<a href="export\vlastnici-archiv.xls" >export dat zde</a>';
-
-        echo "</td><td>";
-
-        // include("include/export-ucetni.php");
+    //         while ( $data_f=pg_fetch_array($vysl_f) )
+    //         {
 
 
-        echo "</td></tr></table>";
+    //         fputs($fp,"<td> ".$data_f["id"]."</td> ");
+    //         fputs($fp,"<td> ".$data_f["ftitle"]."</td> ");
+    //         fputs($fp,"<td> ".$data_f["fulice"]."</td> ");
+    //         fputs($fp,"<td> ".$data_f["fmesto"]."</td> ");
+    //         fputs($fp,"<td> ".$data_f["fpsc"]."</td> ");
+    //         fputs($fp,"<td> ".$data_f["ico"]."</td> ");
+    //         fputs($fp,"<td> ".$data_f["dic"]."</td> ");
+    //         fputs($fp,"<td> ".$data_f["ucet"]."</td> ");
+    //         fputs($fp,"<td> ".$data_f["splatnost"]."</td> ");
+    //         fputs($fp,"<td> ".$data_f["cetnost"]."</td> ");
+
+    //         }
+
+    //       }
+
+    //       fputs($fp,"</tr> \n ");
+    //       // echo "vysledek_array: ".$vysledek_array[$i];
+
+    //       }
+
+    //     fputs($fp,"</table>");   // Zapíšeme do souboru konec tabulky
+
+    //     fclose($fp);   // Zavřeme soubor
+
+    //     echo "<td>";
+
+    //     echo '<a href="export\vlastnici-archiv.xls" >export dat zde</a>';
+
+    //     echo "</td><td>";
+
+    //     // include("include/export-ucetni.php");
+
+
+    //     echo "</td></tr></table>";
 
     }
 
