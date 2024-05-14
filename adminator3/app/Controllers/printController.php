@@ -101,7 +101,7 @@ class printController extends adminatorController
             $this->smarty->assign("file_name", $rf->file_name);
 
             //finalni zobrazeni sablony
-            $this->smarty->display('others/print-reg-form-2012-05.tpl');
+            $this->smarty->display('print/reg-form-2012-05.tpl');
         } else {
 
             //check a processing form

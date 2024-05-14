@@ -851,10 +851,12 @@ class printClass extends adminator
             // </body>
             // </html>';
 
-            $this->smarty->assign("file_name", '/'.$nazev_souboru);
+            $this->smarty->assign("csrf_html", $this->csrf_html);
+
+            $this->smarty->assign("file_name", $nazev_souboru);
 
             //finalni zobrazeni sablony
-            $this->smarty->display('others/print-reg-form-2012-05.tpl');
+            $this->smarty->display('print/reg-form-2012-05.tpl');
 
         } //konec else !isset nazev
     }
