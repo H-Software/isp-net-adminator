@@ -60,8 +60,16 @@ class printController extends adminatorController
             //     ->withStatus(302);
 
             $fh = fopen($fullName, "r");
-            $content = fread($fh, filesize($fullName));
-            fclose($fh);
+            if($fh === false ){
+
+                $newResponse = $response->withStatus(500);
+                return $newResponse;
+
+            } else{
+                $content = fread($fh, filesize($fullName));
+                fclose($fh);
+            }
+
 
             $response = $response->withHeader('Content-type', 'application/pdf')
                 ->withAddedHeader('Content-Disposition', 'attachment; filename=' . $fileName);
