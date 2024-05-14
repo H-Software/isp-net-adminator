@@ -381,34 +381,34 @@ if (!(isset($fail))) {
         } else {
             $vlast_upd["mail"] = null;
         }
-        
+
         if ($icq > 0) {
             $vlast_upd["icq"] = $icq;
         } else {
             $vlast_upd["icq"] = "";
         }
-        
+
         if ((strlen($tel) > 0)) {
             $vlast_upd["telefon"] = $tel;
         } else {
             $vlast_upd["telefon"] = null;
         }
-        
+
         if ($ucetni_index > 0) {
             $vlast_upd["ucetni_index"] = $ucetni_index;
         } else {
             $vlast_upd["ucetni_index"] = "";
         }
-        
+
         //if ( (strlen($poznamka) > 0 ) )
         { $vlast_upd["poznamka"] = $poznamka; }
-        
+
         if ((strlen($datum_podpisu) > 0)) {
             $vlast_upd["datum_podpisu"] = $datum_podpisu;
         } else {
             $vlast_upd["datum_podpisu"] = null;
         }
-        
+
         if ((strlen($typ_smlouvy) > 0)) {
             $vlast_upd["typ_smlouvy"] = $typ_smlouvy;
         } else {
@@ -416,7 +416,7 @@ if (!(isset($fail))) {
         }
 
         if ($fakt_skupina < 1) {
-          unset($vlast_upd["fakturacni_skupina_id"]);
+            $vlast_upd["fakturacni_skupina_id"] = null;
         }
 
         if($sluzba_int == 1) {
@@ -424,7 +424,7 @@ if (!(isset($fail))) {
         }
 
         if($sluzba_iptv == 1) {
-          $vlast_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
+            $vlast_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
         }
 
         if($billing_suspend_status == 1) {
@@ -445,18 +445,18 @@ if (!(isset($fail))) {
             $vlast_upd["billing_suspend_start"]  = null;
             $vlast_upd["billing_suspend_stop"] = null;
         }
-        
+
         echo "<pre>" . var_export($vlast_upd, true) ."</pre>";
 
         // echo "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
 
         try {
-          $affected = DB::connection('pgsql')
-                      ->table('vlastnici')
-                      ->where('id_cloveka', $update_id)
-                      ->update($vlast_upd);
+            $affected = DB::connection('pgsql')
+                        ->table('vlastnici')
+                        ->where('id_cloveka', $update_id)
+                        ->update($vlast_upd);
         } catch (Exception $e) {
-          $error = $e->getMessage();
+            $error = $e->getMessage();
         }
 
         if($affected == 1) {
