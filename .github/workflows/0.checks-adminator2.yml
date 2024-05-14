@@ -31,9 +31,14 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           coverage: none
+          extensions: opentelemetry, grpc, protobuf
 
-      - name: Print PHP version
-        run: php -v
+      - name: Print PHP version and extensions
+        run: |
+          php -v \
+          && php --ri opentelemetry \
+          && php --ri grpc \
+          && php --ri protobuf
 
       - name: Install dependencies
         run: composer install --ignore-platform-reqs
@@ -74,12 +79,11 @@ jobs:
       #           templates \
       #           app
 
-      # - name: PHP-CS-Fixer
-      #   if: always()
-      #   run: |
-      #     php \
-      #     vendor/friendsofphp/php-cs-fixer/php-cs-fixer \
-      #     check \
-      #     --show-progress=dots \
-      #     -v
+      - name: PHP-CS-Fixer
+        run: |
+          php \
+          vendor/friendsofphp/php-cs-fixer/php-cs-fixer \
+          check \
+          --show-progress=dots \
+          -v
 

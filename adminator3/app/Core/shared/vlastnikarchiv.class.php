@@ -42,9 +42,9 @@ class vlastnikarchiv
 	    <td class=\"vlastnici-td-black\" colspan=\"2\">VS: [".$data["vs"]."] ";
 
                 if ($data["firma"] == 1) {
-                    echo " firma: [Simelon, s.r.o.]";
+                    echo " firma: [Company, s.r.o.]";
                 } else {
-                    echo " firma: [M. Lopušný] ";
+                    echo " firma: [F.O.] ";
                 }
 
                 echo"</td>
