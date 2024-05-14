@@ -194,7 +194,7 @@ class vlastnikarchiv
 
                 $output .= "<td align=\"center\" >";
 
-                $output .= " <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
+                $output .= " <img title=\"poznamka\" src=\"/img2/poznamka3.png\" align=\"middle\" ";
                 $output .= " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." ');\" >";
 
                 $output .= "</td>";
