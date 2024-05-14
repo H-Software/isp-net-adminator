@@ -156,6 +156,8 @@ class vlastniciController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
+        $vlastnikArchiv = new \vlastnikarchiv();
+
         $find_id = $_GET["find_id"];
         $find = $_GET["find"];
 
@@ -194,7 +196,7 @@ class vlastniciController extends adminatorController
             $odendani_povoleno = "true";
         }
 
-        \vlastnikarchiv::vypis_tab(1);
+        $vlastnikArchiv->vypis_tab(1);
 
         if ($co == 1) {
 
@@ -292,16 +294,14 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-
         $listovani->listInterval();
 
-        $ip = new \vlastnikarchiv();
-        $ip->conn_mysql = $this->conn_mysql;
-        $ip->conn_pgsql = $this->conn_pgsql;
+        $vlastnikArchiv->conn_mysql = $this->conn_mysql;
+        $vlastnikArchiv->conn_pgsql = $this->conn_pgsql;
 
-        $ip->vypis($sql, $co, $dotaz_final);
+        $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
-        \vlastnikarchiv::vypis_tab(2);
+        $vlastnikArchiv->vypis_tab(2);
 
         $listovani->listInterval();
 
