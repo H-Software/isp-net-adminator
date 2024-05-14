@@ -181,6 +181,13 @@ class vlastniciController extends adminatorController
         } else { /* cokoli dalsiho */
         }
 
+        if (empty($_GET["find"]) )  { 
+            $this->smarty->assign("form_find", "%");
+        }
+        else {  
+            $this->smarty->assign("form_find", htmlspecialchars($_GET["find"]));
+        }
+
         //promena pro update objektu
         if ($this->adminator->checkLevel(29, false) === true) {
             $vlastnikArchiv->objekt_update_povolen = true;
