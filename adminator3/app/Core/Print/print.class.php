@@ -370,6 +370,8 @@ class printClass extends adminator
             //zobrazeni odkazu dpdf soubor
             $this->smarty->assign("file_name", "/".$nazev_souboru);
 
+            $this->smarty->assign("csrf_html", $this->csrf_html);
+
             //finalni zobrazeni sablony
             $this->smarty->display('print/smlouva-2012-05.tpl');
 
@@ -1157,6 +1159,8 @@ class printClass extends adminator
 
             $this->smarty->assign("file_name", '/'.$nazev_souboru);
 
+            $this->smarty->assign("csrf_html", $this->csrf_html);
+
             //finalni zobrazeni sablony
             $this->smarty->display('print/smlouva.tpl');
 
@@ -1671,6 +1675,8 @@ class printClass extends adminator
             // </html>';
 
             $this->smarty->assign("file_name", '/'.$nazev_souboru);
+
+            $this->smarty->assign("csrf_html", $this->csrf_html);
 
             //finalni zobrazeni sablony
             $this->smarty->display('print/reg-form.tpl');
