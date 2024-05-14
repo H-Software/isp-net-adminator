@@ -23,6 +23,8 @@ class printController extends adminatorController
         $this->smarty = $this->container->get('smarty');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
     }
 
     public function printListAll(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -49,6 +51,10 @@ class printController extends adminatorController
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->checkLevel(308, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Print :: redirect");
+
+        $this->header($request, $response, $this->adminator);
 
         if ($request->getMethod() == "POST") {
 
@@ -79,6 +85,12 @@ class printController extends adminatorController
 
         } else {
             $response->getBody()->write("Error! Missing POST parameter.");
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", "Error! Missing POST parameter.");
+
+            $this->smarty->display('print/redirect.tpl');
+
             $newResponse = $response->withStatus(500);
             return $newResponse;
         }
