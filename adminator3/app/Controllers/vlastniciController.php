@@ -300,7 +300,7 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-        $bodyContent .= $listovani->listInterval();
+        $bodyContent .= "<div class=\"text-listing2\" style=\"border: 1px solid black;\">" . $listovani->listInterval() . "</div>";
 
         $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
