@@ -169,22 +169,30 @@ class vlastniciController extends adminatorController
         $find_id = $_GET["find_id"];
         $find = $_GET["find"];
 
+        $form_select = intval($_GET["select"]);
+        $form_razeni = intval($_GET["razeni"]);
+        $form_razeni2 = intval($_GET["razeni2"]);
+
         if ((strlen($find_id) > 0)) {
             $co = 3;
             /* hledani podle id_cloveka */
-            $sql = $_GET["find_id"];
+            $sql = intval($_GET["find_id"]);
         } elseif ((strlen($find) > 0)) {
             $co = 1;
             /* hledani podle cehokoli */
-            $sql = $_GET["find"];
+            $sql = $this->conn_mysql->real_escape_string($find);
         } else { /* cokoli dalsiho */
         }
 
         if (empty($_GET["find"])) {
             $this->smarty->assign("form_find", "%");
         } else {
-            $this->smarty->assign("form_find", htmlspecialchars($_GET["find"]));
+            $this->smarty->assign("form_find", htmlspecialchars($find));
         }
+
+        $this->smarty->assign("form_select",$form_select);
+        $this->smarty->assign("form_razeni", $form_razeni);
+        $this->smarty->assign("form_razeni2", $form_razeni2);
 
         //promena pro update objektu
         if ($this->adminator->checkLevel(29, false) === true) {
@@ -295,7 +303,7 @@ class vlastniciController extends adminatorController
         // global $list;
         $list = $_GET["list"];
 
-        $poradek = "find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
+        $poradek = "find=".$find."&find_id=".intval($find_id)."&najdi=".$_GET["najdi"]."&select=".$form_select."&razeni=".$form_razeni."&razeni2=".$form_razeni2;
 
         //vytvoreni objektu
         $listovani = new \c_listing_vlastnici2("/vlastnici/archiv?".$poradek."&menu=1", 30, $list, "", "", $dotaz_source);
