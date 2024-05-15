@@ -2,15 +2,20 @@
 
 <div style="padding-top: 4px; " class="listing-selectors-line" >
 
-<input type="radio" name="select" value="1" ><label>Všichni</label> |
+<input type="radio" name="select" value="1" >
+<label class="listing-selector-label" >Všichni</label> |
 
-<input type="radio" name="select" value="2" ><label>Fakturační</label> |
+<input type="radio" name="select" value="2" >
+<labelclass="listing-selector-label" >Fakturační</label> |
 
-<input type="radio" name="select" value="3" ><label>Nefakturační</label> |
+<input type="radio" name="select" value="3" >
+<label class="listing-selector-label" >Nefakturační</label> |
 
-<input type="radio" name="select" value="4" ><label> Neplatí(free) </label> |
+<input type="radio" name="select" value="4" >
+<label class="listing-selector-label" > Neplatí(free) </label> |
 
-<input type="radio" name="select" value="5" ><label> Platí </label> |
+<input type="radio" name="select" value="5" >
+<label class="listing-selector-label" > Platí </label> |
 
 <span style="padding-left: 5px; padding-right: 5px; ">Řadit dle:</span>
 
@@ -31,11 +36,14 @@
     <option value="2" > sestupně  </option>
 </select>
 
-<div>
+</div>
+
+<div style="padding-top: 4px; width: 100%;" class="listing-selectors-line" >
+
 <input type="submit" value="NAJDI" name="najdi"> 
 
-<label>Hledání : </label><input type="text" name="find" value="{$form_find|default: ''}">
-</div>
+<label>Hledání : </label>
+<input type="text" name="find" value="{$form_find|default: ''}">
 
 </div>
 
