@@ -7,6 +7,9 @@ use Psr\Container\ContainerInterface;
 use App\View\CsrfExtension;
 use App\Middleware\FlashOldFormDataMiddleware;
 
+use OpenFeature\OpenFeatureAPI;
+use OpenFeature\Providers\Flagd\FlagdProvider;
+
 $container->set(
     'settings',
     function () {
@@ -50,7 +53,18 @@ $container->set(
     }
 );
 
-// $container->set('smarty', $smarty);
+$container->set(
+    'openfeature',
+    function ($c) {
+        $api = OpenFeatureAPI::getInstance();
+    
+        $api->setProvider(new FlagdProvider());
+    
+        $client = $api->getClient();
+
+        return $client;
+    }
+);
 
 $container->set(
     'smarty',
