@@ -56,11 +56,22 @@ $container->set(
 $container->set(
     'openfeature',
     function ($c) {
+        $logger = $c->get('logger');
+
         $api = OpenFeatureAPI::getInstance();
     
-        $api->setProvider(new FlagdProvider());
+        $api->setProvider(new FlagdProvider([
+            'host' => 'flagd',
+            'port' => 8013,
+            'secure' => false,
+            'protocol' => 'http'
+          ]));
     
-        $client = $api->getClient();
+        $client = $api->getClient('flagd-local', '1.0');
+
+        $configVersion = $client->getStringValue("adminator3FlagdConfigVersion", "null");
+
+        $logger->debug("bootstrap\containerAfer: openfeature:  adminator3FlagdConfigVersion: " . var_export($configVersion, true));
 
         return $client;
     }
