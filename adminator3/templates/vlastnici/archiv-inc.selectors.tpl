@@ -38,6 +38,8 @@
 
 </div>
 
+<div style="padding-top: 4px; border-bottom: 1px gray solid; width: 20%; "></div>
+
 <div style="padding-top: 4px; width: 100%;" class="listing-selectors-line" >
 
 <input type="submit" value="NAJDI" name="najdi"> 
