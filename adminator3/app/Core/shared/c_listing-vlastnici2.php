@@ -26,6 +26,8 @@ class c_listing_vlastnici2
     public $befError = "<div align=\"center\" style=\"color: maroon;\">";
     public $aftError = "</div>";
 
+    public $echo = true;
+
     // $select="./objekty.php?";
 
     public function __construct($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
@@ -117,8 +119,9 @@ class c_listing_vlastnici2
     //napr.:    1-10 | 11-20 | 21-30
     public function listInterval()
     {
+        $output = "";
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         for ($i = 1; $i <= $this->numLists; $i++) {
             $isLink = 1;
             $spacer = " | ";
@@ -136,13 +139,18 @@ class c_listing_vlastnici2
                 $spacer = "";
             }
             if ($isLink == 0) {
-                echo $from."-".$to." ".$spacer;
+                $output .= $from."-".$to." ".$spacer;
             }
             if ($isLink == 1) {
-                echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
+                $output .= "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
             }
         }
-        echo $this->after;
+        $output .= $this->after;
+        if($this->echo) {
+            echo $output;
+        } else {
+            return $output;
+        }
     }
 
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)

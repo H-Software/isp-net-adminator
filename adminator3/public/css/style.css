@@ -283,8 +283,20 @@ subcat-spacebody
     border-collapse: separate;
     border: 1px solid #999;
     font-size: 0.9rem;
-}​
+}
 
+input[type=button], 
+input[type=submit] 
+.vlastnici-archiv-button {
+    border: none;
+    font-size: 0.75rem !important;
+}
+
+.vlastnici-archiv-table table {
+    border-collapse: separate;
+    border: 1px solid #999;
+    font-size: 0.9rem;
+}
 
 .listing-selectors-line
 {

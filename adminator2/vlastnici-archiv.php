@@ -115,7 +115,7 @@ include ("include/charset.php");
 
 
           <tr>
-            <td> <input type="submit" value="NAJDI" name="najdi"> </td>
+            <td>  <input type="submit" value="NAJDI" name="najdi"> </td>
             <td>  <label>Hledání : </label><input type="text" name="find"
             <?
             if (empty($_GET["find"]) )  { echo 'value="%"'; }
@@ -252,6 +252,9 @@ include ("include/charset.php");
         </form>
 
         <?
+        $ip = new vlastnikarchiv;
+        $ip->conn_mysql = $conn_mysql;
+        $ip->conn_pgsql = $db_ok2;
 
         $find_id=$_GET["find_id"];
         $find=$_GET["find"];
@@ -278,7 +281,7 @@ include ("include/charset.php");
         // odendani objektu od vlastnika
         if ( check_level($level,49) ){ $odendani_povoleno="true"; }
 
-        vlastnikarchiv::vypis_tab(1);
+        $ip->vypis_tab(1);
 
          if ( $co==1)
          {
@@ -344,13 +347,9 @@ include ("include/charset.php");
 
           $listovani->listInterval();
 
-          $ip = new vlastnikarchiv;
-          $ip->conn_mysql = $conn_mysql;
-          $ip->conn_pgsql = $db_ok2;
-
           $ip->vypis($sql,$co,$dotaz_final);
 
-          vlastnikarchiv::vypis_tab(2);
+          $ip->vypis_tab(2);
 
           $listovani->listInterval();
 

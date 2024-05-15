@@ -5,21 +5,42 @@ class vlastnikarchiv
     public $conn_mysql;
     public $conn_pgsql;
 
-    public static function vypis_tab($par)
+    public $echo = true;
+
+    public $csrf_html;
+
+    public $vlastnici_erase_povolen = false;
+
+    public $vlastnici_update_povolen = false;
+
+    public $odendani_povoleno = false;
+
+    public $objekt_update_povolen = false;
+    public $objekt_mazani_povoleno = false;
+    public $objekt_garant_akce = false;
+
+    public function vypis_tab($par)
     {
+        $output = "";
+
         if ($par == 1) {
-            echo "\n".'<table border="1" width="100%">'."\n";
+            $output .= "\n".'<table border="1" width="100%">'."\n";
         } elseif ($par == 2) {
-            echo "\n".'</table>'."\n";
+            $output .= "\n".'</table>'."\n";
         } else {
-            echo "chybny vyber";
+            $output .= "chybny vyber";
+        }
+
+        if($this->echo) {
+            echo $output;
+        } else {
+            return $output;
         }
     }
 
-
     public function vypis($sql, $co, $dotaz_final)
     {
-
+        $output = "";
         // co - co hledat, 1- podle dns, 2-podle ip
 
         $dotaz = pg_query($dotaz_final);
@@ -27,80 +48,69 @@ class vlastnikarchiv
         if($dotaz !== false) {
             $radku = pg_num_rows($dotaz);
         } else {
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($db_ok2). "</div>");
+            $output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). "</div>";
         }
 
         if ($radku == 0) {
-            echo "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
+            $output .= "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
         } else {
 
             while($data = pg_fetch_array($dotaz)) {
-                echo "<tr><td colspan=\"14\"> <br> </td> </tr>
-	    <tr> <td class=\"vlastnici-td-black\" colspan=\"2\" width=\"\" >id: [".$data["id_cloveka"]."] 
-	    nick: [".$data["nick"]."] účetní-index: [".sprintf("%05d", $data["ucetni_index"])."] </td>
-	    
-	    <td class=\"vlastnici-td-black\" colspan=\"2\">VS: [".$data["vs"]."] ";
+                $output .= "<tr><td colspan=\"14\"> <br> </td> </tr>
+                            <tr> <td class=\"vlastnici-td-black\" colspan=\"2\" width=\"\" >id: [".$data["id_cloveka"]."] 
+                            nick: [".$data["nick"]."] účetní-index: [".sprintf("%05d", $data["ucetni_index"])."] </td>
+                            
+                            <td class=\"vlastnici-td-black\" colspan=\"2\">VS: [".$data["vs"]."] ";
 
                 if ($data["firma"] == 1) {
-                    echo " firma: [Company, s.r.o.]";
+                    $output .= " firma: [Company, s.r.o.]";
                 } else {
-                    echo " firma: [F.O.] ";
+                    $output .= " firma: [F.O.] ";
                 }
 
-                echo"</td>
-	
-	    <td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
-	    <td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"\" >";
+                $output .= "</td>	
+                        <td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
+                        <td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"\" >";
 
-                echo "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
+                $output .= "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
 
                 // sem mazani
-
-                global $vlastnici_erase_povolen;
-
-                if (! ($vlastnici_erase_povolen == "true")) {
-                    echo "<span style=\"\" > smazat </span> ";
+                if (! ($this->vlastnici_erase_povolen === true)) {
+                    $output .= "<span style=\"\" > smazat </span> ";
                 } else {
-                    echo "<form method=\"POST\" action=\"vlastnici2-erase.php\" >";
-                    echo "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_cloveka"]."\" >";
-                    echo "<input type=\"submit\" value=\"Smazat\" >";
-
-                    echo "</form> \n";
-
+                    $output .= "<form method=\"POST\" action=\"vlastnici2-erase.php\" >";
+                    $output .= "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_cloveka"]."\" >";
+                    $output .= "<input type=\"submit\" value=\"Smazat\" >";
+                    $output .= "</form> \n";
                 }
-                echo "</td><td class=\"vlastnici-td-black\" >";
-
-                global $vlastnici_update_povolen;
+                $output .= "</td><td class=\"vlastnici-td-black\" >";
 
                 // 6-ta update
-
-                if (!($vlastnici_update_povolen == "true")) {
-                    echo "<span style=\"\" >  upravit  </span> \n";
+                if (!($this->vlastnici_update_povolen === true)) {
+                    $output .= "<span style=\"\" >  upravit  </span> \n";
                 } else {
-                    echo " <form method=\"POST\" action=\"vlastnici2-change.php\" >";
-                    echo "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
-                    echo "<input type=\"submit\" value=\"update\" >";
-
-                    echo "</form> \n";
-
+                    $output .= " <form method=\"POST\" action=\"vlastnici2-change.php\" >";
+                    $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
+                    $output .= "<input type=\"submit\" value=\"update\" >";
+                    $output .= "</form> \n";
                 }
 
-                echo "</td> </tr> </table>";
+                $output .= "</td> </tr> </table>";
 
-                echo "  </td>
-	        </tr>
-		  <tr> <td colspan=\"2\">".$data["jmeno"]." ".$data["prijmeni"]."<br>
-		 ".$data["ulice"]." ";
+                $output .= "</td>
+                            </tr>
+                        <tr>
+                        <td colspan=\"2\">".$data["jmeno"]." ".$data["prijmeni"]."<br>
+                        ".$data["ulice"]." ";
 
-                echo "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
+                $output .= "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
 
 
-                echo "<br>".$data["mesto"]." ".$data["psc"]."</td>
-		 <td colspan=\"12\">icq: ".$data["icq"]." <br>
-		 mail: ".$data["mail"]." <br>
-		 tel: ".$data["telefon"]." </td>
-		 </tr>";
-
+                $output .= "<br>".$data["mesto"]." ".$data["psc"]."</td>
+                            <td colspan=\"12\">icq: ".$data["icq"]." <br>
+                            mail: ".$data["mail"]." <br>
+                            tel: ".$data["telefon"]." </td>
+                            </tr>";
 
                 $id = $data["id_cloveka"];
                 $id_v = $id;
@@ -111,7 +121,9 @@ class vlastnikarchiv
 
                 if (($id_f > 0)) {
                     $fakturacni = new fakturacni();
-                    $fakturacni->vypis($id_f, $id_v);
+                    $fakturacni->echo = false;
+
+                    $output .= $fakturacni->vypis($id_f, $id_v);
                 }
 
                 // $sql="%";
@@ -122,161 +134,155 @@ class vlastnikarchiv
                 $objekt_a2 = new objekt_a2();
                 $objekt_a2->conn_mysql = $this->conn_mysql;
                 $objekt_a2->conn_pgsql = $this->conn_pgsql;
+                $objekt_a2->echo = false;
 
-                $objekt_a2->vypis($sql, $co, $id);
-
-
+                $output .= $objekt_a2->vypis($sql, $co, $id);
 
                 //tady dalsi radka asi
+                $output .= "<tr>";
 
+                $output .= "<td>další funkce: </td>
+                        <td colspan=\"13\">";
 
-                echo "<tr>";
+                //$output .= "<a href=\"vlastnici2-add-obj.php?id_vlastnika=".$data["id_cloveka"]."\">přidání objektu</a>";
+                $output .= "<span style=\"color: gray; \">přidání objektu</span>";
 
-                echo "<td>další funkce: </td>
-	        <td colspan=\"13\">";
+                $output .= "<span style=\"margin: 10px; \"></span>";
 
-                //echo "<a href=\"vlastnici2-add-obj.php?id_vlastnika=".$data["id_cloveka"]."\">přidání objektu</a>";
-                echo "<span style=\"color: gray; \">přidání objektu</span>";
+                $output .= "<a href=\"platby-vypis.php?id_vlastnika=".intval($data["id_cloveka"])."\" > výpis plateb - starý (do 2/2012)</a>";
 
-                echo "<span style=\"margin: 10px; \"></span>";
+                $output .= "<span style=\"margin-left: 20px; \">
+                            <a href=pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - (od 3/2012)</a>".
+                                "</span>";
 
-                echo "<a href=\"platby-vypis.php?id_vlastnika=".intval($data["id_cloveka"])."\" > výpis plateb - starý (do 2/2012)</a>";
-
-                echo "<span style=\"margin-left: 20px; \">
-		    <a href=pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - (od 3/2012)</a>".
-                "</span>";
-
-                echo "<span style=\"margin: 10px; \">fakturační adresa:</span>";
+                $output .= "<span style=\"margin: 10px; \">fakturační adresa:</span>";
 
                 /*
                 if ( ( $data["fakturacni"] > 0 ) )
-                { echo " přidání fakturační adresy "; }
+                { $output .= " přidání fakturační adresy "; }
                 else
-                { echo "<a href=\"vlastnici2-add-fakt.php?id_vlastnika=".$data["id_cloveka"]."\" > přidání fakturační adresy </a>"; }
+                { $output .= "<a href=\"vlastnici2-add-fakt.php?id_vlastnika=".$data["id_cloveka"]."\" > přidání fakturační adresy </a>"; }
                 */
-                echo "<span style=\"color: grey; \"> přidání</span>";
+                $output .= "<span style=\"color: grey; \"> přidání</span>";
 
-                echo "<span style=\"margin: 25px; \"></span>";
-
-                if (($data["fakturacni"] > 0)) {
-                    echo "<a href=\"vlastnici2-erase-f.php?id=".$data["fakturacni"]."\" > smazání </a>";
-                } else {
-                    echo " smazání ";
-                }
-
-                echo "<span style=\"margin: 25px; \" ></span>";
+                $output .= "<span style=\"margin: 25px; \"></span>";
 
                 if (($data["fakturacni"] > 0)) {
-                    echo "<a href=\"vlastnici2-change-fakt.php?id=".$data["fakturacni"]."\" > úprava </a>";
+                    $output .= "<a href=\"vlastnici2-erase-f.php?id=".$data["fakturacni"]."\" > smazání </a>";
                 } else {
-                    echo " úprava ";
+                    $output .= " smazání ";
                 }
 
-                echo "</td></tr>";
+                $output .= "<span style=\"margin: 25px; \" ></span>";
+
+                if (($data["fakturacni"] > 0)) {
+                    $output .= "<a href=\"vlastnici2-change-fakt.php?id=".$data["fakturacni"]."\" > úprava </a>";
+                } else {
+                    $output .= " úprava ";
+                }
+
+                $output .= "</td></tr>";
 
                 //druha radka
-                echo "<tr>";
+                $output .= "<tr>";
 
-                // echo "<td><br></td>";
+                // $output .= "<td><br></td>";
 
                 $orezano = explode(':', $data["pridano"]);
                 $pridano = $orezano[0].":".$orezano[1];
 
+                $output .= "<td colspan=\"1\" >";
 
-                echo "<td colspan=\"1\" >";
+                $output .= "datum přidání: ".$pridano." ";
 
-                echo "datum přidání: ".$pridano." ";
+                $output .= "</td>";
 
-                echo "</td>";
+                $output .= "<td align=\"center\" >";
 
-                echo "<td align=\"center\" >";
+                $output .= " <img title=\"poznamka\" src=\"/img2/poznamka3.png\" align=\"middle\" ";
+                $output .= " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." ');\" >";
 
-                echo " <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
-                echo " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." ');\" >";
+                $output .= "</td>";
 
-                echo "</td>";
+                $output .= "<td colspan=\"2\">";
+                $output .= "<form method=\"POST\" action=\"platby-akce.php\" >";
 
-                echo "<td colspan=\"4\">";
-                echo "<form method=\"POST\" action=\"platby-akce.php\" >";
+                $output .= "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
+                $output .= "<input type=\"hidden\" name=\"klient\" value=\"".$data["id_cloveka"]."\" >";
 
-                echo "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
-                echo "<input type=\"hidden\" name=\"klient\" value=\"".$data["id_cloveka"]."\" >";
+                $output .= "<input type=\"submit\" name=\"akce\" value=\"Vložení hotovostní platby\" >";
 
-                echo "<input type=\"submit\" name=\"akce\" value=\"Vložení hotovostní platby\" >";
-
-                echo "</form>";
-                echo "</td>";
+                $output .= "</form>";
+                $output .= "</td>";
 
 
-                echo "<td colspan=\"4\">";
-                echo "<form method=\"POST\" action=\"vypovedi-vlozeni.php\" >";
+                $output .= "<td colspan=\"4\">";
+                $output .= "<form method=\"POST\" action=\"vypovedi-vlozeni.php\" >";
 
-                echo "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
-                echo "<input type=\"hidden\" name=\"klient\" value=\"".$data["id_cloveka"]."\" >";
+                $output .= "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
+                $output .= "<input type=\"hidden\" name=\"klient\" value=\"".$data["id_cloveka"]."\" >";
 
-                echo "<input type=\"submit\" name=\"akce\" value=\"Vložit žádost o výpověď\" >";
+                $output .= "<input type=\"submit\" name=\"akce\" value=\"Vložit žádost o výpověď\" >";
 
-                echo "</form>";
-                echo "</td>";
+                $output .= "</form>";
+                $output .= "</td>";
 
-                //echo "<td colspan=\"3\"><br></td>";
+                //$output .= "<td colspan=\"3\"><br></td>";
 
-                echo "<td colspan=\"1\">";
+                $output .= "<td colspan=\"3\">";
                 // zde dalsi veci
-                echo "<span style=\"color: grey; padding-left: 10px; \" >H: </span>";
-                echo "<a href=\"archiv-zmen.php?id_cloveka=".$data["id_cloveka"]."\">".$data["id_cloveka"]."</a>";
+                $output .= "<span style=\"color: grey; padding-left: 10px; \" >H: </span>";
+                $output .= "<a href=\"/archiv-zmen?id_cloveka=".$data["id_cloveka"]."\">".$data["id_cloveka"]."</a>";
 
-                echo "</td>";
+                $output .= "</td>";
 
-                echo "<td> ";
+                $output .= "<td> ";
                 //tisk smlouvy
-                echo "<form method=\"POST\" action=\"/smlouva-pdf.php\" >";
-
-                echo "<input type=\"hidden\" name=\"ec\" value=\"".$data["vs"]."\" >";
-                echo "<input type=\"hidden\" name=\"jmeno\" value=\"".$data["jmeno"]." ".$data["prijmeni"]."\" >";
-                echo "<input type=\"hidden\" name=\"ulice\" value=\"".$data["ulice"]."\" >";
-                echo "<input type=\"hidden\" name=\"mesto\" value=\"".$data["psc"]." ".$data["mesto"]."\" >";
-                echo "<input type=\"hidden\" name=\"telefon\" value=\"".$data["telefon"]."\" >";
-                echo "<input type=\"hidden\" name=\"email\" value=\"".$data["mail"]."\" >";
+                $output .= "<form method=\"POST\" action=\"/print/smlouva\" >";
+                $output .= $this->csrf_html;
+                $output .= "<input type=\"hidden\" name=\"ec\" value=\"".$data["vs"]."\" >";
+                $output .= "<input type=\"hidden\" name=\"jmeno\" value=\"".$data["jmeno"]." ".$data["prijmeni"]."\" >";
+                $output .= "<input type=\"hidden\" name=\"ulice\" value=\"".$data["ulice"]."\" >";
+                $output .= "<input type=\"hidden\" name=\"mesto\" value=\"".$data["psc"]." ".$data["mesto"]."\" >";
+                $output .= "<input type=\"hidden\" name=\"telefon\" value=\"".$data["telefon"]."\" >";
+                $output .= "<input type=\"hidden\" name=\"email\" value=\"".$data["mail"]."\" >";
 
                 if(($data["fakturacni"] > 0)) {
-                    echo "<input type=\"hidden\" name=\"fakturace\" value=\"2\" >";
-                    //echo "<input type=\"hidden\" name=\"jmeno\" value=\"".$data["jmeno"]." ".$data["prijmeni"]."\" >";
-                    //echo "<input type=\"hidden\" name=\"ulice\" value=\"".$data["ulice"]."\" >";
-                    //echo "<input type=\"hidden\" name=\"mesto\" value=\"".$data["psc"]." ".$data["mesto"]."\" >";
+                    $output .= "<input type=\"hidden\" name=\"fakturace\" value=\"2\" >";
+                    //$output .= "<input type=\"hidden\" name=\"jmeno\" value=\"".$data["jmeno"]." ".$data["prijmeni"]."\" >";
+                    //$output .= "<input type=\"hidden\" name=\"ulice\" value=\"".$data["ulice"]."\" >";
+                    //$output .= "<input type=\"hidden\" name=\"mesto\" value=\"".$data["psc"]." ".$data["mesto"]."\" >";
                 }
                 if ($data["k_platbe"] == "250") {
-                    echo "<input type=\"hidden\" name=\"tarif\" value=\"1\" >";
+                    $output .= "<input type=\"hidden\" name=\"tarif\" value=\"1\" >";
                 } elseif($data["k_platbe"] == "420") {
-                    echo "<input type=\"hidden\" name=\"tarif\" value=\"2\" >";
+                    $output .= "<input type=\"hidden\" name=\"tarif\" value=\"2\" >";
                 } else {
-                    echo "<input type=\"hidden\" name=\"tarif\" value=\"3\" >";
+                    $output .= "<input type=\"hidden\" name=\"tarif\" value=\"3\" >";
                 }
 
-                echo "<input type=\"submit\" name=\"akce\" value=\"Tisk smlouvy\" >";
+                $output .= "<input type=\"submit\" name=\"akce\" value=\"Tisk smlouvy\" class=\"vlastnici-archiv-button\" >";
 
-                echo "</form>";
+                $output .= "</form>";
 
-                // echo "</tr></table>";
-                echo "</td>";
+                $output .= "</td>";
 
+                $output .= "<td colspan=\"2\" >
+                    <form action=\"opravy-vlastnik.php\" method=\"get\" >
+                    <input type=\"hidden\" name=\"typ\" value=\"2\" >
+                    <input type=\"hidden\" name=\"id_vlastnika\" value=\"".$data["id_cloveka"]."\" >			    
+		            <input type=\"submit\" name=\"ok\" value=\"Zobrazit závady/opravy \" ></form>";
+                $output .= "</td>";
 
-                echo "<td colspan=\"2\" >
-		    <form action=\"opravy-vlastnik.php\" method=\"get\" >
-		    <input type=\"hidden\" name=\"typ\" value=\"2\" >
-		    <input type=\"hidden\" name=\"id_vlastnika\" value=\"".$data["id_cloveka"]."\" >
-										    
-		    <input type=\"submit\" name=\"ok\" value=\"Zobrazit závady/opravy \" ></form>";
-                echo "</td>";
-
-                echo "</tr>";
-
-                //konec while
+                $output .= "</tr>";
             }
-
-            // konec else
         }
 
+        if($this->echo) {
+            echo $output;
+        } else {
+            return $output;
+        }
         // konec funkce vypis
     }
 
