@@ -6,7 +6,7 @@
 <label class="listing-selector-label" >Všichni</label> |
 
 <input type="radio" name="select" value="2" >
-<labelclass="listing-selector-label" >Fakturační</label> |
+<label class="listing-selector-label" >Fakturační</label> |
 
 <input type="radio" name="select" value="3" >
 <label class="listing-selector-label" >Nefakturační</label> |
