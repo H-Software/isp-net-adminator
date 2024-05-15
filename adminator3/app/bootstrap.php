@@ -23,5 +23,8 @@ require __DIR__ ."/../boostrap/appFactory.php";
 
 require __DIR__ ."/../boostrap/dependencies.php";
 
+# instanciate FF
+$feature = $container->get('openfeature');
+
 # FPDF
 define('FPDF_FONTPATH', "include/font/");
