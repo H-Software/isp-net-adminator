@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8d2f8bc69925ce70a74296ade1fef55",
+    "content-hash": "4ed659558b8633ac62b3348dc1ea49b2",
     "packages": [
         {
             "name": "amnuts/opcache-gui",
@@ -2923,6 +2923,90 @@
                 "source": "https://github.com/odan/session/tree/6.1.0"
             },
             "time": "2023-01-22T10:40:26+00:00"
+        },
+        {
+            "name": "open-feature/flagd-provider",
+            "version": "0.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/open-feature-php/flagd-provider.git",
+                "reference": "e7c2139dc144af7e7de356ccc6364ccedbee1951"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/open-feature-php/flagd-provider/zipball/e7c2139dc144af7e7de356ccc6364ccedbee1951",
+                "reference": "e7c2139dc144af7e7de356ccc6364ccedbee1951",
+                "shasum": ""
+            },
+            "require": {
+                "open-feature/sdk": "^2.0",
+                "php": "^8",
+                "php-http/httplug": "^2.3.0",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.0",
+                "psr/log": "^2.0 || ^3.0"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.25",
+                "friendsofphp/php-cs-fixer": "^3.13",
+                "hamcrest/hamcrest-php": "^2.0",
+                "mdwheele/zalgo": "^0.3.1",
+                "mockery/mockery": "^1.5",
+                "phan/phan": "^5.4",
+                "php-parallel-lint/php-console-highlighter": "^1.0",
+                "php-parallel-lint/php-parallel-lint": "^1.3",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "~1.10.0",
+                "phpstan/phpstan-mockery": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "psalm/plugin-mockery": "^0.11.0",
+                "psalm/plugin-phpunit": "^0.18.0",
+                "ramsey/coding-standard": "^2.0.3",
+                "ramsey/composer-repl": "^1.4",
+                "ramsey/conventional-commits": "^1.3",
+                "roave/security-advisories": "dev-latest",
+                "spatie/phpunit-snapshot-assertions": "^4.2",
+                "vimeo/psalm": "~4.30.0"
+            },
+            "type": "library",
+            "extra": {
+                "captainhook": {
+                    "force-install": false
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "": "proto/php/",
+                    "OpenFeature\\Providers\\Flagd\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "OpenFeature PHP Maintainers",
+                    "homepage": "https://github.com/orgs/open-feature/teams/php-maintainer"
+                },
+                {
+                    "name": "open-feature/php-sdk-contrib Contributors",
+                    "homepage": "https://github.com/open-feature/php-sdk-contrib/graphs/contributors"
+                }
+            ],
+            "description": "The Flagd provider package for open-feature",
+            "keywords": [
+                "featureflagging",
+                "featureflags",
+                "flagd",
+                "openfeature",
+                "provider"
+            ],
+            "support": {
+                "source": "https://github.com/open-feature-php/flagd-provider/tree/0.7.0"
+            },
+            "time": "2023-05-16T21:44:12+00:00"
         },
         {
             "name": "open-feature/sdk",
