@@ -19,6 +19,8 @@ networks:
 configs:
   collector_conf:
     file: ./configs/otel-collector/collector.yml
+  flagd_conf:
+    file: ./configs/flagd/flagd.json
 
 services:
   nginx:
@@ -208,6 +210,17 @@ services:
     volumes:
       - /:/hostfs
       - "/var/run/docker.sock.raw:/var/run/docker.sock"
+
+  flagd:
+    image: ghcr.io/open-feature/flagd:latest
+    configs:
+      - source: flagd_conf
+        target: /etc/flagd/flags.flagd.json
+    # tty: true
+    # stdin_open: true
+    command: start --uri file:/etc/flagd/flags.flagd.json
+    ports:
+      - 8013:8013
 
 #   grafana:
 #     labels:
