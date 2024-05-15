@@ -25,3 +25,6 @@ require __DIR__ ."/../boostrap/dependencies.php";
 
 # FPDF
 define('FPDF_FONTPATH', "include/font/");
+
+# test
+$feature = $container->get('openfeature');

@@ -10,6 +10,9 @@ use App\Middleware\FlashOldFormDataMiddleware;
 use OpenFeature\OpenFeatureAPI;
 use OpenFeature\Providers\Flagd\FlagdProvider;
 
+
+use Guzzle\Http\Message;
+
 $container->set(
     'settings',
     function () {
@@ -58,20 +61,33 @@ $container->set(
     function ($c) {
         $logger = $c->get('logger');
 
+        $httpClient = new \GuzzleHttp\Client();
+        $httpFactory = new \GuzzleHttp\Psr7\HttpFactory();
+
+
         $api = OpenFeatureAPI::getInstance();
-    
+
+        $logger->debug("bootstrap\containerAfer: openfeature: client instance: " . var_export($httpClient instanceof \Psr\Http\Client\ClientInterface, true));
+        $logger->debug("bootstrap\containerAfer: openfeature: requestFactory instance: " . var_export($httpFactory instanceof \Psr\Http\Message\RequestFactoryInterface, true));
+        $logger->debug("bootstrap\containerAfer: openfeature: streamFactory instance: " . var_export($httpFactory instanceof \Psr\Http\Message\StreamFactoryInterface, true));
+
         $api->setProvider(new FlagdProvider([
             'host' => 'flagd',
             'port' => 8013,
             'secure' => false,
-            'protocol' => 'http'
-          ]));
-    
+            'protocol' => 'http',
+            'httpConfig' => [
+                'client' => $httpClient, // \Psr\Http\Client\ClientInterface
+                'requestFactory' => $httpFactory, // Psr\Http\Message\RequestFactoryInterface
+                'streamFactory' => $httpFactory, // Psr\Http\Message\StreamFactoryInterface
+            ],
+        ]));
+
         $client = $api->getClient('flagd-local', '1.0');
 
         $configVersion = $client->getStringValue("adminator3FlagdConfigVersion", "null");
 
-        $logger->debug("bootstrap\containerAfer: openfeature:  adminator3FlagdConfigVersion: " . var_export($configVersion, true));
+        $logger->debug("bootstrap\containerAfer: openfeature: adminator3FlagdConfigVersion: " . var_export($configVersion, true));
 
         return $client;
     }
