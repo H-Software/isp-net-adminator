@@ -66,7 +66,7 @@
   <div style="padding-top: 4px; border-bottom: 1px gray solid; width: 20%; "></div>
 
   {* second line *}
-  <div style="padding-top: 5px; width: 100%;" class="listing-selectors-line" >
+  <div style="padding-top: 4px; width: 100%;" class="listing-selectors-line" >
 
     <span style="padding-right: 20px;" >
       <input type="submit" value="NAJDI" name="najdi">

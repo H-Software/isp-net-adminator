@@ -42,9 +42,10 @@
 
 <div style="padding-top: 4px; width: 100%;" class="listing-selectors-line" >
 
-<input type="submit" value="NAJDI" name="najdi"> 
-
-<label>Hledání : </label>
+<span style="padding-right: 20px;" >
+  <input type="submit" value="NAJDI" name="najdi"> 
+</span>
+<label style="padding-right: 20px;" >Hledání: </label>
 <input type="text" name="find" value="{$form_find|default: ''}">
 
 </div>
