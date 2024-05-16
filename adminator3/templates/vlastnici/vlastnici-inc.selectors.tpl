@@ -54,7 +54,7 @@
     </span>
     <span >
       <label style="padding-right: 20px;" >Hledání: </label>
-      <input style="margin-left: 20px;" type="text" name="find" value="{$form_search_value}" >
+      <input style="margin-left: 20px;" type="text" name="find" value="{$form_find}" >
     </span>
   </div>
 
