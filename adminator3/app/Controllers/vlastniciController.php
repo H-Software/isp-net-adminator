@@ -227,7 +227,7 @@ class vlastniciController extends adminatorController
 
         $bodyContent .= $vlastnik->vypis_tab(1);
 
-        $vlastnik->vypis($sql, $co, 0, $dotaz_final);
+        $bodyContent .= $vlastnik->vypis($sql, $co, 0, $dotaz_final);
 
         $bodyContent .= $vlastnik->vypis_tab(2);
 
