@@ -7,7 +7,7 @@
 Vlastníci - FO
 </div>
 
-{* {include file="vlastnici/inc.links-panel.tpl"} *}
+{include file="vlastnici/vlastnici-inc.links-panel.tpl"}
 
 <div style="font-weight: bold; padding-top: 5px; border-bottom: 1px gray solid; width: 20%; " >
 </div>

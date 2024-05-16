@@ -1,28 +1,20 @@
 
 <div style="padding-left: 4px; padding-bottom: 5px; padding-top: 5px; ">
     <span style="">
-    {if $vlastnici2_pridani_povoleno eq "true"}
-        <a href="/vlastnici2/action" >Přidání vlastníka</a>
+    {if $vlastnici_pridani_povoleno eq "true"}
+        <a href="vlastnici2-change.php?firma_add=2">Přidání vlastníka</a>
     {else}
-        Přidání vlastníka (N/A)
+        <span style="color: grey; font-style: italic">Přidání vlastníka</span>
     {/if}
     
     </span>
 
     <span style="padding-left: 25px; ">
-        {if $vlastnici2_export_povolen eq "true"}
-            <a href="\export\vlastnici-sro.xls" >export dat</a>
+        {if $vlastnici_export_povolen eq "true"}
+            <a href="\export\vlastnici.xls" >export dat</a>
         {else}
-            export dat (N/A)
+            <span style="color: grey; font-style: italic">export dat</span>
         {/if}
     </span>
-
-    <span style="padding-left: 25px; ">
-        <!--<a href=\"include/export-ucetni.php\" >-->export ucetni<!--</a>-->
-    </span>
-
-    <span style="padding-left: 25px; ">
-        <!--<a href=\"admin-login-iptv.php\" target=\"_new\" >-->aktivace funkcí IPTV portálu (přihlašení)<!--</a>-->
-    </span>
-
+    
 </div>
