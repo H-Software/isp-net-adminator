@@ -46,10 +46,26 @@ services:
       context: ./
       target: main
     # user: "www-data:www-data"
+    # https://github.com/compose-spec/compose-spec/blob/master/develop.md
     develop:
       watch: 
         - path: ./
           action: rebuild
+          ignore:
+            - adminator2/log/
+            - adminator3/logs/
+            - adminator3/templates_c/
+            - adminator3/print/temp
+            - adminator3/tests
+            - adminator3/vendor
+            - adminator3/database
+            - configs/flagd
+            - configs/php*
+            - configs/otel*
+            - docker-compose.yml
+            - "*.sql"
+            - .github/
+            - .vscode/
     environment:
       # DB conn
       - MYSQL_SERVER=192.168.1.213
