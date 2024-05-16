@@ -83,7 +83,7 @@ class vlastnik2_a2
         $objekt->listAllowedActionErase = $this->objektListAllowedActionErase;
         // $objekt-> = $this->objektListAllowedActionGarant;
         $objekt->allowedUnassignFromVlastnik = $this->vlastnikAllowedUnassignObject;
-        
+
         // echo "<pre>" . var_export($dotaz_final, true) . "</pre>";
 
         $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
