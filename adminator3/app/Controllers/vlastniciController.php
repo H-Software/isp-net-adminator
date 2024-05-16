@@ -89,6 +89,14 @@ class vlastniciController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
+        if ($this->adminator->checkLevel(64, false) === true) {
+            $this->smarty->assign("vlastnici_export_povolen", "true");
+        }
+
+        if ($this->adminator->checkLevel(40, false) === true) {
+            $this->smarty->assign("vlastnici_pridani_povoleno", "true");
+        }
+
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         // $vlastnik2->csrf_html = $csrf_html;
 
