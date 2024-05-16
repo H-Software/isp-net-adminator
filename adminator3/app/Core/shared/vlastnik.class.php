@@ -140,7 +140,7 @@ class vlastnik
                     $co = "3";
 
                     $output .= "<tr>
-                        <td colspan=\"3\" bgcolor=\"#99FF99\" align=\"center\" >W
+                        <td colspan=\"1\" bgcolor=\"#99FF99\" align=\"center\" >W
                         <td colspan=\"10\" bgcolor=\"#99FF99\" >";
                     $output .= "<table border=\"0\" width=\"100%\" >";
 
