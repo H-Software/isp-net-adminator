@@ -80,6 +80,23 @@ class vlastniciController extends adminatorController
         return $response;
     }
 
+    public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info("vlastniciController\\vlastnici called");
+        $this->checkLevel(13, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
+
+        $this->header($request, $response, $this->adminator);
+
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        // $vlastnik2->csrf_html = $csrf_html;
+
+        $this->smarty->display('vlastnici/vlastnici.tpl');
+
+        return $response;
+    }
+
     public function vlastnici2(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
@@ -87,7 +104,7 @@ class vlastniciController extends adminatorController
 
         $this->checkLevel(38, $this->adminator);
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
+        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci 2");
 
         $this->header($request, $response, $this->adminator);
 
