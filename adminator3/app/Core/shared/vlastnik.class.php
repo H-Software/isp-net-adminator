@@ -8,19 +8,26 @@ class vlastnik
 
     public $csrf_html;
 
+    public $echo = true;
+
     public function vypis_tab($par)
     {
+        $output = "";
+
         if ($par == 1) {
-            echo "\n".'<table border="1" width="100%">'."\n";
+            $output .= "\n".'<table border="1" width="100%">'."\n";
         } elseif ($par == 2) {
-            echo "\n".'</table>'."\n";
+            $output .= "\n".'</table>'."\n";
         } else {
-            echo "chybny vyber";
+            $output .= "chybny vyber";
         }
 
-        // konec funkce vypis_tab
+        if($this->echo){
+            echo $output;
+        } else {
+            return $output;
+        }
     }
-
 
     public function vypis($sql, $co, $mod, $dotaz_source)
     {
