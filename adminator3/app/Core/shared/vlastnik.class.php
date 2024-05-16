@@ -138,15 +138,15 @@ class vlastnik
 
                 // print "debug: id: $id";
 
-                $output .= "<tr><td colspan=\"9\" >";
+                // $output .= "<tr><td colspan=\"9\" >";
 
-                $output .= "<table border=\"0\" width=\"100%\" >";
+                // $output .= "<table border=\"0\" width=\"100%\" >";
 
-                $output .= $objekt->vypis($sql, $co, $id, "");
+                // $output .= $objekt->vypis($sql, $co, $id, "");
 
-                $output .= "</table>";
+                // $output .= "</table>";
 
-                $output .= "</td></tr>\n\n";
+                // $output .= "</td></tr>\n\n";
 
                 $pocet_wifi_obj = $objekt->zjistipocet(1, $id);
 
