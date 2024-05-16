@@ -15,7 +15,9 @@ Vlastníci - FO
 {* hledaci a filtrovaci prvky *}
 {include file="vlastnici/vlastnici-inc.selectors.tpl"}
 
+<div class="vlastnici-table" style="padding-right: 5px;" >
 {$body}
+</div>
 
 {* konecny soubor *}
 {include file="base-end.tpl"}
