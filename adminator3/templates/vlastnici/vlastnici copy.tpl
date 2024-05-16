@@ -13,7 +13,7 @@ Vlastníci - FO
 </div>
 
 {* hledaci a filtrovaci prvky *}
-{include file="vlastnici/vlastnici-inc.selectors.tpl"}
+{* {include file="vlastnici/vlastnici-inc.selectors.tpl"} *}
 
 {$body}
 
