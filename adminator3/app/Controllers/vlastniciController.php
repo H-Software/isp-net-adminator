@@ -107,6 +107,10 @@ class vlastniciController extends adminatorController
         $find_id = $_GET["find_id"];
         $find = $_GET["find"];
 
+        $form_select = intval($_GET["select"]);
+        $form_razeni = intval($_GET["razeni"]);
+        $form_razeni2 = intval($_GET["razeni2"]);
+
         if((strlen($find_id) > 0)) {
             $co = 3;
             /* hledani podle id_cloveka */
@@ -114,10 +118,20 @@ class vlastniciController extends adminatorController
         } elseif ((strlen($find) > 0)) {
             $co = 1;
             /* hledani podle cehokoli */
-            $sql = $find;
+            $sql = $this->conn_mysql->real_escape_string($find);
         } else {
             /* cokoli dalsiho */
         }
+
+        if (empty($_GET["find"])) {
+            $this->smarty->assign("form_find", "%");
+        } else {
+            $this->smarty->assign("form_find", htmlspecialchars($find));
+        }
+
+        $this->smarty->assign("form_select", $form_select);
+        $this->smarty->assign("form_razeni", $form_razeni);
+        $this->smarty->assign("form_razeni2", $form_razeni2);
 
         if ($co == 1) {
 
