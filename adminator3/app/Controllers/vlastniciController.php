@@ -89,6 +89,13 @@ class vlastniciController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
+        $vlastnik = new \vlastnik;
+        $vlastnik->conn_mysql = $this->conn_mysql;
+        $vlastnik->conn_pgsql = $this->conn_pgsql;
+
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $vlastnik->csrf_html = $csrf_html;
+
         if ($this->adminator->checkLevel(64, false) === true) {
             $this->smarty->assign("vlastnici_export_povolen", "true");
         }
@@ -173,12 +180,38 @@ class vlastniciController extends adminatorController
         } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($sql) ."' AND firma is null AND ( archiv = 0 or archiv is null )";
         } else {
-            echo "<div style=\"padding-top: 20px; padding-bottom: 20px; \">Zadejte výraz k vyhledání.... </div>";
-            exit;
+            $body = "<div style=\"padding-top: 20px; padding-bottom: 20px; \">Zadejte výraz k vyhledání.... </div>";
+
+            $this->smarty->assign("body", $body);
+
+            $this->smarty->display('vlastnici/archiv.tpl');
+
+            return $response;
         }
 
-        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
-        // $vlastnik2->csrf_html = $csrf_html;
+        $list=$_GET["list"];
+        
+        $poradek="find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
+        
+        //vytvoreni objektu
+        $listovani = new \c_listing_vlastnici("./vlastnici.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+            
+        if (($list == "")||($list == "1")){ $bude_chybet = 0; }
+        else{ $bude_chybet = (($list-1) * $listovani->interval); }
+                            
+        $interval=$listovani->interval;
+                                
+        $dotaz_final=$dotaz_source." LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
+                                                
+        $listovani->listInterval();
+                                    
+        $vlastnik->vypis_tab(1);
+
+        $vlastnik->vypis($sql,$co,0,$dotaz_final);
+        
+        $vlastnik->vypis_tab(2);
+
+        $listovani->listInterval(); 
 
         $this->smarty->display('vlastnici/vlastnici.tpl');
 

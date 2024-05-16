@@ -6,6 +6,8 @@ class vlastnik
 
     public $conn_pgsql;
 
+    public $csrf_html;
+
     public function vypis_tab($par)
     {
         if ($par == 1) {
