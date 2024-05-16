@@ -15,6 +15,7 @@ use App\Controllers\runtimeController;
 use App\Controllers\printController;
 use App\Controllers\othersController;
 use App\Controllers\vlastniciController;
+use App\Controllers\topologyController;
 
 // routes
 
@@ -106,14 +107,15 @@ $app->group(
         $group->map(['GET', 'POST'], '/vlastnici/cat', vlastniciController::class . ':cat');
         $group->map(['GET', 'POST'], '/vlastnici/cross', vlastniciController::class . ':cross');
         $group->map(['GET', 'POST'], '/vlastnici/archiv', vlastniciController::class . ':archiv');
+        $group->map(['GET', 'POST'], '/vlastnici', vlastniciController::class . ':vlastnici');
 
         $group->map(['GET', 'POST'], '/vlastnici2', vlastniciController::class . ':vlastnici2');
         $group->map(['GET', 'POST'], '/vlastnici2/fakturacni-skupiny', vlastniciController::class . ':fakturacniSkupiny');
         $group->map(['GET', 'POST'], '/vlastnici2/fakturacni-skupiny/action', vlastniciController::class . ':fakturacniSkupinyAction');
 
-        $group->map(['GET', 'POST'], '/topology', \topologyController::class . ':nodeList');
-        $group->map(['GET', 'POST'], '/topology/node-list', \topologyController::class . ':nodeList');
-        $group->map(['GET', 'POST'], '/topology/router-list', \topologyController::class . ':routerList');
+        $group->map(['GET', 'POST'], '/topology', topologyController::class . ':nodeList');
+        $group->map(['GET', 'POST'], '/topology/node-list', topologyController::class . ':nodeList');
+        $group->map(['GET', 'POST'], '/topology/router-list', topologyController::class . ':routerList');
 
         $group->map(['GET', 'POST'], '/work', \workController::class . ':work');
 

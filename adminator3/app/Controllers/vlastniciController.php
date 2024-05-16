@@ -80,6 +80,194 @@ class vlastniciController extends adminatorController
         return $response;
     }
 
+    public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $bodyContent = "";
+
+        $this->logger->info("vlastniciController\\vlastnici called");
+        $this->checkLevel(13, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
+
+        $this->header($request, $response, $this->adminator);
+
+        $vlastnik = new \vlastnik();
+        $vlastnik->conn_mysql = $this->conn_mysql;
+        $vlastnik->conn_pgsql = $this->conn_pgsql;
+        $vlastnik->echo = false;
+
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $vlastnik->csrf_html = $csrf_html;
+
+        if ($this->adminator->checkLevel(64, false) === true) {
+            $this->smarty->assign("vlastnici_export_povolen", "true");
+        }
+
+        if ($this->adminator->checkLevel(40, false) === true) {
+            $this->smarty->assign("vlastnici_pridani_povoleno", "true");
+        }
+
+        $find_id = $_GET["find_id"];
+        $find = $_GET["find"];
+
+        $form_select = intval($_GET["select"]);
+        $form_razeni = intval($_GET["razeni"]);
+        $form_razeni2 = intval($_GET["razeni2"]);
+
+        if((strlen($find_id) > 0)) {
+            $co = 3;
+            /* hledani podle id_cloveka */
+            $sql = intval($find_id);
+        } elseif ((strlen($find) > 0)) {
+            $co = 1;
+            /* hledani podle cehokoli */
+            $sql = $this->conn_mysql->real_escape_string($find);
+        } else {
+            /* cokoli dalsiho */
+        }
+
+        if (empty($_GET["find"])) {
+            $this->smarty->assign("form_find", "%");
+        } else {
+            $this->smarty->assign("form_find", htmlspecialchars($find));
+        }
+
+        $this->smarty->assign("select", $form_select);
+        $this->smarty->assign("razeni", $form_razeni);
+        $this->smarty->assign("razeni2", $form_razeni2);
+
+        //promena pro update objektu
+        if ($this->adminator->checkLevel(29, false) === true) {
+            $vlastnik->objekt_update_povolen = true;
+        }
+        if ($this->adminator->checkLevel(33, false) === true) {
+            $vlastnik->objekt_mazani_povoleno = true;
+        }
+        if ($this->adminator->checkLevel(34, false) === true) {
+            $vlastnik->objekt_garant_akce = true;
+        }
+
+        // promeny pro mazani, zmenu vlastniku
+        if ($this->adminator->checkLevel(45, false) === true) {
+            $vlastnik->vlastnici_erase_povolen = true;
+        }
+        if ($this->adminator->checkLevel(30, false) === true) {
+            $vlastnik->vlastnici_update_povolen = true;
+        }
+
+        // odendani objektu od vlastnika
+        if ($this->adminator->checkLevel(49, false) === true) {
+            $vlastnik->odendani_povoleno = true;
+        }
+
+        // co - co hledat, 1- podle dns, 2-podle ip , 3 - dle id_vlastnika
+        if ($co == 1) {
+
+            $sql = "%".$sql."%";
+            $select1 = " WHERE firma is NULL AND ( archiv = 0 or archiv is null ) AND ";
+            $select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";
+            $select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
+
+            $select2 = " OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
+            $select2 .= "OR vs LIKE '$sql') ";
+
+            if ($_GET["select"] == 2) {
+                $select3 = " AND fakturacni > 0 ";
+            }
+            if ($_GET["select"] == 3) {
+                $select3 = " AND fakturacni is NULL ";
+            }
+            if ($_GET["select"] == 4) {
+                $select3 = " AND k_platbe = 0 ";
+            }
+            if ($_GET["select"] == 5) {
+                $select3 = " AND k_platbe > 0 ";
+            }
+
+            if ($_GET["razeni"] == 1) {
+                $select4 = " order by id_cloveka ";
+            }
+            if ($_GET["razeni"] == 3) {
+                $select4 = " order by jmeno ";
+            }
+            if ($_GET["razeni"] == 4) {
+                $select4 = " order by prijmeni ";
+            }
+            if ($_GET["razeni"] == 5) {
+                $select4 = " order by ulice ";
+            }
+            if ($_GET["razeni"] == 6) {
+                $select4 = " order by mesto ";
+            }
+            if ($_GET["razeni"] == 14) {
+                $select4 = " order by vs ";
+            }
+            if ($_GET["razeni"] == 15) {
+                $select4 = " order by k_platbe ";
+            }
+
+            if ($_GET["razeni2"] == 1) {
+                $select5 = " ASC ";
+            }
+            if ($_GET["razeni2"] == 2) {
+                $select5 = " DESC ";
+            }
+
+            // @phpstan-ignore-next-line
+            if (strlen($select4) > 1) {
+                $select4 = $select4.$select5;
+            }
+
+            $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
+
+            // @phpstan-ignore-next-line
+        } elseif ($co == 3) {
+            $dotaz_source = "SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($sql) ."' AND firma is null AND ( archiv = 0 or archiv is null )";
+        } else {
+            $body = "<div style=\"padding-top: 20px; padding-bottom: 20px; \">Zadejte výraz k vyhledání.... </div>";
+
+            $this->smarty->assign("body", $body);
+
+            $this->smarty->display('vlastnici/vlastnici.tpl');
+
+            return $response;
+        }
+
+        $list = $_GET["list"];
+
+        $poradek = "find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
+
+        //vytvoreni objektu
+        $listovani = new \c_listing_vlastnici("./vlastnici.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+        $listovani->echo = false;
+
+        if (($list == "") || ($list == "1")) {
+            $bude_chybet = 0;
+        } else {
+            $bude_chybet = (($list - 1) * $listovani->interval);
+        }
+
+        $interval = $listovani->interval;
+
+        $dotaz_final = $dotaz_source." LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
+
+        $bodyContent .= $listovani->listInterval();
+
+        $bodyContent .= $vlastnik->vypis_tab(1);
+
+        $bodyContent .= $vlastnik->vypis($sql, $co, 0, $dotaz_final);
+
+        $bodyContent .= $vlastnik->vypis_tab(2);
+
+        $bodyContent .= $listovani->listInterval();
+
+        $this->smarty->assign("body", $bodyContent);
+
+        $this->smarty->display('vlastnici/vlastnici.tpl');
+
+        return $response;
+    }
+
     public function vlastnici2(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
 
@@ -87,7 +275,7 @@ class vlastniciController extends adminatorController
 
         $this->checkLevel(38, $this->adminator);
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
+        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci 2");
 
         $this->header($request, $response, $this->adminator);
 
