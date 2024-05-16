@@ -96,7 +96,7 @@ class vlastnik
                         
                         <tr> <td colspan=\"2\">".$data["jmeno"]." ".$data["prijmeni"]."<br>";
 
-                echo $data["ulice"]."  ";
+                $output .= $data["ulice"]."  ";
 
                 $output .= "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
 
@@ -128,7 +128,7 @@ class vlastnik
 
                 $output .= "<table border=\"0\" width=\"100%\" >";
 
-                $objekt->vypis($sql, $co, $id, "");
+                $output .= $objekt->vypis($sql, $co, $id, "");
 
                 $output .= "</table>";
 
@@ -147,7 +147,7 @@ class vlastnik
                         <td colspan=\"10\" bgcolor=\"#99FF99\" >";
                     $output .= "<table border=\"0\" width=\"100%\" >";
 
-                    $objekt->vypis($sql, $co, $id, "");
+                    $output .= $objekt->vypis($sql, $co, $id, "");
 
                     $output .= "</table>";
                     $output .= "</td></tr>";
@@ -166,7 +166,7 @@ class vlastnik
 
                     $output .= "<table border=\"0\" width=\"100%\" >";
 
-                    $objekt->vypis($sql, $co, $id);
+                    $output .= $objekt->vypis($sql, $co, $id);
 
                     $output .= "</table>";
 
@@ -212,8 +212,8 @@ class vlastnik
                 $output .= "<a href=\"platby-vypis.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - starý (do 2/2012)</a>";
 
                 $output .= "<span style=\"margin-left: 20px; \">".
-                "<a href=pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - nový (od 3/2012)</a>".
-                "</span>";
+                            "<a href=pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - nový (od 3/2012)</a>".
+                            "</span>";
 
                 $output .= "<span style=\"margin: 15px; \"></span>";
 
