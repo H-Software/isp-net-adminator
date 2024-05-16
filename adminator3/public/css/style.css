@@ -298,6 +298,13 @@ input[type=submit]
     font-size: 0.9rem;
 }
 
+input[type=button], 
+input[type=submit] 
+.vlastnici-button {
+    border: none;
+    font-size: 0.75rem !important;
+}
+
 .vlastnici-table table {
     border-collapse: separate;
     border: 1px solid #999;

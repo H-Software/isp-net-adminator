@@ -212,6 +212,7 @@ class vlastniciController extends adminatorController
 
         //vytvoreni objektu
         $listovani = new \c_listing_vlastnici("./vlastnici.php?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $dotaz_source);
+        $listovani->echo = false;
 
         if (($list == "") || ($list == "1")) {
             $bude_chybet = 0;
@@ -223,7 +224,7 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
 
-        $listovani->listInterval();
+        $bodyContent .= $listovani->listInterval();
 
         $bodyContent .= $vlastnik->vypis_tab(1);
 
@@ -231,7 +232,7 @@ class vlastniciController extends adminatorController
 
         $bodyContent .= $vlastnik->vypis_tab(2);
 
-        $listovani->listInterval();
+        $bodyContent .= $listovani->listInterval();
 
         $this->smarty->assign("body", $bodyContent);
 
