@@ -82,6 +82,8 @@ class vlastniciController extends adminatorController
 
     public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
+        $bodyContent = "";
+
         $this->logger->info("vlastniciController\\vlastnici called");
         $this->checkLevel(13, $this->adminator);
 
@@ -93,7 +95,7 @@ class vlastniciController extends adminatorController
         $vlastnik->conn_mysql = $this->conn_mysql;
         $vlastnik->conn_pgsql = $this->conn_pgsql;
         $vlastnik->echo = false;
-        
+
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $vlastnik->csrf_html = $csrf_html;
 
@@ -223,13 +225,15 @@ class vlastniciController extends adminatorController
 
         $listovani->listInterval();
 
-        $vlastnik->vypis_tab(1);
+        $bodyContent .= $vlastnik->vypis_tab(1);
 
         $vlastnik->vypis($sql, $co, 0, $dotaz_final);
 
-        $vlastnik->vypis_tab(2);
+        $bodyContent .= $vlastnik->vypis_tab(2);
 
         $listovani->listInterval();
+
+        $this->smarty->assign("body", $bodyContent);
 
         $this->smarty->display('vlastnici/vlastnici.tpl');
 
