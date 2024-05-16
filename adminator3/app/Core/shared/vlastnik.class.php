@@ -140,8 +140,8 @@ class vlastnik
                     $co = "3";
 
                     $output .= "<tr>
-                        <td colspan=\"2\" bgcolor=\"#99FF99\" align=\"center\" >W
-                        <td colspan=\"9\" bgcolor=\"#99FF99\" >";
+                        <td colspan=\"3\" bgcolor=\"#99FF99\" align=\"center\" >W
+                        <td colspan=\"10\" bgcolor=\"#99FF99\" >";
                     $output .= "<table border=\"0\" width=\"100%\" >";
 
                     $output .= $objekt->vypis($sql, $co, $id, "");
