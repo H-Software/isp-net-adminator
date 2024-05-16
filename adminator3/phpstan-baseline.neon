@@ -578,11 +578,6 @@ parameters:
 			path: app/Core/shared/partner.servis.class.php
 
 		-
-			message: "#^Static call to instance method fakturacni\\:\\:vypis\\(\\)\\.$#"
-			count: 1
-			path: app/Core/shared/vlastnik.class.php
-
-		-
 			message: "#^Access to an undefined property App\\\\Core\\\\stb\\:\\:\\$level\\.$#"
 			count: 1
 			path: app/Core/shared/vlastnik2_a2.class.php
