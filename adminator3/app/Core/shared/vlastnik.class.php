@@ -80,7 +80,7 @@ class vlastnik
 
                 // 6-ta update
                 if ($this->vlastnici_update_povolen === false) {
-                    $output .= "<span style=\"color: gray;\" >  upravit  </span> \n";
+                    $output .= "<span style=\"\" >  upravit  </span> \n";
                 } else {
                     $output .= " <form method=\"POST\" action=\"vlastnici2-change.php\" >";
                     $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
