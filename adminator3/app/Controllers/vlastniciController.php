@@ -184,7 +184,7 @@ class vlastniciController extends adminatorController
 
             $this->smarty->assign("body", $body);
 
-            $this->smarty->display('vlastnici/archiv.tpl');
+            $this->smarty->display('vlastnici/vlastnici.tpl');
 
             return $response;
         }
