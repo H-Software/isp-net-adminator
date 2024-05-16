@@ -213,7 +213,7 @@ class vlastniciController extends adminatorController
                 $select5 = " DESC ";
             }
 
-            if ((strlen($select4) > 1)) {
+            if (strlen($select4) > 1) {
                 $select4 = $select4.$select5;
             }
 

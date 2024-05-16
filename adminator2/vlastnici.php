@@ -135,111 +135,111 @@ include("include/charset.php");
     if ( $export_povolen)
     {
 
-    $fp=fopen("export/vlastnici.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
+//     $fp=fopen("export/vlastnici.xls","w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
 
-    fputs($fp,"<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
+//     fputs($fp,"<table border='1'> \n \n");   // Zapíšeme do souboru začátek tabulky
 
-    fputs($fp,"<tr>");   // Zapíšeme do souboru začátek řádky, kde budou názvy sloupců (polí)
+//     fputs($fp,"<tr>");   // Zapíšeme do souboru začátek řádky, kde budou názvy sloupců (polí)
 
-    $vysledek_pole=pg_query("SELECT column_name FROM information_schema.columns WHERE table_name ='vlastnici' ORDER BY ordinal_position ");
-    // Vybereme z databáze názvy polí tabulky tabulka a postupně je zapíšeme do souboru
+//     $vysledek_pole=pg_query("SELECT column_name FROM information_schema.columns WHERE table_name ='vlastnici' ORDER BY ordinal_position ");
+//     // Vybereme z databáze názvy polí tabulky tabulka a postupně je zapíšeme do souboru
 
-    // echo "vysledek_pole: $vysledek_pole ";
+//     // echo "vysledek_pole: $vysledek_pole ";
 
-     while ($vysledek_array_pole=pg_fetch_row($vysledek_pole) )
-     {
-        fputs($fp,"<td><b> ".$vysledek_array_pole[0]." </b></td> \n");
-     }
+//      while ($vysledek_array_pole=pg_fetch_row($vysledek_pole) )
+//      {
+//         fputs($fp,"<td><b> ".$vysledek_array_pole[0]." </b></td> \n");
+//      }
 
-       fputs($fp,"<td><b> id_f </b></td> \n");
-       fputs($fp,"<td><b> f. jméno </b></td> \n");
-       fputs($fp,"<td><b> f. ulice </b></td> \n");
-       fputs($fp,"<td><b> f. mesto </b></td> \n");
-       fputs($fp,"<td><b> f. PSČ </b></td> \n");
-       fputs($fp,"<td><b> f. ičo </b></td> \n");
-       fputs($fp,"<td><b> f. dič </b></td> \n");
-       fputs($fp,"<td><b> f. účet </b></td> \n");
-       fputs($fp,"<td><b> f. splatnost </b></td> \n");
-       fputs($fp,"<td><b> f. cetnost </b></td> \n");
+//        fputs($fp,"<td><b> id_f </b></td> \n");
+//        fputs($fp,"<td><b> f. jméno </b></td> \n");
+//        fputs($fp,"<td><b> f. ulice </b></td> \n");
+//        fputs($fp,"<td><b> f. mesto </b></td> \n");
+//        fputs($fp,"<td><b> f. PSČ </b></td> \n");
+//        fputs($fp,"<td><b> f. ičo </b></td> \n");
+//        fputs($fp,"<td><b> f. dič </b></td> \n");
+//        fputs($fp,"<td><b> f. účet </b></td> \n");
+//        fputs($fp,"<td><b> f. splatnost </b></td> \n");
+//        fputs($fp,"<td><b> f. cetnost </b></td> \n");
 
-        fputs($fp,"</tr>");   // Zapíšeme do souboru konec řádky, kde jsou názvy sloupců (polí)
+//         fputs($fp,"</tr>");   // Zapíšeme do souboru konec řádky, kde jsou názvy sloupců (polí)
 
-        $vysledek = pg_query("SELECT * FROM vlastnici WHERE ( (firma is null) AND ( archiv = 0 OR archiv is null ) ) ORDER BY id_cloveka ASC ");
+//         $vysledek = pg_query("SELECT * FROM vlastnici WHERE ( (firma is null) AND ( archiv = 0 OR archiv is null ) ) ORDER BY id_cloveka ASC ");
 
-        while ( $data=pg_fetch_array($vysledek) )
-        {
-          fputs($fp,"\n <tr>");
+//         while ( $data=pg_fetch_array($vysledek) )
+//         {
+//           fputs($fp,"\n <tr>");
 
-          fputs($fp,"<td> ".$data["id_cloveka"]."</td> ");
-          fputs($fp,"<td> ".$data["nick"]."</td> ");
-          fputs($fp,"<td> ".$data["jmeno"]."</td> ");
-          fputs($fp,"<td> ".$data["prijmeni"]."</td> ");
-          fputs($fp,"<td> ".$data["ulice"]."</td> ");
-          fputs($fp,"<td> ".$data["mesto"]."</td> ");
-          fputs($fp,"<td> ".$data["psc"]."</td> ");
-          fputs($fp,"<td> ".$data["icq"]."</td> ");
-          fputs($fp,"<td> ".$data["mail"]."</td> ");
-          fputs($fp,"<td> ".$data["telefon"]."</td> ");
-          fputs($fp,"<td> ".$data["poznamka"]."</td> ");
-          fputs($fp,"<td> ".$data["zaplaceno"]."</td> ");
-          fputs($fp,"<td> ".$data["fakturacni"]."</td> ");
-          fputs($fp,"<td> ".$data["vs"]."</td> ");
-          fputs($fp,"<td> ".$data["k_platbe"]."</td> ");
-          fputs($fp,"<td> ".$data["firma"]."</td> ");
+//           fputs($fp,"<td> ".$data["id_cloveka"]."</td> ");
+//           fputs($fp,"<td> ".$data["nick"]."</td> ");
+//           fputs($fp,"<td> ".$data["jmeno"]."</td> ");
+//           fputs($fp,"<td> ".$data["prijmeni"]."</td> ");
+//           fputs($fp,"<td> ".$data["ulice"]."</td> ");
+//           fputs($fp,"<td> ".$data["mesto"]."</td> ");
+//           fputs($fp,"<td> ".$data["psc"]."</td> ");
+//           fputs($fp,"<td> ".$data["icq"]."</td> ");
+//           fputs($fp,"<td> ".$data["mail"]."</td> ");
+//           fputs($fp,"<td> ".$data["telefon"]."</td> ");
+//           fputs($fp,"<td> ".$data["poznamka"]."</td> ");
+//           fputs($fp,"<td> ".$data["zaplaceno"]."</td> ");
+//           fputs($fp,"<td> ".$data["fakturacni"]."</td> ");
+//           fputs($fp,"<td> ".$data["vs"]."</td> ");
+//           fputs($fp,"<td> ".$data["k_platbe"]."</td> ");
+//           fputs($fp,"<td> ".$data["firma"]."</td> ");
 
-          fputs($fp,"<td> ".$data["pridano"]."</td> ");
-          fputs($fp,"<td> ".$data["ucetni_index"]."</td> ");
-          fputs($fp,"<td> ".$data["archiv"]."</td> ");
-          fputs($fp,"<td> ".$data["fakturacni_skupina_id"]."</td> ");
-          fputs($fp,"<td> ".$data["splatnost"]."</td> ");
-          fputs($fp,"<td> ".$data["typ_smlouvy"]."</td> ");
-          fputs($fp,"<td> ".$data["trvani_do"]."</td> ");
-          fputs($fp,"<td> ".$data["datum_podpisu"]."</td> ");
+//           fputs($fp,"<td> ".$data["pridano"]."</td> ");
+//           fputs($fp,"<td> ".$data["ucetni_index"]."</td> ");
+//           fputs($fp,"<td> ".$data["archiv"]."</td> ");
+//           fputs($fp,"<td> ".$data["fakturacni_skupina_id"]."</td> ");
+//           fputs($fp,"<td> ".$data["splatnost"]."</td> ");
+//           fputs($fp,"<td> ".$data["typ_smlouvy"]."</td> ");
+//           fputs($fp,"<td> ".$data["trvani_do"]."</td> ");
+//           fputs($fp,"<td> ".$data["datum_podpisu"]."</td> ");
 
-          fputs($fp,"<td> ".$data["sluzba_int"]."</td> ");
-          fputs($fp,"<td> ".$data["sluzba_iptv"]."</td> ");
-          fputs($fp,"<td> ".$data["sluzba_voip"]."</td> ");
-          fputs($fp,"<td> ".$data["sluzba_int_id_tarifu"]."</td> ");
-//          fputs($fp,"<td> ".$data["datum_podpisu"]."</td> ");
+//           fputs($fp,"<td> ".$data["sluzba_int"]."</td> ");
+//           fputs($fp,"<td> ".$data["sluzba_iptv"]."</td> ");
+//           fputs($fp,"<td> ".$data["sluzba_voip"]."</td> ");
+//           fputs($fp,"<td> ".$data["sluzba_int_id_tarifu"]."</td> ");
+// //          fputs($fp,"<td> ".$data["datum_podpisu"]."</td> ");
 
-	  if ( $data["fakturacni"] > 0 )
-          {
-            $id_f=$data["fakturacni"];
+// 	  if ( $data["fakturacni"] > 0 )
+//           {
+//             $id_f=$data["fakturacni"];
 
-            $vysl_f=pg_query("SELECT * FROM fakturacni WHERE id = '$id_f' ");
+//             $vysl_f=pg_query("SELECT * FROM fakturacni WHERE id = '$id_f' ");
 
-            while ( $data_f=pg_fetch_array($vysl_f) )
-            {
+//             while ( $data_f=pg_fetch_array($vysl_f) )
+//             {
 
-            fputs($fp,"<td> ".$data_f["id"]."</td> ");
-            fputs($fp,"<td> ".$data_f["ftitle"]."</td> ");
-            fputs($fp,"<td> ".$data_f["fulice"]."</td> ");
-            fputs($fp,"<td> ".$data_f["fmesto"]."</td> ");
-            fputs($fp,"<td> ".$data_f["fpsc"]."</td> ");
-            fputs($fp,"<td> ".$data_f["ico"]."</td> ");
-            fputs($fp,"<td> ".$data_f["dic"]."</td> ");
-            fputs($fp,"<td> ".$data_f["ucet"]."</td> ");
-            fputs($fp,"<td> ".$data_f["splatnost"]."</td> ");
-            fputs($fp,"<td> ".$data_f["cetnost"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["id"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["ftitle"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["fulice"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["fmesto"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["fpsc"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["ico"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["dic"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["ucet"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["splatnost"]."</td> ");
+//             fputs($fp,"<td> ".$data_f["cetnost"]."</td> ");
 
-            }
+//             }
 
-          }
+//           }
 	
-	  fputs($fp,"</tr> \n ");
-          // echo "vysledek_array: ".$vysledek_array[$i];
+// 	  fputs($fp,"</tr> \n ");
+//           // echo "vysledek_array: ".$vysledek_array[$i];
 
-        } //konec prvniho while
+//         } //konec prvniho while
 
-        fputs($fp,"</table>");   // Zapíšeme do souboru konec tabulky
+//         fputs($fp,"</table>");   // Zapíšeme do souboru konec tabulky
 
-        fclose($fp);   // Zavřeme soubor
+//         fclose($fp);   // Zavřeme soubor
 
-	echo "<span style=\"padding-left: 20px; \" >";
-          echo '<a href="export\vlastnici.xls" >export dat zde</a>';
-	echo "</span>";
+// 	echo "<span style=\"padding-left: 20px; \" >";
+//           echo '<a href="export\vlastnici.xls" >export dat zde</a>';
+// 	echo "</span>";
 	
-        echo "</div>\n\n";
+//         echo "</div>\n\n";
 
 	}
 	
