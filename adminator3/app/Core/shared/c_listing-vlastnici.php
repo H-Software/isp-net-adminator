@@ -148,7 +148,7 @@ class c_listing_vlastnici
         }
         $output .= $this->after;
 
-        if($this->echo){
+        if($this->echo) {
             echo $output;
         } else {
             return $output;
