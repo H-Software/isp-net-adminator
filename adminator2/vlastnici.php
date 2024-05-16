@@ -254,25 +254,35 @@ elseif ( ( strlen($find) > 0 ) )
 else
 { /* cokoli dalsiho */ }
 
-   //promena pro update objektu
- 
-   if( check_level($level,29) ) { $update_povolen="true"; }
-      
-   if( check_level($level,33) ) { $mazani_povoleno="true"; }
-	    
-   if( check_level($level,34) ) { $garant_akce="true"; }
-		  
-// promene pro upravu vlastniku
-    if( check_level($level,45) ) { $vlastnici_erase_povolen="true"; }
+  //promena pro update objektu
+if( check_level($level,29) ) { 
+  $update_povolen="true"; 
+}
     
-    if( check_level($level,30) ) { $vlastnici_update_povolen="true"; }
+if( check_level($level,33) ) {
+  $mazani_povoleno="true";
+}
+    
+if( check_level($level,34) ) {
+  $garant_akce="true"; 
+}
+    
+// promene pro upravu vlastniku
+if( check_level($level,45) ) {
+  $vlastnici_erase_povolen="true";
+}
+  
+if( check_level($level,30) ) {
+  $vlastnici_update_povolen="true";
+}
 
 // odendani povoleno
-    if( check_level($level,49) ){ $odendani_povoleno="true"; }
+if( check_level($level,49) ){
+  $odendani_povoleno="true"; 
+}
     		  
 
   // co - co hledat, 1- podle dns, 2-podle ip , 3 - dle id_vlastnika
-  
   if ( $co==1 )
   {
 	  

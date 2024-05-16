@@ -136,6 +136,31 @@ class vlastniciController extends adminatorController
         $this->smarty->assign("form_razeni", $form_razeni);
         $this->smarty->assign("form_razeni2", $form_razeni2);
 
+        //promena pro update objektu
+        if ($this->adminator->checkLevel(29, false) === true) {
+            $vlastnik->objekt_update_povolen = true;
+        }
+        if ($this->adminator->checkLevel(33, false) === true) {
+            $vlastnik->objekt_mazani_povoleno = true;
+        }
+        if ($this->adminator->checkLevel(34, false) === true) {
+            $vlastnik->objekt_garant_akce = true;
+        }
+
+        // promeny pro mazani, zmenu vlastniku
+        if ($this->adminator->checkLevel(45, false) === true) {
+            $vlastnik->vlastnici_erase_povolen = true;
+        }
+        if ($this->adminator->checkLevel(30, false) === true) {
+            $vlastnik->vlastnici_update_povolen = true;
+        }
+
+        // odendani objektu od vlastnika
+        if ($this->adminator->checkLevel(49, false) === true) {
+            $vlastnik->odendani_povoleno = true;
+        }
+
+        // co - co hledat, 1- podle dns, 2-podle ip , 3 - dle id_vlastnika
         if ($co == 1) {
 
             $sql = "%".$sql."%";

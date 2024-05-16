@@ -14,6 +14,12 @@ class vlastnik
 
     public $vlastnici_update_povolen = false;
 
+    public $odendani_povoleno = false;
+
+    public $objekt_update_povolen = false;
+    public $objekt_mazani_povoleno = false;
+    public $objekt_garant_akce = false;
+
     public function vypis_tab($par)
     {
         $output = "";
@@ -41,6 +47,12 @@ class vlastnik
         $objekt->conn_mysql = $this->conn_mysql;
         $objekt->conn_pgsql = $this->conn_pgsql;
         $objekt->echo = $this->echo;
+        $objekt->csrf_html = $this->csrf_html;
+
+        $objekt->listAllowedActionUpdate = $this->objekt_update_povolen;
+        $objekt->listAllowedActionErase = $this->objekt_mazani_povoleno;
+        // $objekt-> = $this->objektListAllowedActionGarant;
+        $objekt->allowedUnassignFromVlastnik = $this->odendani_povoleno;
 
         // co - co hledat, 1- podle dns, 2-podle ip , 3 - dle id_vlastnika
         $dotaz = pg_query($this->conn_pgsql, $dotaz_source);
@@ -113,10 +125,12 @@ class vlastnik
 
                 // tady asi bude generovani fakturacnich udaju
                 if (($id_f > 0)) {
+                    $fakturacni = new fakturacni();
+                    $fakturacni->echo = false;
 
-                    fakturacni::vypis($id_f, $id);
-
+                    $output .= $fakturacni->vypis($id_f, $id);
                 }
+
                 // $sql="%";
                 $co = "3";
 
@@ -268,7 +282,7 @@ class vlastnik
 
                 $output .= "<td align=\"center\" >";
 
-                $output .= " <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
+                $output .= " <img title=\"poznamka\" src=\"/img2/poznamka3.png\" align=\"middle\" ";
                 $output .= " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." ');\" >";
 
                 $output .= "</td>";
@@ -303,7 +317,7 @@ class vlastnik
 
                 // zde dalsi veci
                 $output .= "<span style=\"color: gray; padding-left: 10px; \" >H: </span>";
-                $output .= "<a href=\"archiv-zmen.php?id_cloveka=".$data["id_cloveka"]."\">".$data["id_cloveka"]."</a>";
+                $output .= "<a href=\"/archiv-zmen?id_cloveka=".$data["id_cloveka"]."\">".$data["id_cloveka"]."</a>";
 
                 $output .= "</td>";
 
