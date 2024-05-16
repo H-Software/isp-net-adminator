@@ -639,12 +639,6 @@ parameters:
 			path: app/routing.php
 
 		-
-			message: "#^Class topologyController not found\\.$#"
-			count: 3
-			path: app/routing.php
-
-
-		-
 			message: "#^Class workController not found\\.$#"
 			count: 1
 			path: app/routing.php
