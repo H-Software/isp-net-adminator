@@ -97,6 +97,86 @@ class vlastniciController extends adminatorController
             $this->smarty->assign("vlastnici_pridani_povoleno", "true");
         }
 
+        $find_id = $_GET["find_id"];
+        $find = $_GET["find"];
+
+        if((strlen($find_id) > 0)) {
+            $co = 3;
+            /* hledani podle id_cloveka */
+            $sql = intval($find_id);
+        } elseif ((strlen($find) > 0)) {
+            $co = 1;
+            /* hledani podle cehokoli */
+            $sql = $find;
+        } else {
+            /* cokoli dalsiho */
+        }
+
+        if ($co == 1) {
+
+            $sql = "%".$sql."%";
+            $select1 = " WHERE firma is NULL AND ( archiv = 0 or archiv is null ) AND ";
+            $select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";
+            $select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
+
+            $select2 = " OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
+            $select2 .= "OR vs LIKE '$sql') ";
+
+            if ($_GET["select"] == 2) {
+                $select3 = " AND fakturacni > 0 ";
+            }
+            if ($_GET["select"] == 3) {
+                $select3 = " AND fakturacni is NULL ";
+            }
+            if ($_GET["select"] == 4) {
+                $select3 = " AND k_platbe = 0 ";
+            }
+            if ($_GET["select"] == 5) {
+                $select3 = " AND k_platbe > 0 ";
+            }
+
+            if ($_GET["razeni"] == 1) {
+                $select4 = " order by id_cloveka ";
+            }
+            if ($_GET["razeni"] == 3) {
+                $select4 = " order by jmeno ";
+            }
+            if ($_GET["razeni"] == 4) {
+                $select4 = " order by prijmeni ";
+            }
+            if ($_GET["razeni"] == 5) {
+                $select4 = " order by ulice ";
+            }
+            if ($_GET["razeni"] == 6) {
+                $select4 = " order by mesto ";
+            }
+            if ($_GET["razeni"] == 14) {
+                $select4 = " order by vs ";
+            }
+            if ($_GET["razeni"] == 15) {
+                $select4 = " order by k_platbe ";
+            }
+
+            if ($_GET["razeni2"] == 1) {
+                $select5 = " ASC ";
+            }
+            if ($_GET["razeni2"] == 2) {
+                $select5 = " DESC ";
+            }
+
+            if ((strlen($select4) > 1)) {
+                $select4 = $select4.$select5;
+            }
+
+            $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
+
+        } elseif ($co == 3) {
+            $dotaz_source = "SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($sql) ."' AND firma is null AND ( archiv = 0 or archiv is null )";
+        } else {
+            echo "<div style=\"padding-top: 20px; padding-bottom: 20px; \">Zadejte výraz k vyhledání.... </div>";
+            exit;
+        }
+
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         // $vlastnik2->csrf_html = $csrf_html;
 
