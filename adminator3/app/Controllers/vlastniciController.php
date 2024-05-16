@@ -213,12 +213,14 @@ class vlastniciController extends adminatorController
                 $select5 = " DESC ";
             }
 
+            // @phpstan-ignore-next-line
             if (strlen($select4) > 1) {
                 $select4 = $select4.$select5;
             }
 
             $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
 
+            // @phpstan-ignore-next-line
         } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($sql) ."' AND firma is null AND ( archiv = 0 or archiv is null )";
         } else {
