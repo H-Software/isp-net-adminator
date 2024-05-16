@@ -132,9 +132,9 @@ class vlastniciController extends adminatorController
             $this->smarty->assign("form_find", htmlspecialchars($find));
         }
 
-        $this->smarty->assign("form_select", $form_select);
-        $this->smarty->assign("form_razeni", $form_razeni);
-        $this->smarty->assign("form_razeni2", $form_razeni2);
+        $this->smarty->assign("select", $form_select);
+        $this->smarty->assign("razeni", $form_razeni);
+        $this->smarty->assign("razeni2", $form_razeni2);
 
         //promena pro update objektu
         if ($this->adminator->checkLevel(29, false) === true) {
