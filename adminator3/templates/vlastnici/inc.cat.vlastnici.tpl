@@ -9,7 +9,7 @@
 
     <span style="padding-left: 20px; "><a class="cat2" href="/vlastnici2" >Vlastníci2 (s.r.o)</a></span>
 
-    <span style="padding-left: 30px; ">Globální hledání</span>
+    <span style="padding-left: 30px; ">><a class="cat2" href="/vlastnici/search" >Globální hledání</a></span>
 
     <span style="padding-left: 30px; "><a class="cat2" href="/vlastnici/archiv" >Vlastníci - archiv</a></span>
 

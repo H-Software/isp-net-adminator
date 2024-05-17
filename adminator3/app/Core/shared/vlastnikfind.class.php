@@ -2,6 +2,8 @@
 
 class vlastnikfind
 {
+    public $csrf_html;
+    
     public static function vypis_tab($par)
     {
         if ($par == 1) {

@@ -91,6 +91,12 @@ class vlastniciController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
+        $vlastnikfind = new \vlastnikfind();
+
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $vlastnikfind->csrf_html = $csrf_html;
+
+
     }
 
     public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)

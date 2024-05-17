@@ -1,47 +1,4 @@
-<?php
 
-require("include/main.function.shared.php");
-require("include/config.php"); 
-
-require("include/check_login.php");
-require("include/check_level.php");
-
-if ( !( check_level($level,102) ) )
-{
- // neni level
-
- $stranka='nolevelpage.php';
- header("Location: ".$stranka);
- 
- echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-   Exit;
-      
-}
-
-echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
-      <html> 
-      <head> ';
-
-include ("include/charset.php"); 
-
-?>
-
-<title>Adminator 2 - hledání</title> 
-
-</head> 
-
-<body> 
-
-<?php include ("head.php"); ?> 
-
-<?php include ("category.php"); ?> 
-
-
- <tr>
-  <td colspan="2" height="20" bgcolor="silver" >
-   <?php include("vlastnici-cat-inc.php"); ?>
-  </td>
- </tr>
       
  <tr>
    <td colspan="2" height="25" >
