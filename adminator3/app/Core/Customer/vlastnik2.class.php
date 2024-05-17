@@ -538,13 +538,17 @@ class vlastnik2
             $stranka = "pohoda_sql/phd_list_fa.php?id_vlastnika=".$id_cloveka;
         }
 
-        if (isset($_SERVER['HTTPS'])) {
-            $prot = "https://";
-        } else {
-            $prot = "http://";
+        // vlastnici2-add-obj.php
+        if (filter_var($stranka, FILTER_VALIDATE_URL)) {
+            $full_url = $stranka;
+        } else{
+            if (isset($_SERVER['HTTPS'])) {
+                $prot = "https://";
+            } else {
+                $prot = "http://";
+            }
+            $full_url = $prot . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"]. '/' . $stranka;
         }
-
-        $full_url = $prot . $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"]. '/' . $stranka;
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": redirecting to URL: " . var_export($full_url, true));
 
