@@ -205,7 +205,7 @@ class vlastnikarchiv
                 $output .= "</td>";
 
                 $output .= "<td colspan=\"2\">";
-                $output .= "<form method=\"POST\" action=\"platby-akce.php\" >";
+                $output .= "<form method=\"POST\" action=\"" . fix_link_to_another_adminator("/platby-akce.php") ."\" >";
 
                 $output .= "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
                 $output .= "<input type=\"hidden\" name=\"klient\" value=\"".$data["id_cloveka"]."\" >";
@@ -215,9 +215,8 @@ class vlastnikarchiv
                 $output .= "</form>";
                 $output .= "</td>";
 
-
                 $output .= "<td colspan=\"4\">";
-                $output .= "<form method=\"POST\" action=\"vypovedi-vlozeni.php\" >";
+                $output .= "<form method=\"POST\" action=\"" . fix_link_to_another_adminator("/vypovedi-vlozeni.php") . "\" >";
 
                 $output .= "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
                 $output .= "<input type=\"hidden\" name=\"klient\" value=\"".$data["id_cloveka"]."\" >";
