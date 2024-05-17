@@ -29,18 +29,24 @@ class c_Listing
     private $sqlHandler;
 
     //konstruktor...naplni promenne
-    public function __construct($conUrl = "./index.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql, $sqlHandler)
+    public function __construct($conUrl = "./index.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql = "", $sqlHandler = null)
     {
         $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
         $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
+        $this->errName[4] = "Při volání konstruktotu nebyl zadán PGSQL Handler!<br>\n";
+
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;
         $this->before = $conBefore;
         $this->after = $conAfter;
 
-        $this->sqlHandler = $sqlHandler;
+        if($sqlHandler == null) {
+            $this->error(4);
+        } else {
+            $this->sqlHandler = $sqlHandler;
+        }
 
         if (empty($sql) or $sql == null) {
             $this->error(1);
