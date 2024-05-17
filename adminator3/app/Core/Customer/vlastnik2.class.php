@@ -486,7 +486,7 @@ class vlastnik2
         } elseif($akce == 8) { //vlozeni vypovedi
             echo $html_init;
 
-            $url = fix_link_to_another_adminator("vypovedi-vlozeni.php");
+            $url = fix_link_to_another_adminator("/vypovedi-vlozeni.php");
             echo "<form action=\"".$url."\" method=\"post\" name=\"frm\" >";
 
             print "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
