@@ -79,6 +79,19 @@ class vlastniciController extends adminatorController
 
         return $response;
     }
+    public function search(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $bodyContent = "";
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(102, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: hledání");
+
+        $this->header($request, $response, $this->adminator);
+
+    }
 
     public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
