@@ -14,6 +14,8 @@ class objekt extends adminator
 
     public $logger;
 
+    public $validator;
+
     public $loggedUserEmail;
 
     public $adminator; // handler for instance of adminator class
@@ -98,9 +100,7 @@ class objekt extends adminator
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
-
         $this->logger = $container->get('logger');
-
 
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
