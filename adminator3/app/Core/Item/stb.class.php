@@ -17,6 +17,8 @@ class stb extends adminator
 
     public $container;
 
+    public $validator;
+
     public $csrf_html;
 
     public $find_id_nodu;        //promenne pro hledani
@@ -1180,8 +1182,6 @@ class stb extends adminator
 
                 //zbytek
                 if($mod == 1) {
-
-                    // if( check_level($this->level, 152) )
                     if($this->enable_unpair_action === true) {
                         $output .= "<td style=\"".$class_stb_sude."\" ><a href=\"objekty-stb-unpairing.php?id=".intval($data_vypis["id_stb"])."\" >odendat</a></td>";
                     } else {
