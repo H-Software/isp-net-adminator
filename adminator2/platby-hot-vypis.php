@@ -72,7 +72,7 @@ try {
     $vyber = pg_query($db_ok2, $sql_base . " ORDER BY id LIMIT ".$listovani->interval." OFFSET ".$bude_chybet." ");
 } catch (Exception $e) {
     echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
-    echo "<div style=\"color: red; \" >Database Error: ".pg_last_error($db_ok2) . "</div>";
+    echo "<div style=\"color: red; \" >Database Error: ". $e->getMessage() . "</div>";
 }
 
 if($vyber) {
@@ -120,7 +120,7 @@ if($vyber) {
 } else {
     echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
     echo "<div style=\"color: red; \" >Error: No database handler.</div>";
-    echo "<div style=\"color: red; \" >" . pg_last_error($db_ok2) . "</div>";
+    echo "<div style=\"color: red; \" >" . pg_last_error() . "</div>";
 }
 
 ?>
