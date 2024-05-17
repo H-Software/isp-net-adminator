@@ -17,9 +17,34 @@
     </span>
 </div> *}
 
-<div class="vlastnici-archiv-table" style="padding-right: 5px;" >
+{if $bodyNoData|count_characters > 1}
 {$body}
+{else}
+
+<div class="vlastnici-archiv-table" style="padding-right: 5px;" >
+
+{$body1}
+
+<tr>
+    <td colspan="10"><hr></td>
+</tr>
+
+<tr>
+    <td colspan="10" height="40px" >
+        <span style="font-size: 20px; font-weight: bold; color: navy; " >
+            Výsledek hledání výrazu: "{$form_select}" v sekci "vlastníci"
+        </span>
+    </td>
+</tr>
+
+{$body2}
+
+{$body3}
 </div>
+
+{/if}
+
+
 
 {* konecny soubor *}
 {include file="base-end.tpl"}
