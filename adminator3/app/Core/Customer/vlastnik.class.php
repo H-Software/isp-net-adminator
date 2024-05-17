@@ -222,7 +222,7 @@ class vlastnik
                 $output .= "<span style=\"margin: 15px; \"></span>";
 
                 if ($data["fakturacni"] > 0) {
-                    $output .= "<a href=\"vlastnici2-erase-f.php?id=".$data["fakturacni"]."\" > smazání fakt. adresy </a>";
+                    $output .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2-erase-f.php?id=".$data["fakturacni"]) . "\" > smazání fakt. adresy </a>";
                 } else {
                     $output .= " smazání fakt. adresy " ;
                 }
@@ -230,7 +230,7 @@ class vlastnik
                 $output .= "<span style=\"margin: 15px; \" ></span>";
 
                 if (($data["fakturacni"] > 0)) {
-                    $output .= "<a href=\"vlastnici2-change-fakt.php?id=".$data["fakturacni"]."\" > úprava fakt. adresy </a>";
+                    $output .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2-change-fakt.php?id=".$data["fakturacni"]) . "\" > úprava fakt. adresy </a>";
                 } else {
                     $output .= " úprava fakt. adresy ";
                 }
