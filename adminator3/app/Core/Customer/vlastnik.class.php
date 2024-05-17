@@ -285,7 +285,7 @@ class vlastnik
 
                 $output .= "<td colspan=\"1\" >";
 
-                $output .= "<form method=\"POST\" action=\"vypovedi-vlozeni.php\" >";
+                $output .= "<form method=\"POST\" action=\"" . fix_link_to_another_adminator("/vypovedi-vlozeni.php") . "\" >";
 
                 $output .= "<input type=\"hidden\" name=\"firma\" value=\"1\" >";
                 $output .= "<input type=\"hidden\" name=\"klient\" value=\"".$data["id_cloveka"]."\" >";
@@ -304,16 +304,15 @@ class vlastnik
                 $output .= "</td>";
 
                 $output .= "<td>
-                    <form action=\"opravy-vlastnik.php\" method=\"get\" >
+                    <form action=\"" . fix_link_to_another_adminator("/opravy-vlastnik.php") . "\" method=\"get\" >
                     <input type=\"hidden\" name=\"typ\" value=\"2\" >
                     <input type=\"hidden\" name=\"id_vlastnika\" value=\"".$data["id_cloveka"]."\" >
                     
                     <input type=\"submit\" name=\"ok\" value=\"Zobrazit závady/opravy \" ></form>";
                 $output .= "</td>";
 
-
                 $output .= "<td>
-                        <form action=\"opravy-index.php\" method=\"get\" >
+                        <form action=\"" . fix_link_to_another_adminator("/opravy-index.php") . "\" method=\"get\" >
                         <input type=\"hidden\" name=\"typ\" value=\"1\" >
                         <input type=\"hidden\" name=\"id_vlastnika\" value=\"".$data["id_cloveka"]."\" >
                         
