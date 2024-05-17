@@ -2,20 +2,30 @@
 
 class vlastnikfind
 {
+    public $conn_mysql;
+    public $conn_pgsql;
+
     public $csrf_html;
-    
-    public static function vypis_tab($par)
+
+    public $echo = false;
+
+    public function vypis_tab($par)
     {
+        $output = "";
+
         if ($par == 1) {
-            echo "\n".'<table border="1" width="100%">'."\n";
+            $output .= "\n".'<table border="0" width="100%">'."\n";
         } elseif ($par == 2) {
-            echo "\n".'</table>'."\n";
+            $output .= "\n".'</table>'."\n";
         } else {
-            echo "chybny vyber";
+            $output .= "chybny vyber";
         }
 
-
-        // konec funkce vypis_tab
+        if($this->echo) {
+            echo $output;
+        } else {
+            return $output;
+        }
     }
 
     public function vypis($sql, $dotaz_source, $co = "")
@@ -38,10 +48,10 @@ class vlastnikfind
 		     AND  ( archiv = 0 or archiv is null ) )
 		     ";
 
-            $dotaz = pg_query($dotaz_sql);
+            $dotaz = pg_query($this->conn_pgsql, $dotaz_sql);
 
         } else {
-            $dotaz = pg_query($dotaz_source);
+            $dotaz = pg_query($this->conn_pgsql, $dotaz_source);
         }
 
         $radku = pg_num_rows($dotaz);
@@ -59,21 +69,21 @@ class vlastnikfind
                 // if ($co == 2)
 
                 echo "<tr><td colspan=\"14\"> <br> </td> </tr>
-    
-	    <tr> <td class=\"vlastnici-td-black\" colspan=\"2\" >[".$data["id_cloveka"]."] ".$data["nick"]."</td>
-	    
-		<td class=\"vlastnici-td-black\" colspan=\"2\">VS: ".$data["vs"]."</td>
-		<td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
-		<td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"8%\" >";
+
+                    <tr> <td class=\"vlastnici-td-black\" colspan=\"2\" >[".$data["id_cloveka"]."] ".$data["nick"]."</td>
+                    
+                    <td class=\"vlastnici-td-black\" colspan=\"2\">VS: ".$data["vs"]."</td>
+                    <td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
+                    <td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"8%\" >";
 
 
                 // tutady update a smazat, takze nic
                 echo "<br>";
 
                 echo "  </td> 
-	    </tr>
-	    
-	    <tr> <td colspan=\"2\">".$data["jmeno"]." ".$data["prijmeni"]."<br>";
+                        </tr>
+                        
+                        <tr> <td colspan=\"2\">".$data["jmeno"]." ".$data["prijmeni"]."<br>";
 
                 echo $data["ulice"]."  ";
 
@@ -82,13 +92,12 @@ class vlastnikfind
                 echo " <br> ".$data["mesto"]." ".$data["psc"]."</td>";
 
                 echo "<td colspan=\"11\">icq: ".$data["icq"]." <br>
-	    mail: ".$data["mail"]." <br>
-	    tel: ".$data["telefon"]." </td>
-	    
-	    </tr>
-    
-	    ";
-
+                        mail: ".$data["mail"]." <br>
+                        tel: ".$data["telefon"]." </td>
+                        
+                        </tr>
+                    
+                        ";
 
                 $id = $data["id_cloveka"];
                 $id_f = $data["fakturacni"];
@@ -103,10 +112,7 @@ class vlastnikfind
                 $co = "3";
 
                 //tady dalsi radka asi
-
-
                 echo "<tr>";
-
                 echo "<td colspan=\"\" ><span style=\"font-weight: bold; font-size: 20px;  \" >Detail vlastníka: ";
 
                 $id_cloveka = $data["id_cloveka"];

@@ -92,10 +92,44 @@ class vlastniciController extends adminatorController
         $this->header($request, $response, $this->adminator);
 
         $vlastnikfind = new \vlastnikfind();
+        $vlastnikfind->conn_mysql = $this->conn_mysql;
+        $vlastnikfind->conn_pgsql = $this->conn_pgsql;
+        $vlastnikfind->echo = true;
 
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $vlastnikfind->csrf_html = $csrf_html;
 
+        $find = $_GET["find"];
+        $najdi=$_GET["najdi"];
+        $sql=$find;
+
+        $form_select = intval($_GET["select"]);
+        $form_razeni = intval($_GET["razeni"]);
+        $form_razeni2 = intval($_GET["razeni2"]);
+
+        // $sql = $this->conn_mysql->real_escape_string($find);
+
+
+
+        if (empty($_GET["find"])) {
+            $this->smarty->assign("form_find", "%");
+        } else {
+            $this->smarty->assign("form_find", htmlspecialchars($find));
+        }
+
+        $this->smarty->assign("form_select", $form_select);
+        $this->smarty->assign("form_razeni", $form_razeni);
+        $this->smarty->assign("form_razeni2", $form_razeni2);
+
+        if(empty($find)){
+            $body = "Zadejte výraz k vyhledání.... <br>";
+
+            $this->smarty->assign("body", $body);
+
+            $this->smarty->display('vlastnici/hledani.tpl');
+
+            return $response;
+        }
 
     }
 
