@@ -45,23 +45,6 @@ require("include/charset.php");
 // vlastni obsah
 $list = $_GET["list"];
 
-//vytvoreni objektu
-$listovani = new c_Listing(
-    "./platby-hot-vypis.php?menu=1",
-    30,
-    $list,
-    "<center><div class=\"text-listing\">\n",
-    "</div></center>\n",
-    "SELECT * FROM platby WHERE hotove='1' ORDER BY id ; ",
-    $db_ok2
-);
-
-if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
-    $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
-} else {
-    $bude_chybet = (($list - 1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
-}
-
 //provedení sql dotazu a výběr záznamů
 try {
     $vyber = pg_query($db_ok2, "SELECT t1.id, t1.zaplaceno_dne, t2.prijmeni, t2.jmeno, t2.id_cloveka,
@@ -74,6 +57,24 @@ try {
 }
 
 if($vyber) {
+
+    //vytvoreni objektu
+    $listovani = new c_Listing(
+      "./platby-hot-vypis.php?menu=1",
+      30,
+      $list,
+      "<center><div class=\"text-listing\">\n",
+      "</div></center>\n",
+      "SELECT * FROM platby WHERE hotove='1' ORDER BY id ; ",
+      $db_ok2
+    );
+
+    if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
+      $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
+    } else {
+      $bude_chybet = (($list - 1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
+    }
+
     $listovani->listInterval();    //zobrazení stránkovače
 
     echo "<table border=\"1\" width=\"100%\" >
