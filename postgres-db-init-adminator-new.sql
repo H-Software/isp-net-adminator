@@ -100,6 +100,7 @@ CREATE TABLE "public"."platby" (
     "hotove" smallint DEFAULT '0' NOT NULL,
     "castka" integer DEFAULT '0' NOT NULL,
     "id_cloveka" integer NOT NULL,
+    "firma" integer,
     CONSTRAINT "platby_pkey" PRIMARY KEY ("id")
 ) WITH (oids = false);
 
@@ -163,4 +164,4 @@ INSERT INTO "vlastnici" ("id_cloveka", "billing_suspend_status", "archiv", "ulic
 (9,	0,	1,	'                                                                                                    ',	'                                                                                                    ',	'112                                               ',	'                                                  ',	NULL,	NULL,	NULL,	'test1                                                                                                                                                 ',	'                                                  ',	NULL,	0,	NULL,	'',	NULL,	NULL,	NULL,	NULL,	0,	'test                                                                                                ',	'testovic archivni                                                                                   ',	15,	NULL,	0,	0,	0,	NULL,	0,	NULL),
 (2,	0,	0,	'Hrad 1                                                                                              ',	'Praha                                                                                               ',	'222                                               ',	'                                                  ',	'pavel@hrad.gov.cz                                 ',	'800888888                                         ',	16,	'petrp                                                                                                                                                 ',	'11000                                             ',	1,	250,	222,	'prezident',	2,	NULL,	NULL,	NULL,	0,	'Petr                                                                                                ',	'Pavel Fakturacni                                                                                    ',	15,	NULL,	0,	0,	0,	NULL,	0,	NULL);
 
--- 2024-05-14 16:03:27.131396+00
+-- 2024-05-17 11:55:44.181424+00
