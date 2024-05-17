@@ -351,9 +351,9 @@ class vlastnik2
 
             $stranka = fix_link_to_another_adminator("/vlastnici2-change-fakt.php?update_id=".$fakturacni_id);
         } elseif($akce == 5) {
-            $stranka = "opravy-index.php?typ=1&id_vlastnika=".$id_cloveka;
+            $stranka = fix_link_to_another_adminator("/opravy-index.php?typ=1&id_vlastnika=".$id_cloveka);
         } elseif($akce == 6) {
-            $stranka = "opravy-vlastnik.php?typ=2&id_vlastnika=".$id_cloveka."&ok=OK";
+            $stranka = fix_link_to_another_adminator("/opravy-vlastnik.php?typ=2&id_vlastnika=".$id_cloveka."&ok=OK");
         } elseif($akce == 7) { //tisk smlouvy
             echo $html_init;
 
@@ -460,26 +460,19 @@ class vlastnik2
 
                     //sluzba IPTV
                     if($rs_fs_r[4] == 1) {
-
                         //sluzba IPTV - ANO
                         print "<input type=\"hidden\" name=\"iptv_sluzba\" value=\"1\" >\n";
                         //tarif
                         //	$iptv_sluzba_id_tarifu = intval(mysql_result($rs_fs, 0, 5));
                         //	print "<input type=\"hidden\" name=\"iptv_sluzba_id_tarifu\" value=\"".$iptv_sluzba_id_tarifu."\" >\n";
-
                     }
-
 
                     //VOIP
                     if($rs_fs_r[6] == 1) {
                         print "<input type=\"hidden\" name=\"voip_sluzba\" value=\"1\" >\n";
                     }
-
-
                 } //konec if( mysql_num_rows rs_fs == 1 )
-
                 //print "<input type=\"hidden\" name=\"tarif\" value=\"".$tarif."\" >\n";
-
             }
 
             echo "</form>\n";
@@ -493,7 +486,7 @@ class vlastnik2
         } elseif($akce == 8) { //vlozeni vypovedi
             echo $html_init;
 
-            $url = "vypovedi-vlozeni.php";
+            $url = fix_link_to_another_adminator("vypovedi-vlozeni.php");
             echo "<form action=\"".$url."\" method=\"post\" name=\"frm\" >";
 
             print "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
@@ -509,7 +502,7 @@ class vlastnik2
         } elseif($akce == 9) { //vlozIT hot. platbu
             echo $html_init;
 
-            $url = "platby-akce2.php";
+            $url = fix_link_to_another_adminator("/platby-akce2.php");
             echo "<form action=\"".$url."\" method=\"post\" name=\"frm\" >";
 
             print "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
@@ -523,19 +516,19 @@ class vlastnik2
             exit;
 
         } elseif($akce == 10) { //vypis plateb
-            $stranka = "platby-vypis.php?id_vlastnika=".$id_cloveka."&ok=OK";
+            $stranka = fix_link_to_another_adminator("/platby-vypis.php?id_vlastnika=".$id_cloveka."&ok=OK");
         } elseif($akce == 11) { //vypis neuhr. faktur
-            $stranka = "faktury/fn-index.php?id_cloveka=".$id_cloveka."&filtr_stav_emailu=99";
+            $stranka = fix_link_to_another_adminator("/faktury/fn-index.php?id_cloveka=".$id_cloveka."&filtr_stav_emailu=99");
         } elseif($akce == 12) { //online xml faktury
-            $stranka = "platby-vypis-xml.php?id_vlastnika=".$id_cloveka;
+            $stranka = fix_link_to_another_adminator("/platby-vypis-xml.php?id_vlastnika=".$id_cloveka);
         } elseif($akce == 13) { //historie
             $stranka = "archiv-zmen?id_cloveka=".$id_cloveka;
         } elseif($akce == 14) { // online faktury - voip
-            $stranka = "platby-vypis-xml-voip.php?id_vlastnika=".$id_cloveka;
+            $stranka = fix_link_to_another_adminator("/platby-vypis-xml-voip.php?id_vlastnika=".$id_cloveka);
         } elseif($akce == 15) { // priradit objekt stb
-            $stranka = "vlastnici2-add-obj-stb.php?id_vlastnika=".$id_cloveka;
+            $stranka = fix_link_to_another_adminator("/vlastnici2-add-obj-stb.php?id_vlastnika=".$id_cloveka);
         } elseif($akce == 16) { // vypis faktur - pohoda SQL
-            $stranka = "pohoda_sql/phd_list_fa.php?id_vlastnika=".$id_cloveka;
+            $stranka = fix_link_to_another_adminator("/pohoda_sql/phd_list_fa.php?id_vlastnika=".$id_cloveka);
         }
 
         // vlastnici2-add-obj.php
