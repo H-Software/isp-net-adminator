@@ -71,8 +71,8 @@ class c_Listing
         $allRecords = pg_num_rows($listRecord);
 
         if ($allRecords < 0) {
-            $this->error(3);
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
+            // $this->error(3);
+            // echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
 
             $this->numLists = 0;
             $this->numRecords = 0;
