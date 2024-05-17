@@ -81,7 +81,7 @@ class vlastnik
                 if($this->vlastnici_erase_povolen === false) {
                     $output .= "<span style=\"\" > smazat </span> ";
                 } else {
-                    $output .= "<form method=\"POST\" action=\"vlastnici2-erase.php\" >";
+                    $output .= "<form method=\"POST\" action=\"" . fix_link_to_another_adminator("/vlastnici2-erase.php") . "\" >";
                     $output .= "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_cloveka"]."\" >";
                     $output .= "<input type=\"submit\" value=\"Smazat\" >";
 
@@ -94,7 +94,7 @@ class vlastnik
                 if ($this->vlastnici_update_povolen === false) {
                     $output .= "<span style=\"\" >  upravit  </span> \n";
                 } else {
-                    $output .= " <form method=\"POST\" action=\"vlastnici2-change.php\" >";
+                    $output .= " <form method=\"POST\" action=\"" . fix_link_to_another_adminator("/vlastnici2-change.php") . "\" >";
                     $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
                     $output .= "<input type=\"submit\" value=\"update\" >";
 
@@ -222,7 +222,7 @@ class vlastnik
                 $output .= "<span style=\"margin: 15px; \"></span>";
 
                 if ($data["fakturacni"] > 0) {
-                    $output .= "<a href=\"vlastnici2-erase-f.php?id=".$data["fakturacni"]."\" > smazání fakt. adresy </a>";
+                    $output .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2-erase-f.php?id=".$data["fakturacni"]) . "\" > smazání fakt. adresy </a>";
                 } else {
                     $output .= " smazání fakt. adresy " ;
                 }
@@ -230,7 +230,7 @@ class vlastnik
                 $output .= "<span style=\"margin: 15px; \" ></span>";
 
                 if (($data["fakturacni"] > 0)) {
-                    $output .= "<a href=\"vlastnici2-change-fakt.php?id=".$data["fakturacni"]."\" > úprava fakt. adresy </a>";
+                    $output .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2-change-fakt.php?id=".$data["fakturacni"]) . "\" > úprava fakt. adresy </a>";
                 } else {
                     $output .= " úprava fakt. adresy ";
                 }
@@ -285,7 +285,7 @@ class vlastnik
 
                 $output .= "<td colspan=\"1\" >";
 
-                $output .= "<form method=\"POST\" action=\"vypovedi-vlozeni.php\" >";
+                $output .= "<form method=\"POST\" action=\"" . fix_link_to_another_adminator("/vypovedi-vlozeni.php") . "\" >";
 
                 $output .= "<input type=\"hidden\" name=\"firma\" value=\"1\" >";
                 $output .= "<input type=\"hidden\" name=\"klient\" value=\"".$data["id_cloveka"]."\" >";
@@ -304,16 +304,15 @@ class vlastnik
                 $output .= "</td>";
 
                 $output .= "<td>
-                    <form action=\"opravy-vlastnik.php\" method=\"get\" >
+                    <form action=\"" . fix_link_to_another_adminator("/opravy-vlastnik.php") . "\" method=\"get\" >
                     <input type=\"hidden\" name=\"typ\" value=\"2\" >
                     <input type=\"hidden\" name=\"id_vlastnika\" value=\"".$data["id_cloveka"]."\" >
                     
                     <input type=\"submit\" name=\"ok\" value=\"Zobrazit závady/opravy \" ></form>";
                 $output .= "</td>";
 
-
                 $output .= "<td>
-                        <form action=\"opravy-index.php\" method=\"get\" >
+                        <form action=\"" . fix_link_to_another_adminator("/opravy-index.php") . "\" method=\"get\" >
                         <input type=\"hidden\" name=\"typ\" value=\"1\" >
                         <input type=\"hidden\" name=\"id_vlastnika\" value=\"".$data["id_cloveka"]."\" >
                         

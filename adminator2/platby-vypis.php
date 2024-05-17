@@ -29,19 +29,19 @@ include ("include/charset.php");
 
 <?php
 
- require("include/js.include.1.php");
+//  require("include/js.include.1.php");
 
- $windowtext = "Aktuální informace o platbách má účetní. Zde jsou zpožděné informace/platby. ";
+//  $windowtext = "Aktuální informace o platbách má účetní. Zde jsou zpožděné informace/platby. ";
 
- // velikost okna
- $windowdelka = 300;
- $windowpadding = 40;
+//  // velikost okna
+//  $windowdelka = 300;
+//  $windowpadding = 40;
 
- // pozice okna
- $windowtop = 370;
- $windowleft = 350;
+//  // pozice okna
+//  $windowtop = 370;
+//  $windowleft = 350;
 
- require("include/window-main.php");
+//  require("include/window-main.php");
  
  ?>
   
@@ -104,7 +104,7 @@ include ("include/charset.php");
 	    echo "<td rowspan=\"3\" width=\"75%\" valign=\"top\" >";
 	    //sem info o vlastnikovi
 	    
-	    $dotaz_vlastnik=pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_vlastnika)."' ");
+	    $dotaz_vlastnik=pg_query($db_ok2, "SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_vlastnika)."' ");
 	    $dotaz_vlastnik_radku=pg_num_rows($dotaz_vlastnik);
 	    
 	    if ( $dotaz_vlastnik_radku <> 1)
@@ -174,7 +174,7 @@ include ("include/charset.php");
           
   // tady zjistime jestli je clovek na s.r.o.
   
-  $dotaz_sro=pg_query("SELECT * FROM vlastnici WHERE id_cloveka='".intval($id_vlastnika)."' ");
+  $dotaz_sro=pg_query($db_ok2, "SELECT * FROM vlastnici WHERE id_cloveka='".intval($id_vlastnika)."' ");
   $dotaz_sro_radku=pg_num_rows($dotaz_sro);
   
   $firma = "0";

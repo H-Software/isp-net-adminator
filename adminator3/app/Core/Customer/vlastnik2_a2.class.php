@@ -517,7 +517,8 @@ class vlastnik2_a2
                     $output .= "<form action=\"" . $this->cross_url . "\" method=\"get\" >";
 
                 } else {
-                    $output .= "<form action=\"vlastnici-cross.php\" method=\"get\" >";
+                    $output .= "<form action=\"\" method=\"get\" >";
+                    $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": unknown cross_url");
                 }
 
                 $output .= "<select name=\"akce\" size=\"1\" >";
