@@ -12,8 +12,6 @@ class vlastnik2_a2
 
     public $csrf_html;
 
-    public $level;
-
     public $export_povolen = false;
 
     public $echo = true;
@@ -451,7 +449,6 @@ class vlastnik2_a2
 
                     $stb->enable_modify_action = $this->objektStbListAllowedActionUpdate;
                     $stb->enable_delete_action = $this->objektStbListAllowedActionErase;
-                    $stb->level = $this->level;
                     $stb->csrf_html = $this->csrf_html;
 
 

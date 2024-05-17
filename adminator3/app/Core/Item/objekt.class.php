@@ -14,6 +14,8 @@ class objekt extends adminator
 
     public $logger;
 
+    public $validator;
+
     public $loggedUserEmail;
 
     public $adminator; // handler for instance of adminator class
@@ -98,9 +100,7 @@ class objekt extends adminator
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
-
         $this->logger = $container->get('logger');
-
 
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
@@ -332,6 +332,7 @@ class objekt extends adminator
         $objekt_a2->conn_mysql = $this->conn_mysql;
         $objekt_a2->conn_pgsql = $this->container->get('connPgsql');
         $objekt_a2->csrf_html = $this->csrf_html;
+        $objekt_a2->mod_vypisu = $this->mod_vypisu;
 
         // checking levels for update/erase/..
         if ($this->adminator->checkLevel(29, false) === true) {

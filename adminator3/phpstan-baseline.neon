@@ -198,11 +198,6 @@ parameters:
 			path: app/Core/Customer/vlastnik2.class.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Core\\\\objekt\\:\\:\\$validator\\.$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
 			message: "#^Access to an undefined property objekt_a2\\:\\:\\$listAllowedActionGarant\\.$#"
 			count: 1
 			path: app/Core/Item/objekt.class.php
@@ -302,10 +297,6 @@ parameters:
 			count: 2
 			path: app/Core/Item/objektypridani.class.php
 
-		-
-			message: "#^Access to an undefined property App\\\\Core\\\\stb\\:\\:\\$validator\\.$#"
-			count: 2
-			path: app/Core/Item/stb.class.php
 
 		-
 			message: "#^Binary operation \"\\+\" between string and 2 results in an error\\.$#"
@@ -576,12 +567,6 @@ parameters:
 			message: "#^Variable \\$user in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
-
-		-
-			message: "#^Access to an undefined property App\\\\Core\\\\stb\\:\\:\\$level\\.$#"
-			count: 1
-			path: app/Core/shared/vlastnik2_a2.class.php
-
 
 		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getPersistenceRepository\\(\\)\\.$#"

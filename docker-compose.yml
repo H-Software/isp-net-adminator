@@ -66,6 +66,7 @@ services:
             - "*.sql"
             - .github/
             - .vscode/
+            - .git/
     environment:
       # DB conn
       - MYSQL_SERVER=192.168.1.213
