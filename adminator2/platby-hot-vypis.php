@@ -68,7 +68,7 @@ if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je prvn
 }
 
 $sql_listing = "";
-if($listovani->interval > 0 and $bude_chybet > 0 ){
+if($listovani->interval > 0 and $bude_chybet > 0) {
     $sql_listing = " LIMIT ".$listovani->interval." OFFSET ".$bude_chybet;
 }
 
