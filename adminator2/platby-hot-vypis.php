@@ -118,8 +118,9 @@ if($vyber) {
 
     $listovani->listInterval();    //zobrazení stránkovače
 } else {
-  echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
-  echo "<div style=\"color: red; \" >Error: No database handler.</div>";
+    echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
+    echo "<div style=\"color: red; \" >Error: No database handler.</div>";
+    echo "<div style=\"color: red; \" >" . pg_last_error($db_ok2) . "</div>";
 }
 
 ?>
