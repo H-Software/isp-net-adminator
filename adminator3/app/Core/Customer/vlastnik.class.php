@@ -205,7 +205,7 @@ class vlastnik
 
                 $output .= "<span style=\"margin: 25px; \"></span>";
 
-                $output .= "<a href=\"platby-vypis.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - starý (do 2/2012)</a>";
+                $output .= "<a href=\"" . fix_link_to_another_adminator("/platby-vypis.php?id_vlastnika=".$data["id_cloveka"]) . "\" > výpis plateb - starý (do 2/2012)</a>";
 
                 $output .= "<span style=\"margin-left: 20px; \">".
                             "<a href=\"" . fix_link_to_another_adminator("/pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]) . "\" > výpis plateb - nový (od 3/2012)</a>".
