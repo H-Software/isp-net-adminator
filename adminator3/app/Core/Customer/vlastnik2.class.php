@@ -331,7 +331,7 @@ class vlastnik2
 
             $stranka = $id_cloveka_res;
         } elseif($akce == 1) {
-            $stranka = "vlastnici2-add-obj.php?id_vlastnika=".$id_cloveka;
+            $stranka = fix_link_to_another_adminator("/vlastnici2-add-obj.php?id_vlastnika=".$id_cloveka);
         } elseif($akce == 2) {
             $stranka = fix_link_to_another_adminator("/vlastnici2-add-fakt.php?id_vlastnika=".$id_cloveka);
         } elseif($akce == 3) {
