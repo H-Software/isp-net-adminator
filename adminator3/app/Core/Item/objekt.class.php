@@ -332,6 +332,7 @@ class objekt extends adminator
         $objekt_a2->conn_mysql = $this->conn_mysql;
         $objekt_a2->conn_pgsql = $this->container->get('connPgsql');
         $objekt_a2->csrf_html = $this->csrf_html;
+        $objekt_a2->mod_vypisu = $this->mod_vypisu;
 
         // checking levels for update/erase/..
         if ($this->adminator->checkLevel(29, false) === true) {
