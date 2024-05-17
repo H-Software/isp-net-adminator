@@ -267,7 +267,7 @@ class vlastnikarchiv
                 $output .= "</td>";
 
                 $output .= "<td colspan=\"2\" >
-                    <form action=\"opravy-vlastnik.php\" method=\"get\" >
+                    <form action=\"" . fix_link_to_another_adminator("/opravy-vlastnik.php") . "\" method=\"get\" >
                     <input type=\"hidden\" name=\"typ\" value=\"2\" >
                     <input type=\"hidden\" name=\"id_vlastnika\" value=\"".$data["id_cloveka"]."\" >			    
 		            <input type=\"submit\" name=\"ok\" value=\"Zobrazit závady/opravy \" ></form>";
