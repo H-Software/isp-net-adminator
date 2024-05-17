@@ -578,11 +578,6 @@ parameters:
 			path: app/Core/shared/partner.servis.class.php
 
 		-
-			message: "#^Access to an undefined property App\\\\Core\\\\stb\\:\\:\\$level\\.$#"
-			count: 1
-			path: app/Core/Customer/vlastnik2_a2.class.php
-
-		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getPersistenceRepository\\(\\)\\.$#"
 			count: 1
 			path: app/Middleware/RedirectIfNotAuthenticated.php
