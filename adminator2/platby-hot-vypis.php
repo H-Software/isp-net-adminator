@@ -72,15 +72,23 @@ if($listovani->interval > 0 and $bude_chybet > 0) {
     $sql_listing = " LIMIT ".$listovani->interval." OFFSET ".$bude_chybet;
 }
 
+$sql_final = $sql_base . " ORDER BY id " . $sql_listing;
+
 //provedení sql dotazu a výběr záznamů
 try {
-    $vyber = pg_query($db_ok2, $sql_base . " ORDER BY id " . $sql_listing);
+    $vyber = pg_query($db_ok2, $sql_final);
 } catch (Exception $e) {
     echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
     echo "<div style=\"color: red; \" >Database Error: ". $e->getMessage() . "</div>";
 }
 
-if($vyber) {
+if(!$vyber) {
+    echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
+    echo "<div style=\"color: red; \" >Error: No database handler.</div>";
+    echo "<div style=\"color: red; \" >" . pg_last_error() . "</div>";
+} elseif(pg_num_rows($vyber) < 1) {
+    echo "<div style=\"\" >zadne platby</div>";
+} else {
     $listovani->listInterval();    //zobrazení stránkovače
 
     echo "<table border=\"1\" width=\"100%\" >
@@ -122,10 +130,6 @@ if($vyber) {
     echo "</table>";
 
     $listovani->listInterval();    //zobrazení stránkovače
-} else {
-    echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
-    echo "<div style=\"color: red; \" >Error: No database handler.</div>";
-    echo "<div style=\"color: red; \" >" . pg_last_error() . "</div>";
 }
 
 ?>
