@@ -31,9 +31,9 @@ class c_Listing
     //konstruktor...naplni promenne
     public function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql = null, $sqlHandler)
     {
-        $this->errName[1] = "P�i vol�n� konstruktotu nebyl zad�n SQL dotaz!<br>\n";
-        $this->errName[2] = "Nelze zobrazit listov�n�, chyba datab�ze(Query)!<br>\n";
-        $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
+        $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
+        $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
+        $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;

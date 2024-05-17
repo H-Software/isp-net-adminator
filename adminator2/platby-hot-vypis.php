@@ -57,7 +57,7 @@ $listovani = new c_Listing(
     $list,
     "<center><div class=\"text-listing\">\n",
     "</div></center>\n",
-    $sqbl_base . " ORDER BY id ; ",
+    $sqbl_base . " ORDER BY id",
     $db_ok2
 );
 
@@ -67,9 +67,14 @@ if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je prvn
     $bude_chybet = (($list - 1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
 }
 
+$sql_listing = "";
+if($listovani->interval > 0 and $bude_chybet > 0 ){
+    $sql_listing = " LIMIT ".$listovani->interval." OFFSET ".$bude_chybet;
+}
+
 //provedení sql dotazu a výběr záznamů
 try {
-    $vyber = pg_query($db_ok2, $sql_base . " ORDER BY id LIMIT ".$listovani->interval." OFFSET ".$bude_chybet." ");
+    $vyber = pg_query($db_ok2, $sql_base . " ORDER BY id " . $sql_listing);
 } catch (Exception $e) {
     echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
     echo "<div style=\"color: red; \" >Database Error: ". $e->getMessage() . "</div>";
