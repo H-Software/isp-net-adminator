@@ -41,9 +41,9 @@ require("include/charset.php");
  <tr>
   <td colspan="2" >
   
-  <?php
-    // sem zbytek
-    $list = $_GET["list"];
+<?php
+// vlastni obsah
+$list = $_GET["list"];
 
 //vytvoreni objektu
 $listovani = new c_Listing(
@@ -115,6 +115,9 @@ if($vyber) {
     echo "</table>";
 
     $listovani->listInterval();    //zobrazení stránkovače
+} else {
+  echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
+  echo "<div style=\"color: red; \" >Error: No database handler.</div>";
 }
 
 ?>
