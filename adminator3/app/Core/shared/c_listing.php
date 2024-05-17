@@ -29,7 +29,7 @@ class c_Listing
     private $sqlHandler;
 
     //konstruktor...naplni promenne
-    public function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql = "", $sqlHandler)
+    public function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql = null, $sqlHandler)
     {
         $this->errName[1] = "P�i vol�n� konstruktotu nebyl zad�n SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listov�n�, chyba datab�ze(Query)!<br>\n";
@@ -42,7 +42,7 @@ class c_Listing
 
         $this->sqlHandler = $sqlHandler;
 
-        if (empty($sql)) {
+        if (empty($sql) or $sql == null) {
             $this->error(1);
         } else {
             $this->sql = $sql;
