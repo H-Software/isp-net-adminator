@@ -100,16 +100,14 @@ class vlastniciController extends adminatorController
         $vlastnikfind->csrf_html = $csrf_html;
 
         $find = $_GET["find"];
-        $najdi=$_GET["najdi"];
-        $sql=$find;
+        $najdi = $_GET["najdi"];
+        $sql = $find;
 
         $form_select = intval($_GET["select"]);
         $form_razeni = intval($_GET["razeni"]);
         $form_razeni2 = intval($_GET["razeni2"]);
 
         // $sql = $this->conn_mysql->real_escape_string($find);
-
-
 
         if (empty($_GET["find"])) {
             $this->smarty->assign("form_find", "%");
@@ -121,7 +119,7 @@ class vlastniciController extends adminatorController
         $this->smarty->assign("form_razeni", $form_razeni);
         $this->smarty->assign("form_razeni2", $form_razeni2);
 
-        if(empty($find)){
+        if(empty($_GET["find"])) {
             $body = "Zadejte výraz k vyhledání.... <br>";
 
             $this->smarty->assign("body", $body);
@@ -131,6 +129,7 @@ class vlastniciController extends adminatorController
             return $response;
         }
 
+        return $response;
     }
 
     public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)
