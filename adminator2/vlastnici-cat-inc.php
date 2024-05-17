@@ -1,12 +1,12 @@
 <?php
 
-echo "<span style=\"padding-left: 30px; \"><a href=\"".$cesta."vlastnici.php\">Vlastníci </a></span>\n\n";
+echo "<span style=\"padding-left: 30px; \">Vlastníci</span>\n\n";
 
-echo "<span style=\"padding-left: 30px; \"><a href=\"".$cesta."vlastnici2.php\">Vlastníci2 (s.r.o) </a></span>\n\n";
+echo "<span style=\"padding-left: 30px; \">Vlastníci2 (s.r.o)</span>\n\n";
 
 echo "<span style=\"padding-left: 30px; \"><a href=\"".$cesta."vlastnici-hledani.php\"> Globální hledání </a></span>\n\n";
 
-echo "<span style=\"padding-left: 30px; \"><a href=\"".$cesta."vlastnici-archiv.php\">Vlastníci - archiv </a></span>\n\n";
+echo "<span style=\"padding-left: 30px; \">Vlastníci - archiv </span>\n\n";
 
 echo "<span style=\"padding-left: 30px; \"><a href=\"".$cesta."vypovedi.php\">Výpovědi smluv </a></span>\n\n";
 
