@@ -201,14 +201,14 @@ class vlastnik
 
                 $output .= "<span style=\"margin: 25px; \">další funkce:</span>\n\n";
 
-                $output .= "<a href=\"" . fix_link_to_another_adminator("vlastnici2-add-obj.php?mod=1&id_vlastnika=".$data["id_cloveka"])."\" >přidání objektu</a>";
+                $output .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2-add-obj.php?mod=1&id_vlastnika=".$data["id_cloveka"])."\" >přidání objektu</a>";
 
                 $output .= "<span style=\"margin: 25px; \"></span>";
 
                 $output .= "<a href=\"platby-vypis.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - starý (do 2/2012)</a>";
 
                 $output .= "<span style=\"margin-left: 20px; \">".
-                            "<a href=\"pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - nový (od 3/2012)</a>".
+                            "<a href=\"" . fix_link_to_another_adminator("/pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]) . "\" > výpis plateb - nový (od 3/2012)</a>".
                             "</span>";
 
                 $output .= "<span style=\"margin: 15px; \"></span>";
@@ -216,7 +216,7 @@ class vlastnik
                 if ($data["fakturacni"] > 0) {
                     $output .= " přidání fakturační adresy ";
                 } else {
-                    $output .= "<a href=\"" . fix_link_to_another_adminator("vlastnici2-add-fakt.php?id_vlastnika=".$data["id_cloveka"]) . "\" > přidání fakt. adresy </a>";
+                    $output .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2-add-fakt.php?id_vlastnika=".$data["id_cloveka"]) . "\" > přidání fakt. adresy </a>";
                 }
 
                 $output .= "<span style=\"margin: 15px; \"></span>";
@@ -237,7 +237,7 @@ class vlastnik
 
                 $output .= "<span style=\"margin: 25px; \" ></span>";
 
-                $output .= "<a href=\"vlastnici-gen-xml.php?id_klienta=".$data["id_cloveka"]."\" > import klienta do Pohody (Adresář)</a>";
+                $output .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici-gen-xml.php?id_klienta=".$data["id_cloveka"]) . "\" > import klienta do Pohody (Adresář)</a>";
 
                 //konec bunky/radky
                 $output .= "</td></tr>";
