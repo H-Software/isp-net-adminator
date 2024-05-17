@@ -297,10 +297,6 @@ parameters:
 			count: 2
 			path: app/Core/Item/objektypridani.class.php
 
-		-
-			message: "#^Access to an undefined property App\\\\Core\\\\stb\\:\\:\\$validator\\.$#"
-			count: 2
-			path: app/Core/Item/stb.class.php
 
 		-
 			message: "#^Binary operation \"\\+\" between string and 2 results in an error\\.$#"
