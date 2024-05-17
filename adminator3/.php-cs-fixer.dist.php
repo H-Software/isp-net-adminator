@@ -13,7 +13,6 @@ $finder = (new PhpCsFixer\Finder())
     ])
     ->notPath([
         'phpstan-baseline.php',
-        'app/Core/shared/objekt_a2.class.php', // TypeError: Illegal offset type 
     ])
 ;
 
