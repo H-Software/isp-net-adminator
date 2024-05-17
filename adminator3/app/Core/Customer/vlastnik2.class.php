@@ -541,7 +541,7 @@ class vlastnik2
         // vlastnici2-add-obj.php
         if (filter_var($stranka, FILTER_VALIDATE_URL)) {
             $full_url = $stranka;
-        } else{
+        } else {
             if (isset($_SERVER['HTTPS'])) {
                 $prot = "https://";
             } else {
