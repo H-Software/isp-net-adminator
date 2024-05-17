@@ -5,7 +5,7 @@
 /*
 priklad vytvareni instance:
 
-$listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
+$listing = new c_Listing_vlastnici("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
     "list pro zobrazeni", "formatovani zacatku odkazu strankovani",
     "formatovani konce odkazu strankovani", "sql dotaz pro vyber vsech zazkamu k vylistovani");
 */
@@ -59,7 +59,7 @@ class c_listing_vlastnici
 
         if (!$listRecord) {
             $this->error(2);
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
 
             $this->numLists = 0;
             $this->numRecords = 0;

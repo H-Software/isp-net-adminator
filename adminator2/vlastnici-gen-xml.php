@@ -5,58 +5,49 @@ require("include/config.php");
 require("include/check_login.php");
 require("include/check_level.php");
 
-require("include/class.php");
-
-if( !( check_level($level,13) ) )
-{
+if( !( check_level($level,13) ) ) {
  // neni level
  header("Location: nolevelpage.php"); 
  echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
  exit;
-     
 }
 
 $id_cloveka = intval($_GET["id_klienta"]);
 
-//$id_cloveka = 34;
-
-$dotaz = pg_query("SELECT ".
+$dotaz = pg_query($db_ok2, "SELECT ".
 			"fakturacni, jmeno, prijmeni, ulice, mesto, psc, telefon, mail, k_platbe, vs, ucetni_index ".
 			" FROM vlastnici WHERE id_cloveka = '$id_cloveka'");
 
 while($data = pg_fetch_array($dotaz)){
 
     if( $data["fakturacni"] > 0 ){
-	$data_company = iconv("UTF-8", "Windows-1250", "FAKTURACNI NEUMIME");    
+	    $data_company = iconv("UTF-8", "Windows-1250", "FAKTURACNI NEUMIME");    
     }
     else{
-	//domácí
-	$data_name = iconv("UTF-8", "Windows-1250", $data["jmeno"]." ".$data["prijmeni"] );    	
-	$data_city = iconv("UTF-8", "Windows-1250", $data["mesto"] );
-	$data_street = iconv("UTF-8", "Windows-1250", $data["ulice"] );
-	$data_zip = iconv("UTF-8", "Windows-1250", $data["psc"] );
+        //domácí
+        $data_name = iconv("UTF-8", "Windows-1250", $data["jmeno"]." ".$data["prijmeni"] );    	
+        $data_city = iconv("UTF-8", "Windows-1250", $data["mesto"] );
+        $data_street = iconv("UTF-8", "Windows-1250", $data["ulice"] );
+        $data_zip = iconv("UTF-8", "Windows-1250", $data["psc"] );
     }
     
-    if($data["telefon"] != "NULL"){
-	$data_phone = iconv("UTF-8", "Windows-1250", $data["telefon"]);
+    if($data["telefon"] != "NULL") {
+        $data_phone = iconv("UTF-8", "Windows-1250", $data["telefon"]);
     }
     
     $data_email = iconv("UTF-8", "Windows-1250", $data["mail"]);    
     
     //klice a skupiny, zjednodusene
-    if($data["k_platbe"] == 248){
-	
-	$data_addGroup = iconv("UTF-8", "Windows-1250", "SMALL CITY");
-	$data_addKey = "FS74";
+    if($data["k_platbe"] == 248) {
+        $data_addGroup = iconv("UTF-8", "Windows-1250", "SMALL CITY");
+        $data_addKey = "FS74";
     }
-    elseif($data["k_platbe"] == 416.5){
-	
-	$data_addGroup = iconv("UTF-8", "Windows-1250", "METROPOLITNÍ");
-	$data_addKey = "FS75";
-	
+    elseif($data["k_platbe"] == 416.5) {
+        $data_addGroup = iconv("UTF-8", "Windows-1250", "METROPOLITNÍ");
+        $data_addKey = "FS75";
     }
     else{
-	//ostatni neresime
+	    //ostatni neresime
     }
     
     $data_agreement = $data["vs"];
@@ -70,9 +61,6 @@ while($data = pg_fetch_array($dotaz)){
 
 // pomoci hlavicky urcime mime typ text/xml
 header('content-type: text/xml');
-
-// autoloaded
-// require 'include/xml/xml_generator.class.php';
 
 // vytvorime instanci tridy c_xml_generator
 $xml = new c_xml_generator;
@@ -167,7 +155,6 @@ $adb_number = $xml->add_node($adb_addressbookHeader, 'adb:number');
 if( !empty($data_number) ){
     $adb_number_data = $xml->add_cdata($adb_number, $data_number);
 }
-
 
 echo $xml->create_xml();
 

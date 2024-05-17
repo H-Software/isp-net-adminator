@@ -5,14 +5,14 @@
 /*
 priklad vytvareni instance:
 
-$listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
+$listing = new c_Listing_vlastnici2("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
     "list pro zobrazeni", "formatovani zacatku odkazu strankovani",
     "formatovani konce odkazu strankovani", "sql dotaz pro vyber vsech zazkamu k vylistovani");
 */
 
 //definice tridy c_Listing
 
-class c_listing_platby
+class c_listing_vlastnici2
 {
     public $url;
     public $interval;
@@ -26,12 +26,15 @@ class c_listing_platby
     public $befError = "<div align=\"center\" style=\"color: maroon;\">";
     public $aftError = "</div>";
 
-    //konstruktor...naplni promenne
-    public function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
+    public $echo = true;
+
+    // $select="./objekty.php?";
+
+    public function __construct($conUrl = "./vlastnici.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
     {
-        $this->errName[1] = "P�i vol�n� konstruktotu nebyl zad�n SQL dotaz!<br>\n";
-        $this->errName[2] = "Nelze zobrazit listov�n�, chyba datab�ze(Query)!<br>\n";
-        $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
+        $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
+        $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
+        $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;
@@ -45,19 +48,37 @@ class c_listing_platby
         }
     }
 
-    // include("config.pg.php");
-
     //vyber dat z databaze
     public function dbSelect()
     {
-        $listRecord = @pg_query($this->sql);
+        try {
+            $listRecord = pg_query($this->sql);
+        } catch (Exception $e) {
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
+        }
+
         if (!$listRecord) {
             $this->error(2);
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
+
+            $this->numLists = 0;
+            $this->numRecords = 0;
+
+            return;
         }
-        $allRecords = @pg_num_rows($listRecord);
-        if (!$allRecords) {
+
+        $allRecords = pg_num_rows($listRecord);
+
+        if ($allRecords < 0) {
             $this->error(3);
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
+
+            $this->numLists = 0;
+            $this->numRecords = 0;
+
+            return;
         }
+
         $allLists = ceil($allRecords / $this->interval);
 
         $this->numLists = $allLists;
@@ -98,8 +119,9 @@ class c_listing_platby
     //napr.:    1-10 | 11-20 | 21-30
     public function listInterval()
     {
+        $output = "";
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         for ($i = 1; $i <= $this->numLists; $i++) {
             $isLink = 1;
             $spacer = " | ";
@@ -117,21 +139,28 @@ class c_listing_platby
                 $spacer = "";
             }
             if ($isLink == 0) {
-                echo $from."-".$to." ".$spacer;
+                $output .= $from."-".$to." ".$spacer;
             }
             if ($isLink == 1) {
-                echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
+                $output .= "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
             }
         }
-        echo $this->after;
+        $output .= $this->after;
+        if($this->echo) {
+            echo $output;
+        } else {
+            return $output;
+        }
     }
 
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)
     //napr.:    <<< << 11-20 >> >>>
-    public function listPart()
+    public function listPart($echo = true)
     {
+        $output = "";
+
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         if (empty($this->list)) {
             $this->list = 1;
         }
@@ -147,8 +176,14 @@ class c_listing_platby
             $to = $this->numRecords;
             $backward = "";
         }
-        echo $forward.$from."-".$to.$backward;
-        echo $this->after;
+        $output .= $forward.$from."-".$to.$backward;
+        $output .= $this->after;
+
+        if($echo === true) {
+            echo $output;
+        } else {
+            return $output;
+        }
     }
 
     //vypisovani chybovych hlasek

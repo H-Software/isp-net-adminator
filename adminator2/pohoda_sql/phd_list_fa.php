@@ -23,8 +23,6 @@ $id_vlastnika = intval($_GET["id_vlastnika"]);
 
 //$mssql_db = "StwPh_26109824_".$rok;
 
-$level_col = "lvl_phd_list_fa";
-
 //ini_set("mssql.charset", "UTF-8");
 
 require($cesta."include/main.function.shared.php");
@@ -38,7 +36,7 @@ require($cesta."include/check_level.php");
 
 // require("phd_global_function.php");
 
-if( !( check_level2($level,$level_col) ) )
+if( !( check_level($level, 311) ) )
 { // neni level
   header("Location: ".$cesta."nolevelpage.php");
     

@@ -2,7 +2,8 @@
 
 $finder = (new PhpCsFixer\Finder())
     ->append([
-        './vlastnici2-change.php'
+        './vlastnici2-change.php',
+        './platby-hot-vypis.php'
     ])
     // ->in(__DIR__)
     // ->exclude([
@@ -16,7 +17,6 @@ $finder = (new PhpCsFixer\Finder())
     // ])
     // ->notPath([
     //     'phpstan-baseline.php',
-    //     'app/Core/shared/objekt_a2.class.php', // TypeError: Illegal offset type 
     // ])
 ;
 

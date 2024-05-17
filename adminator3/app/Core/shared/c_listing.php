@@ -26,38 +26,66 @@ class c_Listing
     public $befError = "<div align=\"center\" style=\"color: maroon;\">";
     public $aftError = "</div>";
 
+    private $sqlHandler;
+
     //konstruktor...naplni promenne
-    public function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
+    public function __construct($conUrl = "./index.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql = "", $sqlHandler = null)
     {
-        $this->errName[1] = "P�i vol�n� konstruktotu nebyl zad�n SQL dotaz!<br>\n";
-        $this->errName[2] = "Nelze zobrazit listov�n�, chyba datab�ze(Query)!<br>\n";
-        $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
+        $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
+        $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
+        $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
+        $this->errName[4] = "Při volání konstruktotu nebyl zadán PGSQL Handler!<br>\n";
+
         $this->url = $conUrl;
         $this->interval = $conInterval;
         $this->list = $conList;
         $this->before = $conBefore;
         $this->after = $conAfter;
 
-        if (empty($conSql)) {
+        if($sqlHandler == null) {
+            $this->error(4);
+        } else {
+            $this->sqlHandler = $sqlHandler;
+        }
+
+        if (empty($sql) or $sql == null) {
             $this->error(1);
         } else {
-            $this->sql = $conSql;
+            $this->sql = $sql;
         }
     }
-
-    // include("config.pg.php");
 
     //vyber dat z databaze
     public function dbSelect()
     {
-        $listRecord = @pg_query($this->sql);
+        try {
+            $listRecord = pg_query($this->sqlHandler, $this->sql);
+        } catch (Exception $e) {
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
+        }
+
         if (!$listRecord) {
             $this->error(2);
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
+
+            $this->numLists = 0;
+            $this->numRecords = 0;
+
+            return;
         }
-        $allRecords = @pg_num_rows($listRecord);
+
+        $allRecords = pg_num_rows($listRecord);
+
         if ($allRecords < 0) {
-            $this->error(3);
+            // $this->error(3);
+            // echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
+
+            $this->numLists = 0;
+            $this->numRecords = 0;
+
+            return;
         }
+
         $allLists = ceil($allRecords / $this->interval);
 
         $this->numLists = $allLists;
