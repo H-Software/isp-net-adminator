@@ -29,7 +29,7 @@ class c_Listing
     private $sqlHandler;
 
     //konstruktor...naplni promenne
-    public function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql = null, $sqlHandler)
+    public function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql, $sqlHandler)
     {
         $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
