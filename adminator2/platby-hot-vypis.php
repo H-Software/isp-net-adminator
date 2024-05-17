@@ -47,7 +47,7 @@ include ("include/charset.php");
     $list=$_GET["list"];
         
     //vytvoreni objektu
-    $listovani = new c_listing("./platby-hot-vypis.php?menu=1", 30, $list, "<center><div class=\"text-listing\">\n", "</div></center>\n", 
+    $listovani = new c_Listing("./platby-hot-vypis.php?menu=1", 30, $list, "<center><div class=\"text-listing\">\n", "</div></center>\n", 
                     "SELECT * FROM platby WHERE hotove='1' ORDER BY id ; ", $db_ok2);
 		    
     if (($list == "")||($list == "1")){    //pokud není list zadán nebo je první
