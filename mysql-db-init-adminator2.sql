@@ -275,7 +275,7 @@ CREATE TABLE `leveling` (
   `level` int unsigned NOT NULL DEFAULT '0',
   `popis` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=311 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=312 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (1,	6,	'a2: objekty'),
@@ -307,6 +307,7 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (40,	30,	'vlastnici2: pridani vlastnika'),
 (41,	50,	'platby-soucet'),
 (43,	40,	'stats-objekty'),
+(44,	48,	'platby hot vypis'),
 (45,	80,	'vlastnici erase'),
 (48,	40,	'vlastnici2-add-obj'),
 (49,	50,	'objekty - odendani od vlastnika'),
@@ -315,7 +316,8 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (53,	53,	'monitoring-control'),
 (55,	50,	'monitoring grafy'),
 (59,	70,	'objekty list - export'),
-(63,	40,	'vlastnici export'),
+(63,	40,	'vlastnici (2) export'),
+(64,	44,	'vlastnici export'),
 (67,	60,	'vlastnici erase fakturacni'),
 (68,	50,	'vlastnici2-change-fakt'),
 (75,	10,	'a2: partner-cat'),
@@ -385,7 +387,8 @@ INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (307,	20,	'partner servis update pozn'),
 (308,	45,	'print redirect'),
 (309,	10,	'board rss'),
-(310,	99,	'objekty stb erase');
+(310,	99,	'objekty stb erase'),
+(311,	80,	'pohoda_sql - phd_list_fa');
 
 DROP TABLE IF EXISTS `login_log`;
 CREATE TABLE `login_log` (
@@ -648,7 +651,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `level`, `created_at`, `updated_at`, `first_name`, `last_name`, `token`) VALUES
-(1,	'Administrator',	'admin@admin',	'$2y$10$uZ7ZBCl/Shp9sW.QRy10CuFxkO/Vg7Yr1kbVJzhSACNQoohChkxaW',	NULL,	'2024-05-14 14:38:32',	101,	'2024-05-01 12:29:13',	'2024-05-14 14:38:32',	NULL,	NULL,	'564e18654c5853bb19e2145866298914'),
+(1,	'Administrator',	'admin@admin',	'$2y$10$uZ7ZBCl/Shp9sW.QRy10CuFxkO/Vg7Yr1kbVJzhSACNQoohChkxaW',	NULL,	'2024-05-17 10:57:16',	101,	'2024-05-01 12:29:13',	'2024-05-17 10:57:16',	NULL,	NULL,	'564e18654c5853bb19e2145866298914'),
 (2,	'admin2',	'admin2@admin',	'$2y$10$H1razrcagxKIoRQWbPmnLu5kUfOo0qeCVic2/J4kNliB8wmTX.6Vi',	NULL,	'2024-05-04 07:53:56',	99,	'2024-05-04 07:50:34',	'2024-05-04 07:53:56',	NULL,	NULL,	NULL);
 
 DROP TABLE IF EXISTS `users_old`;
@@ -683,11 +686,12 @@ CREATE TABLE `users_persistences` (
   UNIQUE KEY `users_persistences_code_unique` (`code`),
   KEY `users_persistences_user_id_foreign` (`user_id`),
   CONSTRAINT `users_persistences_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `users_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
 (49,	2,	'nAA1MFmnDLvgKzbKSP7j08GPkEgUrLZs',	'2024-05-04 07:53:56',	'2024-05-04 07:53:56'),
-(150,	1,	'GVJ50qRB11wi1Aw2BlwvNBm15frvXlXh',	'2024-05-14 14:38:32',	'2024-05-14 14:38:32');
+(172,	1,	'iegVj0I9RPvK7MEhDltcgJCXkeuF5H0D',	'2024-05-17 07:07:20',	'2024-05-17 07:07:20'),
+(189,	1,	'lXSbtHGdpniScCL9svWY7gxhErPUxAiS',	'2024-05-17 10:57:16',	'2024-05-17 10:57:16');
 
 DROP TABLE IF EXISTS `vypovedi`;
 CREATE TABLE `vypovedi` (
@@ -735,4 +739,4 @@ CREATE TABLE `workzamek` (
 INSERT INTO `workzamek` (`id`, `zamek`) VALUES
 (1,	'ne');
 
--- 2024-05-14 16:02:09
+-- 2024-05-17 11:55:11

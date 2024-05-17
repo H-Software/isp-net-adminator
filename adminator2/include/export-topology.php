@@ -9,12 +9,9 @@
 				
 set_time_limit(10);
 
-require_once "./class.writeexcel_workbook.inc.php";
-require_once "./class.writeexcel_worksheet.inc.php";
-
 $fname = tempnam("../export", "export-topology");
 
-$workbook = &new writeexcel_workbook($fname);
+// $workbook = &new writeexcel_workbook($fname);
 
 $nazev1=iconv("UTF-8","CP1250",' výpis lokalit - nodů ');
 

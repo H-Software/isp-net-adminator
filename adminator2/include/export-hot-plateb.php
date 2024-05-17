@@ -8,9 +8,6 @@
 			
 set_time_limit(20);
 
-require_once "class.writeexcel_workbook.inc.php";
-require_once "class.writeexcel_worksheet.inc.php";
-
 //global $rok;
 //echo "sekund. rok: ".$rok."<br>";
 if( ereg('^([[:digit:]]+)$',$_GET["rok"]) )
@@ -20,7 +17,7 @@ if( ereg('^([[:digit:]]+)$',$_GET["rok"]) )
 
 $fname = tempnam("/export", "export-hot-plateb-".$rok.".xls");
 
-$workbook = &new writeexcel_workbook($fname);
+// $workbook = &new writeexcel_workbook($fname);
 
 $nazev1=iconv("UTF-8","CP1250",' všechny platby - '.$rok);
 $nazev2=iconv("UTF-8","CP1250",' platby na f.o. - '.$rok);
@@ -104,7 +101,7 @@ $worksheet1->set_selection('C3');
     
  //include("config.pg.php");
 
- $dotaz1 = pg_query("SELECT t1.id_cloveka, t1.zaplaceno_dne, t1.castka, t1.dan, t1.ucet, t1.id, t1.zaplaceno_za,
+ $dotaz1 = pg_query($db_ok2, "SELECT t1.id_cloveka, t1.zaplaceno_dne, t1.castka, t1.dan, t1.ucet, t1.id, t1.zaplaceno_za,
                         t1.zvypisu, t1.hotove, t1.firma, t2.jmeno, t2.prijmeni,t2.fakturacni,t3.id,t3.ico
 			     
 			FROM (platby AS t1 LEFT JOIN vlastnici AS t2
@@ -183,7 +180,7 @@ $worksheet2->set_selection('C3');
     $worksheet2->write(0, 10, 'jmeno', $header);
     $worksheet2->write(0, 11, 'prijmeni', $header);
 
- $dotaz2 = pg_query("SELECT t1.id_cloveka, t1.zaplaceno_dne, t1.castka, t1.dan, t1.ucet, t1.id, t1.zaplaceno_za,
+ $dotaz2 = pg_query($db_ok2, "SELECT t1.id_cloveka, t1.zaplaceno_dne, t1.castka, t1.dan, t1.ucet, t1.id, t1.zaplaceno_za,
                         t1.zvypisu, t1.hotove, t1.firma, t2.jmeno, t2.prijmeni
 
                         FROM (platby AS t1 LEFT JOIN vlastnici AS t2
@@ -268,7 +265,7 @@ $worksheet3->set_selection('C3');
     $worksheet3->write(0, 12, 'var. symbol', $header);
     $worksheet3->write(0, 13, 'ico', $header);
 
- $dotaz3 = pg_query("SELECT t1.id_cloveka, t1.zaplaceno_dne, t1.castka, t1.dan, t1.ucet, t1.id, t1.zaplaceno_za,
+ $dotaz3 = pg_query($db_ok2, "SELECT t1.id_cloveka, t1.zaplaceno_dne, t1.castka, t1.dan, t1.ucet, t1.id, t1.zaplaceno_za,
                         t1.zvypisu, t1.hotove, t1.firma, t2.jmeno, t2.prijmeni, t2.vs,t3.id,t3.ico
 
                         FROM (platby AS t1 LEFT JOIN vlastnici AS t2

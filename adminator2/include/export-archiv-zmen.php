@@ -11,19 +11,14 @@ error_reporting(E_ERROR | E_CORE_ERROR | E_PARSE);
 require ("main.function.shared.php");
 require ("config.php");
 
-require_once "class.writeexcel_biffwriter.inc.php";
-require_once "class.writeexcel_format.inc.php";
-require_once "class.writeexcel_formula.inc.php";
-require_once "class.writeexcel_olewriter.inc.php";
-require_once "class.writeexcel_workbook.inc.php";
-require_once "class.writeexcel_workbookbig.inc.php";
-require_once "class.writeexcel_worksheet.inc.php";
 
 global $delic; 
 
 $fname = tempnam("/export", "export-archiv-zmen.xls");
 
-$workbookbig = &new writeexcel_workbookbig($fname);
+// $workbookbig = &new writeexcel_workbookbig($fname);
+
+// $workbookbig = new stdClass;
 
 try {
     $dotaz = $conn_mysql->query("SELECT * FROM archiv_zmen ");
@@ -204,7 +199,8 @@ unlink($fname);
 
 function na_text($vstup)
 {
-
+    $vystup = "";
+    
     for($i=0;$i<strlen($vstup);$i++)
     {
         if ( ( ord(substr($vstup,$i,1))> 43 ) and ( ord(substr($vstup,$i,1))< 59 ) ){ $vystup = $vystup.substr($vstup,$i,1); }
