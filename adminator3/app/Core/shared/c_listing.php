@@ -60,7 +60,7 @@ class c_Listing
 
         if (!$listRecord) {
             $this->error(2);
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
 
             $this->numLists = 0;
             $this->numRecords = 0;

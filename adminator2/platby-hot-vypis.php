@@ -57,7 +57,7 @@ $listovani = new c_Listing(
     $list,
     "<center><div class=\"text-listing\">\n",
     "</div></center>\n",
-    $sqbl_base . " ORDER BY id",
+    $sql_base . " ORDER BY id",
     $db_ok2
 );
 
