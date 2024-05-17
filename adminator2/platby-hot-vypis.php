@@ -1,9 +1,9 @@
 <?php
 
-include ("include/config.php"); 
-include ("include/check_login.php");
-
-include ("include/check_level.php");
+require("include/main.function.shared.php");
+require("include/config.php"); 
+require("include/check_login.php");
+require("include/check_level.php");
 
 if( !( check_level($level,44) ) )
 {
@@ -44,11 +44,6 @@ include ("include/charset.php");
   
   <?
     // sem zbytek
-    
-    // include "./include/c_listing_platby.php";    //předpokládáme třídu uloženou v externím souboru
-    
-//    include ("include/config.pg.php");
-
     $list=$_GET["list"];
         
     //vytvoreni objektu
@@ -56,25 +51,23 @@ include ("include/charset.php");
                     "SELECT * FROM platby WHERE hotove='1' ORDER BY id ; ");
 		    
     if (($list == "")||($list == "1")){    //pokud není list zadán nebo je první
-    $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
+      $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
     }
     else{
-    $bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
-        }
-				    
+      $bude_chybet = (($list-1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
+    }
 
     //provedení sql dotazu a výběr záznamů
-    $vyber = pg_query("SELECT t1.id, t1.zaplaceno_dne, t2.prijmeni, t2.jmeno, t2.id_cloveka,
-    t1.firma, t1.zaplaceno_za, t1.castka, t1.id_cloveka 
-    FROM (platby AS t1 LEFT JOIN vlastnici AS t2 
-    ON t1.id_cloveka=t2.id_cloveka) WHERE hotove='1' ORDER BY id LIMIT ".$listovani->interval." OFFSET ".$bude_chybet." ");
+    $vyber = pg_query($db_ok2, "SELECT t1.id, t1.zaplaceno_dne, t2.prijmeni, t2.jmeno, t2.id_cloveka,
+                                t1.firma, t1.zaplaceno_za, t1.castka, t1.id_cloveka 
+                                FROM (platby AS t1 LEFT JOIN vlastnici AS t2 
+                                ON t1.id_cloveka=t2.id_cloveka) WHERE hotove='1' ORDER BY id LIMIT ".$listovani->interval." OFFSET ".$bude_chybet." ");
     
     //pro mysql:
     // LIMIT ".$bude_chybet.",".$listovani->interval." ");
 					     
      $listovani->listInterval();    //zobrazení stránkovače
       
-        
      echo "<table border=\"1\" width=\"100%\" >
      <tr>
      
@@ -91,27 +84,26 @@ include ("include/charset.php");
      </tr>
      ";
       
-     //výpis záznamů dokud nějaké jsou
-     while ( $zaznam = pg_fetch_array($vyber) )
-     {
-	 $orez= $zaznam["zaplaceno_dne"];
-	 $orezano = split(':', $orez);
-	 $pridano_orez=$orezano[0].":".$orezano[1];
-		 
-	// $id_cloveka=$id_cloveka=["id_cloveka"];
-	echo "<tr>";
-	
-	echo "<td> ".$zaznam["id"]."</td>"."<td>".$zaznam["zaplaceno_za"]."</td>"."<td>".$zaznam["castka"]."</td> ";
-	echo "<td>".$pridano_orez." </td>";
-	
-	echo "<td>".$zaznam["id_cloveka"]."</td>";
-	echo "<td>".$zaznam["firma"]." </td> "."<td> ".$zaznam["prijmeni"]." </td> "." <td>".$zaznam["jmeno"]." </td> ";
-	
-	// , ".$zaznam["t1.zaplaceno_dne"]."<br><br>\n";
-	
-    	echo "</tr>";
-	
-     }
+    //výpis záznamů dokud nějaké jsou
+    while ( $zaznam = pg_fetch_array($vyber) )
+    {
+      $orez= $zaznam["zaplaceno_dne"];
+      $orezano = split(':', $orez);
+      $pridano_orez=$orezano[0].":".$orezano[1];
+        
+      // $id_cloveka=$id_cloveka=["id_cloveka"];
+      echo "<tr>";
+
+      echo "<td> ".$zaznam["id"]."</td>"."<td>".$zaznam["zaplaceno_za"]."</td>"."<td>".$zaznam["castka"]."</td> ";
+      echo "<td>".$pridano_orez." </td>";
+
+      echo "<td>".$zaznam["id_cloveka"]."</td>";
+      echo "<td>".$zaznam["firma"]." </td> "."<td> ".$zaznam["prijmeni"]." </td> "." <td>".$zaznam["jmeno"]." </td> ";
+
+      // , ".$zaznam["t1.zaplaceno_dne"]."<br><br>\n";
+
+      echo "</tr>";
+    }
 	
     echo "</table>";
     
