@@ -24,7 +24,7 @@ class vlastnikarchiv
         $output = "";
 
         if ($par == 1) {
-            $output .= "\n".'<table border="1" width="100%">'."\n";
+            $output .= "\n".'<table border="0" width="100%">'."\n";
         } elseif ($par == 2) {
             $output .= "\n".'</table>'."\n";
         } else {
@@ -78,7 +78,7 @@ class vlastnikarchiv
                 if (! ($this->vlastnici_erase_povolen === true)) {
                     $output .= "<span style=\"\" > smazat </span> ";
                 } else {
-                    $output .= "<form method=\"POST\" action=\"vlastnici2-erase.php\" >";
+                    $output .= "<form method=\"POST\" action=\"" . fix_link_to_another_adminator("/vlastnici2-erase.php") . "\" >";
                     $output .= "<input type=\"hidden\" name=\"erase_id\" value=\"".$data["id_cloveka"]."\" >";
                     $output .= "<input type=\"submit\" value=\"Smazat\" >";
                     $output .= "</form> \n";
@@ -89,7 +89,7 @@ class vlastnikarchiv
                 if (!($this->vlastnici_update_povolen === true)) {
                     $output .= "<span style=\"\" >  upravit  </span> \n";
                 } else {
-                    $output .= " <form method=\"POST\" action=\"vlastnici2-change.php\" >";
+                    $output .= " <form method=\"POST\" action=\"" . fix_link_to_another_adminator("/vlastnici2-change.php") . "\" >";
                     $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
                     $output .= "<input type=\"submit\" value=\"update\" >";
                     $output .= "</form> \n";
@@ -149,10 +149,10 @@ class vlastnikarchiv
 
                 $output .= "<span style=\"margin: 10px; \"></span>";
 
-                $output .= "<a href=\"platby-vypis.php?id_vlastnika=".intval($data["id_cloveka"])."\" > výpis plateb - starý (do 2/2012)</a>";
+                $output .= "<a href=\"" . fix_link_to_another_adminator("/platby-vypis.php?id_vlastnika=".intval($data["id_cloveka"])) ."\" > výpis plateb - starý (do 2/2012)</a>";
 
                 $output .= "<span style=\"margin-left: 20px; \">
-                            <a href=pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]."\" > výpis plateb - (od 3/2012)</a>".
+                            <a href=\"" . fix_link_to_another_adminator("/pohoda_sql/phd_list_fa.php?id_vlastnika=".$data["id_cloveka"]) . "\" > výpis plateb - (od 3/2012)</a>".
                                 "</span>";
 
                 $output .= "<span style=\"margin: 10px; \">fakturační adresa:</span>";
@@ -168,7 +168,7 @@ class vlastnikarchiv
                 $output .= "<span style=\"margin: 25px; \"></span>";
 
                 if (($data["fakturacni"] > 0)) {
-                    $output .= "<a href=\"vlastnici2-erase-f.php?id=".$data["fakturacni"]."\" > smazání </a>";
+                    $output .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2-erase-f.php?id=".$data["fakturacni"]) . "\" > smazání </a>";
                 } else {
                     $output .= " smazání ";
                 }
@@ -176,7 +176,7 @@ class vlastnikarchiv
                 $output .= "<span style=\"margin: 25px; \" ></span>";
 
                 if (($data["fakturacni"] > 0)) {
-                    $output .= "<a href=\"vlastnici2-change-fakt.php?id=".$data["fakturacni"]."\" > úprava </a>";
+                    $output .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2-change-fakt.php?id=".$data["fakturacni"]) . "\" > úprava </a>";
                 } else {
                     $output .= " úprava ";
                 }
