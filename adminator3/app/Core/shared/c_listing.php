@@ -26,8 +26,10 @@ class c_Listing
     public $befError = "<div align=\"center\" style=\"color: maroon;\">";
     public $aftError = "</div>";
 
+    private $sqlHandler;
+
     //konstruktor...naplni promenne
-    public function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
+    public function __construct($conUrl = "./platby-hot-akce.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql = "", $sqlHandler)
     {
         $this->errName[1] = "P�i vol�n� konstruktotu nebyl zad�n SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listov�n�, chyba datab�ze(Query)!<br>\n";
@@ -38,10 +40,12 @@ class c_Listing
         $this->before = $conBefore;
         $this->after = $conAfter;
 
-        if (empty($conSql)) {
+        $this->sqlHandler = $sqlHandler;
+
+        if (empty($sql)) {
             $this->error(1);
         } else {
-            $this->sql = $conSql;
+            $this->sql = $sql;
         }
     }
 
@@ -50,7 +54,7 @@ class c_Listing
     //vyber dat z databaze
     public function dbSelect()
     {
-        $listRecord = @pg_query($this->sql);
+        $listRecord = @pg_query($this->sqlHandler, $this->sql);
         if (!$listRecord) {
             $this->error(2);
         }

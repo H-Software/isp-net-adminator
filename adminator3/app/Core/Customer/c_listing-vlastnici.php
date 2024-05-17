@@ -5,7 +5,7 @@
 /*
 priklad vytvareni instance:
 
-$listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
+$listing = new c_Listing_vlastnici("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
     "list pro zobrazeni", "formatovani zacatku odkazu strankovani",
     "formatovani konce odkazu strankovani", "sql dotaz pro vyber vsech zazkamu k vylistovani");
 */
