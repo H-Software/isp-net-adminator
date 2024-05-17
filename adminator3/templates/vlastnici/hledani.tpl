@@ -18,7 +18,7 @@
 </div> *}
 
 {if $bodyNoData|count_characters > 1}
-{$body}
+{$bodyNoData}
 {else}
 
 <div class="vlastnici-archiv-table" style="padding-right: 5px;" >
