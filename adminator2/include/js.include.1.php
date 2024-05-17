@@ -1,5 +1,7 @@
 <?php
 
+// obsolete
+
 echo '
 
      <script type="text/javascript" src="/include/js/main.js?2"></script>
