@@ -312,7 +312,7 @@ class vlastnik2
                 <body>";
 
         if($akce == 0) {
-            $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
+            $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
 
             while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
                 $firma_vlastnik = $data_vlastnik_pom["firma"];
@@ -320,11 +320,11 @@ class vlastnik2
             }
 
             if($archiv_vlastnik == 1) {
-                $id_cloveka_res = "vlastnici-archiv.php";
+                $id_cloveka_res = "/vlastnici/archiv";
             } elseif($firma_vlastnik == 1) {
-                $id_cloveka_res .= "vlastnici2.php";
+                $id_cloveka_res = "/vlastnici2";
             } else {
-                $id_cloveka_res .= "vlastnici.php";
+                $id_cloveka_res = "/vlastnici";
             }
 
             $id_cloveka_res .= "?find_id=".$id_cloveka;
@@ -333,23 +333,23 @@ class vlastnik2
         } elseif($akce == 1) {
             $stranka = "vlastnici2-add-obj.php?id_vlastnika=".$id_cloveka;
         } elseif($akce == 2) {
-            $stranka = "vlastnici2/fakturacni-skupiny/action?id_vlastnika=".$id_cloveka;
+            $stranka = fix_link_to_another_adminator("/vlastnici2-add-fakt.php?id_vlastnika=".$id_cloveka);
         } elseif($akce == 3) {
-            $rs_vl = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
+            $rs_vl = pg_query($this->conn_pgsql, "SELECT fakturacni FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
 
             while($data_vl = pg_fetch_array($rs_vl)) {
                 $fakturacni_id = $data_vl["fakturacni"];
             }
 
-            $stranka = "vlastnici2-erase-f.php?id=".$fakturacni_id;
+            $stranka = fix_link_to_another_adminator("/vlastnici2-erase-f.php?id=".$fakturacni_id);
         } elseif($akce == 4) {
-            $rs_vl = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
+            $rs_vl = pg_query($this->conn_pgsql, "SELECT fakturacni FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
 
             while($data_vl = pg_fetch_array($rs_vl)) {
                 $fakturacni_id = $data_vl["fakturacni"];
             }
 
-            $stranka = "vlastnici2/fakturacni-skupiny/action?update_id=".$fakturacni_id;
+            $stranka = fix_link_to_another_adminator("/vlastnici2-change-fakt.php?update_id=".$fakturacni_id);
         } elseif($akce == 5) {
             $stranka = "opravy-index.php?typ=1&id_vlastnika=".$id_cloveka;
         } elseif($akce == 6) {
