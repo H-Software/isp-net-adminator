@@ -49,19 +49,37 @@ class c_Listing
         }
     }
 
-    // include("config.pg.php");
-
     //vyber dat z databaze
     public function dbSelect()
     {
-        $listRecord = @pg_query($this->sqlHandler, $this->sql);
+        try {
+            $listRecord = pg_query($this->sqlHandler, $this->sql);
+        } catch (Exception $e) {
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
+        }
+
         if (!$listRecord) {
             $this->error(2);
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
+
+            $this->numLists = 0;
+            $this->numRecords = 0;
+
+            return;
         }
-        $allRecords = @pg_num_rows($listRecord);
+
+        $allRecords = pg_num_rows($listRecord);
+
         if ($allRecords < 0) {
             $this->error(3);
+            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
+
+            $this->numLists = 0;
+            $this->numRecords = 0;
+
+            return;
         }
+
         $allLists = ceil($allRecords / $this->interval);
 
         $this->numLists = $allLists;

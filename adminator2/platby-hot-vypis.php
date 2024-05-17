@@ -45,36 +45,37 @@ require("include/charset.php");
 // vlastni obsah
 $list = $_GET["list"];
 
+$sql_base = "SELECT t1.id, t1.zaplaceno_dne, t2.prijmeni, t2.jmeno, t2.id_cloveka,
+                t1.firma, t1.zaplaceno_za, t1.castka, t1.id_cloveka 
+                FROM (platby AS t1 LEFT JOIN vlastnici AS t2 
+                ON t1.id_cloveka=t2.id_cloveka) WHERE hotove='1' ";
+
+//vytvoreni objektu
+$listovani = new c_Listing(
+    "./platby-hot-vypis.php?menu=1",
+    30,
+    $list,
+    "<center><div class=\"text-listing\">\n",
+    "</div></center>\n",
+    $sqbl_base . " ORDER BY id ; ",
+    $db_ok2
+);
+
+if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
+    $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
+} else {
+    $bude_chybet = (($list - 1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
+}
+
 //provedení sql dotazu a výběr záznamů
 try {
-    $vyber = pg_query($db_ok2, "SELECT t1.id, t1.zaplaceno_dne, t2.prijmeni, t2.jmeno, t2.id_cloveka,
-                                  t1.firma, t1.zaplaceno_za, t1.castka, t1.id_cloveka 
-                                  FROM (platby AS t1 LEFT JOIN vlastnici AS t2 
-                                  ON t1.id_cloveka=t2.id_cloveka) WHERE hotove='1' ORDER BY id LIMIT ".$listovani->interval." OFFSET ".$bude_chybet." ");
+    $vyber = pg_query($db_ok2, $sql_base . " ORDER BY id LIMIT ".$listovani->interval." OFFSET ".$bude_chybet." ");
 } catch (Exception $e) {
     echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
     echo "<div style=\"color: red; \" >Database Error: ".pg_last_error($db_ok2) . "</div>";
 }
 
 if($vyber) {
-
-    //vytvoreni objektu
-    $listovani = new c_Listing(
-      "./platby-hot-vypis.php?menu=1",
-      30,
-      $list,
-      "<center><div class=\"text-listing\">\n",
-      "</div></center>\n",
-      "SELECT * FROM platby WHERE hotove='1' ORDER BY id ; ",
-      $db_ok2
-    );
-
-    if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
-      $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
-    } else {
-      $bude_chybet = (($list - 1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
-    }
-
     $listovani->listInterval();    //zobrazení stránkovače
 
     echo "<table border=\"1\" width=\"100%\" >
