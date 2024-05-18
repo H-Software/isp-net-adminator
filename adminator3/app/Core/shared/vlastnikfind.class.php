@@ -92,7 +92,7 @@ class vlastnikfind
                 $output .= "<td colspan=\"11\">icq: ".$data["icq"]." <br>
                         mail: ".$data["mail"]." <br>
                         tel: ".$data["telefon"]." </td>
-                        
+
                         </tr>
                     
                         ";
