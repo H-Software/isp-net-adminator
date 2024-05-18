@@ -68,14 +68,16 @@
 	
 	<?php
 				
-	// body 1					      
+	// body 2		      
 	//   $vlastnik = new vlastnikfind;
 	//   $vlastnik->vypis($sql,$dotaz_source);
 	
-	echo "<tr><td colspan=\"10\"><hr></td></tr>";	      
-	echo "<tr><td colspan=\"10\" height=\"40px\" ><span style=\"font-size: 20px; font-weight: bold; color: navy; \" >
-	Výsledek hledání výrazu: \"".$sql."\" v sekci \"vlastníci2\"</span></td></tr>";
-	
+
+	// echo "<tr><td colspan=\"10\"><hr></td></tr>";	      
+	// echo "<tr><td colspan=\"10\" height=\"40px\" ><span style=\"font-size: 20px; font-weight: bold; color: navy; \" >
+	// Výsledek hledání výrazu: \"".$sql."\" v sekci \"vlastníci2\"</span></td></tr>";
+
+	// b3
 	$sql="".$sql."";
 	$select1 = " WHERE firma is not NULL AND ( archiv = 0 or archiv is null ) AND ";
 	$select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";

@@ -37,7 +37,19 @@
 
 {$body2}
 
+<tr>
+    <td colspan="10"><hr></td>
+</tr>
+
+<tr>
+    <td colspan="10" height="40px" >
+        <span style="font-size: 20px; font-weight: bold; color: navy; " >
+            Výsledek hledání výrazu: "{$form_select}" v sekci "vlastníci2"</span>
+    </td>
+</tr>
+
 {$body3}
+
 </div>
 
 {/if}

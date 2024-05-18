@@ -167,8 +167,23 @@ class vlastniciController extends adminatorController
         $bc2 = $vlastnikfind->vypis($sql,$dotaz_source);
         $this->smarty->assign("body2", $bc2);
 
-        // 
+        $sql="".$sql."";
+        $select1 = " WHERE firma is not NULL AND ( archiv = 0 or archiv is null ) AND ";
+        $select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";
+        $select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
         
+        $select2 = " OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
+        $select2 .= " OR vs LIKE '$sql') ";
+    
+        $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
+        
+        if ( ( strlen($select5) > 1 ) ){ $dotaz_source = $dotaz_source.$select5; }
+
+        $bc3 = $vlastnikfind->vypis($sql,$dotaz_source);
+        $this->smarty->assign("body3", $bc3);
+
+        $this->smarty->display('vlastnici/hledani.tpl');
+
         return $response;
     }
 
