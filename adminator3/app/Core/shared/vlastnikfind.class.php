@@ -57,7 +57,6 @@ class vlastnikfind
 
         $radku = pg_num_rows($dotaz);
 
-
         if($radku == 0) {
             $output .= "<tr><td colspan=\"9\" ><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle ";
             $output .= "hledaného \"".$sql."\".</span></td></tr>";
@@ -104,7 +103,8 @@ class vlastnikfind
                 // tady asi bude generovani fakturacnich udaju
                 if (($id_f > 0)) {
                     $fakturacni = new fakturacni();
-                    $fakturacni->vypis($id_f, $id);
+                    $fakturacni->echo = false;
+                    $output .= $fakturacni->vypis($id_f, $id);
                 }
 
                 // $sql="%";
