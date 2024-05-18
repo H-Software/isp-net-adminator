@@ -9,6 +9,8 @@
     </span>
 </div>
 
+<div style="font-weight: bold; padding-top: 5px; border-bottom: 1px gray solid; width: 20%; " >
+</div>
 
 {* hledaci a filtrovaci prvky *}
 {include file="vlastnici/hledani-inc.selectors.tpl"}
