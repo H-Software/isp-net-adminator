@@ -120,9 +120,11 @@ class vlastnikfind
                 $archiv_vlastnik = $data["archiv"];
 
                 if ($archiv_vlastnik == 1) {
-                    $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n";
+                    $output .= "V: <a href=\"/vlastnici/archiv?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n";
+                } elseif ($firma_vlastnik == 1) {
+                    $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n";
                 } else {
-                    $output .= "V: <a href=\"vlastnici2.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n";
+                    $output .= "V: <a href=\"/vlastnici?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n";
                 }
 
                 $output .= "</span></td>";
@@ -134,7 +136,7 @@ class vlastnikfind
 
                 $output .= "<td align=\"center\" width=\"50px\" >";
 
-                $output .= " <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
+                $output .= " <img title=\"poznamka\" src=\"/img2/poznamka3.png\" align=\"middle\" ";
                 $output .= " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." ');\" >";
 
                 $output .= "</td>";
