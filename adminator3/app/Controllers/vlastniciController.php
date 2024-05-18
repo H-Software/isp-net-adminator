@@ -149,19 +149,6 @@ class vlastniciController extends adminatorController
             $select3 = " AND k_platbe > 0 ";
         }
 
-        if ($_GET["select"] == 2) {
-            $select3 = " AND fakturacni > 0 ";
-        }
-        if ($_GET["select"] == 3) {
-            $select3 = " AND fakturacni is NULL ";
-        }
-        if ($_GET["select"] == 4) {
-            $select3 = " AND k_platbe = 0 ";
-        }
-        if ($_GET["select"] == 5) {
-            $select3 = " AND k_platbe > 0 ";
-        }
-
         if ($_GET["razeni"] == 1) {
             $select4 = " order by id_cloveka ";
         }
