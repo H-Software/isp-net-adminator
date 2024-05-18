@@ -167,6 +167,7 @@ class vlastniciController extends adminatorController
         $bc2 = $vlastnikfind->vypis($sql,$dotaz_source);
         $this->smarty->assign("body2", $bc2);
 
+        // 
         
         return $response;
     }
