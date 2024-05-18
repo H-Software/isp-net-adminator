@@ -30,6 +30,7 @@ class vlastnikfind
 
     public function vypis($sql, $dotaz_source, $co = "")
     {
+        $output = "";
 
         if ($co == 2) {
 
@@ -153,7 +154,11 @@ class vlastnikfind
         }
 
 
-        // konec funkce vypis
+        if($this->echo) {
+            echo $output;
+        } else {
+            return $output;
+        }
     }
 
 } // konec class vlastnikfind
