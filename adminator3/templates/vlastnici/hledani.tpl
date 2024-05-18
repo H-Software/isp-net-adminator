@@ -30,7 +30,7 @@
 <tr>
     <td colspan="10" height="40px" >
         <span style="font-size: 20px; font-weight: bold; color: navy; " >
-            Výsledek hledání výrazu: "{$form_select}" v sekci "vlastníci"
+            Výsledek hledání výrazu: "{$form_find}" v sekci "vlastníci"
         </span>
     </td>
 </tr>
@@ -44,17 +44,31 @@
 <tr>
     <td colspan="10" height="40px" >
         <span style="font-size: 20px; font-weight: bold; color: navy; " >
-            Výsledek hledání výrazu: "{$form_select}" v sekci "vlastníci2"</span>
+            Výsledek hledání výrazu: "{$form_find}" v sekci "vlastníci2"</span>
     </td>
 </tr>
 
 {$body3}
 
+
+<tr>
+    <td colspan="10"><hr></td>
+</tr>
+<tr>
+    <td colspan="10" height="40px" >
+        <span style="font-size: 20px; font-weight: bold; color: navy; " >
+            Výsledek hledání výrazu: "{$form_find}" v sekci "Fakturační"
+        </span>
+    </td>
+</tr>
+
+{$body4}
+
+{$body5}
+
 </div>
 
 {/if}
-
-
 
 {* konecny soubor *}
 {include file="base-end.tpl"}

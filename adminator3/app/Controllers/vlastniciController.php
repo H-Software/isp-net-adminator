@@ -182,6 +182,15 @@ class vlastniciController extends adminatorController
         $bc3 = $vlastnikfind->vypis($sql,$dotaz_source);
         $this->smarty->assign("body3", $bc3);
 
+        $sql="".$sql."";
+        $dotaz_source = "26058677";
+
+        $bc4 = $vlastnikfind->vypis($sql,$dotaz_source,"2");
+        $this->smarty->assign("body4", $bc4);
+
+        $bc5 = $vlastnikfind->vypis_tab(2);
+        $this->smarty->assign("body5", $bc5);
+
         $this->smarty->display('vlastnici/hledani.tpl');
 
         return $response;

@@ -97,6 +97,7 @@
 	echo "<tr><td colspan=\"10\" height=\"40px\" ><span style=\"font-size: 20px; font-weight: bold; color: navy; \" >
 	Výsledek hledání výrazu: \"".$sql."\" v sekci \"Fakturační\"</span></td></tr>";
 	
+	// body 4
 	$sql="".$sql."";
 			 
 	$dotaz_source = "26058677";
