@@ -1,9 +1,3 @@
-
-      
- <tr>
-   <td colspan="2" height="25" >
-   <span style="font-weight: bold; font-size: 14px; ">Vlastníci - globální hledání </span></td>
- </tr>
   
   <tr>
   <td colspan="2">
@@ -65,7 +59,7 @@
           <tr>
 	    <td> <input type="submit" value="NAJDI" name="najdi"> </td>
 	    <td>  <label>Hledání : </label><input type="text" name="find" 
-	    <? 
+	    <?php
 	    if (empty($_GET["find"]) ){ echo 'value="%"'; } 
 	    else{  echo 'value="'.$_GET["find"].'" >'; }
 	    ?>
@@ -73,61 +67,10 @@
 	  </tr>
 	
 	<?php
-		
-	$find=$_GET["find"];
-	$najdi=$_GET["najdi"];
-	
-	// $delka_find_id=strlen($find_id);
-	
-	$sql=$_GET["find"];
-	
-	if( ( ! isset($najdi) ) )
-	{ echo "Zadejte výraz k vyhledání.... <br>"; Exit; }
-	
-	vlastnikfind::vypis_tab(1);
-		
-	    $sql="%".$sql."%";
-	    $select1 = " WHERE ( firma is  NULL OR firma = 0 ) AND ( archiv = 0 or archiv is null ) AND ";
-	    $select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' OR ulice LIKE '$sql' ";
-	    $select1 .= " OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
-	    
-	    $select2=" OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
-	    $select2 .= "OR vs LIKE '$sql' ) ";
-			 
-		if ( $_GET["select"] == 2){ $select3=" AND fakturacni > 0 "; }
-		if ( $_GET["select"] == 3){ $select3=" AND fakturacni is NULL "; }
-		if ( $_GET["select"] == 4){ $select3=" AND k_platbe = 0 "; }
-		if ( $_GET["select"] == 5){ $select3=" AND k_platbe > 0 "; }
-		
-		if ( $_GET["select"] == 2){ $select3=" AND fakturacni > 0 "; }
-		if ( $_GET["select"] == 3){ $select3=" AND fakturacni is NULL "; }
-		if ( $_GET["select"] == 4){ $select3=" AND k_platbe = 0 "; }
-		if ( $_GET["select"] == 5){ $select3=" AND k_platbe > 0 "; }
-	
-		if ( $_GET["razeni"] == 1){ $select4=" order by id_cloveka "; }
-		if ( $_GET["razeni"] == 3){ $select4=" order by jmeno "; }
-		if ( $_GET["razeni"] == 4){ $select4=" order by prijmeni "; }
-		if ( $_GET["razeni"] == 5){ $select4=" order by ulice "; }
-		if ( $_GET["razeni"] == 6){ $select4=" order by mesto "; }
-		if ( $_GET["razeni"] == 14){ $select4=" order by vs "; }
-		if ( $_GET["razeni"] == 15){ $select4=" order by k_platbe "; }
-						 
-		if ( $_GET["razeni2"] == 1){ $select5=" ASC "; }
-		if ( $_GET["razeni2"] == 2){ $select5=" DESC "; }
-						     
-		$dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
-	  
-		if ( ( strlen($select5) > 1 ) ){ $dotaz_source = $dotaz_source.$select5; }
-		  
-	//  $poradek="find=".$find."&find_id=".$find_id."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".$_GET["razeni"]."&razeni2=".$_GET["razeni2"];
-	
-	echo "<tr><td colspan=\"10\"><hr></td></tr>";	      
-	echo "<tr><td colspan=\"10\" height=\"40px\" ><span style=\"font-size: 20px; font-weight: bold; color: navy; \" >
-	Výsledek hledání výrazu: \"".$sql."\" v sekci \"vlastníci\"</span></td></tr>";
 				
-					      
-	  $vlastnik = new vlastnikfind;
-	  $vlastnik->vypis($sql,$dotaz_source);
+	// body 1					      
+	//   $vlastnik = new vlastnikfind;
+	//   $vlastnik->vypis($sql,$dotaz_source);
 	
 	echo "<tr><td colspan=\"10\"><hr></td></tr>";	      
 	echo "<tr><td colspan=\"10\" height=\"40px\" ><span style=\"font-size: 20px; font-weight: bold; color: navy; \" >
