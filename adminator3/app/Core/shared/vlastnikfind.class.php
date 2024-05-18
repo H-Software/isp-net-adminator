@@ -34,7 +34,7 @@ class vlastnikfind
 
         if ($co == 2) {
 
-            // echo "<tr><td>sem fakturacni </td></tr>";
+            // $output .= "<tr><td>sem fakturacni </td></tr>";
 
             $dotaz_sql = "SELECT t1.id_cloveka,t1.jmeno, t1.prijmeni, t1.mail, t1.telefon, t1.k_platbe, t1.ucetni_index, t1.poznamka,t1.fakturacni,
 		    t1.ulice,t1.mesto,t1.psc,t1.vs,t1.icq,t1.pridano,t1.firma, t1.archiv,
@@ -59,17 +59,17 @@ class vlastnikfind
 
 
         if($radku == 0) {
-            echo "<tr><td colspan=\"9\" ><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle ";
-            echo "hledaného \"".$sql."\".</span></td></tr>";
+            $output .= "<tr><td colspan=\"9\" ><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle ";
+            $output .= "hledaného \"".$sql."\".</span></td></tr>";
         } elseif($radku > 25) {
-            echo "<tr><td><span style=\"color: red; \" >Nalezeno více záznamů než je limit, specifikujte hledaný výraz. </span></td></tr>";
+            $output .= "<tr><td><span style=\"color: red; \" >Nalezeno více záznamů než je limit, specifikujte hledaný výraz. </span></td></tr>";
         } else {
 
             while($data = pg_fetch_array($dotaz)) {
 
                 // if ($co == 2)
 
-                echo "<tr><td colspan=\"14\"> <br> </td> </tr>
+                $output .= "<tr><td colspan=\"14\"> <br> </td> </tr>
 
                     <tr> <td class=\"vlastnici-td-black\" colspan=\"2\" >[".$data["id_cloveka"]."] ".$data["nick"]."</td>
                     
@@ -79,20 +79,20 @@ class vlastnikfind
 
 
                 // tutady update a smazat, takze nic
-                echo "<br>";
+                $output .= "<br>";
 
-                echo "  </td> 
+                $output .= "  </td> 
                         </tr>
                         
                         <tr> <td colspan=\"2\">".$data["jmeno"]." ".$data["prijmeni"]."<br>";
 
-                echo $data["ulice"]."  ";
+                $output .= $data["ulice"]."  ";
 
-                echo "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
+                $output .= "<a href=\"http://www.mapy.cz?query=".$data["ulice"].",".$data["mesto"]."\" target=\"_blank\" >ukaž na mapě</a>";
 
-                echo " <br> ".$data["mesto"]." ".$data["psc"]."</td>";
+                $output .= " <br> ".$data["mesto"]." ".$data["psc"]."</td>";
 
-                echo "<td colspan=\"11\">icq: ".$data["icq"]." <br>
+                $output .= "<td colspan=\"11\">icq: ".$data["icq"]." <br>
                         mail: ".$data["mail"]." <br>
                         tel: ".$data["telefon"]." </td>
                         
@@ -113,8 +113,8 @@ class vlastnikfind
                 $co = "3";
 
                 //tady dalsi radka asi
-                echo "<tr>";
-                echo "<td colspan=\"\" ><span style=\"font-weight: bold; font-size: 20px;  \" >Detail vlastníka: ";
+                $output .= "<tr>";
+                $output .= "<td colspan=\"\" ><span style=\"font-weight: bold; font-size: 20px;  \" >Detail vlastníka: ";
 
                 $id_cloveka = $data["id_cloveka"];
 
@@ -122,28 +122,28 @@ class vlastnikfind
                 $archiv_vlastnik = $data["archiv"];
 
                 if ($archiv_vlastnik == 1) {
-                    echo "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n";
+                    $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n";
                 } else {
-                    echo "V: <a href=\"vlastnici2.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n";
+                    $output .= "V: <a href=\"vlastnici2.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n";
                 }
 
-                echo "</span></td>";
+                $output .= "</span></td>";
 
                 $orezano = explode(':', $data["pridano"]);
                 $pridano = $orezano[0].":".$orezano[1];
 
-                echo "<td colspan=\"2\" width=\"250px\" >datum přidání: ".$pridano." </td>";
+                $output .= "<td colspan=\"2\" width=\"250px\" >datum přidání: ".$pridano." </td>";
 
-                echo "<td align=\"center\" width=\"50px\" >";
+                $output .= "<td align=\"center\" width=\"50px\" >";
 
-                echo " <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
-                echo " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." ');\" >";
+                $output .= " <img title=\"poznamka\" src=\"img2/poznamka3.png\" align=\"middle\" ";
+                $output .= " onclick=\"window.alert(' poznámka: ".$data["poznamka"]." ');\" >";
 
-                echo "</td>";
+                $output .= "</td>";
 
-                echo "<td colspan=\"5\" ><br></td>";
+                $output .= "<td colspan=\"5\" ><br></td>";
 
-                echo "</tr>";
+                $output .= "</tr>";
 
                 //konec while
             }
