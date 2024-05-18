@@ -67,8 +67,6 @@ class vlastnikfind
 
             while($data = pg_fetch_array($dotaz)) {
 
-                // if ($co == 2)
-
                 $output .= "<tr><td colspan=\"14\"> <br> </td> </tr>
 
                     <tr> <td class=\"vlastnici-td-black\" colspan=\"2\" >[".$data["id_cloveka"]."] ".$data["nick"]."</td>
@@ -145,14 +143,8 @@ class vlastnikfind
 
                 $output .= "</tr>";
 
-                //konec while
             }
-
-            // } //konec else if co == 2
-
-            // konec else
         }
-
 
         if($this->echo) {
             echo $output;
@@ -160,5 +152,4 @@ class vlastnikfind
             return $output;
         }
     }
-
-} // konec class vlastnikfind
+}
