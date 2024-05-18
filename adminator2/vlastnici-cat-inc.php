@@ -4,7 +4,7 @@ echo "<span style=\"padding-left: 30px; \">Vlastníci</span>\n\n";
 
 echo "<span style=\"padding-left: 30px; \">Vlastníci2 (s.r.o)</span>\n\n";
 
-echo "<span style=\"padding-left: 30px; \"><a href=\"".$cesta."vlastnici-hledani.php\"> Globální hledání </a></span>\n\n";
+echo "<span style=\"padding-left: 30px; \"> Globální hledání </span>\n\n";
 
 echo "<span style=\"padding-left: 30px; \">Vlastníci - archiv </span>\n\n";
 
