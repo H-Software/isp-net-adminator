@@ -180,7 +180,7 @@ class vlastniciController extends adminatorController
 
         $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
 
-        if ((strlen($select5) > 1)) {
+        if (!empty($select5)) {
             $dotaz_source = $dotaz_source.$select5;
         }
 
