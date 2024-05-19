@@ -79,6 +79,147 @@ class vlastniciController extends adminatorController
 
         return $response;
     }
+    public function search(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $bodyContent = "";
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(102, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: hledání");
+
+        $this->header($request, $response, $this->adminator);
+
+        $vlastnikfind = new \vlastnikfind();
+        $vlastnikfind->conn_mysql = $this->conn_mysql;
+        $vlastnikfind->conn_pgsql = $this->conn_pgsql;
+        $vlastnikfind->echo = false;
+
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $vlastnikfind->csrf_html = $csrf_html;
+
+        $find = $_GET["find"];
+        $najdi = $_GET["najdi"];
+
+        $form_select = intval($_GET["select"]);
+        $form_razeni = intval($_GET["razeni"]);
+        $form_razeni2 = intval($_GET["razeni2"]);
+
+        // $sql = $this->conn_mysql->real_escape_string($find);
+
+        if (empty($_GET["najdi"])) {
+            $this->smarty->assign("form_find", "%");
+        } else {
+            $this->smarty->assign("form_find", htmlspecialchars($find));
+        }
+
+        $this->smarty->assign("form_select", $form_select);
+        $this->smarty->assign("form_razeni", $form_razeni);
+        $this->smarty->assign("form_razeni2", $form_razeni2);
+
+        if(empty($_GET["find"])) {
+            $body = "Zadejte výraz k vyhledání.... <br>";
+
+            $this->smarty->assign("bodyNoData", $body);
+
+            $this->smarty->display('vlastnici/hledani.tpl');
+
+            return $response;
+        }
+
+        $sql = "%".htmlspecialchars($find)."%";
+        $select1 = " WHERE ( firma is  NULL OR firma = 0 ) AND ( archiv = 0 or archiv is null ) AND ";
+        $select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' OR ulice LIKE '$sql' ";
+        $select1 .= " OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
+
+        $select2 = " OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
+        $select2 .= "OR vs LIKE '$sql' ) ";
+
+        if ($_GET["select"] == 2) {
+            $select3 = " AND fakturacni > 0 ";
+        }
+        if ($_GET["select"] == 3) {
+            $select3 = " AND fakturacni is NULL ";
+        }
+        if ($_GET["select"] == 4) {
+            $select3 = " AND k_platbe = 0 ";
+        }
+        if ($_GET["select"] == 5) {
+            $select3 = " AND k_platbe > 0 ";
+        }
+
+        if ($_GET["razeni"] == 1) {
+            $select4 = " order by id_cloveka ";
+        }
+        if ($_GET["razeni"] == 3) {
+            $select4 = " order by jmeno ";
+        }
+        if ($_GET["razeni"] == 4) {
+            $select4 = " order by prijmeni ";
+        }
+        if ($_GET["razeni"] == 5) {
+            $select4 = " order by ulice ";
+        }
+        if ($_GET["razeni"] == 6) {
+            $select4 = " order by mesto ";
+        }
+        if ($_GET["razeni"] == 14) {
+            $select4 = " order by vs ";
+        }
+        if ($_GET["razeni"] == 15) {
+            $select4 = " order by k_platbe ";
+        }
+
+        if ($_GET["razeni2"] == 1) {
+            $select5 = " ASC ";
+        }
+        if ($_GET["razeni2"] == 2) {
+            $select5 = " DESC ";
+        }
+
+        $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
+
+        if (!empty($select5)) {
+            $dotaz_source = $dotaz_source.$select5;
+        }
+
+        $bc1 = $vlastnikfind->vypis_tab(1);
+        $this->smarty->assign("body1", $bc1);
+
+        $bc2 = $vlastnikfind->vypis($sql, $dotaz_source);
+        $this->smarty->assign("body2", $bc2);
+
+        $sql = "".$sql."";
+        $select1 = " WHERE firma is not NULL AND ( archiv = 0 or archiv is null ) AND ";
+        $select1 .= " ( nick LIKE '$sql' OR jmeno LIKE '$sql' OR prijmeni LIKE '$sql' ";
+        $select1 .= " OR ulice LIKE '$sql' OR mesto LIKE '$sql' OR poznamka LIKE '$sql' ";
+
+        $select2 = " OR psc LIKE '$sql' OR icq LIKE '$sql' OR mail LIKE '$sql' OR telefon LIKE '$sql' ";
+        $select2 .= " OR vs LIKE '$sql') ";
+
+        $dotaz_source = " SELECT * FROM vlastnici ".$select1.$select2.$select3.$select4;
+
+        if (!empty($select5)) {
+            $dotaz_source = $dotaz_source.$select5;
+        }
+
+        $bc3 = $vlastnikfind->vypis($sql, $dotaz_source);
+        $this->smarty->assign("body3", $bc3);
+
+        $sql = "".$sql."";
+        $dotaz_source = "26058677";
+
+        $bc4 = $vlastnikfind->vypis($sql, $dotaz_source, "2");
+        $this->smarty->assign("body4", $bc4);
+
+        $bc5 = $vlastnikfind->vypis_tab(2);
+        $this->smarty->assign("body5", $bc5);
+
+        $this->smarty->display('vlastnici/hledani.tpl');
+
+        return $response;
+    }
 
     public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {

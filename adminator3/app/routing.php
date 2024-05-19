@@ -114,6 +114,7 @@ $app->group(
 
         $group->map(['GET', 'POST'], '/vlastnici/cat', vlastniciController::class . ':cat');
         $group->map(['GET', 'POST'], '/vlastnici/archiv', vlastniciController::class . ':archiv');
+        $group->map(['GET', 'POST'], '/vlastnici/search', vlastniciController::class . ':search');
         $group->map(['GET', 'POST'], '/vlastnici', vlastniciController::class . ':vlastnici');
 
         $group->map(['GET', 'POST'], '/vlastnici2', vlastniciController::class . ':vlastnici2');
