@@ -11,6 +11,8 @@ class vlastnik2
 
     public $logger;
 
+    public $smarty;
+
     public $container; // for calling stb class over vlastnik2_a2 class
     public $adminator; // handler for instance of adminator class
 
@@ -63,6 +65,7 @@ class vlastnik2
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
+        $this->smarty = $container->get('smarty');
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->get('smarty'), $this->logger);
     }
@@ -581,9 +584,9 @@ class vlastnik2
         }
 
         if ($update_status == 1) {
-            $output .= '<h3 align="center">Úprava vlastníka</h3>';
+            $this->smarty->assign("content_header", "Úprava vlastníka");
         } else {
-            $output .= '<h3 align="center">Přidání nového vlastníka</h3>';
+            $this->smarty->assign("content_header", "Přidání nového vlastníka");
         }
 
         if(($update_status == 1 and !(isset($send)))) { //rezim upravy
@@ -1076,8 +1079,8 @@ class vlastnik2
                     $output .= "<H3><div style=\"color: green; padding-top: 10px; padding-left: 5px; \" >"
                                 . "Data úspěšně uloženy do databáze vlastníků. </div></H3>\n";
                 } else {
-                    $output .= "<div style=\"color: red; padding-top: 10px; padding-left: 5px;\">"
-                                ."Chyba! Data do databáze vlastníků nelze uložit. </div>".pg_last_error($this->conn_pgsql)."<br>\n";
+                    $output .= "<H3><div style=\"color: red; padding-top: 10px; padding-left: 5px;\">"
+                                ."Chyba! Data do databáze vlastníků nelze uložit. </div>".pg_last_error($this->conn_pgsql)."</h3><br>\n";
                 }
 
                 // pridame to do archivu zmen

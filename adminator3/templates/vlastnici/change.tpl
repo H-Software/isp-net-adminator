@@ -18,7 +18,11 @@
 </div> *}
 
 <div style="padding-right: 5px;" >
+
+<h3 align="center">{$content_header}</h3>
+
 {$body}
+
 </div>
 
 {* konecny soubor *}
