@@ -580,6 +580,12 @@ class vlastnik2
             $update_status = 1;
         }
 
+        if ($update_status == 1) {
+            $output .= '<h3 align="center">Úprava vlastníka</h3>';
+        } else {
+            $output .= '<h3 align="center">Přidání nového vlastníka</h3>';
+        }
+
         if(($update_status == 1 and !(isset($send)))) { //rezim upravy
 
             $dotaz_upd = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka='".intval($update_id)."' ");
@@ -1067,9 +1073,11 @@ class vlastnik2
                 $res = pg_insert($this->conn_pgsql, 'vlastnici', $vlastnik_add);
 
                 if($res) {
-                    $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze vlastníků. </div></H3>\n";
+                    $output .= "<H3><div style=\"color: green; padding-top: 10px; padding-left: 5px; \" >"
+                                . "Data úspěšně uloženy do databáze vlastníků. </div></H3>\n";
                 } else {
-                    $output .= "<div style=\"color: red; \">Chyba! Data do databáze vlastníků nelze uložit. </div>".pg_last_error($this->conn_pgsql)."<br>\n";
+                    $output .= "<div style=\"color: red; padding-top: 10px; padding-left: 5px;\">"
+                                ."Chyba! Data do databáze vlastníků nelze uložit. </div>".pg_last_error($this->conn_pgsql)."<br>\n";
                 }
 
                 // pridame to do archivu zmen
@@ -1111,12 +1119,6 @@ class vlastnik2
         elseif (isset($send)):
             $error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
         endif;
-
-        if ($update_status == 1) {
-            $output .= '<h3 align="center">Úprava vlastníka</h3>';
-        } else {
-            $output .= '<h3 align="center">Přidání nového vlastníka</h3>';
-        }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
         if (($error != null) or (!isset($send))) {
@@ -1215,7 +1217,7 @@ class vlastnik2
 
         $output .= "<br><b>Fakturační skupina: </b> ".$fakt_skupina."<br>";
 
-        $output .= '<b>Typ smlouvy:</b>: ';
+        $output .= '<b>Typ smlouvy:</b> ';
 
         if($typ_smlouvy == 0) {
             $output .= "[nezvoleno]";
@@ -1280,7 +1282,7 @@ class vlastnik2
 
         $output .= '<br><br>';
 
-        $output .= '<b>Pozastavené fakturace:</b>';
+        $output .= '<b>Pozastavené fakturace:</b> ';
 
         if($billing_suspend_status == 1) {
             $output .= "Ano";
