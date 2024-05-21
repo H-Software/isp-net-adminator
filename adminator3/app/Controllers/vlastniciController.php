@@ -486,10 +486,13 @@ class vlastniciController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        // $vlastnik2 = new \vlastnik2($this->container);
-        // list($csrf_html) = $this->generateCsrfToken($request, $response, true);
-        // $vlastnik2->csrf_html = $csrf_html;
+        $this->smarty->assign("enable_calendar2", 1);
 
+        $vlastnik2 = new \vlastnik2($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $vlastnik2->csrf_html = $csrf_html;
+
+        $vlastnik2->action();
 
         return $response;
     }

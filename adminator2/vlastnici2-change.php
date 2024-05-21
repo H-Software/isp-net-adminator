@@ -42,7 +42,7 @@ echo '<script type="text/javascript" src="/adminator3/plugins/tigra_calendar/cus
 <?php
 
 //vytvoreni objektu
-$Aglobal = new Aglobal();
+// $Aglobal = new Aglobal();
 
 $update_id = intval($_POST["update_id"]);
 $odeslano = $_POST["odeslano"];
