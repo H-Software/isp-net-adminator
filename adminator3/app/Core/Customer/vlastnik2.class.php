@@ -1,6 +1,7 @@
 <?php
 
 use Psr\Container\ContainerInterface;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class vlastnik2
 {
