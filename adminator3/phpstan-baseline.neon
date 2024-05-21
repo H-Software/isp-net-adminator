@@ -619,12 +619,6 @@ parameters:
 			path: app/routing.php
 
 		-
-			message: "#^Class workController not found\\.$#"
-			count: 1
-			path: app/routing.php
-
-
-		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
 			count: 1
 			path: include/main.function.shared.php
