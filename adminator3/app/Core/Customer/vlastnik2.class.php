@@ -49,6 +49,14 @@ class vlastnik2
 
     public $form_find;
 
+    private $action_az_pole2;
+
+    private $action_az_pole3;
+
+    private $action_affected;
+
+    private $action_vlast_upd_old;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -810,7 +818,7 @@ class vlastnik2
                 // rezim upravy
 
                 //prvne stavajici data docasne ulozime
-                $pole2 = "<b>akce: uprava vlastnika; </b><br>";
+                $this->action_az_pole2 = "<b>akce: uprava vlastnika; </b><br>";
 
                 $vysl4 = pg_query($this->conn_pgsql, "select * from vlastnici WHERE id_cloveka='".intval($update_id)."' ");
                 if((pg_num_rows($vysl4) <> 1)) {
@@ -819,7 +827,7 @@ class vlastnik2
                     while ($data4 = pg_fetch_array($vysl4)):
 
                         $nick3 = $data4["nick"];
-                        $vlast_upd_old["id_cloveka"] = $data4["id_cloveka"];
+                        $this->action_vlast_upd_old["id_cloveka"] = $data4["id_cloveka"];
 
                         //novy zpusob archivace - pro porovnavani zmen
                         $pole_puvodni_data["id_cloveka"] = $data4["id_cloveka"];
@@ -948,7 +956,7 @@ class vlastnik2
 
                 if($billing_suspend_status == 1) {
                     $vlast_upd["billing_suspend_status"] = intval($billing_suspend_status);
-                    $vlast_upd["billing_suspend_reason"] = $conn_mysql->real_escape_string($billing_suspend_reason);
+                    $vlast_upd["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
 
                     list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
                     $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
@@ -956,8 +964,8 @@ class vlastnik2
                     list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $billing_suspend_stop);
                     $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 
-                    $vlast_upd["billing_suspend_start"]  = $conn_mysql->real_escape_string($billing_suspend_start);
-                    $vlast_upd["billing_suspend_stop"]   = $conn_mysql->real_escape_string($billing_suspend_stop);
+                    $vlast_upd["billing_suspend_start"]  = $this->conn_mysql->real_escape_string($billing_suspend_start);
+                    $vlast_upd["billing_suspend_stop"]   = $this->conn_mysql->real_escape_string($billing_suspend_stop);
                 } else {
                     $vlast_upd["billing_suspend_status"] = 0;
                     $vlast_upd["billing_suspend_reason"] = null;
@@ -970,7 +978,7 @@ class vlastnik2
                 // $output .= "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
 
                 try {
-                    $affected = DB::connection('pgsql')
+                    $this->action_affected = DB::connection('pgsql')
                                 ->table('vlastnici')
                                 ->where('id_cloveka', $update_id)
                                 ->update($vlast_upd);
@@ -978,8 +986,8 @@ class vlastnik2
                     $error = $e->getMessage();
                 }
 
-                if($affected == 1) {
-                    $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . ")\n";
+                if($this->action_affected == 1) {
+                    $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $this->action_affected . ")\n";
                 } else {
                     $output .= "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error . ")\n";
                 }
@@ -1048,7 +1056,7 @@ class vlastnik2
 
                 if($billing_suspend_status == 1) {
                     $vlastnik_add["billing_suspend_status"] = intval($billing_suspend_status);
-                    $vlastnik_add["billing_suspend_reason"] = $conn_mysql->real_escape_string($billing_suspend_reason);
+                    $vlastnik_add["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
 
                     list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
                     $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
@@ -1056,16 +1064,16 @@ class vlastnik2
                     list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $billing_suspend_stop);
                     $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 
-                    $vlastnik_add["billing_suspend_start"] = $conn_mysql->real_escape_string($billing_suspend_start);
-                    $vlastnik_addd["billing_suspend_stop"] = $conn_mysql->real_escape_string($billing_suspend_stop);
+                    $vlastnik_add["billing_suspend_start"] = $this->conn_mysql->real_escape_string($billing_suspend_start);
+                    $vlastnik_addd["billing_suspend_stop"] = $this->conn_mysql->real_escape_string($billing_suspend_stop);
                 }
 
-                $res = pg_insert($db_ok2, 'vlastnici', $vlastnik_add);
+                $res = pg_insert($this->conn_pgsql, 'vlastnici', $vlastnik_add);
 
                 if($res) {
                     $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze vlastníků. </div></H3>\n";
                 } else {
-                    $output .= "<div style=\"color: red; \">Chyba! Data do databáze vlastníků nelze uložit. </div>".pg_last_error($db_ok2)."<br>\n";
+                    $output .= "<div style=\"color: red; \">Chyba! Data do databáze vlastníků nelze uložit. </div>".pg_last_error($this->conn_pgsql)."<br>\n";
                 }
 
                 // pridame to do archivu zmen
@@ -1094,7 +1102,7 @@ class vlastnik2
                     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
                 }
 
-                // $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+                // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
 
                 $writed = "true";
 
@@ -1376,7 +1384,7 @@ class vlastnik2
             }
 
             try {
-                $dotaz_fakt_skup = $conn_mysql->query($sql);
+                $dotaz_fakt_skup = $this->conn_mysql->query($sql);
                 $dotaz_fakt_skup_radku = $dotaz_fakt_skup->num_rows;
             } catch (Exception $e) {
                 die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
@@ -1577,7 +1585,7 @@ class vlastnik2
             $output .= " style=\"color: gray; \">Nevybráno</option>";
 
             try {
-                $dotaz_tarify_id_tarifu = $conn_mysql->query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
+                $dotaz_tarify_id_tarifu = $this->conn_mysql->query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
             } catch (Exception $e) {
                 die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
             }
@@ -1649,7 +1657,7 @@ class vlastnik2
             $output .= " style=\"color: gray; \">Nevybráno</option>";
 
             try {
-                $dotaz_iptv_id_tarifu = $conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");
+                $dotaz_iptv_id_tarifu = $this->conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");
             } catch (Exception $e) {
                 die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
             }
@@ -1808,170 +1816,170 @@ class vlastnik2
 
     private function actionArchivZmen()
     {
-        $pole2 = " diferencialni data: ";
+        $this->action_az_pole2 .= " diferencialni data: ";
 
         //novy zpusob archivovani dat
         foreach($pole_puvodni_data as $key => $val) {
             if (!($vlast_upd[$key] == $val)) {
                 if (!($key == "id_cloveka")) {
                     if($key == "vs") {
-                        $pole3 .= "změna <b>Variabilního symbolu</b> z: ";
-                        $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
-                        $pole3 .= ", ";
+                        $this->action_az_pole3 .= "změna <b>Variabilního symbolu</b> z: ";
+                        $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                        $this->action_az_pole3 .= ", ";
                     } //konec key == vs
                     elseif($key == "archiv") {
-                        $pole3 .= "změna <b>Archivu</b> z: ";
+                        $this->action_az_pole3 .= "změna <b>Archivu</b> z: ";
 
                         if($val == "0" and $vlast_upd[$key] == "1") {
-                            $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } elseif($val == "1" and $vlast_upd[$key] == "0") {
-                            $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
                         }
 
-                        $pole3 .= ", ";
+                        $this->action_az_pole3 .= ", ";
                     } //konec key == archiv
                     elseif($key == "sluzba_int") {
-                        $pole3 .= "změna <b>Služba Internet</b> z: ";
+                        $this->action_az_pole3 .= "změna <b>Služba Internet</b> z: ";
 
                         if($val == "0" and $vlast_upd[$key] == "1") {
-                            $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } elseif($val == "1" and $vlast_upd[$key] == "0") {
-                            $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
                         }
 
-                        $pole3 .= ", ";
+                        $this->action_az_pole3 .= ", ";
                     } //konec key == sluzba_int
                     elseif($key == "sluzba_iptv") {
-                        $pole3 .= "změna <b>Služba IPTV</b> z: ";
+                        $this->action_az_pole3 .= "změna <b>Služba IPTV</b> z: ";
 
                         if($val == "0" and $vlast_upd[$key] == "1") {
-                            $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } elseif($val == "1" and $vlast_upd[$key] == "0") {
-                            $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
                         }
 
-                        $pole3 .= ", ";
+                        $this->action_az_pole3 .= ", ";
                     } //konec key == sluzba_iptv
                     elseif($key == "sluzba_voip") {
-                        $pole3 .= "změna <b>Služba VoIP</b> z: ";
+                        $this->action_az_pole3 .= "změna <b>Služba VoIP</b> z: ";
 
                         if($val == "0" and $vlast_upd[$key] == "1") {
-                            $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } elseif($val == "1" and $vlast_upd[$key] == "0") {
-                            $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
                         }
 
-                        $pole3 .= ", ";
+                        $this->action_az_pole3 .= ", ";
                     } //konec key == sluzba_voip
                     elseif($key == "billing_freq") {
-                        $pole3 .= "změna <b>Frekvence fakturování</b> z: ";
+                        $this->action_az_pole3 .= "změna <b>Frekvence fakturování</b> z: ";
 
                         if($val == "0" and $vlast_upd[$key] == "1") {
-                            $pole3 .= "<span class=\"az-s1\">Měsíční</span> na: <span class=\"az-s2\">Čtvrtletní</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Měsíční</span> na: <span class=\"az-s2\">Čtvrtletní</span>";
                         } elseif($val == "1" and $vlast_upd[$key] == "0") {
-                            $pole3 .= "<span class=\"az-s1\">Čtvrtletní</span> na: <span class=\"az-s2\">Měsíční</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Čtvrtletní</span> na: <span class=\"az-s2\">Měsíční</span>";
                         } else {
-                            $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
                         }
 
-                        $pole3 .= ", ";
+                        $this->action_az_pole3 .= ", ";
                     }
                     // TODO: fix pretify fakt. skupiny in AZ call
                     // elseif( $key == "fakturacni_skupina_id" )
                     // {
-                    //   $pole3 .= "změna <b>Fakturační skupiny</b> z: ";
+                    //   $this->action_az_pole3 .= "změna <b>Fakturační skupiny</b> z: ";
 
-                    //   $fs_ols_rs = $conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($val)."'");
+                    //   $fs_ols_rs = $this->conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($val)."'");
                     //   $fs_old_rs->data_seek(0);
                     //   list($fs_old) = $fs_old_rs->fetch_row();
 
-                    //   $fs_new_rs = $conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($vlast_upd[$key])."'");
+                    //   $fs_new_rs = $this->conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($vlast_upd[$key])."'");
 
                     //   $fs_new_rs->data_seek(0);
                     //   list($fs_new) = $fs_new->fetch_row();
 
                     //   if( isset($fs_old) )
-                    //   { $pole3 .= "<span class=\"az-s1\">".$fs_old."</span> "; }
+                    //   { $this->action_az_pole3 .= "<span class=\"az-s1\">".$fs_old."</span> "; }
                     //   else
-                    //   { $pole3 .= "<span class=\"az-s1\">".$val."</span> "; }
+                    //   { $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> "; }
 
                     //   if( isset($fs_new) )
-                    //   { $pole3 .= "na: <span class=\"az-s2\">".$fs_new."</span>"; }
+                    //   { $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$fs_new."</span>"; }
                     //   else
-                    //   { $Pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>"; }
+                    //   { $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>"; }
 
-                    //   $pole3 .= ", ";
+                    //   $this->action_az_pole3 .= ", ";
 
                     // } //end of elseif fakturacni_skupina_id
                     elseif($key == "billing_suspend_status") {
-                        $pole3 .= "změna <b>Pozastavené fakturace</b> z: ";
+                        $this->action_az_pole3 .= "změna <b>Pozastavené fakturace</b> z: ";
 
                         if($val == "0" and $vlast_upd[$key] == "1") {
-                            $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } elseif($val == "1" and $vlast_upd[$key] == "0") {
-                            $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
                         }
 
-                        $pole3 .= ", ";
+                        $this->action_az_pole3 .= ", ";
 
                     } elseif($key == "billing_suspend_reason") {
-                        $pole3 .= "změna <b>Důvod pozastavení</b> z: ";
-                        $pole3 .= "<span class=\"az-s1\" >".$val."</span> ";
-                        $pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>, ";
+                        $this->action_az_pole3 .= "změna <b>Důvod pozastavení</b> z: ";
+                        $this->action_az_pole3 .= "<span class=\"az-s1\" >".$val."</span> ";
+                        $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>, ";
                     } elseif($key == "billing_suspend_start") {
-                        $pole3 .= "změna <b>Poz. fakturace - od kdy</b> z: ";
+                        $this->action_az_pole3 .= "změna <b>Poz. fakturace - od kdy</b> z: ";
 
                         list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $val);
                         $val_cz = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-                        $pole3 .= "<span class=\"az-s1\" >".$val_cz."</span> ";
+                        $this->action_az_pole3 .= "<span class=\"az-s1\" >".$val_cz."</span> ";
 
                         list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $vlast_upd[$key]);
                         $val_cz_2 = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-                        $pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
+                        $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
 
                     } elseif($key == "billing_suspend_stop") {
-                        $pole3 .= "změna <b>Poz. fakturace - do kdy</b> z: ";
+                        $this->action_az_pole3 .= "změna <b>Poz. fakturace - do kdy</b> z: ";
 
                         list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $val);
                         $val_cz = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-                        $pole3 .= "<span class=\"az-s1\" >".$val_cz."</span> ";
+                        $this->action_az_pole3 .= "<span class=\"az-s1\" >".$val_cz."</span> ";
 
                         list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $vlast_upd[$key]);
                         $val_cz_2 = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-                        $pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
+                        $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
 
                     } else { // ostatni mody, nerozpoznane
-                        $pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
-                        $pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>, ";
+                        $this->action_az_pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
+                        $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>, ";
                     }
                 } //konec if nejde li od id cloveka
             } // konec if obj == val
         } // konec foreach
 
-        //$pole2 .=",<br> stavajici data: ";
+        //$this->action_az_pole2 .=",<br> stavajici data: ";
 
-        foreach ($vlast_upd_old as $key => $val) {
+        foreach ($this->action_vlast_upd_old as $key => $val) {
             //if( $key == "id_cloveka" )
-            { $pole2 .= " [".$key."] => ".$val." , "; }
+            { $this->action_az_pole2 .= " [".$key."] => ".$val." , "; }
         }
 
-        $pole2 .= "".$pole3;
+        $this->action_az_pole2 .= "".$this->action_az_pole3;
 
-        if ($affected == 1) {
+        if ($this->action_affected == 1) {
             $vysledek_write = 1;
         } else {
             $vysledek_write = 0;
@@ -1979,7 +1987,7 @@ class vlastnik2
 
         $id = DB::table('archiv_zmen')
                         ->insertGetId([
-                            'akce' => $pole2,
+                            'akce' => $this->action_az_pole2,
                             'vysledek' => $vysledek_write,
                             'provedeno_kym' => \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email
                         ]);
@@ -1990,7 +1998,7 @@ class vlastnik2
             echo "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
         }
 
-        // $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+        // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$this->action_az_pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
 
     }
 }
