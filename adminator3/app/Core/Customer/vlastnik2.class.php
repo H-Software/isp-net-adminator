@@ -1292,11 +1292,13 @@ class vlastnik2
         $output = "";
 
         $output .= '<form name="form1" method="post" action="" >
-        <input type="hidden" name="send" value="true">
-        <input type="hidden" name="update_id" value="'.intval($update_id).'" >'
-        . '<input type="hidden" name="fakturacni" value="'.intval($fakturacni).'" >';
+                <input type="hidden" name="send" value="true">
+                <input type="hidden" name="update_id" value="'.intval($update_id).'" >'
+                . '<input type="hidden" name="fakturacni" value="'.intval($fakturacni).'" >';
+        
+        $output .= $this->csrf_html;
 
-        $output .= '<table border="1" width="100%">
+        $output .= '<table border="0" width="100%">
             <tr>
             <td width="70">nick:
             <input type="Text" name="nick2" size="10" maxlength="20" value="'.$nick2.'" ></td>'
