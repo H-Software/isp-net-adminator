@@ -112,12 +112,14 @@ $app->group(
         $group->map(['GET', 'POST'], '/print/smlouva', printController::class . ':printSmlouva');
         $group->map(['GET', 'POST'], '/print/reg-form', printController::class . ':printRegForm');
 
-        $group->map(['GET', 'POST'], '/vlastnici/cat', vlastniciController::class . ':cat');
-        $group->map(['GET', 'POST'], '/vlastnici/archiv', vlastniciController::class . ':archiv');
-        $group->map(['GET', 'POST'], '/vlastnici/search', vlastniciController::class . ':search');
         $group->map(['GET', 'POST'], '/vlastnici', vlastniciController::class . ':vlastnici');
-
+        $group->map(['GET', 'POST'], '/vlastnici/archiv', vlastniciController::class . ':archiv');
+        $group->map(['GET', 'POST'], '/vlastnici/cat', vlastniciController::class . ':cat');
+        $group->map(['GET', 'POST'], '/vlastnici/search', vlastniciController::class . ':search');
+        
         $group->map(['GET', 'POST'], '/vlastnici2', vlastniciController::class . ':vlastnici2');
+        $group->map(['GET', 'POST'], '/vlastnici2/change', vlastniciController::class . ':change');
+
         $group->map(['GET', 'POST'], '/vlastnici2/fakturacni-skupiny', vlastniciController::class . ':fakturacniSkupiny');
         $group->map(['GET', 'POST'], '/vlastnici2/fakturacni-skupiny/action', vlastniciController::class . ':fakturacniSkupinyAction');
 
