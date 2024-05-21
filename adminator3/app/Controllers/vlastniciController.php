@@ -492,7 +492,11 @@ class vlastniciController extends adminatorController
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $vlastnik2->csrf_html = $csrf_html;
 
-        $vlastnik2->action();
+        $bodyContent = $vlastnik2->action();
+
+        $this->smarty->assign("body", $bodyContent);
+
+        $this->smarty->display('vlastnici/change.tpl');
 
         return $response;
     }

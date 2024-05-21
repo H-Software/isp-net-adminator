@@ -28,6 +28,8 @@ class vlastnik2
 
     public $istFindId;
 
+    public $listFindId;
+
     public $dotaz_source;
 
     public $objektListAllowedActionUpdate = false;
@@ -556,8 +558,11 @@ class vlastnik2
         return true;
     }
 
-    public function action()
+    public function action(): string
     {
+        $output = "";
+        $error = "";
+
         $update_id = intval($_POST["update_id"]);
         $odeslano = $_POST["odeslano"];
         $send = $_POST["send"];
@@ -573,7 +578,7 @@ class vlastnik2
             $radku_upd = pg_num_rows($dotaz_upd);
 
             if($radku_upd == 0) {
-                echo "Chyba! Požadovaná data nelze načíst! ";
+                $output .= "Chyba! Požadovaná data nelze načíst! ";
             } else {
 
                 while($data = pg_fetch_array($dotaz_upd)):
@@ -769,7 +774,7 @@ class vlastnik2
             if($update_status != 1) {
 
                 //zjisti jestli neni duplicitni : nick, vs
-                $MSQ_NICK = pg_query("SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
+                $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
                     $error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
                     $fail = "true";
@@ -781,7 +786,7 @@ class vlastnik2
             if(($update_status == 1 and (isset($odeslano)))) {
 
                 //zjisti jestli neni duplicitni : nick, vs
-                $MSQ_NICK = pg_query("SELECT * FROM vlastnici WHERE nick LIKE '$nick2' and id_cloveka <> '$update_id' ");
+                $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' and id_cloveka <> '$update_id' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
                     $error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
                     $fail = "true";
@@ -805,11 +810,11 @@ class vlastnik2
                 // rezim upravy
 
                 //prvne stavajici data docasne ulozime
-                $pole2 .= "<b>akce: uprava vlastnika; </b><br>";
+                $pole2 = "<b>akce: uprava vlastnika; </b><br>";
 
-                $vysl4 = pg_query("select * from vlastnici WHERE id_cloveka='".intval($update_id)."' ");
+                $vysl4 = pg_query($this->conn_pgsql, "select * from vlastnici WHERE id_cloveka='".intval($update_id)."' ");
                 if((pg_num_rows($vysl4) <> 1)) {
-                    echo "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>";
+                    $output .= "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>";
                 } else {
                     while ($data4 = pg_fetch_array($vysl4)):
 
@@ -960,9 +965,9 @@ class vlastnik2
                     $vlast_upd["billing_suspend_stop"] = null;
                 }
 
-                // echo "<pre>" . var_export($vlast_upd, true) ."</pre>";
+                // $output .= "<pre>" . var_export($vlast_upd, true) ."</pre>";
 
-                // echo "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
+                // $output .= "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
 
                 try {
                     $affected = DB::connection('pgsql')
@@ -974,9 +979,9 @@ class vlastnik2
                 }
 
                 if($affected == 1) {
-                    echo "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . ")\n";
+                    $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $affected . ")\n";
                 } else {
-                    echo "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error . ")\n";
+                    $output .= "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error . ")\n";
                 }
 
                 require("vlastnici2-change-archiv-zmen-inc.php");
@@ -1057,9 +1062,9 @@ class vlastnik2
                 $res = pg_insert($db_ok2, 'vlastnici', $vlastnik_add);
 
                 if($res) {
-                    echo "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze vlastníků. </div></H3>\n";
+                    $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze vlastníků. </div></H3>\n";
                 } else {
-                    echo "<div style=\"color: red; \">Chyba! Data do databáze vlastníků nelze uložit. </div>".pg_last_error($db_ok2)."<br>\n";
+                    $output .= "<div style=\"color: red; \">Chyba! Data do databáze vlastníků nelze uložit. </div>".pg_last_error($db_ok2)."<br>\n";
                 }
 
                 // pridame to do archivu zmen
@@ -1083,9 +1088,9 @@ class vlastnik2
                         ]);
 
                 if($id > 0) {
-                    echo "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+                    $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
                 } else {
-                    echo "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
+                    $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
                 }
 
                 // $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
@@ -1103,17 +1108,17 @@ class vlastnik2
         endif;
 
         if ($update_status == 1) {
-            echo '<h3 align="center">Úprava vlastníka</h3>';
+            $output .= '<h3 align="center">Úprava vlastníka</h3>';
         } else {
-            echo '<h3 align="center">Přidání nového vlastníka</h3>';
+            $output .= '<h3 align="center">Přidání nového vlastníka</h3>';
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
         if ((isset($error)) or (!isset($send))):
-            echo $error;
+            $output .= $error;
 
             // vlozeni vlastniho formu
-            echo $this->actionForm();
+            $output .= $this->actionForm();
             // require("vlastnici2-change-inc.php");
 
         elseif ((isset($writed) or isset($updated))):
@@ -1134,139 +1139,139 @@ class vlastnik2
                 $stranka = "vlastnici.php";
             }
 
-        echo '<table border="0" width="50%" >
-            <tr>
-            <td align="right">Zpět na vlastníka </td>
-            <td><form action="'.$stranka.'" method="GET" >
-            <input type="hidden" value="' . $nick2 . '" name="find" >
-            <input type="submit" value="ZDE" name="odeslat" > </form></td>
+        $output .= '<table border="0" width="50%" >
+                <tr>
+                <td align="right">Zpět na vlastníka </td>
+                <td><form action="'.$stranka.'" method="GET" >
+                <input type="hidden" value="' . $nick2 . '" name="find" >
+                <input type="submit" value="ZDE" name="odeslat" > </form></td>
 
-            <td align="right">Restart (all iptables ) </td>
-            <td><form action="work.php" method="POST" ><input type="hidden" name="iptables" value="1" >
-                <input type="submit" value="ZDE" name="odeslat" > </form> </td>
-            </tr>
-            </table>';
+                <td align="right">Restart (all iptables ) </td>
+                <td><form action="work.php" method="POST" ><input type="hidden" name="iptables" value="1" >
+                    <input type="submit" value="ZDE" name="odeslat" > </form> </td>
+                </tr>
+                </table>';
 
-        echo '<br>';
+        $output .= '<br>';
 
         if ($firma_back == 1) {
-            echo "<div style=\"padding-top: 10px; padding-bottom: 20px; font-size: 18px; \">
-            <span style=\"font-weight: bold; \">Upozornění!</span> Změny je nutné dát vědet účetní. </div>";
+            $output .= "<div style=\"padding-top: 10px; padding-bottom: 20px; font-size: 18px; \">
+                <span style=\"font-weight: bold; \">Upozornění!</span> Změny je nutné dát vědet účetní. </div>";
         }
 
-        echo '
+        $output .= '
         Objekt byl přidán/upraven , zadané údaje:<br><br> 
         <b>Nick</b>: ' . $nick2 . ' <br> 
         <b>VS</b>: ' . $vs . ' <br> 
         <b>K_platbě</b>: ' . $k_platbe . ' <br>';
 
-        echo '<br>';
+        $output .= '<br>';
 
-        echo '<b>Jméno</b>: ' . $jmeno . ' <br>
+        $output .= '<b>Jméno</b>: ' . $jmeno . ' <br>
         <b>Příjmení</b>: ' . $prijmeni . ' <br>
         <b>Ulice</b>: ' . $ulice . '<br>
         <b>PSČ</b>: ' . $psc . '<br>';
 
-        echo '<br>';
+        $output .= '<br>';
 
-        echo '<b>e-mail</b>: ' . $email . '<br>
+        $output .= '<b>e-mail</b>: ' . $email . '<br>
         <b>icq</b>: ' . $icq . '<br>
         <b>telefon</b>: ' . $tel . '<br> 
         <br>';
 
-        echo '<b>firma</b>: ';
+        $output .= '<b>firma</b>: ';
 
         if($firma == 1) {
-            echo "Vlastníci2 - Copmany, s.r.o.";
+            $output .= "Vlastníci2 - Copmany, s.r.o.";
         } else {
-            echo "Vlastníci - FO";
+            $output .= "Vlastníci - FO";
         }
 
-        echo "<br>";
-        echo "<b>Archivovat: </b>";
+        $output .= "<br>";
+        $output .= "<b>Archivovat: </b>";
 
         if($archiv == 1) {
-            echo " Ano ";
+            $output .= " Ano ";
         } else {
-            echo " Ne ";
+            $output .= " Ne ";
         }
 
-        echo "<br><b>Fakturační skupina: </b> ".$fakt_skupina."<br>";
+        $output .= "<br><b>Fakturační skupina: </b> ".$fakt_skupina."<br>";
 
-        echo '<b>Typ smlouvy:</b>: ';
+        $output .= '<b>Typ smlouvy:</b>: ';
 
         if($typ_smlouvy == 0) {
-            echo "[nezvoleno]";
+            $output .= "[nezvoleno]";
         } elseif($typ_smlouvy == 1) {
-            echo "[na dobu neurčitou]";
+            $output .= "[na dobu neurčitou]";
         } elseif($typ_smlouvy == 2) {
-            echo "[na dobu určitou]";
-            echo " ( doba trvání do: ";
+            $output .= "[na dobu určitou]";
+            $output .= " ( doba trvání do: ";
 
             list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("-", $trvani_do);
             $trvani_do = $trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
 
-            echo $trvani_do." )";
+            $output .= $trvani_do." )";
         } else {
-            echo "[nelze zjistit]";
+            $output .= "[nelze zjistit]";
         }
 
-        echo '<br>';
+        $output .= '<br>';
 
-        echo '<b>Datum podpisu</b>: ';
+        $output .= '<b>Datum podpisu</b>: ';
 
         if((strlen($datum_podpisu) > 0)) {
             list($datum_podpisu_rok, $datum_podpisu_mesic, $datum_podpisu_den) = explode("-", $datum_podpisu);
             $datum_podpisu = $datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
         }
 
-        echo $datum_podpisu;
+        $output .= $datum_podpisu;
 
-        echo '<br><br>';
+        $output .= '<br><br>';
 
-        echo '<b>Služba Internet:</b>';
+        $output .= '<b>Služba Internet:</b>';
 
         if($sluzba_inet == 0) {
-            echo "Ne";
+            $output .= "Ne";
         } elseif($sluzba_inet == 1) {
-            echo "Ano";
+            $output .= "Ano";
         } else {
-            echo "Nelze zjistit - hodnota: ".$sluzba_inet;
+            $output .= "Nelze zjistit - hodnota: ".$sluzba_inet;
         }
 
-        echo '<br>'
+        $output .= '<br>'
             . '<b>Služba IPTV:</b>';
 
         if($sluzba_iptv == 0) {
-            echo "Ne";
+            $output .= "Ne";
         } elseif($sluzba_iptv == 1) {
-            echo "Ano";
+            $output .= "Ano";
         } else {
-            echo "Nelze zjistit - hodnota: ".$sluzba_iptv;
+            $output .= "Nelze zjistit - hodnota: ".$sluzba_iptv;
         }
 
-        echo '<br>'
+        $output .= '<br>'
             . '<b>Služba VoIP:</b>';
 
         if($sluzba_voip == 0) {
-            echo "Ne";
+            $output .= "Ne";
         } elseif($sluzba_voip == 1) {
-            echo "Ano";
+            $output .= "Ano";
         } else {
-            echo "Nelze zjistit - hodnota: ".$sluzba_voip;
+            $output .= "Nelze zjistit - hodnota: ".$sluzba_voip;
         }
 
-        echo '<br><br>';
+        $output .= '<br><br>';
 
-        echo '<b>Pozastavené fakturace:</b>';
+        $output .= '<b>Pozastavené fakturace:</b>';
 
         if($billing_suspend_status == 1) {
-            echo "Ano";
+            $output .= "Ano";
         } else {
-            echo "Ne";
+            $output .= "Ne";
         }
 
-        echo "<br>";
+        $output .= "<br>";
 
         if($billing_suspend_status == 1) {
             list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $billing_suspend_start);
@@ -1275,16 +1280,18 @@ class vlastnik2
             list($b_s_t_rok, $b_s_t_mesic, $b_s_t_den) = explode("-", $billing_suspend_stop);
             $billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
 
-            echo "<b>od kdy</b>: ".$billing_suspend_start."<br>\n";
-            echo "<b>do kdy</b>: ".$billing_suspend_stop."<br>\n";
+            $output .= "<b>od kdy</b>: ".$billing_suspend_start."<br>\n";
+            $output .= "<b>do kdy</b>: ".$billing_suspend_stop."<br>\n";
 
-            echo "<b>důvod</b>: ".$billing_suspend_reason."<br>\n";
+            $output .= "<b>důvod</b>: ".$billing_suspend_reason."<br>\n";
         }
 
-        echo '<br>'
+        $output .= '<br>'
         . '<br><br>';
 
         endif;
+
+        return $output;
     }
 
     private function actionForm(): string
@@ -1295,7 +1302,7 @@ class vlastnik2
                 <input type="hidden" name="send" value="true">
                 <input type="hidden" name="update_id" value="'.intval($update_id).'" >'
                 . '<input type="hidden" name="fakturacni" value="'.intval($fakturacni).'" >';
-        
+
         $output .= $this->csrf_html;
 
         $output .= '<table border="0" width="100%">
