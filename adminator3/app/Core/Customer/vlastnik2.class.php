@@ -1116,7 +1116,7 @@ class vlastnik2
 
         elseif ((isset($writed) or isset($updated))):
 
-            $back = pg_query("SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
+            $back = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
             $back_radku = pg_num_rows($back);
 
             while ($data_back = pg_fetch_array($back)) {
