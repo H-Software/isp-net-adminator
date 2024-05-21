@@ -569,7 +569,7 @@ class vlastnik2
     public function action(): string
     {
         $output = "";
-        $error = "";
+        $error = null;
 
         $update_id = intval($_POST["update_id"]);
         $odeslano = $_POST["odeslano"];
@@ -780,26 +780,22 @@ class vlastnik2
         if(($nick2 != "") and ($vs != "") and ($k_platbe != "") and (($fakt_skupina > 0) or ($firma <> 1) or ($archiv == 1))):
 
             if($update_status != 1) {
-
                 //zjisti jestli neni duplicitni : nick, vs
                 $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
                     $error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
-
             }
 
             // check v modu uprava
             if(($update_status == 1 and (isset($odeslano)))) {
-
                 //zjisti jestli neni duplicitni : nick, vs
                 $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' and id_cloveka <> '$update_id' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
                     $error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
-
             }
 
             //checkem jestli se macklo na tlacitko "OK" :)
@@ -1123,7 +1119,7 @@ class vlastnik2
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if ((isset($error)) or (!isset($send))):
+        if (($error != null) or (!isset($send))):
             $output .= $error;
 
             // vlozeni vlastniho formu
