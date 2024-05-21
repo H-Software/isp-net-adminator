@@ -16,6 +16,7 @@ use App\Controllers\printController;
 use App\Controllers\othersController;
 use App\Controllers\vlastniciController;
 use App\Controllers\topologyController;
+use App\Controllers\workController;
 
 // routes
 
@@ -127,7 +128,7 @@ $app->group(
         $group->map(['GET', 'POST'], '/topology/node-list', topologyController::class . ':nodeList');
         $group->map(['GET', 'POST'], '/topology/router-list', topologyController::class . ':routerList');
 
-        $group->map(['GET', 'POST'], '/work', \workController::class . ':work');
+        $group->map(['GET', 'POST'], '/work', workController::class . ':work');
 
     }
 )->add(RedirectIfNotAuthenticated::class);
