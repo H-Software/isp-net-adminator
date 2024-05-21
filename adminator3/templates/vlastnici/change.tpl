@@ -21,6 +21,14 @@
 
 <h3 align="center">{$content_header}</h3>
 
+{if $alert_type|count_characters > 1}
+    {include file="partials/bootstrap-alert-with-columns.tpl"}
+{/if}
+
+{if $alert_type2|count_characters > 1}
+    {include file="partials/bootstrap-alert-with-columns.tpl" alert_type=$alert_type2 alert_content=$alert_content2 }
+{/if}
+
 {$body}
 
 </div>

@@ -1,9 +1,10 @@
 <?php
 
+use App\Core\adminator;
 use Psr\Container\ContainerInterface;
 use Illuminate\Database\Capsule\Manager as DB;
 
-class vlastnik2
+class vlastnik2 extends adminator
 {
     public $conn_mysql;
 
@@ -1076,12 +1077,15 @@ class vlastnik2
                 $res = pg_insert($this->conn_pgsql, 'vlastnici', $vlastnik_add);
 
                 if($res) {
-                    $output .= "<H3><div style=\"color: green; padding-top: 10px; padding-left: 5px; \" >"
-                                . "Data úspěšně uloženy do databáze vlastníků. </div></H3>\n";
+                    $this->alert_type = "success";
+                    $this->alert_content = "Data úspěšně uloženy do databáze vlastníků.";
                 } else {
-                    $output .= "<H3><div style=\"color: red; padding-top: 10px; padding-left: 5px;\">"
-                                ."Chyba! Data do databáze vlastníků nelze uložit. </div>".pg_last_error($this->conn_pgsql)."</h3><br>\n";
+                    $this->alert_type = "danger";
+                    $this->alert_content = "Chyba! Data do databáze vlastníků nelze uložit. </br>".pg_last_error($this->conn_pgsql);
                 }
+
+                $this->smarty->assign("alert_type", $this->alert_type);
+                $this->smarty->assign("alert_content", $this->alert_content);
 
                 // pridame to do archivu zmen
                 $pole = "<b>akce: pridani vlastnika ; </b><br>";
@@ -1104,10 +1108,15 @@ class vlastnik2
                         ]);
 
                 if($id > 0) {
-                    $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+                    $this->alert_type = "success";
+                    $this->alert_content = "Změna byla úspěšně zaznamenána do archivu změn.";
                 } else {
-                    $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
+                    $this->alert_type = "danger";
+                    $this->alert_content = "Chyba! Změnu do archivu změn se nepodařilo přidat.";
                 }
+
+                $this->smarty->assign("alert_type2", $this->alert_type);
+                $this->smarty->assign("alert_content2", $this->alert_content);
 
                 // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
 
