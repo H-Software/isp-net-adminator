@@ -1300,140 +1300,146 @@ class vlastnik2
             <tr>
             <td width="70">nick:
             <input type="Text" name="nick2" size="10" maxlength="20" value="'.$nick2.'" ></td>'
-            
+
             . '<td colspan="3" width="80" align="left" >'
-            
-            
+
+
             . 'vs: <input type="Text" name="vs" size="" maxlength="" value="'.$vs.'" >'
-            
+
             . '<span style="padding-left: 10px; padding-right: 10px; ">'
             . 'k platbě: </span><input type="text" name="k_platbe" size="" maxlength="" value="'.$k_platbe.'" >'
 
             . '<span style="padding-left: 10px; padding-right: 10px; ">Splatnost (ke dni):';
-            
-        if ( $firma == 1)
-        { $output .= '<input type="text" name="splatnost" size="8" maxlength="" value="'.$splatnost.'" >'; } 
-        else
-        { $output .= "<span style=\"color: grey; \" > není dostupné </span>"; }
-            
+
+        if ($firma == 1) {
+            $output .= '<input type="text" name="splatnost" size="8" maxlength="" value="'.$splatnost.'" >';
+        } else {
+            $output .= "<span style=\"color: grey; \" > není dostupné </span>";
+        }
+
         $output .= '</span>'
-            
-            . '</td>'	
+
+            . '</td>'
             . '</tr>'
 
             . '<tr><td><br></td></tr>'
-                
+
             . '<tr>'
             . '<td> jméno a příjmení: </td>'
             . '<td colspan="" >'
                 . '<input type="text" name="jmeno" value="'.$jmeno.'" >'
-                . '<input type="text" name="prijmeni" value="'.$prijmeni.'" >'	   
+                . '<input type="text" name="prijmeni" value="'.$prijmeni.'" >'
                 . '</td>'
 
                 . '<td>účetní index: <span style="padding-left: 10px; "></span>';
-                
+
         //if ( $firma == 1)
         { $output .= '<input type="text" name="ucetni_index" value="'.$ucetni_index.'" >'; }
         //else
         //{ $output .= "<span style=\"color: grey; \" >není dostupné</span>"; }
-                
+
         $output .= '</td>
                 </tr>'
             . '<tr><td><br></td></tr>'
-                                                
+
             . '<tr>
                 <td>Ulice a čp. :</td>
                 <td colspan="1" ><input type="text" name="ulice" size="35" maxlength="" value="'.$ulice.'" ></td>'
                 . '<td>Fakturační skupina: ';
-                
+
         if($firma == 1) {
-                
+
             $output .= '<span style="padding-left: 10px;" >'
-            
+
                 . '<select name="fakt_skupina" size="1" >'
-            
+
                 ."\t\t".'<option value="0" class="vlastnici2-fakt-skupina" ';
-            if ($fakt_skupina == 0){ $output .= " selected "; }
-            $output .= ' > žádná </option> '."\n";
-            
-            if ( $fakturacni > 0){ 
-                $sql= "SELECT * FROM fakturacni_skupiny WHERE typ = 2 order by nazev DESC";
+            if ($fakt_skupina == 0) {
+                $output .= " selected ";
             }
-            else { 
+            $output .= ' > žádná </option> '."\n";
+
+            if ($fakturacni > 0) {
+                $sql = "SELECT * FROM fakturacni_skupiny WHERE typ = 2 order by nazev DESC";
+            } else {
                 $sql = "SELECT * FROM fakturacni_skupiny WHERE typ = 1 order by nazev DESC";
             }
-            
+
             try {
                 $dotaz_fakt_skup = $conn_mysql->query($sql);
                 $dotaz_fakt_skup_radku = $dotaz_fakt_skup->num_rows;
             } catch (Exception $e) {
-                die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
             }
-                    
-            if( $dotaz_fakt_skup_radku > 0 )
-            {
-                while( $data_fakt_skup=$dotaz_fakt_skup->fetch_array() )
-                {             
+
+            if($dotaz_fakt_skup_radku > 0) {
+                while($data_fakt_skup = $dotaz_fakt_skup->fetch_array()) {
                     $output .= "\t\t<option value=\"".$data_fakt_skup["id"]."\" ";
-                    if ($fakt_skupina == $data_fakt_skup["id"] ){ $output .= " selected "; }
+                    if ($fakt_skupina == $data_fakt_skup["id"]) {
+                        $output .= " selected ";
+                    }
                     $output .= " > ".$data_fakt_skup["nazev"];
-                    
-                    if( $data_fakt_skup["typ"] == 1 ){ $output .= " (DÚ) "; }
-                    elseif( $data_fakt_skup["typ"] == 2 ){ $output .= " (FÚ) "; }
-                    else{ $output .= $data_fakt_skup["typ"]; }
-                                
-                    $output .= " </option>\n";                                   
+
+                    if($data_fakt_skup["typ"] == 1) {
+                        $output .= " (DÚ) ";
+                    } elseif($data_fakt_skup["typ"] == 2) {
+                        $output .= " (FÚ) ";
+                    } else {
+                        $output .= $data_fakt_skup["typ"];
+                    }
+
+                    $output .= " </option>\n";
                 } // konec while
             } // kone if dotaz > 0
-                
+
         } // konec if firma == 1
-        else { 
-            $output .= "<span style=\"color: grey; \" >není dostupné</span>"; 
+        else {
+            $output .= "<span style=\"color: grey; \" >není dostupné</span>";
         }
-                
+
         $output .= '        
                 </select>
                 </td>
             </tr>'
             . '<tr><td><br></td></tr>'
-            
+
             . '<tr>
                 <td>Město , PSČ: </td>
                 <td colpsan="2" >
                     <input type="text" name="mesto" size="" maxlength="" value="'.$mesto.'">
                     <input type="text" name="psc" size="10" value="'.$psc.'">
                 </td>'
-            
+
             . '<td valign="top" rowspan="7" >'
             . 'Poznámka: <br>
                 <textarea rows="10" name="poznamka" cols="40">' . $poznamka . '</textarea>
             </td>'
             . '</tr>'
-                                                        
+
             . '<tr><td><br></td></tr>'
 
             . '<tr>
                 <td>Email: </td>
                 <td colspan="3" ><input type="text" name="email" size="30" value="'.$email.'" ></td>
             </tr>'
-            
+
             . '<tr><td><br></td></tr>'
-                                        
+
             . '<tr>
             <td>ICQ:</td>
             <td colspan="3" >
                 <input type="text" name="icq" size="30" value="'.$icq.'">
             </td>'
-            
+
             . '</tr>'
 
             . '<tr><td><br></td></tr>'
-                                                                    
+
              .'<tr>
                 <td>Telefon: </td>
                 <td><input type="text" name="tel" size="30" value="'.$tel.'"> 
                 </td>'
-            
+
             . '</tr>'
 
             . '<tr><td colspan="2"><br></td></tr>'
@@ -1441,51 +1447,70 @@ class vlastnik2
             . '<tr>
             <td> Firma: </td>
             <td colspan="1" >'
-            
+
             . '<select name="firma" size="1" onChange="self.document.forms.form1.submit()" >
-            <option value="" '; if ( ( $firma == "") ){ $output .= " selected "; } $output .= ' >Fyzická os. ( vlastníci )</option>
-            <option value="1" '; if ( ( $firma == 1 ) ){ $output .= " selected "; } $output .= ' >Company, s.r.o. ( vlastníci2 ) </option>
+            <option value="" ';
+        if (($firma == "")) {
+            $output .= " selected ";
+        } $output .= ' >Fyzická os. ( vlastníci )</option>
+            <option value="1" ';
+        if (($firma == 1)) {
+            $output .= " selected ";
+        } $output .= ' >Company, s.r.o. ( vlastníci2 ) </option>
             </select>'
-            . '</td>'
-            . '<td>';
-            
-        if ( $update_status == "1") {
-            $output .= "<span style=\"padding-right: 20px; \" >Archivovat: </span>"; 
-                
+        . '</td>'
+        . '<td>';
+
+        if ($update_status == "1") {
+            $output .= "<span style=\"padding-right: 20px; \" >Archivovat: </span>";
+
             $output .= " <select name=\"archiv\" size=\"1\" >
-                <option value=\"0\""; if ( ( $archiv != "1" ) ){ $output .= " selected "; } $output .= " > Ne </option>
-                <option value=\"1\""; if ( ( $archiv == "1" ) ){ $output .= " selected "; } $output .= " > Ano </option>";   
-        } else { 
-            $output .= "<br>"; 
+                <option value=\"0\"";
+            if (($archiv != "1")) {
+                $output .= " selected ";
+            } $output .= " > Ne </option>
+                <option value=\"1\"";
+            if (($archiv == "1")) {
+                $output .= " selected ";
+            } $output .= " > Ano </option>";
+        } else {
+            $output .= "<br>";
         }
-            
+
         $output .= '</td>
                 </tr>'
-        
+
                 . '<tr><td colspan="3"><br></td><tr>'
 
                 . '<tr>
                 <td colspan="" >Smlouva na dobu: </td>
                 <td colspan="" >';
 
-        if( $firma == 1 ) {
+        if($firma == 1) {
             $output .= '<select name="typ_smlouvy" size="1" onChange="self.document.forms.form1.submit()" >    
-                <option value="0"'; 
-                    if( ($typ_smlouvy == 0) or ( !isset($typ_smlouvy) ) ){ $output .= " selected "; } 
-                    
-                    $output .= 'class="vlastnici-nezvoleno" >Nevybráno</option>
-                <option value="1"'; if( $typ_smlouvy == 1){ $output .= " selected "; } $output .= ' >Neurčitou</option>
-                <option value="2"'; if( $typ_smlouvy == 2){ $output .= " selected "; } $output .= ' >Určitou</option>
+                <option value="0"';
+            if(($typ_smlouvy == 0) or (!isset($typ_smlouvy))) {
+                $output .= " selected ";
+            }
+
+            $output .= 'class="vlastnici-nezvoleno" >Nevybráno</option>
+                <option value="1"';
+            if($typ_smlouvy == 1) {
+                $output .= " selected ";
+            } $output .= ' >Neurčitou</option>
+                <option value="2"';
+            if($typ_smlouvy == 2) {
+                $output .= " selected ";
+            } $output .= ' >Určitou</option>
                 </select>';
-        }
-        else { 
-            $output .= "<span style=\"color: gray; \" >Není dostupné</span>"; 
+        } else {
+            $output .= "<span style=\"color: gray; \" >Není dostupné</span>";
         }
 
         $output .= "</td>";
-        
+
         $output .= "<td><span style=\"font-weight: bold;\" >Aktivace / deaktivace služeb:</span></td>";
-                    
+
         $output .= '</td>
                 <tr>
 
@@ -1496,61 +1521,69 @@ class vlastnik2
 
         $output .= "<td colspan=\"\" >";
 
-        if( ( ($typ_smlouvy == 2) and ($firma == 1) ) ) { 
-            $output .= "<input type=\"text\" name=\"trvani_do\" value=\"".$trvani_do."\" >"; 
+        if((($typ_smlouvy == 2) and ($firma == 1))) {
+            $output .= "<input type=\"text\" name=\"trvani_do\" value=\"".$trvani_do."\" >";
             $output .= "<span style=\"padding-left: 15px; \" >formát: ( dd.mm.rrrr )</span>";
+        } else {
+            $output .= "<span style=\"color: grey; \">Není dostupné</span>";
         }
-        else { 
-            $output .= "<span style=\"color: grey; \">Není dostupné</span>"; 
-        }
-            
-        if( $firma == 1 ) {
+
+        if($firma == 1) {
             //sluzba internet
             $output .= "<td><span style=\"padding-right: 40px; \" ><b>Internet:</b></span>";
-            
+
             $output .= "<select name=\"sluzba_int\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
-            $output .= "<option value=\"0\" "; if( $sluzba_int == 0 or !isset($sluzba_int) ){ $output .= " selected "; } $output .= " >Ne</option>";
-            $output .= "<option value=\"1\" "; if( $sluzba_int == 1 ){ $output .= " selected "; } $output .= " >Ano</option>";
-            
+            $output .= "<option value=\"0\" ";
+            if($sluzba_int == 0 or !isset($sluzba_int)) {
+                $output .= " selected ";
+            } $output .= " >Ne</option>";
+            $output .= "<option value=\"1\" ";
+            if($sluzba_int == 1) {
+                $output .= " selected ";
+            } $output .= " >Ano</option>";
+
             $output .= "</select>";
-                
+
             $output .= "</td>";
-            
-        } else { 
-            $output .= "<td><span style=\"color: grey; \">Není dostupné</span></td>"; 
+
+        } else {
+            $output .= "<td><span style=\"color: grey; \">Není dostupné</span></td>";
         }
-            
+
         $output .= '</tr>';
 
-        if( $sluzba_int == 1 ) {
+        if($sluzba_int == 1) {
             $output .= "<tr>
                 <td colspan=\"2\" >&nbsp;</td>";
             $output .= "<td><span style=\"padding-right: 17px; \" >Vyberte tarif: </span>";
-            
+
             //vypis tarifu
             $output .= "<select name=\"sluzba_int_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
-            
-            $output .= "<option value=\"999\" "; 
-                    if($sluzba_int_id_tarifu == 999 or !isset($sluzba_int_id_tarifu) ){ $output .= " selected "; }
+
+            $output .= "<option value=\"999\" ";
+            if($sluzba_int_id_tarifu == 999 or !isset($sluzba_int_id_tarifu)) {
+                $output .= " selected ";
+            }
             $output .= " style=\"color: gray; \">Nevybráno</option>";
-            
+
             try {
                 $dotaz_tarify_id_tarifu = $conn_mysql->query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
             } catch (Exception $e) {
-                die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
             }
-            
-            while( $data_tarify = $dotaz_tarify_id_tarifu->fetch_array() )
-            {
+
+            while($data_tarify = $dotaz_tarify_id_tarifu->fetch_array()) {
                 $output .= "<option value=\"".$data_tarify["id_tarifu"]."\" ";
-                if( $sluzba_int_id_tarifu == $data_tarify["id_tarifu"] ){ $output .= " selected "; }
+                if($sluzba_int_id_tarifu == $data_tarify["id_tarifu"]) {
+                    $output .= " selected ";
+                }
                 $output .= " >".$data_tarify["jmeno_tarifu"]." (".$data_tarify["zkratka_tarifu"].")</option>";
-            
+
             }
-                        
+
             $output .= "</select>";
-            $output .= "</td>";	
-            $output .= "</tr>";   
+            $output .= "</td>";
+            $output .= "</tr>";
         }
 
         $output .= '<tr><td colspan="3" ><br></td></tr>
@@ -1558,107 +1591,121 @@ class vlastnik2
             <td colspan="" >Datum podpisu: </td>
             <td>';
 
-        if ( $firma == 1 ) {
+        if ($firma == 1) {
             $output .= '<input type="text" name="datum_podpisu" size="10" class=tcal value='."\"".$datum_podpisu."\" > (formát: dd.mm.yyyy)";
-        }
-        else { 
-            $output .= "<span style=\"color: grey; \">Není dostupné</span>"; 
+        } else {
+            $output .= "<span style=\"color: grey; \">Není dostupné</span>";
         }
 
         $output .= "</td>";
-        
-        if( $firma == 1 ) {
+
+        if($firma == 1) {
             //sluzba iptv
             $output .= "<td><span style=\"padding-right: 5px; \" ><b>IPTV</b> (televize): </span>";
-        
+
             $output .= "<select name=\"sluzba_iptv\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
-            $output .= "<option value=\"0\" "; 
-                    if( $sluzba_iptv == 0 or !isset($sluzba_iptv) ){ $output .= " selected "; } 
+            $output .= "<option value=\"0\" ";
+            if($sluzba_iptv == 0 or !isset($sluzba_iptv)) {
+                $output .= " selected ";
+            }
             $output .= ">Ne</option>";
-            $output .= "<option value=\"1\" "; if( $sluzba_iptv == 1){ $output .= " selected "; }
+            $output .= "<option value=\"1\" ";
+            if($sluzba_iptv == 1) {
+                $output .= " selected ";
+            }
             $output .= ">Ano</option>";
-        
+
             $output .= "</select>";
-            
+
             $output .= "</td>";
-        }
-        else{ 
-            $output .= "<td><span style=\"color: grey; \">Není dostupné</span></td>"; 
+        } else {
+            $output .= "<td><span style=\"color: grey; \">Není dostupné</span></td>";
         }
 
         $output .= "</tr>";
 
-        if( $sluzba_iptv == 1 ) {
+        if($sluzba_iptv == 1) {
             $output .= "<tr>
                 <td colspan=\"2\" >&nbsp;</td>";
             $output .= "<td><span style=\"padding-right: 17px; \" >Vyberte tarif: </span>";
-            
+
             //vypis tarifu
             $output .= "<select name=\"sluzba_iptv_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
-            
-            $output .= "<option value=\"999\" "; 
-                    if($sluzba_iptv_id_tarifu == 999 or !isset($sluzba_iptv_id_tarifu) ){ $output .= " selected "; }
+
+            $output .= "<option value=\"999\" ";
+            if($sluzba_iptv_id_tarifu == 999 or !isset($sluzba_iptv_id_tarifu)) {
+                $output .= " selected ";
+            }
             $output .= " style=\"color: gray; \">Nevybráno</option>";
-            
+
             try {
                 $dotaz_iptv_id_tarifu = $conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");
             } catch (Exception $e) {
-                die ("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
             }
 
-            while( $data_iptv = $dotaz_iptv_id_tarifu->fetch_array() )
-            {
+            while($data_iptv = $dotaz_iptv_id_tarifu->fetch_array()) {
                 $output .= "<option value=\"".$data_iptv["id_tarifu"]."\" ";
-                if( $sluzba_iptv_id_tarifu == $data_iptv["id_tarifu"] ){ $output .= " selected "; }
+                if($sluzba_iptv_id_tarifu == $data_iptv["id_tarifu"]) {
+                    $output .= " selected ";
+                }
                 $output .= " >".$data_iptv["jmeno_tarifu"]." (".$data_iptv["zkratka_tarifu"].")</option>";
             }
-            
+
             $output .= "</select>";
-            $output .= "</td>";	
-            
+            $output .= "</td>";
+
             $output .= "</tr>";
-        
+
         }
 
         $output .= "<tr><td colspan=\"3\" ><br></td></tr>";
-        
+
         $output .= "<tr>";
-        $output .= "<td>Frekvence fakturování:</td>";      
-                
-        if( $firma == 1 ) {
+        $output .= "<td>Frekvence fakturování:</td>";
+
+        if($firma == 1) {
             $output .= "<td>".
             "<select size=\"1\" name=\"billing_freq\">";
-        
-            $output .= "<option value=\"0\" "; if( $billing_freq == 0 or empty($billing_freq) ) $output .= "selected"; $output .= " >Měsíční</option>";
-            $output .= "<option value=\"1\" "; if( $billing_freq == 1 ) $output .= "selected"; $output .= " >Čtvrtletní</option>";
-                        
+
+            $output .= "<option value=\"0\" ";
+            if($billing_freq == 0 or empty($billing_freq)) {
+                $output .= "selected";
+            } $output .= " >Měsíční</option>";
+            $output .= "<option value=\"1\" ";
+            if($billing_freq == 1) {
+                $output .= "selected";
+            } $output .= " >Čtvrtletní</option>";
+
             $output .= "</select>".
                 "</td>";
-        }
-        else {
+        } else {
             $output .= "<td><span style=\"color: grey; \">Není dostupné</span></td>";
         }
-            
-        if( $firma == 1 ) {
+
+        if($firma == 1) {
             //sluzba VoIP
             $output .= "<td><span style=\"padding-right: 10px; \" ><b>VoIP</b> (telefon): </span>";
-            
+
             $output .= "<select name=\"sluzba_voip\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
             $output .= "<option value=\"0\" ";
-                    if( $sluzba_voip == 0 or !isset($sluzba_voip) ){ $output .= " selected "; }
+            if($sluzba_voip == 0 or !isset($sluzba_voip)) {
+                $output .= " selected ";
+            }
             $output .= " >Ne</option>";
             $output .= "<option value=\"1\" ";
-                    if( $sluzba_voip == 1 ){ $output .= " selected "; }
+            if($sluzba_voip == 1) {
+                $output .= " selected ";
+            }
             $output .= ">Ano</option>";
-        
+
             $output .= "</select>";
-            
+
             $output .= "</td>";
+        } else {
+            $output .= "<td><span style=\"color: grey; \">Není dostupné</span></td>";
         }
-        else { 
-            $output .= "<td><span style=\"color: grey; \">Není dostupné</span></td>"; 
-        }
-            
+
         $output .= '<tr><td colspan="3" ><br></td></tr>';
 
         $output .= '<tr>
@@ -1666,10 +1713,16 @@ class vlastnik2
                     <td>';
 
         $output .= "<select size=\"1\" name=\"billing_suspend_status\" onChange=\"self.document.forms.form1.submit()\">";
-            
-        $output .= "<option value=\"0\" "; if(($billing_suspend_status == 0) or (!isset($billing_suspend_status)) ) $output .= " selected "; $output .= ">Ne</option>";
-        $output .= "<option value=\"1\" "; if($billing_suspend_status == 1) $output .= " selected "; $output .= ">Ano</option>";
-            
+
+        $output .= "<option value=\"0\" ";
+        if(($billing_suspend_status == 0) or (!isset($billing_suspend_status))) {
+            $output .= " selected ";
+        } $output .= ">Ne</option>";
+        $output .= "<option value=\"1\" ";
+        if($billing_suspend_status == 1) {
+            $output .= " selected ";
+        } $output .= ">Ano</option>";
+
         $output .= "</select>";
 
         $output .= '</td>
@@ -1679,13 +1732,13 @@ class vlastnik2
             <tr>
             <td colspan="2" ><br></td>';
 
-            
+
         if($billing_suspend_status == 1) {
             $output .= "<td rowspan=\"3\">
                 <textarea type=\"text\" name=\"billing_suspend_reason\" cols=\"40\" rows=\"4\" >".htmlspecialchars($billing_suspend_reason)."</textarea>
                 </td>";
-        } else {  
-            $output .= "<td rowspan=\"3\"><span style=\"color: grey; \">Není dostupné</span></td>"; 
+        } else {
+            $output .= "<td rowspan=\"3\"><span style=\"color: grey; \">Není dostupné</span></td>";
             $output .= "<input type=\"hidden\" name=\"billing_suspend_reason\" value=\"".htmlspecialchars($billing_suspend_reason)."\" >";
         }
 
@@ -1697,12 +1750,12 @@ class vlastnik2
         if($billing_suspend_status == 1) {
             $output .= "<input type=\"text\" name=\"billing_suspend_start\" size=\"10\" class=\"tcal\" value=\"".
                 htmlspecialchars($billing_suspend_start)."\" > datum (formát: dd.mm.yyyy)";
-        } else {  
-            $output .= "<span style=\"color: grey; \">Není dostupné</span>"; 
+        } else {
+            $output .= "<span style=\"color: grey; \">Není dostupné</span>";
             $output .= "<input type=\"hidden\" name=\"billing_suspend_start\" value=\"".htmlspecialchars($billing_suspend_start)."\" >";
         }
-            
-            
+
+
         $output .= '
             </td>
             </tr>
@@ -1711,15 +1764,14 @@ class vlastnik2
             <td>Poz. fakturace - do kdy:</td>
             <td>';
 
-        if($billing_suspend_status == 1) {	
+        if($billing_suspend_status == 1) {
             $output .= "<input type=\"text\" name=\"billing_suspend_stop\" size=\"10\" value=\"".
             htmlspecialchars($billing_suspend_stop)."\" class=\"tcal\"> datum (formát: dd.mm.yyyy)";
-        }
-        else {  
-            $output .= "<span style=\"color: grey; \">Není dostupné</span>"; 
+        } else {
+            $output .= "<span style=\"color: grey; \">Není dostupné</span>";
             $output .= "<input type=\"hidden\" name=\"billing_suspend_stop\" value=\"".htmlspecialchars($billing_suspend_stop)."\" >";
         }
-            
+
         $output .= '
             </td>
             </tr>
