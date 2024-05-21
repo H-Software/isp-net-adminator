@@ -979,13 +979,13 @@ class vlastnik2
                                 ->where('id_cloveka', $update_id)
                                 ->update($vlast_upd);
                 } catch (Exception $e) {
-                    $error = $e->getMessage();
+                    $error_nr = $e->getMessage();
                 }
 
                 if($this->action_affected == 1) {
                     $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $this->action_affected . ")\n";
                 } else {
-                    $output .= "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error . ")\n";
+                    $output .= "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error_nr . ")\n";
                 }
 
                 $output .= $this->actionArchivZmen();
@@ -1119,30 +1119,42 @@ class vlastnik2
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if (($error != null) or (!isset($send))):
+        if (($error != null) or (!isset($send))) {
             $output .= $error;
 
             // vlozeni vlastniho formu
             $output .= $this->actionForm();
             // require("vlastnici2-change-inc.php");
 
-        elseif ((isset($writed) or isset($updated))):
+            return $output;
+        }
 
-            $back = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
-            $back_radku = pg_num_rows($back);
+        if ((isset($writed) or isset($updated))) {
+            $output .= $this->actionShowResults();
+        }
 
-            while ($data_back = pg_fetch_array($back)) {
-                $firma_back = $data_back["firma"];
-                $archiv_back = $data_back["archiv"];
-            }
+        return $output;
+    }
 
-            if ($archiv_back == 1) {
-                $stranka = "vlastnici-archiv.php";
-            } elseif ($firma_back == 1) {
-                $stranka = "vlastnici2.php";
-            } else {
-                $stranka = "vlastnici.php";
-            }
+    private function actionShowResults(): string
+    {
+        $output = "";
+
+        $back = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
+        $back_radku = pg_num_rows($back);
+
+        while ($data_back = pg_fetch_array($back)) {
+            $firma_back = $data_back["firma"];
+            $archiv_back = $data_back["archiv"];
+        }
+
+        if ($archiv_back == 1) {
+            $stranka = "vlastnici-archiv.php";
+        } elseif ($firma_back == 1) {
+            $stranka = "vlastnici2.php";
+        } else {
+            $stranka = "vlastnici.php";
+        }
 
         $output .= '<table border="0" width="50%" >
                 <tr>
@@ -1293,8 +1305,6 @@ class vlastnik2
 
         $output .= '<br>'
         . '<br><br>';
-
-        endif;
 
         return $output;
     }
