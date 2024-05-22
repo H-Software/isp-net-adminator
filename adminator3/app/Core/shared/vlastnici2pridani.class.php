@@ -219,7 +219,7 @@ class vlastnici2pridani extends adminator
                 echo "";
             } else {
                 $this->fail = "true";
-                $this->error .= '<div class="alert alert-info" role="alert">Data neuloženy, nebylo použito tlačítko "OK", ';
+                $this->error .= '<div class="alert alert-info" role="alert" style="padding-left: 5px; width: 75%;">Data neuloženy, nebylo použito tlačítko "OK", ';
                 $this->error .= "pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</div>";
             }
 
