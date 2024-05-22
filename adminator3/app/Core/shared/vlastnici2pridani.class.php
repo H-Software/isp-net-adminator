@@ -101,7 +101,7 @@ class vlastnici2pridani extends adminator
     private $form_billing_freq;
 
     private $form_billing_suspend_status;
-    
+
     private $form_billing_suspend_reason;
 
     private $form_billing_suspend_start;
