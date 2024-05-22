@@ -48,6 +48,10 @@ class vlastnici2pridani extends adminator
 
     private $firma;
 
+    private $updated;
+
+    private $writed;
+
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
@@ -175,309 +179,12 @@ class vlastnici2pridani extends adminator
 
         //ulozeni
         if (!(isset($this->fail))) {
-
             if ($this->form_update_id > 0) {
                 // rezim upravy
-
-                //prvne stavajici data docasne ulozime
-                $this->action_az_pole2 = "<b>akce: uprava vlastnika; </b><br>";
-
-                $vysl4 = pg_query($this->conn_pgsql, "select * from vlastnici WHERE id_cloveka='".intval($this->form_update_id)."' ");
-                if((pg_num_rows($vysl4) <> 1)) {
-                    $output .= "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>";
-                } else {
-                    while ($data4 = pg_fetch_array($vysl4)):
-
-                        $this->action_vlast_upd_old["id_cloveka"] = $data4["id_cloveka"];
-
-                        //novy zpusob archivace - pro porovnavani zmen
-                        $this->pole_puvodni_data["id_cloveka"] = $data4["id_cloveka"];
-                        $this->pole_puvodni_data["nick"] = $data4["nick"];
-                        $this->pole_puvodni_data["jmeno"] = $data4["jmeno"];
-                        $this->pole_puvodni_data["prijmeni"] = $data4["prijmeni"];
-                        $this->pole_puvodni_data["ulice"] = $data4["ulice"];
-                        $this->pole_puvodni_data["mesto"] = $data4["mesto"];
-                        $this->pole_puvodni_data["psc"] = $data4["psc"];
-                        $this->pole_puvodni_data["icq"] = $data4["icq"];
-                        $this->pole_puvodni_data["mail"] = $data4["mail"];
-                        $this->pole_puvodni_data["telefon"] = $data4["telefon"];
-                        $this->pole_puvodni_data["poznamka"] = $data4["poznamka"];
-                        $this->pole_puvodni_data["vs"] = $data4["vs"];
-                        $this->pole_puvodni_data["datum_podpisu"] = $data4["datum_podpisu"];
-                        $this->pole_puvodni_data["k_platbe"] = $data4["k_platbe"];
-                        $this->pole_puvodni_data["ucetni_index"] = $data4["ucetni_index"];
-                        $this->pole_puvodni_data["archiv"] = $data4["archiv"];
-                        $this->pole_puvodni_data["fakturacni_skupina_id"] = $data4["fakturacni_skupina_id"];
-                        $this->pole_puvodni_data["splatnost"] = $data4["splatnost"];
-                        $this->pole_puvodni_data["typ_smlouvy"] = $data4["typ_smlouvy"];
-                        $this->pole_puvodni_data["firma"] = $data4["firma"];
-                        $this->pole_puvodni_data["trvani_do"] = $data4["trvani_do"];
-
-                        $this->pole_puvodni_data["sluzba_int"] = $data4["sluzba_int"];
-                        $this->pole_puvodni_data["sluzba_iptv"] = $data4["sluzba_iptv"];
-                        $this->pole_puvodni_data["sluzba_voip"] = $data4["sluzba_voip"];
-
-                        $this->pole_puvodni_data["billing_freq"] = $data4["billing_freq"];
-
-                        $this->pole_puvodni_data["billing_suspend_status"] = $data4["billing_suspend_status"];
-                        $this->pole_puvodni_data["billing_suspend_reason"] = $data4["billing_suspend_reason"];
-
-                        $this->pole_puvodni_data["billing_suspend_start"]  = $data4["billing_suspend_start"];
-                        $this->pole_puvodni_data["billing_suspend_stop"]   = $data4["billing_suspend_stop"];
-
-                        if($sluzba_int == 1) {
-                            $this->pole_puvodni_data["sluzba_int_id_tarifu"] = $data4["sluzba_int_id_tarifu"];
-                        }
-
-                        if($sluzba_iptv == 1) {
-                            $this->pole_puvodni_data["sluzba_iptv_id_tarifu"] = $data4["sluzba_iptv_id_tarifu"];
-                        }
-
-                        //$this->pole_puvodni_data["fakturacni"]=$data4["fakturacni"];
-
-                    endwhile;
-                }
-
-                if((strlen($trvani_do) > 0)) {
-                    list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = split("\.", $trvani_do);
-                    $trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
-                }
-
-                if((strlen($datum_podpisu) > 0)) {
-                    list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = split("\.", $datum_podpisu);
-                    $datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
-                }
-
-                if((strlen($billing_freq) <> 1)) {
-                    $billing_freq = 0;
-                }
-
-                $vlast_upd = array( "nick" => trim($nick2), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
-                    "vs" => $vs, "k_platbe" => $k_platbe, "archiv" => $archiv, "fakturacni_skupina_id" => $fakt_skupina,
-                    "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
-                    "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
-                    "billing_freq" => $billing_freq );
-
-                if ((strlen($this->firma) > 0)) {
-                    $vlast_upd["firma"] = $this->firma;
-                } else {
-                    $vlast_upd["firma"] = null;
-                } // u firmy else musi byt
-
-                if ((strlen($email) > 0)) {
-                    $vlast_upd["mail"] = $email;
-                } else {
-                    $vlast_upd["mail"] = null;
-                }
-
-                if ($icq > 0) {
-                    $vlast_upd["icq"] = $icq;
-                } else {
-                    $vlast_upd["icq"] = "";
-                }
-
-                if ((strlen($tel) > 0)) {
-                    $vlast_upd["telefon"] = $tel;
-                } else {
-                    $vlast_upd["telefon"] = null;
-                }
-
-                if ($ucetni_index > 0) {
-                    $vlast_upd["ucetni_index"] = $ucetni_index;
-                } else {
-                    $vlast_upd["ucetni_index"] = null;
-                }
-
-                //if ( (strlen($poznamka) > 0 ) )
-                { $vlast_upd["poznamka"] = $poznamka; }
-
-                if ((strlen($datum_podpisu) > 0)) {
-                    $vlast_upd["datum_podpisu"] = $datum_podpisu;
-                } else {
-                    $vlast_upd["datum_podpisu"] = null;
-                }
-
-                if ((strlen($typ_smlouvy) > 0)) {
-                    $vlast_upd["typ_smlouvy"] = $typ_smlouvy;
-                } else {
-                    $vlast_upd["typ_smlouvy"] = 0;
-                }
-
-                if ($fakt_skupina < 1) {
-                    $vlast_upd["fakturacni_skupina_id"] = null;
-                }
-
-                if($sluzba_int == 1) {
-                    $vlast_upd["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
-                }
-
-                if($sluzba_iptv == 1) {
-                    $vlast_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
-                }
-
-                if($billing_suspend_status == 1) {
-                    $vlast_upd["billing_suspend_status"] = intval($billing_suspend_status);
-                    $vlast_upd["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
-
-                    list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
-                    $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
-
-                    list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $billing_suspend_stop);
-                    $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
-
-                    $vlast_upd["billing_suspend_start"]  = $this->conn_mysql->real_escape_string($billing_suspend_start);
-                    $vlast_upd["billing_suspend_stop"]   = $this->conn_mysql->real_escape_string($billing_suspend_stop);
-                } else {
-                    $vlast_upd["billing_suspend_status"] = 0;
-                    $vlast_upd["billing_suspend_reason"] = null;
-                    $vlast_upd["billing_suspend_start"]  = null;
-                    $vlast_upd["billing_suspend_stop"] = null;
-                }
-
-                // $output .= "<pre>" . var_export($vlast_upd, true) ."</pre>";
-
-                // $output .= "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
-
-                try {
-                    $this->action_affected = DB::connection('pgsql')
-                                ->table('vlastnici')
-                                ->where('id_cloveka', $this->form_update_id)
-                                ->update($vlast_upd);
-                } catch (Exception $e) {
-                    $error_nr = $e->getMessage();
-                }
-
-                if($this->action_affected == 1) {
-                    $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $this->action_affected . ")\n";
-                } else {
-                    $output .= "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error_nr . ")\n";
-                }
-
-                $output .= $this->actionArchivZmen();
-                // require("vlastnici2-change-archiv-zmen-inc.php");
-
-                $updated = "true";
+                $output .= $this->actionSaveIntoDatabaseChange();
             } else {
                 // rezim pridani
-
-                if((strlen($trvani_do) > 0)) {
-                    list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = preg_split("/\./", $trvani_do);
-                    $trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
-                }
-
-                if((strlen($datum_podpisu) > 0)) {
-                    list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = preg_split("/\./", $datum_podpisu);
-                    $datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
-                }
-
-
-                $vlastnik_add = array( "nick" => $nick2 ,  "vs" => $vs, "k_platbe" => $k_platbe,
-                    "jmeno" => $jmeno, "prijmeni" => $prijmeni, "ulice" => $ulice,
-                    "mesto" => $mesto, "psc" => $psc, "ucetni_index" => $ucetni_index,
-                    "fakturacni_skupina_id" => $fakt_skupina, "splatnost" => $splatnost,
-                    "typ_smlouvy" => $typ_smlouvy, "sluzba_int" => $sluzba_int,
-                    "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
-                    "billing_freq" => $billing_freq );
-
-                if ((strlen($this->firma) > 0)) {
-                    $vlastnik_add["firma"] = $this->firma;
-                }
-                if ((strlen($email) > 0)) {
-                    $vlastnik_add["mail"] = $email;
-                }
-                if ($icq > 0) {
-                    $vlastnik_add["icq"] = $icq;
-                }
-                if ((strlen($tel) > 0)) {
-                    $vlastnik_add["telefon"] = $tel;
-                }
-                if ($ucetni_index > 0) {
-                    $vlastnik_add["ucetni_index"] = $ucetni_index;
-                }
-                if ((strlen($poznamka) > 0)) {
-                    $vlastnik_add["poznamka"] = $poznamka;
-                }
-                if ((strlen($trvani_do) > 0)) {
-                    $vlastnik_add["trvani_do"] = $trvani_do;
-                }
-                if ((strlen($datum_podpisu) > 0)) {
-                    $vlastnik_add["datum_podpisu"] = $datum_podpisu;
-                }
-
-                if ($fakt_skupina < 1) {
-                    $vlast_upd["fakturacni_skupina_id"] = null;
-                }
-
-                if($sluzba_int == 1) {
-                    $vlast_add["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
-                }
-                if($sluzba_iptv == 1) {
-                    $vlast_add["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
-                }
-
-                if($billing_suspend_status == 1) {
-                    $vlastnik_add["billing_suspend_status"] = intval($billing_suspend_status);
-                    $vlastnik_add["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
-
-                    list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
-                    $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
-
-                    list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $billing_suspend_stop);
-                    $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
-
-                    $vlastnik_add["billing_suspend_start"] = $this->conn_mysql->real_escape_string($billing_suspend_start);
-                    $vlastnik_addd["billing_suspend_stop"] = $this->conn_mysql->real_escape_string($billing_suspend_stop);
-                }
-
-                $res = pg_insert($this->conn_pgsql, 'vlastnici', $vlastnik_add);
-
-                if($res) {
-                    $this->alert_type = "success";
-                    $this->alert_content = "Data úspěšně uloženy do databáze vlastníků.";
-                } else {
-                    $this->alert_type = "danger";
-                    $this->alert_content = "Chyba! Data do databáze vlastníků nelze uložit. </br>".pg_last_error($this->conn_pgsql);
-                }
-
-                $this->smarty->assign("alert_type", $this->alert_type);
-                $this->smarty->assign("alert_content", $this->alert_content);
-
-                // pridame to do archivu zmen
-                $pole = "<b>akce: pridani vlastnika ; </b><br>";
-
-                foreach($vlastnik_add as $key => $val) {
-                    $pole = $pole." [".$key."] => ".$val."\n";
-                }
-
-                if ($res) {
-                    $vysledek_write = 1;
-                } else {
-                    $vysledek_write = 0;
-                }
-
-                $id = DB::table('archiv_zmen')
-                        ->insertGetId([
-                            'akce' => $pole,
-                            'vysledek' => $vysledek_write,
-                            'provedeno_kym' => \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email
-                        ]);
-
-                if($id > 0) {
-                    $this->alert_type = "success";
-                    $this->alert_content = "Změna byla úspěšně zaznamenána do archivu změn.";
-                } else {
-                    $this->alert_type = "danger";
-                    $this->alert_content = "Chyba! Změnu do archivu změn se nepodařilo přidat.";
-                }
-
-                $this->smarty->assign("alert_type2", $this->alert_type);
-                $this->smarty->assign("alert_content2", $this->alert_content);
-
-                // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
-
-                $writed = "true";
-
-                // konec else - rezim pridani
+                $output .= $this->actionSaveIntoDatabaseAdd();
             }
 
         } else {
@@ -498,7 +205,7 @@ class vlastnici2pridani extends adminator
             return $output;
         }
 
-        if ((isset($writed) or isset($updated))) {
+        if ((isset($this->writed) or isset($this->updated))) {
             $output .= $this->actionShowResults();
         }
 
@@ -1508,6 +1215,316 @@ class vlastnici2pridani extends adminator
         } else {
             echo "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
         }
+    }
+
+    private function actionSaveIntoDatabaseAdd(): string
+    {
+        $output = "";
+
+        if((strlen($trvani_do) > 0)) {
+            list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = preg_split("/\./", $trvani_do);
+            $trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
+        }
+
+        if((strlen($datum_podpisu) > 0)) {
+            list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = preg_split("/\./", $datum_podpisu);
+            $datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
+        }
+
+
+        $vlastnik_add = array( "nick" => $nick2 ,  "vs" => $vs, "k_platbe" => $k_platbe,
+            "jmeno" => $jmeno, "prijmeni" => $prijmeni, "ulice" => $ulice,
+            "mesto" => $mesto, "psc" => $psc, "ucetni_index" => $ucetni_index,
+            "fakturacni_skupina_id" => $fakt_skupina, "splatnost" => $splatnost,
+            "typ_smlouvy" => $typ_smlouvy, "sluzba_int" => $sluzba_int,
+            "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
+            "billing_freq" => $billing_freq );
+
+        if ((strlen($this->firma) > 0)) {
+            $vlastnik_add["firma"] = $this->firma;
+        }
+        if ((strlen($email) > 0)) {
+            $vlastnik_add["mail"] = $email;
+        }
+        if ($icq > 0) {
+            $vlastnik_add["icq"] = $icq;
+        }
+        if ((strlen($tel) > 0)) {
+            $vlastnik_add["telefon"] = $tel;
+        }
+        if ($ucetni_index > 0) {
+            $vlastnik_add["ucetni_index"] = $ucetni_index;
+        }
+        if ((strlen($poznamka) > 0)) {
+            $vlastnik_add["poznamka"] = $poznamka;
+        }
+        if ((strlen($trvani_do) > 0)) {
+            $vlastnik_add["trvani_do"] = $trvani_do;
+        }
+        if ((strlen($datum_podpisu) > 0)) {
+            $vlastnik_add["datum_podpisu"] = $datum_podpisu;
+        }
+
+        if ($fakt_skupina < 1) {
+            $vlast_upd["fakturacni_skupina_id"] = null;
+        }
+
+        if($sluzba_int == 1) {
+            $vlast_add["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
+        }
+        if($sluzba_iptv == 1) {
+            $vlast_add["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
+        }
+
+        if($billing_suspend_status == 1) {
+            $vlastnik_add["billing_suspend_status"] = intval($billing_suspend_status);
+            $vlastnik_add["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
+
+            list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
+            $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
+
+            list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $billing_suspend_stop);
+            $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
+
+            $vlastnik_add["billing_suspend_start"] = $this->conn_mysql->real_escape_string($billing_suspend_start);
+            $vlastnik_addd["billing_suspend_stop"] = $this->conn_mysql->real_escape_string($billing_suspend_stop);
+        }
+
+        $res = pg_insert($this->conn_pgsql, 'vlastnici', $vlastnik_add);
+
+        if($res) {
+            $this->alert_type = "success";
+            $this->alert_content = "Data úspěšně uloženy do databáze vlastníků.";
+        } else {
+            $this->alert_type = "danger";
+            $this->alert_content = "Chyba! Data do databáze vlastníků nelze uložit. </br>".pg_last_error($this->conn_pgsql);
+        }
+
+        $this->smarty->assign("alert_type", $this->alert_type);
+        $this->smarty->assign("alert_content", $this->alert_content);
+
+        // pridame to do archivu zmen
+        $pole = "<b>akce: pridani vlastnika ; </b><br>";
+
+        foreach($vlastnik_add as $key => $val) {
+            $pole = $pole." [".$key."] => ".$val."\n";
+        }
+
+        if ($res) {
+            $vysledek_write = 1;
+        } else {
+            $vysledek_write = 0;
+        }
+
+        $id = DB::table('archiv_zmen')
+                ->insertGetId([
+                    'akce' => $pole,
+                    'vysledek' => $vysledek_write,
+                    'provedeno_kym' => \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email
+                ]);
+
+        if($id > 0) {
+            $this->alert_type = "success";
+            $this->alert_content = "Změna byla úspěšně zaznamenána do archivu změn.";
+        } else {
+            $this->alert_type = "danger";
+            $this->alert_content = "Chyba! Změnu do archivu změn se nepodařilo přidat.";
+        }
+
+        $this->smarty->assign("alert_type2", $this->alert_type);
+        $this->smarty->assign("alert_content2", $this->alert_content);
+
+        // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+
+        $this->writed = "true";
+
+        return $output;
+    }
+
+    private function actionSaveIntoDatabaseChange(): string
+    {
+        $output = "";
+
+        //prvne stavajici data docasne ulozime
+        $this->action_az_pole2 = "<b>akce: uprava vlastnika; </b><br>";
+
+        $vysl4 = pg_query($this->conn_pgsql, "select * from vlastnici WHERE id_cloveka='".intval($this->form_update_id)."' ");
+        if((pg_num_rows($vysl4) <> 1)) {
+            $output .= "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>";
+        } else {
+            while ($data4 = pg_fetch_array($vysl4)):
+
+                $this->action_vlast_upd_old["id_cloveka"] = $data4["id_cloveka"];
+
+                //novy zpusob archivace - pro porovnavani zmen
+                $this->pole_puvodni_data["id_cloveka"] = $data4["id_cloveka"];
+                $this->pole_puvodni_data["nick"] = $data4["nick"];
+                $this->pole_puvodni_data["jmeno"] = $data4["jmeno"];
+                $this->pole_puvodni_data["prijmeni"] = $data4["prijmeni"];
+                $this->pole_puvodni_data["ulice"] = $data4["ulice"];
+                $this->pole_puvodni_data["mesto"] = $data4["mesto"];
+                $this->pole_puvodni_data["psc"] = $data4["psc"];
+                $this->pole_puvodni_data["icq"] = $data4["icq"];
+                $this->pole_puvodni_data["mail"] = $data4["mail"];
+                $this->pole_puvodni_data["telefon"] = $data4["telefon"];
+                $this->pole_puvodni_data["poznamka"] = $data4["poznamka"];
+                $this->pole_puvodni_data["vs"] = $data4["vs"];
+                $this->pole_puvodni_data["datum_podpisu"] = $data4["datum_podpisu"];
+                $this->pole_puvodni_data["k_platbe"] = $data4["k_platbe"];
+                $this->pole_puvodni_data["ucetni_index"] = $data4["ucetni_index"];
+                $this->pole_puvodni_data["archiv"] = $data4["archiv"];
+                $this->pole_puvodni_data["fakturacni_skupina_id"] = $data4["fakturacni_skupina_id"];
+                $this->pole_puvodni_data["splatnost"] = $data4["splatnost"];
+                $this->pole_puvodni_data["typ_smlouvy"] = $data4["typ_smlouvy"];
+                $this->pole_puvodni_data["firma"] = $data4["firma"];
+                $this->pole_puvodni_data["trvani_do"] = $data4["trvani_do"];
+
+                $this->pole_puvodni_data["sluzba_int"] = $data4["sluzba_int"];
+                $this->pole_puvodni_data["sluzba_iptv"] = $data4["sluzba_iptv"];
+                $this->pole_puvodni_data["sluzba_voip"] = $data4["sluzba_voip"];
+
+                $this->pole_puvodni_data["billing_freq"] = $data4["billing_freq"];
+
+                $this->pole_puvodni_data["billing_suspend_status"] = $data4["billing_suspend_status"];
+                $this->pole_puvodni_data["billing_suspend_reason"] = $data4["billing_suspend_reason"];
+
+                $this->pole_puvodni_data["billing_suspend_start"]  = $data4["billing_suspend_start"];
+                $this->pole_puvodni_data["billing_suspend_stop"]   = $data4["billing_suspend_stop"];
+
+                if($sluzba_int == 1) {
+                    $this->pole_puvodni_data["sluzba_int_id_tarifu"] = $data4["sluzba_int_id_tarifu"];
+                }
+
+                if($sluzba_iptv == 1) {
+                    $this->pole_puvodni_data["sluzba_iptv_id_tarifu"] = $data4["sluzba_iptv_id_tarifu"];
+                }
+
+                //$this->pole_puvodni_data["fakturacni"]=$data4["fakturacni"];
+
+            endwhile;
+        }
+
+        if((strlen($trvani_do) > 0)) {
+            list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = split("\.", $trvani_do);
+            $trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
+        }
+
+        if((strlen($datum_podpisu) > 0)) {
+            list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = split("\.", $datum_podpisu);
+            $datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
+        }
+
+        if((strlen($billing_freq) <> 1)) {
+            $billing_freq = 0;
+        }
+
+        $vlast_upd = array( "nick" => trim($nick2), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
+            "vs" => $vs, "k_platbe" => $k_platbe, "archiv" => $archiv, "fakturacni_skupina_id" => $fakt_skupina,
+            "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
+            "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
+            "billing_freq" => $billing_freq );
+
+        if ((strlen($this->firma) > 0)) {
+            $vlast_upd["firma"] = $this->firma;
+        } else {
+            $vlast_upd["firma"] = null;
+        } // u firmy else musi byt
+
+        if ((strlen($email) > 0)) {
+            $vlast_upd["mail"] = $email;
+        } else {
+            $vlast_upd["mail"] = null;
+        }
+
+        if ($icq > 0) {
+            $vlast_upd["icq"] = $icq;
+        } else {
+            $vlast_upd["icq"] = "";
+        }
+
+        if ((strlen($tel) > 0)) {
+            $vlast_upd["telefon"] = $tel;
+        } else {
+            $vlast_upd["telefon"] = null;
+        }
+
+        if ($ucetni_index > 0) {
+            $vlast_upd["ucetni_index"] = $ucetni_index;
+        } else {
+            $vlast_upd["ucetni_index"] = null;
+        }
+
+        //if ( (strlen($poznamka) > 0 ) )
+        { $vlast_upd["poznamka"] = $poznamka; }
+
+        if ((strlen($datum_podpisu) > 0)) {
+            $vlast_upd["datum_podpisu"] = $datum_podpisu;
+        } else {
+            $vlast_upd["datum_podpisu"] = null;
+        }
+
+        if ((strlen($typ_smlouvy) > 0)) {
+            $vlast_upd["typ_smlouvy"] = $typ_smlouvy;
+        } else {
+            $vlast_upd["typ_smlouvy"] = 0;
+        }
+
+        if ($fakt_skupina < 1) {
+            $vlast_upd["fakturacni_skupina_id"] = null;
+        }
+
+        if($sluzba_int == 1) {
+            $vlast_upd["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
+        }
+
+        if($sluzba_iptv == 1) {
+            $vlast_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
+        }
+
+        if($billing_suspend_status == 1) {
+            $vlast_upd["billing_suspend_status"] = intval($billing_suspend_status);
+            $vlast_upd["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
+
+            list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
+            $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
+
+            list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $billing_suspend_stop);
+            $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
+
+            $vlast_upd["billing_suspend_start"]  = $this->conn_mysql->real_escape_string($billing_suspend_start);
+            $vlast_upd["billing_suspend_stop"]   = $this->conn_mysql->real_escape_string($billing_suspend_stop);
+        } else {
+            $vlast_upd["billing_suspend_status"] = 0;
+            $vlast_upd["billing_suspend_reason"] = null;
+            $vlast_upd["billing_suspend_start"]  = null;
+            $vlast_upd["billing_suspend_stop"] = null;
+        }
+
+        // $output .= "<pre>" . var_export($vlast_upd, true) ."</pre>";
+
+        // $output .= "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
+
+        try {
+            $this->action_affected = DB::connection('pgsql')
+                        ->table('vlastnici')
+                        ->where('id_cloveka', $this->form_update_id)
+                        ->update($vlast_upd);
+        } catch (Exception $e) {
+            $error_nr = $e->getMessage();
+        }
+
+        if($this->action_affected == 1) {
+            $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $this->action_affected . ")\n";
+        } else {
+            $output .= "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error_nr . ")\n";
+        }
+
+        $output .= $this->actionArchivZmen();
+        // require("vlastnici2-change-archiv-zmen-inc.php");
+
+        $this->updated = "true";
+
+        return $output;
     }
 
     private function checknick($nick2)
