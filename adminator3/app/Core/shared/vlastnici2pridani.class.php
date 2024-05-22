@@ -46,6 +46,8 @@ class vlastnici2pridani extends adminator
 
     private $form_nick;
 
+    private $vlast_upd;
+
     private $pole_puvodni_data;
 
     private $firma;
@@ -1037,22 +1039,22 @@ class vlastnici2pridani extends adminator
 
         //novy zpusob archivovani dat
         foreach($this->pole_puvodni_data as $key => $val) {
-            if (!($vlast_upd[$key] == $val)) {
+            if (!($this->vlast_upd[$key] == $val)) {
                 if (!($key == "id_cloveka")) {
                     if($key == "vs") {
                         $this->action_az_pole3 .= "změna <b>Variabilního symbolu</b> z: ";
-                        $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                        $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
                         $this->action_az_pole3 .= ", ";
                     } //konec key == vs
                     elseif($key == "archiv") {
                         $this->action_az_pole3 .= "změna <b>Archivu</b> z: ";
 
-                        if($val == "0" and $vlast_upd[$key] == "1") {
+                        if($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $vlast_upd[$key] == "0") {
+                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
                         }
 
                         $this->action_az_pole3 .= ", ";
@@ -1060,12 +1062,12 @@ class vlastnici2pridani extends adminator
                     elseif($key == "sluzba_int") {
                         $this->action_az_pole3 .= "změna <b>Služba Internet</b> z: ";
 
-                        if($val == "0" and $vlast_upd[$key] == "1") {
+                        if($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $vlast_upd[$key] == "0") {
+                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
                         }
 
                         $this->action_az_pole3 .= ", ";
@@ -1073,12 +1075,12 @@ class vlastnici2pridani extends adminator
                     elseif($key == "sluzba_iptv") {
                         $this->action_az_pole3 .= "změna <b>Služba IPTV</b> z: ";
 
-                        if($val == "0" and $vlast_upd[$key] == "1") {
+                        if($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $vlast_upd[$key] == "0") {
+                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
                         }
 
                         $this->action_az_pole3 .= ", ";
@@ -1086,12 +1088,12 @@ class vlastnici2pridani extends adminator
                     elseif($key == "sluzba_voip") {
                         $this->action_az_pole3 .= "změna <b>Služba VoIP</b> z: ";
 
-                        if($val == "0" and $vlast_upd[$key] == "1") {
+                        if($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $vlast_upd[$key] == "0") {
+                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
                         }
 
                         $this->action_az_pole3 .= ", ";
@@ -1099,12 +1101,12 @@ class vlastnici2pridani extends adminator
                     elseif($key == "billing_freq") {
                         $this->action_az_pole3 .= "změna <b>Frekvence fakturování</b> z: ";
 
-                        if($val == "0" and $vlast_upd[$key] == "1") {
+                        if($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Měsíční</span> na: <span class=\"az-s2\">Čtvrtletní</span>";
-                        } elseif($val == "1" and $vlast_upd[$key] == "0") {
+                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Čtvrtletní</span> na: <span class=\"az-s2\">Měsíční</span>";
                         } else {
-                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
                         }
 
                         $this->action_az_pole3 .= ", ";
@@ -1118,7 +1120,7 @@ class vlastnici2pridani extends adminator
                     //   $fs_old_rs->data_seek(0);
                     //   list($fs_old) = $fs_old_rs->fetch_row();
 
-                    //   $fs_new_rs = $this->conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($vlast_upd[$key])."'");
+                    //   $fs_new_rs = $this->conn_mysql->query("SELECT nazev FROM fakturacni_skupiny WHERE id = '".intval($this->vlast_upd[$key])."'");
 
                     //   $fs_new_rs->data_seek(0);
                     //   list($fs_new) = $fs_new->fetch_row();
@@ -1131,7 +1133,7 @@ class vlastnici2pridani extends adminator
                     //   if( isset($fs_new) )
                     //   { $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$fs_new."</span>"; }
                     //   else
-                    //   { $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>"; }
+                    //   { $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>"; }
 
                     //   $this->action_az_pole3 .= ", ";
 
@@ -1139,12 +1141,12 @@ class vlastnici2pridani extends adminator
                     elseif($key == "billing_suspend_status") {
                         $this->action_az_pole3 .= "změna <b>Pozastavené fakturace</b> z: ";
 
-                        if($val == "0" and $vlast_upd[$key] == "1") {
+                        if($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $vlast_upd[$key] == "0") {
+                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
-                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>";
+                            $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
                         }
 
                         $this->action_az_pole3 .= ", ";
@@ -1152,7 +1154,7 @@ class vlastnici2pridani extends adminator
                     } elseif($key == "billing_suspend_reason") {
                         $this->action_az_pole3 .= "změna <b>Důvod pozastavení</b> z: ";
                         $this->action_az_pole3 .= "<span class=\"az-s1\" >".$val."</span> ";
-                        $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>, ";
+                        $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>, ";
                     } elseif($key == "billing_suspend_start") {
                         $this->action_az_pole3 .= "změna <b>Poz. fakturace - od kdy</b> z: ";
 
@@ -1161,7 +1163,7 @@ class vlastnici2pridani extends adminator
 
                         $this->action_az_pole3 .= "<span class=\"az-s1\" >".$val_cz."</span> ";
 
-                        list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $vlast_upd[$key]);
+                        list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $this->vlast_upd[$key]);
                         $val_cz_2 = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
                         $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
@@ -1174,14 +1176,14 @@ class vlastnici2pridani extends adminator
 
                         $this->action_az_pole3 .= "<span class=\"az-s1\" >".$val_cz."</span> ";
 
-                        list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $vlast_upd[$key]);
+                        list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $this->vlast_upd[$key]);
                         $val_cz_2 = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
                         $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
 
                     } else { // ostatni mody, nerozpoznane
                         $this->action_az_pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
-                        $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$vlast_upd[$key]."</span>, ";
+                        $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>, ";
                     }
                 } //konec if nejde li od id cloveka
             } // konec if obj == val
@@ -1265,7 +1267,7 @@ class vlastnici2pridani extends adminator
         }
 
         if ($fakt_skupina < 1) {
-            $vlast_upd["fakturacni_skupina_id"] = null;
+            $this->vlast_upd["fakturacni_skupina_id"] = null;
         }
 
         if($sluzba_int == 1) {
@@ -1417,72 +1419,72 @@ class vlastnici2pridani extends adminator
             $billing_freq = 0;
         }
 
-        $vlast_upd = array( "nick" => trim($this->form_nick), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
+        $this->vlast_upd = array( "nick" => trim($this->form_nick), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
             "vs" => $vs, "k_platbe" => $k_platbe, "archiv" => $archiv, "fakturacni_skupina_id" => $fakt_skupina,
             "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
             "billing_freq" => $billing_freq );
 
         if ((strlen($this->firma) > 0)) {
-            $vlast_upd["firma"] = $this->firma;
+            $this->vlast_upd["firma"] = $this->firma;
         } else {
-            $vlast_upd["firma"] = null;
+            $this->vlast_upd["firma"] = null;
         } // u firmy else musi byt
 
         if ((strlen($email) > 0)) {
-            $vlast_upd["mail"] = $email;
+            $this->vlast_upd["mail"] = $email;
         } else {
-            $vlast_upd["mail"] = null;
+            $this->vlast_upd["mail"] = null;
         }
 
         if ($icq > 0) {
-            $vlast_upd["icq"] = $icq;
+            $this->vlast_upd["icq"] = $icq;
         } else {
-            $vlast_upd["icq"] = "";
+            $this->vlast_upd["icq"] = "";
         }
 
         if ((strlen($tel) > 0)) {
-            $vlast_upd["telefon"] = $tel;
+            $this->vlast_upd["telefon"] = $tel;
         } else {
-            $vlast_upd["telefon"] = null;
+            $this->vlast_upd["telefon"] = null;
         }
 
         if ($ucetni_index > 0) {
-            $vlast_upd["ucetni_index"] = $ucetni_index;
+            $this->vlast_upd["ucetni_index"] = $ucetni_index;
         } else {
-            $vlast_upd["ucetni_index"] = null;
+            $this->vlast_upd["ucetni_index"] = null;
         }
 
         //if ( (strlen($poznamka) > 0 ) )
-        { $vlast_upd["poznamka"] = $poznamka; }
+        { $this->vlast_upd["poznamka"] = $poznamka; }
 
         if ((strlen($datum_podpisu) > 0)) {
-            $vlast_upd["datum_podpisu"] = $datum_podpisu;
+            $this->vlast_upd["datum_podpisu"] = $datum_podpisu;
         } else {
-            $vlast_upd["datum_podpisu"] = null;
+            $this->vlast_upd["datum_podpisu"] = null;
         }
 
         if ((strlen($typ_smlouvy) > 0)) {
-            $vlast_upd["typ_smlouvy"] = $typ_smlouvy;
+            $this->vlast_upd["typ_smlouvy"] = $typ_smlouvy;
         } else {
-            $vlast_upd["typ_smlouvy"] = 0;
+            $this->vlast_upd["typ_smlouvy"] = 0;
         }
 
         if ($fakt_skupina < 1) {
-            $vlast_upd["fakturacni_skupina_id"] = null;
+            $this->vlast_upd["fakturacni_skupina_id"] = null;
         }
 
         if($sluzba_int == 1) {
-            $vlast_upd["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
+            $this->vlast_upd["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
         }
 
         if($sluzba_iptv == 1) {
-            $vlast_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
+            $this->vlast_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
         }
 
         if($billing_suspend_status == 1) {
-            $vlast_upd["billing_suspend_status"] = intval($billing_suspend_status);
-            $vlast_upd["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
+            $this->vlast_upd["billing_suspend_status"] = intval($billing_suspend_status);
+            $this->vlast_upd["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
 
             list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
             $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
@@ -1490,16 +1492,16 @@ class vlastnici2pridani extends adminator
             list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $billing_suspend_stop);
             $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 
-            $vlast_upd["billing_suspend_start"]  = $this->conn_mysql->real_escape_string($billing_suspend_start);
-            $vlast_upd["billing_suspend_stop"]   = $this->conn_mysql->real_escape_string($billing_suspend_stop);
+            $this->vlast_upd["billing_suspend_start"]  = $this->conn_mysql->real_escape_string($billing_suspend_start);
+            $this->vlast_upd["billing_suspend_stop"]   = $this->conn_mysql->real_escape_string($billing_suspend_stop);
         } else {
-            $vlast_upd["billing_suspend_status"] = 0;
-            $vlast_upd["billing_suspend_reason"] = null;
-            $vlast_upd["billing_suspend_start"]  = null;
-            $vlast_upd["billing_suspend_stop"] = null;
+            $this->vlast_upd["billing_suspend_status"] = 0;
+            $this->vlast_upd["billing_suspend_reason"] = null;
+            $this->vlast_upd["billing_suspend_start"]  = null;
+            $this->vlast_upd["billing_suspend_stop"] = null;
         }
 
-        // $output .= "<pre>" . var_export($vlast_upd, true) ."</pre>";
+        // $output .= "<pre>" . var_export($this->vlast_upd, true) ."</pre>";
 
         // $output .= "<pre>ID: " . var_export( $vlast_id, true ) ."</pre>";
 
@@ -1507,7 +1509,7 @@ class vlastnici2pridani extends adminator
             $this->action_affected = DB::connection('pgsql')
                         ->table('vlastnici')
                         ->where('id_cloveka', $this->form_update_id)
-                        ->update($vlast_upd);
+                        ->update($this->vlast_upd);
         } catch (Exception $e) {
             $error_nr = $e->getMessage();
         }
@@ -1519,7 +1521,6 @@ class vlastnici2pridani extends adminator
         }
 
         $output .= $this->actionArchivZmen();
-        // require("vlastnici2-change-archiv-zmen-inc.php");
 
         $this->updated = "true";
 
