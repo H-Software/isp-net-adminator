@@ -88,12 +88,14 @@ class vlastnici2pridani extends adminator
 
     private $form_datum_podpisu;
 
-    // $sluzba_int;
+    private $form_sluzba_int;
+
     // $sluzba_iptv;
     // $sluzba_voip;
 
-    // $sluzba_int_id_tarifu;
-    // $sluzba_iptv_id_tarifu;
+    private $form_sluzba_int_id_tarifu;
+
+    private $form_sluzba_iptv_id_tarifu;
 
     // $billing_freq;
 
@@ -315,12 +317,12 @@ class vlastnici2pridani extends adminator
                     $this->form_splatnost = $data["splatnost"];
                     $this->form_trvani_do = $data["trvani_do"];
                     $this->form_datum_podpisu = $data["datum_podpisu"];
-                    $sluzba_int = $data["sluzba_int"];
+                    $this->form_sluzba_int = $data["sluzba_int"];
                     $sluzba_iptv = $data["sluzba_iptv"];
                     $sluzba_voip = $data["sluzba_voip"];
 
-                    $sluzba_int_id_tarifu = $data["sluzba_int_id_tarifu"];
-                    $sluzba_iptv_id_tarifu = $data["sluzba_iptv_id_tarifu"];
+                    $this->form_sluzba_int_id_tarifu = $data["sluzba_int_id_tarifu"];
+                    $this->form_sluzba_iptv_id_tarifu = $data["sluzba_iptv_id_tarifu"];
 
                     $billing_freq = $data["billing_freq"];
 
@@ -378,12 +380,12 @@ class vlastnici2pridani extends adminator
             $this->form_trvani_do = $_POST["trvani_do"];
             $this->form_datum_podpisu = $_POST["datum_podpisu"];
 
-            $sluzba_int = intval($_POST["sluzba_int"]);
+            $this->form_sluzba_int = intval($_POST["sluzba_int"]);
             $sluzba_iptv = intval($_POST["sluzba_iptv"]);
             $sluzba_voip = intval($_POST["sluzba_voip"]);
 
-            $sluzba_int_id_tarifu = intval($_POST["sluzba_int_id_tarifu"]);
-            $sluzba_iptv_id_tarifu = intval($_POST["sluzba_iptv_id_tarifu"]);
+            $this->form_sluzba_int_id_tarifu = intval($_POST["sluzba_int_id_tarifu"]);
+            $this->form_sluzba_iptv_id_tarifu = intval($_POST["sluzba_iptv_id_tarifu"]);
 
             $billing_freq = intval($_POST["billing_freq"]);
 
@@ -831,11 +833,11 @@ class vlastnici2pridani extends adminator
 
             $output .= "<select name=\"sluzba_int\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
             $output .= "<option value=\"0\" ";
-            if($sluzba_int == 0 or !isset($sluzba_int)) {
+            if($this->form_sluzba_int == 0 or !isset($this->form_sluzba_int)) {
                 $output .= " selected ";
             } $output .= " >Ne</option>";
             $output .= "<option value=\"1\" ";
-            if($sluzba_int == 1) {
+            if($this->form_sluzba_int == 1) {
                 $output .= " selected ";
             } $output .= " >Ano</option>";
 
@@ -849,7 +851,7 @@ class vlastnici2pridani extends adminator
 
         $output .= '</tr>';
 
-        if($sluzba_int == 1) {
+        if($this->form_sluzba_int == 1) {
             $output .= "<tr>
                 <td colspan=\"2\" >&nbsp;</td>";
             $output .= "<td><span style=\"padding-right: 17px; \" >Vyberte tarif: </span>";
@@ -858,7 +860,7 @@ class vlastnici2pridani extends adminator
             $output .= "<select name=\"sluzba_int_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
 
             $output .= "<option value=\"999\" ";
-            if($sluzba_int_id_tarifu == 999 or !isset($sluzba_int_id_tarifu)) {
+            if($this->form_sluzba_int_id_tarifu == 999 or !isset($this->form_sluzba_int_id_tarifu)) {
                 $output .= " selected ";
             }
             $output .= " style=\"color: gray; \">Nevybráno</option>";
@@ -871,7 +873,7 @@ class vlastnici2pridani extends adminator
 
             while($data_tarify = $dotaz_tarify_id_tarifu->fetch_array()) {
                 $output .= "<option value=\"".$data_tarify["id_tarifu"]."\" ";
-                if($sluzba_int_id_tarifu == $data_tarify["id_tarifu"]) {
+                if($this->form_sluzba_int_id_tarifu == $data_tarify["id_tarifu"]) {
                     $output .= " selected ";
                 }
                 $output .= " >".$data_tarify["jmeno_tarifu"]." (".$data_tarify["zkratka_tarifu"].")</option>";
@@ -930,7 +932,7 @@ class vlastnici2pridani extends adminator
             $output .= "<select name=\"sluzba_iptv_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
 
             $output .= "<option value=\"999\" ";
-            if($sluzba_iptv_id_tarifu == 999 or !isset($sluzba_iptv_id_tarifu)) {
+            if($this->form_sluzba_iptv_id_tarifu == 999 or !isset($this->form_sluzba_iptv_id_tarifu)) {
                 $output .= " selected ";
             }
             $output .= " style=\"color: gray; \">Nevybráno</option>";
@@ -943,7 +945,7 @@ class vlastnici2pridani extends adminator
 
             while($data_iptv = $dotaz_iptv_id_tarifu->fetch_array()) {
                 $output .= "<option value=\"".$data_iptv["id_tarifu"]."\" ";
-                if($sluzba_iptv_id_tarifu == $data_iptv["id_tarifu"]) {
+                if($this->form_sluzba_iptv_id_tarifu == $data_iptv["id_tarifu"]) {
                     $output .= " selected ";
                 }
                 $output .= " >".$data_iptv["jmeno_tarifu"]." (".$data_iptv["zkratka_tarifu"].")</option>";
@@ -1301,7 +1303,7 @@ class vlastnici2pridani extends adminator
             "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice,
             "mesto" => $this->form_mesto, "psc" => $this->form_psc, "ucetni_index" => $this->form_ucetni_index,
             "fakturacni_skupina_id" => $this->form_fakt_skupina, "splatnost" => $this->form_splatnost,
-            "typ_smlouvy" => $this->form_typ_smlouvy, "sluzba_int" => $sluzba_int,
+            "typ_smlouvy" => $this->form_typ_smlouvy, "sluzba_int" => $this->form_sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
             "billing_freq" => $billing_freq );
 
@@ -1334,11 +1336,11 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["fakturacni_skupina_id"] = null;
         }
 
-        if($sluzba_int == 1) {
-            $vlast_add["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
+        if($this->form_sluzba_int == 1) {
+            $vlast_add["sluzba_int_id_tarifu"] = $this->form_sluzba_int_id_tarifu;
         }
         if($sluzba_iptv == 1) {
-            $vlast_add["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
+            $vlast_add["sluzba_iptv_id_tarifu"] = $this->form_sluzba_iptv_id_tarifu;
         }
 
         if($billing_suspend_status == 1) {
@@ -1456,7 +1458,7 @@ class vlastnici2pridani extends adminator
                 $this->pole_puvodni_data["billing_suspend_start"]  = $data4["billing_suspend_start"];
                 $this->pole_puvodni_data["billing_suspend_stop"]   = $data4["billing_suspend_stop"];
 
-                if($sluzba_int == 1) {
+                if($this->form_sluzba_int == 1) {
                     $this->pole_puvodni_data["sluzba_int_id_tarifu"] = $data4["sluzba_int_id_tarifu"];
                 }
 
@@ -1485,7 +1487,7 @@ class vlastnici2pridani extends adminator
 
         $this->vlast_upd = array( "nick" => $this->form_nick, "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice, "mesto" => $this->form_mesto, "psc" => $this->form_psc,
             "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe, "archiv" => $this->form_archiv, "fakturacni_skupina_id" => $this->form_fakt_skupina,
-            "splatnost" => $this->form_splatnost, "trvani_do" => $this->form_trvani_do, "sluzba_int" => $sluzba_int,
+            "splatnost" => $this->form_splatnost, "trvani_do" => $this->form_trvani_do, "sluzba_int" => $this->form_sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
             "billing_freq" => $billing_freq );
 
@@ -1538,12 +1540,12 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["fakturacni_skupina_id"] = null;
         }
 
-        if($sluzba_int == 1) {
-            $this->vlast_upd["sluzba_int_id_tarifu"] = $sluzba_int_id_tarifu;
+        if($this->form_sluzba_int == 1) {
+            $this->vlast_upd["sluzba_int_id_tarifu"] = $this->form_sluzba_int_id_tarifu;
         }
 
         if($sluzba_iptv == 1) {
-            $this->vlast_upd["sluzba_iptv_id_tarifu"] = $sluzba_iptv_id_tarifu;
+            $this->vlast_upd["sluzba_iptv_id_tarifu"] = $this->form_sluzba_iptv_id_tarifu;
         }
 
         if($billing_suspend_status == 1) {
