@@ -66,8 +66,10 @@ class vlastnici2pridani extends adminator
     
     private $form_mesto;
 
-    // $psc = $data["psc"];
-    // $email = $data["mail"];
+    private $form_psc;
+
+    private $form_email;
+
     // $icq = $data["icq"];
     // $tel = $data["telefon"];
     // $poznamka = $data["poznamka"];
@@ -143,8 +145,8 @@ class vlastnici2pridani extends adminator
                 vlastnici2pridani::check_icq($icq);
             }
 
-            if((strlen($email) > 0)) {
-                vlastnici2pridani::check_email($email);
+            if((strlen($this->form_email) > 0)) {
+                vlastnici2pridani::check_email($this->form_email);
             }
 
             if((strlen($ucetni_index) > 0)) {
@@ -225,7 +227,7 @@ class vlastnici2pridani extends adminator
 
                 $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
 
-                $this->smarty->clear_assign(array('alert_type', 'alert_content'));
+                $this->smarty->clearAssign(array('alert_type', 'alert_content'));
             }
 
             //ulozeni
@@ -292,8 +294,8 @@ class vlastnici2pridani extends adminator
                     $this->form_prijmeni = $data["prijmeni"];
                     $this->form_ulice = $data["ulice"];
                     $this->form_mesto = $data["mesto"];
-                    $psc = $data["psc"];
-                    $email = $data["mail"];
+                    $this->form_psc = $data["psc"];
+                    $this->form_email = $data["mail"];
                     $icq = $data["icq"];
                     $tel = $data["telefon"];
                     $this->firma = $data["firma"];
@@ -342,8 +344,8 @@ class vlastnici2pridani extends adminator
             $this->form_ulice = trim($_POST["ulice"]);
 
             $this->form_mesto = $_POST["mesto"];
-            $psc = $_POST["psc"];
-            $email = $_POST["email"];
+            $this->form_psc = $_POST["psc"];
+            $this->form_email = $_POST["email"];
             $icq = $_POST["icq"];
             $tel = $_POST["tel"];
 
@@ -451,11 +453,11 @@ class vlastnici2pridani extends adminator
         $output .= '<b>Jméno</b>: ' . $this->form_jmeno . ' <br>
         <b>Příjmení</b>: ' . $this->form_prijmeni . ' <br>
         <b>Ulice</b>: ' . $this->form_ulice . '<br>
-        <b>PSČ</b>: ' . $psc . '<br>';
+        <b>PSČ</b>: ' . $this->form_psc . '<br>';
 
         $output .= '<br>';
 
-        $output .= '<b>e-mail</b>: ' . $email . '<br>
+        $output .= '<b>e-mail</b>: ' . $this->form_email . '<br>
         <b>icq</b>: ' . $icq . '<br>
         <b>telefon</b>: ' . $tel . '<br> 
         <br>';
@@ -695,7 +697,7 @@ class vlastnici2pridani extends adminator
                 <td>Město , PSČ: </td>
                 <td colpsan="2" >
                     <input type="text" name="mesto" size="" maxlength="" value="'.$this->form_mesto.'">
-                    <input type="text" name="psc" size="10" value="'.$psc.'">
+                    <input type="text" name="psc" size="10" value="'.$this->form_psc.'">
                 </td>'
 
             . '<td valign="top" rowspan="7" >'
@@ -708,7 +710,7 @@ class vlastnici2pridani extends adminator
 
             . '<tr>
                 <td>Email: </td>
-                <td colspan="3" ><input type="text" name="email" size="30" value="'.$email.'" ></td>
+                <td colspan="3" ><input type="text" name="email" size="30" value="'.$this->form_email.'" ></td>
             </tr>'
 
             . '<tr><td><br></td></tr>'
@@ -1286,7 +1288,7 @@ class vlastnici2pridani extends adminator
 
         $vlastnik_add = array( "nick" => $this->form_nick ,  "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe,
             "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice,
-            "mesto" => $this->form_mesto, "psc" => $psc, "ucetni_index" => $ucetni_index,
+            "mesto" => $this->form_mesto, "psc" => $this->form_psc, "ucetni_index" => $ucetni_index,
             "fakturacni_skupina_id" => $this->form_fakt_skupina, "splatnost" => $splatnost,
             "typ_smlouvy" => $typ_smlouvy, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
@@ -1295,8 +1297,8 @@ class vlastnici2pridani extends adminator
         if ((strlen($this->firma) > 0)) {
             $vlastnik_add["firma"] = $this->firma;
         }
-        if ((strlen($email) > 0)) {
-            $vlastnik_add["mail"] = $email;
+        if ((strlen($this->form_email) > 0)) {
+            $vlastnik_add["mail"] = $this->form_email;
         }
         if ($icq > 0) {
             $vlastnik_add["icq"] = $icq;
@@ -1470,7 +1472,7 @@ class vlastnici2pridani extends adminator
             $billing_freq = 0;
         }
 
-        $this->vlast_upd = array( "nick" => $this->form_nick, "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice, "mesto" => $this->form_mesto, "psc" => $psc,
+        $this->vlast_upd = array( "nick" => $this->form_nick, "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice, "mesto" => $this->form_mesto, "psc" => $this->form_psc,
             "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe, "archiv" => $this->form_archiv, "fakturacni_skupina_id" => $this->form_fakt_skupina,
             "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
@@ -1482,8 +1484,8 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["firma"] = null;
         } // u firmy else musi byt
 
-        if ((strlen($email) > 0)) {
-            $this->vlast_upd["mail"] = $email;
+        if ((strlen($this->form_email) > 0)) {
+            $this->vlast_upd["mail"] = $this->form_email;
         } else {
             $this->vlast_upd["mail"] = null;
         }
@@ -1649,12 +1651,12 @@ class vlastnici2pridani extends adminator
 
     } //end of function check_icq
 
-    private function check_email($email)
+    private function check_email($input)
     {
-        $rs = filter_var($email, FILTER_VALIDATE_EMAIL);
+        $rs = filter_var($input, FILTER_VALIDATE_EMAIL);
         if ($rs === false) {
             $this->fail = "true";
-            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Emailová adresa (".$email.") není ve správnem formátu!</H4></div>";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Emailová adresa (".$input.") není ve správnem formátu!</H4></div>";
         }
     } //end of function check_icq
 
