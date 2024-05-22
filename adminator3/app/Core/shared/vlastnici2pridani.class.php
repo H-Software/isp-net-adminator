@@ -190,7 +190,7 @@ class vlastnici2pridani extends adminator
                     // rezim pridani
                     $output .= $this->actionSaveIntoDatabaseAdd();
                 }
-            } 
+            }
             // else {
             // } // konec else ( !(isset(fail) ), else tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
@@ -1600,7 +1600,7 @@ class vlastnici2pridani extends adminator
 
     private function check_email($email)
     {
-        $rs = filter_var($email, FILTER_VALIDATE_EMAIL);;
+        $rs = filter_var($email, FILTER_VALIDATE_EMAIL);
         if ($rs === false) {
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Emailová adresa (".$email.") není ve správnem formátu!</H4></div>";
