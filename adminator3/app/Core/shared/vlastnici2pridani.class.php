@@ -70,10 +70,14 @@ class vlastnici2pridani extends adminator
 
     private $form_email;
 
-    // $icq = $data["icq"];
-    // $tel = $data["telefon"];
-    // $poznamka = $data["poznamka"];
-    // $ucetni_index = $data["ucetni_index"];
+    private $form_icq;
+
+    private $form_tel;
+
+    private $form_poznamka;
+
+    private $ucetni_index;
+
     // $typ_smlouvy = $data["typ_smlouvy"];
     // $fakturacni = $data["fakturacni"];
     // $splatnost = $data["splatnost"];
@@ -141,20 +145,20 @@ class vlastnici2pridani extends adminator
                 vlastnici2pridani::check_splatnost($splatnost);
             }
 
-            if((strlen($icq) > 0)) {
-                vlastnici2pridani::check_icq($icq);
+            if((strlen($this->form_icq) > 0)) {
+                vlastnici2pridani::check_icq($this->form_icq);
             }
 
             if((strlen($this->form_email) > 0)) {
                 vlastnici2pridani::check_email($this->form_email);
             }
 
-            if((strlen($ucetni_index) > 0)) {
-                vlastnici2pridani::check_uc_index($ucetni_index);
+            if((strlen($this->form_ucetni_index) > 0)) {
+                vlastnici2pridani::check_uc_index($this->form_ucetni_index);
             }
 
-            if((strlen($tel) > 0)) {
-                vlastnici2pridani::check_tel($tel);
+            if((strlen($this->form_tel) > 0)) {
+                vlastnici2pridani::check_tel($this->form_tel);
             }
 
             if((strlen($datum_podpisu) > 0)) {
@@ -287,20 +291,20 @@ class vlastnici2pridani extends adminator
                 while($data = pg_fetch_array($dotaz_upd)):
 
                     // primy promenny
-                    $this->form_nick = $data["nick"];
-                    $this->form_vs = $data["vs"];
-                    $this->form_k_platbe = $data["k_platbe"];
-                    $this->form_jmeno = $data["jmeno"];
-                    $this->form_prijmeni = $data["prijmeni"];
-                    $this->form_ulice = $data["ulice"];
-                    $this->form_mesto = $data["mesto"];
+                    $this->form_nick = trim($data["nick"]);
+                    $this->form_vs = trim($data["vs"]);
+                    $this->form_k_platbe = trim($data["k_platbe"]);
+                    $this->form_jmeno = trim($data["jmeno"]);
+                    $this->form_prijmeni = trim($data["prijmeni"]);
+                    $this->form_ulice = trim($data["ulice"]);
+                    $this->form_mesto = trim($data["mesto"]);
                     $this->form_psc = $data["psc"];
                     $this->form_email = $data["mail"];
-                    $icq = $data["icq"];
-                    $tel = $data["telefon"];
+                    $this->form_icq = $data["icq"];
+                    $this->form_tel = $data["telefon"];
                     $this->firma = $data["firma"];
-                    $poznamka = $data["poznamka"];
-                    $ucetni_index = $data["ucetni_index"];
+                    $this->form_poznamka = $data["poznamka"];
+                    $this->form_ucetni_index = $data["ucetni_index"];
                     $this->form_archiv = $data["archiv"];
                     $this->form_fakt_skupina = $data["fakturacni_skupina_id"];
                     $typ_smlouvy = $data["typ_smlouvy"];
@@ -346,8 +350,8 @@ class vlastnici2pridani extends adminator
             $this->form_mesto = $_POST["mesto"];
             $this->form_psc = $_POST["psc"];
             $this->form_email = $_POST["email"];
-            $icq = $_POST["icq"];
-            $tel = $_POST["tel"];
+            $this->form_icq = $_POST["icq"];
+            $this->form_tel = $_POST["tel"];
 
             $fakturacni = $_POST["fakturacni"];
             $ftitle = $_POST["ftitle"];
@@ -360,8 +364,8 @@ class vlastnici2pridani extends adminator
             $splatnost = $_POST["splatnost"];
             $cetnost = $_POST["cetnost"];
             $this->firma = $_POST["firma"];
-            $poznamka = $_POST["poznamka"];
-            $ucetni_index = $_POST["ucetni_index"];
+            $this->form_poznamka = $_POST["poznamka"];
+            $this->form_ucetni_index = $_POST["ucetni_index"];
             $this->form_archiv = $_POST["archiv"];
             $this->form_fakt_skupina = intval($_POST["fakt_skupina"]);
             $splatnost = $_POST["splatnost"];
@@ -458,8 +462,8 @@ class vlastnici2pridani extends adminator
         $output .= '<br>';
 
         $output .= '<b>e-mail</b>: ' . $this->form_email . '<br>
-        <b>icq</b>: ' . $icq . '<br>
-        <b>telefon</b>: ' . $tel . '<br> 
+        <b>icq</b>: ' . $this->form_icq . '<br>
+        <b>telefon</b>: ' . $this->form_tel . '<br> 
         <br>';
 
         $output .= '<b>firma</b>: ';
@@ -624,7 +628,7 @@ class vlastnici2pridani extends adminator
                 . '<td>účetní index: <span style="padding-left: 10px; "></span>';
 
         //if ( $this->firma == 1)
-        { $output .= '<input type="text" name="ucetni_index" value="'.$ucetni_index.'" >'; }
+        { $output .= '<input type="text" name="ucetni_index" value="'.$this->form_ucetni_index.'" >'; }
         //else
         //{ $output .= "<span style=\"color: grey; \" >není dostupné</span>"; }
 
@@ -702,7 +706,7 @@ class vlastnici2pridani extends adminator
 
             . '<td valign="top" rowspan="7" >'
             . 'Poznámka: <br>
-                <textarea rows="10" name="poznamka" cols="40">' . $poznamka . '</textarea>
+                <textarea rows="10" name="poznamka" cols="40">' . $this->form_poznamka . '</textarea>
             </td>'
             . '</tr>'
 
@@ -718,7 +722,7 @@ class vlastnici2pridani extends adminator
             . '<tr>
             <td>ICQ:</td>
             <td colspan="3" >
-                <input type="text" name="icq" size="30" value="'.$icq.'">
+                <input type="text" name="icq" size="30" value="'.$this->form_icq.'">
             </td>'
 
             . '</tr>'
@@ -727,7 +731,7 @@ class vlastnici2pridani extends adminator
 
              .'<tr>
                 <td>Telefon: </td>
-                <td><input type="text" name="tel" size="30" value="'.$tel.'"> 
+                <td><input type="text" name="tel" size="30" value="'.$this->form_tel.'"> 
                 </td>'
 
             . '</tr>'
@@ -1288,7 +1292,7 @@ class vlastnici2pridani extends adminator
 
         $vlastnik_add = array( "nick" => $this->form_nick ,  "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe,
             "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice,
-            "mesto" => $this->form_mesto, "psc" => $this->form_psc, "ucetni_index" => $ucetni_index,
+            "mesto" => $this->form_mesto, "psc" => $this->form_psc, "ucetni_index" => $this->form_ucetni_index,
             "fakturacni_skupina_id" => $this->form_fakt_skupina, "splatnost" => $splatnost,
             "typ_smlouvy" => $typ_smlouvy, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
@@ -1300,17 +1304,17 @@ class vlastnici2pridani extends adminator
         if ((strlen($this->form_email) > 0)) {
             $vlastnik_add["mail"] = $this->form_email;
         }
-        if ($icq > 0) {
-            $vlastnik_add["icq"] = $icq;
+        if ($this->form_icq > 0) {
+            $vlastnik_add["icq"] = $this->form_icq;
         }
-        if ((strlen($tel) > 0)) {
-            $vlastnik_add["telefon"] = $tel;
+        if ((strlen($this->form_tel) > 0)) {
+            $vlastnik_add["telefon"] = $this->form_tel;
         }
-        if ($ucetni_index > 0) {
-            $vlastnik_add["ucetni_index"] = $ucetni_index;
+        if ($this->form_ucetni_index > 0) {
+            $vlastnik_add["ucetni_index"] = $this->form_ucetni_index;
         }
-        if ((strlen($poznamka) > 0)) {
-            $vlastnik_add["poznamka"] = $poznamka;
+        if ((strlen($this->form_poznamka) > 0)) {
+            $vlastnik_add["poznamka"] = $this->form_poznamka;
         }
         if ((strlen($trvani_do) > 0)) {
             $vlastnik_add["trvani_do"] = $trvani_do;
@@ -1490,26 +1494,26 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["mail"] = null;
         }
 
-        if ($icq > 0) {
-            $this->vlast_upd["icq"] = $icq;
+        if ($this->form_icq > 0) {
+            $this->vlast_upd["icq"] = $this->form_icq;
         } else {
             $this->vlast_upd["icq"] = "";
         }
 
-        if ((strlen($tel) > 0)) {
-            $this->vlast_upd["telefon"] = $tel;
+        if ((strlen($this->form_tel) > 0)) {
+            $this->vlast_upd["telefon"] = $this->form_tel;
         } else {
             $this->vlast_upd["telefon"] = null;
         }
 
-        if ($ucetni_index > 0) {
-            $this->vlast_upd["ucetni_index"] = $ucetni_index;
+        if ($this->form_ucetni_index > 0) {
+            $this->vlast_upd["ucetni_index"] = $this->form_ucetni_index;
         } else {
             $this->vlast_upd["ucetni_index"] = null;
         }
 
-        //if ( (strlen($poznamka) > 0 ) )
-        { $this->vlast_upd["poznamka"] = $poznamka; }
+        //if ( (strlen($this->form_poznamka) > 0 ) )
+        { $this->vlast_upd["poznamka"] = $this->form_poznamka; }
 
         if ((strlen($datum_podpisu) > 0)) {
             $this->vlast_upd["datum_podpisu"] = $datum_podpisu;
@@ -1615,20 +1619,20 @@ class vlastnici2pridani extends adminator
 
     } // konec funkce check rra
 
-    private function check_uc_index($ucetni_index)
+    private function check_uc_index($input)
     {
-        $ui_check = preg_match('/^([[:digit:]]|\.)+$/', $ucetni_index);
+        $ui_check = preg_match('/^([[:digit:]]|\.)+$/', $input);
 
         if(!($ui_check)) {
             $this->fail = "true";
-            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$ucetni_index." ) není ve správnem formátu (Povoleny pouze čísla)!!! </H4></div>";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$input." ) není ve správnem formátu (Povoleny pouze čísla)!!! </H4></div>";
         }
 
-        $ui_check2 = strlen($ucetni_index);
+        $ui_check2 = strlen($input);
 
         if($ui_check2 > 5) {
             $this->fail = "true";
-            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$ucetni_index." ) překračuje povolenou délku (5 znaků) !!! </H4></div>";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$input." ) překračuje povolenou délku (5 znaků) !!! </H4></div>";
         }
 
     } //konec funkce check_uc_index
