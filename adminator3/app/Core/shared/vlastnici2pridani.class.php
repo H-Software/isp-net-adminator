@@ -58,6 +58,40 @@ class vlastnici2pridani extends adminator
 
     private $form_archiv;
 
+    private $form_jmeno;
+
+    private $form_prijmeni;
+
+    private $form_ulice;
+    
+    private $form_mesto;
+
+    // $psc = $data["psc"];
+    // $email = $data["mail"];
+    // $icq = $data["icq"];
+    // $tel = $data["telefon"];
+    // $poznamka = $data["poznamka"];
+    // $ucetni_index = $data["ucetni_index"];
+    // $typ_smlouvy = $data["typ_smlouvy"];
+    // $fakturacni = $data["fakturacni"];
+    // $splatnost = $data["splatnost"];
+    // $trvani_do = $data["trvani_do"];
+    // $datum_podpisu = $data["datum_podpisu"];
+    // $sluzba_int = $data["sluzba_int"];
+    // $sluzba_iptv = $data["sluzba_iptv"];
+    // $sluzba_voip = $data["sluzba_voip"];
+
+    // $sluzba_int_id_tarifu = $data["sluzba_int_id_tarifu"];
+    // $sluzba_iptv_id_tarifu = $data["sluzba_iptv_id_tarifu"];
+
+    // $billing_freq = $data["billing_freq"];
+
+    // $billing_suspend_status = $data["billing_suspend_status"];
+    // $billing_suspend_reason = $data["billing_suspend_reason"];
+
+    // $billing_suspend_start  = $data["billing_suspend_start"];
+    // $billing_suspend_stop   = $data["billing_suspend_stop"];
+
     private $firma;
 
     private $updated;
@@ -79,7 +113,7 @@ class vlastnici2pridani extends adminator
         $output = "";
         $this->error = null;
 
-        $this->actionPrepareVars();
+        $output .= $this->actionPrepareVars();
 
         if ($this->form_update_id > 0) {
             $this->smarty->assign("content_header", "Úprava vlastníka");
@@ -221,8 +255,10 @@ class vlastnici2pridani extends adminator
         return $output;
     }
 
-    private function actionPrepareVars(): void
+    private function actionPrepareVars()
     {
+        $output = "";
+
         $this->form_update_id = intval($_POST["update_id"]);
         $this->form_odeslano = $_POST["odeslano"];
         $this->form_send = $_POST["send"];
@@ -238,7 +274,7 @@ class vlastnici2pridani extends adminator
             $radku_upd = pg_num_rows($dotaz_upd);
 
             if($radku_upd == 0) {
-                $output .= "Chyba! Požadovaná data nelze načíst! ";
+                $output .= "<div>Chyba! Požadovaná data nelze načíst!</div>";
             } else {
 
                 while($data = pg_fetch_array($dotaz_upd)):
@@ -247,10 +283,10 @@ class vlastnici2pridani extends adminator
                     $this->form_nick = $data["nick"];
                     $this->form_vs = $data["vs"];
                     $this->form_k_platbe = $data["k_platbe"];
-                    $jmeno = $data["jmeno"];
-                    $prijmeni = $data["prijmeni"];
-                    $ulice = $data["ulice"];
-                    $mesto = $data["mesto"];
+                    $this->form_jmeno = $data["jmeno"];
+                    $this->form_prijmeni = $data["prijmeni"];
+                    $this->form_ulice = $data["ulice"];
+                    $this->form_mesto = $data["mesto"];
                     $psc = $data["psc"];
                     $email = $data["mail"];
                     $icq = $data["icq"];
@@ -296,11 +332,11 @@ class vlastnici2pridani extends adminator
             $this->form_nick = trim($_POST["nick2"]);
             $this->form_vs = trim($_POST["vs"]);
             $this->form_k_platbe = trim($_POST["k_platbe"]);
-            $jmeno = trim($_POST["jmeno"]);
-            $prijmeni = trim($_POST["prijmeni"]);
-            $ulice = trim($_POST["ulice"]);
+            $this->form_jmeno = trim($_POST["jmeno"]);
+            $this->form_prijmeni = trim($_POST["prijmeni"]);
+            $this->form_ulice = trim($_POST["ulice"]);
 
-            $mesto = $_POST["mesto"];
+            $this->form_mesto = $_POST["mesto"];
             $psc = $_POST["psc"];
             $email = $_POST["email"];
             $icq = $_POST["icq"];
@@ -355,6 +391,8 @@ class vlastnici2pridani extends adminator
                 $splatnost = "15";
             }
         }
+
+        return $output;
     }
 
     private function actionShowResults(): string
@@ -405,9 +443,9 @@ class vlastnici2pridani extends adminator
 
         $output .= '<br>';
 
-        $output .= '<b>Jméno</b>: ' . $jmeno . ' <br>
-        <b>Příjmení</b>: ' . $prijmeni . ' <br>
-        <b>Ulice</b>: ' . $ulice . '<br>
+        $output .= '<b>Jméno</b>: ' . $this->form_jmeno . ' <br>
+        <b>Příjmení</b>: ' . $this->form_prijmeni . ' <br>
+        <b>Ulice</b>: ' . $this->form_ulice . '<br>
         <b>PSČ</b>: ' . $psc . '<br>';
 
         $output .= '<br>';
@@ -572,8 +610,8 @@ class vlastnici2pridani extends adminator
             . '<tr>'
             . '<td> jméno a příjmení: </td>'
             . '<td colspan="" >'
-                . '<input type="text" name="jmeno" value="'.$jmeno.'" >'
-                . '<input type="text" name="prijmeni" value="'.$prijmeni.'" >'
+                . '<input type="text" name="jmeno" value="'.$this->form_jmeno.'" >'
+                . '<input type="text" name="prijmeni" value="'.$this->form_prijmeni.'" >'
                 . '</td>'
 
                 . '<td>účetní index: <span style="padding-left: 10px; "></span>';
@@ -589,7 +627,7 @@ class vlastnici2pridani extends adminator
 
             . '<tr>
                 <td>Ulice a čp. :</td>
-                <td colspan="1" ><input type="text" name="ulice" size="35" maxlength="" value="'.$ulice.'" ></td>'
+                <td colspan="1" ><input type="text" name="ulice" size="35" maxlength="" value="'.$this->form_ulice.'" ></td>'
                 . '<td>Fakturační skupina: ';
 
         if($this->firma == 1) {
@@ -614,7 +652,7 @@ class vlastnici2pridani extends adminator
                 $dotaz_fakt_skup = $this->conn_mysql->query($sql);
                 $dotaz_fakt_skup_radku = $dotaz_fakt_skup->num_rows;
             } catch (Exception $e) {
-                die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                $output .= "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2>";
             }
 
             if($dotaz_fakt_skup_radku > 0) {
@@ -651,7 +689,7 @@ class vlastnici2pridani extends adminator
             . '<tr>
                 <td>Město , PSČ: </td>
                 <td colpsan="2" >
-                    <input type="text" name="mesto" size="" maxlength="" value="'.$mesto.'">
+                    <input type="text" name="mesto" size="" maxlength="" value="'.$this->form_mesto.'">
                     <input type="text" name="psc" size="10" value="'.$psc.'">
                 </td>'
 
@@ -1242,8 +1280,8 @@ class vlastnici2pridani extends adminator
 
 
         $vlastnik_add = array( "nick" => $this->form_nick ,  "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe,
-            "jmeno" => $jmeno, "prijmeni" => $prijmeni, "ulice" => $ulice,
-            "mesto" => $mesto, "psc" => $psc, "ucetni_index" => $ucetni_index,
+            "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice,
+            "mesto" => $this->form_mesto, "psc" => $psc, "ucetni_index" => $ucetni_index,
             "fakturacni_skupina_id" => $this->form_fakt_skupina, "splatnost" => $splatnost,
             "typ_smlouvy" => $typ_smlouvy, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
@@ -1427,7 +1465,7 @@ class vlastnici2pridani extends adminator
             $billing_freq = 0;
         }
 
-        $this->vlast_upd = array( "nick" => trim($this->form_nick), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
+        $this->vlast_upd = array( "nick" => $this->form_nick, "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice, "mesto" => $this->form_mesto, "psc" => $psc,
             "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe, "archiv" => $this->form_archiv, "fakturacni_skupina_id" => $this->form_fakt_skupina,
             "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
