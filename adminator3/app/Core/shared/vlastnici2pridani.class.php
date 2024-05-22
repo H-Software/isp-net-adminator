@@ -80,9 +80,12 @@ class vlastnici2pridani extends adminator
 
     private $form_fakturacni;
 
-    // $typ_smlouvy;
-    // $splatnost;
-    // $trvani_do;
+    private $form_typ_smlouvy;
+
+    private $form_splatnost;
+
+    private $form_trvani_do;
+
     // $datum_podpisu;
     // $sluzba_int;
     // $sluzba_iptv;
@@ -142,8 +145,8 @@ class vlastnici2pridani extends adminator
                 vlastnici2pridani::check_k_platbe($this->form_k_platbe);
             }
 
-            if((strlen($splatnost) > 0)) {
-                vlastnici2pridani::check_splatnost($splatnost);
+            if((strlen($this->form_splatnost) > 0)) {
+                vlastnici2pridani::check_splatnost($this->form_splatnost);
             }
 
             if((strlen($this->form_icq) > 0)) {
@@ -166,10 +169,10 @@ class vlastnici2pridani extends adminator
                 vlastnici2pridani::check_datum($datum_podpisu, "Datum podpisu");
             }
 
-            if($typ_smlouvy == 2) {
-                vlastnici2pridani::check_datum($trvani_do, "Trvání do");
-            } elseif((strlen($trvani_do) > 0)) {
-                vlastnici2pridani::check_datum($trvani_do, "Trvání do");
+            if($this->form_typ_smlouvy == 2) {
+                vlastnici2pridani::check_datum($this->form_trvani_do, "Trvání do");
+            } elseif((strlen($this->form_trvani_do) > 0)) {
+                vlastnici2pridani::check_datum($this->form_trvani_do, "Trvání do");
             }
 
             if($billing_suspend_status == 1) {
@@ -186,10 +189,10 @@ class vlastnici2pridani extends adminator
         }
 
         if(($this->form_update_id > 0 and !(isset($this->form_send)))) {
-            // $trvani_do = "";
-            if((strlen($trvani_do) > 0)) {
-                list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("\-", $trvani_do);
-                $trvani_do = $trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
+            // $this->form_trvani_do = "";
+            if((strlen($this->form_trvani_do) > 0)) {
+                list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("\-", $this->form_splatnost);
+                $this->form_trvani_do = $trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
             }
 
             if((strlen($datum_podpisu) > 0)) {
@@ -297,19 +300,19 @@ class vlastnici2pridani extends adminator
                     $this->form_prijmeni = trim($data["prijmeni"]);
                     $this->form_ulice = trim($data["ulice"]);
                     $this->form_mesto = trim($data["mesto"]);
-                    $this->form_psc = $data["psc"];
-                    $this->form_email = $data["mail"];
-                    $this->form_icq = $data["icq"];
-                    $this->form_tel = $data["telefon"];
+                    $this->form_psc = trim($data["psc"]);
+                    $this->form_email = trim($data["mail"]);
+                    $this->form_icq = trim($data["icq"]);
+                    $this->form_tel = trim($data["telefon"]);
                     $this->firma = $data["firma"];
-                    $this->form_poznamka = $data["poznamka"];
-                    $this->form_ucetni_index = $data["ucetni_index"];
+                    $this->form_poznamka = trim($data["poznamka"]);
+                    $this->form_ucetni_index = trim($data["ucetni_index"]);
                     $this->form_archiv = $data["archiv"];
                     $this->form_fakt_skupina = $data["fakturacni_skupina_id"];
-                    $typ_smlouvy = $data["typ_smlouvy"];
+                    $this->form_typ_smlouvy = $data["typ_smlouvy"];
                     $this->form_fakturacni = $data["fakturacni"];
-                    $splatnost = $data["splatnost"];
-                    $trvani_do = $data["trvani_do"];
+                    $this->form_splatnost = $data["splatnost"];
+                    $this->form_trvani_do = $data["trvani_do"];
                     $datum_podpisu = $data["datum_podpisu"];
                     $sluzba_int = $data["sluzba_int"];
                     $sluzba_iptv = $data["sluzba_iptv"];
@@ -346,11 +349,11 @@ class vlastnici2pridani extends adminator
             $this->form_prijmeni = trim($_POST["prijmeni"]);
             $this->form_ulice = trim($_POST["ulice"]);
 
-            $this->form_mesto = $_POST["mesto"];
-            $this->form_psc = $_POST["psc"];
-            $this->form_email = $_POST["email"];
-            $this->form_icq = $_POST["icq"];
-            $this->form_tel = $_POST["tel"];
+            $this->form_mesto = trim($_POST["mesto"]);
+            $this->form_psc = trim($_POST["psc"]);
+            $this->form_email = trim($_POST["email"]);
+            $this->form_icq = trim($_POST["icq"]);
+            $this->form_tel = trim($_POST["tel"]);
 
             $this->form_fakturacni = $_POST["fakturacni"];
             $ftitle = $_POST["ftitle"];
@@ -360,18 +363,18 @@ class vlastnici2pridani extends adminator
             $ico = $_POST["ico"];
             $dic = $_POST["dic"];
             $ucet = $_POST["ucet"];
-            $splatnost = $_POST["splatnost"];
+            $this->form_splatnost = $_POST["splatnost"];
             $cetnost = $_POST["cetnost"];
             $this->firma = $_POST["firma"];
-            $this->form_poznamka = $_POST["poznamka"];
-            $this->form_ucetni_index = $_POST["ucetni_index"];
+            $this->form_poznamka = trim($_POST["poznamka"]);
+            $this->form_ucetni_index = trim($_POST["ucetni_index"]);
             $this->form_archiv = $_POST["archiv"];
             $this->form_fakt_skupina = intval($_POST["fakt_skupina"]);
-            $splatnost = $_POST["splatnost"];
+            $this->form_splatnost = trim($_POST["splatnost"]);
 
-            $typ_smlouvy = intval($_POST["typ_smlouvy"]);
+            $this->form_typ_smlouvy = intval($_POST["typ_smlouvy"]);
 
-            $trvani_do = $_POST["trvani_do"];
+            $this->form_trvani_do = $_POST["trvani_do"];
             $datum_podpisu = $_POST["datum_podpisu"];
 
             $sluzba_int = intval($_POST["sluzba_int"]);
@@ -397,8 +400,8 @@ class vlastnici2pridani extends adminator
                 $this->firma = "1";
             }
 
-            if((strlen($splatnost) < 1)) {
-                $splatnost = "15";
+            if((strlen($this->form_splatnost) < 1)) {
+                $this->form_splatnost = "15";
             }
         }
 
@@ -486,18 +489,18 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>Typ smlouvy:</b> ';
 
-        if($typ_smlouvy == 0) {
+        if($this->form_typ_smlouvy == 0) {
             $output .= "[nezvoleno]";
-        } elseif($typ_smlouvy == 1) {
+        } elseif($this->form_typ_smlouvy == 1) {
             $output .= "[na dobu neurčitou]";
-        } elseif($typ_smlouvy == 2) {
+        } elseif($this->form_typ_smlouvy == 2) {
             $output .= "[na dobu určitou]";
             $output .= " ( doba trvání do: ";
 
-            list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("-", $trvani_do);
-            $trvani_do = $trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
+            list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("-", $this->form_trvani_do);
+            $this->form_trvani_do = $trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
 
-            $output .= $trvani_do." )";
+            $output .= $this->form_trvani_do." )";
         } else {
             $output .= "[nelze zjistit]";
         }
@@ -605,7 +608,7 @@ class vlastnici2pridani extends adminator
             . '<span style="padding-left: 10px; padding-right: 10px; ">Splatnost (ke dni):';
 
         if ($this->firma == 1) {
-            $output .= '<input type="text" name="splatnost" size="8" maxlength="" value="'.$splatnost.'" >';
+            $output .= '<input type="text" name="splatnost" size="8" maxlength="" value="'.$this->form_splatnost.'" >';
         } else {
             $output .= "<span style=\"color: grey; \" > není dostupné </span>";
         }
@@ -782,17 +785,17 @@ class vlastnici2pridani extends adminator
         if($this->firma == 1) {
             $output .= '<select name="typ_smlouvy" size="1" onChange="self.document.forms.form1.submit()" >    
                 <option value="0"';
-            if(($typ_smlouvy == 0) or (!isset($typ_smlouvy))) {
+            if(($this->form_typ_smlouvy == 0) or (!isset($this->form_typ_smlouvy))) {
                 $output .= " selected ";
             }
 
             $output .= 'class="vlastnici-nezvoleno" >Nevybráno</option>
                 <option value="1"';
-            if($typ_smlouvy == 1) {
+            if($this->form_typ_smlouvy == 1) {
                 $output .= " selected ";
             } $output .= ' >Neurčitou</option>
                 <option value="2"';
-            if($typ_smlouvy == 2) {
+            if($this->form_typ_smlouvy == 2) {
                 $output .= " selected ";
             } $output .= ' >Určitou</option>
                 </select>';
@@ -814,8 +817,8 @@ class vlastnici2pridani extends adminator
 
         $output .= "<td colspan=\"\" >";
 
-        if((($typ_smlouvy == 2) and ($this->firma == 1))) {
-            $output .= "<input type=\"text\" name=\"trvani_do\" value=\"".$trvani_do."\" >";
+        if((($this->form_typ_smlouvy == 2) and ($this->firma == 1))) {
+            $output .= "<input type=\"text\" name=\"trvani_do\" value=\"".$this->form_trvani_do."\" >";
             $output .= "<span style=\"padding-left: 15px; \" >formát: ( dd.mm.rrrr )</span>";
         } else {
             $output .= "<span style=\"color: grey; \">Není dostupné</span>";
@@ -1282,9 +1285,9 @@ class vlastnici2pridani extends adminator
     {
         $output = "";
 
-        if((strlen($trvani_do) > 0)) {
-            list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = preg_split("/\./", $trvani_do);
-            $trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
+        if((strlen($this->form_trvani_do) > 0)) {
+            list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = preg_split("/\./", $this->form_trvani_do);
+            $this->form_trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
         }
 
         if((strlen($datum_podpisu) > 0)) {
@@ -1296,8 +1299,8 @@ class vlastnici2pridani extends adminator
         $vlastnik_add = array( "nick" => $this->form_nick ,  "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe,
             "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice,
             "mesto" => $this->form_mesto, "psc" => $this->form_psc, "ucetni_index" => $this->form_ucetni_index,
-            "fakturacni_skupina_id" => $this->form_fakt_skupina, "splatnost" => $splatnost,
-            "typ_smlouvy" => $typ_smlouvy, "sluzba_int" => $sluzba_int,
+            "fakturacni_skupina_id" => $this->form_fakt_skupina, "splatnost" => $this->form_splatnost,
+            "typ_smlouvy" => $this->form_typ_smlouvy, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
             "billing_freq" => $billing_freq );
 
@@ -1319,8 +1322,8 @@ class vlastnici2pridani extends adminator
         if ((strlen($this->form_poznamka) > 0)) {
             $vlastnik_add["poznamka"] = $this->form_poznamka;
         }
-        if ((strlen($trvani_do) > 0)) {
-            $vlastnik_add["trvani_do"] = $trvani_do;
+        if ((strlen($this->form_trvani_do) > 0)) {
+            $vlastnik_add["trvani_do"] = $this->form_trvani_do;
         }
         if ((strlen($datum_podpisu) > 0)) {
             $vlastnik_add["datum_podpisu"] = $datum_podpisu;
@@ -1465,13 +1468,13 @@ class vlastnici2pridani extends adminator
             endwhile;
         }
 
-        if((strlen($trvani_do) > 0)) {
-            list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = split("\.", $trvani_do);
-            $trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
+        if((strlen($this->form_trvani_do) > 0)) {
+            list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = explode("\.", $this->form_trvani_do);
+            $this->form_trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
         }
 
         if((strlen($datum_podpisu) > 0)) {
-            list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = split("\.", $datum_podpisu);
+            list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = explode("\.", $datum_podpisu);
             $datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
         }
 
@@ -1481,7 +1484,7 @@ class vlastnici2pridani extends adminator
 
         $this->vlast_upd = array( "nick" => $this->form_nick, "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice, "mesto" => $this->form_mesto, "psc" => $this->form_psc,
             "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe, "archiv" => $this->form_archiv, "fakturacni_skupina_id" => $this->form_fakt_skupina,
-            "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
+            "splatnost" => $this->form_splatnost, "trvani_do" => $this->form_trvani_do, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
             "billing_freq" => $billing_freq );
 
@@ -1524,8 +1527,8 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["datum_podpisu"] = null;
         }
 
-        if ((strlen($typ_smlouvy) > 0)) {
-            $this->vlast_upd["typ_smlouvy"] = $typ_smlouvy;
+        if ((strlen($this->form_typ_smlouvy) > 0)) {
+            $this->vlast_upd["typ_smlouvy"] = $this->form_typ_smlouvy;
         } else {
             $this->vlast_upd["typ_smlouvy"] = 0;
         }
