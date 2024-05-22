@@ -86,7 +86,8 @@ class vlastnici2pridani extends adminator
 
     private $form_trvani_do;
 
-    // $datum_podpisu;
+    private $form_datum_podpisu;
+
     // $sluzba_int;
     // $sluzba_iptv;
     // $sluzba_voip;
@@ -165,8 +166,8 @@ class vlastnici2pridani extends adminator
                 vlastnici2pridani::check_tel($this->form_tel);
             }
 
-            if((strlen($datum_podpisu) > 0)) {
-                vlastnici2pridani::check_datum($datum_podpisu, "Datum podpisu");
+            if((strlen($this->form_datum_podpisu) > 0)) {
+                vlastnici2pridani::check_datum($this->form_datum_podpisu, "Datum podpisu");
             }
 
             if($this->form_typ_smlouvy == 2) {
@@ -195,9 +196,9 @@ class vlastnici2pridani extends adminator
                 $this->form_trvani_do = $trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
             }
 
-            if((strlen($datum_podpisu) > 0)) {
-                list($datum_podpisu_rok, $datum_podpisu_mesic, $datum_podpisu_den) = explode("\-", $datum_podpisu);
-                $datum_podpisu = $datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
+            if((strlen($this->form_datum_podpisu) > 0)) {
+                list($datum_podpisu_rok, $datum_podpisu_mesic, $datum_podpisu_den) = explode("\-", $this->form_datum_podpisu);
+                $this->form_datum_podpisu = $datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
             }
 
         }
@@ -313,7 +314,7 @@ class vlastnici2pridani extends adminator
                     $this->form_fakturacni = $data["fakturacni"];
                     $this->form_splatnost = $data["splatnost"];
                     $this->form_trvani_do = $data["trvani_do"];
-                    $datum_podpisu = $data["datum_podpisu"];
+                    $this->form_datum_podpisu = $data["datum_podpisu"];
                     $sluzba_int = $data["sluzba_int"];
                     $sluzba_iptv = $data["sluzba_iptv"];
                     $sluzba_voip = $data["sluzba_voip"];
@@ -375,7 +376,7 @@ class vlastnici2pridani extends adminator
             $this->form_typ_smlouvy = intval($_POST["typ_smlouvy"]);
 
             $this->form_trvani_do = $_POST["trvani_do"];
-            $datum_podpisu = $_POST["datum_podpisu"];
+            $this->form_datum_podpisu = $_POST["datum_podpisu"];
 
             $sluzba_int = intval($_POST["sluzba_int"]);
             $sluzba_iptv = intval($_POST["sluzba_iptv"]);
@@ -509,12 +510,12 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>Datum podpisu</b>: ';
 
-        if((strlen($datum_podpisu) > 0)) {
-            list($datum_podpisu_rok, $datum_podpisu_mesic, $datum_podpisu_den) = explode("-", $datum_podpisu);
-            $datum_podpisu = $datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
+        if((strlen($this->form_datum_podpisu) > 0)) {
+            list($datum_podpisu_rok, $datum_podpisu_mesic, $datum_podpisu_den) = explode("-", $this->form_datum_podpisu);
+            $this->form_datum_podpisu = $datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
         }
 
-        $output .= $datum_podpisu;
+        $output .= $this->form_datum_podpisu;
 
         $output .= '<br><br>';
 
@@ -888,7 +889,7 @@ class vlastnici2pridani extends adminator
             <td>';
 
         if ($this->firma == 1) {
-            $output .= '<input type="text" name="datum_podpisu" size="10" class=tcal value='."\"".$datum_podpisu."\" > (formát: dd.mm.yyyy)";
+            $output .= '<input type="text" name="datum_podpisu" size="10" class=tcal value='."\"".$this->form_datum_podpisu."\" > (formát: dd.mm.yyyy)";
         } else {
             $output .= "<span style=\"color: grey; \">Není dostupné</span>";
         }
@@ -1290,9 +1291,9 @@ class vlastnici2pridani extends adminator
             $this->form_trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
         }
 
-        if((strlen($datum_podpisu) > 0)) {
-            list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = preg_split("/\./", $datum_podpisu);
-            $datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
+        if((strlen($this->form_datum_podpisu) > 0)) {
+            list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = preg_split("/\./", $this->form_datum_podpisu);
+            $this->form_datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
         }
 
 
@@ -1325,8 +1326,8 @@ class vlastnici2pridani extends adminator
         if ((strlen($this->form_trvani_do) > 0)) {
             $vlastnik_add["trvani_do"] = $this->form_trvani_do;
         }
-        if ((strlen($datum_podpisu) > 0)) {
-            $vlastnik_add["datum_podpisu"] = $datum_podpisu;
+        if ((strlen($this->form_datum_podpisu) > 0)) {
+            $vlastnik_add["datum_podpisu"] = $this->form_datum_podpisu;
         }
 
         if ($this->form_fakt_skupina < 1) {
@@ -1473,9 +1474,9 @@ class vlastnici2pridani extends adminator
             $this->form_trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
         }
 
-        if((strlen($datum_podpisu) > 0)) {
-            list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = explode("\.", $datum_podpisu);
-            $datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
+        if((strlen($this->form_datum_podpisu) > 0)) {
+            list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = explode("\.", $this->form_datum_podpisu);
+            $this->form_datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
         }
 
         if((strlen($billing_freq) <> 1)) {
@@ -1521,8 +1522,8 @@ class vlastnici2pridani extends adminator
         //if ( (strlen($this->form_poznamka) > 0 ) )
         { $this->vlast_upd["poznamka"] = $this->form_poznamka; }
 
-        if ((strlen($datum_podpisu) > 0)) {
-            $this->vlast_upd["datum_podpisu"] = $datum_podpisu;
+        if ((strlen($this->form_datum_podpisu) > 0)) {
+            $this->vlast_upd["datum_podpisu"] = $this->form_datum_podpisu;
         } else {
             $this->vlast_upd["datum_podpisu"] = null;
         }
