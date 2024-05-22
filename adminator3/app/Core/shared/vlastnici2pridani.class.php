@@ -221,10 +221,8 @@ class vlastnici2pridani extends adminator
                 }
             }
 
-            //checkem jestli se macklo na tlacitko "OK" :)
-            if (preg_match("/^OK$/", $this->form_odeslano)) {
-                echo "";
-            } else {
+            //checkem jestli se (NE)macklo na tlacitko "OK" :)
+            if (!preg_match("/^OK$/", $this->form_odeslano)) {
                 $this->fail = "true";
 
                 $this->smarty->assign("alert_type", "info");
@@ -1091,8 +1089,10 @@ class vlastnici2pridani extends adminator
         return $output;
     }
 
-    private function actionArchivZmen(): void
+    private function actionArchivZmen(): string
     {
+        $output = "";
+        
         $this->action_az_pole2 .= " diferencialni data: ";
 
         //novy zpusob archivovani dat
@@ -1270,10 +1270,12 @@ class vlastnici2pridani extends adminator
                         ]);
 
         if($id > 0) {
-            echo "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+            $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
         } else {
-            echo "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
+            $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
         }
+
+        return $output;
     }
 
     private function actionSaveIntoDatabaseAdd(): string
