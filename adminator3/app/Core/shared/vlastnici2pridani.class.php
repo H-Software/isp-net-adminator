@@ -1589,7 +1589,7 @@ class vlastnici2pridani extends adminator
             $this->alert_content = "Data v databázi úspěšně změněny.</div> (affected:" . $this->action_affected . ")\n";;
         } else {
             $this->alert_type = "danger";
-            $this->alert_content = "Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error_nr . ")\n";
+            $this->alert_content = "Chyba! Data v databázi nelze změnit.<br>(Error: " . $error_nr . ")\n";
         }
 
         $this->smarty->assign("alert_type", $this->alert_type);
