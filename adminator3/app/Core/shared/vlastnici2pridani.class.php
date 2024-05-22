@@ -56,6 +56,8 @@ class vlastnici2pridani extends adminator
 
     private $form_fakt_skupina;
 
+    private $form_archiv;
+
     private $firma;
 
     private $updated;
@@ -157,7 +159,7 @@ class vlastnici2pridani extends adminator
         }
 
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
-        if(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($archiv == 1))) {
+        if(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
 
             if($this->form_update_id < 1) {
                 //zjisti jestli neni duplicitni : nick, vs
@@ -256,7 +258,7 @@ class vlastnici2pridani extends adminator
                     $this->firma = $data["firma"];
                     $poznamka = $data["poznamka"];
                     $ucetni_index = $data["ucetni_index"];
-                    $archiv = $data["archiv"];
+                    $this->form_archiv = $data["archiv"];
                     $this->form_fakt_skupina = $data["fakturacni_skupina_id"];
                     $typ_smlouvy = $data["typ_smlouvy"];
                     $fakturacni = $data["fakturacni"];
@@ -317,7 +319,7 @@ class vlastnici2pridani extends adminator
             $this->firma = $_POST["firma"];
             $poznamka = $_POST["poznamka"];
             $ucetni_index = $_POST["ucetni_index"];
-            $archiv = $_POST["archiv"];
+            $this->form_archiv = $_POST["archiv"];
             $this->form_fakt_skupina = intval($_POST["fakt_skupina"]);
             $splatnost = $_POST["splatnost"];
 
@@ -426,7 +428,7 @@ class vlastnici2pridani extends adminator
         $output .= "<br>";
         $output .= "<b>Archivovat: </b>";
 
-        if($archiv == 1) {
+        if($this->form_archiv == 1) {
             $output .= " Ano ";
         } else {
             $output .= " Ne ";
@@ -709,11 +711,11 @@ class vlastnici2pridani extends adminator
 
             $output .= " <select name=\"archiv\" size=\"1\" >
                 <option value=\"0\"";
-            if (($archiv != "1")) {
+            if (($this->form_archiv != "1")) {
                 $output .= " selected ";
             } $output .= " > Ne </option>
                 <option value=\"1\"";
-            if (($archiv == "1")) {
+            if (($this->form_archiv == "1")) {
                 $output .= " selected ";
             } $output .= " > Ano </option>";
         } else {
@@ -1426,7 +1428,7 @@ class vlastnici2pridani extends adminator
         }
 
         $this->vlast_upd = array( "nick" => trim($this->form_nick), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
-            "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe, "archiv" => $archiv, "fakturacni_skupina_id" => $this->form_fakt_skupina,
+            "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe, "archiv" => $this->form_archiv, "fakturacni_skupina_id" => $this->form_fakt_skupina,
             "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
             "billing_freq" => $billing_freq );
