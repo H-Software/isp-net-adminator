@@ -219,9 +219,13 @@ class vlastnici2pridani extends adminator
                 echo "";
             } else {
                 $this->fail = "true";
-                $this->error .= '<div class="alert alert-info position-absolute top-50 start-50 translate-middle" role="alert" style="padding-left: 5px; width: 75%;">';
-                $this->error .= "Data neuloženy, nebylo použito tlačítko \"OK\".</br>Pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!";
-                $this->error .= "</div>";
+
+                $alert_type = "info";
+                $alert_content = "Data neuloženy, nebylo použito tlačítko \"OK\".</br>Pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!";
+                $this->smarty->assign("alert_type", $alert_type);
+                $this->smarty->assign("alert_content", $alert_content);
+
+                $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
             }
 
             //ulozeni
