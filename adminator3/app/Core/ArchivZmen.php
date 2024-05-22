@@ -703,12 +703,13 @@ class ArchivZmen
                         $firma_vlastnik = $data_vlastnik_pom["firma"];
                         $archiv_vlastnik = $data_vlastnik_pom["archiv"];
                     }
+
                     if($archiv_vlastnik == 1) {
-                        $id_cloveka_res .= "<a href=\"vlastnici-archiv.php";
+                        $id_cloveka_res .= "<a href=\"/vlastnici/archiv";
                     } elseif($firma_vlastnik == 1) {
-                        $id_cloveka_res .= "<a href=\"vlastnici2.php";
+                        $id_cloveka_res .= "<a href=\"/vlastnici2";
                     } else {
-                        $id_cloveka_res .= "<a href=\"vlastnici.php";
+                        $id_cloveka_res .= "<a href=\"/vlastnici";
                     }
 
                     $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
@@ -762,7 +763,7 @@ class ArchivZmen
                         $id_cloveka_pomocne = $pomocne2[1];
                     }
 
-                    $dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
+                    $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
 
                     while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
                         $firma_vlastnik = $data_vlastnik_pom["firma"];
@@ -770,11 +771,11 @@ class ArchivZmen
                     }
 
                     if($archiv_vlastnik == 1) {
-                        $id_cloveka_res .= "<a href=\"vlastnici-archiv.php";
+                        $id_cloveka_res .= "<a href=\"/vlastnici/archiv";
                     } elseif($firma_vlastnik == 1) {
-                        $id_cloveka_res .= "<a href=\"vlastnici2.php";
+                        $id_cloveka_res .= "<a href=\"/vlastnici2";
                     } else {
-                        $id_cloveka_res .= "<a href=\"vlastnici.php";
+                        $id_cloveka_res .= "<a href=\"/vlastnici";
                     }
 
                     $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
@@ -792,7 +793,7 @@ class ArchivZmen
 
                     // echo "<pre>" . var_export( $id_cloveka_pomocne, true) . "</pre>";
 
-                    $dotaz_vlastnik_pom = pg_query("SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
+                    $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
 
                     while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
                         $firma_vlastnik = $data_vlastnik_pom["firma"];
@@ -800,11 +801,11 @@ class ArchivZmen
                     }
 
                     if($archiv_vlastnik == 1) {
-                        $id_cloveka_res .= "<a href=\"vlastnici-archiv.php";
+                        $id_cloveka_res .= "<a href=\"/vlastnici/archiv";
                     } elseif($firma_vlastnik == 1) {
-                        $id_cloveka_res .= "<a href=\"vlastnici2.php";
+                        $id_cloveka_res .= "<a href=\"/vlastnici2";
                     } else {
-                        $id_cloveka_res .= "<a href=\"vlastnici.php";
+                        $id_cloveka_res .= "<a href=\"/vlastnici";
                     }
 
                     $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >".$id_cloveka_pomocne."</a>";
