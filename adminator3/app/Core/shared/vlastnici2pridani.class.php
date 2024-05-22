@@ -98,10 +98,11 @@ class vlastnici2pridani extends adminator
 
     private $form_sluzba_iptv_id_tarifu;
 
-    // $billing_freq;
+    private $form_billing_freq;
 
-    // $billing_suspend_status;
-    // $billing_suspend_reason;
+    private $form_billing_suspend_status;
+    
+    private $form_billing_suspend_reason;
 
     // $billing_suspend_start;
     // $billing_suspend_stop;
@@ -179,15 +180,15 @@ class vlastnici2pridani extends adminator
                 vlastnici2pridani::check_datum($this->form_trvani_do, "Trvání do");
             }
 
-            if($billing_suspend_status == 1) {
+            if($this->form_billing_suspend_status == 1) {
 
                 vlastnici2pridani::check_datum($billing_suspend_start, "Poz. fakturace - od kdy");
                 vlastnici2pridani::check_datum($billing_suspend_stop, "Poz. fakturace - do kdy");
 
             }
 
-            if((strlen($billing_suspend_reason) > 0) and ($billing_suspend_status == 1)) {
-                vlastnici2pridani::check_b_reason($billing_suspend_reason);
+            if((strlen($this->form_billing_suspend_reason) > 0) and ($this->form_billing_suspend_status == 1)) {
+                vlastnici2pridani::check_b_reason($this->form_billing_suspend_reason);
             }
 
         }
@@ -325,10 +326,10 @@ class vlastnici2pridani extends adminator
                     $this->form_sluzba_int_id_tarifu = $data["sluzba_int_id_tarifu"];
                     $this->form_sluzba_iptv_id_tarifu = $data["sluzba_iptv_id_tarifu"];
 
-                    $billing_freq = $data["billing_freq"];
+                    $this->form_billing_freq = $data["billing_freq"];
 
-                    $billing_suspend_status = $data["billing_suspend_status"];
-                    $billing_suspend_reason = $data["billing_suspend_reason"];
+                    $this->form_billing_suspend_status = $data["billing_suspend_status"];
+                    $this->form_billing_suspend_reason = $data["billing_suspend_reason"];
 
                     $billing_suspend_start  = $data["billing_suspend_start"];
                     $billing_suspend_stop   = $data["billing_suspend_stop"];
@@ -388,10 +389,10 @@ class vlastnici2pridani extends adminator
             $this->form_sluzba_int_id_tarifu = intval($_POST["sluzba_int_id_tarifu"]);
             $this->form_sluzba_iptv_id_tarifu = intval($_POST["sluzba_iptv_id_tarifu"]);
 
-            $billing_freq = intval($_POST["billing_freq"]);
+            $this->form_billing_freq = intval($_POST["billing_freq"]);
 
-            $billing_suspend_status = intval($_POST["billing_suspend_status"]);
-            $billing_suspend_reason = $_POST["billing_suspend_reason"];
+            $this->form_billing_suspend_status = intval($_POST["billing_suspend_status"]);
+            $this->form_billing_suspend_reason = $_POST["billing_suspend_reason"];
             $billing_suspend_start  = $_POST["billing_suspend_start"];
             $billing_suspend_stop   = $_POST["billing_suspend_stop"];
 
@@ -475,7 +476,7 @@ class vlastnici2pridani extends adminator
         $output .= '<b>firma</b>: ';
 
         if($this->firma == 1) {
-            $output .= "Vlastníci2 - Copmany, s.r.o.";
+            $output .= "Vlastníci2 - Company, s.r.o.";
         } else {
             $output .= "Vlastníci - FO";
         }
@@ -558,7 +559,7 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>Pozastavené fakturace:</b> ';
 
-        if($billing_suspend_status == 1) {
+        if($this->form_billing_suspend_status == 1) {
             $output .= "Ano";
         } else {
             $output .= "Ne";
@@ -566,7 +567,7 @@ class vlastnici2pridani extends adminator
 
         $output .= "<br>";
 
-        if($billing_suspend_status == 1) {
+        if($this->form_billing_suspend_status == 1) {
             list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $billing_suspend_start);
             $billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
@@ -576,7 +577,7 @@ class vlastnici2pridani extends adminator
             $output .= "<b>od kdy</b>: ".$billing_suspend_start."<br>\n";
             $output .= "<b>do kdy</b>: ".$billing_suspend_stop."<br>\n";
 
-            $output .= "<b>důvod</b>: ".$billing_suspend_reason."<br>\n";
+            $output .= "<b>důvod</b>: ".$this->form_billing_suspend_reason."<br>\n";
         }
 
         $output .= '<br>'
@@ -969,11 +970,11 @@ class vlastnici2pridani extends adminator
             "<select size=\"1\" name=\"billing_freq\">";
 
             $output .= "<option value=\"0\" ";
-            if($billing_freq == 0 or empty($billing_freq)) {
+            if($this->form_billing_freq == 0 or empty($this->form_billing_freq)) {
                 $output .= "selected";
             } $output .= " >Měsíční</option>";
             $output .= "<option value=\"1\" ";
-            if($billing_freq == 1) {
+            if($this->form_billing_freq == 1) {
                 $output .= "selected";
             } $output .= " >Čtvrtletní</option>";
 
@@ -1015,11 +1016,11 @@ class vlastnici2pridani extends adminator
         $output .= "<select size=\"1\" name=\"billing_suspend_status\" onChange=\"self.document.forms.form1.submit()\">";
 
         $output .= "<option value=\"0\" ";
-        if(($billing_suspend_status == 0) or (!isset($billing_suspend_status))) {
+        if(($this->form_billing_suspend_status == 0) or (!isset($this->form_billing_suspend_status))) {
             $output .= " selected ";
         } $output .= ">Ne</option>";
         $output .= "<option value=\"1\" ";
-        if($billing_suspend_status == 1) {
+        if($this->form_billing_suspend_status == 1) {
             $output .= " selected ";
         } $output .= ">Ano</option>";
 
@@ -1033,13 +1034,13 @@ class vlastnici2pridani extends adminator
             <td colspan="2" ><br></td>';
 
 
-        if($billing_suspend_status == 1) {
+        if($this->form_billing_suspend_status == 1) {
             $output .= "<td rowspan=\"3\">
-                <textarea type=\"text\" name=\"billing_suspend_reason\" cols=\"40\" rows=\"4\" >".htmlspecialchars($billing_suspend_reason)."</textarea>
+                <textarea type=\"text\" name=\"billing_suspend_reason\" cols=\"40\" rows=\"4\" >".htmlspecialchars($this->form_billing_suspend_reason)."</textarea>
                 </td>";
         } else {
             $output .= "<td rowspan=\"3\"><span style=\"color: grey; \">Není dostupné</span></td>";
-            $output .= "<input type=\"hidden\" name=\"billing_suspend_reason\" value=\"".htmlspecialchars($billing_suspend_reason)."\" >";
+            $output .= "<input type=\"hidden\" name=\"billing_suspend_reason\" value=\"".htmlspecialchars($this->form_billing_suspend_reason)."\" >";
         }
 
         $output .= '</tr>
@@ -1047,7 +1048,7 @@ class vlastnici2pridani extends adminator
                     <td>Poz. fakturace - od kdy:</td>
                 <td>';
 
-        if($billing_suspend_status == 1) {
+        if($this->form_billing_suspend_status == 1) {
             $output .= "<input type=\"text\" name=\"billing_suspend_start\" size=\"10\" class=\"tcal\" value=\"".
                 htmlspecialchars($billing_suspend_start)."\" > datum (formát: dd.mm.yyyy)";
         } else {
@@ -1064,7 +1065,7 @@ class vlastnici2pridani extends adminator
             <td>Poz. fakturace - do kdy:</td>
             <td>';
 
-        if($billing_suspend_status == 1) {
+        if($this->form_billing_suspend_status == 1) {
             $output .= "<input type=\"text\" name=\"billing_suspend_stop\" size=\"10\" value=\"".
             htmlspecialchars($billing_suspend_stop)."\" class=\"tcal\"> datum (formát: dd.mm.yyyy)";
         } else {
@@ -1306,7 +1307,7 @@ class vlastnici2pridani extends adminator
             "fakturacni_skupina_id" => $this->form_fakt_skupina, "splatnost" => $this->form_splatnost,
             "typ_smlouvy" => $this->form_typ_smlouvy, "sluzba_int" => $this->form_sluzba_int,
             "sluzba_iptv" => $this->form_sluzba_iptv, "sluzba_voip" => $this->form_sluzba_voip,
-            "billing_freq" => $billing_freq );
+            "billing_freq" => $this->form_billing_freq );
 
         if ((strlen($this->firma) > 0)) {
             $vlastnik_add["firma"] = $this->firma;
@@ -1344,9 +1345,9 @@ class vlastnici2pridani extends adminator
             $vlast_add["sluzba_iptv_id_tarifu"] = $this->form_sluzba_iptv_id_tarifu;
         }
 
-        if($billing_suspend_status == 1) {
-            $vlastnik_add["billing_suspend_status"] = intval($billing_suspend_status);
-            $vlastnik_add["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
+        if($this->form_billing_suspend_status == 1) {
+            $vlastnik_add["billing_suspend_status"] = intval($this->form_billing_suspend_status);
+            $vlastnik_add["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($this->form_billing_suspend_reason);
 
             list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
             $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
@@ -1482,15 +1483,15 @@ class vlastnici2pridani extends adminator
             $this->form_datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
         }
 
-        if((strlen($billing_freq) <> 1)) {
-            $billing_freq = 0;
+        if((strlen($this->form_billing_freq) <> 1)) {
+            $this->form_billing_freq = 0;
         }
 
         $this->vlast_upd = array( "nick" => $this->form_nick, "jmeno" => $this->form_jmeno, "prijmeni" => $this->form_prijmeni, "ulice" => $this->form_ulice, "mesto" => $this->form_mesto, "psc" => $this->form_psc,
             "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe, "archiv" => $this->form_archiv, "fakturacni_skupina_id" => $this->form_fakt_skupina,
             "splatnost" => $this->form_splatnost, "trvani_do" => $this->form_trvani_do, "sluzba_int" => $this->form_sluzba_int,
             "sluzba_iptv" => $this->form_sluzba_iptv, "sluzba_voip" => $this->form_sluzba_voip,
-            "billing_freq" => $billing_freq );
+            "billing_freq" => $this->form_billing_freq );
 
         if ((strlen($this->firma) > 0)) {
             $this->vlast_upd["firma"] = $this->firma;
@@ -1549,9 +1550,9 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["sluzba_iptv_id_tarifu"] = $this->form_sluzba_iptv_id_tarifu;
         }
 
-        if($billing_suspend_status == 1) {
-            $this->vlast_upd["billing_suspend_status"] = intval($billing_suspend_status);
-            $this->vlast_upd["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($billing_suspend_reason);
+        if($this->form_billing_suspend_status == 1) {
+            $this->vlast_upd["billing_suspend_status"] = intval($this->form_billing_suspend_status);
+            $this->vlast_upd["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($this->form_billing_suspend_reason);
 
             list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
             $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
