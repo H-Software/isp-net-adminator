@@ -197,7 +197,7 @@ class vlastnici2pridani extends adminator
         if(($this->form_update_id > 0 and !(isset($this->form_send)))) {
             // $this->form_trvani_do = "";
             if((strlen($this->form_trvani_do) > 0)) {
-                list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("\-", $this->form_splatnost);
+                list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("\-", $this->form_trvani_do);
                 $this->form_trvani_do = $trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
             }
 
@@ -362,15 +362,15 @@ class vlastnici2pridani extends adminator
             $this->form_tel = trim($_POST["tel"]);
 
             $this->form_fakturacni = $_POST["fakturacni"];
-            $ftitle = $_POST["ftitle"];
-            $fulice = $_POST["fulice"];
-            $fmesto = $_POST["fmesto"];
-            $fpsc = $_POST["fpsc"];
-            $ico = $_POST["ico"];
-            $dic = $_POST["dic"];
-            $ucet = $_POST["ucet"];
-            $this->form_splatnost = $_POST["splatnost"];
-            $cetnost = $_POST["cetnost"];
+            // $ftitle = $_POST["ftitle"];
+            // $fulice = $_POST["fulice"];
+            // $fmesto = $_POST["fmesto"];
+            // $fpsc = $_POST["fpsc"];
+            // $ico = $_POST["ico"];
+            // $dic = $_POST["dic"];
+            // $ucet = $_POST["ucet"];
+            // $cetnost = $_POST["cetnost"];
+
             $this->firma = $_POST["firma"];
             $this->form_poznamka = trim($_POST["poznamka"]);
             $this->form_ucetni_index = trim($_POST["ucetni_index"]);
