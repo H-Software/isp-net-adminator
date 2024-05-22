@@ -227,10 +227,10 @@ parameters:
 			count: 1
 			path: app/Core/Item/objekt.class.php
 
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
+		# -
+		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+		# 	count: 1
+		# 	path: app/Core/Item/objekt.class.php
 
 		-
 			message: "#^Elseif condition is always true\\.$#"
