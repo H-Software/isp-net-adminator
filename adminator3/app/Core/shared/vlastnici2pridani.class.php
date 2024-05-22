@@ -46,9 +46,15 @@ class vlastnici2pridani extends adminator
 
     private $form_nick;
 
+    private $form_vs;
+
+    private $form_k_platbe;
+
     private $vlast_upd;
 
     private $pole_puvodni_data;
+
+    private $form_fakt_skupina;
 
     private $firma;
 
@@ -85,12 +91,12 @@ class vlastnici2pridani extends adminator
                 vlastnici2pridani::checknick($this->form_nick);
             }
 
-            if((strlen($vs) > 0)) {
-                vlastnici2pridani::checkvs($vs);
+            if((strlen($this->form_vs) > 0)) {
+                vlastnici2pridani::checkvs($this->form_vs);
             }
 
-            if((strlen($k_platbe) > 0)) {
-                vlastnici2pridani::check_k_platbe($k_platbe);
+            if((strlen($this->form_k_platbe) > 0)) {
+                vlastnici2pridani::check_k_platbe($this->form_k_platbe);
             }
 
             if((strlen($splatnost) > 0)) {
@@ -151,7 +157,7 @@ class vlastnici2pridani extends adminator
         }
 
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
-        if(($this->form_nick != "") and ($vs != "") and ($k_platbe != "") and (($fakt_skupina > 0) or ($this->firma <> 1) or ($archiv == 1))) {
+        if(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($archiv == 1))) {
 
             if($this->form_update_id < 1) {
                 //zjisti jestli neni duplicitni : nick, vs
@@ -237,8 +243,8 @@ class vlastnici2pridani extends adminator
 
                     // primy promenny
                     $this->form_nick = $data["nick"];
-                    $vs = $data["vs"];
-                    $k_platbe = $data["k_platbe"];
+                    $this->form_vs = $data["vs"];
+                    $this->form_k_platbe = $data["k_platbe"];
                     $jmeno = $data["jmeno"];
                     $prijmeni = $data["prijmeni"];
                     $ulice = $data["ulice"];
@@ -251,7 +257,7 @@ class vlastnici2pridani extends adminator
                     $poznamka = $data["poznamka"];
                     $ucetni_index = $data["ucetni_index"];
                     $archiv = $data["archiv"];
-                    $fakt_skupina = $data["fakturacni_skupina_id"];
+                    $this->form_fakt_skupina = $data["fakturacni_skupina_id"];
                     $typ_smlouvy = $data["typ_smlouvy"];
                     $fakturacni = $data["fakturacni"];
                     $splatnost = $data["splatnost"];
@@ -286,8 +292,8 @@ class vlastnici2pridani extends adminator
         } else { // rezim pridani, ukladani
 
             $this->form_nick = trim($_POST["nick2"]);
-            $vs = trim($_POST["vs"]);
-            $k_platbe = trim($_POST["k_platbe"]);
+            $this->form_vs = trim($_POST["vs"]);
+            $this->form_k_platbe = trim($_POST["k_platbe"]);
             $jmeno = trim($_POST["jmeno"]);
             $prijmeni = trim($_POST["prijmeni"]);
             $ulice = trim($_POST["ulice"]);
@@ -312,7 +318,7 @@ class vlastnici2pridani extends adminator
             $poznamka = $_POST["poznamka"];
             $ucetni_index = $_POST["ucetni_index"];
             $archiv = $_POST["archiv"];
-            $fakt_skupina = intval($_POST["fakt_skupina"]);
+            $this->form_fakt_skupina = intval($_POST["fakt_skupina"]);
             $splatnost = $_POST["splatnost"];
 
             $typ_smlouvy = intval($_POST["typ_smlouvy"]);
@@ -392,8 +398,8 @@ class vlastnici2pridani extends adminator
         $output .= '
         Objekt byl přidán/upraven , zadané údaje:<br><br> 
         <b>Nick</b>: ' . $this->form_nick . ' <br> 
-        <b>VS</b>: ' . $vs . ' <br> 
-        <b>K_platbě</b>: ' . $k_platbe . ' <br>';
+        <b>VS</b>: ' . $this->form_vs . ' <br> 
+        <b>K_platbě</b>: ' . $this->form_k_platbe . ' <br>';
 
         $output .= '<br>';
 
@@ -426,7 +432,7 @@ class vlastnici2pridani extends adminator
             $output .= " Ne ";
         }
 
-        $output .= "<br><b>Fakturační skupina: </b> ".$fakt_skupina."<br>";
+        $output .= "<br><b>Fakturační skupina: </b> ".$this->form_fakt_skupina."<br>";
 
         $output .= '<b>Typ smlouvy:</b> ';
 
@@ -541,10 +547,10 @@ class vlastnici2pridani extends adminator
             . '<td colspan="3" width="80" align="left" >'
 
 
-            . 'vs: <input type="Text" name="vs" size="" maxlength="" value="'.$vs.'" >'
+            . 'vs: <input type="Text" name="vs" size="" maxlength="" value="'.$this->form_vs.'" >'
 
             . '<span style="padding-left: 10px; padding-right: 10px; ">'
-            . 'k platbě: </span><input type="text" name="k_platbe" size="" maxlength="" value="'.$k_platbe.'" >'
+            . 'k platbě: </span><input type="text" name="k_platbe" size="" maxlength="" value="'.$this->form_k_platbe.'" >'
 
             . '<span style="padding-left: 10px; padding-right: 10px; ">Splatnost (ke dni):';
 
@@ -591,7 +597,7 @@ class vlastnici2pridani extends adminator
                 . '<select name="fakt_skupina" size="1" >'
 
                 ."\t\t".'<option value="0" class="vlastnici2-fakt-skupina" ';
-            if ($fakt_skupina == 0) {
+            if ($this->form_fakt_skupina == 0) {
                 $output .= " selected ";
             }
             $output .= ' > žádná </option> '."\n";
@@ -612,7 +618,7 @@ class vlastnici2pridani extends adminator
             if($dotaz_fakt_skup_radku > 0) {
                 while($data_fakt_skup = $dotaz_fakt_skup->fetch_array()) {
                     $output .= "\t\t<option value=\"".$data_fakt_skup["id"]."\" ";
-                    if ($fakt_skupina == $data_fakt_skup["id"]) {
+                    if ($this->form_fakt_skupina == $data_fakt_skup["id"]) {
                         $output .= " selected ";
                     }
                     $output .= " > ".$data_fakt_skup["nazev"];
@@ -1233,10 +1239,10 @@ class vlastnici2pridani extends adminator
         }
 
 
-        $vlastnik_add = array( "nick" => $this->form_nick ,  "vs" => $vs, "k_platbe" => $k_platbe,
+        $vlastnik_add = array( "nick" => $this->form_nick ,  "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe,
             "jmeno" => $jmeno, "prijmeni" => $prijmeni, "ulice" => $ulice,
             "mesto" => $mesto, "psc" => $psc, "ucetni_index" => $ucetni_index,
-            "fakturacni_skupina_id" => $fakt_skupina, "splatnost" => $splatnost,
+            "fakturacni_skupina_id" => $this->form_fakt_skupina, "splatnost" => $splatnost,
             "typ_smlouvy" => $typ_smlouvy, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
             "billing_freq" => $billing_freq );
@@ -1266,7 +1272,7 @@ class vlastnici2pridani extends adminator
             $vlastnik_add["datum_podpisu"] = $datum_podpisu;
         }
 
-        if ($fakt_skupina < 1) {
+        if ($this->form_fakt_skupina < 1) {
             $this->vlast_upd["fakturacni_skupina_id"] = null;
         }
 
@@ -1420,7 +1426,7 @@ class vlastnici2pridani extends adminator
         }
 
         $this->vlast_upd = array( "nick" => trim($this->form_nick), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
-            "vs" => $vs, "k_platbe" => $k_platbe, "archiv" => $archiv, "fakturacni_skupina_id" => $fakt_skupina,
+            "vs" => $this->form_vs, "k_platbe" => $this->form_k_platbe, "archiv" => $archiv, "fakturacni_skupina_id" => $this->form_fakt_skupina,
             "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
             "billing_freq" => $billing_freq );
@@ -1470,7 +1476,7 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["typ_smlouvy"] = 0;
         }
 
-        if ($fakt_skupina < 1) {
+        if ($this->form_fakt_skupina < 1) {
             $this->vlast_upd["fakturacni_skupina_id"] = null;
         }
 
@@ -1542,22 +1548,22 @@ class vlastnici2pridani extends adminator
 
     } // konec funkce check nick
 
-    private function checkvs($vs)
+    private function checkvs($input)
     {
-        $vs_check = preg_match('/^([[:digit:]]+)$/', $vs);
-        if(!($vs_check)) {
+        $input_check = preg_match('/^([[:digit:]]+)$/', $input);
+        if(!($input_check)) {
             $this->fail = "true";
-            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Variabilní symbol ( ".$vs." ) není ve správnem formátu!!! (Pouze čísla)</H4></div>";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Variabilní symbol ( ".$input." ) není ve správnem formátu!!! (Pouze čísla)</H4></div>";
         }
     } // konec funkce check vs
 
-    private function check_k_platbe($k_platbe)
+    private function check_k_platbe($input)
     {
-        $platba_check = preg_match('/^([[:digit:]]|\.)+$/', $k_platbe);
+        $platba_check = preg_match('/^([[:digit:]]|\.)+$/', $input);
 
         if (!($platba_check)) {
             $this->fail = "true";
-            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>K_platbe ( ".$k_platbe." ) není ve správnem formátu !!! </H4></div>";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>K_platbe ( ".$input." ) není ve správnem formátu !!! </H4></div>";
         }
 
     } // konec funkce check rra
