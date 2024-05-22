@@ -44,7 +44,9 @@ class vlastnici2pridani extends adminator
 
     private $form_firma_add;
 
-    $private $pole_puvodni_data;
+    private $pole_puvodni_data;
+
+    private $firma;
 
     public function __construct(ContainerInterface $container)
     {
@@ -70,7 +72,7 @@ class vlastnici2pridani extends adminator
         }
 
         //kontrola promených
-        if(isset($this->send)) {
+        if(isset($this->form_send)) {
             if((strlen($nick2) > 0)) {
                 vlastnici2pridani::checknick($nick2);
             }
@@ -126,7 +128,7 @@ class vlastnici2pridani extends adminator
 
         }
 
-        if(($this->form_update_id > 0 and !(isset($this->send)))) {
+        if(($this->form_update_id > 0 and !(isset($this->form_send)))) {
             // $trvani_do = "";
             if((strlen($trvani_do) > 0)) {
                 list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("\-", $trvani_do);
@@ -141,7 +143,7 @@ class vlastnici2pridani extends adminator
         }
 
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
-        if(($nick2 != "") and ($vs != "") and ($k_platbe != "") and (($fakt_skupina > 0) or ($firma <> 1) or ($archiv == 1))):
+        if(($nick2 != "") and ($vs != "") and ($k_platbe != "") and (($fakt_skupina > 0) or ($this->firma <> 1) or ($archiv == 1))):
 
             if($this->form_update_id < 1) {
                 //zjisti jestli neni duplicitni : nick, vs
@@ -189,49 +191,49 @@ class vlastnici2pridani extends adminator
                         $this->action_vlast_upd_old["id_cloveka"] = $data4["id_cloveka"];
 
                         //novy zpusob archivace - pro porovnavani zmen
-                        $pole_puvodni_data["id_cloveka"] = $data4["id_cloveka"];
-                        $pole_puvodni_data["nick"] = $data4["nick"];
-                        $pole_puvodni_data["jmeno"] = $data4["jmeno"];
-                        $pole_puvodni_data["prijmeni"] = $data4["prijmeni"];
-                        $pole_puvodni_data["ulice"] = $data4["ulice"];
-                        $pole_puvodni_data["mesto"] = $data4["mesto"];
-                        $pole_puvodni_data["psc"] = $data4["psc"];
-                        $pole_puvodni_data["icq"] = $data4["icq"];
-                        $pole_puvodni_data["mail"] = $data4["mail"];
-                        $pole_puvodni_data["telefon"] = $data4["telefon"];
-                        $pole_puvodni_data["poznamka"] = $data4["poznamka"];
-                        $pole_puvodni_data["vs"] = $data4["vs"];
-                        $pole_puvodni_data["datum_podpisu"] = $data4["datum_podpisu"];
-                        $pole_puvodni_data["k_platbe"] = $data4["k_platbe"];
-                        $pole_puvodni_data["ucetni_index"] = $data4["ucetni_index"];
-                        $pole_puvodni_data["archiv"] = $data4["archiv"];
-                        $pole_puvodni_data["fakturacni_skupina_id"] = $data4["fakturacni_skupina_id"];
-                        $pole_puvodni_data["splatnost"] = $data4["splatnost"];
-                        $pole_puvodni_data["typ_smlouvy"] = $data4["typ_smlouvy"];
-                        $pole_puvodni_data["firma"] = $data4["firma"];
-                        $pole_puvodni_data["trvani_do"] = $data4["trvani_do"];
+                        $this->pole_puvodni_data["id_cloveka"] = $data4["id_cloveka"];
+                        $this->pole_puvodni_data["nick"] = $data4["nick"];
+                        $this->pole_puvodni_data["jmeno"] = $data4["jmeno"];
+                        $this->pole_puvodni_data["prijmeni"] = $data4["prijmeni"];
+                        $this->pole_puvodni_data["ulice"] = $data4["ulice"];
+                        $this->pole_puvodni_data["mesto"] = $data4["mesto"];
+                        $this->pole_puvodni_data["psc"] = $data4["psc"];
+                        $this->pole_puvodni_data["icq"] = $data4["icq"];
+                        $this->pole_puvodni_data["mail"] = $data4["mail"];
+                        $this->pole_puvodni_data["telefon"] = $data4["telefon"];
+                        $this->pole_puvodni_data["poznamka"] = $data4["poznamka"];
+                        $this->pole_puvodni_data["vs"] = $data4["vs"];
+                        $this->pole_puvodni_data["datum_podpisu"] = $data4["datum_podpisu"];
+                        $this->pole_puvodni_data["k_platbe"] = $data4["k_platbe"];
+                        $this->pole_puvodni_data["ucetni_index"] = $data4["ucetni_index"];
+                        $this->pole_puvodni_data["archiv"] = $data4["archiv"];
+                        $this->pole_puvodni_data["fakturacni_skupina_id"] = $data4["fakturacni_skupina_id"];
+                        $this->pole_puvodni_data["splatnost"] = $data4["splatnost"];
+                        $this->pole_puvodni_data["typ_smlouvy"] = $data4["typ_smlouvy"];
+                        $this->pole_puvodni_data["firma"] = $data4["firma"];
+                        $this->pole_puvodni_data["trvani_do"] = $data4["trvani_do"];
 
-                        $pole_puvodni_data["sluzba_int"] = $data4["sluzba_int"];
-                        $pole_puvodni_data["sluzba_iptv"] = $data4["sluzba_iptv"];
-                        $pole_puvodni_data["sluzba_voip"] = $data4["sluzba_voip"];
+                        $this->pole_puvodni_data["sluzba_int"] = $data4["sluzba_int"];
+                        $this->pole_puvodni_data["sluzba_iptv"] = $data4["sluzba_iptv"];
+                        $this->pole_puvodni_data["sluzba_voip"] = $data4["sluzba_voip"];
 
-                        $pole_puvodni_data["billing_freq"] = $data4["billing_freq"];
+                        $this->pole_puvodni_data["billing_freq"] = $data4["billing_freq"];
 
-                        $pole_puvodni_data["billing_suspend_status"] = $data4["billing_suspend_status"];
-                        $pole_puvodni_data["billing_suspend_reason"] = $data4["billing_suspend_reason"];
+                        $this->pole_puvodni_data["billing_suspend_status"] = $data4["billing_suspend_status"];
+                        $this->pole_puvodni_data["billing_suspend_reason"] = $data4["billing_suspend_reason"];
 
-                        $pole_puvodni_data["billing_suspend_start"]  = $data4["billing_suspend_start"];
-                        $pole_puvodni_data["billing_suspend_stop"]   = $data4["billing_suspend_stop"];
+                        $this->pole_puvodni_data["billing_suspend_start"]  = $data4["billing_suspend_start"];
+                        $this->pole_puvodni_data["billing_suspend_stop"]   = $data4["billing_suspend_stop"];
 
                         if($sluzba_int == 1) {
-                            $pole_puvodni_data["sluzba_int_id_tarifu"] = $data4["sluzba_int_id_tarifu"];
+                            $this->pole_puvodni_data["sluzba_int_id_tarifu"] = $data4["sluzba_int_id_tarifu"];
                         }
 
                         if($sluzba_iptv == 1) {
-                            $pole_puvodni_data["sluzba_iptv_id_tarifu"] = $data4["sluzba_iptv_id_tarifu"];
+                            $this->pole_puvodni_data["sluzba_iptv_id_tarifu"] = $data4["sluzba_iptv_id_tarifu"];
                         }
 
-                        //$pole_puvodni_data["fakturacni"]=$data4["fakturacni"];
+                        //$this->pole_puvodni_data["fakturacni"]=$data4["fakturacni"];
 
                     endwhile;
                 }
@@ -256,8 +258,8 @@ class vlastnici2pridani extends adminator
                     "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
                     "billing_freq" => $billing_freq );
 
-                if ((strlen($firma) > 0)) {
-                    $vlast_upd["firma"] = $firma;
+                if ((strlen($this->firma) > 0)) {
+                    $vlast_upd["firma"] = $this->firma;
                 } else {
                     $vlast_upd["firma"] = null;
                 } // u firmy else musi byt
@@ -377,8 +379,8 @@ class vlastnici2pridani extends adminator
                     "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
                     "billing_freq" => $billing_freq );
 
-                if ((strlen($firma) > 0)) {
-                    $vlastnik_add["firma"] = $firma;
+                if ((strlen($this->firma) > 0)) {
+                    $vlastnik_add["firma"] = $this->firma;
                 }
                 if ((strlen($email) > 0)) {
                     $vlastnik_add["mail"] = $email;
@@ -481,12 +483,12 @@ class vlastnici2pridani extends adminator
         } else {
         } // konec else ( !(isset(fail) ), else tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
-        elseif (isset($this->send)):
+        elseif (isset($this->form_send)):
             $this->error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
         endif;
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if (($this->error != null) or (!isset($this->send))) {
+        if (($this->error != null) or (!isset($this->form_send))) {
             $output .= $this->error;
 
             // vlozeni vlastniho formu
@@ -514,7 +516,7 @@ class vlastnici2pridani extends adminator
         //     $update_status = 1;
         // }
 
-        if(($this->form_update_id > 0 and !(isset($this->send)))) { //rezim upravy
+        if(($this->form_update_id > 0 and !(isset($this->form_send)))) { //rezim upravy
 
             $dotaz_upd = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka='".intval($this->form_update_id)."' ");
             $radku_upd = pg_num_rows($dotaz_upd);
@@ -537,7 +539,7 @@ class vlastnici2pridani extends adminator
                     $email = $data["mail"];
                     $icq = $data["icq"];
                     $tel = $data["telefon"];
-                    $firma = $data["firma"];
+                    $this->firma = $data["firma"];
                     $poznamka = $data["poznamka"];
                     $ucetni_index = $data["ucetni_index"];
                     $archiv = $data["archiv"];
@@ -598,7 +600,7 @@ class vlastnici2pridani extends adminator
             $ucet = $_POST["ucet"];
             $splatnost = $_POST["splatnost"];
             $cetnost = $_POST["cetnost"];
-            $firma = $_POST["firma"];
+            $this->firma = $_POST["firma"];
             $poznamka = $_POST["poznamka"];
             $ucetni_index = $_POST["ucetni_index"];
             $archiv = $_POST["archiv"];
@@ -625,12 +627,12 @@ class vlastnici2pridani extends adminator
             $billing_suspend_stop   = $_POST["billing_suspend_stop"];
 
             //systémove
-            $this->send = $_POST["send"];
+            $this->form_send = $_POST["send"];
 
             if($this->form_firma_add == 2) {
-                $firma = "";
+                $this->firma = "";
             } elseif ($this->form_firma_add == 1) {
-                $firma = "1";
+                $this->firma = "1";
             }
 
             if((strlen($splatnost) < 1)) {
@@ -701,7 +703,7 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>firma</b>: ';
 
-        if($firma == 1) {
+        if($this->firma == 1) {
             $output .= "Vlastníci2 - Copmany, s.r.o.";
         } else {
             $output .= "Vlastníci - FO";
@@ -838,7 +840,7 @@ class vlastnici2pridani extends adminator
 
             . '<span style="padding-left: 10px; padding-right: 10px; ">Splatnost (ke dni):';
 
-        if ($firma == 1) {
+        if ($this->firma == 1) {
             $output .= '<input type="text" name="splatnost" size="8" maxlength="" value="'.$splatnost.'" >';
         } else {
             $output .= "<span style=\"color: grey; \" > není dostupné </span>";
@@ -860,7 +862,7 @@ class vlastnici2pridani extends adminator
 
                 . '<td>účetní index: <span style="padding-left: 10px; "></span>';
 
-        //if ( $firma == 1)
+        //if ( $this->firma == 1)
         { $output .= '<input type="text" name="ucetni_index" value="'.$ucetni_index.'" >'; }
         //else
         //{ $output .= "<span style=\"color: grey; \" >není dostupné</span>"; }
@@ -874,7 +876,7 @@ class vlastnici2pridani extends adminator
                 <td colspan="1" ><input type="text" name="ulice" size="35" maxlength="" value="'.$ulice.'" ></td>'
                 . '<td>Fakturační skupina: ';
 
-        if($firma == 1) {
+        if($this->firma == 1) {
 
             $output .= '<span style="padding-left: 10px;" >'
 
@@ -977,11 +979,11 @@ class vlastnici2pridani extends adminator
 
             . '<select name="firma" size="1" onChange="self.document.forms.form1.submit()" >
             <option value="" ';
-        if (($firma == "")) {
+        if (($this->firma == "")) {
             $output .= " selected ";
         } $output .= ' >Fyzická os. ( vlastníci )</option>
             <option value="1" ';
-        if (($firma == 1)) {
+        if (($this->firma == 1)) {
             $output .= " selected ";
         } $output .= ' >Company, s.r.o. ( vlastníci2 ) </option>
             </select>'
@@ -1013,7 +1015,7 @@ class vlastnici2pridani extends adminator
                 <td colspan="" >Smlouva na dobu: </td>
                 <td colspan="" >';
 
-        if($firma == 1) {
+        if($this->firma == 1) {
             $output .= '<select name="typ_smlouvy" size="1" onChange="self.document.forms.form1.submit()" >    
                 <option value="0"';
             if(($typ_smlouvy == 0) or (!isset($typ_smlouvy))) {
@@ -1048,14 +1050,14 @@ class vlastnici2pridani extends adminator
 
         $output .= "<td colspan=\"\" >";
 
-        if((($typ_smlouvy == 2) and ($firma == 1))) {
+        if((($typ_smlouvy == 2) and ($this->firma == 1))) {
             $output .= "<input type=\"text\" name=\"trvani_do\" value=\"".$trvani_do."\" >";
             $output .= "<span style=\"padding-left: 15px; \" >formát: ( dd.mm.rrrr )</span>";
         } else {
             $output .= "<span style=\"color: grey; \">Není dostupné</span>";
         }
 
-        if($firma == 1) {
+        if($this->firma == 1) {
             //sluzba internet
             $output .= "<td><span style=\"padding-right: 40px; \" ><b>Internet:</b></span>";
 
@@ -1118,7 +1120,7 @@ class vlastnici2pridani extends adminator
             <td colspan="" >Datum podpisu: </td>
             <td>';
 
-        if ($firma == 1) {
+        if ($this->firma == 1) {
             $output .= '<input type="text" name="datum_podpisu" size="10" class=tcal value='."\"".$datum_podpisu."\" > (formát: dd.mm.yyyy)";
         } else {
             $output .= "<span style=\"color: grey; \">Není dostupné</span>";
@@ -1126,7 +1128,7 @@ class vlastnici2pridani extends adminator
 
         $output .= "</td>";
 
-        if($firma == 1) {
+        if($this->firma == 1) {
             //sluzba iptv
             $output .= "<td><span style=\"padding-right: 5px; \" ><b>IPTV</b> (televize): </span>";
 
@@ -1191,7 +1193,7 @@ class vlastnici2pridani extends adminator
         $output .= "<tr>";
         $output .= "<td>Frekvence fakturování:</td>";
 
-        if($firma == 1) {
+        if($this->firma == 1) {
             $output .= "<td>".
             "<select size=\"1\" name=\"billing_freq\">";
 
@@ -1210,7 +1212,7 @@ class vlastnici2pridani extends adminator
             $output .= "<td><span style=\"color: grey; \">Není dostupné</span></td>";
         }
 
-        if($firma == 1) {
+        if($this->firma == 1) {
             //sluzba VoIP
             $output .= "<td><span style=\"padding-right: 10px; \" ><b>VoIP</b> (telefon): </span>";
 
@@ -1328,7 +1330,7 @@ class vlastnici2pridani extends adminator
         $this->action_az_pole2 .= " diferencialni data: ";
 
         //novy zpusob archivovani dat
-        foreach($pole_puvodni_data as $key => $val) {
+        foreach($this->pole_puvodni_data as $key => $val) {
             if (!($vlast_upd[$key] == $val)) {
                 if (!($key == "id_cloveka")) {
                     if($key == "vs") {
