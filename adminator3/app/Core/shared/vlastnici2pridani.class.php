@@ -44,6 +44,8 @@ class vlastnici2pridani extends adminator
 
     private $form_firma_add;
 
+    private $form_nick;
+
     private $pole_puvodni_data;
 
     private $firma;
@@ -77,8 +79,8 @@ class vlastnici2pridani extends adminator
 
         //kontrola promených
         if(isset($this->form_send)) {
-            if((strlen($nick2) > 0)) {
-                vlastnici2pridani::checknick($nick2);
+            if((strlen($this->form_nick) > 0)) {
+                vlastnici2pridani::checknick($this->form_nick);
             }
 
             if((strlen($vs) > 0)) {
@@ -147,13 +149,13 @@ class vlastnici2pridani extends adminator
         }
 
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
-        if(($nick2 != "") and ($vs != "") and ($k_platbe != "") and (($fakt_skupina > 0) or ($this->firma <> 1) or ($archiv == 1))):
+        if(($this->form_nick != "") and ($vs != "") and ($k_platbe != "") and (($fakt_skupina > 0) or ($this->firma <> 1) or ($archiv == 1))) {
 
             if($this->form_update_id < 1) {
                 //zjisti jestli neni duplicitni : nick, vs
-                $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
+                $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$this->form_nick' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
-                    $this->error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
+                    $this->error .= "<h4>Nick ( ".$this->form_nick." ) již existuje!!!</h4>";
                     $this->fail = "true";
                 }
             }
@@ -161,9 +163,9 @@ class vlastnici2pridani extends adminator
             // check v modu uprava
             if(($this->form_update_id > 0 and (isset($this->form_odeslano)))) {
                 //zjisti jestli neni duplicitni : nick, vs
-                $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' and id_cloveka <> '$this->form_update_id' ");
+                $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$this->form_nick' and id_cloveka <> '$this->form_update_id' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
-                    $this->error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
+                    $this->error .= "<h4>Nick ( ".$this->form_nick." ) již existuje!!!</h4>";
                     $this->fail = "true";
                 }
             }
@@ -177,30 +179,27 @@ class vlastnici2pridani extends adminator
                 $this->error .= "pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
             }
 
-        //ulozeni
-        if (!(isset($this->fail))) {
-            if ($this->form_update_id > 0) {
-                // rezim upravy
-                $output .= $this->actionSaveIntoDatabaseChange();
-            } else {
-                // rezim pridani
-                $output .= $this->actionSaveIntoDatabaseAdd();
-            }
+            //ulozeni
+            if (!(isset($this->fail))) {
+                if ($this->form_update_id > 0) {
+                    // rezim upravy
+                    $output .= $this->actionSaveIntoDatabaseChange();
+                } else {
+                    // rezim pridani
+                    $output .= $this->actionSaveIntoDatabaseAdd();
+                }
+            } 
+            // else {
+            // } // konec else ( !(isset(fail) ), else tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
-        } else {
-        } // konec else ( !(isset(fail) ), else tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
-
-        elseif (isset($this->form_send)):
+        } elseif (isset($this->form_send)) {
             $this->error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
-        endif;
+        }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
         if (($this->error != null) or (!isset($this->form_send))) {
             $output .= $this->error;
-
-            // vlozeni vlastniho formu
             $output .= $this->actionForm();
-            // require("vlastnici2-change-inc.php");
 
             return $output;
         }
@@ -235,7 +234,7 @@ class vlastnici2pridani extends adminator
                 while($data = pg_fetch_array($dotaz_upd)):
 
                     // primy promenny
-                    $nick2 = $data["nick"];
+                    $this->form_nick = $data["nick"];
                     $vs = $data["vs"];
                     $k_platbe = $data["k_platbe"];
                     $jmeno = $data["jmeno"];
@@ -284,7 +283,7 @@ class vlastnici2pridani extends adminator
 
         } else { // rezim pridani, ukladani
 
-            $nick2 = trim($_POST["nick2"]);
+            $this->form_nick = trim($_POST["nick2"]);
             $vs = trim($_POST["vs"]);
             $k_platbe = trim($_POST["k_platbe"]);
             $jmeno = trim($_POST["jmeno"]);
@@ -352,7 +351,7 @@ class vlastnici2pridani extends adminator
     {
         $output = "";
 
-        $back = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
+        $back = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$this->form_nick' ");
         $back_radku = pg_num_rows($back);
 
         while ($data_back = pg_fetch_array($back)) {
@@ -372,7 +371,7 @@ class vlastnici2pridani extends adminator
                 <tr>
                 <td align="right">Zpět na vlastníka </td>
                 <td><form action="'.$stranka.'" method="GET" >
-                <input type="hidden" value="' . $nick2 . '" name="find" >
+                <input type="hidden" value="' . $this->form_nick . '" name="find" >
                 <input type="submit" value="ZDE" name="odeslat" > </form></td>
 
                 <td align="right">Restart (all iptables ) </td>
@@ -390,7 +389,7 @@ class vlastnici2pridani extends adminator
 
         $output .= '
         Objekt byl přidán/upraven , zadané údaje:<br><br> 
-        <b>Nick</b>: ' . $nick2 . ' <br> 
+        <b>Nick</b>: ' . $this->form_nick . ' <br> 
         <b>VS</b>: ' . $vs . ' <br> 
         <b>K_platbě</b>: ' . $k_platbe . ' <br>';
 
@@ -535,7 +534,7 @@ class vlastnici2pridani extends adminator
         $output .= '<table border="0" width="100%">
             <tr>
             <td width="70">nick:
-            <input type="Text" name="nick2" size="10" maxlength="20" value="'.$nick2.'" ></td>'
+            <input type="Text" name="nick2" size="10" maxlength="20" value="'.$this->form_nick.'" ></td>'
 
             . '<td colspan="3" width="80" align="left" >'
 
@@ -1232,7 +1231,7 @@ class vlastnici2pridani extends adminator
         }
 
 
-        $vlastnik_add = array( "nick" => $nick2 ,  "vs" => $vs, "k_platbe" => $k_platbe,
+        $vlastnik_add = array( "nick" => $this->form_nick ,  "vs" => $vs, "k_platbe" => $k_platbe,
             "jmeno" => $jmeno, "prijmeni" => $prijmeni, "ulice" => $ulice,
             "mesto" => $mesto, "psc" => $psc, "ucetni_index" => $ucetni_index,
             "fakturacni_skupina_id" => $fakt_skupina, "splatnost" => $splatnost,
@@ -1418,7 +1417,7 @@ class vlastnici2pridani extends adminator
             $billing_freq = 0;
         }
 
-        $vlast_upd = array( "nick" => trim($nick2), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
+        $vlast_upd = array( "nick" => trim($this->form_nick), "jmeno" => trim($jmeno), "prijmeni" => trim($prijmeni), "ulice" => trim($ulice), "mesto" => trim($mesto), "psc" => $psc,
             "vs" => $vs, "k_platbe" => $k_platbe, "archiv" => $archiv, "fakturacni_skupina_id" => $fakt_skupina,
             "splatnost" => $splatnost, "trvani_do" => $trvani_do, "sluzba_int" => $sluzba_int,
             "sluzba_iptv" => $sluzba_iptv, "sluzba_voip" => $sluzba_voip,
@@ -1527,17 +1526,17 @@ class vlastnici2pridani extends adminator
         return $output;
     }
 
-    private function checknick($nick2)
+    private function checknick($nick)
     {
-        $nick_check = preg_match('/^([[:alnum:]]|_|-)+$/', $nick2);
+        $nick_check = preg_match('/^([[:alnum:]]|_|-)+$/', $nick);
         if(!($nick_check)) {
             $this->fail = "true";
-            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick2.") není ve správnem formátu!!! (Povoleno alfanumerické znaky, dolní podtržítko, pomlčka)</H4></div>";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick.") není ve správnem formátu!!! (Povoleno alfanumerické znaky, dolní podtržítko, pomlčka)</H4></div>";
         }
 
-        if((strlen($nick2) > 20)) {
+        if((strlen($nick) > 20)) {
             $this->fail = "true";
-            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick2.") je moc dlouhý! (Maximální délka je 20 znaků)</H4></div>";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick.") je moc dlouhý! (Maximální délka je 20 znaků)</H4></div>";
         }
 
     } // konec funkce check nick
