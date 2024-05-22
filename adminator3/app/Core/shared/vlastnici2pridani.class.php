@@ -76,27 +76,28 @@ class vlastnici2pridani extends adminator
 
     private $form_poznamka;
 
-    private $ucetni_index;
+    private $form_ucetni_index;
 
-    // $typ_smlouvy = $data["typ_smlouvy"];
-    // $fakturacni = $data["fakturacni"];
-    // $splatnost = $data["splatnost"];
-    // $trvani_do = $data["trvani_do"];
-    // $datum_podpisu = $data["datum_podpisu"];
-    // $sluzba_int = $data["sluzba_int"];
-    // $sluzba_iptv = $data["sluzba_iptv"];
-    // $sluzba_voip = $data["sluzba_voip"];
+    private $form_fakturacni;
 
-    // $sluzba_int_id_tarifu = $data["sluzba_int_id_tarifu"];
-    // $sluzba_iptv_id_tarifu = $data["sluzba_iptv_id_tarifu"];
+    // $typ_smlouvy;
+    // $splatnost;
+    // $trvani_do;
+    // $datum_podpisu;
+    // $sluzba_int;
+    // $sluzba_iptv;
+    // $sluzba_voip;
 
-    // $billing_freq = $data["billing_freq"];
+    // $sluzba_int_id_tarifu;
+    // $sluzba_iptv_id_tarifu;
 
-    // $billing_suspend_status = $data["billing_suspend_status"];
-    // $billing_suspend_reason = $data["billing_suspend_reason"];
+    // $billing_freq;
 
-    // $billing_suspend_start  = $data["billing_suspend_start"];
-    // $billing_suspend_stop   = $data["billing_suspend_stop"];
+    // $billing_suspend_status;
+    // $billing_suspend_reason;
+
+    // $billing_suspend_start;
+    // $billing_suspend_stop;
 
     private $firma;
 
@@ -308,7 +309,7 @@ class vlastnici2pridani extends adminator
                     $this->form_archiv = $data["archiv"];
                     $this->form_fakt_skupina = $data["fakturacni_skupina_id"];
                     $typ_smlouvy = $data["typ_smlouvy"];
-                    $fakturacni = $data["fakturacni"];
+                    $this->form_fakturacni = $data["fakturacni"];
                     $splatnost = $data["splatnost"];
                     $trvani_do = $data["trvani_do"];
                     $datum_podpisu = $data["datum_podpisu"];
@@ -353,7 +354,7 @@ class vlastnici2pridani extends adminator
             $this->form_icq = $_POST["icq"];
             $this->form_tel = $_POST["tel"];
 
-            $fakturacni = $_POST["fakturacni"];
+            $this->form_fakturacni = $_POST["fakturacni"];
             $ftitle = $_POST["ftitle"];
             $fulice = $_POST["fulice"];
             $fmesto = $_POST["fmesto"];
@@ -586,7 +587,7 @@ class vlastnici2pridani extends adminator
         $output .= '<form name="form1" method="post" action="" >
                 <input type="hidden" name="send" value="true">
                 <input type="hidden" name="update_id" value="'.intval($this->form_update_id).'" >'
-                . '<input type="hidden" name="fakturacni" value="'.intval($fakturacni).'" >';
+                . '<input type="hidden" name="fakturacni" value="'.intval($this->form_fakturacni).'" >';
 
         $output .= $this->csrf_html;
 
@@ -653,7 +654,7 @@ class vlastnici2pridani extends adminator
             }
             $output .= ' > žádná </option> '."\n";
 
-            if ($fakturacni > 0) {
+            if (intval($this->form_fakturacni) > 0) {
                 $sql = "SELECT * FROM fakturacni_skupiny WHERE typ = 2 order by nazev DESC";
             } else {
                 $sql = "SELECT * FROM fakturacni_skupiny WHERE typ = 1 order by nazev DESC";
