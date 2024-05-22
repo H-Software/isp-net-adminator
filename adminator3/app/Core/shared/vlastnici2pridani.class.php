@@ -1584,10 +1584,16 @@ class vlastnici2pridani extends adminator
         }
 
         if($this->action_affected == 1) {
-            $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3> (affected: " . $this->action_affected . ")\n";
+
+            $this->alert_type = "success";
+            $this->alert_content = "Data v databázi úspěšně změněny.</div> (affected:" . $this->action_affected . ")\n";;
         } else {
-            $output .= "<div style=\"color: red; \">Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error_nr . ")\n";
+            $this->alert_type = "danger";
+            $this->alert_content = "Chyba! Data v databázi nelze změnit. </div><br>(Error: " . $error_nr . ")\n";
         }
+
+        $this->smarty->assign("alert_type", $this->alert_type);
+        $this->smarty->assign("alert_content", $this->alert_content);
 
         $output .= $this->actionArchivZmen();
 
