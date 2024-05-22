@@ -63,7 +63,7 @@ class vlastnici2pridani extends adminator
     private $form_prijmeni;
 
     private $form_ulice;
-    
+
     private $form_mesto;
 
     private $form_psc;
@@ -1092,7 +1092,7 @@ class vlastnici2pridani extends adminator
     private function actionArchivZmen(): string
     {
         $output = "";
-        
+
         $this->action_az_pole2 .= " diferencialni data: ";
 
         //novy zpusob archivovani dat
