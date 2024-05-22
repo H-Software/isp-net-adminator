@@ -94,7 +94,7 @@ class vlastnik
                 if ($this->vlastnici_update_povolen === false) {
                     $output .= "<span style=\"\" >  upravit  </span> \n";
                 } else {
-                    $output .= " <form method=\"POST\" action=\"" . fix_link_to_another_adminator("/vlastnici2-change.php") . "\" >";
+                    $output .= " <form method=\"POST\" action=\"/vlastnici2/change\" >";
                     $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_cloveka"]."\" >";
                     $output .= "<input type=\"submit\" value=\"update\" >";
 
