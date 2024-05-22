@@ -1588,7 +1588,7 @@ class vlastnici2pridani extends adminator
         if($this->action_affected == 1) {
 
             $this->alert_type = "success";
-            $this->alert_content = "Data v databázi úspěšně změněny.</div> (affected:" . $this->action_affected . ")\n";;
+            $this->alert_content = "Data v databázi úspěšně změněny. (affected:" . $this->action_affected . ")\n";;
         } else {
             $this->alert_type = "danger";
             $this->alert_content = "Chyba! Data v databázi nelze změnit.<br>(Error: " . $error_nr . ")\n";
