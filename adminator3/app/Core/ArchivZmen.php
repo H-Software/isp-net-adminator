@@ -116,6 +116,7 @@ class ArchivZmen
 
     public function getActionType($actionType, $itemId = null)
     {
+        $r = "";
         if($actionType == 1) {
             return "<b> akce: pridani fakt. skupiny; </b><br>";
         } elseif($actionType == 2) {

@@ -21,9 +21,7 @@ parameters:
 		path: include/main.function.shared.php
 	-
 		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-		count: 1
 		path: app/Core/*/*.class.php
 	-
 		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-		count: 1
 		path: app/Core/shared/*.php
