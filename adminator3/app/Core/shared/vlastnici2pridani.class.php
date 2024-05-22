@@ -220,12 +220,12 @@ class vlastnici2pridani extends adminator
             } else {
                 $this->fail = "true";
 
-                $alert_type = "info";
-                $alert_content = "Data neuloženy, nebylo použito tlačítko \"OK\".</br>Pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!";
-                $this->smarty->assign("alert_type", $alert_type);
-                $this->smarty->assign("alert_content", $alert_content);
+                $this->smarty->assign("alert_type", "info");
+                $this->smarty->assign("alert_content", "Data neuloženy, nebylo použito tlačítko \"OK\".</br>Pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!");
 
                 $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
+
+                $this->smarty->clear_assign(array('alert_type', 'alert_content'));
             }
 
             //ulozeni
