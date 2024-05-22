@@ -219,8 +219,8 @@ class vlastnici2pridani extends adminator
                 echo "";
             } else {
                 $this->fail = "true";
-                $this->error .= "<div class=\"vlastnici2-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", ";
-                $this->error .= "pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
+                $this->error .= '<div class="alert alert-info" role="alert">Data neuloženy, nebylo použito tlačítko "OK", ';
+                $this->error .= "pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</div>";
             }
 
             //ulozeni
@@ -852,7 +852,7 @@ class vlastnici2pridani extends adminator
             try {
                 $dotaz_tarify_id_tarifu = $this->conn_mysql->query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
             } catch (Exception $e) {
-                die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                $output .= "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2>";
             }
 
             while($data_tarify = $dotaz_tarify_id_tarifu->fetch_array()) {
@@ -924,7 +924,7 @@ class vlastnici2pridani extends adminator
             try {
                 $dotaz_iptv_id_tarifu = $this->conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");
             } catch (Exception $e) {
-                die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                $output .= "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2>";
             }
 
             while($data_iptv = $dotaz_iptv_id_tarifu->fetch_array()) {
