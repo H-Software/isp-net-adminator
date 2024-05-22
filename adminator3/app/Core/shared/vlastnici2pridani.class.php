@@ -526,12 +526,12 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>Služba Internet:</b>';
 
-        if($sluzba_inet == 0) {
+        if($this->form_sluzba_int == 0) {
             $output .= "Ne";
-        } elseif($sluzba_inet == 1) {
+        } elseif($this->form_sluzba_int == 1) {
             $output .= "Ano";
         } else {
-            $output .= "Nelze zjistit - hodnota: ".$sluzba_inet;
+            $output .= "Nelze zjistit - hodnota: ".$this->form_sluzba_int;
         }
 
         $output .= '<br>'

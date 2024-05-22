@@ -56,9 +56,9 @@ include ("include/charset.php");
   <!-- zacatek vlastniho obsahu -->
   
   <br><br>
-  <div style="">Tisk prázdné žádosti s hlavičkou společnosti "Simelon, s.r.o. " - <a href="vypovedi-tisk.php?firma=2">zde</a></div>
+  <div >Tisk prázdné žádosti s hlavičkou společnosti "Simelon, s.r.o. " - <a href="vypovedi-tisk.php?firma=2">zde</a></div>
   <br>
-  <div style="">Tisk prázdné žádosti s hlavičkou společnosti "Martin Lopušný " - <a href="vypovedi-tisk.php?firma=1">zde</a></div>
+  <div >Tisk prázdné žádosti s hlavičkou společnosti "Martin Lopušný " - <a href="vypovedi-tisk.php?firma=1">zde</a></div>
   <br>
   
   <!-- konec vlastniho obsahu -->
