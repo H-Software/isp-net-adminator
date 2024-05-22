@@ -537,7 +537,7 @@ if (!(isset($fail))) {
             $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 
             $vlastnik_add["billing_suspend_start"] = $conn_mysql->real_escape_string($billing_suspend_start);
-            $vlastnik_addd["billing_suspend_stop"] = $conn_mysql->real_escape_string($billing_suspend_stop);
+            $vlastnik_add["billing_suspend_stop"] = $conn_mysql->real_escape_string($billing_suspend_stop);
         }
 
         $res = pg_insert($db_ok2, 'vlastnici', $vlastnik_add);

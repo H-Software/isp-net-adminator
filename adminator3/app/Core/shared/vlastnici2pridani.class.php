@@ -104,8 +104,9 @@ class vlastnici2pridani extends adminator
     
     private $form_billing_suspend_reason;
 
-    // $billing_suspend_start;
-    // $billing_suspend_stop;
+    private $form_billing_suspend_start;
+
+    private $form_billing_suspend_stop;
 
     private $firma;
 
@@ -182,8 +183,8 @@ class vlastnici2pridani extends adminator
 
             if($this->form_billing_suspend_status == 1) {
 
-                vlastnici2pridani::check_datum($billing_suspend_start, "Poz. fakturace - od kdy");
-                vlastnici2pridani::check_datum($billing_suspend_stop, "Poz. fakturace - do kdy");
+                vlastnici2pridani::check_datum($this->form_billing_suspend_start, "Poz. fakturace - od kdy");
+                vlastnici2pridani::check_datum($this->form_billing_suspend_stop, "Poz. fakturace - do kdy");
 
             }
 
@@ -331,15 +332,15 @@ class vlastnici2pridani extends adminator
                     $this->form_billing_suspend_status = $data["billing_suspend_status"];
                     $this->form_billing_suspend_reason = $data["billing_suspend_reason"];
 
-                    $billing_suspend_start  = $data["billing_suspend_start"];
-                    $billing_suspend_stop   = $data["billing_suspend_stop"];
+                    $this->form_billing_suspend_start  = $data["billing_suspend_start"];
+                    $this->form_billing_suspend_stop   = $data["billing_suspend_stop"];
 
                     //konverze z DB formatu
-                    list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $billing_suspend_start);
-                    $billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
+                    list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $this->form_billing_suspend_start);
+                    $this->form_billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-                    list($b_s_t_rok, $b_s_t_mesic, $b_s_t_den) = explode("-", $billing_suspend_stop);
-                    $billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
+                    list($b_s_t_rok, $b_s_t_mesic, $b_s_t_den) = explode("-", $this->form_billing_suspend_stop);
+                    $this->form_billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
 
                 endwhile;
 
@@ -393,8 +394,8 @@ class vlastnici2pridani extends adminator
 
             $this->form_billing_suspend_status = intval($_POST["billing_suspend_status"]);
             $this->form_billing_suspend_reason = $_POST["billing_suspend_reason"];
-            $billing_suspend_start  = $_POST["billing_suspend_start"];
-            $billing_suspend_stop   = $_POST["billing_suspend_stop"];
+            $this->form_billing_suspend_start  = $_POST["billing_suspend_start"];
+            $this->form_billing_suspend_stop   = $_POST["billing_suspend_stop"];
 
             //systémove
             $this->form_send = $_POST["send"];
@@ -568,14 +569,14 @@ class vlastnici2pridani extends adminator
         $output .= "<br>";
 
         if($this->form_billing_suspend_status == 1) {
-            list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $billing_suspend_start);
-            $billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
+            list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $this->form_billing_suspend_start);
+            $this->form_billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
-            list($b_s_t_rok, $b_s_t_mesic, $b_s_t_den) = explode("-", $billing_suspend_stop);
-            $billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
+            list($b_s_t_rok, $b_s_t_mesic, $b_s_t_den) = explode("-", $this->form_billing_suspend_stop);
+            $this->form_billing_suspend_stop = $b_s_t_den.".".$b_s_t_mesic.".".$b_s_t_rok;
 
-            $output .= "<b>od kdy</b>: ".$billing_suspend_start."<br>\n";
-            $output .= "<b>do kdy</b>: ".$billing_suspend_stop."<br>\n";
+            $output .= "<b>od kdy</b>: ".$this->form_billing_suspend_start."<br>\n";
+            $output .= "<b>do kdy</b>: ".$this->form_billing_suspend_stop."<br>\n";
 
             $output .= "<b>důvod</b>: ".$this->form_billing_suspend_reason."<br>\n";
         }
@@ -1050,10 +1051,10 @@ class vlastnici2pridani extends adminator
 
         if($this->form_billing_suspend_status == 1) {
             $output .= "<input type=\"text\" name=\"billing_suspend_start\" size=\"10\" class=\"tcal\" value=\"".
-                htmlspecialchars($billing_suspend_start)."\" > datum (formát: dd.mm.yyyy)";
+                htmlspecialchars($this->form_billing_suspend_start)."\" > datum (formát: dd.mm.yyyy)";
         } else {
             $output .= "<span style=\"color: grey; \">Není dostupné</span>";
-            $output .= "<input type=\"hidden\" name=\"billing_suspend_start\" value=\"".htmlspecialchars($billing_suspend_start)."\" >";
+            $output .= "<input type=\"hidden\" name=\"billing_suspend_start\" value=\"".htmlspecialchars($this->form_billing_suspend_start)."\" >";
         }
 
 
@@ -1067,10 +1068,10 @@ class vlastnici2pridani extends adminator
 
         if($this->form_billing_suspend_status == 1) {
             $output .= "<input type=\"text\" name=\"billing_suspend_stop\" size=\"10\" value=\"".
-            htmlspecialchars($billing_suspend_stop)."\" class=\"tcal\"> datum (formát: dd.mm.yyyy)";
+            htmlspecialchars($this->form_billing_suspend_stop)."\" class=\"tcal\"> datum (formát: dd.mm.yyyy)";
         } else {
             $output .= "<span style=\"color: grey; \">Není dostupné</span>";
-            $output .= "<input type=\"hidden\" name=\"billing_suspend_stop\" value=\"".htmlspecialchars($billing_suspend_stop)."\" >";
+            $output .= "<input type=\"hidden\" name=\"billing_suspend_stop\" value=\"".htmlspecialchars($this->form_billing_suspend_stop)."\" >";
         }
 
         $output .= '
@@ -1349,14 +1350,14 @@ class vlastnici2pridani extends adminator
             $vlastnik_add["billing_suspend_status"] = intval($this->form_billing_suspend_status);
             $vlastnik_add["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($this->form_billing_suspend_reason);
 
-            list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
-            $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
+            list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $this->form_billing_suspend_start);
+            $this->form_billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
 
-            list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $billing_suspend_stop);
-            $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
+            list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $this->form_billing_suspend_stop);
+            $this->form_billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 
-            $vlastnik_add["billing_suspend_start"] = $this->conn_mysql->real_escape_string($billing_suspend_start);
-            $vlastnik_addd["billing_suspend_stop"] = $this->conn_mysql->real_escape_string($billing_suspend_stop);
+            $vlastnik_add["billing_suspend_start"] = $this->conn_mysql->real_escape_string($this->form_billing_suspend_start);
+            $vlastnik_add["billing_suspend_stop"] = $this->conn_mysql->real_escape_string($this->form_billing_suspend_stop);
         }
 
         $res = pg_insert($this->conn_pgsql, 'vlastnici', $vlastnik_add);
@@ -1554,14 +1555,14 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["billing_suspend_status"] = intval($this->form_billing_suspend_status);
             $this->vlast_upd["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($this->form_billing_suspend_reason);
 
-            list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $billing_suspend_start);
-            $billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
+            list($b_s_s_den, $b_s_s_mesic, $b_s_s_rok) = preg_split("/\./", $this->form_billing_suspend_start);
+            $this->form_billing_suspend_start = $b_s_s_rok."-".$b_s_s_mesic."-".$b_s_s_den;
 
-            list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $billing_suspend_stop);
-            $billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
+            list($b_s_t_den, $b_s_t_mesic, $b_s_t_rok) = preg_split("/\./", $this->form_billing_suspend_stop);
+            $this->form_billing_suspend_stop = $b_s_t_rok."-".$b_s_t_mesic."-".$b_s_t_den;
 
-            $this->vlast_upd["billing_suspend_start"]  = $this->conn_mysql->real_escape_string($billing_suspend_start);
-            $this->vlast_upd["billing_suspend_stop"]   = $this->conn_mysql->real_escape_string($billing_suspend_stop);
+            $this->vlast_upd["billing_suspend_start"]  = $this->conn_mysql->real_escape_string($this->form_billing_suspend_start);
+            $this->vlast_upd["billing_suspend_stop"]   = $this->conn_mysql->real_escape_string($this->form_billing_suspend_stop);
         } else {
             $this->vlast_upd["billing_suspend_status"] = 0;
             $this->vlast_upd["billing_suspend_reason"] = null;
