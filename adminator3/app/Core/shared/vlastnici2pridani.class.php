@@ -1098,10 +1098,8 @@ class vlastnici2pridani extends adminator
         return $output;
     }
 
-    private function actionArchivZmen(): string
+    private function actionArchivZmen(): void
     {
-        $output = "";
-
         $this->action_az_pole2 .= " diferencialni data: ";
 
         //novy zpusob archivovani dat
@@ -1279,12 +1277,16 @@ class vlastnici2pridani extends adminator
                         ]);
 
         if($id > 0) {
-            $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+            $this->alert_type = "success";
+            $this->alert_content = "Změna byla úspěšně zaznamenána do archivu změn.";
         } else {
-            $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
+            $this->alert_type = "danger";
+            $this->alert_content = "Chyba! Změnu do archivu změn se nepodařilo přidat.";
         }
 
-        return $output;
+        $this->smarty->assign("alert_type2", $this->alert_type);
+        $this->smarty->assign("alert_content2", $this->alert_content);
+
     }
 
     private function actionSaveIntoDatabaseAdd(): string
@@ -1595,7 +1597,7 @@ class vlastnici2pridani extends adminator
         $this->smarty->assign("alert_type", $this->alert_type);
         $this->smarty->assign("alert_content", $this->alert_content);
 
-        $output .= $this->actionArchivZmen();
+        $this->actionArchivZmen();
 
         $this->updated = "true";
 
