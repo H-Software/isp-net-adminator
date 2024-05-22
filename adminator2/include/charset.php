@@ -88,7 +88,7 @@ width: 30%;
 
 .vypis-bunky { font-size: 14px; }
 
-.cat { color: teal; font-weight: ; }
+.cat { color: teal; }
 
 .top-neni-vybr { color: gray; }
 
@@ -119,7 +119,7 @@ border-right: 1px dashed #C0C0C0;
 
 .map-tab-right{ border-left: 1px solid #C0C0C0 }
 
-.buttonalllogin{ height: 20px; weight: 20px; font-size: 8pt; }
+.buttonalllogin{ height: 20px; font-size: 8pt; }
 
 .faktury-neni-vybrano{ color: gray; }
 
