@@ -24,6 +24,10 @@ class vlastnici2pridani extends adminator
 
     public $csrf_html;
 
+    private $error;
+
+    private $fail;
+
     private $action_az_pole2;
 
     private $action_az_pole3;
@@ -40,6 +44,8 @@ class vlastnici2pridani extends adminator
 
     private $form_firma_add;
 
+    $private $pole_puvodni_data;
+
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
@@ -53,7 +59,7 @@ class vlastnici2pridani extends adminator
     public function action(): string
     {
         $output = "";
-        $error = null;
+        $this->error = null;
 
         $this->actionPrepareVars();
 
@@ -64,7 +70,7 @@ class vlastnici2pridani extends adminator
         }
 
         //kontrola promených
-        if(isset($send)) {
+        if(isset($this->send)) {
             if((strlen($nick2) > 0)) {
                 vlastnici2pridani::checknick($nick2);
             }
@@ -120,7 +126,7 @@ class vlastnici2pridani extends adminator
 
         }
 
-        if(($this->form_update_id > 0 and !(isset($send)))) {
+        if(($this->form_update_id > 0 and !(isset($this->send)))) {
             // $trvani_do = "";
             if((strlen($trvani_do) > 0)) {
                 list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("\-", $trvani_do);
@@ -141,8 +147,8 @@ class vlastnici2pridani extends adminator
                 //zjisti jestli neni duplicitni : nick, vs
                 $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
-                    $error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
-                    $fail = "true";
+                    $this->error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
+                    $this->fail = "true";
                 }
             }
 
@@ -151,8 +157,8 @@ class vlastnici2pridani extends adminator
                 //zjisti jestli neni duplicitni : nick, vs
                 $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$nick2' and id_cloveka <> '$this->form_update_id' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
-                    $error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
-                    $fail = "true";
+                    $this->error .= "<h4>Nick ( ".$nick2." ) již existuje!!!</h4>";
+                    $this->fail = "true";
                 }
             }
 
@@ -160,13 +166,13 @@ class vlastnici2pridani extends adminator
             if (preg_match("/^OK$/", $this->form_odeslano)) {
                 echo "";
             } else {
-                $fail = "true";
-                $error .= "<div class=\"vlastnici2-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", ";
-                $error .= "pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
+                $this->fail = "true";
+                $this->error .= "<div class=\"vlastnici2-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", ";
+                $this->error .= "pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
             }
 
         //ulozeni
-        if (!(isset($fail))) {
+        if (!(isset($this->fail))) {
 
             if ($this->form_update_id > 0) {
                 // rezim upravy
@@ -180,12 +186,11 @@ class vlastnici2pridani extends adminator
                 } else {
                     while ($data4 = pg_fetch_array($vysl4)):
 
-                        $nick3 = $data4["nick"];
                         $this->action_vlast_upd_old["id_cloveka"] = $data4["id_cloveka"];
 
                         //novy zpusob archivace - pro porovnavani zmen
                         $pole_puvodni_data["id_cloveka"] = $data4["id_cloveka"];
-                        $pole_puvodni_data["nick"] = $nick3;
+                        $pole_puvodni_data["nick"] = $data4["nick"];
                         $pole_puvodni_data["jmeno"] = $data4["jmeno"];
                         $pole_puvodni_data["prijmeni"] = $data4["prijmeni"];
                         $pole_puvodni_data["ulice"] = $data4["ulice"];
@@ -476,13 +481,13 @@ class vlastnici2pridani extends adminator
         } else {
         } // konec else ( !(isset(fail) ), else tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
-        elseif (isset($send)):
-            $error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
+        elseif (isset($this->send)):
+            $this->error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
         endif;
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if (($error != null) or (!isset($send))) {
-            $output .= $error;
+        if (($this->error != null) or (!isset($this->send))) {
+            $output .= $this->error;
 
             // vlozeni vlastniho formu
             $output .= $this->actionForm();
@@ -498,7 +503,7 @@ class vlastnici2pridani extends adminator
         return $output;
     }
 
-    private function actionPrepareVars()
+    private function actionPrepareVars(): void
     {
         $this->form_update_id = intval($_POST["update_id"]);
         $this->form_odeslano = $_POST["odeslano"];
@@ -509,7 +514,7 @@ class vlastnici2pridani extends adminator
         //     $update_status = 1;
         // }
 
-        if(($this->form_update_id > 0 and !(isset($send)))) { //rezim upravy
+        if(($this->form_update_id > 0 and !(isset($this->send)))) { //rezim upravy
 
             $dotaz_upd = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka='".intval($this->form_update_id)."' ");
             $radku_upd = pg_num_rows($dotaz_upd);
@@ -620,7 +625,7 @@ class vlastnici2pridani extends adminator
             $billing_suspend_stop   = $_POST["billing_suspend_stop"];
 
             //systémove
-            $send = $_POST["send"];
+            $this->send = $_POST["send"];
 
             if($this->form_firma_add == 2) {
                 $firma = "";
@@ -631,9 +636,7 @@ class vlastnici2pridani extends adminator
             if((strlen($splatnost) < 1)) {
                 $splatnost = "15";
             }
-
         }
-
     }
 
     private function actionShowResults(): string
@@ -1320,7 +1323,7 @@ class vlastnici2pridani extends adminator
         return $output;
     }
 
-    private function actionArchivZmen()
+    private function actionArchivZmen(): void
     {
         $this->action_az_pole2 .= " diferencialni data: ";
 
@@ -1503,126 +1506,104 @@ class vlastnici2pridani extends adminator
         } else {
             echo "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
         }
-
-        // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$this->action_az_pole2','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
-
     }
 
-    public static function checknick($nick2)
+    private function checknick($nick2)
     {
-        global $fail, $error;
-
         $nick_check = preg_match('/^([[:alnum:]]|_|-)+$/', $nick2);
         if(!($nick_check)) {
-            $fail = "true";
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick2.") není ve správnem formátu!!! (Povoleno alfanumerické znaky, dolní podtržítko, pomlčka)</H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick2.") není ve správnem formátu!!! (Povoleno alfanumerické znaky, dolní podtržítko, pomlčka)</H4></div>";
         }
 
         if((strlen($nick2) > 20)) {
-            $fail = "true";
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick2.") je moc dlouhý! (Maximální délka je 20 znaků)</H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick2.") je moc dlouhý! (Maximální délka je 20 znaků)</H4></div>";
         }
 
     } // konec funkce check nick
 
-    public static function checkvs($vs)
+    private function checkvs($vs)
     {
         $vs_check = preg_match('/^([[:digit:]]+)$/', $vs);
         if(!($vs_check)) {
-            global $fail;
-            $fail = "true";
-            global $error;
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Variabilní symbol ( ".$vs." ) není ve správnem formátu!!! (Pouze čísla)</H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Variabilní symbol ( ".$vs." ) není ve správnem formátu!!! (Pouze čísla)</H4></div>";
         }
     } // konec funkce check vs
 
-    public static function check_k_platbe($k_platbe)
+    private function check_k_platbe($k_platbe)
     {
         $platba_check = preg_match('/^([[:digit:]]|\.)+$/', $k_platbe);
 
         if (!($platba_check)) {
-            global $fail;
-            $fail = "true";
-            global $error;
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>K_platbe ( ".$k_platbe." ) není ve správnem formátu !!! </H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>K_platbe ( ".$k_platbe." ) není ve správnem formátu !!! </H4></div>";
         }
 
     } // konec funkce check rra
 
-    public static function check_uc_index($ucetni_index)
+    private function check_uc_index($ucetni_index)
     {
         $ui_check = preg_match('/^([[:digit:]]|\.)+$/', $ucetni_index);
 
         if(!($ui_check)) {
-            global $fail;
-            $fail = "true";
-            global $error;
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$ucetni_index." ) není ve správnem formátu (Povoleny pouze čísla)!!! </H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$ucetni_index." ) není ve správnem formátu (Povoleny pouze čísla)!!! </H4></div>";
         }
 
         $ui_check2 = strlen($ucetni_index);
 
         if($ui_check2 > 5) {
-            global $fail;
-            $fail = "true";
-            global $error;
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$ucetni_index." ) překračuje povolenou délku (5 znaků) !!! </H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$ucetni_index." ) překračuje povolenou délku (5 znaků) !!! </H4></div>";
         }
 
     } //konec funkce check_uc_index
 
-    public static function check_splatnost($number)
+    private function check_splatnost($number)
     {
         if (!(preg_match('/^([[:digit:]])+$/', $number))) {
-            global $fail;
-            $fail = "true";
-            global $error;
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Splatnost (".$number.") není ve správnem formátu! (pouze čísla)</H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Splatnost (".$number.") není ve správnem formátu! (pouze čísla)</H4></div>";
         }
 
     } //end of function check_splatnost
 
-    public static function check_icq($number)
+    private function check_icq($number)
     {
         if (!(preg_match('/^([[:digit:]])+$/', $number))) {
-            global $fail;
-            $fail = "true";
-            global $error;
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>ICQ (".$number.") není ve správnem formátu! (pouze čísla)</H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>ICQ (".$number.") není ve správnem formátu! (pouze čísla)</H4></div>";
         }
 
     } //end of function check_icq
 
-    public static function check_email($email)
+    private function check_email($email)
     {
-        if (!(Aglobal::check_email($email))) {
-            global $fail;
-            $fail = "true";
-            global $error;
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Emailová adresa (".$email.") není ve správnem formátu!</H4></div>";
+        $rs = filter_var($email, FILTER_VALIDATE_EMAIL);;
+        if ($rs === false) {
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Emailová adresa (".$email.") není ve správnem formátu!</H4></div>";
         }
     } //end of function check_icq
 
-    public static function check_tel($number)
+    private function check_tel($number)
     {
-        global $fail, $error;
-
         if(!(preg_match('/^([[:digit:]])+$/', $number))) {
-            $fail = "true";
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Telefon (".$number.") není ve správnem formátu! (pouze číslice)</H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Telefon (".$number.") není ve správnem formátu! (pouze číslice)</H4></div>";
         }
 
         if(strlen($number) <> 9) {
 
-            $fail = "true";
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Pole Telefon (".$number.") musí obsahovat 9 číslic!</H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Pole Telefon (".$number.") musí obsahovat 9 číslic!</H4></div>";
         }
     } //end of function check_tel
 
-    public static function check_datum($date, $desc)
+    private function check_datum($date, $desc)
     {
-        global $fail, $error;
-
         $a_date = explode('.', $date);
 
         $day =   intval($a_date["0"]);
@@ -1630,19 +1611,17 @@ class vlastnici2pridani extends adminator
         $year =  intval($a_date["2"]);
 
         if(!checkdate($month, $day, $year)) {
-            $fail = "true";
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Datum ".$desc." (".$date.") není ve správném formátu! (dd.mm.rrrr)</H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Datum ".$desc." (".$date.") není ve správném formátu! (dd.mm.rrrr)</H4></div>";
         }
 
     } //end of function check_datum
 
-    public static function check_b_reason($reason)
+    private function check_b_reason($reason)
     {
         if((strlen($reason) > 30)) {
-            global $fail, $error;
-
-            $fail = "true";
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Pole \"Důvod pozastavení\" je moc dlouhé! Maximální počet je 30 znaků.</H4></div>";
+            $this->fail = "true";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Pole \"Důvod pozastavení\" je moc dlouhé! Maximální počet je 30 znaků.</H4></div>";
         }
 
     } //end of function check_b_reason
