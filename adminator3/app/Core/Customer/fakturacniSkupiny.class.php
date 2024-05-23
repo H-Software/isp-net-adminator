@@ -28,11 +28,9 @@ class fakturacniSkupiny extends adminator
         $this->container = $container;
         $this->logger = $container->get('logger');
 
-
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
 
         $this->conn_mysql = $container->get('connMysql');
-
     }
 
     public function getItems()

@@ -475,6 +475,32 @@ class vlastniciController extends adminatorController
         return $response;
     }
 
+    public function change(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->checkLevel(40, $this->adminator);
+
+        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Update");
+
+        $this->header($request, $response, $this->adminator);
+
+        $this->smarty->assign("enable_calendar2", 1);
+
+        $vlastnik2 = new \vlastnici2pridani($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $vlastnik2->csrf_html = $csrf_html;
+
+        $bodyContent = $vlastnik2->action();
+
+        $this->smarty->assign("body", $bodyContent);
+
+        $this->smarty->display('vlastnici/change.tpl');
+
+        return $response;
+    }
+
     public function archiv(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info("vlastniciController\\fakturacniSkupiny called");

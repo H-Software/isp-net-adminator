@@ -2,7 +2,6 @@
 
 $finder = (new PhpCsFixer\Finder())
     ->append([
-        './vlastnici2-change.php',
         './platby-hot-vypis.php'
     ])
     // ->in(__DIR__)

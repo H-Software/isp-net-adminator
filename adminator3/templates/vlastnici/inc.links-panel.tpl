@@ -2,7 +2,7 @@
 <div style="padding-left: 4px; padding-bottom: 5px; padding-top: 5px; ">
     <span style="">
     {if $vlastnici2_pridani_povoleno eq "true"}
-        <a href="/vlastnici2/action" >Přidání vlastníka</a>
+        <a href="/vlastnici2/change" >Přidání vlastníka</a>
     {else}
         Přidání vlastníka (N/A)
     {/if}

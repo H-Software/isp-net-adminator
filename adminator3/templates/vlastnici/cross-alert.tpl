@@ -8,7 +8,7 @@
 
 {if $alert_type|count_characters > 1}
     {include file="partials/bootstrap-alert-with-columns.tpl"}
- {/if}
+{/if}
 
 {* konecny soubor *}
 {include file="base-end.tpl"}

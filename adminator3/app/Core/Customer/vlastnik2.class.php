@@ -1,14 +1,17 @@
 <?php
 
+use App\Core\adminator;
 use Psr\Container\ContainerInterface;
 
-class vlastnik2
+class vlastnik2 extends adminator
 {
     public $conn_mysql;
 
     public $conn_pgsql;
 
     public $logger;
+
+    public $smarty;
 
     public $container; // for calling stb class over vlastnik2_a2 class
     public $adminator; // handler for instance of adminator class
@@ -26,6 +29,8 @@ class vlastnik2
     public $listSql; // original local variable "sql"
 
     public $istFindId;
+
+    public $listFindId;
 
     public $dotaz_source;
 
@@ -52,6 +57,7 @@ class vlastnik2
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
+        $this->smarty = $container->get('smarty');
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->get('smarty'), $this->logger);
     }
@@ -554,5 +560,6 @@ class vlastnik2
 
         return true;
     }
+
 
 }

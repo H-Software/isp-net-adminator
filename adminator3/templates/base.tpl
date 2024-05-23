@@ -18,6 +18,11 @@
  <link rel="stylesheet" href="/plugins/tigra_calendar/calendar.css">
 {/if}
 
+{if $enable_calendar2|default:'0' == 1}
+  <link rel="stylesheet" type="text/css" href="/plugins/tigra_calendar/tcal.css" />
+  <script type="text/javascript" src="/plugins/tigra_calendar/tcal.js"></script>
+ <script type="text/javascript" src="/plugins/tigra_calendar/custom-a2-vlastnici2-change.js"></script>
+{/if}
 
 {if $enable_work|default:'0' == 1}
  <script language="JavaScript" src="/public/js/work.js" ></script>

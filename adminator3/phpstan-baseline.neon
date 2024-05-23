@@ -123,11 +123,6 @@ parameters:
 			path: app/Core/ArchivZmen.php
 
 		-
-			message: "#^Property App\\\\Core\\\\ArchivZmen\\:\\:\\$conn_pgsql is never read, only written\\.$#"
-			count: 1
-			path: app/Core/ArchivZmen.php
-
-		-
 			message: "#^Variable \\$pocet in isset\\(\\) always exists and is not nullable\\.$#"
 			count: 1
 			path: app/Core/ArchivZmen.php
@@ -188,11 +183,6 @@ parameters:
 			path: app/Core/Customer/fakturacniSkupiny.class.php
 
 		-
-			message: "#^Access to an undefined property vlastnik2\\:\\:\\$listFindId\\.$#"
-			count: 2
-			path: app/Core/Customer/vlastnik2.class.php
-
-		-
 			message: "#^Comparison operation \"\\>\" between 13\\|16\\|19\\|21 and 1 is always true\\.$#"
 			count: 1
 			path: app/Core/Customer/vlastnik2.class.php
@@ -229,11 +219,6 @@ parameters:
 
 		-
 			message: "#^Binary operation \"\\+\" between string and 2 results in an error\\.$#"
-			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 			count: 1
 			path: app/Core/Item/objekt.class.php
 
@@ -617,12 +602,6 @@ parameters:
 			message: "#^Class objektyController not found\\.$#"
 			count: 5
 			path: app/routing.php
-
-		-
-			message: "#^Class workController not found\\.$#"
-			count: 1
-			path: app/routing.php
-
 
 		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"

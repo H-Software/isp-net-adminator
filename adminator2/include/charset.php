@@ -88,7 +88,7 @@ width: 30%;
 
 .vypis-bunky { font-size: 14px; }
 
-.cat { color: teal; font-weight: ; }
+.cat { color: teal; }
 
 .top-neni-vybr { color: gray; }
 
@@ -119,7 +119,7 @@ border-right: 1px dashed #C0C0C0;
 
 .map-tab-right{ border-left: 1px solid #C0C0C0 }
 
-.buttonalllogin{ height: 20px; weight: 20px; font-size: 8pt; }
+.buttonalllogin{ height: 20px; font-size: 8pt; }
 
 .faktury-neni-vybrano{ color: gray; }
 
@@ -156,7 +156,7 @@ border-right: 1px dashed #C0C0C0;
 
 
 
-<!--  styly partner programu -->
+/* <!--  styly partner programu --> */
 
 .select-nevybrano{ color: gray; }
 
@@ -170,7 +170,7 @@ border-right: 1px dashed #C0C0C0;
 
 .table-vypis-1-line2{ border-bottom: 1px solid gray; }
 
-<!--  konec stylu partner programu -->
+/* <!--  konec stylu partner programu --> */
 
 .admin-partner-vypis1{ border-bottom: 1px solid gray; }
 
@@ -221,7 +221,7 @@ border-right: 1px dashed #C0C0C0;
     max-width: 250px;
 }
 
-<!--  A3 -->
+/* <!--  A3 --> */
 
 #subcat-space {
     margin-left: 20px;
@@ -273,7 +273,7 @@ border-right: 1px dashed #C0C0C0;
     font-weight: bold;
 }
 
-<!--  end of A3 -->
+/* <!--  end of A3 --> */
 
 </style>
 
