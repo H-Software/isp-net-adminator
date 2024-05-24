@@ -72,12 +72,12 @@ class GuardMiddleware implements MiddlewareInterface
 
         $this->guard->setFailureHandler(function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($logger) {
             $logger->error(
-                        __CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ",
-                        array(
-                            "uri" => $request->getUri(),
-                            "headers" => var_export($request->getHeaders(), true)
-                            )
-                    );
+                __CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ",
+                array(
+                    "uri" => $request->getUri(),
+                    "headers" => var_export($request->getHeaders(), true)
+                )
+            );
             $request = $request->withAttribute("csrf_status", false);
             return $handler->handle($request);
         });
