@@ -553,20 +553,20 @@ parameters:
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
 
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getPersistenceRepository\\(\\)\\.$#"
-			count: 1
-			path: app/Middleware/RedirectIfNotAuthenticated.php
+		# -
+		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getPersistenceRepository\\(\\)\\.$#"
+		# 	count: 1
+		# 	path: app/Middleware/RedirectIfNotAuthenticated.php
 
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: app/Middleware/RedirectIfNotAuthenticated.php
+		# -
+		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+		# 	count: 1
+		# 	path: app/Middleware/RedirectIfNotAuthenticated.php
 
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
-			count: 1
-			path: app/Middleware/RedirectIfNotAuthenticated.php
+		# -
+		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
+		# 	count: 1
+		# 	path: app/Middleware/RedirectIfNotAuthenticated.php
 
 		-
 			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
