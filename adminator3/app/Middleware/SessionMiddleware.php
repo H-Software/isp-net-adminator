@@ -53,14 +53,16 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+
+        $this->logger->debug("SessionMiddleware called");
+
         if (!$this->session->isStarted() && !headers_sent()) {
             $this->logger->debug("SessionMiddleware: session not started, starting");
             $this->session->start();
         } elseif (!$this->session->isStarted()) {
             $this->logger->warning("SessionMiddleware: session not started, but headers already sent!");
-
         }
-        
+
         if (!$this->session->has('regen') || $this->session->get('regen') < time()) {
             $this->session->regenerateId();
             $this->session->set('regen', time() + 300);

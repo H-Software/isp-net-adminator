@@ -16,8 +16,6 @@ $container->set(
     }
 );
 
-$feature = $container->get('openfeature');
-$logger = $container->get('logger');
 if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
     $app->add('csrf');
 } else {
