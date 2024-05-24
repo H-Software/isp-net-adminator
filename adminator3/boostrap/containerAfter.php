@@ -63,15 +63,15 @@ $container->set('sentinel', function () use ($container) {
     $logger->debug("bootstrap\containerAfer: sentinel: called");
 
     // $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
-    $sentinel = new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php'));
+    $boostrap = new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php'));
 
-    $instance = new Sentinel($sentinel);
+    $sentinel = new Sentinel($boostrap);
 
     // $sentinel->getSentinel();
     
-    // $sentinel = (new Sentinel());
+    return $sentinel;
 
-    return $instance->getSentinel();
+    // return $instance->getSentinel();
 });
 
 $container->set(
