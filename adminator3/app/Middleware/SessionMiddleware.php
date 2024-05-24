@@ -37,11 +37,11 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function __construct(
         SessionInterface $session,
-        Guard $guard,
+        // Guard $guard,
         LoggerInterface $logger
     ) {
         $this->session = $session;
-        $this->guard   = $guard;
+        // $this->guard   = $guard;
         $this->logger  = $logger;
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");

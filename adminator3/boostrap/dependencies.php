@@ -12,8 +12,11 @@ $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 $logger->debug("bootstrapDependencies: setup DI container for csrf");
 $container->set(
     'csrf',
-    function () use ($responseFactory) {
-        return new Guard($responseFactory);
+    function () use ($responseFactory, $container) {
+        $logger = $container->get('logger');
+        $logger->debug('DI\csrf: creating Guard instance');
+        $guard = new Guard($responseFactory);
+        return $guard;
     }
 );
 
