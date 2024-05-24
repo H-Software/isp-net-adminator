@@ -26,7 +26,7 @@ class FlashOldFormDataMiddleware implements MiddlewareInterface
     public function __construct(Messages $flash)
     {
         $this->flash = $flash;
-        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
     /**
