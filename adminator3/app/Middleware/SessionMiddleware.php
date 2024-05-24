@@ -67,7 +67,7 @@ class SessionMiddleware implements MiddlewareInterface
             $this->session->set('regen', time() + 300);
         }
 
-        $this->guard->setStorage($this);
+        // $this->guard->setStorage($this);
 
         $this->logger->debug("SessionMiddleware iniciated");
 
