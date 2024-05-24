@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Middleware;
 
 use Cartalyst\Sentinel\Sentinel;
+use Cartalyst\Sentinel\Persistences\PersistableInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -56,6 +57,8 @@ class RedirectIfNotAuthenticated
         $this->responseFactory = $responseFactory;
         $this->logger          = $loggerInterface;
         $this->sentinel        = $sentinel;
+
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
     /**
@@ -68,8 +71,7 @@ class RedirectIfNotAuthenticated
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
-
-        $this->logger->info("RedirectIfNotAuthenticated invoked");
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " invoked");
 
         if ($this->sentinel->guest()) {
             $this->logger->info(
@@ -89,11 +91,14 @@ class RedirectIfNotAuthenticated
                                 http_build_query(['redirect' => $request->getUri()->getPath()])
                 );
         } else {
-            // prune old persistence data (in database)
+            $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": prune old persistence data (in database)");
 
             // from https://github.com/cartalyst/sentinel/issues/519#issuecomment-559742227
             $currentLoggedInUser = $this->sentinel->getUser();
-            $this->sentinel->getPersistenceRepository()->flush($currentLoggedInUser, false);
+            $persistence = $this->sentinel->getPersistenceRepository();
+            // $persistence->flush();
+
+            // $this->sentinel->getPersistenceRepository()->flush();
         }
 
         return $handler->handle($request);
