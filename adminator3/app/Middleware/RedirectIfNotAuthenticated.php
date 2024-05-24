@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use \Cartalyst\Sentinel\Native\SentinelBootstrapper;
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Cartalyst\Sentinel\Sentinel;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,7 +38,7 @@ class RedirectIfNotAuthenticated
      */
     protected ResponseFactoryInterface $responseFactory;
 
-    private SentinelBootstrapper $sentinel;
+    private Sentinel $sentinel;
 
     /**
      * @param Messages             $flash       The flash
@@ -50,7 +49,7 @@ class RedirectIfNotAuthenticated
         RouteParserInterface $routeParser,
         ResponseFactoryInterface $responseFactory,
         LoggerInterface $loggerInterface,
-        SentinelBootstrapper $sentinel
+        Sentinel $sentinel
     ) {
         $this->flash           = $flash;
         $this->routeParser     = $routeParser;
@@ -72,9 +71,9 @@ class RedirectIfNotAuthenticated
 
         $this->logger->info("RedirectIfNotAuthenticated invoked");
 
-        if (Sentinel::guest()) {
+        if ($this->sentinel->guest()) {
             $this->logger->info(
-                "RedirectIfNotAuthenticated: sentinel::guest, "
+                "RedirectIfNotAuthenticated: sentinel->guest, "
                 . "redirecting to auth.signing (" . $this->routeParser->urlFor('auth.signin') . ")"
             );
 
@@ -93,8 +92,8 @@ class RedirectIfNotAuthenticated
             // prune old persistence data (in database)
 
             // from https://github.com/cartalyst/sentinel/issues/519#issuecomment-559742227
-            $currentLoggedInUser = Sentinel::getUser();
-            Sentinel::getPersistenceRepository()->flush($currentLoggedInUser, false);
+            $currentLoggedInUser = $this->sentinel->getUser();
+            $this->sentinel->getPersistenceRepository()->flush($currentLoggedInUser, false);
         }
 
         return $handler->handle($request);
