@@ -49,6 +49,7 @@ class HomeController extends adminatorController
                 null,
                 $this->pdoMysql,
                 $this->settings,
+                $this->sentinel
             );
         }
 
