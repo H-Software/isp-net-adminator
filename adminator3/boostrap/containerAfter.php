@@ -65,7 +65,7 @@ $container->set('sentinel', function () use ($container) {
     // $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
     $sentinel = new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php'));
 
-    $instance = $sentinel->createSentinel();
+    $instance = new Sentinel($sentinel);
 
     // $sentinel->getSentinel();
     
