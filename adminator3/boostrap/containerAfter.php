@@ -58,11 +58,9 @@ $container->set(
 
 $container->set('sentinel', function () use ($container) {
     $logger = $container->get('logger');
-
-    $logger->debug("bootstrap\containerAfer: sentinel: called");
+    $logger->debug('DI\sentinel: called');
 
     $boostrap = new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php'));
-
     $sentinel = new Sentinel($boostrap);
 
     return $sentinel->getSentinel();
@@ -99,7 +97,7 @@ $container->set(
 
         $configVersion = $client->getStringValue("adminator3FlagdConfigVersion", "null");
 
-        $logger->debug("bootstrap\containerAfer: openfeature: adminator3FlagdConfigVersion: " . var_export($configVersion, true));
+        $logger->debug("DI\openfeature: adminator3FlagdConfigVersion: " . var_export($configVersion, true));
 
         return $client;
     }
@@ -116,8 +114,8 @@ $container->set(
         $smarty->caching = $settings['smarty']['caching'];
         //$smarty->debugging = true;
 
-        $logger->debug("bootstrap\containerAfer: smarty compile_check: " . var_export($settings['smarty']['compile_check'], true));
-        $logger->debug("bootstrap\containerAfer: smarty caching: " . var_export($settings['smarty']['caching'], true));
+        $logger->debug("DI\smarty: compile_check: " . var_export($settings['smarty']['compile_check'], true));
+        $logger->debug("DI\smarty: smarty caching: " . var_export($settings['smarty']['caching'], true));
 
         return $smarty;
     }
@@ -162,7 +160,7 @@ $container->set(
     'flash',
     function ($container) {
         $logger = $container->get('logger');
-        $logger->debug("bootstrap\containerAfer: flash: called");
+        $logger->debug('DI\flash: called');
         return new \Slim\Flash\Messages();
     }
 );

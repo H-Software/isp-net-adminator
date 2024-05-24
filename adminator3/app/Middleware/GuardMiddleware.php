@@ -56,11 +56,12 @@ class GuardMiddleware implements MiddlewareInterface
         if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
             $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ': calling slim\csrf\guard');
 
-            // $app->add('csrf');
+            $response = $this->guard->process($request, $handler);
         } else {
             $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ':  slim\csrf\guard middleware disabled over openFeature');
+            $response = $handler->handle($request);
         }
         
-        return $handler->handle($request);
+        return $response;
     }
 }
