@@ -97,7 +97,7 @@ class RedirectIfNotAuthenticated
 
             // from https://github.com/cartalyst/sentinel/issues/519#issuecomment-559742227
             $currentLoggedInUser = $this->sentinel->getUser();
-            $this->sentinel->getPersistenceRepository()->flush($currentLoggedInUser, false);
+            // $this->sentinel->getPersistenceRepository()->flush($currentLoggedInUser, false);
         }
 
         return $handler->handle($request);
