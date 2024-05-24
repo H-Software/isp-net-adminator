@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use \Cartalyst\Sentinel\Native\SentinelBootstrapper;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -38,6 +39,8 @@ class RedirectIfNotAuthenticated
      */
     protected ResponseFactoryInterface $responseFactory;
 
+    private SentinelBootstrapper $sentinel;
+
     /**
      * @param Messages             $flash       The flash
      * @param RouteParserInterface $routeParser The routeParser
@@ -46,12 +49,14 @@ class RedirectIfNotAuthenticated
         Messages $flash,
         RouteParserInterface $routeParser,
         ResponseFactoryInterface $responseFactory,
-        LoggerInterface $loggerInterface
+        LoggerInterface $loggerInterface,
+        SentinelBootstrapper $sentinel
     ) {
         $this->flash           = $flash;
         $this->routeParser     = $routeParser;
         $this->responseFactory = $responseFactory;
         $this->logger          = $loggerInterface;
+        $this->sentinel        = $sentinel;
     }
 
     /**

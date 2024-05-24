@@ -30,10 +30,10 @@ require __DIR__ ."/../boostrap/dependencies.php";
 //
 // must be after session middleware / bootstrap\session
 // 
-Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
+// Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
 
 # instanciate FF
-$feature = $container->get('openfeature');
+// $feature = $container->get('openfeature');
 
 # FPDF
 define('FPDF_FONTPATH', "include/font/");

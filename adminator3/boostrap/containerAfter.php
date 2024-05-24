@@ -10,7 +10,8 @@ use App\Middleware\FlashOldFormDataMiddleware;
 use OpenFeature\OpenFeatureAPI;
 use OpenFeature\Providers\Flagd\FlagdProvider;
 
-
+use Cartalyst\Sentinel\Native\SentinelBootstrapper;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Guzzle\Http\Message;
 
 $container->set(
@@ -55,6 +56,26 @@ $container->set(
         return $logger;
     }
 );
+
+/* add sentinel user auth lib to container */
+$container->set('sentinel', function () use ($settings) {
+
+    $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
+
+
+    // $sentinel = (new Sentinel());
+    // $capsule  = new Capsule;
+    // $capsule->addConnection($settings['database']);
+    // $capsule->setAsGlobal();
+    // $capsule->bootEloquent();
+    // $debug = $settings['general_settings']['debug'];
+    // if ($debug == true) {
+    //     $capsule::connection()->enableQueryLog();
+    // }
+    // return $sentinel->getSentinel();
+
+    return $sentinel;
+});
 
 $container->set(
     'openfeature',
