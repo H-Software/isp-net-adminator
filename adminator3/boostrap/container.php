@@ -10,6 +10,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use Cartalyst\Sentinel\Sentinel;
 
 return [
 
@@ -58,6 +59,10 @@ return [
 
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(Psr17Factory::class);
+    },
+
+    Sentinel::class => function (ContainerInterface $container) {
+        return $container->get('sentinel');
     },
 
 ];
