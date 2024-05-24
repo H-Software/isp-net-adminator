@@ -1,7 +1,7 @@
 <?php
 
 use Slim\Views\Twig;
-use Slim\Csrf\Guard;
+use Nyholm\Psr7\Factory\Psr17Factory;
 
 use App\View\CsrfExtension;
 use App\Middleware\FlashOldFormDataMiddleware;
@@ -204,7 +204,8 @@ $container->set(
 
 $container->set(
     'GuardMiddleware',
-    function ($container) use ($responseFactory) {
-        return new GuardMiddleware($container, $responseFactory);
+    function ($container) {
+        $rs = $container->get(Psr17Factory::class);
+        return new GuardMiddleware($container, $rs);
     }
 );
