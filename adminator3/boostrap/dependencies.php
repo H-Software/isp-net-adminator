@@ -7,10 +7,6 @@ use Slim\Csrf\Guard;
 $logger = $container->get('logger');
 $feature = $container->get('openfeature');
 
-// must be first
-$logger->debug("bootstrapDependencies: adding middleware: SessionMiddleware");
-$app->addMiddleware($container->get(SessionMiddleware::class));
-
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
 $logger->debug("bootstrapDependencies: setup DI container for csrf");
@@ -34,6 +30,10 @@ $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
 $logger->debug("bootstrapDependencies: adding middleware: FlashOldFormDataMiddleware");
 $app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
+
+$logger->debug("bootstrapDependencies: adding middleware: SessionMiddleware");
+$app->addMiddleware($container->get(SessionMiddleware::class));
+
 
 $container->set(
     'AuthController',
