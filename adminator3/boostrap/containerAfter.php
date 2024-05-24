@@ -193,7 +193,7 @@ $container->set(
 
         $view->addExtension($container->get(CsrfExtension::class));
 
-        $view->getEnvironment()->addGlobal('flash', $container->get('flash'));
+        // $view->getEnvironment()->addGlobal('flash', $container->get('flash'));
 
         return $view;
     }
