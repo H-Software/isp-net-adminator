@@ -4,9 +4,6 @@ use App\Middleware\SessionMiddleware;
 use Slim\Views\TwigMiddleware;
 use Slim\Csrf\Guard;
 
-// must be first
-$app->addMiddleware($container->get(SessionMiddleware::class));
-
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
 $container->set(
@@ -15,6 +12,9 @@ $container->set(
         return new Guard($responseFactory);
     }
 );
+
+// must be first, but after csrf container
+$app->addMiddleware($container->get(SessionMiddleware::class));
 
 $feature = $container->get('openfeature');
 $logger = $container->get('logger');
