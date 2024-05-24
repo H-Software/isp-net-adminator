@@ -69,7 +69,7 @@ class SessionMiddleware implements MiddlewareInterface
             $this->session->set('regen', time() + 300);
         }
 
-        $this->guard->setStorage($this);
+        // $this->guard->setStorage($this);
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " iniciated");
 
