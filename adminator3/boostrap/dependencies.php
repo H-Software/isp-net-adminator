@@ -25,6 +25,7 @@ if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
 }
 
 // $app->addMiddleware($container->get(TwigMiddleware::class));
+$logger->debug("bootstrapDependencies: adding middleware: Twig");
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
 $logger->debug("bootstrapDependencies: adding middleware: FlashOldFormDataMiddleware");

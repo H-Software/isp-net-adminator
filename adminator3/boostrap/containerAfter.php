@@ -171,8 +171,8 @@ $container->set(
 $container->set(
     'flash',
     function ($container) {
-        // $logger = $container->get('logger');
-        // $logger->debug("bootstrap\containerAfer: flash: called");
+        $logger = $container->get('logger');
+        $logger->debug("bootstrap\containerAfer: flash: called");
         return new \Slim\Flash\Messages();
     }
 );
