@@ -31,7 +31,10 @@ if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
 $logger->debug("bootstrapDependencies: adding middleware: Twig");
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
-$logger->debug("bootstrapDependencies: adding middleware: FlashOldFormDataMiddleware");
+$logger->debug("bootstrapDependencies: adding middleware: Guard");
+$app->addMiddleware($container->get('GuardMiddleware'));
+
+$logger->debug("bootstrapDependencies: adding middleware: FlashOldFormData");
 $app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
 
 $logger->debug("bootstrapDependencies: adding middleware: SessionMiddleware");

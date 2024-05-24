@@ -3,9 +3,9 @@
 use Slim\Views\Twig;
 use Slim\Csrf\Guard;
 
-use Psr\Container\ContainerInterface;
 use App\View\CsrfExtension;
 use App\Middleware\FlashOldFormDataMiddleware;
+use App\Middleware\GuardMiddleware;
 
 use OpenFeature\OpenFeatureAPI;
 use OpenFeature\Providers\Flagd\FlagdProvider;
@@ -201,5 +201,12 @@ $container->set(
     'FlashOldFormDataMiddleware',
     function ($container) {
         return new FlashOldFormDataMiddleware($container);
+    }
+);
+
+$container->set(
+    'GuardMiddleware',
+    function ($container) {
+        return new GuardMiddleware($container);
     }
 );
