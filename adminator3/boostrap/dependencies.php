@@ -19,7 +19,7 @@ $app->addMiddleware($container->get(SessionMiddleware::class));
 $feature = $container->get('openfeature');
 $logger = $container->get('logger');
 if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
-    $app->add('csrf');
+    // $app->add('csrf');
 } else {
     $logger->warning("AppDependencies: csrf middleware disabled over openFeature");
 }
