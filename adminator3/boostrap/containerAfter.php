@@ -12,7 +12,6 @@ use OpenFeature\Providers\Flagd\FlagdProvider;
 
 use Cartalyst\Sentinel\Native\SentinelBootstrapper;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
-use Guzzle\Http\Message;
 
 $container->set(
     'settings',
@@ -60,9 +59,10 @@ $container->set(
 /* add sentinel user auth lib to container */
 $container->set('sentinel', function () use ($settings) {
 
-    $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
+    // $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
+    $sentinel = new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php'));
 
-    $sentine->getSentinel();
+    // $sentinel->getSentinel();
     
     // $sentinel = (new Sentinel());
     // $capsule  = new Capsule;
@@ -195,8 +195,6 @@ $container->set(
         $view->getEnvironment()->enableStrictVariables();
 
         $view->addExtension($container->get(CsrfExtension::class));
-
-        // $view->getEnvironment()->addGlobal('flash', $container->get('flash'));
 
         return $view;
     }
