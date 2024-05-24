@@ -204,7 +204,7 @@ $container->set(
 
 $container->set(
     'GuardMiddleware',
-    function ($container) {
-        return new GuardMiddleware($container);
+    function ($container) use ($responseFactory) {
+        return new GuardMiddleware($container, $responseFactory);
     }
 );
