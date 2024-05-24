@@ -4,6 +4,9 @@ use App\Middleware\SessionMiddleware;
 use Slim\Views\TwigMiddleware;
 use Slim\Csrf\Guard;
 
+// must be first
+$app->addMiddleware($container->get(SessionMiddleware::class));
+
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
 $container->set(
@@ -20,8 +23,6 @@ if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
 } else {
     $logger->warning("AppDependencies: csrf middleware disabled over openFeature");
 }
-
-$app->addMiddleware($container->get(SessionMiddleware::class));
 
 // $app->addMiddleware($container->get(TwigMiddleware::class));
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
