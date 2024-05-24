@@ -40,11 +40,11 @@ class SessionMiddleware implements MiddlewareInterface
         // Guard $guard,
         LoggerInterface $logger
     ) {
-        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
-
         $this->session = $session;
         // $this->guard   = $guard;
         $this->logger  = $logger;
+        
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
     /**

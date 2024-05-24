@@ -36,6 +36,9 @@ return [
     },
 
     SessionMiddleware::class => function (ContainerInterface $container) {
+        $logger = $container->get('logger');
+        $logger->debug("bootstrapContainer: init container SessionMiddleware");
+
         return new SessionMiddleware($container->get(SessionInterface::class), $container->get('logger'));
     },
 
