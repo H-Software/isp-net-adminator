@@ -21,7 +21,7 @@ if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
     $logger->debug("bootstrapDependencies: adding middleware: csrf");
     $app->add('csrf');
 } else {
-    $logger->warning("AppDependencies: csrf middleware disabled over openFeature");
+    $logger->warning("bootstrapDependencies: csrf middleware disabled over openFeature");
 }
 
 // $app->addMiddleware($container->get(TwigMiddleware::class));
