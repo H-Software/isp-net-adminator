@@ -43,7 +43,7 @@ class SessionMiddleware implements MiddlewareInterface
         $this->session = $session;
         // $this->guard   = $guard;
         $this->logger  = $logger;
-        
+
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
@@ -55,7 +55,7 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $this->logger->debug("SessionMiddleware called");
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         if (!$this->session->isStarted() && !headers_sent()) {
             $this->logger->debug("SessionMiddleware: session not started, starting");
