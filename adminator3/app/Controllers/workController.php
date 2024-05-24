@@ -18,8 +18,11 @@ class workController extends adminatorController
 
     protected $adminator;
 
+    protected $container;
+
     public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
         $this->conn_mysql = $container->get('connMysql');
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
