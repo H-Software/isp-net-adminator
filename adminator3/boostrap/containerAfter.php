@@ -181,7 +181,10 @@ $container->set(
     'view',
     function ($container) {
         $settings = $container->get('settings');
+        $logger = $container->get('logger');
 
+        $logger->debug("bootstrap\containerAfer: view: called");
+        
         $view = Twig::create(
             $settings['twig']['path'],
             [
