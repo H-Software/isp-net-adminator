@@ -40,7 +40,7 @@ return [
         $logger = $container->get('logger');
         $logger->debug("bootstrapContainer: init container SessionMiddleware");
 
-        return new SessionMiddleware($container->get(SessionInterface::class), $container->get('logger'));
+        return new SessionMiddleware($container->get(SessionInterface::class), $container->get('csrf'), $container->get('logger'));
     },
 
     // Guard::class => function (ContainerInterface $container) {

@@ -6,6 +6,20 @@ parameters:
 			path: app/Controllers/Auth/AuthController.php
 
 		-
+			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
+			count: 2
+			path: app/Middleware/SessionMiddleware.php
+
+		-
+			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:regenerateId\\(\\)\\.$#"
+			count: 1
+			path: app/Middleware/SessionMiddleware.php
+
+		-
+			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:start\\(\\)\\.$#"
+			count: 1
+			path: app/Middleware/SessionMiddleware.php
+		-
 			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
 			count: 1
 			path: app/Auth/Password.php
@@ -499,20 +513,7 @@ parameters:
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
 
-		-
-			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
-			count: 2
-			path: app/Middleware/SessionMiddleware.php
 
-		-
-			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:regenerateId\\(\\)\\.$#"
-			count: 1
-			path: app/Middleware/SessionMiddleware.php
-
-		-
-			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:start\\(\\)\\.$#"
-			count: 1
-			path: app/Middleware/SessionMiddleware.php
 
 		-
 			message: "#^Class aboutController not found\\.$#"

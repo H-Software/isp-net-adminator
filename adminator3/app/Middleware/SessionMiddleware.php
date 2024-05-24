@@ -22,10 +22,10 @@ class SessionMiddleware implements MiddlewareInterface
      */
     protected SessionInterface $session;
 
-    // /**
-    //  * @var Guard
-    //  */
-    // protected Guard $guard;
+    /**
+     * @var Guard
+     */
+    protected Guard $guard;
 
     /**
      * @var LoggerInterface
@@ -37,11 +37,11 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function __construct(
         SessionInterface $session,
-        // Guard $guard,
+        Guard $guard,
         LoggerInterface $logger
     ) {
         $this->session = $session;
-        // $this->guard   = $guard;
+        $this->guard   = $guard;
         $this->logger  = $logger;
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
@@ -69,7 +69,7 @@ class SessionMiddleware implements MiddlewareInterface
             $this->session->set('regen', time() + 300);
         }
 
-        // $this->guard->setStorage($this);
+        $this->guard->setStorage($this);
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " iniciated");
 
