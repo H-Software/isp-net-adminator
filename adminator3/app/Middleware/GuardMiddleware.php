@@ -29,7 +29,6 @@ class GuardMiddleware implements MiddlewareInterface
      */
     protected ContainerInterface $container;
 
-
     public function __construct(
         ContainerInterface $container
     ) {
@@ -49,13 +48,9 @@ class GuardMiddleware implements MiddlewareInterface
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->guard = $this->container->get('csrf');
+        $session_mw = $this->container->get('SessionMiddleware::class');
 
-        // $this->view->getEnvironment()->addGlobal('flash', $this->flash);
-
-        // if (!empty($params = $request->getParsedBody())) {
-        //     $this->flash->addMessageNow('oldNow', $params);
-        //     $this->flash->addMessage('old', $params);
-        // }
+        $this->guard->setStorage($session_mw);
 
         return $handler->handle($request);
     }

@@ -10,7 +10,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
-use Slim\Csrf\Guard;
 
 /**
  * Class SessionMiddleware.
@@ -23,11 +22,6 @@ class SessionMiddleware implements MiddlewareInterface
     protected SessionInterface $session;
 
     /**
-     * @var Guard
-     */
-    protected Guard $guard;
-
-    /**
      * @var LoggerInterface
      */
     protected LoggerInterface $logger;
@@ -37,11 +31,9 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function __construct(
         SessionInterface $session,
-        // Guard $guard,
         LoggerInterface $logger
     ) {
         $this->session = $session;
-        // $this->guard   = $guard;
         $this->logger  = $logger;
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
@@ -68,8 +60,6 @@ class SessionMiddleware implements MiddlewareInterface
             $this->session->regenerateId();
             $this->session->set('regen', time() + 300);
         }
-
-        // $this->guard->setStorage($this);
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " iniciated");
 

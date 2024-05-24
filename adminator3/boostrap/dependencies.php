@@ -27,7 +27,6 @@ if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
     $logger->warning("bootstrapDependencies: csrf middleware disabled over openFeature");
 }
 
-// $app->addMiddleware($container->get(TwigMiddleware::class));
 $logger->debug("bootstrapDependencies: adding middleware: Twig");
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
@@ -39,7 +38,6 @@ $app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
 
 $logger->debug("bootstrapDependencies: adding middleware: SessionMiddleware");
 $app->addMiddleware($container->get(SessionMiddleware::class));
-
 
 $container->set(
     'AuthController',
