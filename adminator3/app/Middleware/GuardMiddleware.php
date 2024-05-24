@@ -64,7 +64,7 @@ class GuardMiddleware implements MiddlewareInterface
         // TODO: set custom failureHandler
         // https://akrabat.com/slim-csrf-with-slim-3/#customising-the-csrf-failure
         // https://github.com/adbario/slim-csrf?tab=readme-ov-file#custom-error-on-csrf-token-failure
-        $this->guard->setFailureHandler(function ($request, $response, $next) use ($logger, $smarty) {
+        $this->guard->setFailureHandler(function ($request, $response, $next) use ($logger) {
             $logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ");
 
             // $response = $responseFactory->createResponse();
