@@ -8,11 +8,12 @@ $logger = $container->get('logger');
 $feature = $container->get('openfeature');
 
 // must be first
-$logger->debug("bootstrapDependencies: add middleware: SessionMiddleware");
+$logger->debug("bootstrapDependencies: adding middleware: SessionMiddleware");
 $app->addMiddleware($container->get(SessionMiddleware::class));
 
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
+$logger->debug("bootstrapDependencies: setup DI contianer for csrf");
 $container->set(
     'csrf',
     function () use ($responseFactory) {
