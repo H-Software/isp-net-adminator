@@ -4,7 +4,11 @@ use App\Middleware\SessionMiddleware;
 use Slim\Views\TwigMiddleware;
 use Slim\Csrf\Guard;
 
+$logger = $container->get('logger');
+$feature = $container->get('openfeature');
+
 // must be first
+$logger->debug("bootstrapDependencies: add middleware: SessionMiddleware");
 $app->addMiddleware($container->get(SessionMiddleware::class));
 
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
@@ -16,8 +20,6 @@ $container->set(
     }
 );
 
-$feature = $container->get('openfeature');
-$logger = $container->get('logger');
 if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
     // $app->add('csrf');
 } else {
