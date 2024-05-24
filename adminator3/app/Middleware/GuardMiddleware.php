@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -29,15 +30,23 @@ class GuardMiddleware implements MiddlewareInterface
      */
     protected ContainerInterface $container;
 
+    /**
+     * @var ResponseFactoryInterface
+     */
+    protected ResponseFactoryInterface $responseFactory;
+
      /**
      * @var \Smarty
      */
     protected \Smarty $smarty;
 
     public function __construct(
-        ContainerInterface $container
+        ContainerInterface $container,
+        ResponseFactoryInterface $responseFactory
     ) {
         $this->container = $container;
+        $this->responseFactory = $responseFactory;
+
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
 
@@ -55,9 +64,10 @@ class GuardMiddleware implements MiddlewareInterface
     {
         $logger = $this->logger;
         $smarty = $this->smarty;
+        $responseFactory = $this->responseFactory;
 
         // https://github.com/slimphp/Slim-Csrf?tab=readme-ov-file#handling-validation-failure
-        $this->guard->setFailureHandler(function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($logger, $smarty) {
+        $this->guard->setFailureHandler(function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($logger, $smarty, $responseFactory) {
 
             $logger->error(
                 __CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ",
@@ -66,6 +76,9 @@ class GuardMiddleware implements MiddlewareInterface
                     "headers" => var_export($request->getHeaders(), true)
                 )
             );
+
+            $response = $responseFactory->createResponse();
+
             // $request = $request->withAttribute("csrf_status", false);
             $smarty->assign("page_title", "Adminator3 - chybny CSRF token");
 
@@ -74,16 +87,11 @@ class GuardMiddleware implements MiddlewareInterface
             $smarty->assign("body", "<br>Failed CSRF check!<br>");
             $smarty->display('global/no-csrf.tpl');
     
-            // $response = $this->responseFactory->createResponse();
-            // $body = $response->getBody();
-            // $body->write('Failed CSRF check!');
-            // return $response
-            //     ->withStatus(400)
-            //     ->withHeader('Content-Type', 'text/plain')
-            //     ->withBody($body);
-            // exit;
+            return $response
+                ->withStatus(400)
+                ->withHeader('Content-Type', 'text/plain');
 
-            return $handler->handle($request);
+            // return $handler->handle($request);
         });
     }
 
