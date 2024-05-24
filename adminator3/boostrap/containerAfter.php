@@ -67,9 +67,9 @@ $container->set('sentinel', function () use ($container) {
 
     $sentinel = new Sentinel($boostrap);
 
-    // $sentinel->getSentinel();
+    return $sentinel->getSentinel();
     
-    return $sentinel;
+    // return $sentinel;
 
     // return $instance->getSentinel();
 });
