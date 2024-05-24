@@ -36,7 +36,7 @@ return [
     },
 
     SessionMiddleware::class => function (ContainerInterface $container) {
-        return new SessionMiddleware($container->get(SessionInterface::class), $container->get('csrf'), $container->get('logger'));
+        return new SessionMiddleware($container->get(SessionInterface::class), $container->get('logger'));
     },
 
     // Guard::class => function (ContainerInterface $container) {
