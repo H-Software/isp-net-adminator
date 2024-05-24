@@ -62,20 +62,15 @@ $container->set('sentinel', function () use ($settings) {
     // $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
     $sentinel = new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php'));
 
+    $instance = $sentinel->createSentinel();
+
     // $sentinel->getSentinel();
     
     // $sentinel = (new Sentinel());
-    // $capsule  = new Capsule;
-    // $capsule->addConnection($settings['database']);
-    // $capsule->setAsGlobal();
-    // $capsule->bootEloquent();
-    // $debug = $settings['general_settings']['debug'];
-    // if ($debug == true) {
-    //     $capsule::connection()->enableQueryLog();
-    // }
-    // return $sentinel->getSentinel();
 
-    return $sentinel;
+    return $instance->getSentinel();
+
+    // return $instance;
 });
 
 $container->set(
