@@ -38,6 +38,9 @@ class RedirectIfNotAuthenticated
      */
     protected ResponseFactoryInterface $responseFactory;
 
+    /**
+     * @var Sentinel
+     */
     private Sentinel $sentinel;
 
     /**
