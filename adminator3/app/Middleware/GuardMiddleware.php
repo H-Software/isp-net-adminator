@@ -48,7 +48,7 @@ class GuardMiddleware implements MiddlewareInterface
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->guard = $this->container->get('csrf');
-        $session_mw = $this->container->get('SessionMiddleware::class');
+        $session_mw = $this->container->get(SessionMiddleware::class);
 
         $this->guard->setStorage($session_mw);
 
