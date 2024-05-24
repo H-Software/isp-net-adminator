@@ -43,7 +43,7 @@ class AuthController extends Controller
         $this->logger = $container->get('logger');
         $this->view = $container->get('view');
 
-        $this->sentinel = $container->get('sentinel')->getInstance();
+        $this->sentinel = $container->get('sentinel')->getSentinel();
 
         $this->logger->info("authController\__construct called");
     }
