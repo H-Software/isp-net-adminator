@@ -76,7 +76,7 @@ class GuardMiddleware implements MiddlewareInterface
                 )
             );
             $request = $request->withAttribute("csrf_status", false);
-            
+
             return $handler->handle($request);
         });
 
@@ -85,7 +85,7 @@ class GuardMiddleware implements MiddlewareInterface
         $response = $this->guard->process($request, $handler);
 
         if (false === $request->getAttribute('csrf_status')) {
-            $logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf_status false! rendering HTTP 500");
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf_status false! rendering HTTP 400");
 
             // $this->smarty->assign("page_title", "Adminator3 - chybny level");
 
@@ -94,6 +94,13 @@ class GuardMiddleware implements MiddlewareInterface
             // $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
             // $this->smarty->display('global/no-level.tpl');
     
+            // $response = $this->responseFactory->createResponse();
+            // $body = $response->getBody();
+            // $body->write('Failed CSRF check!');
+            // return $response
+            //     ->withStatus(400)
+            //     ->withHeader('Content-Type', 'text/plain')
+            //     ->withBody($body);
             // exit;
         }
 
