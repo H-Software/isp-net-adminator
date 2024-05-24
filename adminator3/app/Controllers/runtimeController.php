@@ -10,12 +10,13 @@ class runtimeController extends Controller
 {
     public $logger;
 
-    protected $adminator;
+    // protected $adminator;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->logger = $this->container->get('logger');
+
         $this->logger->info("runtimeController\__construct called");
     }
 
@@ -26,6 +27,5 @@ class runtimeController extends Controller
         require_once __DIR__ . '/../../vendor/amnuts/opcache-gui/index.php';
 
         return $response;
-
     }
 }
