@@ -32,8 +32,8 @@ if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
 // $app->addMiddleware($container->get(TwigMiddleware::class));
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
-// $logger->debug("bootstrapDependencies: adding middleware: FlashOldFormDataMiddleware");
-// $app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
+$logger->debug("bootstrapDependencies: adding middleware: FlashOldFormDataMiddleware");
+$app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
 
 $container->set(
     'AuthController',
