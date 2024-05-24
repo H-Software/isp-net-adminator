@@ -9,6 +9,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Flash\Messages;
+use Psr\Log\LoggerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class FlashOldFormData.
@@ -21,12 +23,24 @@ class FlashOldFormDataMiddleware implements MiddlewareInterface
     protected Messages $flash;
 
     /**
-     * @param Messages $flash The flash
+     * @var LoggerInterface
      */
-    public function __construct(Messages $flash)
+    protected LoggerInterface $logger;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected ContainerInterface $container;    
+
+    public function __construct(
+        // Messages $flash,
+        // LoggerInterface $logger
+        ContainerInterface $container
+    )
     {
-        $this->flash = $flash;
-        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        // $this->flash = $flash;
+        $logger = $container->get('logger');
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
     /**

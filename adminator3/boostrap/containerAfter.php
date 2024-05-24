@@ -207,6 +207,6 @@ $container->set(
 $container->set(
     'FlashOldFormDataMiddleware',
     function ($container) {
-        return new FlashOldFormDataMiddleware($container->get('flash'));
+        return new FlashOldFormDataMiddleware($container);
     }
 );
