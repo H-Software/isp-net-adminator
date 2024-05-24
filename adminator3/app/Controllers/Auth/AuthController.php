@@ -6,7 +6,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Controllers\Controller;
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
+// use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Cartalyst\Sentinel\Sentinel;
 use Exception;
 use Slim\Interfaces\RouteParserInterface;
 use Slim\Flash\Messages;
@@ -31,7 +32,7 @@ class AuthController extends Controller
      */
     protected Twig $view;
 
-    protected $sentinel;
+    protected Sentinel $sentinel;
 
     public function __construct(
         ContainerInterface $container,
