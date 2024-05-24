@@ -56,21 +56,31 @@ class GuardMiddleware implements MiddlewareInterface
 
         $this->guard = $this->container->get('csrf');
         $session_mw = $this->container->get(SessionMiddleware::class);
-
         $this->guard->setStorage($session_mw);
+
+        $smarty = $this->container->get('smarty');
+        $logger = $this->logger;
 
         // TODO: set custom failureHandler
         // https://akrabat.com/slim-csrf-with-slim-3/#customising-the-csrf-failure
         // https://github.com/adbario/slim-csrf?tab=readme-ov-file#custom-error-on-csrf-token-failure
+        $this->guard->setFailureHandler(function ($request, $response, $next) use ($logger, $smarty) {
+            $logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ");
 
+            // $response = $responseFactory->createResponse();
+            $body = $response->getBody();
+            $body->write('Failed CSRF check!');
+            return $response
+                ->withStatus(400)
+                ->withHeader('Content-Type', 'text/plain')
+                ->withBody($body);
+
+            return $next($request, $response);
+        });
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ': calling slim\csrf\guard process');
 
         $response = $this->guard->process($request, $handler);
-
-        if (false === $request->getAttribute('csrf_result')) {
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf_result false. " . var_export($request, true));
-        }
 
         return $response;
     }
