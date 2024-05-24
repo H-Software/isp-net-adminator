@@ -68,7 +68,7 @@ $container->set('sentinel', function () use ($container) {
     $sentinel = new Sentinel($boostrap);
 
     return $sentinel->getSentinel();
-    
+
     // return $sentinel;
 
     // return $instance->getSentinel();
@@ -180,7 +180,7 @@ $container->set(
         $logger = $container->get('logger');
 
         $logger->debug("bootstrap\containerAfer: view: called");
-        
+
         $view = Twig::create(
             $settings['twig']['path'],
             [

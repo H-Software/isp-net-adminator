@@ -17,6 +17,8 @@ class vlastniciController extends adminatorController
     public $smarty;
     public $logger;
 
+    protected $sentinel;
+
     protected $adminator;
 
     public function __construct(ContainerInterface $container)
@@ -27,6 +29,8 @@ class vlastniciController extends adminatorController
 
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
+        $this->sentinel = $this->container->get('sentinel');
+
         $this->logger->info("vlastniciController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);

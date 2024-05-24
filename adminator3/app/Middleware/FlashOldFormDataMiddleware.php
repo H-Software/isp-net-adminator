@@ -30,7 +30,7 @@ class FlashOldFormDataMiddleware implements MiddlewareInterface
     /**
      * @var ContainerInterface
      */
-    protected ContainerInterface $container;    
+    protected ContainerInterface $container;
 
     protected $view;
 
@@ -38,8 +38,7 @@ class FlashOldFormDataMiddleware implements MiddlewareInterface
         // Messages $flash,
         // LoggerInterface $logger
         ContainerInterface $container
-    )
-    {
+    ) {
         // $this->flash = $flash;
         $this->container = $container;
         $this->view = $container->get('view');

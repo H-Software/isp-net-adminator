@@ -109,10 +109,9 @@ class adminator
             $level = $a['level'];
         }
 
-        if($level > 0){
+        if($level > 0) {
             return $level;
-        }
-        else {
+        } else {
             return false;
         }
     }

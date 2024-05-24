@@ -44,7 +44,7 @@ class adminatorController extends Controller
         // // $this->logger->info("JsonViewer\\render response dump: " . var_export($newResponse, true));
 
         // return $newResponse;
-        
+
         return $response;
     }
 
@@ -83,11 +83,11 @@ class adminatorController extends Controller
         $a->page_level_id = $page_level_id;
 
         if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
-            if($this->sentinel->getUser()->email == null){
+            if($this->sentinel->getUser()->email == null) {
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
                 $this->renderNoLogin();
                 // return false;
-            } else{
+            } else {
                 $a->userIdentityUsername = $this->sentinel->getUser()->email;
             }
         }
@@ -167,11 +167,11 @@ class adminatorController extends Controller
 
         // $show_se_cat = $_POST["show_se_cat"];
         $show_se_cat = 0;
-        if($request != null){
+        if($request != null) {
             if ($request->getMethod() == "POST") {
                 $show_se_cat = $request->getParsedBody()['show_se_cat'];
                 $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat, true));
-            } 
+            }
         }
 
         $this->smarty->assign("show_se_cat_selected", $show_se_cat);
