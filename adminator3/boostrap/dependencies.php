@@ -17,7 +17,6 @@ $container->set(
     }
 );
 
-
 if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
     $logger->debug("bootstrapDependencies: adding middleware: csrf");
     // $app->add('csrf');
