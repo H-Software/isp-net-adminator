@@ -31,6 +31,8 @@ class AuthController extends Controller
      */
     protected Twig $view;
 
+    protected $sentinel;
+
     public function __construct(
         ContainerInterface $container,
         RouteParserInterface $routeParser,
@@ -40,6 +42,8 @@ class AuthController extends Controller
         $this->flash = $container->get('flash');
         $this->logger = $container->get('logger');
         $this->view = $container->get('view');
+
+        $this->sentinel = $container->get('sentinel');
 
         $this->logger->info("authController\__construct called");
     }
@@ -57,7 +61,7 @@ class AuthController extends Controller
             );
 
             try {
-                if (!Sentinel::authenticate(
+                if (!$this->sentinel->authenticate(
                     $this->array_clean(
                         $data,
                         [
@@ -73,7 +77,7 @@ class AuthController extends Controller
                     // login OK
                     $this->logger->info(
                         "authController\signin: authentication was successful, email: "
-                                        . var_export(Sentinel::getUser()->email, true)
+                                        . var_export($this->sentinel->getUser()->email, true)
                                         . ", redirect URL: "
                                         . var_export($redirect, true)
                     );
@@ -114,10 +118,10 @@ class AuthController extends Controller
     public function signout($request, $response, array $args)
     {
         $this->logger->info("AuthController/signout called");
-        $this->logger->debug("AuthController/signout: dump user identity: ".var_export(Sentinel::getUser()->email, true));
+        $this->logger->debug("AuthController/signout: dump user identity: ".var_export($this->sentinel->getUser()->email, true));
 
-        if (!Sentinel::guest()) {
-            $rs = sentinel::logout();
+        if (!$this->sentinel->guest()) {
+            $rs = $this->sentinel->logout();
             $this->logger->info("AuthController/signout: signout action result: " . var_export($rs, true));
         } else {
             $this->logger->info("AuthController/signout: user is not logged, redirecting to home");
