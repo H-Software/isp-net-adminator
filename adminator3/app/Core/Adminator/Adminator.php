@@ -96,6 +96,8 @@ class adminator
 
     public function getUserLevel()
     {
+        $level = 0;
+
         $rs = User::where(
             "email",
             isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
@@ -104,8 +106,13 @@ class adminator
         if(is_object($rs)) {
             $this->logger->info("adminator\getUserLevel dump db: " . var_export($rs, true));
             $a = $rs->toArray();
-            return $a['level'];
-        } else {
+            $level = $a['level'];
+        }
+
+        if($level > 0){
+            return $level;
+        }
+        else {
             return false;
         }
     }
