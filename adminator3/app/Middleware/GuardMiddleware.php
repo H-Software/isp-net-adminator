@@ -47,21 +47,31 @@ class GuardMiddleware implements MiddlewareInterface
     {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->guard = $this->container->get('csrf');
         $feature = $this->container->get('openfeature');
+
+        if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true) === false) {
+            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ':  slim\csrf\guard middleware disabled over openFeature');
+            return $handler->handle($request);
+        }
+
+        $this->guard = $this->container->get('csrf');
         $session_mw = $this->container->get(SessionMiddleware::class);
 
         $this->guard->setStorage($session_mw);
 
-        if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
-            $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ': calling slim\csrf\guard');
+        // TODO: set custom failureHandler
+        // https://akrabat.com/slim-csrf-with-slim-3/#customising-the-csrf-failure
+        // https://github.com/adbario/slim-csrf?tab=readme-ov-file#custom-error-on-csrf-token-failure
 
-            $response = $this->guard->process($request, $handler);
-        } else {
-            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ':  slim\csrf\guard middleware disabled over openFeature');
-            $response = $handler->handle($request);
+
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ': calling slim\csrf\guard process');
+
+        $response = $this->guard->process($request, $handler);
+
+        if (false === $request->getAttribute('csrf_result')) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf_result false. " . var_export($request, true));
         }
-        
+
         return $response;
     }
 }
