@@ -39,7 +39,8 @@ class FlashOldFormDataMiddleware implements MiddlewareInterface
     )
     {
         // $this->flash = $flash;
-        $logger = $container->get('logger');
+        $this->container = $container;
+        $this->logger = $container->get('logger');
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
@@ -51,6 +52,7 @@ class FlashOldFormDataMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        $this->flash = $this->container->get('flash');
         if (!empty($params = $request->getParsedBody())) {
             $this->flash->addMessageNow('oldNow', $params);
             $this->flash->addMessage('old', $params);
