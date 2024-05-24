@@ -4,6 +4,8 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\DbUnit\DataSet\DataSet;
 use Slim\Csrf\Guard;
+use Cartalyst\Sentinel\Native\SentinelBootstrapper;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 $container->set(
     'settings',
@@ -24,6 +26,18 @@ $container->set(
         return $logger;
     }
 );
+
+$container->set('sentinel', function () use ($container) {
+    // $logger = $container->get('logger');
+
+    // $logger->debug("bootstrap\containerAfer: sentinel: called");
+
+    $boostrap = new SentinelBootstrapper();
+
+    $sentinel = new Sentinel($boostrap);
+
+    return $sentinel->getSentinel();
+});
 
 $container->set(
     'connMysql',

@@ -145,7 +145,7 @@ class archivZmenController extends adminatorController
                 //zde check duplicitnich hodnot ( uprava i pridani )
 
                 //checkem jestli se macklo na tlacitko "OK" :)
-                if(ereg("OK", $zmena->odeslano)) { /* zde nic */
+                if(preg_match("/OK/", $zmena->odeslano)) { /* zde nic */
                 } else {
                     $zmena->fail = "true";
                     $zmena->error .= "<div class=\"form-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";

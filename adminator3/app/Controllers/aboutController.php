@@ -11,7 +11,7 @@ class aboutController extends adminatorController
     public $conn_mysql;
     public $smarty;
     public $logger;
-    
+
     protected $sentinel;
 
     private $adminator;
