@@ -75,10 +75,7 @@ class RedirectIfNotAuthenticated
     ): ResponseInterface {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        // $sentinel = $this->sentinel->getSentinel();
-        $sentinel = $this->sentinel;
-
-        if ($sentinel->guest()) {
+        if ($this->sentinel->guest()) {
             $this->logger->info(
                 "RedirectIfNotAuthenticated: sentinel->guest, "
                 . "redirecting to auth.signing (" . $this->routeParser->urlFor('auth.signin') . ")"
@@ -99,8 +96,8 @@ class RedirectIfNotAuthenticated
             $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": prune old persistence data (in database)");
 
             // from https://github.com/cartalyst/sentinel/issues/519#issuecomment-559742227
-            // $currentLoggedInUser = $sentinel->getUser();
-            // $persistence = $sentinel->getPersistenceRepository();
+            $currentLoggedInUser = $this->sentinel->getUser();
+            $persistence = $this->sentinel->getPersistenceRepository();
             // $persistence->flush();
 
             // $sentinel->getPersistenceRepository()->flush();
