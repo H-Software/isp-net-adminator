@@ -70,7 +70,7 @@ class AuthController extends Controller
                             'password',
                         ]
                     ),
-                    isset($data['persist'])
+                    true
                 )
                 ) {
                     throw new Exception('Incorrect email or password.');
