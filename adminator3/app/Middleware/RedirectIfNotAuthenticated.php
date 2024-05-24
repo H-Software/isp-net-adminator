@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use Cartalyst\Sentinel\Sentinel;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 // use Cartalyst\Sentinel\Persistences\PersistableInterface;
 // use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Psr\Http\Message\ResponseFactoryInterface;
