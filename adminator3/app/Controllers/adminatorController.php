@@ -13,11 +13,14 @@ class adminatorController extends Controller
     public $smarty;
     public $logger;
 
-    public function __construct($conn_mysql, $smarty, $logger)
+    private $sentinel;
+
+    public function __construct($conn_mysql, $smarty, $logger, $sentinel)
     {
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
+        $this->sentinel = $sentinel;
 
         $this->logger->info("adminatorController\__construct called");
     }
@@ -36,10 +39,13 @@ class adminatorController extends Controller
             $_response['msg'] = $msg;
         }
 
-        $newResponse = $response->withJson($_response, $status, JSON_PRETTY_PRINT);
-        // $this->logger->info("JsonViewer\\render response dump: " . var_export($newResponse, true));
+        // TODO: fix unknown withJson
+        // $newResponse = $response->withJson($_response, $status, JSON_PRETTY_PRINT);
+        // // $this->logger->info("JsonViewer\\render response dump: " . var_export($newResponse, true));
 
-        return $newResponse;
+        // return $newResponse;
+        
+        return $response;
     }
 
     // public function jsonRenderException($status = 0, $msg = '') {
@@ -59,7 +65,7 @@ class adminatorController extends Controller
 
         exit;
     }
-    public function checkLevel($page_level_id = 0, $adminator = null)
+    public function checkLevel($page_level_id = 0, $adminator = null): void
     {
 
         if(is_object($adminator)) {
@@ -70,7 +76,7 @@ class adminatorController extends Controller
 
         if ($page_level_id == 0) {
             $this->renderNoLogin();
-            return false;
+            // return false;
         }
 
         $a->page_level_id = $page_level_id;
@@ -78,7 +84,8 @@ class adminatorController extends Controller
         if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
             if(Sentinel::getUser()->email == null){
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
-                return false;
+                $this->renderNoLogin();
+                // return false;
             } else{
                 $a->userIdentityUsername = Sentinel::getUser()->email;
             }
@@ -92,7 +99,7 @@ class adminatorController extends Controller
 
         if($checkLevel === false) {
             $this->renderNoLogin();
-            return false;
+            // return false;
         }
     }
 

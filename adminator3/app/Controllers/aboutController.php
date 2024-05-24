@@ -11,6 +11,8 @@ class aboutController extends adminatorController
     public $conn_mysql;
     public $smarty;
 
+    private $adminator;
+    
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
