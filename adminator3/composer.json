@@ -28,6 +28,7 @@
         "illuminate/session": "v10.48",
         "illuminate/pagination": "^10.48",
         "cartalyst/sentinel": "^v7.0",
+        "symfony/http-foundation": "^v6.4",
         "nyholm/psr7": "^1.4.1",
         "nyholm/psr7-server": "^1.0.2",
         "setasign/fpdf": "1.8.6",
