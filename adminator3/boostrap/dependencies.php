@@ -13,7 +13,7 @@ $app->addMiddleware($container->get(SessionMiddleware::class));
 
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
-$logger->debug("bootstrapDependencies: setup DI contianer for csrf");
+$logger->debug("bootstrapDependencies: setup DI container for csrf");
 $container->set(
     'csrf',
     function () use ($responseFactory) {
@@ -30,6 +30,7 @@ if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
 // $app->addMiddleware($container->get(TwigMiddleware::class));
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
+$logger->debug("bootstrapDependencies: adding middleware: FlashOldFormDataMiddleware");
 $app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
 
 $container->set(
