@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Access to an undefined property Cartalyst\\\Sentinel\\\Users\\\UserInterface\\:\\:\\$email\\.$#"
+			message: "#^Access to an undefined property Cartalyst\\\\Sentinel\\\\Users\\\\UserInterface\\:\\:\\$email\\.$#"
 			count: 2
 			path: app/Controllers/Auth/AuthController.php
 
