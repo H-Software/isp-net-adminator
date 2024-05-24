@@ -29,11 +29,18 @@ class GuardMiddleware implements MiddlewareInterface
      */
     protected ContainerInterface $container;
 
+     /**
+     * @var \Smarty
+     */
+    protected \Smarty $smarty;
+
     public function __construct(
         ContainerInterface $container
     ) {
         $this->container = $container;
         $this->logger = $container->get('logger');
+        $this->smarty = $container->get('smarty');
+
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
@@ -58,18 +65,8 @@ class GuardMiddleware implements MiddlewareInterface
         $session_mw = $this->container->get(SessionMiddleware::class);
         $this->guard->setStorage($session_mw);
 
-        $smarty = $this->container->get('smarty');
         $logger = $this->logger;
-
-        // TODO: set custom failureHandler
         // https://github.com/slimphp/Slim-Csrf?tab=readme-ov-file#handling-validation-failure
-        // $this->guard->setFailureHandler(function ($request, $response, $next) use ($logger) {
-        //     $logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ");
-
-        //     $request = $request->withAttribute("csrf_result", 'FAILED');
-        //     return $next($request, $response);
-        // });
-
         $this->guard->setFailureHandler(function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($logger) {
             $logger->error(
                 __CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ",
@@ -79,6 +76,7 @@ class GuardMiddleware implements MiddlewareInterface
                 )
             );
             $request = $request->withAttribute("csrf_status", false);
+            
             return $handler->handle($request);
         });
 
@@ -88,8 +86,22 @@ class GuardMiddleware implements MiddlewareInterface
 
         if (false === $request->getAttribute('csrf_status')) {
             $logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf_status false! rendering HTTP 500");
+
+            // $this->smarty->assign("page_title", "Adminator3 - chybny level");
+
+            // // $this->header($request, $response);
+    
+            // $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+            // $this->smarty->display('global/no-level.tpl');
+    
+            // exit;
         }
 
         return $response;
+    }
+
+    private function FailureHandler()
+    {
+
     }
 }
