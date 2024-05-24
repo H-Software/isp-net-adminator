@@ -65,6 +65,7 @@ class adminatorController extends Controller
 
         exit;
     }
+
     public function checkLevel($page_level_id = 0, $adminator = null): void
     {
 
@@ -82,12 +83,12 @@ class adminatorController extends Controller
         $a->page_level_id = $page_level_id;
 
         if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
-            if(Sentinel::getUser()->email == null){
+            if($this->sentinel->getUser()->email == null){
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
                 $this->renderNoLogin();
                 // return false;
             } else{
-                $a->userIdentityUsername = Sentinel::getUser()->email;
+                $a->userIdentityUsername = $this->sentinel->getUser()->email;
             }
         }
 
