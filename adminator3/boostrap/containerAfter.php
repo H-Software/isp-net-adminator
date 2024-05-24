@@ -71,9 +71,7 @@ $container->set('sentinel', function () use ($container) {
     
     // $sentinel = (new Sentinel());
 
-    // return $sentinel->getSentinel();
-
-    return $instance;
+    return $instance->getSentinel();
 });
 
 $container->set(
