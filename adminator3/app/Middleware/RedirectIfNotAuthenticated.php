@@ -75,7 +75,8 @@ class RedirectIfNotAuthenticated
     ): ResponseInterface {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $sentinel = $this->sentinel->getSentinel();
+        // $sentinel = $this->sentinel->getSentinel();
+        $sentinel = $this->sentinel;
 
         if ($sentinel->guest()) {
             $this->logger->info(
