@@ -19,7 +19,7 @@ class HomeController extends adminatorController
     public $smarty;
     public $logger;
 
-    private $sentinel;
+    protected $sentinel;
 
     private $adminator;
 

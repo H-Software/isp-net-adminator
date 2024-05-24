@@ -13,7 +13,7 @@ class adminatorController extends Controller
     public $smarty;
     public $logger;
 
-    private $sentinel;
+    protected $sentinel;
 
     public function __construct($conn_mysql, $smarty, $logger, $sentinel)
     {

@@ -75,6 +75,9 @@ class RedirectIfNotAuthenticated
     ): ResponseInterface {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
+        // TODO: add Short Circuit for options method
+        // https://github.com/larsloQ/larsloQ-slim4-skeleton-monolog-sentinel-behat/blob/8b4dc7d30485af40bbd06c92f6b7f8debda0ba53/app/Middleware/SentinelAuthCheckMiddleWare.php
+
         if ($this->sentinel->guest()) {
             $this->logger->info(
                 "RedirectIfNotAuthenticated: sentinel->guest, "
