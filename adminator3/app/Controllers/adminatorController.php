@@ -167,12 +167,14 @@ class adminatorController extends Controller
         $this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
 
         // $show_se_cat = $_POST["show_se_cat"];
-        if ($request->getMethod() == "POST") {
-            $show_se_cat = $request->getParsedBody()['show_se_cat'];
-            $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat, true));
-        } else {
-            $show_se_cat = 0;
+        $show_se_cat = 0;
+        if($$request != null){
+            if ($request->getMethod() == "POST") {
+                $show_se_cat = $request->getParsedBody()['show_se_cat'];
+                $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat, true));
+            } 
         }
+
         $this->smarty->assign("show_se_cat_selected", $show_se_cat);
 
         // $this->logger->debug("adminatorController\\header: show_se_cat value: ".$show_se_cat);
