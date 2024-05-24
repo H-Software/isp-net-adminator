@@ -62,20 +62,17 @@ class GuardMiddleware implements MiddlewareInterface
         $logger = $this->logger;
 
         // TODO: set custom failureHandler
-        // https://akrabat.com/slim-csrf-with-slim-3/#customising-the-csrf-failure
-        // https://github.com/adbario/slim-csrf?tab=readme-ov-file#custom-error-on-csrf-token-failure
-        $this->guard->setFailureHandler(function ($request, $response, $next) use ($logger) {
-            $logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ");
+        // https://github.com/slimphp/Slim-Csrf?tab=readme-ov-file#handling-validation-failure
+        // $this->guard->setFailureHandler(function ($request, $response, $next) use ($logger) {
+        //     $logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ");
 
-            // $response = $responseFactory->createResponse();
-            $body = $response->getBody();
-            $body->write('Failed CSRF check!');
-            return $response
-                ->withStatus(400)
-                ->withHeader('Content-Type', 'text/plain')
-                ->withBody($body);
+        //     $request = $request->withAttribute("csrf_result", 'FAILED');
+        //     return $next($request, $response);
+        // });
 
-            return $next($request, $response);
+        $this->guard->setFailureHandler(function (ServerRequestInterface $request, RequestHandlerInterface $handler) {
+            $request = $request->withAttribute("csrf_status", false);
+            return $handler->handle($request);
         });
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ': calling slim\csrf\guard process');
