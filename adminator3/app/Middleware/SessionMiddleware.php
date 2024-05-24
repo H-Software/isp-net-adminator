@@ -58,10 +58,10 @@ class SessionMiddleware implements MiddlewareInterface
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         if (!$this->session->isStarted() && !headers_sent()) {
-            $this->logger->debug("SessionMiddleware: session not started, starting");
+            $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": session not started, starting");
             $this->session->start();
         } elseif (!$this->session->isStarted()) {
-            $this->logger->warning("SessionMiddleware: session not started, but headers already sent!");
+            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": session not started, but headers already sent!");
         }
 
         if (!$this->session->has('regen') || $this->session->get('regen') < time()) {
@@ -71,7 +71,7 @@ class SessionMiddleware implements MiddlewareInterface
 
         // $this->guard->setStorage($this);
 
-        $this->logger->debug("SessionMiddleware iniciated");
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " iniciated");
 
         return $handler->handle($request);
     }
