@@ -1,5 +1,9 @@
 <?php
 
+// https://laravel.com/docs/10.x/session#introduction
+// https://github.com/rdehnhardt/skeleton/blob/master/config/session.php
+// https://stackoverflow.com/a/47055083/19497107
+
 use Odan\Session\SessionInterface;
 
 $session = $container->get(SessionInterface::class);
