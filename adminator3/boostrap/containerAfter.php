@@ -11,6 +11,7 @@ use OpenFeature\OpenFeatureAPI;
 use OpenFeature\Providers\Flagd\FlagdProvider;
 
 use Cartalyst\Sentinel\Native\SentinelBootstrapper;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 $container->set(
     'settings',
@@ -62,17 +63,17 @@ $container->set('sentinel', function () use ($container) {
     $logger->debug("bootstrap\containerAfer: sentinel: called");
 
     // $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
-    $sentinel = new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php'));
+    $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
 
-    $instance = $sentinel->createSentinel();
+    // $instance = $sentinel->createSentinel();
 
     // $sentinel->getSentinel();
     
     // $sentinel = (new Sentinel());
 
-    // return $instance->getSentinel();
+    return $sentinel->getSentinel();
 
-    return $instance;
+    // return $instance;
 });
 
 $container->set(
