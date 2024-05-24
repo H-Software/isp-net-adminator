@@ -86,6 +86,10 @@ class GuardMiddleware implements MiddlewareInterface
 
         $response = $this->guard->process($request, $handler);
 
+        if (false === $request->getAttribute('csrf_status')) {
+            $logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": csrf_status false! rendering HTTP 500");
+        }
+
         return $response;
     }
 }
