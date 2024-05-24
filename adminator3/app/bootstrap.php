@@ -1,7 +1,7 @@
 <?php
 
-use Cartalyst\Sentinel\Native\SentinelBootstrapper;
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
+// use Cartalyst\Sentinel\Native\SentinelBootstrapper;
+// use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 require __DIR__ ."/../boostrap/netteLoader.php";
 
