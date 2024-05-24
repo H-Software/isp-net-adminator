@@ -57,7 +57,10 @@ $container->set(
 );
 
 /* add sentinel user auth lib to container */
-$container->set('sentinel', function () use ($settings) {
+$container->set('sentinel', function () use ($container) {
+    $logger = $container->get('logger');
+    
+    $logger->debug("bootstrap\containerAfer: sentinel: called");
 
     // $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
     $sentinel = new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php'));
@@ -68,9 +71,9 @@ $container->set('sentinel', function () use ($settings) {
     
     // $sentinel = (new Sentinel());
 
-    return $instance->getSentinel();
+    // return $instance->getSentinel();
 
-    // return $instance;
+    return $instance;
 });
 
 $container->set(
