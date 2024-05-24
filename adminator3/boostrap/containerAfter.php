@@ -62,7 +62,8 @@ $container->set('sentinel', function () use ($settings) {
 
     $sentinel = Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
 
-
+    $sentine->getSentinel();
+    
     // $sentinel = (new Sentinel());
     // $capsule  = new Capsule;
     // $capsule->addConnection($settings['database']);

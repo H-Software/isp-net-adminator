@@ -1,5 +1,9 @@
 <?php
 
+use Odan\Session\SessionInterface;
+
+$session = $container->get(SessionInterface::class);
+
 if (!$session->isStarted() && !headers_sent()) {
     $logger->debug("Bootstrap\Session: session not started!");
     // $logger->debug("Bootstrap\Session: session not started, starting");
