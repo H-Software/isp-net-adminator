@@ -40,15 +40,15 @@ parameters:
 			count: 1
 			path: app/Controllers/Auth/PasswordController.php
 
-		-
-			message: "#^Access to an undefined property App\\\\Controllers\\\\aboutController\\:\\:\\$adminator\\.$#"
-			count: 7
-			path: app/Controllers/aboutController.php
+		# -
+		# 	message: "#^Access to an undefined property App\\\\Controllers\\\\aboutController\\:\\:\\$adminator\\.$#"
+		# 	count: 7
+		# 	path: app/Controllers/aboutController.php
 
-		-
-			message: "#^Call to an undefined method Psr\\\\Http\\\\Message\\\\ResponseInterface\\:\\:withJson\\(\\)\\.$#"
-			count: 1
-			path: app/Controllers/adminatorController.php
+		# -
+		# 	message: "#^Call to an undefined method Psr\\\\Http\\\\Message\\\\ResponseInterface\\:\\:withJson\\(\\)\\.$#"
+		# 	count: 1
+		# 	path: app/Controllers/adminatorController.php
 
 		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
@@ -87,20 +87,20 @@ parameters:
 			count: 1
 			path: app/Controllers/othersController.php
 
-		-
-			message: "#^Access to an undefined property App\\\\Controllers\\\\platbyController\\:\\:\\$adminator\\.$#"
-			count: 7
-			path: app/Controllers/platbyController.php
+		# -
+		# 	message: "#^Access to an undefined property App\\\\Controllers\\\\platbyController\\:\\:\\$adminator\\.$#"
+		# 	count: 7
+		# 	path: app/Controllers/platbyController.php
 
-		-
-			message: "#^Access to an undefined property App\\\\Controllers\\\\topologyController\\:\\:\\$adminator\\.$#"
-			count: 5
-			path: app/Controllers/topologyController.php
+		# -
+		# 	message: "#^Access to an undefined property App\\\\Controllers\\\\topologyController\\:\\:\\$adminator\\.$#"
+		# 	count: 5
+		# 	path: app/Controllers/topologyController.php
 
-		-
-			message: "#^Access to an undefined property App\\\\Controllers\\\\workController\\:\\:\\$adminator\\.$#"
-			count: 3
-			path: app/Controllers/workController.php
+		# -
+		# 	message: "#^Access to an undefined property App\\\\Controllers\\\\workController\\:\\:\\$adminator\\.$#"
+		# 	count: 3
+		# 	path: app/Controllers/workController.php
 
 		-
 			message: "#^Call to an undefined static method App\\\\Models\\\\PageLevel\\:\\:find\\(\\)\\.$#"
@@ -570,7 +570,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
-			count: 1
+			count: 2
 			path: app/Middleware/SessionMiddleware.php
 
 		-
