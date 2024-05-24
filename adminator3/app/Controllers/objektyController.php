@@ -13,7 +13,9 @@ class objektyController extends adminatorController
     public $logger;
     public $app;
 
-    public $adminator;
+    protected $sentinel;
+
+    private $adminator;
 
     public function __construct(ContainerInterface $container)
     {
@@ -21,6 +23,8 @@ class objektyController extends adminatorController
         $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
+        $this->sentinel = $this->container->get('sentinel');
+
         $this->logger->info("objektyController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);

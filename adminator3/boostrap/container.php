@@ -10,6 +10,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use Cartalyst\Sentinel\Sentinel;
 
 return [
 
@@ -26,7 +27,7 @@ return [
         $settings = $container->get('settings');
         $logger = $container->get('logger');
 
-        $logger->debug("SessionInterface: creating PhpSession");
+        $logger->debug("DI\SessionInterface: creating PhpSession handler adapter");
         // $logger->debug("SessionInterface: PhpSession config dump: " . var_export($settings['session'], true));
 
         $session = new PhpSession((array) $settings['session']);
@@ -36,7 +37,10 @@ return [
     },
 
     SessionMiddleware::class => function (ContainerInterface $container) {
-        return new SessionMiddleware($container->get(SessionInterface::class), $container->get('csrf'), $container->get('logger'));
+        $logger = $container->get('logger');
+        $logger->debug("bootstrapContainer: init container SessionMiddleware");
+
+        return new SessionMiddleware($container->get(SessionInterface::class), $container->get('logger'));
     },
 
     // Guard::class => function (ContainerInterface $container) {
@@ -55,6 +59,10 @@ return [
 
     ResponseFactoryInterface::class => function (ContainerInterface $container) {
         return $container->get(Psr17Factory::class);
+    },
+
+    Sentinel::class => function (ContainerInterface $container) {
+        return $container->get('sentinel');
     },
 
 ];

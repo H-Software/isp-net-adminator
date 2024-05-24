@@ -19,6 +19,8 @@ class HomeController extends adminatorController
     public $smarty;
     public $logger;
 
+    protected $sentinel;
+
     private $adminator;
 
     private $opravyInstance;
@@ -33,6 +35,8 @@ class HomeController extends adminatorController
 
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
+        $this->sentinel = $this->container->get('sentinel');
+
         $this->logger->info("homeController\__construct called");
 
         if(isset($adminatorInstance)) {
@@ -45,6 +49,7 @@ class HomeController extends adminatorController
                 null,
                 $this->pdoMysql,
                 $this->settings,
+                $this->sentinel
             );
         }
 

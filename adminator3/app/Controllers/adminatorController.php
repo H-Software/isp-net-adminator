@@ -13,11 +13,14 @@ class adminatorController extends Controller
     public $smarty;
     public $logger;
 
-    public function __construct($conn_mysql, $smarty, $logger)
+    protected $sentinel;
+
+    public function __construct($conn_mysql, $smarty, $logger, $sentinel)
     {
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
+        $this->sentinel = $sentinel;
 
         $this->logger->info("adminatorController\__construct called");
     }
@@ -36,10 +39,13 @@ class adminatorController extends Controller
             $_response['msg'] = $msg;
         }
 
-        $newResponse = $response->withJson($_response, $status, JSON_PRETTY_PRINT);
-        // $this->logger->info("JsonViewer\\render response dump: " . var_export($newResponse, true));
+        // TODO: fix unknown withJson
+        // $newResponse = $response->withJson($_response, $status, JSON_PRETTY_PRINT);
+        // // $this->logger->info("JsonViewer\\render response dump: " . var_export($newResponse, true));
 
-        return $newResponse;
+        // return $newResponse;
+
+        return $response;
     }
 
     // public function jsonRenderException($status = 0, $msg = '') {
@@ -59,7 +65,8 @@ class adminatorController extends Controller
 
         exit;
     }
-    public function checkLevel($page_level_id = 0, $adminator = null)
+
+    public function checkLevel($page_level_id = 0, $adminator = null): void
     {
 
         if(is_object($adminator)) {
@@ -70,13 +77,19 @@ class adminatorController extends Controller
 
         if ($page_level_id == 0) {
             $this->renderNoLogin();
-            return false;
+            // return false;
         }
 
         $a->page_level_id = $page_level_id;
 
         if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
-            $a->userIdentityUsername = Sentinel::getUser()->email;
+            if($this->sentinel->getUser()->email == null) {
+                $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
+                $this->renderNoLogin();
+                // return false;
+            } else {
+                $a->userIdentityUsername = $this->sentinel->getUser()->email;
+            }
         }
 
         $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($a->userIdentityUsername, true));
@@ -87,13 +100,12 @@ class adminatorController extends Controller
 
         if($checkLevel === false) {
             $this->renderNoLogin();
-            return false;
+            // return false;
         }
     }
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
     {
-
         $ret = array();
 
         // CSRF token name and value for update form
@@ -115,7 +127,6 @@ class adminatorController extends Controller
 
     public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminator = null)
     {
-
         if(is_object($adminator)) {
             $a = $adminator;
         } else {
@@ -155,12 +166,14 @@ class adminatorController extends Controller
         $this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
 
         // $show_se_cat = $_POST["show_se_cat"];
-        if ($request->getMethod() == "POST") {
-            $show_se_cat = $request->getParsedBody()['show_se_cat'];
-            $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat, true));
-        } else {
-            $show_se_cat = 0;
+        $show_se_cat = 0;
+        if($request != null) {
+            if ($request->getMethod() == "POST") {
+                $show_se_cat = $request->getParsedBody()['show_se_cat'];
+                $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat, true));
+            }
         }
+
         $this->smarty->assign("show_se_cat_selected", $show_se_cat);
 
         // $this->logger->debug("adminatorController\\header: show_se_cat value: ".$show_se_cat);

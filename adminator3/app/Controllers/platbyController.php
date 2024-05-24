@@ -10,6 +10,11 @@ class platbyController extends adminatorController
 {
     public $conn_mysql;
     public $smarty;
+    public $logger;
+
+    protected $sentinel;
+
+    private $adminator;
 
     public function __construct(ContainerInterface $container)
     {
@@ -17,6 +22,8 @@ class platbyController extends adminatorController
         $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
+        $this->sentinel = $this->container->get('sentinel');
+
         $this->logger->info("platbyController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
@@ -32,7 +39,7 @@ class platbyController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        $body .= "Prosím vyberte z podkategorie výše....";
+        $body = "Prosím vyberte z podkategorie výše....";
 
         $this->smarty->assign("body", $body);
 

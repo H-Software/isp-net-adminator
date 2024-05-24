@@ -9,6 +9,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Flash\Messages;
+use Psr\Log\LoggerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class FlashOldFormData.
@@ -21,11 +23,27 @@ class FlashOldFormDataMiddleware implements MiddlewareInterface
     protected Messages $flash;
 
     /**
-     * @param Messages $flash The flash
+     * @var LoggerInterface
      */
-    public function __construct(Messages $flash)
-    {
-        $this->flash = $flash;
+    protected LoggerInterface $logger;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected ContainerInterface $container;
+
+    protected $view;
+
+    public function __construct(
+        // Messages $flash,
+        // LoggerInterface $logger
+        ContainerInterface $container
+    ) {
+        // $this->flash = $flash;
+        $this->container = $container;
+        $this->view = $container->get('view');
+        $this->logger = $container->get('logger');
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
     /**
@@ -36,6 +54,12 @@ class FlashOldFormDataMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->flash = $this->container->get('flash');
+
+        $this->view->getEnvironment()->addGlobal('flash', $this->flash);
+
         if (!empty($params = $request->getParsedBody())) {
             $this->flash->addMessageNow('oldNow', $params);
             $this->flash->addMessage('old', $params);

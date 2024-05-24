@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Cartalyst\Sentinel\Sentinel;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,6 +39,11 @@ class RedirectIfNotAuthenticated
     protected ResponseFactoryInterface $responseFactory;
 
     /**
+     * @var Sentinel
+     */
+    private Sentinel $sentinel;
+
+    /**
      * @param Messages             $flash       The flash
      * @param RouteParserInterface $routeParser The routeParser
      */
@@ -46,12 +51,16 @@ class RedirectIfNotAuthenticated
         Messages $flash,
         RouteParserInterface $routeParser,
         ResponseFactoryInterface $responseFactory,
-        LoggerInterface $loggerInterface
+        LoggerInterface $loggerInterface,
+        Sentinel $sentinel
     ) {
         $this->flash           = $flash;
         $this->routeParser     = $routeParser;
         $this->responseFactory = $responseFactory;
         $this->logger          = $loggerInterface;
+        $this->sentinel        = $sentinel;
+
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
     /**
@@ -64,12 +73,14 @@ class RedirectIfNotAuthenticated
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): ResponseInterface {
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->logger->info("RedirectIfNotAuthenticated invoked");
+        // TODO: add Short Circuit for options method
+        // https://github.com/larsloQ/larsloQ-slim4-skeleton-monolog-sentinel-behat/blob/8b4dc7d30485af40bbd06c92f6b7f8debda0ba53/app/Middleware/SentinelAuthCheckMiddleWare.php
 
-        if (Sentinel::guest()) {
+        if ($this->sentinel->guest()) {
             $this->logger->info(
-                "RedirectIfNotAuthenticated: sentinel::guest, "
+                "RedirectIfNotAuthenticated: sentinel->guest, "
                 . "redirecting to auth.signing (" . $this->routeParser->urlFor('auth.signin') . ")"
             );
 
@@ -85,11 +96,12 @@ class RedirectIfNotAuthenticated
                                 http_build_query(['redirect' => $request->getUri()->getPath()])
                 );
         } else {
-            // prune old persistence data (in database)
+            $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": prune old persistence data (in database)");
 
             // from https://github.com/cartalyst/sentinel/issues/519#issuecomment-559742227
-            $currentLoggedInUser = Sentinel::getUser();
-            Sentinel::getPersistenceRepository()->flush($currentLoggedInUser, false);
+            $currentLoggedInUser = $this->sentinel->getUser();
+            // @phpstan-ignore-next-line
+            $this->sentinel->getPersistenceRepository()->flush($currentLoggedInUser, false);
         }
 
         return $handler->handle($request);

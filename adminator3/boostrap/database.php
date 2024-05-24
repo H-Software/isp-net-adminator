@@ -42,5 +42,9 @@ $capsule->addConnection(
     "pgsql"
 );
 
+// if ($debug == true) {
+//     $capsule::connection()->enableQueryLog();
+// }
+
 $capsule->setAsGlobal();
 $capsule->bootEloquent();

@@ -13,7 +13,9 @@ class archivZmenController extends adminatorController
     public $smarty;
     public $logger;
 
-    public $adminator;
+    protected $sentinel;
+
+    private $adminator;
 
     public function __construct(ContainerInterface $container)
     {
@@ -21,6 +23,8 @@ class archivZmenController extends adminatorController
         $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
+        $this->sentinel = $this->container->get('sentinel');
+
         $this->logger->info("archivZmenController\__construct called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
@@ -141,7 +145,7 @@ class archivZmenController extends adminatorController
                 //zde check duplicitnich hodnot ( uprava i pridani )
 
                 //checkem jestli se macklo na tlacitko "OK" :)
-                if(ereg("OK", $zmena->odeslano)) { /* zde nic */
+                if(preg_match("/OK/", $zmena->odeslano)) { /* zde nic */
                 } else {
                     $zmena->fail = "true";
                     $zmena->error .= "<div class=\"form-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";

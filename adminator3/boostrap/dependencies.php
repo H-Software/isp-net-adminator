@@ -4,29 +4,32 @@ use App\Middleware\SessionMiddleware;
 use Slim\Views\TwigMiddleware;
 use Slim\Csrf\Guard;
 
+$logger = $container->get('logger');
+// $feature = $container->get('openfeature');
+
 $container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
 
 $container->set(
     'csrf',
-    function () use ($responseFactory) {
-        return new Guard($responseFactory);
+    function () use ($responseFactory, $container) {
+        $logger = $container->get('logger');
+        $logger->debug('DI\csrf: creating Guard instance');
+        $guard = new Guard($responseFactory);
+        return $guard;
     }
 );
 
-$feature = $container->get('openfeature');
-$logger = $container->get('logger');
-if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true)) {
-    $app->add('csrf');
-} else {
-    $logger->warning("AppDependencies: csrf middleware disabled over openFeature");
-}
-
-$app->addMiddleware($container->get(SessionMiddleware::class));
-
-// $app->addMiddleware($container->get(TwigMiddleware::class));
+$logger->debug("bootstrapDependencies: adding middleware: Twig");
 $app->addMiddleware(TwigMiddleware::createFromContainer($app));
 
+$logger->debug("bootstrapDependencies: adding middleware: Guard");
+$app->addMiddleware($container->get('GuardMiddleware'));
+
+$logger->debug("bootstrapDependencies: adding middleware: FlashOldFormData");
 $app->addMiddleware($container->get('FlashOldFormDataMiddleware'));
+
+$logger->debug("bootstrapDependencies: adding middleware: Session");
+$app->addMiddleware($container->get(SessionMiddleware::class));
 
 $container->set(
     'AuthController',

@@ -12,6 +12,10 @@ class printController extends adminatorController
 {
     public $logger;
 
+    public $smarty;
+
+    protected $sentinel;
+
     protected $adminator;
 
     private $printInstance;
@@ -21,6 +25,7 @@ class printController extends adminatorController
         $this->container = $container;
         $this->logger = $this->container->get('logger');
         $this->smarty = $this->container->get('smarty');
+        $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 

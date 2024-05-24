@@ -1,17 +1,17 @@
 <?php
 
 use Slim\Views\Twig;
-use Slim\Csrf\Guard;
+use Nyholm\Psr7\Factory\Psr17Factory;
 
-use Psr\Container\ContainerInterface;
 use App\View\CsrfExtension;
 use App\Middleware\FlashOldFormDataMiddleware;
+use App\Middleware\GuardMiddleware;
 
 use OpenFeature\OpenFeatureAPI;
 use OpenFeature\Providers\Flagd\FlagdProvider;
 
-
-use Guzzle\Http\Message;
+use Cartalyst\Sentinel\Native\SentinelBootstrapper;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 $container->set(
     'settings',
@@ -56,6 +56,16 @@ $container->set(
     }
 );
 
+$container->set('sentinel', function () use ($container) {
+    $logger = $container->get('logger');
+    $logger->debug('DI\sentinel: called');
+
+    $boostrap = new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php'));
+    $sentinel = new Sentinel($boostrap);
+
+    return $sentinel->getSentinel();
+});
+
 $container->set(
     'openfeature',
     function ($c) {
@@ -87,7 +97,7 @@ $container->set(
 
         $configVersion = $client->getStringValue("adminator3FlagdConfigVersion", "null");
 
-        $logger->debug("bootstrap\containerAfer: openfeature: adminator3FlagdConfigVersion: " . var_export($configVersion, true));
+        $logger->debug("DI\openfeature: adminator3FlagdConfigVersion: " . var_export($configVersion, true));
 
         return $client;
     }
@@ -104,8 +114,8 @@ $container->set(
         $smarty->caching = $settings['smarty']['caching'];
         //$smarty->debugging = true;
 
-        $logger->debug("bootstrap\containerAfer: smarty compile_check: " . var_export($settings['smarty']['compile_check'], true));
-        $logger->debug("bootstrap\containerAfer: smarty caching: " . var_export($settings['smarty']['caching'], true));
+        $logger->debug("DI\smarty: compile_check: " . var_export($settings['smarty']['compile_check'], true));
+        $logger->debug("DI\smarty: smarty caching: " . var_export($settings['smarty']['caching'], true));
 
         return $smarty;
     }
@@ -149,6 +159,8 @@ $container->set(
 $container->set(
     'flash',
     function ($container) {
+        $logger = $container->get('logger');
+        $logger->debug('DI\flash: called');
         return new \Slim\Flash\Messages();
     }
 );
@@ -157,6 +169,9 @@ $container->set(
     'view',
     function ($container) {
         $settings = $container->get('settings');
+        $logger = $container->get('logger');
+
+        $logger->debug("bootstrap\containerAfer: view: called");
 
         $view = Twig::create(
             $settings['twig']['path'],
@@ -168,8 +183,6 @@ $container->set(
         $view->getEnvironment()->enableStrictVariables();
 
         $view->addExtension($container->get(CsrfExtension::class));
-
-        $view->getEnvironment()->addGlobal('flash', $container->get('flash'));
 
         return $view;
     }
@@ -185,6 +198,14 @@ $container->set(
 $container->set(
     'FlashOldFormDataMiddleware',
     function ($container) {
-        return new FlashOldFormDataMiddleware($container->get('flash'));
+        return new FlashOldFormDataMiddleware($container);
+    }
+);
+
+$container->set(
+    'GuardMiddleware',
+    function ($container) {
+        $rf = $container->get(Psr17Factory::class);
+        return new GuardMiddleware($container, $rf);
     }
 );
