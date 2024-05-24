@@ -27,7 +27,7 @@ return [
         $settings = $container->get('settings');
         $logger = $container->get('logger');
 
-        $logger->debug("SessionInterface: creating PhpSession handler adapter");
+        $logger->debug("DI\SessionInterface: creating PhpSession handler adapter");
         // $logger->debug("SessionInterface: PhpSession config dump: " . var_export($settings['session'], true));
 
         $session = new PhpSession((array) $settings['session']);
