@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Middleware;
 
 use Cartalyst\Sentinel\Sentinel;
-use Cartalyst\Sentinel\Persistences\PersistableInterface;
+// use Cartalyst\Sentinel\Persistences\PersistableInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -94,7 +94,7 @@ class RedirectIfNotAuthenticated
             $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": prune old persistence data (in database)");
 
             // from https://github.com/cartalyst/sentinel/issues/519#issuecomment-559742227
-            $currentLoggedInUser = $this->sentinel->getUser();
+            // $currentLoggedInUser = $this->sentinel->getUser();
             // $persistence = $this->sentinel->getPersistenceRepository();
             // $persistence->flush();
 
