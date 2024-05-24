@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Access to an undefined property Cartalyst\\\Sentinel\\\Users\\\UserInterface\\:\\:\\$email\\.$#"
+			count: 2
+			path: app/Controllers/Auth/AuthController.php
+
+		-
 			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
 			count: 1
 			path: app/Auth/Password.php
@@ -10,55 +15,11 @@ parameters:
 			count: 2
 			path: app/Auth/Password.php
 
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:authenticate\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Controllers/Auth/AuthController.php
-
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-		# 	count: 2
-		# 	path: app/Controllers/Auth/AuthController.php
-
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Controllers/Auth/AuthController.php
-
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:logout\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Controllers/Auth/AuthController.php
-
-		# -
-		# 	message: "#^Offset 'persist' on array\\{email\\: mixed, password\\: mixed\\} in isset\\(\\) does not exist\\.$#"
-		# 	count: 1
-		# 	path: app/Controllers/Auth/AuthController.php
-
 		-
 			message: "#^Constructor of class App\\\\Controllers\\\\Auth\\\\PasswordController has an unused parameter \\$flash\\.$#"
 			count: 1
 			path: app/Controllers/Auth/PasswordController.php
 
-		# -
-		# 	message: "#^Access to an undefined property App\\\\Controllers\\\\aboutController\\:\\:\\$adminator\\.$#"
-		# 	count: 7
-		# 	path: app/Controllers/aboutController.php
-
-		# -
-		# 	message: "#^Call to an undefined method Psr\\\\Http\\\\Message\\\\ResponseInterface\\:\\:withJson\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Controllers/adminatorController.php
-
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Controllers/adminatorController.php
-
-		# -
-		# 	message: "#^Function ereg not found\\.$#"
-		# 	count: 1
-		# 	path: app/Controllers/archivZmenController.php
 
 		-
 			message: "#^If condition is always true\\.$#"
@@ -86,21 +47,6 @@ parameters:
 			message: "#^If condition is always false\\.$#"
 			count: 1
 			path: app/Controllers/othersController.php
-
-		# -
-		# 	message: "#^Access to an undefined property App\\\\Controllers\\\\platbyController\\:\\:\\$adminator\\.$#"
-		# 	count: 7
-		# 	path: app/Controllers/platbyController.php
-
-		# -
-		# 	message: "#^Access to an undefined property App\\\\Controllers\\\\topologyController\\:\\:\\$adminator\\.$#"
-		# 	count: 5
-		# 	path: app/Controllers/topologyController.php
-
-		# -
-		# 	message: "#^Access to an undefined property App\\\\Controllers\\\\workController\\:\\:\\$adminator\\.$#"
-		# 	count: 3
-		# 	path: app/Controllers/workController.php
 
 		-
 			message: "#^Call to an undefined static method App\\\\Models\\\\PageLevel\\:\\:find\\(\\)\\.$#"
@@ -552,21 +498,6 @@ parameters:
 			message: "#^Variable \\$user in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
-
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getPersistenceRepository\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Middleware/RedirectIfNotAuthenticated.php
-
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Middleware/RedirectIfNotAuthenticated.php
-
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Middleware/RedirectIfNotAuthenticated.php
 
 		-
 			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
