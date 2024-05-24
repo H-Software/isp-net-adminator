@@ -16,12 +16,16 @@ require __DIR__ ."/../boostrap/containerAfter.php";
 // and after containerBuilder
 require __DIR__ ."/../boostrap/session.php";
 
-// authz
-Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
-
 require __DIR__ ."/../boostrap/appFactory.php";
 
 require __DIR__ ."/../boostrap/dependencies.php";
+
+//
+// authz
+//
+// must be after session middleware / bootstrap\session
+// 
+Sentinel::instance(new SentinelBootstrapper((require __DIR__ . '/../config/sentinel.php')));
 
 # instanciate FF
 $feature = $container->get('openfeature');
