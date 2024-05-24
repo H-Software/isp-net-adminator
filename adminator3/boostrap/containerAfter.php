@@ -205,7 +205,7 @@ $container->set(
 $container->set(
     'GuardMiddleware',
     function ($container) {
-        $rs = $container->get(Psr17Factory::class);
-        return new GuardMiddleware($container, $rs);
+        $rf = $container->get(Psr17Factory::class);
+        return new GuardMiddleware($container, $rf);
     }
 );

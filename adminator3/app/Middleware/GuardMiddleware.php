@@ -35,9 +35,9 @@ class GuardMiddleware implements MiddlewareInterface
      */
     protected ResponseFactoryInterface $responseFactory;
 
-     /**
-     * @var \Smarty
-     */
+    /**
+    * @var \Smarty
+    */
     protected \Smarty $smarty;
 
     public function __construct(
@@ -83,10 +83,10 @@ class GuardMiddleware implements MiddlewareInterface
             $smarty->assign("page_title", "Adminator3 - chybny CSRF token");
 
             // // $this->header($request, $response);
-    
+
             $smarty->assign("body", "<br>Failed CSRF check!<br>");
             $smarty->display('global/no-csrf.tpl');
-    
+
             return $response
                 ->withStatus(400)
                 ->withHeader('Content-Type', 'text/plain');
