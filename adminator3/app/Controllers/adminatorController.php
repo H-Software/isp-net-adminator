@@ -106,7 +106,6 @@ class adminatorController extends Controller
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
     {
-
         $ret = array();
 
         // CSRF token name and value for update form
@@ -128,7 +127,6 @@ class adminatorController extends Controller
 
     public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminator = null)
     {
-
         if(is_object($adminator)) {
             $a = $adminator;
         } else {
