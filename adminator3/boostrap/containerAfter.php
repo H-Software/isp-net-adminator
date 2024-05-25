@@ -200,7 +200,7 @@ $container->set(
 
 $container->set(
     'cache',
-    function ($container) {
+    function ($container) use ($capsule) {
         $logger = $container->get('logger');
         $settings = $container->get('settings');
 
@@ -209,6 +209,7 @@ $container->set(
         // https://github.com/mattstauffer/Torch/blob/master/components/cache/index.php
         $c = new Container();
         $c['config'] = $settings['cache'];
+        $c['db'] = $capsule;
 
         // $logger->debug('DI\cache: using config: ' . var_export($c['config'], true));
 
