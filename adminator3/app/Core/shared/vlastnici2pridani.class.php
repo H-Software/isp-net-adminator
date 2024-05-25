@@ -1450,6 +1450,8 @@ class vlastnici2pridani extends adminator
         // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
 
         $this->writed = "true";
+        
+        $this->cache::unlock($this->lock_name);
 
         return $output;
     }

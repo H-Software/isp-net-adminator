@@ -204,6 +204,9 @@ $container->set(
         $logger = $container->get('logger');
         $logger->debug('DI\cache: called');
 
+        // $settings = $container->get('settings');
+
+
         // https://github.com/mattstauffer/Torch/blob/master/components/cache/index.php
         $c = new Container();
         $c['config'] = [
@@ -214,8 +217,10 @@ $container->set(
                         'driver' => 'database',
                         // 'table' => 'cache',
                         // 'connection' => null,
+                        // 'lock_connection' => null,
                     ],
-                ]
+                ],
+                'prefix' => 'a3_cache_'
             ]
         ];
 
@@ -224,6 +229,8 @@ $container->set(
 
         // Get the default cache driver
         $cache = $cacheManager->store();
+
+        $logger->debug('DI\cache: using driver: ' . var_export($cacheManager->driver(), true));
 
         return $cache;
     }
