@@ -160,8 +160,8 @@ RUN cd adminator3 \
     && composer install --no-dev
 
 # app code
-COPY adminator2/ /srv/www/adminator2/
-COPY adminator3/ /srv/www/adminator3/
+COPY adminator2/ --exclude=adminator2/composer.* /srv/www/adminator2/
+COPY adminator3/ --exclude=adminator3/composer.* /srv/www/adminator3/
 
 # shared stuff
 COPY adminator3/templates/inc.intro.category-ext.tpl /srv/www/adminator2/templates/inc.intro.category-ext.tpl
@@ -233,7 +233,7 @@ ENTRYPOINT [ \
         "chown www-data:www-data adminator3/print/temp", \
         "docker-php-entrypoint"]
 
-        WORKDIR /srv/www
+WORKDIR /srv/www
 
 # Override stop signal to stop process gracefully
 # https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163
