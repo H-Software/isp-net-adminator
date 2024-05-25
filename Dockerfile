@@ -157,9 +157,26 @@ RUN cd adminator2 \
 RUN cd adminator3 \
     && composer install --no-dev
 
+# clean-up
+RUN apt-get purge -y --allow-remove-essential \
+libgcc-12-dev \
+libstdc++-12-dev \
+linux-libc-dev \
+curl \
+gnupg \
+make \
+m4 \
+re2c \
+pkg-config \
+file \
+unzip \
+&& apt autoremove -y \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # app code
-COPY adminator2/ --exclude=composer.* /srv/www/adminator2/
-COPY adminator3/ --exclude=composer.* /srv/www/adminator3/
+# COPY adminator2/ --exclude=composer.* /srv/www/adminator2/
+# COPY adminator3/ --exclude=composer.* /srv/www/adminator3/
 
 # shared stuff
 COPY adminator3/templates/inc.intro.category-ext.tpl /srv/www/adminator2/templates/inc.intro.category-ext.tpl
@@ -185,23 +202,6 @@ RUN set -xe && echo "pm.status_path = /status" >> /usr/local/etc/php-fpm.d/zz-do
 COPY ./configs/php-fpm-healthcheck /usr/local/bin/php-fpm-healthcheck
 
 RUN chmod +x /usr/local/bin/php-fpm-healthcheck
-
-# clean-up
-RUN apt-get purge -y --allow-remove-essential \
-        libgcc-12-dev \
-        libstdc++-12-dev \
-        linux-libc-dev \
-        curl \
-        gnupg \
-        make \
-        m4 \
-        re2c \
-        pkg-config \
-        file \
-        unzip \
-    && apt autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # fix logging
 # RUN mkdir -p /var/log/php \
