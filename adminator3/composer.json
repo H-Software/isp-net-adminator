@@ -25,6 +25,7 @@
         "formr/formr": "^1.5",
         "illuminate/database": "^10.48",
         "illuminate/events": "^v10.0",
+        "illuminate/cache": "^10.0",
         "cartalyst/sentinel": "^v7.0",
         "nyholm/psr7": "^1.4.1",
         "nyholm/psr7-server": "^1.0.2",

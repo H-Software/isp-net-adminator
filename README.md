@@ -72,6 +72,9 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/nette/robot-loader/tree/v3.1.4
 - https://dev.to/mtk3d/how-to-configure-php-logs-for-docker-2384
 
+#### Illuminate
+- https://github.com/mattstauffer/Torch
+
 #### forms
 - https://symfony.com/doc/3.x/forms.html
 - https://packagist.org/packages/symfony/form#v3.4.47
