@@ -65,6 +65,8 @@ $settings = [
             'prefix' => '',
         ],
         'cache' => [
+            'cache.prefix' => 'a3_cache_',
+            'connection' => "default",
             'cache.default' => 'database',
             'cache.stores.database' => [
                 'driver' => 'database',
@@ -77,7 +79,6 @@ $settings = [
             //         // 'lock_connection' => null,
             //     ],
             // ],
-            'cache.prefix' => 'a3_cache_'
         ],
         'phinx' => [
             'paths' => [
