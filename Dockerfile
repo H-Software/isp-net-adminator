@@ -158,8 +158,8 @@ RUN cd adminator3 \
     && composer install --no-dev
 
 # app code
-COPY adminator2/ --exclude=adminator2/composer.* /srv/www/adminator2/
-COPY adminator3/ --exclude=adminator3/composer.* /srv/www/adminator3/
+COPY adminator2/ --exclude=/adminator2/composer.* /srv/www/adminator2/
+COPY adminator3/ --exclude=/adminator3/composer.* /srv/www/adminator3/
 
 # shared stuff
 COPY adminator3/templates/inc.intro.category-ext.tpl /srv/www/adminator2/templates/inc.intro.category-ext.tpl
