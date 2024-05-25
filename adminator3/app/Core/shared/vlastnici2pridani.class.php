@@ -3,7 +3,6 @@
 use App\Core\adminator;
 use Psr\Container\ContainerInterface;
 use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Support\Facades\Cache;
 
 class vlastnici2pridani extends adminator
 {
@@ -14,6 +13,8 @@ class vlastnici2pridani extends adminator
     public $logger;
 
     public $smarty;
+
+    protected $cache;
 
     // public $container; // for calling stb class over vlastnik2_a2 class
 
@@ -127,6 +128,7 @@ class vlastnici2pridani extends adminator
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
+        $this->cache = $container->get('cache');
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
     }
@@ -144,7 +146,7 @@ class vlastnici2pridani extends adminator
             // set lock
             $this->lock_name = 'vlastnici2pridani:update:' . $this->form_update_id;
 
-            $this->lock_handler = Cache::lock($this->lock_name, 60, 'vlastnici2pridani:'. $this->form_update_id);
+            $this->lock_handler = $this->cache->lock($this->lock_name, 60, 'vlastnici2pridani:'. $this->form_update_id);
 
             if ($this->lock_handler) {
                 $this->locked = true;

@@ -207,11 +207,25 @@ $container->set(
         // https://github.com/mattstauffer/Torch/blob/master/components/cache/index.php
         $c = new Container;
         $c['config'] = [
-            'cache.default' => 'database',
+            'cache' => [
+                'default' => 'database',
+                'stores' => [
+                    'database' => [
+                        'driver' => 'database',
+                        // 'table' => 'cache',
+                        // 'connection' => null,
+                    ],   
+                ]
+            ]
         ];
 
         // Create the CacheManager
         $cacheManager = new CacheManager($c);
+
+        // Get the default cache driver
+        $cache = $cacheManager->store();
+
+        return $cache;
     }
 );
 

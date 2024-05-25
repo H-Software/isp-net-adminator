@@ -22,6 +22,8 @@ class adminator
 
     public $pdoMysql;
 
+    protected $cache;
+
     public $settings;
 
     public $userIdentityUsername;
