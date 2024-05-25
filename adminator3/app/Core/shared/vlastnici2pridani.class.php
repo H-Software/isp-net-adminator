@@ -151,6 +151,7 @@ class vlastnici2pridani extends adminator
             if ($this->lock_handler->get()) {
                 $this->locked = true;
                 $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": lock " . var_export($this->lock_name, true) . " accquired.");
+                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": lock owner " . var_export($this->lock_handler->owner(), true));
 
             } else {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": lock for " . var_export($this->lock_name, true) . " failed.");

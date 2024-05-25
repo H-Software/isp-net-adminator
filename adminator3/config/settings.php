@@ -65,7 +65,7 @@ $settings = [
             'prefix' => '',
         ],
         'cache' => [
-            'cache.prefix' => 'a3_cache_',
+            'cache.prefix' => 'a3cache::',
             'cache.default' => 'database',
             'cache.stores.database' => [
                 'driver' => 'database',
