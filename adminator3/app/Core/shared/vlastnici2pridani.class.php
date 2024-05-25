@@ -242,8 +242,7 @@ class vlastnici2pridani extends adminator
             $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
 
             $this->smarty->clearAssign(array('alert_type', 'alert_content'));
-        }
-        elseif(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
+        } elseif(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
             // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
 
             if($this->form_update_id < 1) {
@@ -294,8 +293,7 @@ class vlastnici2pridani extends adminator
             $this->error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
         }
 
-        if($this->form_update_id > 0 and $this->locked !== true) 
-        {
+        if($this->form_update_id > 0 and $this->locked !== true) {
             // we dont have lock, do nothing
             $output .= $this->error;
             return $output;
