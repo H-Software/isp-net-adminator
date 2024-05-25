@@ -210,7 +210,7 @@ $container->set(
         $c = new Container();
         $c['config'] = $settings['cache'];
 
-        $logger->debug('DI\cache: using config: ' . var_export($c, true));
+        $logger->debug('DI\cache: using config: ' . var_export($c['config'], true));
 
         $cacheManager = new CacheManager($c);
 
