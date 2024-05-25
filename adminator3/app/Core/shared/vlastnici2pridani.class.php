@@ -144,7 +144,7 @@ class vlastnici2pridani extends adminator
             // set lock
             $this->lock_name = 'vlastnici2pridani:update:' . $this->form_update_id;
 
-            $this->lock_handler = Cache::lock($this->lock_name, 10, 'vlastnici2pridani:'. $this->form_update_id);
+            $this->lock_handler = Cache::lock($this->lock_name, 60, 'vlastnici2pridani:'. $this->form_update_id);
 
             if ($this->lock_handler) {
                 $this->locked = true;
@@ -263,6 +263,18 @@ class vlastnici2pridani extends adminator
                 $this->smarty->clearAssign(array('alert_type', 'alert_content'));
             }
 
+            // if ($this->locked !== true) 
+            {
+                $this->fail = "true";
+
+                $this->smarty->assign("alert_type", "danger");
+                $this->smarty->assign("alert_content", "Data nelze zpracovat. (Lock failed!)");
+
+                $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
+
+                $this->smarty->clearAssign(array('alert_type', 'alert_content'));
+            }
+
             //ulozeni
             if (!(isset($this->fail))) {
                 if ($this->form_update_id > 0) {
@@ -276,7 +288,8 @@ class vlastnici2pridani extends adminator
             // else {
             // } // konec else ( !(isset(fail) ), else tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
-        } elseif (isset($this->form_send)) {
+        }
+        elseif (isset($this->form_send)) {
             $this->error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
         }
 
