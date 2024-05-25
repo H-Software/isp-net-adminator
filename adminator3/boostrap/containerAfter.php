@@ -208,9 +208,8 @@ $container->set(
 
         // https://github.com/mattstauffer/Torch/blob/master/components/cache/index.php
         $c = new Container();
-        $c['config'] = [
-            $settings['cache']
-        ];
+        $c['config'] = $settings['cache'];
+
         $logger->debug('DI\cache: using config: ' . var_export($c, true));
 
         $cacheManager = new CacheManager($c);
