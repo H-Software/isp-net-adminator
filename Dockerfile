@@ -176,7 +176,7 @@ unzip \
 
 # app code
 COPY adminator2/ --exclude=adminator2/composer.lock /srv/www/adminator2/
-COPY adminator3/ --exclude=composer.lock /srv/www/adminator3/
+COPY adminator3/ --exclude=adminator3/composer.lock /srv/www/adminator3/
 
 # shared stuff
 COPY adminator3/templates/inc.intro.category-ext.tpl /srv/www/adminator2/templates/inc.intro.category-ext.tpl
