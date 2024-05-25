@@ -66,10 +66,10 @@ $settings = [
         ],
         'cache' => [
             'cache.prefix' => 'a3_cache_',
-            'connection' => "default",
             'cache.default' => 'database',
             'cache.stores.database' => [
                 'driver' => 'database',
+                'connection' => 'default',
             ],
             // 'cache.stores' => [
             //     'database' => [
