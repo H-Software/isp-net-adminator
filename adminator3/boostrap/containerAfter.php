@@ -204,7 +204,7 @@ $container->set(
         $logger = $container->get('logger');
         $logger->debug('DI\cache: called');
 
-        // $settings = $container->get('settings');
+        $settings = $container->get('settings');
 
         // https://github.com/mattstauffer/Torch/blob/master/components/cache/index.php
         $c = new Container();
