@@ -3,6 +3,7 @@
 use App\Core\adminator;
 use Psr\Container\ContainerInterface;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Support\Facades\Cache;
 
 class vlastnici2pridani extends adminator
 {
@@ -27,6 +28,12 @@ class vlastnici2pridani extends adminator
     private $error;
 
     private $fail;
+
+    private $locked;
+
+    private $lock_name;
+
+    private $lock_handler;
 
     private $action_az_pole2;
 
@@ -133,6 +140,20 @@ class vlastnici2pridani extends adminator
 
         if ($this->form_update_id > 0) {
             $this->smarty->assign("content_header", "Úprava vlastníka");
+
+            // set lock
+            $this->lock_name = 'vlastnici2pridani:update:' . $this->form_update_id;
+
+            $this->lock_handler = Cache::lock($this->lock_name, 10, 'vlastnici2pridani:'. $this->form_update_id);
+
+            if ($this->lock_handler) {
+                $this->locked = true;
+                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": lock: " . var_export($this->lock_name , true));
+
+            } else {
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": lock for " . var_export($this->lock_name , true) . " failed.");
+            }
+
         } else {
             $this->smarty->assign("content_header", "Přidání nového vlastníka");
         }

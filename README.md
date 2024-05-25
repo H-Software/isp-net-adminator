@@ -135,6 +135,9 @@ sqlcmd query "SELECT Name from sys.databases;"
 #### SimpleXML
 - https://www.sanwebe.com/2013/08/creating-rss-feed-using-php-simplexml
 
+#### locks
+- https://laravel.io/articles/preventing-duplicate-form-submissions-using-atomic-locks
+
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html
 
