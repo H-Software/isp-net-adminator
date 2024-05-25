@@ -206,7 +206,6 @@ $container->set(
 
         // $settings = $container->get('settings');
 
-
         // https://github.com/mattstauffer/Torch/blob/master/components/cache/index.php
         $c = new Container();
         $c['config'] = [
@@ -224,10 +223,8 @@ $container->set(
             ]
         ];
 
-        // Create the CacheManager
         $cacheManager = new CacheManager($c);
 
-        // Get the default cache driver
         $cache = $cacheManager->store();
 
         $logger->debug('DI\cache: using driver: ' . var_export($cacheManager->driver(), true));
