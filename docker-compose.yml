@@ -49,26 +49,26 @@ services:
         progress: plain
     # user: "www-data:www-data"
     # https://github.com/compose-spec/compose-spec/blob/master/develop.md
-    develop:
-      watch: 
-        - path: ./
-          action: rebuild
-          ignore:
-            - adminator2/log/
-            - adminator3/logs/
-            - adminator3/templates_c/
-            - adminator3/print/temp
-            - adminator3/tests
-            - adminator3/vendor
-            - adminator3/database
-            - configs/flagd
-            - configs/php*
-            - configs/otel*
-            - docker-compose.yml
-            - "*.sql"
-            - .github/
-            - .vscode/
-            - .git/
+    # develop:
+    #   watch: 
+    #     - path: ./
+    #       action: rebuild
+    #       ignore:
+    #         - adminator2/log/
+    #         - adminator3/logs/
+    #         - adminator3/templates_c/
+    #         - adminator3/print/temp
+    #         - adminator3/tests
+    #         - adminator3/vendor
+    #         - adminator3/database
+    #         - configs/flagd
+    #         - configs/php*
+    #         - configs/otel*
+    #         - docker-compose.yml
+    #         - "*.sql"
+    #         - .github/
+    #         - .vscode/
+    #         - .git/
     environment:
       # DB conn
       - MYSQL_SERVER=192.168.1.213
@@ -110,13 +110,13 @@ services:
       - "9002:9002"
     # https://docs.docker.com/compose/compose-file/05-services/#healthcheck
     # https://docs.docker.com/reference/dockerfile/#healthcheck
-    healthcheck:
-      test: "(FCGI_CONNECT=localhost:9001 php-fpm-healthcheck && FCGI_CONNECT=localhost:9002 php-fpm-healthcheck --accepted-conn=100)"
-      interval: 1m
-      timeout: 2s
-      retries: 3
-      start_period: 10s
-      start_interval: 1s
+    # healthcheck:
+    #   test: "(FCGI_CONNECT=localhost:9001 php-fpm-healthcheck && FCGI_CONNECT=localhost:9002 php-fpm-healthcheck --accepted-conn=100)"
+    #   interval: 1m
+    #   timeout: 2s
+    #   retries: 3
+    #   start_period: 10s
+    #   start_interval: 1s
 
   mysql:
     image: mysql:8.0
