@@ -27,10 +27,10 @@ services:
     build:
       context: ./
       dockerfile: ./configs/nginx/Dockerfile
-    develop:
-      watch: 
-        - path: ./
-          action: rebuild
+    # develop:
+    #   watch: 
+    #     - path: ./
+    #       action: rebuild
     ports:
       - 80:80
       - 443:443
@@ -159,13 +159,13 @@ services:
       - POSTGRES_PASSWORD=isp-net-passwd
       - POSTGRES_USER=adminator
       - POSTGRES_DB=adminator.new
-    healthcheck:
-      test: "(pg_isready -U postgres || exit 1)"
-      interval: 1m
-      timeout: 5s
-      retries: 3
-      start_period: 30s
-      start_interval: 5s
+    # healthcheck:
+    #   test: "(pg_isready -U postgres || exit 1)"
+    #   interval: 1m
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 30s
+    #   start_interval: 5s
 
   # fix permissions: echo "host all all all $POSTGRES_HOST_AUTH_METHOD" >> pg_hba.conf
   pgadmin:
