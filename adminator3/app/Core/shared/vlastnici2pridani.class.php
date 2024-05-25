@@ -148,9 +148,9 @@ class vlastnici2pridani extends adminator
 
             $this->lock_handler = $this->cache->lock($this->lock_name, 60, 'vlastnici2pridani:'. $this->form_update_id);
 
-            if ($this->lock_handler) {
+            if ($this->lock_handler->get()) {
                 $this->locked = true;
-                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": lock: " . var_export($this->lock_name, true));
+                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": lock " . var_export($this->lock_name, true) . " accquired.");
 
             } else {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": lock for " . var_export($this->lock_name, true) . " failed.");
