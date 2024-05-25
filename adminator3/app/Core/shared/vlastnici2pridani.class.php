@@ -231,9 +231,9 @@ class vlastnici2pridani extends adminator
 
         }
 
-        // first of all, check lock
-        // if ($this->locked !== true)
-        if ($this->form_update_id > 0) {
+        if ($this->form_update_id > 0 and $this->locked !== true) {
+            // first of all, check lock
+
             $this->fail = "true";
 
             $this->smarty->assign("alert_type", "danger");
@@ -243,8 +243,8 @@ class vlastnici2pridani extends adminator
 
             $this->smarty->clearAssign(array('alert_type', 'alert_content'));
         }
-        // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
         elseif(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
+            // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
 
             if($this->form_update_id < 1) {
                 //zjisti jestli neni duplicitni : nick, vs
@@ -294,8 +294,16 @@ class vlastnici2pridani extends adminator
             $this->error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
         }
 
-        // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
+        if($this->form_update_id > 0 and $this->locked !== true) 
+        {
+            // we dont have lock, do nothing
+            $output .= $this->error;
+            return $output;
+        }
+
         if (($this->error != null) or (!isset($this->form_send))) {
+            // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
+
             $output .= $this->error;
             $output .= $this->actionForm();
 

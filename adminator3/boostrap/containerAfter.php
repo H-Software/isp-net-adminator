@@ -13,7 +13,7 @@ use OpenFeature\Providers\Flagd\FlagdProvider;
 use Cartalyst\Sentinel\Native\SentinelBootstrapper;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
-// use Illuminate\Cache\CacheManager;
+use Illuminate\Cache\CacheManager;
 use Illuminate\Container\Container;
 
 $container->set(
@@ -220,7 +220,7 @@ $container->set(
         ];
 
         // Create the CacheManager
-        $cacheManager = new \Illuminate\Cache\CacheManager($c);
+        $cacheManager = new CacheManager($c);
 
         // Get the default cache driver
         $cache = $cacheManager->store();
