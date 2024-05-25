@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4bf21a28ceceaff508f3f3c3074ce705",
+    "content-hash": "18eb628f2393d77f8015847e3de74249",
     "packages": [
         {
             "name": "amnuts/opcache-gui",
