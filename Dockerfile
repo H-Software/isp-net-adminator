@@ -148,8 +148,8 @@ RUN mkdir -p /srv/www/adminator3/ \
         && mkdir temp log logs export \
         && chown www-data:www-data temp log logs export
 
-COPY adminator2/composer.* /srv/www/adminator2/
-COPY adminator3/composer.* /srv/www/adminator3/
+COPY adminator2/composer.json /srv/www/adminator2/
+COPY adminator3/composer.json /srv/www/adminator3/
 
 RUN cd adminator2 \
      && composer install --no-dev
