@@ -229,8 +229,20 @@ class vlastnici2pridani extends adminator
 
         }
 
+        // first of all, check lock
+        // if ($this->locked !== true) 
+        if ($this->form_update_id > 0 ) {
+            $this->fail = "true";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", "Operaci nelze provést, nepodařilo se nastavit zámek. (Lock failed!)");
+
+            $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
+
+            $this->smarty->clearAssign(array('alert_type', 'alert_content'));
+        }
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
-        if(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
+        elseif(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
 
             if($this->form_update_id < 1) {
                 //zjisti jestli neni duplicitni : nick, vs
@@ -257,18 +269,6 @@ class vlastnici2pridani extends adminator
 
                 $this->smarty->assign("alert_type", "info");
                 $this->smarty->assign("alert_content", "Data neuloženy, nebylo použito tlačítko \"OK\".</br>Pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!");
-
-                $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
-
-                $this->smarty->clearAssign(array('alert_type', 'alert_content'));
-            }
-
-            // if ($this->locked !== true) 
-            {
-                $this->fail = "true";
-
-                $this->smarty->assign("alert_type", "danger");
-                $this->smarty->assign("alert_content", "Data nelze zpracovat. (Lock failed!)");
 
                 $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
 
