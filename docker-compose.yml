@@ -40,7 +40,7 @@ services:
     #     restart: true
 
   fpm:
-    image: h-software/isp-net-adminator-fpm
+    image: h-software/isp-net-adminator-fpm:latest
     # image: ghcr.io/h-software/isp-net-adminator:pr-137
     build:
       context: ./
