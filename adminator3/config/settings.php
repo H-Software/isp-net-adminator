@@ -66,6 +66,9 @@ $settings = [
         ],
         'cache' => [
             'cache.default' => 'database',
+            'cache.stores.database' => [
+                'driver' => 'database',
+            ],
             // 'cache.stores' => [
             //     'database' => [
             //         'driver' => 'database',

@@ -202,15 +202,15 @@ $container->set(
     'cache',
     function ($container) {
         $logger = $container->get('logger');
-        $logger->debug('DI\cache: called');
-
         $settings = $container->get('settings');
+
+        $logger->debug('DI\cache: called');
 
         // https://github.com/mattstauffer/Torch/blob/master/components/cache/index.php
         $c = new Container();
         $c['config'] = $settings['cache'];
 
-        $logger->debug('DI\cache: using config: ' . var_export($c['config'], true));
+        // $logger->debug('DI\cache: using config: ' . var_export($c['config'], true));
 
         $cacheManager = new CacheManager($c);
 
