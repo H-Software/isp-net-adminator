@@ -150,10 +150,10 @@ class vlastnici2pridani extends adminator
 
             if ($this->lock_handler) {
                 $this->locked = true;
-                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": lock: " . var_export($this->lock_name , true));
+                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": lock: " . var_export($this->lock_name, true));
 
             } else {
-                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": lock for " . var_export($this->lock_name , true) . " failed.");
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": lock for " . var_export($this->lock_name, true) . " failed.");
             }
 
         } else {
@@ -232,8 +232,8 @@ class vlastnici2pridani extends adminator
         }
 
         // first of all, check lock
-        // if ($this->locked !== true) 
-        if ($this->form_update_id > 0 ) {
+        // if ($this->locked !== true)
+        if ($this->form_update_id > 0) {
             $this->fail = "true";
 
             $this->smarty->assign("alert_type", "danger");
@@ -290,8 +290,7 @@ class vlastnici2pridani extends adminator
             // else {
             // } // konec else ( !(isset(fail) ), else tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
-        }
-        elseif (isset($this->form_send)) {
+        } elseif (isset($this->form_send)) {
             $this->error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
         }
 

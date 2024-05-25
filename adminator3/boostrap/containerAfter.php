@@ -205,7 +205,7 @@ $container->set(
         $logger->debug('DI\cache: called');
 
         // https://github.com/mattstauffer/Torch/blob/master/components/cache/index.php
-        $c = new Container;
+        $c = new Container();
         $c['config'] = [
             'cache' => [
                 'default' => 'database',
@@ -214,7 +214,7 @@ $container->set(
                         'driver' => 'database',
                         // 'table' => 'cache',
                         // 'connection' => null,
-                    ],   
+                    ],
                 ]
             ]
         ];
