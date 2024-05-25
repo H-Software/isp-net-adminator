@@ -227,7 +227,7 @@ $container->set(
 
         $cache = $cacheManager->store();
 
-        $logger->debug('DI\cache: using driver: ' . var_export($cacheManager->driver(), true));
+        $logger->debug('DI\cache: using driver: ' . var_export($cacheManager->getDefaultDriver(), true));
 
         return $cache;
     }
