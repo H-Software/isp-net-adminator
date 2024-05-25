@@ -167,10 +167,10 @@ COPY adminator2/composer.json /srv/www/adminator2/
 COPY adminator3/composer.json /srv/www/adminator3/
 
 RUN cd adminator2 \
-     && composer install
+     && composer install --no-dev
 
 RUN cd adminator3 \
-    && composer install
+    && composer install --no-dev
 
 # app code
 COPY adminator2/ /srv/www/adminator2/
