@@ -10,14 +10,32 @@ class CreateFakturyNeuhrazeneTable extends Migration
     {
         $this->schema->create('faktury_neuhrazene', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('Cislo', 50);
-            $table->string('VarSym', 50);
-            $table->date('Datum');
-            $table->date('DatSplat');
-            $table->integer('par_id_vlastnika')->unsigned()->default(0);
-            $table->integer('ignorovat')->unsigned()->default(0);
-            $table->string('po_splatnosti_vlastnik', 50);
-            // TODO: add the rest of columns
+            $table->string('Cislo', 50)->nullable();
+            $table->string('VarSym', 50)->nullable();
+            $table->date('Datum')->nullable();
+            $table->date('DatSplat')->nullable();
+            #
+            $table->string('KcCelkem')->nullable();
+            $table->string('KcLikv')->nullable();
+            #
+            $table->string('Firma')->nullable();
+            $table->string('Jmeno')->nullable();
+            $table->string('ICO')->nullable();
+            $table->string('DIC')->nullable();
+            #
+            $table->integer('par_id_vlastnika')->unsigned()->nullable();
+            $table->integer('par_stav')->nullable();
+            #
+            $table->date('datum_vlozeni')->nullable();
+            $table->integer('overeno')->unsigned()->default(0)->nullable();
+            #
+            $table->string('aut_email_stav')->nullable();
+            $table->date('aut_email_datum')->nullable();
+            $table->string('aut_sms_stav')->nullable();
+            $table->date('aut_sms_datum')->nullable();
+            #
+            $table->integer('ignorovat')->unsigned()->default(0)->nullable();
+            $table->string('po_splatnosti_vlastnik', 50)->nullable();
         });
     }
 
