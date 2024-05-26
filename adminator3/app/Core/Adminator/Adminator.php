@@ -618,7 +618,7 @@ class adminator
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": missing database data");
             return false;
         }
-        
+
         if ($archiv_vlastnik == 1) {
             $odkaz = "<a href=\"/vlastnici/archiv?".urlencode("find_id")."=".urlencode(strval($owner_id))."\" >".$owner_id."</a>\n";
         } elseif ($firma_vlastnik == 1) {

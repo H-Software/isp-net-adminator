@@ -3,7 +3,7 @@
 class vlastnikarchiv
 {
     public $conn_mysql;
-    
+
     public $conn_pgsql;
 
     public $logger;
