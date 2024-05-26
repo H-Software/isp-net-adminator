@@ -49,6 +49,7 @@ class adminatorController extends Controller
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
+        // for using mocked instance in tests
         if(isset($adminatorInstance)) {
             $this->adminator = $adminatorInstance;
         } else {
