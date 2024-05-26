@@ -129,16 +129,16 @@ class adminatorController extends Controller
         $this->adminator->page_level_id = $page_level_id;
 
         // TODO: after fix calling adminatorController constructor in every other controller, remove this
-        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
-            if($this->sentinel->getUser()->email == null) {
-                $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
-                $content = $this->renderNoLogin();
-                $this->createNoLoginResponse($content);
-                return false;
-            } else {
-                $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
-            }
-        }
+        // if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
+        //     if($this->sentinel->getUser()->email == null) {
+        //         $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
+        //         $content = $this->renderNoLogin();
+        //         $this->createNoLoginResponse($content);
+        //         return false;
+        //     } else {
+        //         $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
+        //     }
+        // }
 
         // double check identity
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));

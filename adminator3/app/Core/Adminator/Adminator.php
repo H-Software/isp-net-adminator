@@ -26,7 +26,7 @@ class adminator
 
     public $settings;
 
-    public $userIdentityUsername;
+    public string $userIdentityUsername;
 
     public $userIPAddress;
 
@@ -106,7 +106,7 @@ class adminator
         )->first(['level']);
 
         if(is_object($rs)) {
-            $this->logger->info("adminator\getUserLevel dump db: " . var_export($rs, true));
+            // $this->logger->info("adminator\getUserLevel dump db: " . var_export($rs, true));
             $a = $rs->toArray();
             $level = $a['level'];
         }
@@ -200,14 +200,14 @@ class adminator
         // porovnat level uzivatele s prislusnym levelem
         // stranky podle jejiho id
 
-        // if(strlen($this->userIdentityUsername) < 1 or $this->userIdentityUsername == null) {
-        //     $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": empty userIdentityUsername");
-        //     throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: empty userIdentityUsername");
-        // }
+        if(strlen($this->userIdentityUsername) < 1 or $this->userIdentityUsername == null) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": empty userIdentityUsername");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: empty userIdentityUsername");
+        }
 
         $this->userIdentityLevel = $this->getUserLevel();
 
-        if($this->userIdentityLevel < 1 or $this->userIdentityLevel == false) {
+        if($this->userIdentityLevel == false) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is 0");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentityLevel is 0");
         }
