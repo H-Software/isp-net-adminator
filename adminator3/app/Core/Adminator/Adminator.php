@@ -26,7 +26,7 @@ class adminator
 
     public $settings;
 
-    public string $userIdentityUsername;
+    public ?string $userIdentityUsername = null;
 
     public $userIPAddress;
 
