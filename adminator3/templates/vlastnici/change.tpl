@@ -25,9 +25,9 @@
     {include file="partials/bootstrap-alert-with-columns.tpl"}
 {/if}
 
-{if $p_bs_alerts|count_characters > 1}
+{if $p_bs_alerts|default:'0' }
     {include file="partials/bootstrap-alert-with-columns-array.tpl"}
- {/if}
+{/if}
 
 {$body}
 
