@@ -185,7 +185,7 @@ class adminController extends adminatorController
 
         $assignData = array(
             "page_title" => "page_title", "Adminator3 :: Tarify :: Action",
-            "body" => $rs[0]
+            "body" => $rs
         );
 
         return $this->renderer->template($request, $response, 'admin/tarify.tpl', $assignData);
