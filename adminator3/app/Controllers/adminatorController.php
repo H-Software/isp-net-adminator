@@ -110,14 +110,8 @@ class adminatorController extends Controller
 
         $this->smarty->assign("page_title", "Adminator3 :: wrong level");
 
-        // check for backward compatibility
-        // without initializated request & response we wont render header
-        if(is_object($this->request) and is_object($this->response)) {
-            $this->header($this->request, $this->response);
-        } else {
-            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": no ServerRequestInterface or ResponseInterface object given.");
-        }
-
+        $this->header($this->request, $this->response);
+        
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $content = $this->smarty->fetch('global/no-level.tpl');
 
