@@ -7,6 +7,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard;
+use Symfony\Component\HttpFoundation\Request;
 
 final class Renderer
 {
@@ -34,12 +35,16 @@ final class Renderer
 
     public ?int $userIdentityLevel = null;
 
+    private $request_data;
+
     public function __construct(
         ContainerInterface $container,
     ) {
         $this->container = $container;
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
+
+        $this->request_data = Request::createFromGlobals();
     }
 
     public function template(
@@ -122,7 +127,8 @@ final class Renderer
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: " . $this->userIdentityUsername . " (" . $this->userIdentityLevel . ")");
 
         $this->smarty->assign("nick_a_level", $this->userIdentityUsername . " (" . $this->userIdentityLevel . ")");
-        $this->smarty->assign("login_ip", $_SERVER['REMOTE_ADDR']);
+        // $this->smarty->assign("login_ip", $_SERVER['REMOTE_ADDR']);
+        $this->smarty->assign("login_ip", $this->request_data->server->get('REMOTE_ADDR'));
     }
 
     public function zobraz_kategorie($uri)
