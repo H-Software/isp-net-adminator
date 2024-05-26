@@ -672,9 +672,11 @@ class objekt_a2
             }
 
             if ($archiv_vlastnik == 1) {
-                $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
-            } else {
+                $output .= "V: <a href=\"/vlastnici/archiv?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+            } elseif($firma_vlastnik == 1) {
                 $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+            } else {
+                $output .= "V: <a href=\"/vlastnici?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
             }
 
             $output .= "</span> </td>\n";
