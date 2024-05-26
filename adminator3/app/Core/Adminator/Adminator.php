@@ -608,15 +608,14 @@ class adminator
         }
 
         $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
+        if($vlastnik_radku <= 0) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": missing database data");
+            return false;
+        }
 
         while($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
             $firma_vlastnik = $data_vlastnik["firma"];
             $archiv_vlastnik = $data_vlastnik["archiv"];
-        }
-
-        if($vlastnik_radku <= 0) {
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": missing database data");
-            return false;
         }
 
         if ($archiv_vlastnik == 1) {
