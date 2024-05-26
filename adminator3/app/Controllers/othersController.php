@@ -145,7 +145,7 @@ class othersController extends adminatorController
 
         //zpatky default DB
         try {
-            $this->conn_mysql->select_db("adminator22");
+            $this->conn_mysql->select_db("adminator2");
         } catch (Exception $e) {
             $content  = "Error: Database select to adminator2 failed!";
             $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
