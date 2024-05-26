@@ -269,7 +269,8 @@ class othersController extends adminatorController
     public function boardRss(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
-
+        $data = "";
+        
         $this->checkLevel(309, $this->adminator);
 
         $rss = new boardRss($this->container);

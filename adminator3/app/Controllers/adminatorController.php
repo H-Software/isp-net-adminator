@@ -91,13 +91,11 @@ class adminatorController extends Controller
         } else {
             $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": no ServerRequestInterface or ResponseInterface object given.");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: no ServerRequestInterface or ResponseInterface object given.");
-
         }
 
         $this->response = $this->responseFactory->createResponse();
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
-
         $this->response
                 ->withStatus(403)
                 ->withHeader('Content-Type', 'text/plain');        
