@@ -53,6 +53,7 @@ final class HomeControllerTest extends AdminatorTestCase
         )->makePartial();
 
         $adminatorMock->userIdentityUsername = 'test@test';
+        $adminatorMock->shouldReceive('getUserLevel')->andReturn(1);
         $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
         $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
         $adminatorMock->shouldReceive('zobraz_kategorie')->andReturn(
