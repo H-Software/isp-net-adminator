@@ -2,6 +2,7 @@
 
 namespace App\Renderer;
 
+use OpenTelemetry\SDK\Resource\Detectors\Sdk;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -130,7 +131,7 @@ final class Renderer
         $this->smarty->assign("login_ip", $this->request_data->server->get('REMOTE_ADDR'));
     }
 
-    public static function zobraz_kategorie($uri)
+    public static function zobraz_kategorie(string $uri): array
     {
         $kategorie = array();
 
