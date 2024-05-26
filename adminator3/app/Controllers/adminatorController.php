@@ -85,40 +85,37 @@ class adminatorController extends Controller
 
     public function checkLevel($page_level_id = 0, $adminator = null): void
     {
+        // wrapper for checking user's level vs. page level
 
-        // TODO: after fix calling adminatorController constructor in every other controller, remove this
-        if(is_object($this->adminator)) {
-            $a = $this->adminator;
-        }
-        if(is_object($adminator)) {
-            $a = $adminator;
-        } else {
+        // "double" check for some backwards compatibility shit
+        if(!is_object($this->adminator)) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": instance of Adminator class not exists");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot verify user login.");
         }
 
         if ($page_level_id == 0) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": page_level_id == 0");
             $this->renderNoLogin();
             // return false;
         }
 
-        $a->page_level_id = $page_level_id;
+        $this->adminator->page_level_id = $page_level_id;
 
         // TODO: after fix calling adminatorController constructor in every other controller, remove this
-        if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
+        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
                 $this->renderNoLogin();
                 // return false;
             } else {
-                $a->userIdentityUsername = $this->sentinel->getUser()->email;
+                $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
             }
         }
 
-        $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($a->userIdentityUsername, true));
+        // double check identity
+        $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($this->adminator->userIdentityUsername, true));
 
-        $checkLevel = $a->checkLevel();
-
+        $checkLevel = $this->adminator->checkLevel();
         $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false) {
