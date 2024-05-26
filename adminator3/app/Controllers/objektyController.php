@@ -166,7 +166,10 @@ class objektyController extends adminatorController
         $objekt = new \App\Core\objekt($this->container);
         $objekt->dns_find = $dns_find;
         $objekt->ip_find = $ip_find;
+        // $objekt->adminator = $this->adminator;
+
         $objekt->userIdentityUsername = $this->userIdentityUsername;
+        $objekt->loggedUserEmail = $this->userIdentityUsername;
 
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $objekt->csrf_html = $csrf_html;

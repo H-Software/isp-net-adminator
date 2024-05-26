@@ -119,10 +119,7 @@ class objekt extends adminator
         //     $this->conn_pgsql
         // );
 
-        $this->loggedUserEmail = $this->userIdentityUsername;
         // $this->userIdentityUsername = $this->sentinel->getUser()->email;
-
-        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
     }
 
     public function listGetOrderItems()
@@ -351,6 +348,8 @@ class objekt extends adminator
         $objekt_a2->conn_pgsql = $this->container->get('connPgsql');
         $objekt_a2->csrf_html = $this->csrf_html;
         $objekt_a2->mod_vypisu = $this->mod_vypisu;
+
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
 
         // checking levels for update/erase/..
         if ($this->checkLevel(29) === true) {
