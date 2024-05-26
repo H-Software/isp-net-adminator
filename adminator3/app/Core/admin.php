@@ -119,7 +119,6 @@ class admin
 
     public function levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value)
     {
-
         $output = "";
 
         if (($_POST["popis_new"])) {
@@ -135,7 +134,7 @@ class admin
 
             if($id_new > 0) {
                 // update
-                $sql = "UPDATE leveling SET popis='$popis', level='$level' where id=".$id_new;
+                $sql = "UPDATE leveling2 SET popis='$popis', level='$level' where id=".$id_new;
             } else {
                 // novy zaznam
                 $sql = "INSERT INTO leveling (popis, level) VALUES ('$popis','$level')";
@@ -144,13 +143,13 @@ class admin
             try {
                 $rs = $this->conn_mysql->query($sql);
             } catch (Exception $e) {
-                die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                $error = "<div style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "</div>\n";
             }
 
             if ($rs) {
                 $output .= "<br><br>MySql potvrdilo, takze: <br><H2>Data v databazi upravena.</H2><br><br>";
             } else {
-                $output .= "Houstone, tento zapis do databaze nevysel :)";
+                $output .= '<div style=\"color: red; \">Houstone, tento zapis do databaze nevysel :)</div>' . $error;
             }
 
         } else {
