@@ -25,6 +25,8 @@ class adminatorController extends Controller
 
     protected $adminator;
 
+    protected $adminatorInstance;
+
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
@@ -34,7 +36,7 @@ class adminatorController extends Controller
     //  */
     // protected ResponseFactoryInterface $responseFactory;
 
-    public function __construct($container)
+    public function __construct($container, $adminatorInstance = null)
     {
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
