@@ -463,34 +463,52 @@ class vlastnici2pridani extends adminator
     private function actionShowResults(): string
     {
         $output = "";
+        $output_return_link_vlastnik = "";
 
-        $back = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$this->form_nick' ");
+        $back = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE nick LIKE '" . $this->form_nick. "' ");
         $back_radku = pg_num_rows($back);
 
-        while ($data_back = pg_fetch_array($back)) {
-            $firma_back = $data_back["firma"];
-            $archiv_back = $data_back["archiv"];
-        }
+        if($back_radku == 0){
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", "Nelze nacist data pro urceni do");
 
-        if ($archiv_back == 1) {
-            $stranka = "/vlastnici/archiv";
-        } elseif ($firma_back == 1) {
-            $stranka = "/vlastnici2";
-        } else {
-            $stranka = "/vlastnici";
+            $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
+
+            $this->smarty->clearAssign(array('alert_type', 'alert_content'));
+        }
+        else{
+            while ($data_back = pg_fetch_array($back)) {
+                $firma_back = $data_back["firma"];
+                $archiv_back = $data_back["archiv"];
+            }
+    
+            if ($archiv_back == 1) {
+                $stranka = "/vlastnici/archiv";
+            } elseif ($firma_back == 1) {
+                $stranka = "/vlastnici2";
+            } else {
+                $stranka = "/vlastnici";
+            }
+
+            $output_return_link_vlastnik =
+                 '<form action="'.$stranka.'" method="GET" >'
+                . '<input type="hidden" value="' . $this->form_nick . '" name="find" >
+                <input type="submit" value="ZDE" name="odeslat" > </form>';
         }
 
         $output .= '<table border="0" width="50%" >
                 <tr>
                 <td align="right">Zpět na vlastníka </td>
-                <td><form action="'.$stranka.'" method="GET" >'
-                . $this->csrf_html
-                . '<input type="hidden" value="' . $this->form_nick . '" name="find" >
-                <input type="submit" value="ZDE" name="odeslat" > </form></td>
+                <td>'
+                . $output_return_link_vlastnik
+                .'</td>
 
                 <td align="right">Restart (all iptables ) </td>
-                <td><form action="/work" method="POST" ><input type="hidden" name="iptables" value="1" >
-                    <input type="submit" value="ZDE" name="odeslat" > </form> </td>
+                <td><form action="/work" method="POST" >'
+                . $this->csrf_html
+                . '<input type="hidden" name="iptables" value="1" >
+                    <input type="submit" value="ZDE" name="odeslat" >'
+                . '</form> </td>
                 </tr>
                 </table>';
 
