@@ -10,7 +10,7 @@ class HomeController extends adminatorController
 {
     public $conn_mysql;
 
-    public $pdoMysql;
+    // public $pdoMysql;
 
     public $conn_pgsql;
 
@@ -19,7 +19,7 @@ class HomeController extends adminatorController
     public $smarty;
     public $logger;
 
-    protected $sentinel;
+    // protected $sentinel;
 
     protected $adminator;
 
@@ -35,29 +35,15 @@ class HomeController extends adminatorController
         $this->conn_mysql = $this->container->get('connMysql');
         $this->conn_pgsql = $this->container->get('connPgsql');
         $this->settings = $this->container->get('settings');
-        $this->pdoMysql = $this->container->get('pdoMysql');
+        // $this->pdoMysql = $this->container->get('pdoMysql');
 
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
+        // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info("homeController\__construct called");
 
         parent::__construct($container);
-
-        // if(isset($adminatorInstance)) {
-        //     $this->adminator = $adminatorInstance;
-        // } else {
-        //     $this->adminator = new \App\Core\adminator(
-        //         $this->conn_mysql,
-        //         $this->smarty,
-        //         $this->logger,
-        //         null,
-        //         $this->pdoMysql,
-        //         $this->settings,
-        //         $this->sentinel
-        //     );
-        // }
 
         if(isset($opravyInstance)) {
             $this->opravyInstance = $opravyInstance;
