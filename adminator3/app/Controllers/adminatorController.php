@@ -2,10 +2,9 @@
 
 namespace App\Controllers;
 
-use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
+// use Psr\Http\Message\ResponseFactoryInterface;
 use Exception;
 
 class adminatorController extends Controller
@@ -18,12 +17,23 @@ class adminatorController extends Controller
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
+    // /**
+    //  * @var ResponseFactoryInterface
+    //  */
+    // protected ResponseFactoryInterface $responseFactory;
+
     public function __construct($container)
     {
         $this->conn_mysql = $container->get('connMysql');
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
+
+        // $this->responseFactory = $container->get(ResponseFactoryInterface::class);
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -71,60 +81,79 @@ class adminatorController extends Controller
     //     $this->_response->withJson($response);
     // }
 
-    public function renderNoLogin(ServerRequestInterface $request = null, ResponseInterface $response = null)
+    public function createNoLoginResponse($content): ResponseInterface
     {
-        $this->smarty->assign("page_title", "Adminator3 - chybny level");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->header($request, $response);
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+        $this->response = $this->response
+                            ->withStatus(403);
 
-        $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-        $this->smarty->display('global/no-level.tpl');
+        $this->response->getBody()->write($content);
 
-        exit;
+        return $this->response;
     }
 
-    public function checkLevel($page_level_id = 0, $adminator = null): void
+    public function renderNoLogin(): string
     {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        // TODO: after fix calling adminatorController constructor in every other controller, remove this
-        if(is_object($this->adminator)) {
-            $a = $this->adminator;
+        $this->smarty->assign("page_title", "Adminator3 :: wrong level");
+
+        $this->header($this->request, $this->response);
+
+        $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
+        $content = $this->smarty->fetch('global/no-level.tpl');
+
+        return $content;
+    }
+
+    public function checkLevel($page_level_id = 0): bool
+    {
+        // wrapper for checking user's level vs. page level
+        // core function for checking level is in adminator class and shared with adminator2
+        // and accessible directly without needs of controller scope
+
+        // check input var(s)
+        if ($page_level_id == 0) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": page_level_id == 0");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: page_level_id is 0.");
         }
-        if(is_object($adminator)) {
-            $a = $adminator;
-        } else {
+
+        // "double" check for some backwards compatibility shit
+        if(!is_object($this->adminator)) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": instance of Adminator class not exists");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot verify user login.");
         }
 
-        if ($page_level_id == 0) {
-            $this->renderNoLogin();
-            // return false;
-        }
-
-        $a->page_level_id = $page_level_id;
+        $this->adminator->page_level_id = $page_level_id;
 
         // TODO: after fix calling adminatorController constructor in every other controller, remove this
-        if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
+        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
-                $this->renderNoLogin();
-                // return false;
+                $content = $this->renderNoLogin();
+                $this->createNoLoginResponse($content);
+                return false;
             } else {
-                $a->userIdentityUsername = $this->sentinel->getUser()->email;
+                $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
             }
         }
 
-        $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($a->userIdentityUsername, true));
+        // double check identity
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
 
-        $checkLevel = $a->checkLevel();
-
-        $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
+        // real check
+        $checkLevel = $this->adminator->checkLevel();
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false) {
-            $this->renderNoLogin();
-            // return false;
+            $content = $this->renderNoLogin();
+            $this->createNoLoginResponse($content);
+            return false;
         }
+
+        return true;
     }
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
@@ -148,26 +177,19 @@ class adminatorController extends Controller
         return $ret;
     }
 
-    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminator = null)
+    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminatorUnsed = null)
     {
-        if(is_object($adminator)) {
-            $a = $adminator;
-        } else {
-            $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-        }
-
         $this->logger->debug("adminatorController\\header called");
-        $this->logger->debug("adminatorController\\header: logged user info: " . $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
+        $this->logger->debug("adminatorController\\header: logged user info: " . $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
 
-        $this->smarty->assign("nick_a_level", $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
-        $this->smarty->assign("login_ip", $a->userIPAddress);
+        $this->smarty->assign("nick_a_level", $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
+        $this->smarty->assign("login_ip", $this->adminator->userIPAddress);
 
         //kategorie
-
-        $uri = $a->getServerUri();
+        $uri = $this->adminator->getServerUri();
         $uri_replace = str_replace("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka) = $a->zobraz_kategorie($uri, $uri_replace);
+        list($kategorie, $kat_2radka) = $this->adminator->zobraz_kategorie($uri, $uri_replace);
 
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);

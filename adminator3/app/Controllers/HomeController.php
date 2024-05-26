@@ -23,6 +23,10 @@ class HomeController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     private $opravyInstance;
 
     public function __construct(ContainerInterface $container, $adminatorInstance = null, $opravyInstance = null)
@@ -64,7 +68,12 @@ class HomeController extends adminatorController
     {
         $this->logger->info("homeController\home called");
 
-        $this->checkLevel(38, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(38)) {
+            return $this->response;
+        };
 
         if ($request->getMethod() == "POST") {
             $data = $request->getParsedBody();

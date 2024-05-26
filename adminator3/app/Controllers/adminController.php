@@ -18,6 +18,10 @@ class adminController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public $admin;
 
     public function __construct(ContainerInterface $container)
@@ -41,7 +45,12 @@ class adminController extends adminatorController
 
         $this->logger->info("adminController\admin called");
 
-        $this->checkLevel(91, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(91)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: admin");
 
@@ -59,7 +68,12 @@ class adminController extends adminatorController
 
         $this->logger->info("adminController\adminMain called");
 
-        $this->checkLevel(17, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(17)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: admin :: subca2");
 
@@ -77,7 +91,12 @@ class adminController extends adminatorController
 
         $this->logger->info("adminController\adminLevelList called");
 
-        $this->checkLevel(21, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(21)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: vypis levelu stranek");
 
@@ -100,7 +119,12 @@ class adminController extends adminatorController
     {
         $this->logger->info("adminController\adminLevelListJson called");
 
-        $this->checkLevel(21, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(21)) {
+            return $this->response;
+        };
 
         list($data, $status, $msg) = $this->admin->levelListJson();
 
@@ -114,7 +138,12 @@ class adminController extends adminatorController
     {
         $this->logger->info("adminController\adminLevelAction called");
 
-        $this->checkLevel(23, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(23)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: uprava levelu stranek");
 
@@ -138,7 +167,12 @@ class adminController extends adminatorController
     {
         $this->logger->info("adminController\adminTarify called");
 
-        $this->checkLevel(131, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(131)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Tarify");
 
@@ -159,7 +193,12 @@ class adminController extends adminatorController
     {
         $this->logger->info("adminController\adminTarify called");
 
-        $this->checkLevel(303, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(303)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Tarify :: Action");
 

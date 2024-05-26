@@ -21,6 +21,10 @@ class vlastniciController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -40,7 +44,12 @@ class vlastniciController extends adminatorController
     {
         $this->logger->info("vlastniciController\cat called");
 
-        $this->checkLevel(90, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(90)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
 
@@ -57,7 +66,12 @@ class vlastniciController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(92, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(92)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Rozcestnik");
 
@@ -89,7 +103,12 @@ class vlastniciController extends adminatorController
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(102, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(102)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: hledání");
 
@@ -230,7 +249,12 @@ class vlastniciController extends adminatorController
         $bodyContent = "";
 
         $this->logger->info("vlastniciController\\vlastnici called");
-        $this->checkLevel(13, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(13)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
 
@@ -418,7 +442,12 @@ class vlastniciController extends adminatorController
 
         $this->logger->info("vlastniciController\\vlastnici2 called");
 
-        $this->checkLevel(38, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(38)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci 2");
 
@@ -484,7 +513,12 @@ class vlastniciController extends adminatorController
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(40, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(40)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Update");
 
@@ -511,7 +545,12 @@ class vlastniciController extends adminatorController
     {
         $this->logger->info("vlastniciController\\fakturacniSkupiny called");
 
-        $this->checkLevel(82, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(82)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Archiv");
 
@@ -700,7 +739,12 @@ class vlastniciController extends adminatorController
 
         $this->logger->info("vlastniciController\\fakturacniSkupiny called");
 
-        $this->checkLevel(99, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(99)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: fakturační skupiny");
 
@@ -732,7 +776,12 @@ class vlastniciController extends adminatorController
 
         $this->logger->info("vlastniciController\\fakturacniSkupinyAction called");
 
-        $this->checkLevel(301, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(301)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: . :: fakturační skupiny :: Action");
 

@@ -16,6 +16,10 @@ class aboutController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -34,7 +38,12 @@ class aboutController extends adminatorController
 
         $this->logger->info("aboutController\about called");
 
-        $this->checkLevel(142, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(142)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: O programu");
 
@@ -51,7 +60,12 @@ class aboutController extends adminatorController
     {
         $this->logger->info("aboutController\changesOld called");
 
-        $this->checkLevel(144, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(144)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: O programu :: Staré změny");
 
@@ -66,7 +80,12 @@ class aboutController extends adminatorController
     {
         $this->logger->info("aboutController\changes called");
 
-        $this->checkLevel(145, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(145)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: O programu :: Změny");
 

@@ -12,6 +12,10 @@ class runtimeController extends Controller
 
     // protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;

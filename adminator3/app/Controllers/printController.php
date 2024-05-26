@@ -18,6 +18,10 @@ class printController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     private $printInstance;
 
     public function __construct(ContainerInterface $container)
@@ -39,7 +43,12 @@ class printController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(146, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(146)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Print");
 
@@ -57,7 +66,12 @@ class printController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(308, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(308)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Print :: redirect");
 
@@ -105,7 +119,12 @@ class printController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(146, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(146)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Reg. Form. 2012-05");
 
@@ -151,7 +170,12 @@ class printController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(146, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(146)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Reg. Form. 2012-05");
 
@@ -170,7 +194,12 @@ class printController extends adminatorController
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(146, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(146)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Smlouva 2012-05");
 
@@ -188,7 +217,12 @@ class printController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(146, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(146)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Smlouva");
 
@@ -206,7 +240,12 @@ class printController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(146, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(146)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Ostatní :: Tisk - Reg. Form");
 

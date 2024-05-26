@@ -16,6 +16,10 @@ class platbyController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -33,7 +37,12 @@ class platbyController extends adminatorController
     {
         $this->logger->info("platbyController\cat called");
 
-        $this->checkLevel(92, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(92)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Platby");
 
@@ -56,12 +65,16 @@ class platbyController extends adminatorController
 
         $this->logger->info("platbyController\\platby called");
 
-        $this->checkLevel();
+        // $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel()) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Platby");
 
         $this->header($request, $response);
-
 
         return $response;
     }
@@ -71,7 +84,12 @@ class platbyController extends adminatorController
 
         $this->logger->info("platbyController\\fn called");
 
-        $this->checkLevel(107, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(107)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Faktury Neuhrazene");
 
@@ -88,7 +106,12 @@ class platbyController extends adminatorController
     {
         $this->logger->info("platbyController\\fn called");
 
-        $this->checkLevel(149, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(149)) {
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: N.F. :: Kontrola omezeni vs. platby");
 

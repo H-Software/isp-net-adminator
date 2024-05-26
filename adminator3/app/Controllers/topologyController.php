@@ -16,6 +16,10 @@ class topologyController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -33,7 +37,12 @@ class topologyController extends adminatorController
     {
         $this->logger->info("topologyController\\nodeList called");
 
-        $this->checkLevel(5, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(5)) {
+            return $this->response;
+        };
 
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
@@ -54,7 +63,12 @@ class topologyController extends adminatorController
     {
         $this->logger->info("topologyController\\routerList called");
 
-        $this->checkLevel(85, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(85)) {
+            return $this->response;
+        };
 
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
