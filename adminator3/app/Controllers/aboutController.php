@@ -65,13 +65,12 @@ class aboutController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: O programu :: Staré změny");
+        $assignData = array(
+            "page_title" => "Adminator3 :: O programu :: Staré změny",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->display('about/about-changes-old.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'about/about-changes-old.tpl', $assignData);
     }
 
     public function changes(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -85,12 +84,11 @@ class aboutController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: O programu :: Změny");
+        $assignData = array(
+            "page_title" => "Adminator3 :: O programu :: Změny",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->display('about/about-changes.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'about/about-changes.tpl', $assignData);
     }
 }
