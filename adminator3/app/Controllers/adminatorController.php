@@ -84,6 +84,8 @@ class adminatorController extends Controller
 
     public function createNoLoginResponse(): ResponseInterface
     {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
         if(is_object($this->request) and is_object($this->response)) {
             $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": ServerRequestInterface and ResponseInterface are objects.");
         } else {
@@ -105,6 +107,8 @@ class adminatorController extends Controller
 
     public function renderNoLogin(): void
     {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
         $this->smarty->assign("page_title", "Adminator3:: wrong login/level");
 
         $this->header($this->request, $this->response);
@@ -149,11 +153,11 @@ class adminatorController extends Controller
         }
 
         // double check identity
-        $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($this->adminator->userIdentityUsername, true));
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
 
         // real check
         $checkLevel = $this->adminator->checkLevel();
-        $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false) {
             $this->createNoLoginResponse();

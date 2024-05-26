@@ -29,7 +29,7 @@ class archivZmenController extends adminatorController
         $this->logger = $this->container->get('logger');
         $this->sentinel = $this->container->get('sentinel');
 
-        $this->logger->info("archivZmenController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         parent::__construct($container);
     }
