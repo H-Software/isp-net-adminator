@@ -98,8 +98,8 @@ class adminator
 
     public function getUserLevel(): false|int
     {
-        $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . " called");
-        $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": get level for identity: ". var_export($this->userIdentityUsername, true));
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": get level for identity: ". var_export($this->userIdentityUsername, true));
         
         $level = 0;
 

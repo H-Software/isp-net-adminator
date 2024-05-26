@@ -108,7 +108,7 @@ class HomeController extends adminatorController
         $this->smarty->assign("stats_faktury_neuhr_error_messages", $neuhr_faktury_pole[4]);
 
 
-        if ($this->adminator->checkLevel(101, false) === true) {
+        if ($this->adminator->checkLevel(101) === true) {
             $this->logger->info("homeController\opravy_a_zavady allowed");
             $this->adminator->get_opravy_a_zavady($this->opravyInstance);
         } else {
@@ -127,7 +127,7 @@ class HomeController extends adminatorController
     {
         //generovani zprav z nastenky
 
-        if ($this->adminator->checkLevel(87, false) === true) {
+        if ($this->adminator->checkLevel(87) === true) {
             $this->logger->info("homeController\board allowed");
 
             $this->smarty->assign("nastenka_povoleno", 1);

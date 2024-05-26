@@ -333,16 +333,16 @@ class objekt extends adminator
         $objekt_a2->mod_vypisu = $this->mod_vypisu;
 
         // checking levels for update/erase/..
-        if ($this->checkLevel(29, false) === true) {
+        if ($this->checkLevel(29) === true) {
             $this->listAllowedActionUpdate = true;
         }
-        if ($this->checkLevel(33, false) === true) {
+        if ($this->checkLevel(33) === true) {
             $this->listAllowedActionErase = true;
         }
-        if ($this->checkLevel(34, false) === true) {
+        if ($this->checkLevel(34) === true) {
             $this->listAllowedActionGarant = true;
         }
-        if ($this->checkLevel(59, false) === true) {
+        if ($this->checkLevel(59) === true) {
             $export_povolen = true;
         }
 
@@ -768,7 +768,7 @@ class objekt extends adminator
             if($update_status == "1") {
                 // rezim upravy
 
-                if ($this->checkLevel(29, false) === false) {
+                if ($this->checkLevel(29) === false) {
                     $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                     return $output;
                 }
@@ -1262,7 +1262,7 @@ class objekt extends adminator
 
             if($update_status == "1") {
 
-                if ($this->checkLevel(29, false) === false) {
+                if ($this->checkLevel(29) === false) {
                     $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                     return $output;
                 }

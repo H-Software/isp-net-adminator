@@ -268,11 +268,11 @@ class vlastniciController extends adminatorController
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $vlastnik->csrf_html = $csrf_html;
 
-        if ($this->adminator->checkLevel(64, false) === true) {
+        if ($this->adminator->checkLevel(64) === true) {
             $this->smarty->assign("vlastnici_export_povolen", "true");
         }
 
-        if ($this->adminator->checkLevel(40, false) === true) {
+        if ($this->adminator->checkLevel(40) === true) {
             $this->smarty->assign("vlastnici_pridani_povoleno", "true");
         }
 
@@ -306,26 +306,26 @@ class vlastniciController extends adminatorController
         $this->smarty->assign("razeni2", $form_razeni2);
 
         //promena pro update objektu
-        if ($this->adminator->checkLevel(29, false) === true) {
+        if ($this->adminator->checkLevel(29) === true) {
             $vlastnik->objekt_update_povolen = true;
         }
-        if ($this->adminator->checkLevel(33, false) === true) {
+        if ($this->adminator->checkLevel(33) === true) {
             $vlastnik->objekt_mazani_povoleno = true;
         }
-        if ($this->adminator->checkLevel(34, false) === true) {
+        if ($this->adminator->checkLevel(34) === true) {
             $vlastnik->objekt_garant_akce = true;
         }
 
         // promeny pro mazani, zmenu vlastniku
-        if ($this->adminator->checkLevel(45, false) === true) {
+        if ($this->adminator->checkLevel(45) === true) {
             $vlastnik->vlastnici_erase_povolen = true;
         }
-        if ($this->adminator->checkLevel(30, false) === true) {
+        if ($this->adminator->checkLevel(30) === true) {
             $vlastnik->vlastnici_update_povolen = true;
         }
 
         // odendani objektu od vlastnika
-        if ($this->adminator->checkLevel(49, false) === true) {
+        if ($this->adminator->checkLevel(49) === true) {
             $vlastnik->odendani_povoleno = true;
         }
 
@@ -480,11 +480,11 @@ class vlastniciController extends adminatorController
         $this->smarty->assign("razeni", $_GET['razeni']);
         $this->smarty->assign("razeni2", $_GET['razeni2']);
 
-        if ($this->adminator->checkLevel(63, false) === true) {
+        if ($this->adminator->checkLevel(63) === true) {
             $this->smarty->assign("vlastnici2_export_povolen", "true");
         }
 
-        if ($this->adminator->checkLevel(40, false) === true) {
+        if ($this->adminator->checkLevel(40) === true) {
             $this->smarty->assign("vlastnici2_pridani_povoleno", "true");
         }
 
@@ -597,26 +597,26 @@ class vlastniciController extends adminatorController
         $this->smarty->assign("form_razeni2", $form_razeni2);
 
         //promena pro update objektu
-        if ($this->adminator->checkLevel(29, false) === true) {
+        if ($this->adminator->checkLevel(29) === true) {
             $vlastnikArchiv->objekt_update_povolen = true;
         }
-        if ($this->adminator->checkLevel(33, false) === true) {
+        if ($this->adminator->checkLevel(33) === true) {
             $vlastnikArchiv->objekt_mazani_povoleno = true;
         }
-        if ($this->adminator->checkLevel(34, false) === true) {
+        if ($this->adminator->checkLevel(34) === true) {
             $vlastnikArchiv->objekt_garant_akce = true;
         }
 
         // promeny pro mazani, zmenu vlastniku
-        if ($this->adminator->checkLevel(45, false) === true) {
+        if ($this->adminator->checkLevel(45) === true) {
             $vlastnikArchiv->vlastnici_erase_povolen = true;
         }
-        if ($this->adminator->checkLevel(30, false) === true) {
+        if ($this->adminator->checkLevel(30) === true) {
             $vlastnikArchiv->vlastnici_update_povolen = true;
         }
 
         // odendani objektu od vlastnika
-        if ($this->adminator->checkLevel(49, false) === true) {
+        if ($this->adminator->checkLevel(49) === true) {
             $vlastnikArchiv->odendani_povoleno = true;
         }
 

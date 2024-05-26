@@ -76,15 +76,15 @@ class objektyController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        if ($this->adminator->checkLevel(137, false) === true) {
+        if ($this->adminator->checkLevel(137) === true) {
             $stb->enable_modify_action = true;
         }
 
-        if ($this->adminator->checkLevel(152, false) === true) {
+        if ($this->adminator->checkLevel(152) === true) {
             $stb->enable_unpair_action = true;
         }
 
-        if ($this->adminator->checkLevel(310, false) === true) {
+        if ($this->adminator->checkLevel(310) === true) {
             $stb->enable_delete_action = true;
         }
 
