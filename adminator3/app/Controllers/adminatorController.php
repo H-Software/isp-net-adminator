@@ -99,8 +99,8 @@ class adminatorController extends Controller
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
 
         $this->response
-        ->withStatus(403)
-        ->withHeader('Content-Type', 'text/plain');        
+                ->withStatus(403)
+                ->withHeader('Content-Type', 'text/plain');        
 
         return $this->response;
     }
