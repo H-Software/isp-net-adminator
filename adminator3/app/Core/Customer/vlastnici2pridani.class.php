@@ -470,9 +470,9 @@ class vlastnici2pridani extends adminator
 
         if($back_radku == 0){
             $this->smarty->assign("alert_type", "danger");
-            $this->smarty->assign("alert_content", "Nelze nacist data pro urceni do");
+            $this->smarty->assign("alert_content", "Nelze načíst data pro vytvoření odkazu na vlastníka.");
 
-            $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
+            $output .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
 
             $this->smarty->clearAssign(array('alert_type', 'alert_content'));
         }
