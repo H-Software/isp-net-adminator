@@ -134,7 +134,7 @@ class admin
 
             if($id_new > 0) {
                 // update
-                $sql = "UPDATE leveling2 SET popis='$popis', level='$level' where id=".$id_new;
+                $sql = "UPDATE leveling SET popis='$popis', level='$level' where id=".$id_new;
             } else {
                 // novy zaznam
                 $sql = "INSERT INTO leveling (popis, level) VALUES ('$popis','$level')";
@@ -147,7 +147,7 @@ class admin
             }
 
             if ($rs) {
-                $output .= "<br><br>MySql potvrdilo, takze: <br><H2>Data v databazi upravena.</H2><br><br>";
+                $output .= "<div style=\"color: green; \">MySql potvrdilo, data v databazi upravena.</div>";
             } else {
                 $output .= '<div style="color: red; ">Houstone, tento zapis do databaze nevysel :)</div>' . $error;
             }
