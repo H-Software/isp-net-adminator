@@ -32,7 +32,7 @@ class adminator
 
     public $page_level_id;
 
-    public $userIdentityLevel;
+    public ?int $userIdentityLevel;
 
     public $loggedUserEmail;
 
