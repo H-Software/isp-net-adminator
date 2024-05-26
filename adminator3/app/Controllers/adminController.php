@@ -179,19 +179,15 @@ class adminController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Tarify :: Action");
-
-        $this->header($request, $response, $this->adminator);
-
-
         list($rs, $rs_err) = $this->admin->tarifAction();
 
         //TODO: add showing errors in templates
 
-        $this->smarty->assign("body", $rs[0]);
+        $assignData = array(
+            "page_title" => "page_title", "Adminator3 :: Tarify :: Action",
+            "body" => $rs[0]
+        );
 
-        $this->smarty->display('admin/tarify.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'admin/tarify.tpl', $assignData);
     }
 }
