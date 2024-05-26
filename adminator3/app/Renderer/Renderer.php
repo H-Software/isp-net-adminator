@@ -199,7 +199,7 @@ final class Renderer
         return $ret;
     }
 
-    public static function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false, $csrf)
+    public static function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html, $csrf)
     {
         $ret = array();
 
