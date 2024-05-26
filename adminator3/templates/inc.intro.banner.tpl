@@ -12,9 +12,9 @@
         jako : <span style="color: black; ">{$nick_a_level}, </span>
         {/if} *}
 
-        {if strlen($login_ip) qt 0}
+        {* {if strlen($login_ip) qt 0}
         z ip : <span style="color: black; ">{$login_ip}</span>
-        {/if}
+        {/if} *}
 
     </span>
  </div>
