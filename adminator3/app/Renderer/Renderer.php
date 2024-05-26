@@ -80,19 +80,19 @@ final class Renderer
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             $this->smarty->assign("kat_csrf_html", $csrf_html);
         } else {
-            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": no required vars for generateCsrfToken");
+            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": no required objects for generateCsrfToken");
         }
 
-		// logic for showing extra line of stuff (SEcondary CATegories)
+        // logic for showing extra line of stuff (SEcondary CATegories)
         $show_se_cat = 0;
         if($request != null) {
             if ($request->getMethod() == "POST") {
                 $show_se_cat = $request->getParsedBody()['show_se_cat'];
                 $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": parsed show_se_cat with: ".var_export($show_se_cat, true));
             }
-			
-			$this->smarty->assign("show_se_cat_values", array("0","1"));
-			$this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
+
+            $this->smarty->assign("show_se_cat_values", array("0","1"));
+            $this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
 
             $this->smarty->assign("show_se_cat_selected", $show_se_cat);
 
