@@ -46,20 +46,16 @@ class archivZmenController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Změny :: kategorie");
+        $assignData = array(
+            "page_title" => "Adminator3 :: Změny :: kategorie",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('archiv-zmen/archiv-zmen-cat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'archiv-zmen/archiv-zmen-cat.tpl', $assignData);
     }
 
     public function archivZmenWork(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("archivZmenController\archivZmenWork called");
 
         $this->request = $request;
@@ -69,26 +65,19 @@ class archivZmenController extends adminatorController
             return $this->response;
         };
 
-        // $this->smarty->assign("bs_layout_main_col_count", "8");
-
-        $this->smarty->assign("page_title", "Adminator3 :: Změny :: Archiv změn Work");
-
-        $this->header($request, $response, $this->adminator);
-
         $az = new ArchivZmen($this->container, $this->smarty);
-
         $body = $az->archivZmenWork();
 
-        $this->smarty->assign("body", $body);
+        $assignData = array(
+            "page_title" => "Adminator3 :: Změny :: Archiv změn Work",
+            "body" => $body
+        );
 
-        $this->smarty->display('archiv-zmen/work.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'archiv-zmen/work.tpl', $assignData);
     }
 
     public function archivZmenList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("archivZmenController\archivZmenList called");
 
         $this->request = $request;
@@ -98,21 +87,15 @@ class archivZmenController extends adminatorController
             return $this->response;
         }
 
-        $this->smarty->assign("bs_layout_main_col_count", "10");
-
-        $this->smarty->assign("page_title", "Adminator3 :: Změny :: Archiv změn");
-
-        $this->header($request, $response, $this->adminator);
-
         $az = new ArchivZmen($this->container, $this->smarty);
-
         $body = $az->archivZmenList();
 
-        $this->smarty->assign("body", $body);
+        $assignData = array(
+            "page_title" => "Adminator3 :: Změny :: Archiv změn",
+            "body" => $body
+        );
 
-        $this->smarty->display('archiv-zmen/list.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'archiv-zmen/list.tpl', $assignData);
     }
 
     public function archivZmenUcetni(ServerRequestInterface $request, ResponseInterface $response, array $args)
