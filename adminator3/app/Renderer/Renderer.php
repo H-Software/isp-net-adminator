@@ -32,7 +32,7 @@ final class Renderer
 
     public ?string $userIdentityUsername = null;
 
-    public ?int $userIdentityLevel;
+    public ?int $userIdentityLevel = null;
 
     public function __construct(
         ContainerInterface $container,
