@@ -32,7 +32,7 @@ class adminator
 
     public $page_level_id;
 
-    public ?int $userIdentityLevel;
+    public ?int $userIdentityLevel = null;
 
     public $loggedUserEmail;
 
@@ -221,8 +221,6 @@ class adminator
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": empty userIdentityUsername");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: empty userIdentityUsername");
         }
-
-        $this->userIdentityLevel = $this->getUserLevel();
 
         if($this->userIdentityLevel == false) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is 0");

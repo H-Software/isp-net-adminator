@@ -70,6 +70,9 @@ class adminatorController extends Controller
             );
         }
 
+        // "warm-up" adminator stuff
+        //
+
         // moved this into constructor for using identity across whole application
         if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
@@ -80,8 +83,12 @@ class adminatorController extends Controller
             }
         }
 
+        $this->adminator->userIdentityLevel = $this->adminator->getUserLevel();
+
         // set identity into to rendered
-        $this->renderer->userIdentityUsername = $this->sentinel->getUser()->email;
+        //
+        $this->renderer->userIdentityUsername = $this->adminator->userIdentityUsername;
+        $this->renderer->userIdentityLevel = $this->adminator->userIdentityLevel;
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
     }
