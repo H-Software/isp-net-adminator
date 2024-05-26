@@ -83,7 +83,7 @@ final class Renderer
         $this->smarty->assign("kat_2radka", $kat_2radka);
 
         if(is_object($request) and is_object($response)) {
-            list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+            list($csrf_html) = $this->generateCsrfToken($request, $response, true, $this->container->get('csrf'));
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             $this->smarty->assign("kat_csrf_html", $csrf_html);
         } else {
@@ -198,12 +198,11 @@ final class Renderer
         return $ret;
     }
 
-    protected function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
+    public static function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false, $csrf)
     {
         $ret = array();
 
         // CSRF token name and value for update form
-        $csrf = $this->container->get('csrf');
         $csrf_nameKey = $csrf->getTokenNameKey();
         $csrf_valueKey = $csrf->getTokenValueKey();
         $csrf_name = $request->getAttribute($csrf_nameKey);

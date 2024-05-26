@@ -175,23 +175,23 @@ class adminatorController extends Controller
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
     {
-        $ret = array();
+        return Renderer::generateCsrfToken($request, $response, $return_form_html, $this->container->get('csrf'));
 
-        // CSRF token name and value for update form
-        $csrf = $this->container->get('csrf');
-        $csrf_nameKey = $csrf->getTokenNameKey();
-        $csrf_valueKey = $csrf->getTokenValueKey();
-        $csrf_name = $request->getAttribute($csrf_nameKey);
-        $csrf_value = $request->getAttribute($csrf_valueKey);
+        // // CSRF token name and value for update form
+        // $csrf = $this->container->get('csrf');
+        // $csrf_nameKey = $csrf->getTokenNameKey();
+        // $csrf_valueKey = $csrf->getTokenValueKey();
+        // $csrf_name = $request->getAttribute($csrf_nameKey);
+        // $csrf_value = $request->getAttribute($csrf_valueKey);
 
-        if($return_form_html === true) {
-            $ret[0] = '<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">'
-                       . '<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">';
-        } else {
-            $ret = array("", $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
-        }
+        // if($return_form_html === true) {
+        //     $ret[0] = '<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">'
+        //                . '<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">';
+        // } else {
+        //     $ret = array("", $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
+        // }
 
-        return $ret;
+        // return $ret;
     }
 
     public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminatorUnused = null)
@@ -206,7 +206,6 @@ class adminatorController extends Controller
         $uri = $this->adminator->getServerUri();
         $uri_replace = str_replace("adminator3", "", $uri);
 
-        // list($kategorie, $kat_2radka) = $this->adminator->zobraz_kategorie($uri, $uri_replace);
         list($kategorie, $kat_2radka) = Renderer::zobraz_kategorie($uri, $uri_replace);
 
         $this->smarty->assign("kategorie", $kategorie);
