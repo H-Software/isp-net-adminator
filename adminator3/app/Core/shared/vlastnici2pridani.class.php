@@ -122,7 +122,7 @@ class vlastnici2pridani extends adminator
 
     private $writed;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminator)
     {
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
@@ -130,6 +130,10 @@ class vlastnici2pridani extends adminator
         $this->smarty = $container->get('smarty');
         $this->cache = $container->get('cache');
 
+        $this->adminator = $adminator;
+        if(!isset($this->adminator->userIdentityUsername) or $this->adminator->userIdentityUsername == null){
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity!");
+        }
         // $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
     }
 
