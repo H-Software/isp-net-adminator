@@ -129,7 +129,7 @@ class adminatorController extends Controller
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
                 $this->renderNoLogin();
 
-                if($noExit === false){
+                if($noExit === true){
                     return false;
                 }
                 exit;
@@ -147,7 +147,7 @@ class adminatorController extends Controller
 
         if($checkLevel === false) {
             $this->renderNoLogin();
-            if($noExit === false){
+            if($noExit === true){
                 return false;
             }
             exit;
