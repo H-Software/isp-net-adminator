@@ -122,6 +122,8 @@ class vlastnici2pridani extends adminator
 
     private $writed;
 
+    private $p_bs_alerts = array();
+
     public function __construct(ContainerInterface $container, $adminator)
     {
         $this->conn_mysql = $container->get('connMysql');
@@ -470,8 +472,9 @@ class vlastnici2pridani extends adminator
 
         if($back_radku == 0){
             $p_bs_alerts = array(
+                            "danger" => "Nelze načíst data pro vytvoření odkazu na vlastníka.",
                             "info" => "test1",
-                            "danger" => "Nelze načíst data pro vytvoření odkazu na vlastníka."
+                            "info" => "test2"
                             );
 
             $this->smarty->assign("p_bs_alerts", $p_bs_alerts);
