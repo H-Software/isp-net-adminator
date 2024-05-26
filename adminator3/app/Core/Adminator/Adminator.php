@@ -96,7 +96,7 @@ class adminator
         return $a;
     }
 
-    public function getUserLevel()
+    public function getUserLevel(): false|int
     {
         $level = 0;
 
@@ -200,10 +200,20 @@ class adminator
         // porovnat level uzivatele s prislusnym levelem
         // stranky podle jejiho id
 
+        if(strlen($this->userIdentityUsername) < 1 or $this->userIdentityUsername == null) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": empty userIdentityUsername");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: empty userIdentityUsername");
+        }
+
         $this->userIdentityLevel = $this->getUserLevel();
 
+        if($this->userIdentityLevel < 1 or $this->userIdentityLevel == false) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is 0");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentityLevel is 0");
+        }
+
         $this->logger->info(
-            "adminator\check_level: called with
+            __CLASS__ . "\\" . __FUNCTION__ . ": called with
                                     [page_level_id_custom => " . $page_level_id_custom
                                     . ", page_level_id => " . $this->page_level_id
                                     . ", user_name => " . $this->userIdentityUsername
