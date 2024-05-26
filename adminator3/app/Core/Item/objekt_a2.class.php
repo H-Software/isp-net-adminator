@@ -1,7 +1,5 @@
 <?php
 
-use App\Core\adminator;
-
 class objekt_a2
 {
     public $conn_pgsql;
@@ -660,8 +658,10 @@ class objekt_a2
 
             // id vlastnika
             $output .= "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" > \n";
-            // $output .= "V: " . $this->create_link_to_owner($data["id_cloveka"]);
-
+            // TODO: fix using this
+            // $rs_create_link = ($data["id_cloveka"] > 0 ? $this->create_link_to_owner($data["id_cloveka"]) : "");
+            // $output .= ($rs_create_link === false ? "E_1" : "V: " . $rs_create_link);
+            
             $id_cloveka = $data["id_cloveka"];
 
             $vlastnik_dotaz = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."'");

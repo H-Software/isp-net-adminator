@@ -594,7 +594,7 @@ class adminator
         return $output;
     }
 
-    public function create_link_to_owner($owner_id)
+    public function create_link_to_owner($owner_id): false|string
     {
         $owner_id = intval($owner_id);
 
