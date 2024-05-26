@@ -20,6 +20,8 @@ class objekt extends adminator
 
     public $adminator; // handler for instance of adminator class
 
+    public ?string $userIdentityUsername = null;
+
     public $dns_find;
 
     public $ip_find;
@@ -103,6 +105,8 @@ class objekt extends adminator
         $this->logger = $container->get('logger');
 
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+        $this->userIdentityUsername = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+
     }
 
     public function listGetOrderItems()
@@ -310,7 +314,7 @@ class objekt extends adminator
         } elseif($co == 3) {
             $dotaz_source = "SELECT * FROM objekty WHERE id_cloveka=".$id;
         } else {
-            $output .= "";
+            // $output .= "";
             return false;
         }
 
