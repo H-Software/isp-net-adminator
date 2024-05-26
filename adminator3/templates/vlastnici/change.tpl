@@ -25,9 +25,9 @@
     {include file="partials/bootstrap-alert-with-columns.tpl"}
 {/if}
 
-{if $alert_type2|count_characters > 1}
-    {include file="partials/bootstrap-alert-with-columns.tpl" alert_type=$alert_type2 alert_content=$alert_content2 }
-{/if}
+{if $p_bs_alerts|count_characters > 1}
+    {include file="partials/bootstrap-alert-with-columns-array.tpl"}
+ {/if}
 
 {$body}
 

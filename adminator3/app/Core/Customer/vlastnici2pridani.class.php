@@ -122,7 +122,7 @@ class vlastnici2pridani extends adminator
 
     private $writed;
 
-    private $p_bs_alerts = array();
+    public $p_bs_alerts = array();
 
     public function __construct(ContainerInterface $container, $adminator)
     {
@@ -471,15 +471,7 @@ class vlastnici2pridani extends adminator
         $back_radku = pg_num_rows($back);
 
         if($back_radku == 0){
-            $p_bs_alerts = array(
-                            "Nelze načíst data pro vytvoření odkazu na vlastníka." => "danger",
-                            "test1" => "info",
-                            "test2" => "info" 
-                            );
-
-            $this->smarty->assign("p_bs_alerts", $p_bs_alerts);
-
-            $output .= $this->smarty->fetch('partials/bootstrap-alert-with-columns-array.tpl');
+            $this->p_bs_alerts["Nelze načíst data pro vytvoření odkazu na vlastníka."] = "info";
         }
         else{
             while ($data_back = pg_fetch_array($back)) {
@@ -1347,16 +1339,10 @@ class vlastnici2pridani extends adminator
                         ]);
 
         if($id > 0) {
-            $this->alert_type = "success";
-            $this->alert_content = "Změna byla úspěšně zaznamenána do archivu změn.";
+            $this->p_bs_alerts["Změna byla úspěšně zaznamenána do archivu změn."] = "success";
         } else {
-            $this->alert_type = "danger";
-            $this->alert_content = "Chyba! Změnu do archivu změn se nepodařilo přidat.";
+            $this->p_bs_alerts["Chyba! Změnu do archivu změn se nepodařilo přidat."] = "danger";
         }
-
-        $this->smarty->assign("alert_type2", $this->alert_type);
-        $this->smarty->assign("alert_content2", $this->alert_content);
-
     }
 
     private function actionSaveIntoDatabaseAdd(): string
@@ -1466,15 +1452,10 @@ class vlastnici2pridani extends adminator
                 ]);
 
         if($id > 0) {
-            $this->alert_type = "success";
-            $this->alert_content = "Změna byla úspěšně zaznamenána do archivu změn.";
+            $this->p_bs_alerts["Změna byla úspěšně zaznamenána do archivu změn."] = "success";
         } else {
-            $this->alert_type = "danger";
-            $this->alert_content = "Chyba! Změnu do archivu změn se nepodařilo přidat.";
+            $this->p_bs_alerts["Chyba! Změnu do archivu změn se nepodařilo přidat."] = "danger";
         }
-
-        $this->smarty->assign("alert_type2", $this->alert_type);
-        $this->smarty->assign("alert_content2", $this->alert_content);
 
         // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
 

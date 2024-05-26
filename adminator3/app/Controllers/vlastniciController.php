@@ -500,6 +500,8 @@ class vlastniciController extends adminatorController
 
         $this->smarty->assign("body", $bodyContent);
 
+        $this->smarty->assign("p_bs_alerts", $vlastnik2->p_bs_alerts);
+
         $this->smarty->display('vlastnici/change.tpl');
 
         return $response;
