@@ -35,7 +35,6 @@ class aboutController extends adminatorController
 
     public function about(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("aboutController\about called");
 
         $this->request = $request;

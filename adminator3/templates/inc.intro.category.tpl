@@ -29,7 +29,7 @@
 
       {/section}
 
-      {if $show_se_cat_selector_disable ne 1}
+      {if $show_se_cat_selector_disable|default: 0 ne 1}
         <div class="cat-select-odkazy" >
           <form name="form2" method="POST" >
             {$kat_csrf_html}
