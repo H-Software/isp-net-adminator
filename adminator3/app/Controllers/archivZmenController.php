@@ -13,10 +13,6 @@ class archivZmenController extends adminatorController
     public $smarty;
     public $logger;
 
-    protected $sentinel;
-
-    protected $adminator;
-
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
@@ -27,7 +23,6 @@ class archivZmenController extends adminatorController
         $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -46,20 +41,16 @@ class archivZmenController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Změny :: kategorie");
+        $assignData = array(
+            "page_title" => "Adminator3 :: Změny :: kategorie",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('archiv-zmen/archiv-zmen-cat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'archiv-zmen/archiv-zmen-cat.tpl', $assignData);
     }
 
     public function archivZmenWork(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("archivZmenController\archivZmenWork called");
 
         $this->request = $request;
@@ -69,26 +60,19 @@ class archivZmenController extends adminatorController
             return $this->response;
         };
 
-        // $this->smarty->assign("bs_layout_main_col_count", "8");
-
-        $this->smarty->assign("page_title", "Adminator3 :: Změny :: Archiv změn Work");
-
-        $this->header($request, $response, $this->adminator);
-
         $az = new ArchivZmen($this->container, $this->smarty);
-
         $body = $az->archivZmenWork();
 
-        $this->smarty->assign("body", $body);
+        $assignData = array(
+            "page_title" => "Adminator3 :: Změny :: Archiv změn Work",
+            "body" => $body
+        );
 
-        $this->smarty->display('archiv-zmen/work.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'archiv-zmen/work.tpl', $assignData);
     }
 
     public function archivZmenList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("archivZmenController\archivZmenList called");
 
         $this->request = $request;
@@ -98,21 +82,15 @@ class archivZmenController extends adminatorController
             return $this->response;
         }
 
-        $this->smarty->assign("bs_layout_main_col_count", "10");
-
-        $this->smarty->assign("page_title", "Adminator3 :: Změny :: Archiv změn");
-
-        $this->header($request, $response, $this->adminator);
-
         $az = new ArchivZmen($this->container, $this->smarty);
-
         $body = $az->archivZmenList();
 
-        $this->smarty->assign("body", $body);
+        $assignData = array(
+            "page_title" => "Adminator3 :: Změny :: Archiv změn",
+            "body" => $body
+        );
 
-        $this->smarty->display('archiv-zmen/list.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'archiv-zmen/list.tpl', $assignData);
     }
 
     public function archivZmenUcetni(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -127,21 +105,11 @@ class archivZmenController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Změny pro účetní");
-
-        $this->header($request, $response, $this->adminator);
-
         //zacatek vlastniho obsahu
         $action = $_GET["action"];
-
-        $this->smarty->assign("link_add", "/archiv-zmen/ucetni?action=add");
-
-        $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger, $this->container->auth);
+        $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger);
 
         if($action == "add") { //rezim pridani
-            $this->request = $request;
-            $this->response = $response;
-
             if(!$this->checkLevel(148)) {
                 return $this->response;
             };
@@ -238,8 +206,11 @@ class archivZmenController extends adminatorController
             $template = "az-ucetni.tpl";
         }
 
-        $this->smarty->display($template);
+        $assignData = array(
+            "page_title" => "Adminator3 :: Změny pro účetní",
+            "link_add" => "/archiv-zmen/ucetni?action=add",
+        );
 
-        return $response;
+        return $this->renderer->template($request, $response, $template, $assignData);
     }
 }
