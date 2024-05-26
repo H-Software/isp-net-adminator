@@ -46,11 +46,11 @@ final class Renderer
     ): ResponseInterface {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
+        $this->header($request, $response);
+
         foreach ($assignData as $name => $value) {
             $this->smarty->assign($name, $value);
         }
-
-        $this->header($request, $response);
 
         $content = $this->smarty->fetch($template);
 
@@ -63,10 +63,7 @@ final class Renderer
     {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": logged user info: " . $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
-
-        // $this->smarty->assign("nick_a_level", $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
-        // $this->smarty->assign("login_ip", $this->adminator->userIPAddress);
+        $this->getIdentityForHeader();
 
         //kategorie
         $uri = \App\Core\adminator::getServerUri();
@@ -114,6 +111,16 @@ final class Renderer
         } else {
             $this->smarty->assign("show_se_cat_selector_disable", 1);
         }
+    }
+
+    private function getIdentityForHeader(): void
+    {
+        // $sentinel = $this->container->get('sentinel');
+
+        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: " . $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
+
+        // $this->smarty->assign("nick_a_level", $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
+        $this->smarty->assign("login_ip", $_SERVER['REMOTE_ADDR']);
     }
 
     public function zobraz_kategorie($uri)
