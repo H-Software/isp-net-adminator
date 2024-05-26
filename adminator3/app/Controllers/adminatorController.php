@@ -93,8 +93,8 @@ class adminatorController extends Controller
         if(is_object($adminator)) {
             $a = $adminator;
         } else {
-            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": creating instance of Adminator class");
-            $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": instance of Adminator class not exists");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot verify user login.");
         }
 
         if ($page_level_id == 0) {

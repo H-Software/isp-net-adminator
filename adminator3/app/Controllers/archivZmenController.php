@@ -115,7 +115,7 @@ class archivZmenController extends adminatorController
         $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger, $this->container->auth);
 
         if($action == "add") { //rezim pridani
-            $this->checkLevel(148);
+            $this->checkLevel(148, $this->adminator);
 
             $csrf = $this->generateCsrfToken($request, $response, true);
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
