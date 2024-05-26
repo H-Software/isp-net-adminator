@@ -10,11 +10,11 @@ use Exception;
 class adminatorController extends Controller
 {
     public $conn_mysql;
-    
+
     public $conn_pgsql;
 
     public $smarty;
-    
+
     public $logger;
 
     public $pdoMysql;
