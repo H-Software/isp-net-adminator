@@ -22,10 +22,10 @@ class adminatorController extends Controller
 
     protected ResponseInterface $response;
 
-    /**
-     * @var ResponseFactoryInterface
-     */
-    protected ResponseFactoryInterface $responseFactory;
+    // /**
+    //  * @var ResponseFactoryInterface
+    //  */
+    // protected ResponseFactoryInterface $responseFactory;
 
     public function __construct($container)
     {
@@ -34,7 +34,7 @@ class adminatorController extends Controller
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
 
-        $this->responseFactory = $container->get(ResponseFactoryInterface::class);
+        // $this->responseFactory = $container->get(ResponseFactoryInterface::class);
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -85,15 +85,6 @@ class adminatorController extends Controller
     public function createNoLoginResponse($content): ResponseInterface
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
-
-        if(is_object($this->request) and is_object($this->response)) {
-            $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": ServerRequestInterface and ResponseInterface are objects.");
-        } else {
-            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": no ServerRequestInterface or ResponseInterface object given.");
-            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: no ServerRequestInterface or ResponseInterface object given.");
-        }
-
-        // $this->response = $this->responseFactory->createResponse();
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
         $this->response = $this->response
