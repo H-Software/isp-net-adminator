@@ -471,7 +471,7 @@ class vlastnici2pridani extends adminator
         $back_radku = pg_num_rows($back);
 
         if($back_radku == 0){
-            $this->p_bs_alerts["Nelze načíst data pro vytvoření odkazu na vlastníka."] = "info";
+            $this->p_bs_alerts["Nelze načíst data pro vytvoření odkazu na vlastníka."] = "warning";
         }
         else{
             while ($data_back = pg_fetch_array($back)) {
