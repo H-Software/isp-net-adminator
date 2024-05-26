@@ -328,11 +328,10 @@ class objekt_a2
             }
         }
 
-        $dotaz = pg_query("SELECT id_cloveka FROM objekty WHERE ( id_cloveka = '".intval($id)."' ".$tarif_sql." ) ");
+        $dotaz = pg_query($this->conn_pgsql, "SELECT id_cloveka FROM objekty WHERE ( id_cloveka = '".intval($id)."' ".$tarif_sql." ) ");
         $radku = pg_num_rows($dotaz);
 
         return $radku;
-
     }
 
     public function vypis($sql, $co, $id, $dotaz_final = "")
@@ -659,6 +658,9 @@ class objekt_a2
 
             // id vlastnika
             $output .= "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" > \n";
+            // TODO: fix using this
+            // $rs_create_link = ($data["id_cloveka"] > 0 ? $this->create_link_to_owner($data["id_cloveka"]) : "");
+            // $output .= ($rs_create_link === false ? "E_1" : "V: " . $rs_create_link);
 
             $id_cloveka = $data["id_cloveka"];
 
@@ -670,10 +672,14 @@ class objekt_a2
             }
 
             if ($archiv_vlastnik == 1) {
-                $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n";
+                $output .= "V: <a href=\"/vlastnici/archiv?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+            } elseif($firma_vlastnik == 1) {
+                $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
             } else {
-                $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n";
+                $output .= "V: <a href=\"/vlastnici?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
             }
+
+            $output .= "</span> </td>\n";
 
             if($update_mod_vypisu == 2) {
                 $output .= "<td class=\"tab-objekty\" colspan=\"3\" > <br></td>";

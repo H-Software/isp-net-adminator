@@ -500,6 +500,8 @@ class vlastniciController extends adminatorController
 
         $this->smarty->assign("body", $bodyContent);
 
+        $this->smarty->assign("p_bs_alerts", $vlastnik2->p_bs_alerts);
+
         $this->smarty->display('vlastnici/change.tpl');
 
         return $response;
@@ -518,6 +520,8 @@ class vlastniciController extends adminatorController
         $vlastnikArchiv = new \vlastnikarchiv();
         $vlastnikArchiv->conn_mysql = $this->conn_mysql;
         $vlastnikArchiv->conn_pgsql = $this->conn_pgsql;
+        $vlastnikArchiv->logger = $this->logger;
+
         $vlastnikArchiv->echo = false;
 
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);

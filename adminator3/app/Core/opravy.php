@@ -236,11 +236,11 @@ class opravy
                 }
 
                 if ($archiv_vlastnik == 1) {
-                    $this->vypis_opravy_content_html .= "<a href=\"". fix_link_to_another_adminator("/vlastnici-archiv.php?find_id=".$data["id_vlastnika"])."\" ";
+                    $this->vypis_opravy_content_html .= "<a href=\"/vlastnici/archiv?find_id=".$data["id_vlastnika"]."\" ";
                 } elseif ($firma_vlastnik == 1) {
-                    $this->vypis_opravy_content_html .= "<a href=\"". fix_link_to_another_adminator("/vlastnici2.php?find_id=".$data["id_vlastnika"])."\" ";
+                    $this->vypis_opravy_content_html .= "<a href=\"/vlastnici2?find_id=".$data["id_vlastnika"]."\" ";
                 } else {
-                    $this->vypis_opravy_content_html .= "<a href=\"". fix_link_to_another_adminator("/vlastnici.php?find_id=".$data["id_vlastnika"])."\" ";
+                    $this->vypis_opravy_content_html .= "<a href=\"/vlastnici?find_id=".$data["id_vlastnika"]."\" ";
                 }
 
                 $this->vypis_opravy_content_html .= "title=\"Detail vlastníka: ".$popis_vlastnika."\" >".$data["id_vlastnika"]."</a> \n\n";
@@ -380,7 +380,7 @@ class opravy
 
                         $id_cloveka = $data["id_vlastnika"];
 
-                        $vlastnik_dotaz = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka'");
+                        $vlastnik_dotaz = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '$id_cloveka'");
                         $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
 
                         while ($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
@@ -392,11 +392,11 @@ class opravy
                         }
 
                         if ($archiv_vlastnik == 1) {
-                            $this->vypis_opravy_content_html .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici-archiv.php?find_id=".$data_S2["id_vlastnika"]) . "\" ";
+                            $this->vypis_opravy_content_html .= "<a href=\"/vlastnici/archiv?find_id=".$data_S2["id_vlastnika"]."\" ";
                         } elseif ($firma_vlastnik == 1) {
-                            $this->vypis_opravy_content_html .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici2.php?find_id=".$data_S2["id_vlastnika"]) . "\" ";
+                            $this->vypis_opravy_content_html .= "<a href=\"/vlastnici2?find_id=".$data_S2["id_vlastnika"] . "\" ";
                         } else {
-                            $this->vypis_opravy_content_html .= "<a href=\"" . fix_link_to_another_adminator("/vlastnici.php?find_id=".$data_S2["id_vlastnika"]) . "\" ";
+                            $this->vypis_opravy_content_html .= "<a href=\"/vlastnici?find_id=".$data_S2["id_vlastnika"] . "\" ";
                         }
 
                         $this->vypis_opravy_content_html .= "title=\"Detail vlastníka: ".$popis_vlastnika."\" >".$data_S2["id_vlastnika"]."</a> \n\n";

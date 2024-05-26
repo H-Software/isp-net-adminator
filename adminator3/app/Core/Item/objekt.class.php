@@ -2351,7 +2351,7 @@ class objekt extends adminator
 
         $r_d = $r_d + "8";
 
-        $check_ip = pg_query("SELECT * FROM objekty WHERE ip <<= '$sub_rozsah/26' ORDER BY ip ASC");
+        $check_ip = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ip <<= '$sub_rozsah/26' ORDER BY ip ASC");
         $check_ip_radku = pg_num_rows($check_ip);
 
         //echo "subrozsah: ".$sub_rozsah." xxx";

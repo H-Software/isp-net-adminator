@@ -3,7 +3,10 @@
 class vlastnikarchiv
 {
     public $conn_mysql;
+
     public $conn_pgsql;
+
+    public $logger;
 
     public $echo = true;
 
@@ -135,6 +138,8 @@ class vlastnikarchiv
                 $objekt_a2 = new objekt_a2();
                 $objekt_a2->conn_mysql = $this->conn_mysql;
                 $objekt_a2->conn_pgsql = $this->conn_pgsql;
+                $objekt_a2->logger = $this->logger;
+
                 $objekt_a2->echo = false;
 
                 $output .= $objekt_a2->vypis($sql, $co, $id);

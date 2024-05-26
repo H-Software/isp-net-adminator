@@ -494,11 +494,6 @@ parameters:
 			path: app/Core/shared/adminatorGlobal.class.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function urlencode expects string, int given\\.$#"
-			count: 2
-			path: app/Core/shared/adminatorGlobal.class.php
-
-		-
 			message: "#^Access to an undefined property partner_servis\\:\\:\\$mod\\.$#"
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
