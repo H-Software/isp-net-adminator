@@ -103,11 +103,6 @@ parameters:
 			path: app/Core/ArchivZmenUcetni.php
 
 		-
-			message: "#^Constructor of class zmeny_ucetni has an unused parameter \\$auth\\.$#"
-			count: 1
-			path: app/Core/ArchivZmenUcetni.php
-
-		-
 			message: "#^Call to an undefined static method App\\\\Models\\\\FakturacniSkupina\\:\\:get\\(\\)\\.$#"
 			count: 1
 			path: app/Core/Customer/fakturacniSkupiny.class.php

@@ -20,18 +20,16 @@ class zmeny_ucetni
 
     public $loggedUserEmail = "";
 
-    public function __construct($conn_mysql, $logger, $auth)
+    public function __construct($conn_mysql, $logger)
     {
         $this->conn_mysql = $conn_mysql;
         $this->logger = $logger;
-
 
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
     }
 
     public function load_sql_result()
     {
-
         $rs_main = array();
 
         $sql = "SELECT az_ucetni.zu_id , az_ucetni.zu_typ, az_ucetni.zu_text, az_ucetni.zu_akceptovano, ";
