@@ -158,19 +158,14 @@ class adminController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Tarify");
-
-        $this->header($request, $response, $this->adminator);
-
-        // $csrf_html = $this->generateCsrfToken($request, $response, true);
-
         $rs = $this->admin->tarifList();
 
-        $this->smarty->assign("body", $rs[0]);
+        $assignData = array(
+            "page_title" => "page_title", "Adminator3 :: Tarify",
+            "body" => $rs[0]
+        );
 
-        $this->smarty->display('admin/tarify.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'admin/tarify.tpl', $assignData);
     }
 
     public function adminTarifyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
