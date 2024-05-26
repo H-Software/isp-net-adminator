@@ -66,7 +66,7 @@ class zmeny_ucetni
 
     public function get_types()
     {
-        $sql .= "SELECT zu_id_typ AS id,zu_nazev_typ AS nazev FROM az_ucetni_typy ";
+        $sql = "SELECT zu_id_typ AS id,zu_nazev_typ AS nazev FROM az_ucetni_typy ";
 
         try {
             $qu = $this->conn_mysql->query($sql);
