@@ -190,9 +190,8 @@ class adminator
         }
     }
 
-    public function checkLevel($page_level_id_custom = 0, $display_no_level_page = true)
+    public function checkLevel($page_level_id_custom = 0, $display_no_level_page = true): bool
     {
-
         // co mame
         // v promeny level mame level prihlaseneho uzivatele
         // databazi levelu pro jednotlivy stranky

@@ -148,26 +148,19 @@ class adminatorController extends Controller
         return $ret;
     }
 
-    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminator = null)
+    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminatorUnsed = null)
     {
-        if(is_object($adminator)) {
-            $a = $adminator;
-        } else {
-            $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-        }
-
         $this->logger->debug("adminatorController\\header called");
-        $this->logger->debug("adminatorController\\header: logged user info: " . $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
+        $this->logger->debug("adminatorController\\header: logged user info: " . $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
 
-        $this->smarty->assign("nick_a_level", $a->userIdentityUsername . " (" . $a->userIdentityLevel . ")");
-        $this->smarty->assign("login_ip", $a->userIPAddress);
+        $this->smarty->assign("nick_a_level", $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
+        $this->smarty->assign("login_ip", $this->adminator->userIPAddress);
 
         //kategorie
-
-        $uri = $a->getServerUri();
+        $uri = $this->adminator->getServerUri();
         $uri_replace = str_replace("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka) = $a->zobraz_kategorie($uri, $uri_replace);
+        list($kategorie, $kat_2radka) = $this->adminator->zobraz_kategorie($uri, $uri_replace);
 
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
