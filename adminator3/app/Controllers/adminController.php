@@ -70,15 +70,12 @@ class adminController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: admin :: subca2");
+        $assignData = array(
+            "page_title" => "Adminator3 :: admin :: subcat2",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('admin/subcat2.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'admin/subcat2.tpl', $assignData);
     }
 
     public function adminLevelList(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -93,21 +90,18 @@ class adminController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: vypis levelu stranek");
-
-        $this->header($request, $response, $this->adminator);
-
         // CSRF token name and value for update form
         list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
 
         $this->logger->info("adminController\adminLevelList: csrf generated: ".var_export($csrf_name, true));
 
         // render
-        $this->smarty->assign("body", $this->admin->levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value));
+        $assignData = array(
+            "page_title" => "Adminator3 :: vypis levelu stranek",
+            "body" => $this->admin->levelList($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value)
+        );
 
-        $this->smarty->display('admin/level-list.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'admin/level-list.tpl', $assignData);
     }
 
     public function adminLevelListJson(ServerRequestInterface $request, ResponseInterface $response, array $args)
