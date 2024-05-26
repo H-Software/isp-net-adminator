@@ -17,9 +17,9 @@ class archivZmenController extends adminatorController
 
     protected $adminator;
 
-    protected ?ServerRequestInterface $request;
+    protected ServerRequestInterface $request;
 
-    protected ?ResponseInterface $response;
+    protected ResponseInterface $response;
 
     public function __construct(ContainerInterface $container)
     {

@@ -18,11 +18,9 @@ class adminatorController extends Controller
 
     protected $adminator;
 
-    // nullable for backwards compatibility
-    protected ?ServerRequestInterface $request = null;
+    protected ServerRequestInterface $request;
 
-    // nullable for backwards compatibility
-    protected ?ResponseInterface $response = null;
+    protected ResponseInterface $response;
 
     /**
      * @var ResponseFactoryInterface
