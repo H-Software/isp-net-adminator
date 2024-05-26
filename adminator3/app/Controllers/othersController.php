@@ -80,7 +80,7 @@ class othersController extends adminatorController
         try {
             $dotaz_q = $this->conn_mysql->query("
             SELECT id_question, jmeno, prijmeni, telefon, email, vs, dotaz, text, datum_vlozeni
-            FROM questions2 ORDER BY id_question
+            FROM questions ORDER BY id_question
             ");
         } catch (Exception $e) {
             $content  = "Error: Database query failed (table questions)!";
@@ -104,7 +104,7 @@ class othersController extends adminatorController
             );
         }
 
-        $this->smarty->assign("data_q", $pole_q);
+        $assignData["data_q"] = $pole_q;
 
         //tab orders
         try {
@@ -118,11 +118,10 @@ class othersController extends adminatorController
             $content  = "Error: Database query failed (table orders)!";
             $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
 
-            $this->smarty->assign("alert_type", "danger");
-            $this->smarty->assign("alert_content", $content);
+            $assignData["alert_type"] = "danger";
+            $assignData["alert_content"] = $content;
 
-            $this->smarty->display("others/company-web-alert.tpl");
-            return $response;
+            return $this->renderer->template($request, $response, 'others/company-web-alert.tpl', $assignData, 500);
         }
 
         $pole_o = array();
@@ -140,21 +139,25 @@ class othersController extends adminatorController
             );
         }
 
-        $this->smarty->assign("data_o", $pole_o);
+        $assignData["data_o"] = $pole_o;
 
         //print_r($pole_o);
 
         //zpatky default DB
         try {
-            $count = $this->conn_mysql->select_db("adminator2");
+            $this->conn_mysql->select_db("adminator22");
         } catch (Exception $e) {
-            die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+            $content  = "Error: Database select to adminator2 failed!";
+            $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
+
+            $assignData["alert_type"] = "danger";
+            $assignData["alert_content"] = $content;
+
+            return $this->renderer->template($request, $response, 'others/company-web-alert.tpl', $assignData, 500);
         }
 
         //finalni zobrazeni stranky
-        $this->smarty->display("others/company-web.tpl");
-
-        return $response;
+        return $this->renderer->template($request, $response, 'others/company-web.tpl', $assignData, 500);
     }
 
     public function board(ServerRequestInterface $request, ResponseInterface $response, array $args)
