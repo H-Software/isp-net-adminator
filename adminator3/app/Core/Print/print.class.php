@@ -19,8 +19,6 @@ class printClass extends adminator
 
     public $logger;
 
-    // public $loggedUserEmail;
-
     public $adminator; // handler for instance of adminator class
 
     public $csrf_html;
@@ -36,11 +34,6 @@ class printClass extends adminator
 
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
-
-        // $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
-
-        // $this->adminator = new adminator($this->conn_mysql, $this->smarty, $this->logger);
-
     }
 
     public function getFileContent($fileName): false|array
