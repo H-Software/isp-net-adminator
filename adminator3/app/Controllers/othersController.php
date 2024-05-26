@@ -65,7 +65,7 @@ class othersController extends adminatorController
         );
 
         try {
-            $this->conn_mysql->select_db("company-web2");
+            $this->conn_mysql->select_db("company-web");
         } catch (Exception $e) {
             $content  = "Error: Database select failed!";
             $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
@@ -80,17 +80,16 @@ class othersController extends adminatorController
         try {
             $dotaz_q = $this->conn_mysql->query("
             SELECT id_question, jmeno, prijmeni, telefon, email, vs, dotaz, text, datum_vlozeni
-            FROM questions ORDER BY id_question
+            FROM questions2 ORDER BY id_question
             ");
         } catch (Exception $e) {
             $content  = "Error: Database query failed (table questions)!";
             $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
 
-            $this->smarty->assign("alert_type", "danger");
-            $this->smarty->assign("alert_content", $content);
+            $assignData["alert_type"] = "danger";
+            $assignData["alert_content"] = $content;
 
-            $this->smarty->display("others/company-web-alert.tpl");
-            return $response;
+            return $this->renderer->template($request, $response, 'others/company-web-alert.tpl', $assignData, 500);
         }
 
         $pole_q = array();
