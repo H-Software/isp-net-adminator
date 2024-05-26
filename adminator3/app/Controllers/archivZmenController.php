@@ -31,7 +31,7 @@ class archivZmenController extends adminatorController
 
         $this->logger->info("archivZmenController\__construct called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        parent::__construct($container);
     }
 
     public function archivZmenCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
