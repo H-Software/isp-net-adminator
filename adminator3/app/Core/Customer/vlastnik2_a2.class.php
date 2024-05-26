@@ -659,7 +659,7 @@ class vlastnik2_a2
 
                 fputs($fp, "<tr>");   // Zapíšeme do souboru začátek řádky, kde budou názvy sloupců (polí)
 
-                $vysledek_pole = pg_query("SELECT column_name FROM information_schema.columns WHERE table_name ='vlastnici' ORDER BY ordinal_position ");
+                $vysledek_pole = pg_query($this->conn_pgsql, "SELECT column_name FROM information_schema.columns WHERE table_name ='vlastnici' ORDER BY ordinal_position ");
                 // Vybereme z databáze názvy polí tabulky tabulka a postupně je zapíšeme do souboru
 
                 // echo "vysledek_pole: $vysledek_pole ";
@@ -684,7 +684,7 @@ class vlastnik2_a2
                 // $vysledek=pg_query("select * from platby where hotove='1' ");
                 // Vybereme z databáze všechny záznamy v tabulce tabulka a postupě je zapíšeme do souboru
 
-                $vysledek = pg_query("SELECT * FROM vlastnici WHERE (archiv ='0' OR archiv is NULL) ORDER BY id_cloveka ASC");
+                $vysledek = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE (archiv ='0' OR archiv is NULL) ORDER BY id_cloveka ASC");
 
                 while ($data = pg_fetch_array($vysledek)) {
                     fputs($fp, "\n <tr>");
@@ -734,7 +734,7 @@ class vlastnik2_a2
                     if ($data["fakturacni"] > 0) {
                         $id_f = $data["fakturacni"];
 
-                        $vysl_f = pg_query("SELECT * FROM fakturacni WHERE id = '".intval($id_f)."' ");
+                        $vysl_f = pg_query($this->conn_pgsql, "SELECT * FROM fakturacni WHERE id = '".intval($id_f)."' ");
 
                         while ($data_f = pg_fetch_array($vysl_f)) {
 
