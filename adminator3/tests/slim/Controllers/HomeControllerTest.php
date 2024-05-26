@@ -57,10 +57,7 @@ final class HomeControllerTest extends AdminatorTestCase
         $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
         $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
         $adminatorMock->shouldReceive('zobraz_kategorie')->andReturn(
-            array(
-                array("nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" ),
-                array("nazev" => "Partner program", "url" => "/partner/cat", "width" => "", "align" => "center" )
-            )
+            require "../../fixtures/zobraz_kategorie_data.php"
         );
         $adminatorMock->shouldReceive('getUserToken')->andReturn(false);
         // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
