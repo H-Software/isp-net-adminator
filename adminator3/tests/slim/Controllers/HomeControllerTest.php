@@ -58,8 +58,8 @@ final class HomeControllerTest extends AdminatorTestCase
         $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
         $adminatorMock->shouldReceive('zobraz_kategorie')->andReturn(
             array(
-                array(),
-                array()
+                array("nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" ),
+                array("nazev" => "Partner program", "url" => "/partner/cat", "width" => "", "align" => "center" )
             )
         );
         $adminatorMock->shouldReceive('getUserToken')->andReturn(false);
