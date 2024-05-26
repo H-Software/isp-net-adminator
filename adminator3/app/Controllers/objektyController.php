@@ -167,7 +167,7 @@ class objektyController extends adminatorController
         $objekt->dns_find = $dns_find;
         $objekt->ip_find = $ip_find;
         $objekt->adminator = $this->adminator;
-        
+
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $objekt->csrf_html = $csrf_html;
 
