@@ -14,35 +14,33 @@ class adminController extends adminatorController
     public $smarty;
     public $logger;
 
-    protected $sentinel;
+    // protected $sentinel;
 
-    protected $adminator;
+    // protected $adminator;
 
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
 
-    public $admin;
+    private $admin;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->conn_mysql = $this->container->get('connMysql');
+        // $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
+        // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info("adminController\__construct called");
 
         parent::__construct($container);
 
         $this->admin = new \admin($this->container);
-
     }
 
     public function admin(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("adminController\admin called");
 
         $this->request = $request;
@@ -52,15 +50,12 @@ class adminController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: admin");
+        $assignData = array(
+            "page_title" => "Adminator3 :: admin",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('admin/subcat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'admin/subcat.tpl', $assignData);
     }
 
     public function adminMain(ServerRequestInterface $request, ResponseInterface $response, array $args)
