@@ -42,7 +42,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(30, true)){
+        if(!$this->checkLevel(30)) {
             return $this->response;
         };
 
@@ -65,7 +65,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(30, true)){
+        if(!$this->checkLevel(30)) {
             return $this->response;
         };
 
@@ -94,7 +94,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(30, true)){
+        if(!$this->checkLevel(30)) {
             return $this->response;
         }
 
@@ -123,7 +123,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(147, true)){
+        if(!$this->checkLevel(147)) {
             return $this->response;
         };
 
@@ -140,11 +140,11 @@ class archivZmenController extends adminatorController
 
         if($action == "add") { //rezim pridani
             $this->request = $request;
-        $this->response = $response;
+            $this->response = $response;
 
-        if(!$this->checkLevel(148, true)){
-            return $this->response;
-        };
+            if(!$this->checkLevel(148)) {
+                return $this->response;
+            };
 
             $csrf = $this->generateCsrfToken($request, $response, true);
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));

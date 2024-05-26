@@ -23,6 +23,10 @@ class HomeController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     private $opravyInstance;
 
     public function __construct(ContainerInterface $container, $adminatorInstance = null, $opravyInstance = null)
@@ -67,7 +71,7 @@ class HomeController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(38, true)){
+        if(!$this->checkLevel(38)) {
             return $this->response;
         };
 

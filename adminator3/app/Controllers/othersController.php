@@ -18,6 +18,10 @@ class othersController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -39,7 +43,7 @@ class othersController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(95, true)){
+        if(!$this->checkLevel(95)) {
             return $this->response;
         };
 
@@ -62,7 +66,7 @@ class othersController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(151, true)){
+        if(!$this->checkLevel(151)) {
             return $this->response;
         };
 
@@ -172,7 +176,7 @@ class othersController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(87, true)){
+        if(!$this->checkLevel(87)) {
             return $this->response;
         };
 
@@ -289,7 +293,7 @@ class othersController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(309, true)){
+        if(!$this->checkLevel(309)) {
             return $this->response;
         };
 

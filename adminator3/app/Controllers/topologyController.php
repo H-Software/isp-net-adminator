@@ -16,6 +16,10 @@ class topologyController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -36,7 +40,7 @@ class topologyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(5, true)){
+        if(!$this->checkLevel(5)) {
             return $this->response;
         };
 
@@ -62,7 +66,7 @@ class topologyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(85, true)){
+        if(!$this->checkLevel(85)) {
             return $this->response;
         };
 

@@ -17,6 +17,10 @@ class objektyController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -37,7 +41,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(93, true)){
+        if(!$this->checkLevel(93)) {
             return $this->response;
         };
 
@@ -64,7 +68,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(135, true)){
+        if(!$this->checkLevel(135)) {
             return $this->response;
         };
 
@@ -102,7 +106,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(136, true)){
+        if(!$this->checkLevel(136)) {
             return $this->response;
         };
 
@@ -138,7 +142,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(1, true)){
+        if(!$this->checkLevel(1)) {
             return $this->response;
         };
 
@@ -188,7 +192,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(2, true)){
+        if(!$this->checkLevel(2)) {
             return $this->response;
         };
 

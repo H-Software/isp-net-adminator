@@ -18,6 +18,10 @@ class printController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     private $printInstance;
 
     public function __construct(ContainerInterface $container)
@@ -42,7 +46,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146, true)){
+        if(!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -65,7 +69,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(308, true)){
+        if(!$this->checkLevel(308)) {
             return $this->response;
         };
 
@@ -118,7 +122,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146, true)){
+        if(!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -169,7 +173,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146, true)){
+        if(!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -193,7 +197,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146, true)){
+        if(!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -216,7 +220,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146, true)){
+        if(!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -239,7 +243,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146, true)){
+        if(!$this->checkLevel(146)) {
             return $this->response;
         };
 

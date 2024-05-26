@@ -21,6 +21,10 @@ class vlastniciController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -43,7 +47,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(90, true)){
+        if(!$this->checkLevel(90)) {
             return $this->response;
         };
 
@@ -65,7 +69,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(92, true)){
+        if(!$this->checkLevel(92)) {
             return $this->response;
         };
 
@@ -102,7 +106,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(102, true)){
+        if(!$this->checkLevel(102)) {
             return $this->response;
         };
 
@@ -248,7 +252,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(13, true)){
+        if(!$this->checkLevel(13)) {
             return $this->response;
         };
 
@@ -441,7 +445,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(38, true)){
+        if(!$this->checkLevel(38)) {
             return $this->response;
         };
 
@@ -512,7 +516,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(40, true)){
+        if(!$this->checkLevel(40)) {
             return $this->response;
         };
 
@@ -544,7 +548,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(82, true)){
+        if(!$this->checkLevel(82)) {
             return $this->response;
         };
 
@@ -738,7 +742,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(99, true)){
+        if(!$this->checkLevel(99)) {
             return $this->response;
         };
 
@@ -775,7 +779,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(301, true)){
+        if(!$this->checkLevel(301)) {
             return $this->response;
         };
 

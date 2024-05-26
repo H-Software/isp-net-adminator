@@ -16,6 +16,10 @@ class platbyController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -36,7 +40,7 @@ class platbyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(92, true)){
+        if(!$this->checkLevel(92)) {
             return $this->response;
         };
 
@@ -64,7 +68,7 @@ class platbyController extends adminatorController
         // $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(, true)){
+        if(!$this->checkLevel()) {
             return $this->response;
         };
 
@@ -83,7 +87,7 @@ class platbyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(107, true)){
+        if(!$this->checkLevel(107)) {
             return $this->response;
         };
 
@@ -105,7 +109,7 @@ class platbyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(149, true)){
+        if(!$this->checkLevel(149)) {
             return $this->response;
         };
 

@@ -16,6 +16,10 @@ class aboutController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -37,7 +41,7 @@ class aboutController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(142, true)){
+        if(!$this->checkLevel(142)) {
             return $this->response;
         };
 
@@ -59,7 +63,7 @@ class aboutController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(144, true)){
+        if(!$this->checkLevel(144)) {
             return $this->response;
         };
 
@@ -79,7 +83,7 @@ class aboutController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(145, true)){
+        if(!$this->checkLevel(145)) {
             return $this->response;
         };
 

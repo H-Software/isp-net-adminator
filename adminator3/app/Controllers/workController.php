@@ -18,6 +18,10 @@ class workController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     protected $container;
 
     public function __construct(ContainerInterface $container)
@@ -41,7 +45,7 @@ class workController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(16, true)){
+        if(!$this->checkLevel(16)) {
             return $this->response;
         };
 

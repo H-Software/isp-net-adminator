@@ -97,7 +97,7 @@ class adminatorController extends Controller
 
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
         $this->response = $this->response
-                            ->withStatus(403);        
+                            ->withStatus(403);
 
         $this->response->getBody()->write($content);
 
@@ -111,14 +111,14 @@ class adminatorController extends Controller
         $this->smarty->assign("page_title", "Adminator3 :: wrong level");
 
         $this->header($this->request, $this->response);
-        
+
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $content = $this->smarty->fetch('global/no-level.tpl');
 
         return $content;
     }
 
-    public function checkLevel($page_level_id = 0, $noExit = false)
+    public function checkLevel($page_level_id = 0): bool
     {
         // wrapper for checking user's level vs. page level
         // core function for checking level is in adminator class and shared with adminator2
@@ -144,11 +144,7 @@ class adminatorController extends Controller
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
                 $content = $this->renderNoLogin();
                 $this->createNoLoginResponse($content);
-
-                if($noExit === true){
-                    return false;
-                }
-                exit;
+                return false;
             } else {
                 $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
             }
@@ -164,11 +160,7 @@ class adminatorController extends Controller
         if($checkLevel === false) {
             $content = $this->renderNoLogin();
             $this->createNoLoginResponse($content);
-
-            if($noExit === true){
-                return false;
-            }
-            exit;
+            return false;
         }
 
         return true;
