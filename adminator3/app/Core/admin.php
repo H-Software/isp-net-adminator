@@ -121,7 +121,7 @@ class admin
     {
         $output = "";
         $error = "";
-        
+
         if (($_POST["popis_new"])) {
             //budeme ukladat
             $popis = $this->conn_mysql->real_escape_string($_POST["popis_new"]);

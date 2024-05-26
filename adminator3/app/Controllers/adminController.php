@@ -136,7 +136,7 @@ class adminController extends adminatorController
         );
 
         $code = 200;
-        if($error){
+        if($error) {
             $code = 500;
         }
 
