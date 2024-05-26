@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Exception;
 
 class adminatorController extends Controller
 {
@@ -38,8 +39,8 @@ class adminatorController extends Controller
             }
         }
 
-        return false;
-        
+        throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity!");
+
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
     }
 
