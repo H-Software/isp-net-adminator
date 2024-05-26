@@ -8,10 +8,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class adminController extends adminatorController
 {
-    public $container;
+    private $container;
 
-    public $conn_mysql;
-    public $smarty;
+    // public $conn_mysql;
+    // public $smarty;
     public $logger;
 
     // protected $sentinel;
@@ -28,7 +28,7 @@ class adminController extends adminatorController
     {
         $this->container = $container;
         // $this->conn_mysql = $this->container->get('connMysql');
-        $this->smarty = $this->container->get('smarty');
+        // $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
         // $this->sentinel = $this->container->get('sentinel');
 
