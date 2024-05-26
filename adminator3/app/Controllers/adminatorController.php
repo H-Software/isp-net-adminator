@@ -37,7 +37,7 @@ class adminatorController extends Controller
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        parent::__construct($container);
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
         // moved this into constructor for using identity across whole application
         if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
