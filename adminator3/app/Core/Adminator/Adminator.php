@@ -100,7 +100,7 @@ class adminator
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": get level for identity: ". var_export($this->userIdentityUsername, true));
-        
+
         $level = 0;
 
         $rs = User::where(
