@@ -1456,8 +1456,6 @@ class vlastnici2pridani extends adminator
 
         $this->writed = "true";
 
-        $this->cache::unlock($this->lock_name);
-
         return $output;
     }
 
@@ -1647,6 +1645,8 @@ class vlastnici2pridani extends adminator
         $this->actionArchivZmen();
 
         $this->updated = "true";
+
+        $this->cache::unlock($this->lock_name);
 
         return $output;
     }
