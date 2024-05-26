@@ -130,7 +130,7 @@ class vlastnici2pridani extends adminator
         $this->smarty = $container->get('smarty');
         $this->cache = $container->get('cache');
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        // $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
     }
 
     public function action(): string
@@ -146,7 +146,7 @@ class vlastnici2pridani extends adminator
             // set lock
             $this->lock_name = 'vlastnici2pridani:update:' . $this->form_update_id;
 
-            $this->lock_handler = $this->cache->lock($this->lock_name, 60);
+            $this->lock_handler = $this->cache->lock($this->lock_name, 60, $this->adminator->userIdentityUsername);
 
             if ($this->lock_handler->get()) {
                 $this->locked = true;
