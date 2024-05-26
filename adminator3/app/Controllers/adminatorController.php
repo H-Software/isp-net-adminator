@@ -33,13 +33,11 @@ class adminatorController extends Controller
         if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": getUser from sentinel failed");
-                return false;
+                throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity! (getUser from sentinel)");
             } else {
                 $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
             }
         }
-
-        throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity!");
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
     }
