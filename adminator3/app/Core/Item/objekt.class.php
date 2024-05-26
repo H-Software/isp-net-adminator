@@ -104,8 +104,13 @@ class objekt extends adminator
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
 
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
         $this->userIdentityUsername = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
+
     }
 
     public function listGetOrderItems()
