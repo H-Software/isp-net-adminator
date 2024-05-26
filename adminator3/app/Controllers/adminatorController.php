@@ -103,7 +103,7 @@ class adminatorController extends Controller
         $this->smarty->display('global/no-level.tpl');
     }
 
-    public function checkLevel($page_level_id = 0, $adminatorUnused, $noExit = false): bool
+    public function checkLevel($page_level_id = 0, $adminatorUnused = null, $noExit = false): bool
     {
         // wrapper for checking user's level vs. page level
         // core function for checking level is in adminator class and shared with adminator2

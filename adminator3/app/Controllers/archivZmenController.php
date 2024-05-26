@@ -57,7 +57,7 @@ class archivZmenController extends adminatorController
 
         $this->logger->info("archivZmenController\archivZmenWork called");
 
-        $this->checkLevel(30, null, true);
+        $this->checkLevel(30);
 
         // $this->smarty->assign("bs_layout_main_col_count", "8");
 
@@ -84,7 +84,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(30)){
+        if(!$this->checkLevel(30, null, true)){
             return $this->response;
         }
 
