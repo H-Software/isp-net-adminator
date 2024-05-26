@@ -5,7 +5,7 @@ class zmeny_ucetni
     public $conn_mysql;
 
     public $logger;
-    
+
     //promene pro pridani
     public $send;
     public $typ;
