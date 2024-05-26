@@ -37,8 +37,16 @@ class adminatorController extends Controller
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-
+        $this->adminator = new \App\Core\adminator(
+            $this->conn_mysql,
+            $this->smarty,
+            $this->logger,
+            null,
+            $this->pdoMysql,
+            $this->settings,
+            $this->sentinel
+        );
+        
         // moved this into constructor for using identity across whole application
         if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
