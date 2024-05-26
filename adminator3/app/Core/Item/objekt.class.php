@@ -352,16 +352,16 @@ class objekt extends adminator
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
 
         // checking levels for update/erase/..
-        if ($this->checkLevel(29) === true) {
+        if ($this->adminator->checkLevel(29) === true) {
             $this->listAllowedActionUpdate = true;
         }
-        if ($this->checkLevel(33) === true) {
+        if ($this->adminator->checkLevel(33) === true) {
             $this->listAllowedActionErase = true;
         }
-        if ($this->checkLevel(34) === true) {
+        if ($this->adminator->checkLevel(34) === true) {
             $this->listAllowedActionGarant = true;
         }
-        if ($this->checkLevel(59) === true) {
+        if ($this->adminator->checkLevel(59) === true) {
             $export_povolen = true;
         }
 
@@ -787,7 +787,7 @@ class objekt extends adminator
             if($update_status == "1") {
                 // rezim upravy
 
-                if ($this->checkLevel(29) === false) {
+                if ($this->adminator->checkLevel(29) === false) {
                     $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                     return $output;
                 }
@@ -1281,7 +1281,7 @@ class objekt extends adminator
 
             if($update_status == "1") {
 
-                if ($this->checkLevel(29) === false) {
+                if ($this->adminator->checkLevel(29) === false) {
                     $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                     return $output;
                 }
