@@ -80,6 +80,9 @@ class adminatorController extends Controller
             }
         }
 
+        // set identity into to rendered
+        $this->renderer->userIdentityUsername = $this->sentinel->getUser()->email;
+
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
     }
 

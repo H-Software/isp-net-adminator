@@ -30,6 +30,8 @@ final class Renderer
     */
     protected Guard $csrf;
 
+    public ?string $userIdentityUsername = null;
+
     public function __construct(
         ContainerInterface $container,
     ) {
@@ -118,8 +120,11 @@ final class Renderer
         // $sentinel = $this->container->get('sentinel');
 
         // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: " . $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: " . $this->userIdentityUsername . " (" . ")");
 
         // $this->smarty->assign("nick_a_level", $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
+        $this->smarty->assign("nick_a_level", $this->userIdentityUsername . " (" . ")");
+
         $this->smarty->assign("login_ip", $_SERVER['REMOTE_ADDR']);
     }
 
