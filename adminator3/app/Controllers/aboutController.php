@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Renderer\Renderer;
+
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,15 +46,12 @@ class aboutController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: O programu");
+        $assignData = array(
+            "page_title" => "Adminator3 :: O programu",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('about/about.tpl');
-
-        return $response;
+        return $this->renderer->template($response, 'about/about.tpl', $assignData);
     }
 
     public function changesOld(ServerRequestInterface $request, ResponseInterface $response, array $args)
