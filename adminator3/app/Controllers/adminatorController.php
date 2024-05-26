@@ -24,9 +24,21 @@ class adminatorController extends Controller
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
 
-        $this->logger->info("adminatorController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+
+        // moved this into costructor for using userIdentityUsername in locks and etc
+        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
+            if($this->sentinel->getUser()->email == null) {
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": getUser from sentinel failed");
+                return false;
+            } else {
+                $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
+            }
+        }
+
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
     }
 
     public function jsonRender(ServerRequestInterface $request, ResponseInterface $response, $data, $status = 200, $msg = '')
@@ -89,6 +101,7 @@ class adminatorController extends Controller
 
         $a->page_level_id = $page_level_id;
 
+        // TODO: after fix calling adminatorController constructor in every other controller, remove this
         if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
