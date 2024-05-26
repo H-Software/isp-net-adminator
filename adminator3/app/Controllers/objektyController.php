@@ -204,6 +204,7 @@ class objektyController extends adminatorController
         $objekt = new \App\Core\objekt($this->container);
         $objekt->csrf_html = $this->generateCsrfToken($request, $response, true);
         $objekt->adminator = $this->adminator;
+        $objekt->loggedUserEmail = $this->adminator->userIdentityUsername;
 
         $objekt->mod_objektu = intval($_POST["mod_objektu"]);
 

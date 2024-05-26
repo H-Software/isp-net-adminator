@@ -22,7 +22,7 @@ class objekt extends adminator
 
     public $adminator; // handler for instance of adminator class
 
-    public ?string $userIdentityUsername = null;
+    // public ?string $userIdentityUsername = null;
 
     public $dns_find;
 
@@ -108,18 +108,6 @@ class objekt extends adminator
         // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
-
-        // parent::__construct(
-        //     $this->conn_mysql,
-        //     $this->smarty,
-        //     $this->logger,
-        //     null,
-        //     $this->pdoMysql,
-        //     $this->settings,
-        //     $this->conn_pgsql
-        // );
-
-        // $this->userIdentityUsername = $this->sentinel->getUser()->email;
     }
 
     public function listGetOrderItems()
