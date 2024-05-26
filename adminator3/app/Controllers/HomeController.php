@@ -43,7 +43,7 @@ class HomeController extends adminatorController
 
         $this->logger->info("homeController\__construct called");
 
-        parent::__construct($container);
+        parent::__construct($container, $adminatorInstance);
 
         if(isset($opravyInstance)) {
             $this->opravyInstance = $opravyInstance;
