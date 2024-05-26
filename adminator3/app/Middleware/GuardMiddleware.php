@@ -87,7 +87,7 @@ class GuardMiddleware implements MiddlewareInterface
             // // $this->header($request, $response);
 
             $smarty->assign("body", "<br>Failed CSRF check!<br>");
-            $smarty->display('global/no-csrf.tpl');
+            $body = $smarty->fetch('global/no-csrf.tpl');
 
             return $response;
 
