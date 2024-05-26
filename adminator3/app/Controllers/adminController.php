@@ -152,7 +152,7 @@ class adminController extends adminatorController
         $rs = $this->admin->tarifList();
 
         $assignData = array(
-            "page_title" => "page_title", "Adminator3 :: Tarify",
+            "page_title" => "Adminator3 :: Tarify",
             "body" => $rs[0]
         );
 
@@ -175,7 +175,7 @@ class adminController extends adminatorController
         //TODO: add showing errors in templates
 
         $assignData = array(
-            "page_title" => "page_title", "Adminator3 :: Tarify :: Action",
+            "page_title" => "Adminator3 :: Tarify :: Action",
             "body" => $rs
         );
 
