@@ -111,7 +111,7 @@ class adminatorController extends Controller
         $this->header($this->request, $this->response);
 
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-        $this->smarty->display('global/no-level.tpl');
+        // $this->smarty->display('global/no-level.tpl');
     }
 
     public function checkLevel($page_level_id = 0, $adminatorUnused = null, $noExit = false)

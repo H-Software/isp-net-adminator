@@ -82,7 +82,7 @@ class GuardMiddleware implements MiddlewareInterface
             $request = $request->withAttribute("csrf_status", false);
             $smarty->assign("page_title", "Adminator3 - chybny CSRF token");
 
-            // // $this->header($request, $response);
+            // $this->header($request, $response);
 
             $smarty->assign("body", "<br>Failed CSRF check!<br>");
             $content = $smarty->fetch('global/no-csrf.tpl');
