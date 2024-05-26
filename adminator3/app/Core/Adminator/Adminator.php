@@ -596,7 +596,6 @@ class adminator
 
     public function create_link_to_owner($owner_id)
     {
-
         $owner_id = intval($owner_id);
 
         $sql = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".$owner_id."' ";
@@ -616,16 +615,18 @@ class adminator
         }
 
         if($vlastnik_radku <= 0) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": missing database data");
             return false;
         }
-
+        
         if ($archiv_vlastnik == 1) {
-            $odkaz = "<a href=\"vlastnici-archiv.php?".urlencode("find_id")."=".urlencode(strval($owner_id))."\" >".$owner_id."</a>\n";
-        } else {
+            $odkaz = "<a href=\"/vlastnici/archiv?".urlencode("find_id")."=".urlencode(strval($owner_id))."\" >".$owner_id."</a>\n";
+        } elseif ($firma_vlastnik == 1) {
             $odkaz = "<a href=\"/vlastnici2?".urlencode("find_id")."=".urlencode(strval($owner_id))."\" >".$owner_id."</a>\n";
+        } else {
+            $odkaz = "<a href=\"/vlastnici?".urlencode("find_id")."=".urlencode(strval($owner_id))."\" >".$owner_id."</a>\n";
         }
 
         return $odkaz;
-
     }
 }

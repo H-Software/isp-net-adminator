@@ -502,8 +502,10 @@ class stb extends adminator
 
     }
 
-    public function stbActionSaveIntoDatabase($data)
+    public function stbActionSaveIntoDatabase($data): string
     {
+        $output = "";
+
         if($data['update_id']) {
 
             $update_id = $data['update_id'];
@@ -621,6 +623,7 @@ class stb extends adminator
         // 0 field -> html code for smarty
         // 1 field -> name (and path) of smarty template
         $ret = array();
+        $rs = "";
 
         $this->logger->info("stb\\stbAction called");
 
@@ -706,7 +709,7 @@ class stb extends adminator
 
     public function stbActionRenderResults($data)
     {
-        $rs .= "<br>
+        $rs = "<br>
         STB Objekt byl přidán/upraven, zadané údaje:<br><br>
         <b>Popis objektu</b>: " . $data['popis'] . "<br>
         <b>IP adresa</b>: " . $data['ip'] . "<br>
@@ -1158,7 +1161,7 @@ class stb extends adminator
                 //generovani Reg. Formu
                 if((intval($data_vypis["id_cloveka"]) > 0)) {
 
-                    $rs_rf = pg_query("SELECT id_komplu FROM objekty WHERE id_cloveka = '".intval($data_vypis["id_cloveka"])."'");
+                    $rs_rf = pg_query($this->conn_pgsql, "SELECT id_komplu FROM objekty WHERE id_cloveka = '".intval($data_vypis["id_cloveka"])."'");
 
                     while($data_rf = pg_fetch_array($rs_rf)) {
                         $id_komplu = $data_rf["id_komplu"];

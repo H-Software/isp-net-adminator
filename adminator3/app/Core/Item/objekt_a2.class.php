@@ -1,6 +1,8 @@
 <?php
 
-class objekt_a2
+use App\Core\adminator;
+
+class objekt_a2 extends adminator
 {
     public $conn_pgsql;
     public $conn_mysql;
@@ -659,21 +661,24 @@ class objekt_a2
 
             // id vlastnika
             $output .= "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" > \n";
+            $output .= "V: " . $this->create_link_to_owner($data["id_cloveka"]);
 
-            $id_cloveka = $data["id_cloveka"];
+            // $id_cloveka = $data["id_cloveka"];
 
-            $vlastnik_dotaz = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."'");
-            $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
-            while ($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
-                $firma_vlastnik = $data_vlastnik["firma"];
-                $archiv_vlastnik = $data_vlastnik["archiv"];
-            }
+            // $vlastnik_dotaz = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."'");
+            // $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
+            // while ($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
+            //     $firma_vlastnik = $data_vlastnik["firma"];
+            //     $archiv_vlastnik = $data_vlastnik["archiv"];
+            // }
 
-            if ($archiv_vlastnik == 1) {
-                $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n";
-            } else {
-                $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n";
-            }
+            // if ($archiv_vlastnik == 1) {
+            //     $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n";
+            // } else {
+            //     $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n";
+            // }
+
+            $output .= "</span> </td>\n";
 
             if($update_mod_vypisu == 2) {
                 $output .= "<td class=\"tab-objekty\" colspan=\"3\" > <br></td>";
