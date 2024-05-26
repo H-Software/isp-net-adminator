@@ -21,7 +21,7 @@ class HomeController extends adminatorController
 
     protected $sentinel;
 
-    private $adminator;
+    protected $adminator;
 
     private $opravyInstance;
 
