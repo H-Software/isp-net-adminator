@@ -284,7 +284,7 @@ class adminator
         }
     }
 
-    public function getServerUri()
+    public static function getServerUri()
     {
         return $_SERVER["REQUEST_URI"];
     }

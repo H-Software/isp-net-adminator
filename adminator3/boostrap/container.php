@@ -74,8 +74,7 @@ return [
         $logger = $container->get('logger');
         $logger->debug("DI\Renderer called");
 
-        $smarty = $container->get('smarty');
-        return new Renderer($smarty);
+        return new Renderer($container);
     },
 
 ];

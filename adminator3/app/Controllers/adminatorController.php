@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 // use Psr\Http\Message\ResponseFactoryInterface;
 use Exception;
+use App\Renderer\Renderer;
 
 class adminatorController extends Controller
 {
@@ -27,6 +28,8 @@ class adminatorController extends Controller
 
     protected $adminatorInstance;
 
+    protected Renderer $renderer;
+
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
@@ -46,6 +49,7 @@ class adminatorController extends Controller
         $this->sentinel = $container->get('sentinel');
         $this->pdoMysql = $this->container->get('pdoMysql');
         $this->settings = $this->container->get('settings');
+        $this->renderer = $this->container->get(Renderer::class);
 
         // $this->responseFactory = $container->get(ResponseFactoryInterface::class);
 
@@ -116,9 +120,14 @@ class adminatorController extends Controller
         $this->response = $this->response
                             ->withStatus(403);
 
-        $this->response->getBody()->write($content);
+        // $this->response->getBody()->write($content);
 
-        return $this->response;
+        $assignData = array(
+            "page_title" => "Adminator3 :: wrong level",
+            "body" => "<br>Neopravneny pristup /chyba pristupu. STOP <br>"
+        );
+
+        return $this->renderer->template($this->response, 'global/no-level.tpl', $assignData);
     }
 
     public function renderNoLogin(): string
@@ -127,7 +136,7 @@ class adminatorController extends Controller
 
         $this->smarty->assign("page_title", "Adminator3 :: wrong level");
 
-        $this->header($this->request, $this->response);
+        // $this->header($this->request, $this->response);
 
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $content = $this->smarty->fetch('global/no-level.tpl');
@@ -204,7 +213,7 @@ class adminatorController extends Controller
         return $ret;
     }
 
-    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminatorUnsed = null)
+    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminatorUnused = null)
     {
         $this->logger->debug("adminatorController\\header called");
         $this->logger->debug("adminatorController\\header: logged user info: " . $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
