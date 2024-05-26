@@ -125,7 +125,7 @@ class adminatorController extends Controller
             "body" => "<br>Neopravneny pristup /chyba pristupu. STOP <br>"
         );
 
-        return $this->renderer->template($this->response, 'global/no-level.tpl', $assignData);
+        return $this->renderer->template(null, $this->response, 'global/no-level.tpl', $assignData);
     }
 
     public function checkLevel($page_level_id = 0): bool

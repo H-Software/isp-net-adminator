@@ -51,7 +51,7 @@ class aboutController extends adminatorController
             "body" => "Prosím vyberte z podkategorie výše...."
         );
 
-        return $this->renderer->template($response, 'about/about.tpl', $assignData);
+        return $this->renderer->template($request, $response, 'about/about.tpl', $assignData);
     }
 
     public function changesOld(ServerRequestInterface $request, ResponseInterface $response, array $args)

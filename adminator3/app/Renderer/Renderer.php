@@ -39,6 +39,7 @@ final class Renderer
     }
 
     public function template(
+        ?ServerRequestInterface $request,
         ResponseInterface $response,
         string $template,
         array $assignData = [],
@@ -49,7 +50,7 @@ final class Renderer
             $this->smarty->assign($name, $value);
         }
 
-        $this->header(null, $response);
+        $this->header($request, $response);
 
         $content = $this->smarty->fetch($template);
 
