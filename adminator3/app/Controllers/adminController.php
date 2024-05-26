@@ -8,15 +8,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class adminController extends adminatorController
 {
-    private $container;
+    protected $container;
 
-    // public $conn_mysql;
-    // public $smarty;
     public $logger;
-
-    // protected $sentinel;
-
-    // protected $adminator;
 
     protected ServerRequestInterface $request;
 
@@ -27,10 +21,7 @@ class adminController extends adminatorController
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        // $this->conn_mysql = $this->container->get('connMysql');
-        // $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info("adminController\__construct called");
 
