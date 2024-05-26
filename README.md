@@ -72,6 +72,9 @@ sqlcmd query "SELECT Name from sys.databases;"
 - https://github.com/nette/robot-loader/tree/v3.1.4
 - https://dev.to/mtk3d/how-to-configure-php-logs-for-docker-2384
 
+#### Illuminate
+- https://github.com/mattstauffer/Torch
+
 #### forms
 - https://symfony.com/doc/3.x/forms.html
 - https://packagist.org/packages/symfony/form#v3.4.47
@@ -134,6 +137,9 @@ sqlcmd query "SELECT Name from sys.databases;"
 
 #### SimpleXML
 - https://www.sanwebe.com/2013/08/creating-rss-feed-using-php-simplexml
+
+#### locks
+- https://laravel.io/articles/preventing-duplicate-form-submissions-using-atomic-locks
 
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html

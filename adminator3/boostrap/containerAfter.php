@@ -13,6 +13,9 @@ use OpenFeature\Providers\Flagd\FlagdProvider;
 use Cartalyst\Sentinel\Native\SentinelBootstrapper;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
+use Illuminate\Cache\CacheManager;
+use Illuminate\Container\Container;
+
 $container->set(
     'settings',
     function () {
@@ -192,6 +195,31 @@ $container->set(
     'validator',
     function ($container) {
         return new App\Validation\Validator();
+    }
+);
+
+$container->set(
+    'cache',
+    function ($container) use ($capsule) {
+        $logger = $container->get('logger');
+        $settings = $container->get('settings');
+
+        $logger->debug('DI\cache: called');
+
+        // https://github.com/mattstauffer/Torch/blob/master/components/cache/index.php
+        $c = new Container();
+        $c['config'] = $settings['cache'];
+        $c['db'] = $capsule;
+
+        // $logger->debug('DI\cache: using config: ' . var_export($c['config'], true));
+
+        $cacheManager = new CacheManager($c);
+
+        $cache = $cacheManager->store();
+
+        $logger->debug('DI\cache: using driver: ' . var_export($cacheManager->getDefaultDriver(), true));
+
+        return $cache;
     }
 );
 

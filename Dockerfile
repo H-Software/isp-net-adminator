@@ -95,7 +95,7 @@ COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sodi
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so
 
-# packages required for php extensions
+# packages required for php extensions and composer
 #   MSSQL
 #    -> https://learn.microsoft.com/en-gb/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017
 RUN apt-get update \
@@ -103,6 +103,7 @@ RUN apt-get update \
         gnupg \
         libfcgi-bin \
         util-linux \
+        unzip \
     && curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
     && curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
@@ -134,22 +135,6 @@ RUN docker-php-ext-enable \
         zip \
         grpc
 
-# clean-up
-RUN apt-get purge -y --allow-remove-essential \
-        libgcc-12-dev \
-        libstdc++-12-dev \
-        linux-libc-dev \
-        curl \
-        gnupg \
-        make \
-        m4 \
-        re2c \
-        pkg-config \
-        file \
-    && apt autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -167,10 +152,27 @@ COPY adminator2/composer.json /srv/www/adminator2/
 COPY adminator3/composer.json /srv/www/adminator3/
 
 RUN cd adminator2 \
-     && composer install
+     && composer install --no-dev
 
 RUN cd adminator3 \
-    && composer install
+    && composer install --no-dev
+
+# clean-up
+RUN apt-get purge -y --allow-remove-essential \
+libgcc-12-dev \
+libstdc++-12-dev \
+linux-libc-dev \
+curl \
+gnupg \
+make \
+m4 \
+re2c \
+pkg-config \
+file \
+unzip \
+&& apt autoremove -y \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # app code
 COPY adminator2/ /srv/www/adminator2/
@@ -207,8 +209,6 @@ RUN chmod +x /usr/local/bin/php-fpm-healthcheck
     #  \
     # && echo '' > /var/log/php/error.log
 
-RUN rm -rf /usr/bin/composer
-
 # # dont run as root
 # USER www-data:www-data
 
@@ -216,6 +216,8 @@ RUN rm -rf /usr/bin/composer
 #
 FROM scratch
 COPY --from=main / /
+
+RUN rm -rf /usr/bin/composer
 
 # # dont run as root
 # USER www-data:www-data
@@ -229,7 +231,7 @@ ENTRYPOINT [ \
         "chown www-data:www-data adminator3/print/temp", \
         "docker-php-entrypoint"]
 
-        WORKDIR /srv/www
+WORKDIR /srv/www
 
 # Override stop signal to stop process gracefully
 # https://github.com/php/php-src/blob/17baa87faddc2550def3ae7314236826bc1b1398/sapi/fpm/php-fpm.8.in#L163

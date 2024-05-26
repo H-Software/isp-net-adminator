@@ -64,6 +64,16 @@ $settings = [
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
         ],
+        'cache' => [
+            'cache.prefix' => 'a3cache::',
+            'cache.default' => 'database',
+            'cache.stores.database' => [
+                'driver' => 'database',
+                'connection' => 'default',
+                'table' => 'cache',
+                // 'lock_connection' => null,
+            ],
+        ],
         'phinx' => [
             'paths' => [
                 'migrations' => 'database/migrations',

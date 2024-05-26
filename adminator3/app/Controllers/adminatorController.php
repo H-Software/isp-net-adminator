@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Exception;
 
 class adminatorController extends Controller
 {
@@ -15,14 +16,30 @@ class adminatorController extends Controller
 
     protected $sentinel;
 
-    public function __construct($conn_mysql, $smarty, $logger, $sentinel)
-    {
-        $this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->sentinel = $sentinel;
+    protected $adminator;
 
-        $this->logger->info("adminatorController\__construct called");
+    public function __construct($container)
+    {
+        $this->conn_mysql = $container->get('connMysql');
+        $this->smarty = $container->get('smarty');
+        $this->logger = $container->get('logger');
+        $this->sentinel = $container->get('sentinel');
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+
+        // moved this into constructor for using identity across whole application
+        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
+            if($this->sentinel->getUser()->email == null) {
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": getUser from sentinel failed");
+                throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity! (getUser from sentinel)");
+            } else {
+                $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
+            }
+        }
+
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
     }
 
     public function jsonRender(ServerRequestInterface $request, ResponseInterface $response, $data, $status = 200, $msg = '')
@@ -69,10 +86,15 @@ class adminatorController extends Controller
     public function checkLevel($page_level_id = 0, $adminator = null): void
     {
 
+        // TODO: after fix calling adminatorController constructor in every other controller, remove this
+        if(is_object($this->adminator)) {
+            $a = $this->adminator;
+        }
         if(is_object($adminator)) {
             $a = $adminator;
         } else {
-            $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": instance of Adminator class not exists");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot verify user login.");
         }
 
         if ($page_level_id == 0) {
@@ -82,6 +104,7 @@ class adminatorController extends Controller
 
         $a->page_level_id = $page_level_id;
 
+        // TODO: after fix calling adminatorController constructor in every other controller, remove this
         if(strlen($a->userIdentityUsername) < 1 or $a->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");

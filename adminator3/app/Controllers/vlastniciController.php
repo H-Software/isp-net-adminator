@@ -31,9 +31,9 @@ class vlastniciController extends adminatorController
         $this->logger = $this->container->get('logger');
         $this->sentinel = $this->container->get('sentinel');
 
-        $this->logger->info("vlastniciController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        parent::__construct($container);
     }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -492,7 +492,7 @@ class vlastniciController extends adminatorController
 
         $this->smarty->assign("enable_calendar2", 1);
 
-        $vlastnik2 = new \vlastnici2pridani($this->container);
+        $vlastnik2 = new \vlastnici2pridani($this->container, $this->adminator);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $vlastnik2->csrf_html = $csrf_html;
 

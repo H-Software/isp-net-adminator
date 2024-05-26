@@ -14,6 +14,8 @@ class vlastnici2pridani extends adminator
 
     public $smarty;
 
+    protected $cache;
+
     // public $container; // for calling stb class over vlastnik2_a2 class
 
     public $adminator; // handler for instance of adminator class
@@ -27,6 +29,12 @@ class vlastnici2pridani extends adminator
     private $error;
 
     private $fail;
+
+    private $locked;
+
+    private $lock_name;
+
+    private $lock_handler;
 
     private $action_az_pole2;
 
@@ -114,14 +122,19 @@ class vlastnici2pridani extends adminator
 
     private $writed;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminator)
     {
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
+        $this->cache = $container->get('cache');
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        $this->adminator = $adminator;
+        if(!isset($this->adminator->userIdentityUsername) or $this->adminator->userIdentityUsername == null) {
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity!");
+        }
+        // $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
     }
 
     public function action(): string
@@ -133,6 +146,21 @@ class vlastnici2pridani extends adminator
 
         if ($this->form_update_id > 0) {
             $this->smarty->assign("content_header", "Úprava vlastníka");
+
+            // set lock
+            $this->lock_name = 'vlastnici2pridani:update:' . $this->form_update_id;
+
+            $this->lock_handler = $this->cache->lock($this->lock_name, 60, $this->adminator->userIdentityUsername);
+
+            if ($this->lock_handler->get()) {
+                $this->locked = true;
+                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": lock " . var_export($this->lock_name, true) . " accquired.");
+                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": lock owner " . var_export($this->lock_handler->owner(), true));
+
+            } else {
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": lock for " . var_export($this->lock_name, true) . " failed.");
+            }
+
         } else {
             $this->smarty->assign("content_header", "Přidání nového vlastníka");
         }
@@ -208,8 +236,19 @@ class vlastnici2pridani extends adminator
 
         }
 
-        // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
-        if(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
+        if ($this->form_update_id > 0 and $this->locked !== true) {
+            // first of all, check lock
+
+            $this->fail = "true";
+
+            $this->smarty->assign("alert_type", "danger");
+            $this->smarty->assign("alert_content", "Operaci nelze provést, nepodařilo se nastavit zámek. (Lock failed!)");
+
+            $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
+
+            $this->smarty->clearAssign(array('alert_type', 'alert_content'));
+        } elseif(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
+            // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
 
             if($this->form_update_id < 1) {
                 //zjisti jestli neni duplicitni : nick, vs
@@ -259,8 +298,15 @@ class vlastnici2pridani extends adminator
             $this->error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
         }
 
-        // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
+        if($this->form_update_id > 0 and $this->locked !== true) {
+            // we dont have lock, do nothing
+            $output .= $this->error;
+            return $output;
+        }
+
         if (($this->error != null) or (!isset($this->form_send))) {
+            // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
+
             $output .= $this->error;
             $output .= $this->actionForm();
 
@@ -1599,6 +1645,8 @@ class vlastnici2pridani extends adminator
         $this->actionArchivZmen();
 
         $this->updated = "true";
+
+        $this->lock_handler->release();
 
         return $output;
     }
