@@ -91,6 +91,7 @@ class adminatorController extends Controller
         if(is_object($adminator)) {
             $a = $adminator;
         } else {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": creating instace of Adminator class");
             $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
 
