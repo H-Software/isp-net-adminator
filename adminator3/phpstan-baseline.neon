@@ -334,16 +334,6 @@ parameters:
 			path: app/Core/Topology.php
 
 		-
-			message: "#^Property admin\\:\\:\\$conn_pgsql is never read, only written\\.$#"
-			count: 1
-			path: app/Core/admin.php
-
-		-
-			message: "#^Property admin\\:\\:\\$container is unused\\.$#"
-			count: 1
-			path: app/Core/admin.php
-
-		-
 			message: "#^Variable \\$send in isset\\(\\) is never defined\\.$#"
 			count: 2
 			path: app/Core/admin.php
