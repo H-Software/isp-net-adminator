@@ -53,8 +53,13 @@ final class Renderer
         ResponseInterface $response,
         string $template,
         array $assignData = [],
+        int $httpStatusCode = 200
     ): ResponseInterface {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+        $response = $response
+                        ->withStatus($httpStatusCode);
 
         $this->header($request, $response);
 

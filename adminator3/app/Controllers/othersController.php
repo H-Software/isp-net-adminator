@@ -73,7 +73,7 @@ class othersController extends adminatorController
             $assignData["alert_type"] = "danger";
             $assignData["alert_content"] = $content;
 
-            return $this->renderer->template($request, $response, 'others/company-web-alert.tpl', $assignData);
+            return $this->renderer->template($request, $response, 'others/company-web-alert.tpl', $assignData, 500);
         }
 
         //tab qestions
