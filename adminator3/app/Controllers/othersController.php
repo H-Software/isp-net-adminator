@@ -14,10 +14,6 @@ class othersController extends adminatorController
     public $smarty;
     public $logger;
 
-    protected $sentinel;
-
-    protected $adminator;
-
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
@@ -28,7 +24,6 @@ class othersController extends adminatorController
         $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info("othersController\__construct called");
 
@@ -37,7 +32,6 @@ class othersController extends adminatorController
 
     public function others(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("othersController\others called");
 
         $this->request = $request;
@@ -47,20 +41,16 @@ class othersController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Ostatní");
+        $assignData = array(
+            "page_title" => "Adminator3 :: Ostatní",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('others-cat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'others-cat.tpl', $assignData);
     }
 
     public function companyWeb(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
@@ -70,21 +60,20 @@ class othersController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Company Web");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = array(
+            "page_title" => "Adminator3 :: Company Web",
+        );
 
         try {
-            $this->conn_mysql->select_db("company-web");
+            $this->conn_mysql->select_db("company-web2");
         } catch (Exception $e) {
             $content  = "Error: Database select failed!";
             $content .= '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
 
-            $this->smarty->assign("alert_type", "danger");
-            $this->smarty->assign("alert_content", $content);
+            $assignData["alert_type"] = "danger";
+            $assignData["alert_content"] = $content;
 
-            $this->smarty->display("others/company-web-alert.tpl");
-            return $response;
+            return $this->renderer->template($request, $response, 'others/company-web-alert.tpl', $assignData);
         }
 
         //tab qestions
