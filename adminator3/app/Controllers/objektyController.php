@@ -31,7 +31,7 @@ class objektyController extends adminatorController
 
         $this->logger->info("objektyController\__construct called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        parent::__construct($container);
     }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -76,15 +76,15 @@ class objektyController extends adminatorController
 
         $this->header($request, $response, $this->adminator);
 
-        if ($this->adminator->checkLevel(137, false) === true) {
+        if ($this->adminator->checkLevel(137) === true) {
             $stb->enable_modify_action = true;
         }
 
-        if ($this->adminator->checkLevel(152, false) === true) {
+        if ($this->adminator->checkLevel(152) === true) {
             $stb->enable_unpair_action = true;
         }
 
-        if ($this->adminator->checkLevel(310, false) === true) {
+        if ($this->adminator->checkLevel(310) === true) {
             $stb->enable_delete_action = true;
         }
 
@@ -166,6 +166,7 @@ class objektyController extends adminatorController
         $objekt = new \App\Core\objekt($this->container);
         $objekt->dns_find = $dns_find;
         $objekt->ip_find = $ip_find;
+        $objekt->adminator = $this->adminator;
 
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $objekt->csrf_html = $csrf_html;
@@ -203,6 +204,7 @@ class objektyController extends adminatorController
         $objekt = new \App\Core\objekt($this->container);
         $objekt->csrf_html = $this->generateCsrfToken($request, $response, true);
         $objekt->adminator = $this->adminator;
+        $objekt->loggedUserEmail = $this->adminator->userIdentityUsername;
 
         $objekt->mod_objektu = intval($_POST["mod_objektu"]);
 

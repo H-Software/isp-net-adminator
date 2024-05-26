@@ -33,7 +33,7 @@ class partnerController extends adminatorController
 
         $this->logger->info("partnerController\__construct called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        parent::__construct($container);
 
         $this->partnerInstance = new partner($this->container);
 

@@ -27,10 +27,10 @@ class fakturacniSkupiny extends adminator
     {
         $this->container = $container;
         $this->logger = $container->get('logger');
+        $this->conn_mysql = $container->get('connMysql');
 
         $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
 
-        $this->conn_mysql = $container->get('connMysql');
     }
 
     public function getItems()
@@ -96,7 +96,7 @@ class fakturacniSkupiny extends adminator
             $update_status = 1;
             $this->logger->info("fakturacniSkupiny\Action: update mode set");
 
-            if ($this->adminator_ctl->checkLevel(140, false) === false) {
+            if ($this->adminator_ctl->checkLevel(140) === false) {
                 $output .= "<div class=\"alert alert-danger\" role=\"alert\">Fakturacni Skupiny nelze upravovat, není dostatečné oprávnění. </div>";
                 return $output;
             }

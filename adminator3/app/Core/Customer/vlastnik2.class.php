@@ -66,40 +66,40 @@ class vlastnik2 extends adminator
     {
         // perms for actions/links
         //
-        if ($this->adminator->checkLevel(63, false) === true) {
+        if ($this->adminator->checkLevel(63) === true) {
             $vlastnik->export_povolen = true;
         }
 
         //promenne pro akce objektu
-        if ($this->adminator->checkLevel(29, false) === true) {
+        if ($this->adminator->checkLevel(29) === true) {
             $this->objektListAllowedActionUpdate = true;
         }
-        if ($this->adminator->checkLevel(33, false) === true) {
+        if ($this->adminator->checkLevel(33) === true) {
             $this->objektListAllowedActionErase = true;
         }
-        if ($this->adminator->checkLevel(34, false) === true) {
+        if ($this->adminator->checkLevel(34) === true) {
             $this->objektListAllowedActionGarant = true;
         }
 
         // akce objekty STB
-        if ($this->adminator->checkLevel(137, false) === true) {
+        if ($this->adminator->checkLevel(137) === true) {
             $this->objektStbListAllowedActionUpdate = true;
         }
-        if ($this->adminator->checkLevel(310, false) === true) {
+        if ($this->adminator->checkLevel(310) === true) {
             $this->objektStbListAllowedActionErase = true;
         }
 
         // promeny pro mazani, zmenu vlastniku
-        if ($this->adminator->checkLevel(45, false) === true) {
+        if ($this->adminator->checkLevel(45) === true) {
             $this->vlastnici_erase_povolen = true;
         }
 
-        if ($this->adminator->checkLevel(34, false) === true) {
+        if ($this->adminator->checkLevel(34) === true) {
             $this->vlastnici_update_povolen = true;
         }
 
         // // odendani objektu od vlastnika
-        if ($this->adminator->checkLevel(49, false) === true) {
+        if ($this->adminator->checkLevel(49) === true) {
             $this->vlastnikAllowedUnassignObject = true;
         }
 

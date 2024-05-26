@@ -26,7 +26,7 @@ class adminator
 
     public $settings;
 
-    public $userIdentityUsername;
+    public ?string $userIdentityUsername = null;
 
     public $userIPAddress;
 
@@ -36,8 +36,18 @@ class adminator
 
     public $loggedUserEmail;
 
-    public function __construct($conn_mysql, $smarty, $logger, $userIPAddress = null, $pdoMysql = null, $settings = null, $conn_pgsql = null)
-    {
+    protected $sentinel;
+
+    public function __construct(
+        $conn_mysql,
+        $smarty,
+        $logger,
+        $userIPAddress = null,
+        $pdoMysql = null,
+        $settings = null,
+        $conn_pgsql = null,
+        $sentinel = null
+    ) {
         $this->logger = $logger;
         $this->logger->info("adminator\__construct called");
 
@@ -46,6 +56,10 @@ class adminator
         $this->pdoMysql = $pdoMysql;
         $this->smarty = $smarty;
         $this->settings = $settings;
+
+        if($sentinel != null) {
+            $this->sentinel = $sentinel;
+        }
 
         if($userIPAddress == null) {
             $this->userIPAddress = $_SERVER['REMOTE_ADDR'];
@@ -96,8 +110,11 @@ class adminator
         return $a;
     }
 
-    public function getUserLevel()
+    public function getUserLevel(): false|int
     {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": get level for identity: ". var_export($this->userIdentityUsername, true));
+
         $level = 0;
 
         $rs = User::where(
@@ -200,10 +217,20 @@ class adminator
         // porovnat level uzivatele s prislusnym levelem
         // stranky podle jejiho id
 
+        if(strlen($this->userIdentityUsername) < 1 or $this->userIdentityUsername == null) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": empty userIdentityUsername");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: empty userIdentityUsername");
+        }
+
         $this->userIdentityLevel = $this->getUserLevel();
 
+        if($this->userIdentityLevel == false) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is 0");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentityLevel is 0");
+        }
+
         $this->logger->info(
-            "adminator\check_level: called with
+            __CLASS__ . "\\" . __FUNCTION__ . ": called with
                                     [page_level_id_custom => " . $page_level_id_custom
                                     . ", page_level_id => " . $this->page_level_id
                                     . ", user_name => " . $this->userIdentityUsername

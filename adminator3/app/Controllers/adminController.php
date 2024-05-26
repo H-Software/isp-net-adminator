@@ -34,7 +34,7 @@ class adminController extends adminatorController
 
         $this->logger->info("adminController\__construct called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        parent::__construct($container);
 
         $this->admin = new \admin($this->container);
 

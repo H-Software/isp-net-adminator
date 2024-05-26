@@ -10,12 +10,22 @@ use Exception;
 class adminatorController extends Controller
 {
     public $conn_mysql;
+
+    public $conn_pgsql;
+
     public $smarty;
+
     public $logger;
+
+    public $pdoMysql;
+
+    public $settings;
 
     protected $sentinel;
 
     protected $adminator;
+
+    protected $adminatorInstance;
 
     protected ServerRequestInterface $request;
 
@@ -26,18 +36,35 @@ class adminatorController extends Controller
     //  */
     // protected ResponseFactoryInterface $responseFactory;
 
-    public function __construct($container)
+    public function __construct($container, $adminatorInstance = null)
     {
         $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
+        $this->pdoMysql = $this->container->get('pdoMysql');
+        $this->settings = $this->container->get('settings');
 
         // $this->responseFactory = $container->get(ResponseFactoryInterface::class);
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        // for using mocked instance in tests
+        if(isset($adminatorInstance)) {
+            $this->adminator = $adminatorInstance;
+        } else {
+            $this->adminator = new \App\Core\adminator(
+                $this->conn_mysql,
+                $this->smarty,
+                $this->logger,
+                null,
+                $this->pdoMysql,
+                $this->settings,
+                $this->conn_pgsql
+            );
+        }
 
         // moved this into constructor for using identity across whole application
         if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
@@ -129,16 +156,16 @@ class adminatorController extends Controller
         $this->adminator->page_level_id = $page_level_id;
 
         // TODO: after fix calling adminatorController constructor in every other controller, remove this
-        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
-            if($this->sentinel->getUser()->email == null) {
-                $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
-                $content = $this->renderNoLogin();
-                $this->createNoLoginResponse($content);
-                return false;
-            } else {
-                $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
-            }
-        }
+        // if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
+        //     if($this->sentinel->getUser()->email == null) {
+        //         $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
+        //         $content = $this->renderNoLogin();
+        //         $this->createNoLoginResponse($content);
+        //         return false;
+        //     } else {
+        //         $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
+        //     }
+        // }
 
         // double check identity
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
