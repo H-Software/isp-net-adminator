@@ -467,7 +467,7 @@ class vlastnici2pridani extends adminator
         $output = "";
         $output_return_link_vlastnik = "";
 
-        $back = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE nick LIKE '" . $this->form_nick. "' ");
+        $back = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE nick = '" . $this->form_nick. "' ");
         $back_radku = pg_num_rows($back);
 
         if($back_radku == 0){
