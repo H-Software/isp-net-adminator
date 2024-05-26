@@ -88,7 +88,7 @@ class GuardMiddleware implements MiddlewareInterface
             // $smarty->display('global/no-csrf.tpl');
 
             return $response
-                ->withStatus(400)
+                ->withStatus(401)
                 ->withHeader('Content-Type', 'text/plain');
 
             // return $handler->handle($request);
