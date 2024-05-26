@@ -210,7 +210,7 @@ class archivZmenController extends adminatorController
 
             $template = "az-ucetni.tpl";
         }
-        
+
         $assignData = array(
             "page_title" => "Adminator3 :: Změny pro účetní",
             "link_add" => "/archiv-zmen/ucetni?action=add",
