@@ -13,10 +13,6 @@ class archivZmenController extends adminatorController
     public $smarty;
     public $logger;
 
-    protected $sentinel;
-
-    protected $adminator;
-
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
@@ -27,7 +23,6 @@ class archivZmenController extends adminatorController
         $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
