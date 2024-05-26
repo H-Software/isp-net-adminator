@@ -12,6 +12,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Csrf\Guard;
+use App\Renderer\Renderer;
 
 class GuardMiddleware implements MiddlewareInterface
 {
@@ -36,19 +37,20 @@ class GuardMiddleware implements MiddlewareInterface
     protected ResponseFactoryInterface $responseFactory;
 
     /**
-    * @var \Smarty
+    * @var Renderer
     */
-    protected \Smarty $smarty;
+    protected Renderer $renderer;
 
     public function __construct(
         ContainerInterface $container,
-        ResponseFactoryInterface $responseFactory
+        ResponseFactoryInterface $responseFactory,
+        Renderer $renderer
     ) {
         $this->container = $container;
         $this->responseFactory = $responseFactory;
+        $this->renderer = $renderer;
 
         $this->logger = $container->get('logger');
-        $this->smarty = $container->get('smarty');
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
@@ -63,11 +65,11 @@ class GuardMiddleware implements MiddlewareInterface
     private function SetFailureHandler(): void
     {
         $logger = $this->logger;
-        $smarty = $this->smarty;
+        $renderer = $this->renderer;
         $responseFactory = $this->responseFactory;
 
         // https://github.com/slimphp/Slim-Csrf?tab=readme-ov-file#handling-validation-failure
-        $this->guard->setFailureHandler(function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($logger, $smarty, $responseFactory) {
+        $this->guard->setFailureHandler(function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($logger, $renderer, $responseFactory) {
 
             $logger->error(
                 __CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ",
@@ -79,19 +81,12 @@ class GuardMiddleware implements MiddlewareInterface
 
             $response = $responseFactory->createResponse(400);
 
-            $request = $request->withAttribute("csrf_status", false);
-            $smarty->assign("page_title", "Adminator3 - chybny CSRF token");
+            $assignData = array(
+                "page_title" => "Adminator3 - chybny CSRF token",
+                "body" => "<br>Failed CSRF check!<br>"
+            );
 
-            // $this->header($request, $response);
-
-            $smarty->assign("body", "<br>Failed CSRF check!<br>");
-            $content = $smarty->fetch('global/no-csrf.tpl');
-
-            $response->getBody()->write($content);
-
-            return $response;
-
-            // return $handler->handle($request);
+            return $renderer->template($response, 'global/no-csrf.tpl', $assignData);
         });
     }
 

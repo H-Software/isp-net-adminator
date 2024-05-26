@@ -11,6 +11,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Cartalyst\Sentinel\Sentinel;
+use App\Renderer\Renderer;
 
 return [
 
@@ -63,6 +64,17 @@ return [
 
     Sentinel::class => function (ContainerInterface $container) {
         return $container->get('sentinel');
+    },
+
+    // Smarty::class => function (ContainerInterface $container) {
+    //     return $container->get('smarty');
+    // },
+
+    Renderer::class => function (ContainerInterface $container) {
+        $logger = $container->get('logger');
+        $logger->debug("DI\Renderer called");
+
+        return new Renderer($container);
     },
 
 ];

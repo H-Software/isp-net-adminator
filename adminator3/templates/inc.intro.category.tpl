@@ -29,19 +29,20 @@
 
       {/section}
 
-      <div class="cat-select-odkazy" >
-        <form name="form2" method="POST" >
-          {$kat_csrf_html}
-          <select name="show_se_cat" size="1" onChange="self.document.forms.form2.submit()" style="font-size: 10px; " >
-           {html_options values=$show_se_cat_values selected=$show_se_cat_selected output=$show_se_cat_output}
-          </select>
-        </form>
-     </div>
-
+      {if $show_se_cat_selector_disable|default: 0 ne 1}
+        <div class="cat-select-odkazy" >
+          <form name="form2" method="POST" >
+            {$kat_csrf_html}
+            <select name="show_se_cat" size="1" onChange="self.document.forms.form2.submit()" style="font-size: 10px; " >
+            {html_options values=$show_se_cat_values selected=$show_se_cat_selected output=$show_se_cat_output}
+            </select>
+          </form>
+        </div>
+      {/if}
 </div>
 
 <div class="cara-kategorie" ></div>
 
-  {if $show_se_cat eq "1"}
-    {include file="inc.intro.category-ext.tpl"}
-  {/if}
+{if $show_se_cat eq "1"}
+  {include file="inc.intro.category-ext.tpl"}
+{/if}

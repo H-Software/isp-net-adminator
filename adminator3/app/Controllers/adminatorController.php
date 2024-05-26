@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 // use Psr\Http\Message\ResponseFactoryInterface;
 use Exception;
+use App\Renderer\Renderer;
 
 class adminatorController extends Controller
 {
@@ -27,6 +28,8 @@ class adminatorController extends Controller
 
     protected $adminatorInstance;
 
+    protected Renderer $renderer;
+
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
@@ -46,6 +49,7 @@ class adminatorController extends Controller
         $this->sentinel = $container->get('sentinel');
         $this->pdoMysql = $this->container->get('pdoMysql');
         $this->settings = $this->container->get('settings');
+        $this->renderer = $this->container->get(Renderer::class);
 
         // $this->responseFactory = $container->get(ResponseFactoryInterface::class);
 
@@ -108,7 +112,7 @@ class adminatorController extends Controller
     //     $this->_response->withJson($response);
     // }
 
-    public function createNoLoginResponse($content): ResponseInterface
+    public function createNoLoginResponse(): ResponseInterface
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -116,23 +120,12 @@ class adminatorController extends Controller
         $this->response = $this->response
                             ->withStatus(403);
 
-        $this->response->getBody()->write($content);
+        $assignData = array(
+            "page_title" => "Adminator3 :: wrong level",
+            "body" => "<br>Neopravneny pristup /chyba pristupu. STOP <br>"
+        );
 
-        return $this->response;
-    }
-
-    public function renderNoLogin(): string
-    {
-        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
-
-        $this->smarty->assign("page_title", "Adminator3 :: wrong level");
-
-        $this->header($this->request, $this->response);
-
-        $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-        $content = $this->smarty->fetch('global/no-level.tpl');
-
-        return $content;
+        return $this->renderer->template($this->response, 'global/no-level.tpl', $assignData);
     }
 
     public function checkLevel($page_level_id = 0): bool
@@ -155,18 +148,6 @@ class adminatorController extends Controller
 
         $this->adminator->page_level_id = $page_level_id;
 
-        // TODO: after fix calling adminatorController constructor in every other controller, remove this
-        // if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
-        //     if($this->sentinel->getUser()->email == null) {
-        //         $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
-        //         $content = $this->renderNoLogin();
-        //         $this->createNoLoginResponse($content);
-        //         return false;
-        //     } else {
-        //         $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
-        //     }
-        // }
-
         // double check identity
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
 
@@ -175,8 +156,7 @@ class adminatorController extends Controller
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false) {
-            $content = $this->renderNoLogin();
-            $this->createNoLoginResponse($content);
+            $this->createNoLoginResponse();
             return false;
         }
 
@@ -204,7 +184,7 @@ class adminatorController extends Controller
         return $ret;
     }
 
-    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminatorUnsed = null)
+    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminatorUnused = null)
     {
         $this->logger->debug("adminatorController\\header called");
         $this->logger->debug("adminatorController\\header: logged user info: " . $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
@@ -221,11 +201,6 @@ class adminatorController extends Controller
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
 
-        // $uri = $request->getUri();
-        // $current_url = $uri->getPath(); // . "?" . $uri->getQuery();
-
-        // $this->smarty->assign("se_cat_form_action", $current_url);
-
         if(is_object($request) and is_object($response)) {
             list($csrf_html) = $this->generateCsrfToken($request, $response, true);
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
@@ -237,7 +212,6 @@ class adminatorController extends Controller
         $this->smarty->assign("show_se_cat_values", array("0","1"));
         $this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
 
-        // $show_se_cat = $_POST["show_se_cat"];
         $show_se_cat = 0;
         if($request != null) {
             if ($request->getMethod() == "POST") {
