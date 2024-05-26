@@ -110,21 +110,11 @@ class archivZmenController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Změny pro účetní");
-
-        $this->header($request, $response, $this->adminator);
-
         //zacatek vlastniho obsahu
         $action = $_GET["action"];
-
-        $this->smarty->assign("link_add", "/archiv-zmen/ucetni?action=add");
-
         $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger, $this->container->auth);
 
         if($action == "add") { //rezim pridani
-            $this->request = $request;
-            $this->response = $response;
-
             if(!$this->checkLevel(148)) {
                 return $this->response;
             };
@@ -220,9 +210,12 @@ class archivZmenController extends adminatorController
 
             $template = "az-ucetni.tpl";
         }
+        
+        $assignData = array(
+            "page_title" => "Adminator3 :: Změny pro účetní",
+            "link_add" => "/archiv-zmen/ucetni?action=add",
+        );
 
-        $this->smarty->display($template);
-
-        return $response;
+        return $this->renderer->template($request, $response, $template, $assignData);
     }
 }
