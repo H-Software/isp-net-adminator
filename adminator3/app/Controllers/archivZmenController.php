@@ -17,6 +17,10 @@ class archivZmenController extends adminatorController
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+    
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -76,6 +80,9 @@ class archivZmenController extends adminatorController
     {
 
         $this->logger->info("archivZmenController\archivZmenList called");
+
+        $this->request = $request;
+        $this->response = $response;
 
         $this->checkLevel(30, $this->adminator);
 

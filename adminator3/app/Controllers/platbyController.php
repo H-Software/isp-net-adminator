@@ -56,12 +56,11 @@ class platbyController extends adminatorController
 
         $this->logger->info("platbyController\\platby called");
 
-        $this->checkLevel();
+        // $this->checkLevel();
 
         $this->smarty->assign("page_title", "Adminator3 :: Platby");
 
         $this->header($request, $response);
-
 
         return $response;
     }

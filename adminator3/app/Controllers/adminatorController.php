@@ -18,6 +18,10 @@ class adminatorController extends Controller
 
     protected $adminator;
 
+    protected ServerRequestInterface $request;
+
+    protected ResponseInterface $response;
+
     public function __construct($container)
     {
         $this->conn_mysql = $container->get('connMysql');
@@ -71,32 +75,50 @@ class adminatorController extends Controller
     //     $this->_response->withJson($response);
     // }
 
-    public function renderNoLogin(ServerRequestInterface $request = null, ResponseInterface $response = null)
+    public function createNoLoginResponse(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $this->smarty->assign("page_title", "Adminator3 - chybny level");
+        if(is_object($this->request) and is_object($this->response)) {
+            $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": ServerRequestInterface and ResponseInterface are objects.");
 
-        $this->header($request, $response);
+            // $response = $responseFactory->createResponse();
+
+            // $response
+            // ->withStatus(400)
+            // ->withHeader('Content-Type', 'text/plain');
+
+        } else {
+            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": no ServerRequestInterface or ResponseInterface object given.");
+        }
+
+        return $response;
+    }
+
+    public function renderNoLogin(): void
+    {
+        $this->smarty->assign("page_title", "Adminator3:: wrong login/level");
+
+        $this->header($this->request, $this->response);
 
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
         $this->smarty->display('global/no-level.tpl');
-
-        exit;
     }
 
-    public function checkLevel($page_level_id = 0, $adminator = null): void
+    public function checkLevel($page_level_id = 0, $adminator = null): ResponseInterface
     {
         // wrapper for checking user's level vs. page level
+        // core function for checking level is in adminator class and shared with adminator2
+        // and accessible directly without needs of controller scope
+
+        // check input var(s)
+        if ($page_level_id == 0) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": page_level_id == 0");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: page_level_id is 0.");
+        }
 
         // "double" check for some backwards compatibility shit
         if(!is_object($this->adminator)) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": instance of Adminator class not exists");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot verify user login.");
-        }
-
-        if ($page_level_id == 0) {
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": page_level_id == 0");
-            $this->renderNoLogin();
-            // return false;
         }
 
         $this->adminator->page_level_id = $page_level_id;
@@ -115,13 +137,16 @@ class adminatorController extends Controller
         // double check identity
         $this->logger->debug("adminatorController\checkLevel: current identity: ".var_export($this->adminator->userIdentityUsername, true));
 
+        // real check
         $checkLevel = $this->adminator->checkLevel();
         $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false) {
-            $this->renderNoLogin();
+            $response = $this->renderNoLogin();
             // return false;
         }
+
+        return $response;
     }
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
