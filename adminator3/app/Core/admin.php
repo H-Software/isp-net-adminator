@@ -120,7 +120,8 @@ class admin
     public function levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value)
     {
         $output = "";
-
+        $error = "";
+        
         if (($_POST["popis_new"])) {
             //budeme ukladat
             $popis = $this->conn_mysql->real_escape_string($_POST["popis_new"]);
@@ -143,7 +144,7 @@ class admin
             try {
                 $rs = $this->conn_mysql->query($sql);
             } catch (Exception $e) {
-                $error = "<div style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "</div>\n";
+                $error .= "<div style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "</div>\n";
             }
 
             if ($rs) {
@@ -217,7 +218,7 @@ class admin
 
         }
 
-        return array($output);
+        return array($output, $error);
     }
 
     public function tarifList()
