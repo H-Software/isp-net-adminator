@@ -127,7 +127,6 @@ final class Renderer
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: " . $this->userIdentityUsername . " (" . $this->userIdentityLevel . ")");
 
         $this->smarty->assign("nick_a_level", $this->userIdentityUsername . " (" . $this->userIdentityLevel . ")");
-        // $this->smarty->assign("login_ip", $_SERVER['REMOTE_ADDR']);
         $this->smarty->assign("login_ip", $this->request_data->server->get('REMOTE_ADDR'));
     }
 
