@@ -1646,7 +1646,7 @@ class vlastnici2pridani extends adminator
 
         $this->updated = "true";
 
-        $this->cache::unlock($this->lock_name);
+        $this->lock_handler->release();
 
         return $output;
     }
