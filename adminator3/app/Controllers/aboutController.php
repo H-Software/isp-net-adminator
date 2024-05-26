@@ -2,21 +2,21 @@
 
 namespace App\Controllers;
 
-use App\Renderer\Renderer;
-
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class aboutController extends adminatorController
 {
-    public $conn_mysql;
-    public $smarty;
+    // public $conn_mysql;
+
+    // public $smarty;
+
     public $logger;
 
-    protected $sentinel;
+    // protected $sentinel;
 
-    protected $adminator;
+    // protected $adminator;
 
     protected ServerRequestInterface $request;
 
