@@ -92,7 +92,6 @@ class adminController extends adminatorController
 
         // CSRF token name and value for update form
         list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
-
         $this->logger->info("adminController\adminLevelList: csrf generated: ".var_export($csrf_name, true));
 
         // render
@@ -134,22 +133,18 @@ class adminController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: uprava levelu stranek");
-
-        $this->header($request, $response, $this->adminator);
-
         // CSRF token name and value for update form
         list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
-
         $this->logger->debug("adminController\adminLevelAction: csrf generated: ".var_export($csrf_name, true));
 
         $rs = $this->admin->levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
 
-        $this->smarty->assign("body", $rs[0]);
+        $assignData = array(
+            "page_title" => "Adminator3 :: uprava levelu stranek",
+            "body" => $rs[0]
+        );
 
-        $this->smarty->display('admin/level-action.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'admin/level-action.tpl', $assignData);
     }
 
     public function adminTarify(ServerRequestInterface $request, ResponseInterface $response, array $args)
