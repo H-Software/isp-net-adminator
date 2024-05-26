@@ -3,7 +3,7 @@
 
       {section name="kat_prvek" loop=$kategorie}
 
-      <div style="width: 135px; float: left; background-color: {$kategorie[kat_prvek].barva}; text-align: {$kategorie[kat_prvek].align}; " >
+      <div style="width: 135px; float: left; background-color: {$kategorie[kat_prvek].barva| default: ''}; text-align: {$kategorie[kat_prvek].align}; " >
             <a class="cat" href="{$kategorie[kat_prvek].url}" target="_top" >{$kategorie[kat_prvek].nazev}</a>
       </div>
       {* *}
