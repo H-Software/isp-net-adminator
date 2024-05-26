@@ -8,13 +8,13 @@
 
      <span class="intro-banner-logged">
 
-        {* {if strlen($nick_a_level) qt 3}
+        {if $nick_a_level|count_characters > 3}
         jako : <span style="color: black; ">{$nick_a_level}, </span>
-        {/if} *}
+        {/if}
 
-        {* {if strlen($login_ip) qt 0}
+        {if $login_ip|count_characters > 0}
         z ip : <span style="color: black; ">{$login_ip}</span>
-        {/if} *}
+        {/if}
 
     </span>
  </div>
