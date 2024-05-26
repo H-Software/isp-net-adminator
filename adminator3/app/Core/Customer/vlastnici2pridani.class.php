@@ -470,17 +470,16 @@ class vlastnici2pridani extends adminator
         $back = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE nick = '" . $this->form_nick. "' ");
         $back_radku = pg_num_rows($back);
 
-        if($back_radku == 0){
+        if($back_radku == 0) {
             $this->p_bs_alerts["Nelze načíst data pro vytvoření odkazu na vlastníka."] = "warning";
 
             $output_return_link_vlastnik = '<span style="padding-left: 10px; padding-right: 10px">N/A</span>';
-        }
-        else{
+        } else {
             while ($data_back = pg_fetch_array($back)) {
                 $firma_back = $data_back["firma"];
                 $archiv_back = $data_back["archiv"];
             }
-    
+
             if ($archiv_back == 1) {
                 $stranka = "/vlastnici/archiv";
             } elseif ($firma_back == 1) {
