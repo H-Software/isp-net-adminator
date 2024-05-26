@@ -31,6 +31,8 @@ function check_level ($user_level, $id, $adminator = null) {
 
   $a->page_level_id = $id;
   $a->userIdentityUsername = Sentinel::getUser()->email;
+  $a->userIdentityLevel = $a->getUserLevel();
+
   $logger->debug("checkLevel: current identity: ".var_export($a->userIdentityUsername, true) . ", level: " . var_export($a->userIdentityLevel, true));
 
   $checkLevel = $a->checkLevel();
