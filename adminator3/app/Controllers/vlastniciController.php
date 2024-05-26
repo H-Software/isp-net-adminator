@@ -520,6 +520,8 @@ class vlastniciController extends adminatorController
         $vlastnikArchiv = new \vlastnikarchiv();
         $vlastnikArchiv->conn_mysql = $this->conn_mysql;
         $vlastnikArchiv->conn_pgsql = $this->conn_pgsql;
+        $vlastnikArchiv->logger = $this->logger;
+
         $vlastnikArchiv->echo = false;
 
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
