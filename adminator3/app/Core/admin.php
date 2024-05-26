@@ -135,7 +135,7 @@ class admin
 
             if($id_new > 0) {
                 // update
-                $sql = "UPDATE leveling SET popis='$popis', level='$level' where id=".$id_new;
+                $sql = "UPDATE leveling2 SET popis='$popis', level='$level' where id=".$id_new;
             } else {
                 // novy zaznam
                 $sql = "INSERT INTO leveling (popis, level) VALUES ('$popis','$level')";

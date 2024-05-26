@@ -128,14 +128,19 @@ class adminController extends adminatorController
         list($csrf_html_empty, $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value) = $this->generateCsrfToken($request, $response);
         $this->logger->debug("adminController\adminLevelAction: csrf generated: ".var_export($csrf_name, true));
 
-        $rs = $this->admin->levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
+        list($content, $error) = $this->admin->levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
 
         $assignData = array(
             "page_title" => "Adminator3 :: uprava levelu stranek",
-            "body" => $rs[0]
+            "body" => $content
         );
 
-        return $this->renderer->template($request, $response, 'admin/level-action.tpl', $assignData);
+        $code = 200;
+        if($error){
+            $code = 500;
+        }
+
+        return $this->renderer->template($request, $response, 'admin/level-action.tpl', $assignData, $code);
     }
 
     public function adminTarify(ServerRequestInterface $request, ResponseInterface $response, array $args)
