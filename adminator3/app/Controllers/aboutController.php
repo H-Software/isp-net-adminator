@@ -25,10 +25,10 @@ class aboutController extends adminatorController
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->conn_mysql = $this->container->get('connMysql');
-        $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
+        // $this->conn_mysql = $this->container->get('connMysql');
+        // $this->smarty = $this->container->get('smarty');
+        // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info("aboutController\__construct called");
 
