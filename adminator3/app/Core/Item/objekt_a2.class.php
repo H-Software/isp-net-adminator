@@ -2,7 +2,7 @@
 
 use App\Core\adminator;
 
-class objekt_a2 extends adminator
+class objekt_a2
 {
     public $conn_pgsql;
     public $conn_mysql;
@@ -330,11 +330,10 @@ class objekt_a2 extends adminator
             }
         }
 
-        $dotaz = pg_query("SELECT id_cloveka FROM objekty WHERE ( id_cloveka = '".intval($id)."' ".$tarif_sql." ) ");
+        $dotaz = pg_query($this->conn_pgsql, "SELECT id_cloveka FROM objekty WHERE ( id_cloveka = '".intval($id)."' ".$tarif_sql." ) ");
         $radku = pg_num_rows($dotaz);
 
         return $radku;
-
     }
 
     public function vypis($sql, $co, $id, $dotaz_final = "")
@@ -661,22 +660,22 @@ class objekt_a2 extends adminator
 
             // id vlastnika
             $output .= "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" > \n";
-            $output .= "V: " . $this->create_link_to_owner($data["id_cloveka"]);
+            // $output .= "V: " . $this->create_link_to_owner($data["id_cloveka"]);
 
-            // $id_cloveka = $data["id_cloveka"];
+            $id_cloveka = $data["id_cloveka"];
 
-            // $vlastnik_dotaz = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."'");
-            // $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
-            // while ($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
-            //     $firma_vlastnik = $data_vlastnik["firma"];
-            //     $archiv_vlastnik = $data_vlastnik["archiv"];
-            // }
+            $vlastnik_dotaz = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."'");
+            $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
+            while ($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
+                $firma_vlastnik = $data_vlastnik["firma"];
+                $archiv_vlastnik = $data_vlastnik["archiv"];
+            }
 
-            // if ($archiv_vlastnik == 1) {
-            //     $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span> </td> \n";
-            // } else {
-            //     $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a> </span></td> \n";
-            // }
+            if ($archiv_vlastnik == 1) {
+                $output .= "V: <a href=\"vlastnici-archiv.php?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+            } else {
+                $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+            }
 
             $output .= "</span> </td>\n";
 
