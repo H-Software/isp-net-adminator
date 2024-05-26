@@ -13,6 +13,10 @@ class adminatorController extends Controller
     public $smarty;
     public $logger;
 
+    public $pdoMysql;
+
+    public $settings;
+
     protected $sentinel;
 
     protected $adminator;
@@ -32,6 +36,8 @@ class adminatorController extends Controller
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
+        $this->pdoMysql = $this->container->get('pdoMysql');
+        $this->settings = $this->container->get('settings');
 
         // $this->responseFactory = $container->get(ResponseFactoryInterface::class);
 
@@ -46,7 +52,7 @@ class adminatorController extends Controller
             $this->settings,
             $this->sentinel
         );
-        
+
         // moved this into constructor for using identity across whole application
         if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
