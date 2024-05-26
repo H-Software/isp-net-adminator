@@ -4,7 +4,7 @@ use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 
 class admin
 {
-    private $container;
+    // private $container;
     private $conn_mysql;
 
     private $conn_pgsql;
@@ -292,7 +292,7 @@ class admin
                 $typ_tarifu = $a["typ_tarifu"];
             }
 
-            $dotaz_lidi = pg_query("SELECT * FROM objekty WHERE id_tarifu = '". intval($a['id_tarifu']). "'");
+            $dotaz_lidi = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_tarifu = '". intval($a['id_tarifu']). "'");
             $dotaz_lidi_radku = pg_num_rows($dotaz_lidi);
 
             // first body row
@@ -334,6 +334,7 @@ class admin
 
     public function tarifAction()
     {
+        $output = "";
         $error = "";
         $update_id = $_GET["update_id"];
         $erase_id = $_GET["erase_id"];
