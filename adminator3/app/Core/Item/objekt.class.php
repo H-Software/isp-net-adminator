@@ -16,6 +16,8 @@ class objekt extends adminator
 
     public $validator;
 
+    protected $sentinel;
+
     public $loggedUserEmail;
 
     public $adminator; // handler for instance of adminator class
@@ -103,6 +105,7 @@ class objekt extends adminator
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
+        $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 

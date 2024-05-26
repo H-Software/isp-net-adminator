@@ -10,7 +10,11 @@ use Exception;
 class adminatorController extends Controller
 {
     public $conn_mysql;
+    
+    public $conn_pgsql;
+
     public $smarty;
+    
     public $logger;
 
     public $pdoMysql;
@@ -33,6 +37,8 @@ class adminatorController extends Controller
     public function __construct($container)
     {
         $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
@@ -50,7 +56,7 @@ class adminatorController extends Controller
             null,
             $this->pdoMysql,
             $this->settings,
-            $this->sentinel
+            $this->conn_pgsql
         );
 
         // moved this into constructor for using identity across whole application
