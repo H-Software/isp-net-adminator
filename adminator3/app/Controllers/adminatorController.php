@@ -29,7 +29,7 @@ class adminatorController extends Controller
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
         // moved this into constructor for using identity across whole application
-        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null or true) {
+        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": getUser from sentinel failed");
                 return false;
@@ -38,6 +38,8 @@ class adminatorController extends Controller
             }
         }
 
+        return false;
+        
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
     }
 

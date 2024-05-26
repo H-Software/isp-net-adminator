@@ -16,7 +16,7 @@ class adminController extends adminatorController
 
     protected $sentinel;
 
-    private $adminator;
+    protected $adminator;
 
     public $admin;
 

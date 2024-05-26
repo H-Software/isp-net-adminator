@@ -14,7 +14,7 @@ class topologyController extends adminatorController
 
     protected $sentinel;
 
-    private $adminator;
+    protected $adminator;
 
     public function __construct(ContainerInterface $container)
     {
