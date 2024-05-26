@@ -206,7 +206,8 @@ class adminatorController extends Controller
         $uri = $this->adminator->getServerUri();
         $uri_replace = str_replace("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka) = $this->adminator->zobraz_kategorie($uri, $uri_replace);
+        // list($kategorie, $kat_2radka) = $this->adminator->zobraz_kategorie($uri, $uri_replace);
+        list($kategorie, $kat_2radka) = Renderer::zobraz_kategorie($uri, $uri_replace);
 
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);

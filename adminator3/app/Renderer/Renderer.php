@@ -130,7 +130,7 @@ final class Renderer
         $this->smarty->assign("login_ip", $this->request_data->server->get('REMOTE_ADDR'));
     }
 
-    public function zobraz_kategorie($uri)
+    public static function zobraz_kategorie($uri)
     {
         $kategorie = array();
 
