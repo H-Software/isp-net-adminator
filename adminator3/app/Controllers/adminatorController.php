@@ -70,6 +70,9 @@ class adminatorController extends Controller
             );
         }
 
+        // "warm-up" adminator stuff
+        //
+
         // moved this into constructor for using identity across whole application
         if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
@@ -79,6 +82,13 @@ class adminatorController extends Controller
                 $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
             }
         }
+
+        $this->adminator->userIdentityLevel = $this->adminator->getUserLevel();
+
+        // set identity into to rendered
+        //
+        $this->renderer->userIdentityUsername = $this->adminator->userIdentityUsername;
+        $this->renderer->userIdentityLevel = $this->adminator->userIdentityLevel;
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->adminator->userIdentityUsername, true));
     }
@@ -125,7 +135,7 @@ class adminatorController extends Controller
             "body" => "<br>Neopravneny pristup /chyba pristupu. STOP <br>"
         );
 
-        return $this->renderer->template($this->response, 'global/no-level.tpl', $assignData);
+        return $this->renderer->template(null, $this->response, 'global/no-level.tpl', $assignData);
     }
 
     public function checkLevel($page_level_id = 0): bool
@@ -165,23 +175,7 @@ class adminatorController extends Controller
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
     {
-        $ret = array();
-
-        // CSRF token name and value for update form
-        $csrf = $this->container->get('csrf');
-        $csrf_nameKey = $csrf->getTokenNameKey();
-        $csrf_valueKey = $csrf->getTokenValueKey();
-        $csrf_name = $request->getAttribute($csrf_nameKey);
-        $csrf_value = $request->getAttribute($csrf_valueKey);
-
-        if($return_form_html === true) {
-            $ret[0] = '<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">'
-                       . '<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">';
-        } else {
-            $ret = array("", $csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value);
-        }
-
-        return $ret;
+        return Renderer::generateCsrfToken($request, $response, $return_form_html, $this->container->get('csrf'));
     }
 
     public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminatorUnused = null)
@@ -194,9 +188,9 @@ class adminatorController extends Controller
 
         //kategorie
         $uri = $this->adminator->getServerUri();
-        $uri_replace = str_replace("adminator3", "", $uri);
+        // $uri_replace = str_replace("adminator3", "", $uri);
 
-        list($kategorie, $kat_2radka) = $this->adminator->zobraz_kategorie($uri, $uri_replace);
+        list($kategorie, $kat_2radka) = Renderer::zobraz_kategorie($uri);
 
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);

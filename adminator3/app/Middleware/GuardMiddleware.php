@@ -86,7 +86,7 @@ class GuardMiddleware implements MiddlewareInterface
                 "body" => "<br>Failed CSRF check!<br>"
             );
 
-            return $renderer->template($response, 'global/no-csrf.tpl', $assignData);
+            return $renderer->template(null, $response, 'global/no-csrf.tpl', $assignData);
         });
     }
 

@@ -32,7 +32,7 @@ class adminator
 
     public $page_level_id;
 
-    public $userIdentityLevel;
+    public ?int $userIdentityLevel = null;
 
     public $loggedUserEmail;
 
@@ -222,8 +222,6 @@ class adminator
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: empty userIdentityUsername");
         }
 
-        $this->userIdentityLevel = $this->getUserLevel();
-
         if($this->userIdentityLevel == false) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is 0");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentityLevel is 0");
@@ -330,75 +328,6 @@ class adminator
         }
 
         return $tarifs;
-    }
-
-    public function zobraz_kategorie($uri, $uri_replace = null)
-    {
-
-        $kategorie = array();
-
-        $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" );
-
-        if(preg_match("/^\/vlastnici.*/", $uri) or preg_match("/^\/vypovedi.*/", $uri)) {
-            $kategorie[0]["barva"] = "silver";
-        }
-
-        $kategorie[1] = array( "nazev" => "Služby", "url" => "/objekty/cat", "align" => "center", "width" => "18%" );
-
-        if(preg_match("/^\/objekty.*/", $uri)) {
-            $kategorie[1]["barva"] = "silver";
-        }
-
-        $kategorie[2] = array( "nazev" => "Platby", "url" => "/platby/cat", "align" => "center", "width" => "18%" );
-
-        // if( ereg("^.+platby.+$",$uri) )
-        // { $kategorie[2]["barva"] = "silver"; }
-
-        $kategorie[3] = array( "nazev" => "Topologie", "url" => "/topology", "align" => "center", "width" => "" );
-
-        // if( ereg("^.+topology",$uri) )
-        // { $kategorie[3]["barva"] = "silver"; }
-
-        $kategorie[4] = array( "nazev" => "Nastavení", "url" => "/admin", "align" => "center", "width" => "" );
-
-        // if( ereg("^.+admin.+$",$uri_replace ) )
-        // {  $kategorie[4]["barva"] = "silver"; }
-
-        $kategorie[5] = array( "nazev" => "Úvodní strana", "url" => "/home", "align" => "center", "width" => "" );
-
-        // if( ereg("^.+home.php$",$uri) )
-        // { $kategorie[5]["barva"] = "silver"; }
-
-        $kat_2radka = array();
-
-        $kat_2radka[0] = array( "nazev" => "Partner program", "url" => "/partner/cat", "width" => "", "align" => "center" );
-
-        // if( (ereg("partner",$uri_replace) and !ereg("admin",$uri_replace)) )
-        // { $kat_2radka[0]["barva"] = "silver"; }
-
-        $kat_2radka[1] = array( "nazev" => "Změny", "url" => "/archiv-zmen/cat", "width" => "", "align" => "center" );
-
-        // if( ereg("^.+archiv-zmen.+$",$uri) )
-        // { $kat_2radka[1]["barva"] = "silver"; }
-
-        $kat_2radka[2] = array( "nazev" => "Work", "url" => "/work", "width" => "", "align" => "center" );
-
-        // if( ereg("^.+work.+$",$uri) )
-        // { $kat_2radka[2]["barva"] = "silver"; }
-
-        $kat_2radka[3] = array( "nazev" => "Ostatní", "url" => "/others", "width" => "", "align" => "center" );
-
-        // if( ereg("^.+others.+$",$uri) or ereg("^.+syslog.+$",$uri) or ereg("^.+/mail.php$",$uri) or ereg("^.+opravy.+$",$uri) )
-        // { $kat_2radka[3]["barva"] = "silver"; }
-
-        $kat_2radka[4] = array( "nazev" => "O programu", "url" => "/about", "width" => "", "align" => "center" );
-
-        // if( ereg("^.+about.+$",$uri) )
-        // { $kat_2radka[4]["barva"] = "silver"; }
-
-        $ret = array( $kategorie, $kat_2radka);
-
-        return $ret;
     }
 
     //

@@ -59,7 +59,7 @@ class vlastnik2 extends adminator
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->get('smarty'), $this->logger);
+        // $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->container->get('smarty'), $this->logger);
     }
 
     private function listPrepareVars($vlastnik)

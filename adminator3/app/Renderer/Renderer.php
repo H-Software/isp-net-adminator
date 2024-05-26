@@ -2,11 +2,13 @@
 
 namespace App\Renderer;
 
+use OpenTelemetry\SDK\Resource\Detectors\Sdk;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard;
+use Symfony\Component\HttpFoundation\Request;
 
 final class Renderer
 {
@@ -30,26 +32,35 @@ final class Renderer
     */
     protected Guard $csrf;
 
+    public ?string $userIdentityUsername = null;
+
+    public ?int $userIdentityLevel = null;
+
+    private $request_data;
+
     public function __construct(
         ContainerInterface $container,
     ) {
         $this->container = $container;
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
+
+        $this->request_data = Request::createFromGlobals();
     }
 
     public function template(
+        ?ServerRequestInterface $request,
         ResponseInterface $response,
         string $template,
         array $assignData = [],
     ): ResponseInterface {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
+        $this->header($request, $response);
+
         foreach ($assignData as $name => $value) {
             $this->smarty->assign($name, $value);
         }
-
-        $this->header(null, $response);
 
         $content = $this->smarty->fetch($template);
 
@@ -62,10 +73,7 @@ final class Renderer
     {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": logged user info: " . $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
-
-        // $this->smarty->assign("nick_a_level", $this->adminator->userIdentityUsername . " (" . $this->adminator->userIdentityLevel . ")");
-        // $this->smarty->assign("login_ip", $this->adminator->userIPAddress);
+        $this->getIdentityForHeader();
 
         //kategorie
         $uri = \App\Core\adminator::getServerUri();
@@ -76,7 +84,7 @@ final class Renderer
         $this->smarty->assign("kat_2radka", $kat_2radka);
 
         if(is_object($request) and is_object($response)) {
-            list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+            list($csrf_html) = $this->generateCsrfToken($request, $response, true, $this->container->get('csrf'));
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             $this->smarty->assign("kat_csrf_html", $csrf_html);
         } else {
@@ -115,7 +123,15 @@ final class Renderer
         }
     }
 
-    public function zobraz_kategorie($uri)
+    private function getIdentityForHeader(): void
+    {
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: " . $this->userIdentityUsername . " (" . $this->userIdentityLevel . ")");
+
+        $this->smarty->assign("nick_a_level", $this->userIdentityUsername . " (" . $this->userIdentityLevel . ")");
+        $this->smarty->assign("login_ip", $this->request_data->server->get('REMOTE_ADDR'));
+    }
+
+    public static function zobraz_kategorie(string $uri): array
     {
         $kategorie = array();
 
@@ -183,12 +199,11 @@ final class Renderer
         return $ret;
     }
 
-    protected function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
+    public static function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html, $csrf)
     {
         $ret = array();
 
         // CSRF token name and value for update form
-        $csrf = $this->container->get('csrf');
         $csrf_nameKey = $csrf->getTokenNameKey();
         $csrf_valueKey = $csrf->getTokenValueKey();
         $csrf_name = $request->getAttribute($csrf_nameKey);

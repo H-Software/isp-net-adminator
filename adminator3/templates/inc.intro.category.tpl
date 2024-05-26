@@ -3,10 +3,15 @@
 
       {section name="kat_prvek" loop=$kategorie}
 
-      <div style="width: 135px; float: left; background-color: {$kategorie[kat_prvek].barva}; text-align: {$kategorie[kat_prvek].align}; " >
-            <a class="cat" href="{$kategorie[kat_prvek].url}" target="_top" >{$kategorie[kat_prvek].nazev}</a>
+      <div style="width: 135px; float: left; 
+              {if $kategorie[kat_prvek].barva|default: ''|count_characters > 0 }
+                background-color: {$kategorie[kat_prvek].barva}; 
+              {/if}
+              text-align: {$kategorie[kat_prvek].align}; " >
+          
+          <a class="cat" href="{$kategorie[kat_prvek].url}" target="_top" >{$kategorie[kat_prvek].nazev}</a>
+
       </div>
-      {* *}
       {sectionelse}
         {* Tato cast se provede v pripade prazdneho pole *}
         <div class="cat-no-records" >Chyba! Žádné kategorie nenalezeny ..</div>
@@ -18,9 +23,15 @@
 
       {section name="kat_prvek2" loop=$kat_2radka}
 
-      <div style="width: 135px; float: left; background-color: {$kat_2radka[kat_prvek2].barva}; text-align: {$kat_2radka[kat_prvek2].align};" >
-           <a class="cat" href="{$kat_2radka[kat_prvek2].url}" target="_top" >{$kat_2radka[kat_prvek2].nazev}</a>
-      </div>
+      <div style="width: 135px; float: left; 
+        {if $kat_2radka[kat_prvek2].barva|default: ''|count_characters > 0 }
+          background-color: {$kat_2radka[kat_prvek2].barva }; 
+        {/if}
+        text-align: {$kat_2radka[kat_prvek2].align};" >
+        
+        <a class="cat" href="{$kat_2radka[kat_prvek2].url}" target="_top" >{$kat_2radka[kat_prvek2].nazev}</a>
+      
+        </div>
       
       {sectionelse}
         {* Tato cast se provede v pripade prazdneho pole *}
