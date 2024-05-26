@@ -39,7 +39,12 @@ class archivZmenController extends adminatorController
 
         $this->logger->info("archivZmenController\archivZmenCat called");
 
-        $this->checkLevel(30, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(30, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Změny :: kategorie");
 
@@ -57,7 +62,12 @@ class archivZmenController extends adminatorController
 
         $this->logger->info("archivZmenController\archivZmenWork called");
 
-        $this->checkLevel(30, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(30, true)){
+            return $this->response;
+        };
 
         // $this->smarty->assign("bs_layout_main_col_count", "8");
 
@@ -84,7 +94,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(30, null, true)){
+        if(!$this->checkLevel(30, true)){
             return $this->response;
         }
 
@@ -110,7 +120,12 @@ class archivZmenController extends adminatorController
 
         $this->logger->info("archivZmenController\archivZmenUcetni called");
 
-        $this->checkLevel(147, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(147, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Změny pro účetní");
 
@@ -124,7 +139,12 @@ class archivZmenController extends adminatorController
         $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger, $this->container->auth);
 
         if($action == "add") { //rezim pridani
-            $this->checkLevel(148, $this->adminator);
+            $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(148, true)){
+            return $this->response;
+        };
 
             $csrf = $this->generateCsrfToken($request, $response, true);
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));

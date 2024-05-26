@@ -33,7 +33,12 @@ class platbyController extends adminatorController
     {
         $this->logger->info("platbyController\cat called");
 
-        $this->checkLevel(92, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(92, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Platby");
 
@@ -56,7 +61,12 @@ class platbyController extends adminatorController
 
         $this->logger->info("platbyController\\platby called");
 
-        // $this->checkLevel();
+        // $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Platby");
 
@@ -70,7 +80,12 @@ class platbyController extends adminatorController
 
         $this->logger->info("platbyController\\fn called");
 
-        $this->checkLevel(107, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(107, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Faktury Neuhrazene");
 
@@ -87,7 +102,12 @@ class platbyController extends adminatorController
     {
         $this->logger->info("platbyController\\fn called");
 
-        $this->checkLevel(149, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(149, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: N.F. :: Kontrola omezeni vs. platby");
 

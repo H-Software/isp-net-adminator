@@ -33,7 +33,12 @@ class topologyController extends adminatorController
     {
         $this->logger->info("topologyController\\nodeList called");
 
-        $this->checkLevel(5, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(5, true)){
+            return $this->response;
+        };
 
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 
@@ -54,7 +59,12 @@ class topologyController extends adminatorController
     {
         $this->logger->info("topologyController\\routerList called");
 
-        $this->checkLevel(85, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(85, true)){
+            return $this->response;
+        };
 
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
 

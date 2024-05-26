@@ -34,7 +34,12 @@ class objektyController extends adminatorController
     {
         $this->logger->info("objektyController\cat called");
 
-        $this->checkLevel(93, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(93, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Objekty");
 
@@ -56,7 +61,12 @@ class objektyController extends adminatorController
 
         $this->logger->info("objektyController\\stb called");
 
-        $this->checkLevel(135, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(135, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Objekty STB");
 
@@ -89,7 +99,12 @@ class objektyController extends adminatorController
 
         $this->logger->info("objektyController\\stbAction called");
 
-        $this->checkLevel(136, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(136, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: STB :: Actions");
 
@@ -120,7 +135,12 @@ class objektyController extends adminatorController
 
         $this->logger->info("objektyController\objekty called");
 
-        $this->checkLevel(1, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(1, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Objekty");
 
@@ -165,7 +185,12 @@ class objektyController extends adminatorController
 
         $this->logger->info("objektyController\objektyAction called");
 
-        $this->checkLevel(2, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(2, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Objekty :: Action");
 

@@ -64,7 +64,12 @@ class HomeController extends adminatorController
     {
         $this->logger->info("homeController\home called");
 
-        $this->checkLevel(38, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(38, true)){
+            return $this->response;
+        };
 
         if ($request->getMethod() == "POST") {
             $data = $request->getParsedBody();

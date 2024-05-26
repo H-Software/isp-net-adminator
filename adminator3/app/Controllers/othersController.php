@@ -36,7 +36,12 @@ class othersController extends adminatorController
 
         $this->logger->info("othersController\others called");
 
-        $this->checkLevel(95, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(95, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Ostatní");
 
@@ -54,7 +59,12 @@ class othersController extends adminatorController
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(151, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(151, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Company Web");
 
@@ -159,7 +169,12 @@ class othersController extends adminatorController
     {
         $this->logger->info("othersController\board called");
 
-        $this->checkLevel(87, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(87, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Board");
 
@@ -270,8 +285,13 @@ class othersController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
         $data = "";
-        
-        $this->checkLevel(309, $this->adminator);
+
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(309, true)){
+            return $this->response;
+        };
 
         $rss = new boardRss($this->container);
 

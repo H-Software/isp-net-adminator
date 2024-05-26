@@ -118,7 +118,7 @@ class adminatorController extends Controller
         return $content;
     }
 
-    public function checkLevel($page_level_id = 0, $adminatorUnused = null, $noExit = false)
+    public function checkLevel($page_level_id = 0, $noExit = false)
     {
         // wrapper for checking user's level vs. page level
         // core function for checking level is in adminator class and shared with adminator2

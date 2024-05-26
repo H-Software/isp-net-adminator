@@ -39,7 +39,12 @@ class partnerController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(75, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(75, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Partner program");
 
@@ -56,7 +61,12 @@ class partnerController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(75, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(75, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Partner program :: Orders");
 
@@ -73,7 +83,12 @@ class partnerController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(76, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(76, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Partner program :: Order List");
 
@@ -92,7 +107,12 @@ class partnerController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(75, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(75, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Add");
 
@@ -115,7 +135,12 @@ class partnerController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(77, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(77, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Accept");
 
@@ -130,7 +155,12 @@ class partnerController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(119, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(119, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Update Desc");
 
@@ -145,7 +175,12 @@ class partnerController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->checkLevel(111, $this->adminator);
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(111, true)){
+            return $this->response;
+        };
 
         $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Change Status");
 
