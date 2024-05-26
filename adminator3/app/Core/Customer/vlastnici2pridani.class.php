@@ -469,12 +469,14 @@ class vlastnici2pridani extends adminator
         $back_radku = pg_num_rows($back);
 
         if($back_radku == 0){
-            $this->smarty->assign("alert_type", "danger");
-            $this->smarty->assign("alert_content", "Nelze načíst data pro vytvoření odkazu na vlastníka.");
+            $p_bs_alerts = array(
+                            "info" => "test1",
+                            "danger" => "Nelze načíst data pro vytvoření odkazu na vlastníka."
+                            );
 
-            $output .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
+            $this->smarty->assign("p_bs_alerts", $p_bs_alerts);
 
-            $this->smarty->clearAssign(array('alert_type', 'alert_content'));
+            $output .= $this->smarty->fetch('partials/bootstrap-alert-with-columns-array.tpl');
         }
         else{
             while ($data_back = pg_fetch_array($back)) {
