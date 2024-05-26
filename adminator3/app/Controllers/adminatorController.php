@@ -28,8 +28,8 @@ class adminatorController extends Controller
 
         $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
 
-        // moved this into costructor for using userIdentityUsername in locks and etc
-        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
+        // moved this into constructor for using identity across whole application
+        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null or true) {
             if($this->sentinel->getUser()->email == null) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": getUser from sentinel failed");
                 return false;
@@ -85,13 +85,14 @@ class adminatorController extends Controller
     public function checkLevel($page_level_id = 0, $adminator = null): void
     {
 
+        // TODO: after fix calling adminatorController constructor in every other controller, remove this
         if(is_object($this->adminator)) {
             $a = $this->adminator;
         }
         if(is_object($adminator)) {
             $a = $adminator;
         } else {
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": creating instace of Adminator class");
+            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": creating instance of Adminator class");
             $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
         }
 
