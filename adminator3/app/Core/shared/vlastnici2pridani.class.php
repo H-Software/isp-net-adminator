@@ -146,7 +146,7 @@ class vlastnici2pridani extends adminator
             // set lock
             $this->lock_name = 'vlastnici2pridani:update:' . $this->form_update_id;
 
-            $this->lock_handler = $this->cache->lock($this->lock_name, 60, 'vlastnici2pridani:'. $this->form_update_id);
+            $this->lock_handler = $this->cache->lock($this->lock_name, 60, );
 
             if ($this->lock_handler->get()) {
                 $this->locked = true;

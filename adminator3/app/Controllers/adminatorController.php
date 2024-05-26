@@ -15,14 +15,18 @@ class adminatorController extends Controller
 
     protected $sentinel;
 
-    public function __construct($conn_mysql, $smarty, $logger, $sentinel)
+    protected $adminator;
+
+    public function __construct($container)
     {
-        $this->conn_mysql = $conn_mysql;
-        $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->sentinel = $sentinel;
+        $this->conn_mysql = $container->get('conn_mysql');
+        $this->smarty = $container->get('smarty');
+        $this->logger = $container->get('logger');
+        $this->sentinel = $container->get('sentinel');
 
         $this->logger->info("adminatorController\__construct called");
+
+        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
     }
 
     public function jsonRender(ServerRequestInterface $request, ResponseInterface $response, $data, $status = 200, $msg = '')
@@ -69,6 +73,9 @@ class adminatorController extends Controller
     public function checkLevel($page_level_id = 0, $adminator = null): void
     {
 
+        if(is_object($this->adminator)) {
+            $a = $this->adminator;
+        }
         if(is_object($adminator)) {
             $a = $adminator;
         } else {
