@@ -472,9 +472,9 @@ class vlastnici2pridani extends adminator
 
         if($back_radku == 0){
             $p_bs_alerts = array(
-                            "danger" => "Nelze načíst data pro vytvoření odkazu na vlastníka.",
-                            "info" => "test1",
-                            "info" => "test2"
+                            "Nelze načíst data pro vytvoření odkazu na vlastníka." => "danger",
+                            "test1" => "info",
+                            "test2" => "info" 
                             );
 
             $this->smarty->assign("p_bs_alerts", $p_bs_alerts);
