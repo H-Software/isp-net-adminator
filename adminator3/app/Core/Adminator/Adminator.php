@@ -200,10 +200,10 @@ class adminator
         // porovnat level uzivatele s prislusnym levelem
         // stranky podle jejiho id
 
-        if(strlen($this->userIdentityUsername) < 1 or $this->userIdentityUsername == null) {
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": empty userIdentityUsername");
-            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: empty userIdentityUsername");
-        }
+        // if(strlen($this->userIdentityUsername) < 1 or $this->userIdentityUsername == null) {
+        //     $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": empty userIdentityUsername");
+        //     throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: empty userIdentityUsername");
+        // }
 
         $this->userIdentityLevel = $this->getUserLevel();
 
