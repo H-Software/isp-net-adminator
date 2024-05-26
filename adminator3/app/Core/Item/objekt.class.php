@@ -16,7 +16,7 @@ class objekt extends adminator
 
     public $validator;
 
-    protected $sentinel;
+    // protected $sentinel;
 
     public $loggedUserEmail;
 
@@ -105,15 +105,24 @@ class objekt extends adminator
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
+        // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->loggedUserEmail = $this->sentinel->getUser()->email;
-        $this->userIdentityUsername = $this->sentinel->getUser()->email;
+        // parent::__construct(
+        //     $this->conn_mysql,
+        //     $this->smarty,
+        //     $this->logger,
+        //     null,
+        //     $this->pdoMysql,
+        //     $this->settings,
+        //     $this->conn_pgsql
+        // );
 
-        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
+        $this->loggedUserEmail = $this->userIdentityUsername;
+        // $this->userIdentityUsername = $this->sentinel->getUser()->email;
 
+        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
     }
 
     public function listGetOrderItems()

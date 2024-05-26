@@ -36,7 +36,18 @@ class adminator
 
     public $loggedUserEmail;
 
-    public function __construct($conn_mysql, $smarty, $logger, $userIPAddress = null, $pdoMysql = null, $settings = null, $conn_pgsql = null)
+    protected $sentinel;
+
+    public function __construct(
+        $conn_mysql, 
+        $smarty, 
+        $logger,
+        $userIPAddress = null,
+        $pdoMysql = null,
+        $settings = null, 
+        $conn_pgsql = null,
+        $sentinel = null
+        )
     {
         $this->logger = $logger;
         $this->logger->info("adminator\__construct called");
@@ -46,6 +57,10 @@ class adminator
         $this->pdoMysql = $pdoMysql;
         $this->smarty = $smarty;
         $this->settings = $settings;
+
+        if($sentinel != null){
+            $this->sentinel = $sentinel;
+        }
 
         if($userIPAddress == null) {
             $this->userIPAddress = $_SERVER['REMOTE_ADDR'];
