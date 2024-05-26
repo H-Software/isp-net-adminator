@@ -82,7 +82,7 @@ class adminatorController extends Controller
     //     $this->_response->withJson($response);
     // }
 
-    public function createNoLoginResponse(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function createNoLoginResponse(): ResponseInterface
     {
         if(is_object($this->request) and is_object($this->response)) {
             $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": ServerRequestInterface and ResponseInterface are objects.");
@@ -92,14 +92,15 @@ class adminatorController extends Controller
 
         }
 
-        $response = $this->responseFactory->createResponse();
+        $this->response = $this->responseFactory->createResponse();
 
-        $response
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
+
+        $this->response
         ->withStatus(403)
-        ->withHeader('Content-Type', 'text/plain');
-        
+        ->withHeader('Content-Type', 'text/plain');        
 
-        return $response;
+        return $this->response;
     }
 
     public function renderNoLogin(): void
@@ -155,6 +156,7 @@ class adminatorController extends Controller
         $this->logger->info("adminatorController\checkLevel: checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false) {
+            $this->createNoLoginResponse();
             $this->renderNoLogin();
             if($noExit === true){
                 return false;
