@@ -82,7 +82,7 @@ class adminatorController extends Controller
     //     $this->_response->withJson($response);
     // }
 
-    public function createNoLoginResponse(): ResponseInterface
+    public function createNoLoginResponse($content): ResponseInterface
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -99,10 +99,12 @@ class adminatorController extends Controller
         $this->response = $this->response
                             ->withStatus(403);        
 
+        $this->response->getBody()->write($content);
+
         return $this->response;
     }
 
-    public function renderNoLogin(): void
+    public function renderNoLogin(): string
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -111,7 +113,9 @@ class adminatorController extends Controller
         $this->header($this->request, $this->response);
 
         $this->smarty->assign("body", "<br>Neopravneny pristup /chyba pristupu. STOP <br>");
-        // $this->smarty->display('global/no-level.tpl');
+        $content = $this->smarty->fetch('global/no-level.tpl');
+
+        return $content;
     }
 
     public function checkLevel($page_level_id = 0, $adminatorUnused = null, $noExit = false)
@@ -138,7 +142,8 @@ class adminatorController extends Controller
         if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             if($this->sentinel->getUser()->email == null) {
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
-                $this->renderNoLogin();
+                $content = $this->renderNoLogin();
+                $this->createNoLoginResponse($content);
 
                 if($noExit === true){
                     return false;
@@ -157,8 +162,9 @@ class adminatorController extends Controller
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": checkLevel result: ".var_export($checkLevel, true));
 
         if($checkLevel === false) {
-            $this->createNoLoginResponse();
-            $this->renderNoLogin();
+            $content = $this->renderNoLogin();
+            $this->createNoLoginResponse($content);
+
             if($noExit === true){
                 return false;
             }
