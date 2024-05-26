@@ -103,7 +103,7 @@ class adminatorController extends Controller
         $this->smarty->display('global/no-level.tpl');
     }
 
-    public function checkLevel($page_level_id = 0, $adminator = null): ResponseInterface
+    public function checkLevel($page_level_id = 0, $adminator = null): bool
     {
         // wrapper for checking user's level vs. page level
         // core function for checking level is in adminator class and shared with adminator2
@@ -128,7 +128,7 @@ class adminatorController extends Controller
             if($this->sentinel->getUser()->email == null) {
                 $this->logger->error("adminatorController\checkLevel: getUser from sentinel failed");
                 $this->renderNoLogin();
-                // return false;
+                return false;
             } else {
                 $this->adminator->userIdentityUsername = $this->sentinel->getUser()->email;
             }
@@ -143,10 +143,10 @@ class adminatorController extends Controller
 
         if($checkLevel === false) {
             $response = $this->renderNoLogin();
-            // return false;
+            return false;
         }
 
-        return $response;
+        return true;
     }
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)

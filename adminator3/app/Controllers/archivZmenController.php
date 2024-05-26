@@ -20,7 +20,7 @@ class archivZmenController extends adminatorController
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
-    
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -84,7 +84,9 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        $this->checkLevel(30, $this->adminator);
+        if(!$this->checkLevel(30)){
+            return $this->response;
+        }
 
         $this->smarty->assign("bs_layout_main_col_count", "10");
 
