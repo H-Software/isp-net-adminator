@@ -472,6 +472,8 @@ class vlastnici2pridani extends adminator
 
         if($back_radku == 0){
             $this->p_bs_alerts["Nelze načíst data pro vytvoření odkazu na vlastníka."] = "warning";
+
+            $output_return_link_vlastnik = '<span style="padding-left: 10px; padding-right: 10px">N/A</span>';
         }
         else{
             while ($data_back = pg_fetch_array($back)) {
