@@ -109,7 +109,7 @@ class adminatorController extends Controller
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->smarty->assign("page_title", "Adminator3:: wrong login/level");
+        $this->smarty->assign("page_title", "Adminator3 :: wrong level");
 
         $this->header($this->request, $this->response);
 

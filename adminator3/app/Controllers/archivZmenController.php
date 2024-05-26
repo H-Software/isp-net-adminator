@@ -85,6 +85,7 @@ class archivZmenController extends adminatorController
         $this->response = $response;
 
         if(!$this->checkLevel(30, null, true)){
+            $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": checklevel failed, returning status code " . var_export($this->response->getStatusCode(),true));
             return $this->response;
         }
 
