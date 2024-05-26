@@ -5,7 +5,7 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Psr\Http\Message\ResponseFactoryInterface;
 use Exception;
 
 class adminatorController extends Controller
@@ -22,12 +22,19 @@ class adminatorController extends Controller
 
     protected ResponseInterface $response;
 
+    /**
+     * @var ResponseFactoryInterface
+     */
+    protected ResponseFactoryInterface $responseFactory;
+
     public function __construct($container)
     {
         $this->conn_mysql = $container->get('connMysql');
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
+
+        $this->responseFactory = $container->get(ResponseFactoryInterface::class);
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -79,16 +86,18 @@ class adminatorController extends Controller
     {
         if(is_object($this->request) and is_object($this->response)) {
             $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": ServerRequestInterface and ResponseInterface are objects.");
-
-            // $response = $responseFactory->createResponse();
-
-            // $response
-            // ->withStatus(400)
-            // ->withHeader('Content-Type', 'text/plain');
-
         } else {
             $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": no ServerRequestInterface or ResponseInterface object given.");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: no ServerRequestInterface or ResponseInterface object given.");
+
         }
+
+        $response = $this->responseFactory->createResponse();
+
+        $response
+        ->withStatus(403)
+        ->withHeader('Content-Type', 'text/plain');
+        
 
         return $response;
     }
@@ -103,7 +112,7 @@ class adminatorController extends Controller
         $this->smarty->display('global/no-level.tpl');
     }
 
-    public function checkLevel($page_level_id = 0, $adminatorUnused = null, $noExit = false): bool
+    public function checkLevel($page_level_id = 0, $adminatorUnused = null, $noExit = false)
     {
         // wrapper for checking user's level vs. page level
         // core function for checking level is in adminator class and shared with adminator2
