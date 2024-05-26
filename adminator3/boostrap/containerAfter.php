@@ -3,6 +3,7 @@
 use Slim\Views\Twig;
 use Nyholm\Psr7\Factory\Psr17Factory;
 
+use App\Renderer\Renderer;
 use App\View\CsrfExtension;
 use App\Middleware\FlashOldFormDataMiddleware;
 use App\Middleware\GuardMiddleware;
@@ -217,7 +218,7 @@ $container->set(
 
         $cache = $cacheManager->store();
 
-        $logger->debug('DI\cache: using driver: ' . var_export($cacheManager->getDefaultDriver(), true));
+        // $logger->debug('DI\cache: using driver: ' . var_export($cacheManager->getDefaultDriver(), true));
 
         return $cache;
     }
@@ -234,6 +235,7 @@ $container->set(
     'GuardMiddleware',
     function ($container) {
         $rf = $container->get(Psr17Factory::class);
-        return new GuardMiddleware($container, $rf);
+        $rendered = $container->get(Renderer::class);
+        return new GuardMiddleware($container, $rf, $rendered);
     }
 );
