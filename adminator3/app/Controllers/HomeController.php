@@ -43,19 +43,21 @@ class HomeController extends adminatorController
 
         $this->logger->info("homeController\__construct called");
 
-        if(isset($adminatorInstance)) {
-            $this->adminator = $adminatorInstance;
-        } else {
-            $this->adminator = new \App\Core\adminator(
-                $this->conn_mysql,
-                $this->smarty,
-                $this->logger,
-                null,
-                $this->pdoMysql,
-                $this->settings,
-                $this->sentinel
-            );
-        }
+        parent::__construct($container);
+
+        // if(isset($adminatorInstance)) {
+        //     $this->adminator = $adminatorInstance;
+        // } else {
+        //     $this->adminator = new \App\Core\adminator(
+        //         $this->conn_mysql,
+        //         $this->smarty,
+        //         $this->logger,
+        //         null,
+        //         $this->pdoMysql,
+        //         $this->settings,
+        //         $this->sentinel
+        //     );
+        // }
 
         if(isset($opravyInstance)) {
             $this->opravyInstance = $opravyInstance;
