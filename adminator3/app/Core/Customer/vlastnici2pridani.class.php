@@ -473,22 +473,23 @@ class vlastnici2pridani extends adminator
         }
 
         if ($archiv_back == 1) {
-            $stranka = "vlastnici-archiv.php";
+            $stranka = "/vlastnici/archiv";
         } elseif ($firma_back == 1) {
-            $stranka = "vlastnici2.php";
+            $stranka = "/vlastnici2";
         } else {
-            $stranka = "vlastnici.php";
+            $stranka = "/vlastnici";
         }
 
         $output .= '<table border="0" width="50%" >
                 <tr>
                 <td align="right">Zpět na vlastníka </td>
-                <td><form action="'.$stranka.'" method="GET" >
-                <input type="hidden" value="' . $this->form_nick . '" name="find" >
+                <td><form action="'.$stranka.'" method="GET" >'
+                . $this->csrf_html
+                . '<input type="hidden" value="' . $this->form_nick . '" name="find" >
                 <input type="submit" value="ZDE" name="odeslat" > </form></td>
 
                 <td align="right">Restart (all iptables ) </td>
-                <td><form action="work.php" method="POST" ><input type="hidden" name="iptables" value="1" >
+                <td><form action="/work" method="POST" ><input type="hidden" name="iptables" value="1" >
                     <input type="submit" value="ZDE" name="odeslat" > </form> </td>
                 </tr>
                 </table>';
