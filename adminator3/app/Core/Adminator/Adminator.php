@@ -106,7 +106,7 @@ class adminator
         )->first(['level']);
 
         if(is_object($rs)) {
-            // $this->logger->info("adminator\getUserLevel dump db: " . var_export($rs, true));
+            $this->logger->info("adminator\getUserLevel dump db: " . var_export($rs, true));
             $a = $rs->toArray();
             $level = $a['level'];
         }
