@@ -34,7 +34,7 @@ class workController extends adminatorController
 
         $this->logger->info("workController\__construct called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        parent::__construct($container);
     }
 
     public function work(ServerRequestInterface $request, ResponseInterface $response, array $args)

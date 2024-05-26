@@ -32,7 +32,7 @@ class othersController extends adminatorController
 
         $this->logger->info("othersController\__construct called");
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        parent::__construct($container);
     }
 
     public function others(ServerRequestInterface $request, ResponseInterface $response, array $args)

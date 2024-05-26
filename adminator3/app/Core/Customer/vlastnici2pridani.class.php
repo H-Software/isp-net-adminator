@@ -136,7 +136,6 @@ class vlastnici2pridani extends adminator
         if(!isset($this->adminator->userIdentityUsername) or $this->adminator->userIdentityUsername == null) {
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity!");
         }
-        // $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
     }
 
     public function action(): string

@@ -325,8 +325,6 @@ class objekt extends adminator
         $exportLink = "";
         $error = "";
 
-        $this->adminator = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
-
         $objekt_a2 = new \objekt_a2();
         $objekt_a2->echo = false;
         $objekt_a2->conn_mysql = $this->conn_mysql;
@@ -335,22 +333,22 @@ class objekt extends adminator
         $objekt_a2->mod_vypisu = $this->mod_vypisu;
 
         // checking levels for update/erase/..
-        if ($this->adminator->checkLevel(29, false) === true) {
+        if ($this->checkLevel(29, false) === true) {
             $this->listAllowedActionUpdate = true;
         }
-        if ($this->adminator->checkLevel(33, false) === true) {
+        if ($this->checkLevel(33, false) === true) {
             $this->listAllowedActionErase = true;
         }
-        if ($this->adminator->checkLevel(34, false) === true) {
+        if ($this->checkLevel(34, false) === true) {
             $this->listAllowedActionGarant = true;
         }
-        if ($this->adminator->checkLevel(59, false) === true) {
+        if ($this->checkLevel(59, false) === true) {
             $export_povolen = true;
         }
 
         $objekt_a2->listAllowedActionUpdate = $this->listAllowedActionUpdate;
         $objekt_a2->listAllowedActionErase = $this->listAllowedActionErase;
-        $objekt_a2->listAllowedActionGarant = $this->listAllowedActionGarant;
+        // $objekt_a2->listAllowedActionGarant = $this->listAllowedActionGarant;
 
         if ($export_povolen === true) {
             $exportLink = $objekt_a2->export_vypis_odkaz();
@@ -462,7 +460,7 @@ class objekt extends adminator
 
         if(($update_status == 1 and !(isset($this->send)))) {
             //rezim upravy
-            $dotaz_upd = pg_query("SELECT * FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
+            $dotaz_upd = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
             $radku_upd = pg_num_rows($dotaz_upd);
 
             if ($radku_upd == 0) {
@@ -602,8 +600,8 @@ class objekt extends adminator
                 $this->ip_find = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS = pg_query("SELECT ip FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
-                $MSQ_IP = pg_query("SELECT ip FROM objekty WHERE ip <<= '$this->ip_find' ");
+                $MSQ_DNS = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
+                $MSQ_IP = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE ip <<= '$this->ip_find' ");
 
                 if (pg_num_rows($MSQ_DNS) > 0) {
                     $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
@@ -616,8 +614,8 @@ class objekt extends adminator
 
                 //duplicitni tunnel_pass/user
                 if($this->form_typ_ip == 4) {
-                    $MSQ_TUNNEL_USER = pg_query("SELECT tunnel_user FROM objekty WHERE tunnel_user LIKE '$tunnel_user' ");
-                    $MSQ_TUNNEL_PASS = pg_query("SELECT tunnel_pass FROM objekty WHERE tunnel_pass LIKE '$tunnel_pass' ");
+                    $MSQ_TUNNEL_USER = pg_query($this->conn_pgsql, "SELECT tunnel_user FROM objekty WHERE tunnel_user LIKE '$tunnel_user' ");
+                    $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE tunnel_pass LIKE '$tunnel_pass' ");
 
                     if(pg_num_rows($MSQ_TUNNEL_USER) > 0) {
                         $error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
@@ -636,8 +634,8 @@ class objekt extends adminator
                 $this->ip_find = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS2 = pg_query("SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '".intval($this->update_id)."' ) ");
-                $MSQ_IP2 = pg_query("SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '".intval($this->update_id)."' ) ");
+                $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '".intval($this->update_id)."' ) ");
+                $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '".intval($this->update_id)."' ) ");
 
                 if(pg_num_rows($MSQ_DNS2) > 0) {
                     $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
@@ -650,8 +648,8 @@ class objekt extends adminator
 
                 //duplicitni tunnel_pass/user
                 if($this->form_typ_ip == 4) {
-                    $MSQ_TUNNEL_USER = pg_query("SELECT tunnel_user FROM objekty WHERE ( tunnel_user LIKE '$tunnel_user' AND id_komplu != '".intval($this->update_id)."' ) ");
-                    $MSQ_TUNNEL_PASS = pg_query("SELECT tunnel_pass FROM objekty WHERE ( tunnel_pass LIKE '$tunnel_pass' AND id_komplu != '".intval($this->update_id)."' ) ");
+                    $MSQ_TUNNEL_USER = pg_query($this->conn_pgsql, "SELECT tunnel_user FROM objekty WHERE ( tunnel_user LIKE '$tunnel_user' AND id_komplu != '".intval($this->update_id)."' ) ");
+                    $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE ( tunnel_pass LIKE '$tunnel_pass' AND id_komplu != '".intval($this->update_id)."' ) ");
 
                     if(pg_num_rows($MSQ_TUNNEL_USER) > 0) {
                         $error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
@@ -683,7 +681,7 @@ class objekt extends adminator
             }
 
         // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
-        $poz_fakt_clovek = pg_query("SELECT id_cloveka, dov_net FROM objekty WHERE id_komplu = '".intval($this->update_id)."' ");
+        $poz_fakt_clovek = pg_query($this->conn_pgsql, "SELECT id_cloveka, dov_net FROM objekty WHERE id_komplu = '".intval($this->update_id)."' ");
         $poz_fakt_clovek_radku = pg_num_rows($poz_fakt_clovek);
 
         while ($data_poz_f_clovek = pg_fetch_array($poz_fakt_clovek)) {
@@ -693,7 +691,7 @@ class objekt extends adminator
 
         if ((($id_cloveka > 1) and ($update_status == 1))) {
 
-            $pozastavene_fakt = pg_query("SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
+            $pozastavene_fakt = pg_query($this->conn_pgsql, "SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
             $pozastavene_fakt_radku = pg_num_rows($pozastavene_fakt);
 
             if ($pozastavene_fakt_radku == 1) {
@@ -770,7 +768,7 @@ class objekt extends adminator
             if($update_status == "1") {
                 // rezim upravy
 
-                if ($this->adminator->checkLevel(29, false) === false) {
+                if ($this->checkLevel(29, false) === false) {
                     $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                     return $output;
                 }
@@ -782,7 +780,7 @@ class objekt extends adminator
                 $sql_rows .= "sikana_status, sikana_cas, sikana_text, upravil, id_nodu, ";
                 $sql_rows .= "tunnelling_ip, tunnel_user, tunnel_pass";
 
-                $vysl4 = pg_query("SELECT ".$sql_rows." FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
+                $vysl4 = pg_query($this->conn_pgsql, "SELECT ".$sql_rows." FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
 
                 if(!$vysl4) {
                     $output .= "<div class=\"alert alert-danger\" role=\"alert\" style=\"padding: 10px; \">Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
@@ -1029,7 +1027,7 @@ class objekt extends adminator
         if (($update_status == 1 and !(isset($this->send)))) {
             //rezim upravy,takze nacitame z databaze ...
 
-            $dotaz_upd = pg_query("SELECT * FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
+            $dotaz_upd = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
             $radku_upd = pg_num_rows($dotaz_upd);
 
             if ($radku_upd == 0) {
@@ -1142,8 +1140,8 @@ class objekt extends adminator
                 $ip = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS = pg_query("SELECT * FROM objekty WHERE dns_jmeno LIKE '" . $this->form_dns ."' ");
-                $MSQ_IP = pg_query("SELECT * FROM objekty WHERE ip <<= '" . $ip ."' ");
+                $MSQ_DNS = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE dns_jmeno LIKE '" . $this->form_dns ."' ");
+                $MSQ_IP = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ip <<= '" . $ip ."' ");
 
                 if (pg_num_rows($MSQ_DNS) > 0) {
                     $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
@@ -1160,8 +1158,8 @@ class objekt extends adminator
                 $ip = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS2 = pg_query("SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
-                $MSQ_IP2 = pg_query("SELECT * FROM objekty WHERE ( ip <<= '$ip' AND id_komplu != '$this->update_id' ) ");
+                $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
+                $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$ip' AND id_komplu != '$this->update_id' ) ");
 
                 if(pg_num_rows($MSQ_DNS2) > 0) {
                     $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
@@ -1192,7 +1190,7 @@ class objekt extends adminator
             }
 
         // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
-        $poz_fakt_clovek = pg_query("SELECT * FROM objekty WHERE id_komplu = '$this->update_id' ");
+        $poz_fakt_clovek = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '$this->update_id' ");
         $poz_fakt_clovek_radku = pg_num_rows($poz_fakt_clovek);
 
         while($data_poz_f_clovek = pg_fetch_array($poz_fakt_clovek)) {
@@ -1202,7 +1200,7 @@ class objekt extends adminator
 
         if ((($id_cloveka > 1) and ($update_status == 1))) {
 
-            $pozastavene_fakt = pg_query("SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
+            $pozastavene_fakt = pg_query($this->conn_pgsql, "SELECT billing_suspend_status FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
             $pozastavene_fakt_radku = pg_num_rows($pozastavene_fakt);
 
 
@@ -1264,7 +1262,7 @@ class objekt extends adminator
 
             if($update_status == "1") {
 
-                if ($this->adminator->checkLevel(29, false) === false) {
+                if ($this->checkLevel(29, false) === false) {
                     $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
                     return $output;
                 }
@@ -1274,7 +1272,7 @@ class objekt extends adminator
                 //prvne stavajici data docasne ulozime
                 $pole2 .= "<b>akce: uprava objektu; </b><br>";
 
-                $vysl4 = pg_query("select * from objekty WHERE id_komplu='$this->update_id' ");
+                $vysl4 = pg_query($this->conn_pgsql, "select * from objekty WHERE id_komplu='$this->update_id' ");
 
                 if((pg_num_rows($vysl4) <> 1)) {
                     $output .= "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>";
@@ -1673,7 +1671,7 @@ class objekt extends adminator
         /*
         if ( $this->form_typ_ip == 3)
         {
-        $vysledek2=pg_query("select * from objekty where typ != 3 AND verejna=99 ORDER BY dns_jmeno ASC" );
+        $vysledek2=pg_query($this->conn_pgsql, "select * from objekty where typ != 3 AND verejna=99 ORDER BY dns_jmeno ASC" );
                 $radku2=pg_num_rows($vysledek2);
 
                 if ($radku==0) { $output .= "žádné objekty v databázi "; }
