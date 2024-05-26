@@ -128,7 +128,7 @@ class admin
 
             $output .= "Zadáno do formuláre : <br><br>";
             $output .= "popis stránky: ".$popis."<br>";
-            $output .= "level stránky: ".$level."<br>";
+            $output .= "level stránky: ".$level."<br><br>";
 
             $id_new = intval($_POST["new_id"]);
 
@@ -149,7 +149,7 @@ class admin
             if ($rs) {
                 $output .= "<br><br>MySql potvrdilo, takze: <br><H2>Data v databazi upravena.</H2><br><br>";
             } else {
-                $output .= '<div style=\"color: red; \">Houstone, tento zapis do databaze nevysel :)</div>' . $error;
+                $output .= '<div style="color: red; ">Houstone, tento zapis do databaze nevysel :)</div>' . $error;
             }
 
         } else {
@@ -162,7 +162,7 @@ class admin
                 try {
                     $vysledek = $this->conn_mysql->query("select * from leveling where id = $update_id ");
                 } catch (Exception $e) {
-                    die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                    $output .= "<div style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "</div>\n";
                 }
 
                 $radku = $vysledek->num_rows;
