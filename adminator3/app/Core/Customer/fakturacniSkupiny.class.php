@@ -76,7 +76,6 @@ class fakturacniSkupiny extends adminator
     public function Action()
     {
         $output = "";
-        $error = "";
 
         $this->action_form = $this->formInit();
 
