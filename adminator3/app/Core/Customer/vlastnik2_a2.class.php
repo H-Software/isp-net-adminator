@@ -2,7 +2,6 @@
 
 class vlastnik2_a2
 {
-
     public $objektListAllowedActionUpdate = false;
 
     public $objektListAllowedActionErase = false;
