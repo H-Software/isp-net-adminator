@@ -55,7 +55,7 @@ class board
     public function prepare_vars($nothing = null)
     {
         if(!isset($this->author)) {
-            if(is_callable($this->sentinel->getUser())) {
+            if(is_object($this->sentinel)) {
                 $this->author = $this->sentinel->getUser()->email;
             }
         }
