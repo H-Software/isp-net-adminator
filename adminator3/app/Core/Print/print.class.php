@@ -13,6 +13,7 @@ class printClass extends adminator
     // private $validator;
 
     public \PgSql\Connection|\PDO|null $conn_pgsql;
+
     public \mysqli|\PDO $conn_mysql;
 
     // public ?\PDO $pdoMysql;
@@ -191,7 +192,7 @@ class printClass extends adminator
 
                 $rs_iptv = $this->conn_mysql->query("SELECT id_tarifu, jmeno_tarifu, cena_s_dph FROM tarify_iptv WHERE id_tarifu = '".intval($iptv_sluzba_id_tarifu)."' ");
 
-                while($data_iptv = $this->conn_mysql->fetch_array($rs_iptv)) {
+                while($data_iptv = $rs_iptv->fetch_array()) {
 
                     if((strlen($iptv_tarif_nazev) == 0)) {
                         $iptv_tarif_nazev = $data_iptv["jmeno_tarifu"];
@@ -484,7 +485,7 @@ class printClass extends adminator
             echo "<div style=\"color: blue;\">INFO: generování údajů z adminátora ...</div>";
 
             //prvni check jestli nejde o tunel verejku, ta sama byt nemuze
-            $rs_tun = pg_query("SELECT tunnelling_ip FROM objekty WHERE id_komplu = '$id_objektu' ");
+            $rs_tun = pg_query($this->conn_pgsql, "SELECT tunnelling_ip FROM objekty WHERE id_komplu = '$id_objektu' ");
 
             if(pg_fetch_result($rs_tun, 0, 0) == 1) {
 
@@ -493,7 +494,7 @@ class printClass extends adminator
             } else {
 
 
-                $rs_obj = pg_query("SELECT id_cloveka, id_tarifu, port_id, id_nodu, ip, mac, client_ap_ip ".
+                $rs_obj = pg_query($this->conn_pgsql, "SELECT id_cloveka, id_tarifu, port_id, id_nodu, ip, mac, client_ap_ip ".
                         " FROM objekty ".
                         " WHERE id_komplu = '$id_objektu' ");
 
@@ -524,7 +525,7 @@ class printClass extends adminator
                     //zjistovani EC (z vlastniku)
                     if($id_cloveka > 0) {
 
-                        $rs_vl = pg_query("SELECT vs FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
+                        $rs_vl = pg_query($this->conn_pgsql, "SELECT vs FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
                         $rs_vl_num = pg_num_rows($rs_vl);
 
                         if($rs_vl_num == 1) {
@@ -668,7 +669,7 @@ class printClass extends adminator
                     }
 
                     //zjisteni zda vlastnik ma jeste tunel. verejku
-                    $rs_tunel = pg_query("SELECT ip, tunnel_user, tunnel_pass ".
+                    $rs_tunel = pg_query($this->conn_pgsql, "SELECT ip, tunnel_user, tunnel_pass ".
                             "FROM objekty ".
                             "WHERE ((id_cloveka = '$id_cloveka') ".
                             "	    AND ".
@@ -1266,7 +1267,7 @@ class printClass extends adminator
             echo "<div style=\"color: blue;\">INFO: generování údajů z adminátora ...</div>";
 
             //prvni check jestli nejde o tunel verejku, ta sama byt nemuze
-            $rs_tun = pg_query("SELECT tunnelling_ip FROM objekty WHERE id_komplu = '$id_objektu' ");
+            $rs_tun = pg_query($this->conn_pgsql, "SELECT tunnelling_ip FROM objekty WHERE id_komplu = '$id_objektu' ");
 
             if(pg_fetch_result($rs_tun, 0, 0) == 1) {
 
@@ -1275,7 +1276,7 @@ class printClass extends adminator
             } else {
 
 
-                $rs_obj = pg_query("SELECT id_cloveka, id_tarifu, port_id, id_nodu, ip, mac, client_ap_ip ".
+                $rs_obj = pg_query($this->conn_pgsql, "SELECT id_cloveka, id_tarifu, port_id, id_nodu, ip, mac, client_ap_ip ".
                         " FROM objekty ".
                         " WHERE id_komplu = '$id_objektu' ");
 
@@ -1306,7 +1307,7 @@ class printClass extends adminator
                     //zjistovani EC (z vlastniku)
                     if($id_cloveka > 0) {
 
-                        $rs_vl = pg_query("SELECT vs FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
+                        $rs_vl = pg_query($this->conn_pgsql, "SELECT vs FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
                         $rs_vl_num = pg_num_rows($rs_vl);
 
                         if($rs_vl_num == 1) {
@@ -1448,7 +1449,7 @@ class printClass extends adminator
 
                     //zjisteni zda vlastnik ma jeste tunel. verejku
                     try {
-                        $rs_tunel = pg_query("SELECT ip, tunnel_user, tunnel_pass ".
+                        $rs_tunel = pg_query($this->conn_pgsql, "SELECT ip, tunnel_user, tunnel_pass ".
                                                 "FROM objekty ".
                                                 "WHERE ((id_cloveka = '$id_cloveka') ".
                                                 "	    AND ".

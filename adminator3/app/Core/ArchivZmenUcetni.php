@@ -97,7 +97,6 @@ class zmeny_ucetni
 
     public function save_vars_to_db()
     {
-
         $this->logger->info("archivZmenUcetni\save_vars_to_db called");
 
         try {
@@ -114,9 +113,10 @@ class zmeny_ucetni
         $pole = "<b>akce: pridani zmeny pro ucetni; </b><br>";
         $pole .= "[typ_id]=> ".$this->typ.", [text]=> ".$this->text."";
 
-        if ($add == 1) {
+        if ($add) {
             $vysledek_write = 1;
         }
+
         try {
             $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('" . $pole . "','" . $this->loggedUserEmail . "','" . $vysledek_write . "')");
         } catch (Exception $e) {
@@ -125,7 +125,7 @@ class zmeny_ucetni
 
         $this->writed = "true";
 
-        if($add == 1) {
+        if($add) {
             return true;
         } else {
             return false;
