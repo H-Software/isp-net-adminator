@@ -100,7 +100,7 @@ class objekt extends adminator
 
     public $addedDataArray;
 
-    public $insertedId;
+    private int $insertedId;
 
     public function __construct(ContainerInterface $container)
     {
@@ -2606,7 +2606,11 @@ class objekt extends adminator
 
         //automaticke osvezovani/restarty
         //
-        list($work_output) = $this->work->workActionObjektyWifi($pole, $this->insertedId);
+        $args = [
+            'form_typ_ip' => $this->form_typ_ip
+        ];
+
+        list($work_output) = $this->work->workActionObjektyWifi($pole, $this->insertedId, $args);
         $output .= $work_output;
 
         return array($output);
