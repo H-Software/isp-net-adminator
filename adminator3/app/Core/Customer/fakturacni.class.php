@@ -1,15 +1,48 @@
 <?php
 
+namespace App\Customer;
+
+use Psr\Container\ContainerInterface;
+
 class fakturacni
 {
-    public $echo = true;
+    // DI
+    public $logger;
+
+    // public $conn_mysql;
+
+    public $conn_pgsql;
+
+    // protected $sentinel;
+
+    // protected $container;
+
+    // protected $loggedUserEmail;
+
+    // the rest
     public $firma;
+
+    public function __construct(ContainerInterface $container)
+    {
+        // $this->container = $container;
+        $this->logger = $container->get('logger');
+        // $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+
+        // $this->sentinel = $container->get('sentinel');
+
+        // $this->loggedUserEmail = $this->sentinel->getUser()->email;
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+    }
 
     public function vypis($id_f, $id_v)
     {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
         $output = "";
 
-        $dotaz = pg_query("SELECT * FROM fakturacni where id='" . intval($id_f). "'");
+        $dotaz = pg_query($this->conn_pgsql, "SELECT * FROM fakturacni where id='" . intval($id_f). "'");
         $dotaz_radku = pg_num_rows($dotaz);
 
         if ($dotaz_radku == 0) {
@@ -34,10 +67,6 @@ class fakturacni
             endwhile;
         }
 
-        if($this->echo === true) {
-            echo $output;
-        } else {
-            return $output;
-        }
+        return $output;
     } // konec funkce vypis
 }

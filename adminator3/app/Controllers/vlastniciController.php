@@ -116,6 +116,7 @@ class vlastniciController extends adminatorController
         $vlastnikfind->conn_mysql = $this->conn_mysql;
         $vlastnikfind->conn_pgsql = $this->conn_pgsql;
         $vlastnikfind->echo = false;
+        $vlastnikfind->container = $this->container;
 
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $vlastnikfind->csrf_html = $csrf_html;
