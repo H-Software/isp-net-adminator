@@ -6,7 +6,7 @@ error_reporting(E_ERROR | E_PARSE | E_COMPILE_ERROR);
  
 require_once("/srv/www/htdocs.ssl/adminator2/include/config.php");
 
-require_once("/srv/www/htdocs.ssl/adminator2/include/class.php");
+// require_once("/srv/www/htdocs.ssl/adminator2/include/class.php");
 
 $html_tags = 1;
 

@@ -11,8 +11,6 @@ require_once($cesta."include/config.php");
 require_once($cesta."include/check_login.php");
 require_once($cesta."include/check_level.php");
 
-require_once($cesta."include/class.php");
-
 if ( ( $_GET["no_login"] != "yes" ) )
 {
 

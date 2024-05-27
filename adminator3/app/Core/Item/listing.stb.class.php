@@ -1,89 +1,83 @@
 <?php
 
-//coded by Warden - http://warden.dharma.cz
+namespace App\Core;
 
-/*
-priklad vytvareni instance:
-
-$listing = new c_Listing("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
-    "list pro zobrazeni", "formatovani zacatku odkazu strankovani",
-    "formatovani konce odkazu strankovani", "sql dotaz pro vyber vsech zazkamu k vylistovani");
-*/
-
-//definice tridy c_Listing
-
-class c_Listing
+class c_listing_stb
 {
     public $url;
     public $interval;
     public $sql;
     public $list;
-    public $before;
-    public $after;
+    public $before = "<div class=\"text-listing2\" style=\"text-align: center;\" >\n";
+    public $after  = "</div>";
     public $numLists;
     public $numRecords;
     public $errName;
     public $befError = "<div align=\"center\" style=\"color: maroon;\">";
-    public $aftError = "</div>";
+    public $aftError = "</div>\n";
 
-    private $sqlHandler;
+    public $msqError = "";
+
+    public $conn_mysql;
+    public $db_type = "mysql";
 
     //konstruktor...naplni promenne
-    public function __construct($conUrl = "./index.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $sql = "", $sqlHandler = null)
+    public function __construct($conn_mysql, $conUrl = "home.php", $conInterval = 10, $conList = 1, $conBefore, $conAfter, $conSql = "")
     {
-        $this->errName[1] = "Při volání konstruktotu nebyl zadán SQL dotaz!<br>\n";
+
+        $this->conn_mysql = $conn_mysql;
+
+        $this->errName[1] = "Při volání konstruktoru nebyl zadán SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listování, chyba databáze(Query)!<br>\n";
-        $this->errName[3] = "Nelze zobrazit listování, chyba databáze(Num_Rows)!<br>\n";
-        $this->errName[4] = "Při volání konstruktotu nebyl zadán PGSQL Handler!<br>\n";
+        // $this->errName[3] = "Nelze zobrazit listov▒n▒, chyba datab▒ze(Num_Rows)!<br>\n";
 
         $this->url = $conUrl;
         $this->interval = $conInterval;
-        $this->list = $conList;
-        $this->before = $conBefore;
-        $this->after = $conAfter;
 
-        if($sqlHandler == null) {
-            $this->error(4);
-        } else {
-            $this->sqlHandler = $sqlHandler;
+        $this->list = $conList;
+
+        if((strlen($conBefore) > 0)) {
+            $this->before = $conBefore;
         }
 
-        if (empty($sql) or $sql == null) {
+        if((strlen($conBefore) > 0)) {
+            $this->after = $conAfter;
+        }
+
+        if (empty($conSql)) {
             $this->error(1);
         } else {
-            $this->sql = $sql;
+            $this->sql = $conSql;
         }
     }
 
     //vyber dat z databaze
     public function dbSelect()
     {
-        try {
-            $listRecord = pg_query($this->sqlHandler, $this->sql);
-        } catch (Exception $e) {
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
+
+        global $db_ok2;
+
+        if($this->db_type == "mysql") {
+            $listRecord = $this->conn_mysql->query($this->sql);
+        } elseif($this->db_type == "pgsql") {
+            $listRecord = pg_query($this->sql);
+        } else {
         }
 
         if (!$listRecord) {
             $this->error(2);
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_query)</div>");
-
-            $this->numLists = 0;
-            $this->numRecords = 0;
-
-            return;
         }
 
-        $allRecords = pg_num_rows($listRecord);
+        if($this->db_type == "mysql") {
+            $allRecords = $listRecord->num_rows;
+        } elseif($this->db_type == "pgsql") {
+            $allRecords = pg_num_rows($listRecord);
+        } else {
 
-        if ($allRecords < 0) {
-            // $this->error(3);
-            // echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). " (pg_num_rows)</div>");
+        }
 
-            $this->numLists = 0;
-            $this->numRecords = 0;
-
-            return;
+        if (!$allRecords) {
+            $this->error(3);
         }
 
         $allLists = ceil($allRecords / $this->interval);
@@ -126,8 +120,9 @@ class c_Listing
     //napr.:    1-10 | 11-20 | 21-30
     public function listInterval()
     {
+        $output = "";
         $this->dbSelect();
-        echo $this->before;
+        $output .= $this->before;
         for ($i = 1; $i <= $this->numLists; $i++) {
             $isLink = 1;
             $spacer = " | ";
@@ -145,13 +140,15 @@ class c_Listing
                 $spacer = "";
             }
             if ($isLink == 0) {
-                echo $from."-".$to." ".$spacer;
+                $output .= $from."-".$to." ".$spacer;
             }
             if ($isLink == 1) {
-                echo "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer;
+                $output .= "<a href=\"".$this->url."&list=".$i."\" onFocus=\"blur()\">".$from."-".$to."</a> ".$spacer."\n";
             }
         }
-        echo $this->after;
+        $output .= $this->after;
+
+        return $output;
     }
 
     //zobrazi aktivni odkaz pouze na dalsi cast intervalu (dopredu, dozadu)
@@ -183,7 +180,7 @@ class c_Listing
     public function error($errNum = 0)
     {
         if ($errNum != 0) {
-            echo $this->befError.$this->errName[$errNum].$this->aftError;
+            $this->msqError = $this->befError.$this->errName[$errNum].$this->aftError;
         }
     }
 }

@@ -15,9 +15,11 @@ class stb extends adminator
 
     public $conn_pgsql;
 
-    public $container;
+    protected $container;
 
-    public $validator;
+    protected $validator;
+
+    protected $sentinel;
 
     public $csrf_html;
 
@@ -63,8 +65,10 @@ class stb extends adminator
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
+        $this->settings = $container->get('settings');
+        $this->sentinel = $this->container->get('sentinel');
 
-        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function stbListGetBodyContent()
@@ -116,7 +120,7 @@ class stb extends adminator
 
         $output .= "";
 
-        $topologyClass = new Topology($this->conn_mysql, $this->smarty, $this->logger);
+        $topologyClass = new Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
 
         $rs_select_nod = $topologyClass->filter_select_nods();
 
@@ -151,7 +155,7 @@ class stb extends adminator
 
         $paging_url = "?".urlencode("order")."=".$this->order.$get_odkazy;
 
-        $paging = new paging_global($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $this->sql_query);
+        $paging = new c_listing_stb($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $this->sql_query);
 
         $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
 
@@ -687,7 +691,7 @@ class stb extends adminator
             $this->logger->info("stb\\stbAction: update: fetch data: update_id: ".$this->id_stb.", rs_rows: ".$rs->num_rows);
         }
 
-        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
+        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
 
         $node_list = $topology->getNodeListForForm($data['nod_find']);
         $this->logger->debug("stb\\stbAction: node_list data: " . var_export($node_list, true));

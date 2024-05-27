@@ -24,7 +24,7 @@ class adminator
 
     protected $cache;
 
-    public $settings;
+    protected $settings;
 
     public ?string $userIdentityUsername = null;
 
@@ -34,7 +34,7 @@ class adminator
 
     public ?int $userIdentityLevel = null;
 
-    public $loggedUserEmail;
+    protected $loggedUserEmail;
 
     protected $sentinel;
 

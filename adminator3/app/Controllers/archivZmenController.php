@@ -13,6 +13,8 @@ class archivZmenController extends adminatorController
     public $smarty;
     public $logger;
 
+    protected $container;
+
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
@@ -107,7 +109,7 @@ class archivZmenController extends adminatorController
 
         //zacatek vlastniho obsahu
         $action = $_GET["action"];
-        $zmena = new \zmeny_ucetni($this->conn_mysql, $this->logger);
+        $zmena = new \zmeny_ucetni($this->container);
 
         if($action == "add") { //rezim pridani
             if(!$this->checkLevel(148)) {

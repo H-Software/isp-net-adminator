@@ -32,11 +32,23 @@ $container->set('sentinel', function () use ($container) {
 
     // $logger->debug("bootstrap\containerAfer: sentinel: called");
 
-    $boostrap = new SentinelBootstrapper();
+    // $boostrap = new SentinelBootstrapper();
 
-    $sentinel = new Sentinel($boostrap);
+    // $sentinel = new Sentinel($boostrap);
 
-    return $sentinel->getSentinel();
+    // return $sentinel->getSentinel();
+
+    $userObj = \Mockery::mock(
+        stdClass::class
+    );
+    $userObj->email = "admin@test";
+
+    $sentinel = \Mockery::mock(
+        Sentinel::class,
+    );
+    $sentinel->shouldReceive('getUser')->andReturn($userObj);
+
+    return $sentinel;
 });
 
 $container->set(

@@ -10,27 +10,40 @@ use Psr\Container\ContainerInterface;
 
 class fakturacniSkupiny extends adminator
 {
+    // ORM
     public $db_table_name = 'fakturacni_skupiny';
+
+    // DI
     public $conn_mysql;
 
+    protected $sentinel;
+
+    protected $container;
+
+    protected $loggedUserEmail;
+
+    public $adminator;
+
+    // FORM
     public $csrf_html;
 
     public $form_update_id;
 
-    public $adminator_ctl;
-
     public $action_form;
 
-    public $container;
+    // control
+    private $error = "";
+
+    private $fail;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->logger = $container->get('logger');
         $this->conn_mysql = $container->get('connMysql');
+        $this->sentinel = $container->get('sentinel');
 
-        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
-
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function getItems()
@@ -59,11 +72,9 @@ class fakturacniSkupiny extends adminator
         $nazev_check = preg_match('/^([[:alnum:]]|_|-)+$/', $nazev);
 
         if($nazev_check === false) {
-            global $fail;
-            $fail = "true";
+            $this->fail = "true";
 
-            global $error;
-            $error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Název ( ".$nazev." ) obsahuje nepovolené znaky! (Povolené: čísla, písmena a-Z,_ ,- )</H4></div>";
+            $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Název ( ".$nazev." ) obsahuje nepovolené znaky! (Povolené: čísla, písmena a-Z,_ ,- )</H4></div>";
         }
 
     } //konec funkce check_nazev
@@ -96,7 +107,7 @@ class fakturacniSkupiny extends adminator
             $update_status = 1;
             $this->logger->info("fakturacniSkupiny\Action: update mode set");
 
-            if ($this->adminator_ctl->checkLevel(140) === false) {
+            if ($this->adminator->checkLevel(140) === false) {
                 $output .= "<div class=\"alert alert-danger\" role=\"alert\">Fakturacni Skupiny nelze upravovat, není dostatečné oprávnění. </div>";
                 return $output;
             }
@@ -150,12 +161,12 @@ class fakturacniSkupiny extends adminator
                 $MSQ_FT = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '" . $form_data['fakturacni_text'] . "' AND typ = '" . $form_data['typ'] . "' ) ");
 
                 if($MSQ_NAZEV->num_rows > 0) {
-                    $error .= "<div style=\"color: #CC0066; \" ><h4>Název (".$form_data['nazev'].") již existuje!</h4></div>";
-                    $fail = "true";
+                    $this->error .= "<div style=\"color: #CC0066; \" ><h4>Název (".$form_data['nazev'].") již existuje!</h4></div>";
+                    $this->fail = "true";
                 }
                 if($MSQ_FT->num_rows > 0) {
-                    $error .= "<div style=\"color: #CC0066; \" ><h4>Fakturační text (".$form_data['fakturacni_text'].") již existuje!</h4></div>";
-                    $fail = "true";
+                    $this->error .= "<div style=\"color: #CC0066; \" ><h4>Fakturační text (".$form_data['fakturacni_text'].") již existuje!</h4></div>";
+                    $this->fail = "true";
                 }
             }
 
@@ -166,13 +177,13 @@ class fakturacniSkupiny extends adminator
                 $MSQ_FT = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '" . $form_data['fakturacni_text'] . "' AND typ = '" . $form_data['typ'] . "' AND id != '$this->form_update_id' ) ");
 
                 if($MSQ_NAZEV->num_rows > 0) {
-                    $error .= "<div style=\"color: #CC0066;\" ><h4>Název (".$form_data['nazev'].") již existuje!!!</h4></div>";
-                    $fail = "true";
+                    $this->error .= "<div style=\"color: #CC0066;\" ><h4>Název (".$form_data['nazev'].") již existuje!!!</h4></div>";
+                    $this->fail = "true";
                 }
 
                 if($MSQ_FT->num_rows > 0) {
-                    $error .= "<div style=\"color: #CC0066;\" ><h4>Fakturační text (".$form_data['fakturacni_text'].") již existuje!!!</h4></div>";
-                    $fail = "true";
+                    $this->error .= "<div style=\"color: #CC0066;\" ><h4>Fakturační text (".$form_data['fakturacni_text'].") již existuje!!!</h4></div>";
+                    $this->fail = "true";
                 }
 
             }
@@ -181,13 +192,13 @@ class fakturacniSkupiny extends adminator
             if(preg_match("/OK/", $odeslano)) {
                 $output .= "";
             } else {
-                $fail = "true";
-                $error .= "<div ><div class=\"alert alert-info\" role=\"alert\">Data neuloženy, nebylo použito tlačítko ";
-                $error .= "\"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</div></div>";
+                $this->fail = "true";
+                $this->error .= "<div ><div class=\"alert alert-info\" role=\"alert\">Data neuloženy, nebylo použito tlačítko ";
+                $this->error .= "\"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</div></div>";
             }
 
         //ulozeni
-        if(!(isset($fail))) {
+        if(!(isset($this->fail))) {
             // priprava / konverze promennych pred ulozenim ...
             //if ( $dov_net == 2 ) { $dov_net_w ="a"; } else { $dov_net_w="n"; }
 
@@ -283,7 +294,7 @@ class fakturacniSkupiny extends adminator
         } // konec else ( !(isset(fail) ), musi tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif (isset($send)) :
-            $error = "<div class=\"alert alert-warning\" role=\"alert\">Chybí povinné údaje !!! (aktuálně jsou povinné: Název, Typ, Typ služby) ".
+            $this->error .= "<div class=\"alert alert-warning\" role=\"alert\">Chybí povinné údaje !!! (aktuálně jsou povinné: Název, Typ, Typ služby) ".
                         "(debug: " . $form_data['nazev'] . ", " . $form_data['typ'] . "," . $form_data['typ_sluzby'] . ")</div>";
         endif;
 
@@ -294,8 +305,8 @@ class fakturacniSkupiny extends adminator
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if ((isset($error)) or (!isset($send))) :
-            $output .= $error;
+        if ((strlen($this->error) > 0) or (!isset($send))) :
+            $output .= $this->error;
 
             // $output .= $info;
 
@@ -620,6 +631,7 @@ class fakturacniSkupiny extends adminator
     public function show_fakt_skupiny($fu_select)
     {
         $fu_sql_base = " SELECT * FROM fakturacni_skupiny ";
+        $fu_sql_select = "";
 
         if($fu_select == 2) {
             $fu_sql_select .= " WHERE typ = '2' ";

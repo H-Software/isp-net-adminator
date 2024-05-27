@@ -791,7 +791,7 @@ class vlastniciController extends adminatorController
 
         $fs = new \App\Customer\fakturacniSkupiny($this->container);
         $fs->csrf_html = $this->generateCsrfToken($request, $response, true);
-        $fs->adminator_ctl = $this->adminator;
+        $fs->adminator = $this->adminator;
 
         $fs_action_body = $fs->Action();
 

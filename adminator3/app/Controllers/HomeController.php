@@ -14,7 +14,7 @@ class HomeController extends adminatorController
 
     public $conn_pgsql;
 
-    public $settings;
+    protected $settings;
 
     public $smarty;
     public $logger;

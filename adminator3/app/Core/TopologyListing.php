@@ -2,17 +2,7 @@
 
 namespace App\Core;
 
-//coded by Warden - http://warden.dharma.cz
-
-/*
-priklad vytvareni instance:
-
-$listing = new c_Listing_topology("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
-    "list pro zobrazeni", "formatovani zacatku odkazu strankovani",
-    "formatovani konce odkazu strankovani", "sql dotaz pro vyber vsech zazkamu k vylistovani");
-*/
-
-//definice tridy c_Listing
+use DivisionByZeroError;
 
 class c_listing_topology
 {
@@ -30,7 +20,6 @@ class c_listing_topology
     public $aftError = "</div>";
     public $msqError = "";
 
-    //konstruktor...naplni promenne
     public function __construct($conn_mysql, $conUrl = "/topology/nod-list?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
     {
 
@@ -63,7 +52,11 @@ class c_listing_topology
         if (!$allRecords) {
             $this->error(3);
         }
-        $allLists = ceil($allRecords / $this->interval);
+
+        try {
+            $allLists = ceil($allRecords / $this->interval);
+        } catch(DivisionByZeroError $e) {
+        }
 
         $this->numLists = $allLists;
         $this->numRecords = $allRecords;

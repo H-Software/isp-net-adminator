@@ -22,7 +22,7 @@ class partner extends adminator
 
     protected $sentinel;
 
-    public $loggedUserEmail;
+    protected $loggedUserEmail;
 
     public $rendererTemplateName;
 

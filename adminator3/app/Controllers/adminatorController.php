@@ -20,7 +20,7 @@ class adminatorController extends Controller
 
     public $pdoMysql;
 
-    public $settings;
+    protected $settings;
 
     protected $csrf;
 

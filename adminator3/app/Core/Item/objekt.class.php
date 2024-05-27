@@ -12,13 +12,13 @@ class objekt extends adminator
 
     public $logger;
 
-    // public $validator;
+    // protected $validator;
 
     protected $sentinel;
 
     public $adminator; // handler for instance of adminator class
 
-    public $loggedUserEmail;
+    protected $loggedUserEmail;
 
     // public ?string $userIdentityUsername = null;
 

@@ -1,6 +1,5 @@
 <?php
 
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Psr\Container\ContainerInterface;
 
 class board
@@ -13,7 +12,12 @@ class board
 
     public $logger;
 
-    public $settings;
+    protected $settings;
+
+    protected $sentinel;
+
+    protected $loggedUserEmail;
+
     public $what;
     public $action;
     public $page;
@@ -43,14 +47,16 @@ class board
         $this->logger = $container->get('logger');
         $this->settings = $container->get('settings');
         $this->pdoMysql = $container->get('pdoMysql');
+        $this->sentinel = $container->get('sentinel');
 
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function prepare_vars($nothing = null)
     {
         if(!isset($this->author)) {
-            if(is_callable(Sentinel::getUser())) {
-                $this->author = Sentinel::getUser()->email;
+            if(is_object($this->sentinel)) {
+                $this->author = $this->sentinel->getUser()->email;
             }
         }
 

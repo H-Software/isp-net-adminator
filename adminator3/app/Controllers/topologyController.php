@@ -12,6 +12,8 @@ class topologyController extends adminatorController
     public $smarty;
     public $logger;
 
+    protected $settings;
+
     protected $sentinel;
 
     protected $adminator;
@@ -27,6 +29,7 @@ class topologyController extends adminatorController
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
         $this->sentinel = $this->container->get('sentinel');
+        $this->settings = $this->container->get('settings');
 
         $this->logger->info("topologyController\__construct called");
 
@@ -44,7 +47,7 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
+        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
 
         $this->smarty->assign("page_title", "Adminator3 :: Topologie :: Node list");
 
@@ -70,7 +73,7 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger);
+        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
 
         $this->smarty->assign("page_title", "Adminator3 :: Topologie :: Router list");
 

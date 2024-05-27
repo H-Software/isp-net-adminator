@@ -8,11 +8,14 @@ class Topology extends adminator
     public $smarty;
     public $logger;
 
-    public function __construct($conn_mysql, $smarty, $logger)
+    protected $settings;
+
+    public function __construct($conn_mysql, $smarty, $logger, $settings)
     {
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
+        $this->settings = $settings;
 
         $this->logger->info("topology\__construct called");
     }
@@ -262,7 +265,7 @@ class Topology extends adminator
         $paging = new c_listing_topology(
             $this->conn_mysql,
             $sql_source,
-            30,
+            $this->settings['app']['core']['topology']['node']['listing_interval'],
             $list,
             "<center><div class=\"text-listing\">\n",
             "</div></center>\n",
@@ -1113,7 +1116,15 @@ class Topology extends adminator
                 //prvky pro listovaci odkazy
                 $paging_url = "?".$get_odkazy;
 
-                $paging = new paging_global($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $sql_final);
+                $paging = new c_listing_topology(
+                    $this->conn_mysql,
+                    $paging_url,
+                    $this->settings['app']['core']['topology']['router']['listing_interval'],
+                    $list,
+                    "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
+                    "</div>\n",
+                    $sql_final
+                );
 
                 $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
 
@@ -1300,6 +1311,7 @@ class Topology extends adminator
                         $output .= "<tr><td colspan=\"11\" >";
 
                         $id_routeru = $data["id"];
+                        $colspan_stav = "1";
 
                         $dotaz_top = $this->conn_mysql->query("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
                         $dotaz_top_radku = $dotaz_top->num_rows;
