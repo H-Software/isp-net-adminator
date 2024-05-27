@@ -47,7 +47,7 @@ class work
 
         $item_id = intval($item_id);
 
-        $rs_count = $this->conn_mysql->query("SELECT COUNT(*) FROM workitems WHERE (number_request = '$item_id' AND in_progress = '0') ");
+        $rs_count = $this->conn_mysql->query("SELECT id FROM workitems WHERE (number_request = '$item_id' AND in_progress = '0') ");
 
         $count = $rs_count->num_rows;
 
