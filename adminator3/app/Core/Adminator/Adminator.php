@@ -13,9 +13,9 @@ use Exception;
 
 class adminator
 {
-    public $conn_mysql;
+    public \mysqli $conn_mysql;
 
-    public $conn_pgsql;
+    public \PgSql\Connection $conn_pgsql;
 
     public $smarty;
     public $logger;

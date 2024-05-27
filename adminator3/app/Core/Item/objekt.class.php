@@ -7,9 +7,9 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class objekt extends adminator
 {
-    public \PgSql\Connection $conn_pgsql;
-
     public \mysqli $conn_mysql;
+
+    public \PgSql\Connection $conn_pgsql;
 
     public $logger;
 
@@ -57,10 +57,10 @@ class objekt extends adminator
 
     public $sql_nod;
 
-    public int $update_id;
+    public ?int $update_id;
 
     public $odeslano;
-    
+
     public $send;
 
     public $mod_objektu;
