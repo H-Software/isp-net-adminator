@@ -103,10 +103,6 @@ class platbyController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: N.F. :: Kontrola omezeni vs. platby");
-
-        $this->header($request, $response, $this->adminator);
-
         $platby = new \platby($this->container);
 
         $pocet_synchro_faktur = $platby->synchro_db_nf();
@@ -115,16 +111,14 @@ class platbyController extends adminatorController
         $dotaz_vlastnici_num = $ret[0];
         $zaznam = $ret[1];
 
-        $this->smarty->assign("nadpis", "Kontrola omezení objektu vs. neuhr. fakturám");
+        $assignData = [
+            "page_title" => "Adminator3 :: N.F. :: Kontrola omezeni vs. platby",
+            "nadpis" => "Kontrola omezení objektu vs. neuhr. fakturám",
+            "faktury_pocet" => $pocet_synchro_faktur,
+            "vlastnici_pocet" => $dotaz_vlastnici_num,
+            "pole_data" => $zaznam
+        ];
 
-        $this->smarty->assign("faktury_pocet", $pocet_synchro_faktur);
-
-        $this->smarty->assign("vlastnici_pocet", $dotaz_vlastnici_num);
-
-        $this->smarty->assign("pole_data", $zaznam);
-
-        $this->smarty->display('faktury/fn-kontrola-omezeni.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'faktury/fn-kontrola-omezeni.tpl', $assignData);
     }
 }
