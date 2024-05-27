@@ -357,42 +357,27 @@ parameters:
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
-
 		-
 			message: "#^Variable \\$user in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
-
-
-
-		-
-			message: "#^Class aboutController not found\\.$#"
-			count: 3
-			path: app/routing.php
-
 		-
 			message: "#^Class adminController not found\\.$#"
 			count: 7
 			path: app/routing.php
-
 		-
 			message: "#^Class archivZmenController not found\\.$#"
 			count: 4
 			path: app/routing.php
-
 		-
 			message: "#^Class objektyController not found\\.$#"
 			count: 5
 			path: app/routing.php
-
 		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
 			count: 1
 			path: include/main.function.shared.php
-
 		-
 			message: "#^Comparison operation \"\\>\" between int\\<2, max\\> and 1 is always true\\.$#"
 			count: 1
 			path: include/main.function.shared.php
-
-
