@@ -1,12 +1,16 @@
 <?php
 
-//skript co se pousti v urcitych intervalech a prodavi pozadavky na restart z adminatoru
+//skript co se pousti v urcitych intervalech a provadi pozadavky na restart z adminatoru
 
 error_reporting(E_ERROR | E_PARSE | E_COMPILE_ERROR);
- 
-require_once("/var/www/html/htdocs.ssl/adminator2/include/config.php");
 
-// require_once("/var/www/html/htdocs.ssl/adminator2/include/class.php");
+require_once __DIR__ . "/../include/main.function.shared.php";
+
+require_once __DIR__ . "/../include/config.php";
+
+$ag = new Aglobal();      
+$ag->conn_mysql = $conn_mysql;
+$ag->conn_pgsql = $db_ok2;
 
 $html_tags = 1;
 
@@ -21,16 +25,16 @@ $output_main .= "work-diff.php start [".strftime("%d/%m/%Y %H:%M:%S", time())."]
 	   " ORDER BY priority ";
     
     $rs = $conn_mysql->query($sql);
-    $num_rows = mysql_num_rows($rs);
-     
+    $num_rows = $rs->num_rows;
+    
     if( $num_rows ==0 ) 
     { 
-	echo " INFO: no requests on the system \n"; 
-	$output_main .= " INFO: no requests on the system \n";
+		echo " INFO: no requests on the system \n"; 
+		$output_main .= " INFO: no requests on the system \n";
     }
     else
     {
-      while($data = mysql_fetch_array($rs) )
+      while($data = $rs->fetch_array() )
       {
         $id = $data["id"];
         $number_request = $data["number_request"];
@@ -45,7 +49,7 @@ $output_main .= "work-diff.php start [".strftime("%d/%m/%Y %H:%M:%S", time())."]
 echo "work-diff.php stop [".strftime("%d/%m/%Y %H:%M:%S", time())."] \n";
 $output_main .= "work-diff.php stop [".strftime("%d/%m/%Y %H:%M:%S", time())."] \n";
 
-if( ereg(".*<span.*>.*", $output_main) )
+if( preg_match("/.*<span.*>.*/", $output_main) )
 { $soubor = fopen("/var/www/html/htdocs.ssl/reinhard.remote.log", "w"); }
 else
 { 
@@ -84,40 +88,38 @@ function execute_request($cmd, $mess_ok, $mess_er)
     	    
     if($rs == "0")
     { 		
-	if($html_tags == 1)
-	{ $hlaska = "  <span class=\"work-ok\">".$mess_ok." (message: ".$rs.")</span>\n"; }
-	else
-	{ $hlaska = "  ".$mess_ok." (message: ".$rs.")\n"; }
+		if($html_tags == 1)
+		{ $hlaska = "  <span class=\"work-ok\">".$mess_ok." (message: ".$rs.")</span>\n"; }
+		else
+		{ $hlaska = "  ".$mess_ok." (message: ".$rs.")\n"; }
 
-	echo $hlaska;
-	$output_main .= $hlaska;
+		echo $hlaska;
+		$output_main .= $hlaska;
 	
     }
     else
     { 
-	if($html_tags == 1)
-	{ $hlaska = "  <span class=\"work-error\">".$mess_er." (message: ".$rs.")</span>\n"; }
-	else
-	{ $hlaska = "  ".$mess_er." (message: ".$rs.")\n"; }
+		if($html_tags == 1)
+		{ $hlaska = "  <span class=\"work-error\">".$mess_er." (message: ".$rs.")</span>\n"; }
+		else
+		{ $hlaska = "  ".$mess_er." (message: ".$rs.")\n"; }
 
-	echo $hlaska; 
-	$output_main .= $hlaska;
-		
+		echo $hlaska; 
+		$output_main .= $hlaska;
     }
-    
 } //end of function execute_request
 
 function execute_action($number_request, $id)
 {
-	global $output_main;
+	global $output_main, $ag, $conn_mysql;
     
 	if($number_request == 1)
 	{ //reinhard-3 - restriction (net-n/sikana)
 
 	    $cmd = "sudo /root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.3\" ";
 
-    	    $mess_ok = "reinhard-3-restriction ok ";
-    	    $mess_er = "reinhard-3-restriction error ";
+		$mess_ok = "reinhard-3-restriction ok ";
+		$mess_er = "reinhard-3-restriction error ";
 	    		
 	    execute_request($cmd, $mess_ok, $mess_er);
 	
@@ -313,7 +315,7 @@ function execute_action($number_request, $id)
 	}
 	elseif($number_request == 19)
 	{
-	   $output_main .= Aglobal::synchro_router_list();
+	   $output_main .= $ag->synchro_router_list();
 	     
 	   $mess_ok = "trinity - adminator - synchro_router_list - restart ";
 
@@ -399,5 +401,3 @@ function execute_action($number_request, $id)
 
 
 } //end of function execute_action
-
-?>

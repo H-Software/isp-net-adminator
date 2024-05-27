@@ -87,8 +87,8 @@ class Aglobal
 
         $router_id = intval($router_id);
 
-        $rs_q = mysql_query("SELECT ip_adresa, id FROM router_list WHERE id = '".$router_id."'");
-        $rs_q_num = mysql_num_rows($rs_q);
+        $rs_q = $this->conn_mysql->query("SELECT ip_adresa, id FROM router_list WHERE id = '".$router_id."'");
+        $rs_q_num = $rs_q->num_rows;
 
         if($rs_q_num <> 1) {
 
