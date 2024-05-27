@@ -39,7 +39,6 @@ class workController extends adminatorController
 
     public function work(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("workController\work called");
 
         $this->request = $request;
@@ -48,10 +47,6 @@ class workController extends adminatorController
         if(!$this->checkLevel(16)) {
             return $this->response;
         };
-
-        $this->smarty->assign("page_title", "Adminator3 :: Work");
-
-        $this->header($request, $response, $this->adminator);
 
         // TODO: fix this
         $this->smarty->assign("enable_work", 1); //slozeni JS skriptu pro stranku
@@ -87,11 +82,12 @@ class workController extends adminatorController
             $odpoved_file = "\n log soubor neexistuje \n";
         }
 
-        $this->smarty->assign("odpoved_file", $odpoved_file); //log ze souboru
+        $assignData = [
+            "page_title" => "Adminator3 :: Work",
+            "odpoved_file" => $odpoved_file, // log ze souboru
+        ];
 
-        $this->smarty->display('work.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'work/work.tpl', $assignData);
     }
 
 }

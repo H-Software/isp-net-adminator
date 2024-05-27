@@ -9,14 +9,16 @@ use Psr\Http\Message\ServerRequestInterface;
 class topologyController extends adminatorController
 {
     public \mysqli|\PDO $conn_mysql;
+
     public $smarty;
+
     public $logger;
 
     protected $settings;
 
-    protected $sentinel;
+    // protected $sentinel;
 
-    protected $adminator;
+    // protected $adminator;
 
     protected ServerRequestInterface $request;
 
@@ -24,12 +26,12 @@ class topologyController extends adminatorController
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->conn_mysql = $this->container->get('connMysql');
-        $this->smarty = $this->container->get('smarty');
-        $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
-        $this->settings = $this->container->get('settings');
+        // $this->container = $container;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->smarty = $container->get('smarty');
+        $this->logger = $container->get('logger');
+        // $this->sentinel = $container->get('sentinel');
+        $this->settings = $container->get('settings');
 
         $this->logger->info("topologyController\__construct called");
 
@@ -48,18 +50,14 @@ class topologyController extends adminatorController
         };
 
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
-
-        $this->smarty->assign("page_title", "Adminator3 :: Topologie :: Node list");
-
-        $this->header($request, $response, $this->adminator);
-
         $output = $topology->getNodeList();
 
-        $this->smarty->assign("body", $output);
+        $assignData = [
+            "page_title" => "Adminator3 :: Topologie :: Node list",
+            "body" => $output
+        ];
 
-        $this->smarty->display('topology/node-list.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'topology/node-list.tpl', $assignData);
     }
 
     public function routerList(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -74,17 +72,13 @@ class topologyController extends adminatorController
         };
 
         $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
-
-        $this->smarty->assign("page_title", "Adminator3 :: Topologie :: Router list");
-
-        $this->header($request, $response, $this->adminator);
-
         $output = $topology->getRouterList();
 
-        $this->smarty->assign("body", $output);
+        $assignData = [
+            "page_title" => "Adminator3 :: Topologie :: Router list",
+            "body" => $output
+        ];
 
-        $this->smarty->display('topology/router-list.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'topology/router-list.tpl', $assignData);
     }
 }

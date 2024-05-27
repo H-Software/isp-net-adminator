@@ -7,6 +7,7 @@ namespace App\Tests;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
@@ -26,6 +27,7 @@ final class HomeControllerTest extends AdminatorTestCase
         $_SERVER['HTTP_HOST'] = "127.0.0.1";
         $_SERVER['SCRIPT_URL'] = "/home";
         $_SERVER['REMOTE_ADDR'] = "127.0.0.1";
+        $_SERVER["REQUEST_URI"] = '/test';
     }
 
     protected function tearDown(): void
@@ -38,6 +40,7 @@ final class HomeControllerTest extends AdminatorTestCase
         $self = $this;
 
         $container = self::initDIcontainer();
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
 
         // mock "underlaying" class for helper functions/logic
         $adminatorMock = \Mockery::mock(
@@ -70,12 +73,12 @@ final class HomeControllerTest extends AdminatorTestCase
         $homeController = new HomeController($container, $adminatorMock, $opravyMock);
 
         $serverRequest = $this->createMock(ServerRequestInterface::class);
-        $response = $this->createMock(ResponseInterface::class);
+        // $response = $this->createMock(ResponseInterface::class);
+        $response = $responseFactory->createResponse();
 
-        ob_start();
+        $response = $homeController->home($serverRequest, $response, []);
 
-        $homeController->home($serverRequest, $response, []);
-
+        $responseContent = $response->getBody()->__toString();
 
         // // test sqlite migration
         // $sql = 'pragma table_info(\'board\');';
@@ -83,14 +86,10 @@ final class HomeControllerTest extends AdminatorTestCase
         // $rs = self::$pdoMysql->query($sql2);
         // print_r($rs->fetchAll());
 
-        $output = ob_get_contents();
-
-        ob_end_clean();
-
         // debug
-        // echo $output;
+        // echo $responseContent;
 
-        $this->assertNotEmpty($output);
+        $this->assertNotEmpty($responseContent);
 
         $outputKeywords = array(
             '<html lang="en">',
@@ -112,18 +111,19 @@ final class HomeControllerTest extends AdminatorTestCase
             // N.B.:
             // assert below causes printing output to stdout
             // workaround is using this foraech with assertFalse
+            // UPDATE: it works ATM.. probably :)
             */
             // $this->assertStringContainsString($output, $w);
 
             // TODO: maybe will works "assertThat()"
             // -> https://docs.phpunit.de/en/9.6/assertions.html#assertthat
 
-            if (!str_contains($output, $w)) {
+            if (!str_contains($responseContent, $w)) {
                 $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
             }
         }
 
-        if (preg_match("/(failed|chyba|error)+/i", $output)) {
+        if (preg_match("/(failed|chyba|error)+/i", $responseContent)) {
             $this->assertFalse(true, "found some word(s), which indicates error(s)");
         }
     }
