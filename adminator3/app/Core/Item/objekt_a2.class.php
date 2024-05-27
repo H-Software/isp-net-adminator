@@ -7,7 +7,7 @@ class objekt_a2
 
     public $logger;
 
-    public $echo = true;
+
 
     public $csrf_html;
 

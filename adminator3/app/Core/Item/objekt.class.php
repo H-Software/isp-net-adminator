@@ -7,20 +7,16 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class objekt extends adminator
 {
-    public $container;
-
     public $conn_pgsql;
     public $conn_mysql;
 
     public $logger;
 
-    public $validator;
+    // public $validator;
 
-    // protected $sentinel;
+    protected $sentinel;
 
     public $loggedUserEmail;
-
-    public $adminator; // handler for instance of adminator class
 
     // public ?string $userIdentityUsername = null;
 
@@ -100,14 +96,15 @@ class objekt extends adminator
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->validator = $container->get('validator');
+        // $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
-        // $this->sentinel = $this->container->get('sentinel');
+        $this->sentinel = $container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function listGetOrderItems()
@@ -331,9 +328,8 @@ class objekt extends adminator
         $error = "";
 
         $objekt_a2 = new \objekt_a2();
-        $objekt_a2->echo = false;
         $objekt_a2->conn_mysql = $this->conn_mysql;
-        $objekt_a2->conn_pgsql = $this->container->get('connPgsql');
+        $objekt_a2->conn_pgsql = $this->conn_pgsql;
         $objekt_a2->csrf_html = $this->csrf_html;
         $objekt_a2->mod_vypisu = $this->mod_vypisu;
 
