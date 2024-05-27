@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Controllers\AuthController;
+use App\Controllers\Auth\AuthController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Slim\Interfaces\RouteParserInterface;
 
 final class AuthControllerTest extends AdminatorTestCase
 {
@@ -26,12 +27,21 @@ final class AuthControllerTest extends AdminatorTestCase
 
     public function testLogin()
     {
-        // $this->markTestSkipped('under construction');
+        $this->markTestSkipped('under construction');
         $self = $this;
 
         $container = self::initDIcontainer(false);
 
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
+
+        $routerParser = \Mockery::mock(
+            RouteParserInterface::class,
+        );
+
+        $authController = new AuthController($container, $routerParser);
+
+        // $response = $authController->home($serverRequest, $response, []);
+
     }
 }
