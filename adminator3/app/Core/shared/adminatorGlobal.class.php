@@ -46,68 +46,6 @@ class Aglobal
         return $output;
     }
 
-    public static function work_handler($item_id, $nothing = null)
-    {
-
-        //item_id - cislo ktery odpovida vzdy nejaky akci :)
-
-        //seznam cisel a akcí
-        // 1 - osvezeni net-n/sikany na reinhard-3
-        // zbytek viz databáze
-
-        $item_id = intval($item_id);
-
-        $count = mysql_result(mysql_query("SELECT COUNT(*) FROM workitems WHERE (number_request = '$item_id' AND in_progress = '0') "), 0);
-
-        $item_name = mysql_result(mysql_query("SELECT name FROM workitems_names WHERE id = '$item_id' "), 0, 0);
-
-        if($count > 1) {
-            echo "<div> WARNING: Požadavek na restart \"".$item_name."\" (No. ".$item_id.") nalezen vícekrát. </div>\n";
-        }
-
-        if($count == 1) {
-            echo "<div> <span style=\"color: #1e90ff; \">INFO: </span>".
-            "Požadavak na restart <b>\"".$item_name."\"</b> (No. ".$item_id.") ".
-            "<span style=\"color: #1e90ff;\">není potřeba přidávat, již se nachází ve frontě restart. subsystému. </div>\n";
-        } else {
-            //polozka na seznamu restart. subsystému není, tj. pridame
-
-            $add = mysql_query("INSERT INTO workitems (number_request) VALUES ('".intval($item_id)."') ");
-
-            if($add == 1) {
-                $rs_write = "1";
-            } else {
-                $rs_write = "0";
-            }
-
-            $akce_az = "<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => ".$item_id;
-            $akce_az .= ", [<b>item_name</b>] => ".$item_name;
-
-            $sql_az = "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-               "('".$this->conn_mysql->real_escape_string($akce_az)."','".$this->conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email)."','".intval($rs_write)."')";
-
-            $add_az = mysql_query($sql_az);
-
-            echo "<div style=\"\">Požadavek na restart <b>\"".$item_name."\"</b> (No. ".$item_id.") - ";
-
-            if($add) {
-                echo "<span style=\"color: green;\"> úspěšně přidán do fronty</span>";
-            } else {
-                echo "<span style=\"color: red;\"> chyba při přidání požadavku do fronty</span>";
-            }
-
-            if($add_az) {
-                echo " - <span style=\"color: green;\"> úspěšně přidán do archivu změn.</span>";
-            } else {
-                echo " - <span style=\"color: red;\"> chyba při přidání požadavku do archivu změn.</span>";
-                echo "</div><div> sql: ".$sql_az."\n";
-            }
-
-            echo "</div>";
-        }
-
-    } //end of function work_handler
-
     public function test_snmp_function()
     {
 
