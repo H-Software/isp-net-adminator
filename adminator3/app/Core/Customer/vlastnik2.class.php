@@ -810,7 +810,7 @@ class vlastnik2 extends adminator
                     if($data["sluzba_int_id_tarifu"] == 999) {
                         $output .= "<span style=\"color: gray; \" >- tarif nezvolen</span></div>";
                     } else {
-                        $output .= " (<a href=\"admin-tarify.php?id_tarifu=".$data["sluzba_int_id_tarifu"]."\" >tarif)</a></div>";
+                        $output .= " (<a href=\"/admin/tarify?id_tarifu=".$data["sluzba_int_id_tarifu"]."\" >tarif)</a></div>";
                     }
 
                     $sluzba_int_aktivni = "1";
