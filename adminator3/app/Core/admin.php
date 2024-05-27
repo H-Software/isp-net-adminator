@@ -119,8 +119,8 @@ class admin
 
     public function levelAction($csrf_nameKey, $csrf_valueKey, $csrf_name, $csrf_value)
     {
-
         $output = "";
+        $error = "";
 
         if (($_POST["popis_new"])) {
             //budeme ukladat
@@ -129,7 +129,7 @@ class admin
 
             $output .= "Zadáno do formuláre : <br><br>";
             $output .= "popis stránky: ".$popis."<br>";
-            $output .= "level stránky: ".$level."<br>";
+            $output .= "level stránky: ".$level."<br><br>";
 
             $id_new = intval($_POST["new_id"]);
 
@@ -144,13 +144,13 @@ class admin
             try {
                 $rs = $this->conn_mysql->query($sql);
             } catch (Exception $e) {
-                die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                $error .= "<div style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "</div>\n";
             }
 
             if ($rs) {
-                $output .= "<br><br>MySql potvrdilo, takze: <br><H2>Data v databazi upravena.</H2><br><br>";
+                $output .= "<div style=\"color: green; \">MySql potvrdilo, data v databazi upravena.</div>";
             } else {
-                $output .= "Houstone, tento zapis do databaze nevysel :)";
+                $output .= '<div style="color: red; ">Houstone, tento zapis do databaze nevysel :)</div>' . $error;
             }
 
         } else {
@@ -163,7 +163,7 @@ class admin
                 try {
                     $vysledek = $this->conn_mysql->query("select * from leveling where id = $update_id ");
                 } catch (Exception $e) {
-                    die("<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
+                    $output .= "<div style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "</div>\n";
                 }
 
                 $radku = $vysledek->num_rows;
@@ -218,7 +218,7 @@ class admin
 
         }
 
-        return array($output);
+        return array($output, $error);
     }
 
     public function tarifList()

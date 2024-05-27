@@ -171,9 +171,9 @@ class othersController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Board");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = array(
+            "page_title" => "Adminator3 :: Board",
+        );
 
         $nastenka = new \board($this->container);
 
@@ -271,9 +271,7 @@ class othersController extends adminatorController
 
         endif;
 
-        $this->smarty->display('others/board.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'others/board.tpl', $assignData);
     }
 
     public function boardRss(ServerRequestInterface $request, ResponseInterface $response, array $args)
