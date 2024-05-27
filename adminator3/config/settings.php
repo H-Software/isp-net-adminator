@@ -4,7 +4,14 @@ $app_mode = (isset($_ENV['MODE'])) ? $_ENV['MODE'] : "";
 
 $settings = [
         'app' => [
-            "mode" => $app_mode,
+            'mode' => $app_mode,
+            'core' => [
+                'topology' => [
+                    'router' => [
+                        'listing_interval' => 2
+                    ]
+                ]
+            ]
         ],
         'logger' => [
             'name' => 'slim-app',

@@ -13,7 +13,7 @@ class topologyController extends adminatorController
     public $logger;
 
     protected $settings;
-    
+
     protected $sentinel;
 
     protected $adminator;

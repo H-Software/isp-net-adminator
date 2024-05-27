@@ -1116,7 +1116,15 @@ class Topology extends adminator
                 //prvky pro listovaci odkazy
                 $paging_url = "?".$get_odkazy;
 
-                $paging = new  c_listing_topology($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $sql_final);
+                $paging = new c_listing_topology(
+                    $this->conn_mysql,
+                    $paging_url,
+                    $this->settings['app']['core']['topology']['router']['listing_interval'],
+                    $list,
+                    "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
+                    "</div>\n",
+                    $sql_final
+                );
 
                 $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
 
@@ -1304,7 +1312,7 @@ class Topology extends adminator
 
                         $id_routeru = $data["id"];
                         $colspan_stav = "1";
-                        
+
                         $dotaz_top = $this->conn_mysql->query("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
                         $dotaz_top_radku = $dotaz_top->num_rows;
 
