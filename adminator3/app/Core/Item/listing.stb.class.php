@@ -54,9 +54,6 @@ class c_listing_stb
     //vyber dat z databaze
     public function dbSelect()
     {
-
-        global $db_ok2;
-
         if($this->db_type == "mysql") {
             $listRecord = $this->conn_mysql->query($this->sql);
         } elseif($this->db_type == "pgsql") {

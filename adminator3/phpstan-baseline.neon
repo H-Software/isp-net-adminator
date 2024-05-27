@@ -1,10 +1,6 @@
 parameters:
 	ignoreErrors:
 
-		# -
-		# 	message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Auth/Password.php
 		-
 			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 			count: 2
@@ -40,21 +36,6 @@ parameters:
 			count: 1
 			path: app/Controllers/othersController.php
 
-		# -
-		# 	message: "#^Call to an undefined static method App\\\\Models\\\\PageLevel\\:\\:find\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Core/Adminator/Adminator.php
-
-		# -
-		# 	message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
-		# 	count: 4
-		# 	path: app/Core/Adminator/Adminator.php
-
-		# -
-		# 	message: "#^Call to an undefined static method App\\\\Models\\\\ArchivZmen\\:\\:create\\(\\)\\.$#"
-		# 	count: 2
-		# 	path: app/Core/ArchivZmen.php
-
 		-
 			message: "#^If condition is always false\\.$#"
 			count: 1
@@ -69,21 +50,6 @@ parameters:
 			message: "#^Variable \\$typ in isset\\(\\) always exists and is not nullable\\.$#"
 			count: 1
 			path: app/Core/ArchivZmen.php
-
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Core/ArchivZmenUcetni.php
-
-		# -
-		# 	message: "#^Call to an undefined static method App\\\\Models\\\\FakturacniSkupina\\:\\:get\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Core/Customer/fakturacniSkupiny.class.php
-
-		# -
-		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Core/Customer/fakturacniSkupiny.class.php
 
 		-
 			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
@@ -211,11 +177,6 @@ parameters:
 			count: 1
 			path: app/Core/Item/stb.class.php
 
-		# -
-		# 	message: "#^Call to an undefined static method App\\\\Models\\\\Stb\\:\\:where\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Core/Item/stb.class.php
-
 		-
 			message: "#^If condition is always true\\.$#"
 			count: 1
@@ -240,17 +201,6 @@ parameters:
 			message: "#^Deprecated in PHP 8\\.0\\: Required parameter \\$conBefore follows optional parameter \\$conList\\.$#"
 			count: 1
 			path: app/Core/Item/listing.stb.class.php
-
-		# -
-		# 	message: "#^Call to an undefined static method App\\\\Models\\\\PartnerOrder\\:\\:create\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Core/Partner/partner.class.php
-
-		# -
-		# 	message: "#^Call to an undefined static method App\\\\Models\\\\PartnerOrder\\:\\:get\\(\\)\\.$#"
-		# 	count: 1
-		# 	path: app/Core/Partner/partner.class.php
-
 
 		-
 			message: "#^Property App\\\\Partner\\\\partner\\:\\:\\$form_error is never written, only read\\.$#"
@@ -378,11 +328,6 @@ parameters:
 			path: app/Core/platby.php
 
 		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: app/Core/shared/adminatorGlobal.class.php
-
-		-
 			message: "#^Call to method connect\\(\\) on an unknown class RouterOS\\.$#"
 			count: 1
 			path: app/Core/shared/adminatorGlobal.class.php
@@ -399,12 +344,12 @@ parameters:
 
 		-
 			message: "#^Function mysql_query not found\\.$#"
-			count: 6
+			count: 2
 			path: app/Core/shared/adminatorGlobal.class.php
 
 		-
 			message: "#^Function mysql_result not found\\.$#"
-			count: 5
+			count: 3
 			path: app/Core/shared/adminatorGlobal.class.php
 
 		-
@@ -416,11 +361,6 @@ parameters:
 			message: "#^Offset 1 does not exist on array\\{false\\}\\.$#"
 			count: 4
 			path: app/Core/shared/adminatorGlobal.class.php
-
-		# -
-		# 	message: "#^PHPDoc tag @param has invalid value \\(string e\\-mailová adresa\\)\\: Unexpected token \"e\\-mailová\", expected variable at offset 70$#"
-		# 	count: 1
-		# 	path: app/Core/shared/adminatorGlobal.class.php
 
 		-
 			message: "#^Access to an undefined property partner_servis\\:\\:\\$mod\\.$#"

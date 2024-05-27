@@ -12,11 +12,15 @@ class objekt extends adminator
 
     public $logger;
 
+    protected $container;
+
     // protected $validator;
 
     protected $sentinel;
 
     public $adminator; // handler for instance of adminator class
+
+    protected $work;
 
     protected $loggedUserEmail;
 
@@ -100,6 +104,7 @@ class objekt extends adminator
 
     public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
         // $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
@@ -109,6 +114,8 @@ class objekt extends adminator
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
+
+        $this->work = new \App\Core\work($this->container);
     }
 
     public function listGetOrderItems()
@@ -771,8 +778,6 @@ class objekt extends adminator
                 }
 
                 //prvne stavajici data docasne ulozime
-                $pole2 .= "<b>akce: uprava objektu; </b><br>";
-
                 $sql_rows = "id_komplu, dns_jmeno, ip, mac, client_ap_ip, dov_net, id_tarifu, typ, poznamka, verejna, ";
                 $sql_rows .= "sikana_status, sikana_cas, sikana_text, upravil, id_nodu, ";
                 $sql_rows .= "tunnelling_ip, tunnel_user, tunnel_pass";
@@ -848,7 +853,9 @@ class objekt extends adminator
                 //ted zvlozime do archivu zmen
                 $this->updatedDataArray = $obj_upd;
                 // require("objekty-add-inc-archiv.php");
-                $this->actionArchivZmenWifiDiff($vysledek_write);
+                list($az_output) = $this->actionArchivZmenWifiDiff($vysledek_write);
+
+                $output .= $az_output;
 
                 $updated = "true";
 
@@ -895,14 +902,13 @@ class objekt extends adminator
                     $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
                     pg_last_error($this->conn_pgsql).
                     "</div>";
-
-                    $output .= "<div style=\"padding-left: 5px; \">sql: ".$sql."</div>";
                 }
 
                 // pridame to do archivu zmen
-                // require("objekty-add-inc-archiv-wifi-add.php");
                 $this->addedDataArray = $obj_add;
-                $this->actionArchivZmenWifi($vysledek_write);
+                list($az_output) = $this->actionArchivZmenWifi($vysledek_write);
+
+                $output .= $az_output;
 
                 $writed = "true";
             } // konec else - rezim pridani
@@ -1267,8 +1273,6 @@ class objekt extends adminator
                 // rezim upravy
 
                 //prvne stavajici data docasne ulozime
-                $pole2 .= "<b>akce: uprava objektu; </b><br>";
-
                 $vysl4 = pg_query($this->conn_pgsql, "select * from objekty WHERE id_komplu='$this->update_id' ");
 
                 if((pg_num_rows($vysl4) <> 1)) {
@@ -2404,10 +2408,12 @@ class objekt extends adminator
         //return true;
     } //konec funkce generujdata
 
-    public function actionArchivZmenWifiDiff($vysledek_write)
+    public function actionArchivZmenWifiDiff($vysledek_write): array
     {
-        $pole3 .= "[id_komplu]=> ".$this->update_id.",";
+        $output = "";
 
+        $pole3 = "<b>akce: uprava objektu; </b><br>";
+        $pole3 .= "[id_komplu]=> ".$this->update_id.",";
         $pole3 .= " diferencialni data: ";
 
         $obj_upd = $this->updatedDataArray;
@@ -2501,163 +2507,29 @@ class objekt extends adminator
             } // konec if obj == val
         } // konec foreach
 
-        $pole2 .= "".$pole3;
-
         $add = $this->conn_mysql->query(
             "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
-                                        . "VALUES ('" . $pole2 . "','" . $this->loggedUserEmail . "','" . $vysledek_write . "')"
+                                        . "VALUES ('" . $pole3 . "','" . $this->loggedUserEmail . "','" . $vysledek_write . "')"
         );
 
-        //
+        if($add) {
+            $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        } else {
+            $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        }
+
         //pro osvezovani
         //
+        list($work_output) = $this->work->workActionObjektyWifiDiff($pole3, $this->update_id);
+        $output .= $work_output;
 
-        // TODO: fix automatic restarts
-
-        // //zjistit, krz kterého reinharda jde objekt
-        // $reinhard_id = adminator::find_reinhard($update_id);
-
-        // //zmena sikany
-        // if( ereg(".*změna.*Šikana.*z.*", $pole3) )
-        // {
-        // if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
-        // else{
-
-        //     //nenalezet pozadovany reinhard, takze osvezime vsechny
-
-        //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-
-        // }
-
-        // }
-
-        // //zmena NetN
-        // if( ereg(".*změna.*Povolen.*Inet.*z.*", $pole3) )
-        // {
-        // if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
-        // else{
-
-        //     //nenalezet pozadovany reinhard, takze osvezime vsechny
-
-        //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-
-        // }
-        // }
-
-        // //zmena IP adresy pokud je aktivni Sikana ci NetN
-        // if( (
-        //     ereg(".*změna.*IP.*adresy.*z.*", $pole3)
-        //     and
-        //     (
-        //     ($this->origDataArray["sikana_status"] == "a")
-        // or
-        // ($this->origDataArray["dov_net"] == "n")
-        //     )
-        //     )
-        // )
-        // {
-        //     //radsi vynutit restart net-n/sikany u vseho
-
-        //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("3"); //reinhard-fiber (linux) - iptables (net-n/sikana)
-        //     Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-
-        //     Aglobal::work_handler("5");  //reinhard-fiber - shaper
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-
-        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        // }
-        // //zmena IP adresy bez aktivovaného omezení
-        // elseif( ereg(".*změna.*IP.*adresy.*z.*", $pole3) )
-        // {
-        //     Aglobal::work_handler("5");  //reinhard-fiber - shaper
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-
-        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        // }
-
-        // //zmena linky -- shaper / filtrace
-        // if( ereg(".*změna.*pole.*id_tarifu.*", $pole3)
-        //     or
-        //     ereg(".*změna.*Tarifu.*", $pole3)
-        // )
-        // {
-        //     if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
-        //     else
-        //     {
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-        //     }
-
-        //     // filtrace asi neni treba
-        //     // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        // }
-
-        // //zmena tunneling_ip ci tunel záznamů
-        // // --> radius artemis
-        // // zde dodelat zmenu IP adresy, pokud tunelovana verejka
-        // if(
-        // ereg(".*změna.*pole.*tunnelling_ip.*", $pole3)
-        // or
-        // ereg(".*změna.*pole.*tunnel_user.*", $pole3)
-        // or
-        // ereg(".*změna.*pole.*tunnel_pass.*", $pole3)
-        // )
-        // {
-        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-        // }
-
-        // //zmena MAC adresy .. zatim se nepouziva u wifi
-
-        // //zmena DNS záznamu, asi jen u veřejných IP adresa
-        // // --> restart DNS auth. serveru
-        // if( ereg(".*změna.*pole.*dns_jmeno.*", $pole3) )
-        // {
-        //     Aglobal::work_handler("9"); //erik - dns-restart
-        //     Aglobal::work_handler("10"); //trinity - dns restart
-        //     Aglobal::work_handler("11"); //artemis - dns restart
-        //     Aglobal::work_handler("12"); //c.ns.simelon.net - dns.restart
-        // }
-
-        // if( ereg(".*změna.*pole.*client_ap_ip.*", $pole3) ){
-
-        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        //     if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
-        //     else
-        //     {
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-        //     }
-        // }
-
-        //nic vic mi nenapada :-)
+        return array($output);
     }
 
-    public function actionArchivZmenWifi($vysledek_write)
+    public function actionArchivZmenWifi($vysledek_write): array
     {
+        $output = "";
+
         //zjistit, krz kterého reinharda jde objekt
         // $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
 
@@ -2731,6 +2603,12 @@ class objekt extends adminator
             "'".$vysledek_write."')"
         );
 
+        if($add) {
+            $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        } else {
+            $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        }
+
         //automaticke osvezovani/restarty
         // TODO: fix automatic restarts
         // if( $this->form_typ_ip == 4 )
@@ -2772,10 +2650,13 @@ class objekt extends adminator
         //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
         //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
         // }
+
+        return array($output);
     }
 
     private function actionArchivZmenFiberDiff($vysledek_write)
     {
+        $pole3 = "<b>akce: uprava objektu; </b><br>";
         $pole3 .= "[id_komplu]=> ".$this->update_id.",";
         $pole3 .= " diferencialni data: ";
 
@@ -2872,14 +2753,18 @@ class objekt extends adminator
             } // konec if obj == val
         } // konec foreach
 
-        $pole2 .= "".$pole3;
-
         $add = $this->conn_mysql->query(
             "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-                "('".$this->conn_mysql->real_escape_string($pole2)."','".
+                "('".$this->conn_mysql->real_escape_string($pole3)."','".
                 $this->conn_mysql->real_escape_string($this->loggedUserEmail)."','".
             $this->conn_mysql->real_escape_string($vysledek_write)."') "
         );
+
+        // if($add) {
+        //     $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        // } else {
+        //     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        // }
 
         // TODO: fix automatic restarts
         //zmena sikany nebo IP adresy
@@ -3020,6 +2905,12 @@ class objekt extends adminator
                 $this->conn_mysql->real_escape_string($this->loggedUserEmail)."','".
             $this->conn_mysql->real_escape_string($vysledek_write)."') "
         );
+
+        // if($add) {
+        //     $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        // } else {
+        //     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        // }
 
         //ted automaticky pridavani restartu
 
@@ -3433,7 +3324,7 @@ class objekt extends adminator
             {
             $id_tridy=$data["id_tridy"];
             //zjistime sirku pasma
-            $dotaz_g = pg_exec($db_ok2, "SELECT * FROM tridy WHERE id_tridy = '$id_tridy' ");
+            $dotaz_g = pg_exec($this->conn_pgsql, "SELECT * FROM tridy WHERE id_tridy = '$id_tridy' ");
 
             while (  $data_g=pg_fetch_array($dotaz_g) ) { $sirka=$data_g["sirka"]; }
             }
