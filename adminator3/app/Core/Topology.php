@@ -265,7 +265,7 @@ class Topology extends adminator
         $paging = new c_listing_topology(
             $this->conn_mysql,
             $sql_source,
-            30,
+            $this->settings['app']['core']['topology']['node']['listing_interval'],
             $list,
             "<center><div class=\"text-listing\">\n",
             "</div></center>\n",

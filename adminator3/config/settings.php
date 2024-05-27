@@ -7,6 +7,9 @@ $settings = [
             'mode' => $app_mode,
             'core' => [
                 'topology' => [
+                    'node' => [
+                        'listing_interval' => 2
+                    ],
                     'router' => [
                         'listing_interval' => 2
                     ]

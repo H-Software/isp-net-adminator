@@ -5,7 +5,7 @@
 
  require("/var/www/html/htdocs.ssl/adminator2/include/config.php");
 
- require_once("/var/www/html/htdocs.ssl/adminator2/include/class.php");
+//  require_once("/var/www/html/htdocs.ssl/adminator2/include/class.php");
 
 //prvne detekce casu
 $datum = strftime("%H ", time());
