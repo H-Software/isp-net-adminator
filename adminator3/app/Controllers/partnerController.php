@@ -9,7 +9,6 @@ use App\Partner\partner;
 
 class partnerController extends adminatorController
 {
-    public $conn_mysql;
     public $smarty;
     public $logger;
 
@@ -23,16 +22,14 @@ class partnerController extends adminatorController
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->conn_mysql = $this->container->get('connMysql');
-        $this->smarty = $this->container->get('smarty');
-        $this->logger = $this->container->get('logger');
+        $this->smarty = $container->get('smarty');
+        $this->logger = $container->get('logger');
 
         $this->logger->info("partnerController\__construct called");
 
         parent::__construct($container);
 
-        $this->partnerInstance = new partner($this->container);
+        $this->partnerInstance = new partner($container);
 
     }
 
