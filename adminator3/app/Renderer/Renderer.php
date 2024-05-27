@@ -74,7 +74,7 @@ final class Renderer
         return $response;
     }
 
-    public function header(ServerRequestInterface|null $request, ResponseInterface $response)
+    public function header(ServerRequestInterface|null $request, ResponseInterface|null $response)
     {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
