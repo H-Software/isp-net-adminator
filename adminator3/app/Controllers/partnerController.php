@@ -47,10 +47,10 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $assignData = array(
+        $assignData = [
             "page_title" => "Adminator3 :: Partner program",
             "body" => "Prosím vyberte z podkategorie výše...."
-        );
+        ];
 
         return $this->renderer->template($request, $response, 'partner/partner-cat.tpl', $assignData);
     }
@@ -66,10 +66,10 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $assignData = array(
+        $assignData = [
             "page_title" => "Adminator3 :: Partner program :: Orders",
             "body" => "Prosím vyberte z podkategorie výše...."
-        );
+        ];
 
         return $this->renderer->template($request, $response, 'partner/order-cat.tpl', $assignData);
     }
@@ -87,10 +87,10 @@ class partnerController extends adminatorController
 
         $listOutput = $this->partnerInstance->list();
 
-        $assignData = array(
+        $assignData = [
             "page_title" => "Adminator3 :: Partner program :: Order List",
             "body" => $listOutput[0]
-        );
+        ];
 
         return $this->renderer->template($request, $response, 'partner/order-list.tpl', $assignData);
     }
@@ -106,9 +106,9 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $assignData = array(
+        $assignData = [
             "page_title" => "Adminator3 :: Partner :: Order Add",
-        );
+        ];
 
         // CSRF token name and value for update form
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
@@ -133,9 +133,9 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $assignData = array(
+        $assignData = [
             "page_title" => "Adminator3 :: Partner :: Order Accept",
-        );
+        ];
 
         $this->partnerInstance->accept();
 
@@ -153,13 +153,13 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Update Desc");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner :: Order Update Desc",
+        ];
 
         $this->partnerInstance->updateDesc();
 
-        return $response;
+        return $this->renderer->template($request, $response, $this->partnerInstance->rendererTemplateName, $assignData);
     }
 
     public function orderChangeStatus(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -173,13 +173,12 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Change Status");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner :: Order Change Status",
+        ];
 
         $this->partnerInstance->changeStatus();
 
-        return $response;
-
+        return $this->renderer->template($request, $response, $this->partnerInstance->rendererTemplateName, $assignData);
     }
 }

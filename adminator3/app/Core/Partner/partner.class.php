@@ -438,7 +438,7 @@ class partner extends adminator
             if(count($data) == 0) {
                 $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
                 $this->smarty->assign("body", $output[0]);
-                $this->smarty->display('partner/order-update-desc.tpl');
+                $this->rendererTemplateName = 'partner/order-update-desc.tpl';
                 return;
             }
 
@@ -518,8 +518,7 @@ class partner extends adminator
 
         $this->smarty->assign("body", $output[0]);
 
-        $this->smarty->display('partner/order-update-desc.tpl');
-
+        $this->rendererTemplateName = 'partner/order-update-desc.tpl';
     }
 
     public function changeStatus(): void
@@ -676,6 +675,6 @@ class partner extends adminator
 
         $this->smarty->assign("body", $output[0]);
 
-        $this->smarty->display('partner/order-change-status.tpl');
+        $this->rendererTemplateName = 'partner/order-change-status.tpl';
     }
 }
