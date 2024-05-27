@@ -46,7 +46,7 @@ require ($cesta."include/charset.php");
     
 <?
 
- $ps = new partner_servis($conn_mysql);
+ $ps = new partner_servis($conn_mysql, $db_ok2);
  
  $ps->klient_hledat = $conn_mysql->real_escape_string($_POST["klient_hledat"]);
  $ps->klient_id = intval($_POST["klient_id"]);

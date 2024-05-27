@@ -10,6 +10,8 @@ class board
 
     public \mysqli|\PDO $conn_mysql;
 
+    public ?\PgSql\Connection $conn_pgsql;
+
     public $logger;
 
     protected $settings;
@@ -44,6 +46,8 @@ class board
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
+        $this->conn_pgsql = $container->get('connPgsql');
+
         $this->logger = $container->get('logger');
         $this->settings = $container->get('settings');
         $this->pdoMysql = $container->get('pdoMysql');
@@ -208,7 +212,7 @@ class board
 
         $this->logger->info("board\\insert_into_db: query result: " . var_export($add, true));
 
-        if($add === null or $add === false) {
+        if($add === false) {
             $this->error .= "<div>Došlo k chybě při zpracování SQL dotazu v databázi!</div>\n";
             $this->error .= "<div>Error description: " . $this->conn_mysql->error."</div>\n";
         }

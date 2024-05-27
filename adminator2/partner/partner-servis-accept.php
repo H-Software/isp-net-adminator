@@ -46,7 +46,7 @@ require ($cesta."include/charset.php");
 
 <?php
    
-   $ps = new partner_servis($conn_mysql);
+   $ps = new partner_servis($conn_mysql, $db_ok2);
    
    if($_GET["accept"] <> 1)
    {
