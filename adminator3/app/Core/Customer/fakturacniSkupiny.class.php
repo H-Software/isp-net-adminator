@@ -76,7 +76,8 @@ class fakturacniSkupiny extends adminator
     public function Action()
     {
         $output = "";
-
+        $error = "";
+        
         $this->action_form = $this->formInit();
 
         $update_id = $_GET["update_id"];
@@ -625,6 +626,7 @@ class fakturacniSkupiny extends adminator
     public function show_fakt_skupiny($fu_select)
     {
         $fu_sql_base = " SELECT * FROM fakturacni_skupiny ";
+        $fu_sql_select = "";
 
         if($fu_select == 2) {
             $fu_sql_select .= " WHERE typ = '2' ";
