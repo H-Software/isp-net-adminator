@@ -23,9 +23,15 @@ class BoardData extends AbstractSeed
             $data[] = [
                 'author'        => $faker->userName,
                 'email'         => $faker->email,
-                'subject'       => $faker->words(5, true),
+                'subject'       => preg_replace(
+                                        "/(failed|chyba|error)/", 
+                                        '',
+                                         $faker->words(5, true)
+                                    ),
                 'body'          => preg_replace(
-                                        "/(failed|chyba|error)/", '', $faker->text(60)
+                                        "/(failed|chyba|error)/",
+                                        '',
+                                        $faker->text(60)
                                     ),
                 'from_date'     => date('Y-m-d', strtotime('yesterday')),
                 'to_date'       => date('Y-m-d', strtotime('+'. $i .' weeks')),
