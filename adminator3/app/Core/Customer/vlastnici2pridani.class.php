@@ -16,7 +16,7 @@ class vlastnici2pridani extends adminator
 
     protected $cache;
 
-    // public $container; // for calling stb class over vlastnik2_a2 class
+    // public $container;
 
     public $adminator; // handler for instance of adminator class
 

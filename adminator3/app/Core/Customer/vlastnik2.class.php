@@ -13,7 +13,8 @@ class vlastnik2 extends adminator
 
     public $smarty;
 
-    public $container; // for calling stb class over vlastnik2_a2 class
+    public $container;
+    
     public $adminator; // handler for instance of adminator class
 
     public $alert_type;
