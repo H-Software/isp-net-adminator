@@ -13,11 +13,13 @@ use Exception;
 
 class adminator
 {
-    public \mysqli $conn_mysql;
+    // PDO if used in tests
+    public \mysqli|\PDO $conn_mysql;
 
     public \PgSql\Connection $conn_pgsql;
 
     public $smarty;
+    
     public $logger;
 
     public $pdoMysql;

@@ -7,7 +7,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class objekt extends adminator
 {
-    public \mysqli $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public \PgSql\Connection $conn_pgsql;
 
@@ -119,6 +119,10 @@ class objekt extends adminator
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
 
         $this->work = new \App\Core\work($this->container);
+
+        $pdo = new \PDO("mysql:host=localhost;dbname=world", 'my_user', 'my_password');
+
+
     }
 
     public function listGetOrderItems()
