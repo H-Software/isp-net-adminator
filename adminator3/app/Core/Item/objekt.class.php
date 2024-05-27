@@ -851,7 +851,9 @@ class objekt extends adminator
                 //ted zvlozime do archivu zmen
                 $this->updatedDataArray = $obj_upd;
                 // require("objekty-add-inc-archiv.php");
-                $this->actionArchivZmenWifiDiff($vysledek_write);
+                list($az_output) = $this->actionArchivZmenWifiDiff($vysledek_write);
+
+                $output  .= $az_output;
 
                 $updated = "true";
 
@@ -2407,8 +2409,10 @@ class objekt extends adminator
         //return true;
     } //konec funkce generujdata
 
-    public function actionArchivZmenWifiDiff($vysledek_write)
+    public function actionArchivZmenWifiDiff($vysledek_write): array
     {
+        $output = "";
+
         $pole3 = "[id_komplu]=> ".$this->update_id.",";
 
         $pole3 .= " diferencialni data: ";
@@ -2509,6 +2513,12 @@ class objekt extends adminator
                                         . "VALUES ('" . $pole3 . "','" . $this->loggedUserEmail . "','" . $vysledek_write . "')"
         );
 
+        if($add) {
+            $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        } else {
+            $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        }
+
         //
         //pro osvezovani
         //
@@ -2519,25 +2529,29 @@ class objekt extends adminator
         // //zjistit, krz kterého reinharda jde objekt
         $reinhard_id = adminator::find_reinhard($this->update_id, $this->conn_mysql, $this->conn_pgsql);
 
+        $work_output = [];
+
         // //zmena sikany
         if(preg_match("/.*změna.*Šikana.*z.*/", $pole3)) {
             if($reinhard_id == 177) {
-                $work->work_handler("1");
+                $work_output[1] = $work->work_handler("1");
             } //reinhard-3 (ros) - restrictions (net-n/sikana)
             elseif($reinhard_id == 1) {
-                $work->work_handler("2");
+                $work_output[2] = $work->work_handler("2");
             } //reinhard-wifi (ros) - restrictions (net-n/sikana)
             elseif($reinhard_id == 236) {
-                $work->work_handler("24");
+                $work_output[24] = $work->work_handler("24");
             } //reinhard-5 (ros) - restrictions (net-n/sikana)
             else {
                 //nenalezet pozadovany reinhard, takze osvezime vsechny
 
-                $work->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-                $work->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-                $work->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+                $work_output[1] = $work->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+                $work_output[2] = $work->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                $work_output[24] = $work->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
             }
         }
+
+        $output .= var_export($work_output, true);
 
         // //zmena NetN
         // if( ereg(".*změna.*Povolen.*Inet.*z.*", $pole3) )
@@ -2658,6 +2672,8 @@ class objekt extends adminator
         // }
 
         //nic vic mi nenapada :-)
+
+        return array($output);
     }
 
     public function actionArchivZmenWifi($vysledek_write)
