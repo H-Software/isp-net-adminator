@@ -347,26 +347,26 @@ if(($odeslat == "OK") and ($error != "1")) {
         }
         $add = $conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 
-        Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+        // Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+        // Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+        // Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
 
-        Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+        // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
 
-        //automatické restarty
-        if($alarm == 1) {
-            //kvuli alarmu
-            Aglobal::work_handler("15"); //trinity - Monitoring I - Footer-restart
-        }
+        // //automatické restarty
+        // if($alarm == 1) {
+        //     //kvuli alarmu
+        //     Aglobal::work_handler("15"); //trinity - Monitoring I - Footer-restart
+        // }
 
-        if($monitoring == 1) {
-            //kvuli monitoringu
-            Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
-            Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart
-        }
+        // if($monitoring == 1) {
+        //     //kvuli monitoringu
+        //     Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
+        //     Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart
+        // }
 
-        //radsi vzdy (resp. zatim)
-        Aglobal::work_handler("19"); //trinity - adminator - synchro_router_list
+        // //radsi vzdy (resp. zatim)
+        // Aglobal::work_handler("19"); //trinity - adminator - synchro_router_list
 
     } //konec if/else update_id > 0
 
