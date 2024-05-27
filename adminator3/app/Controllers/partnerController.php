@@ -133,13 +133,13 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Accept");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = array(
+            "page_title" => "Adminator3 :: Partner :: Order Accept",
+        );
 
         $this->partnerInstance->accept();
 
-        return $response;
+        return $this->renderer->template($request, $response, $this->partnerInstance->rendererTemplateName, $assignData);
     }
 
     public function orderChangeDesc(ServerRequestInterface $request, ResponseInterface $response, array $args)
