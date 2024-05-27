@@ -3324,7 +3324,7 @@ class objekt extends adminator
             {
             $id_tridy=$data["id_tridy"];
             //zjistime sirku pasma
-            $dotaz_g = pg_exec($db_ok2, "SELECT * FROM tridy WHERE id_tridy = '$id_tridy' ");
+            $dotaz_g = pg_exec($this->conn_pgsql, "SELECT * FROM tridy WHERE id_tridy = '$id_tridy' ");
 
             while (  $data_g=pg_fetch_array($dotaz_g) ) { $sirka=$data_g["sirka"]; }
             }
