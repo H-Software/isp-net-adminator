@@ -119,7 +119,7 @@ class partnerController extends adminatorController
 
         $this->partnerInstance->add();
 
-        return $this->renderer->template($request, $response, , $assignData);
+        return $this->renderer->template($request, $response, $this->partnerInstance->rendererTemplateName, $assignData);
     }
 
     public function orderAccept(ServerRequestInterface $request, ResponseInterface $response, array $args)

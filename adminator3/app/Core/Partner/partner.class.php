@@ -24,6 +24,8 @@ class partner extends adminator
 
     protected $loggedUserEmail;
 
+    public $rendererTemplateName;
+
     public $csrf_html;
 
     public $url_params;
@@ -300,11 +302,11 @@ class partner extends adminator
 
             $this->smarty->assign("insertedData", $insertedData);
 
-            $this->smarty->display('partner/order-add.tpl');
+            $this->rendererTemplateName = 'partner/order-add.tpl';
             return true;
         } else {
             // zobrazime formular
-
+            //
             if(isset($this->form_odeslat)) {
                 $this->smarty->assign("form_error_message", $this->form_error);
             }
@@ -313,7 +315,7 @@ class partner extends adminator
             // $bodyContent .=  print_r($form_data);
             $this->smarty->assign($form_data);
 
-            $this->smarty->display('partner/order-add-form.tpl');
+            $this->rendererTemplateName = 'partner/order-add-form.tpl';
             return true;
         }
     }
