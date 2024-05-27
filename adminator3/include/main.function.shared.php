@@ -1185,7 +1185,6 @@ function execute_action($number_request, $id)
         $output_main .= " ERROR: Not found action to request No.".$number_request."\n";
     }
 
-
 } //end of function execute_action
 
 function synchro_router_list(\PgSql\Connection $conn_pgsql)
