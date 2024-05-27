@@ -52,7 +52,7 @@ class adminatorController extends Controller
         $this->pdoMysql = $container->get('pdoMysql');
         $this->settings = $container->get('settings');
         $this->renderer = $container->get(Renderer::class);
-        $this->csrf     = $container->eget('csrf');
+        $this->csrf     = $container->get('csrf');
 
         // $this->responseFactory = $container->get(ResponseFactoryInterface::class);
 
