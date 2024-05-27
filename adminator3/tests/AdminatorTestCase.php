@@ -14,7 +14,6 @@ use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
 use Slim\Csrf\Guard;
 
 abstract class AdminatorTestCase extends TestCase
@@ -44,7 +43,7 @@ abstract class AdminatorTestCase extends TestCase
 
     }
 
-    public function initDIcontainer()
+    public function initDIcontainer(bool $sentinelMocked)
     {
         // prepare DI
         $builder = new ContainerBuilder();
@@ -56,6 +55,12 @@ abstract class AdminatorTestCase extends TestCase
 
         require __DIR__ . '/../tests/fixtures/bootstrapContainerAfter.php';
 
+        if($sentinelMocked){
+            require __DIR__ . '/../tests/fixtures/containers/sentinelMock.php';
+        } else {
+            require __DIR__ . '/../tests/fixtures/containers/sentinel.php';
+        }
+
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);
 
@@ -66,18 +71,18 @@ abstract class AdminatorTestCase extends TestCase
         // $this->assertIsObject($container->get('smarty'));
         $this->assertInstanceOf(\Smarty::class, $container->get('smarty'));
 
-        $this->assertInstanceOf(Sentinel::class, $container->get('sentinel'));
-
         $this->assertInstanceOf(\PDO::class, $container->get('connPgsql'));
 
         $this->assertInstanceOf(Guard::class, $container->get('csrf'));
+
+        $this->assertInstanceOf(\Cartalyst\Sentinel\Sentinel::class, $container->get('sentinel'));
 
         $this->assertInstanceOf(\Slim\Flash\Messages::class, $container->get('flash'));
 
         return $container;
     }
 
-    public function initAdminatorClass(ContainerInterface $container)
+    public function initAdminatorMockClass(ContainerInterface $container)
     {
         // mock "underlaying" class for helper functions/logic
         $adminatorMock = \Mockery::mock(
@@ -96,9 +101,6 @@ abstract class AdminatorTestCase extends TestCase
         $adminatorMock->shouldReceive('getUserLevel')->andReturn(1);
         $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
         $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
-        // $adminatorMock->shouldReceive('zobraz_kategorie')->andReturn(
-        //     require __DIR__ . "/../../fixtures/zobraz_kategorie_data.php"
-        // );
         $adminatorMock->shouldReceive('getUserToken')->andReturn(false);
         // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
