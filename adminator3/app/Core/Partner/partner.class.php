@@ -16,7 +16,7 @@ class partner extends adminator
     public ?\PgSql\Connection $conn_pgsql;
     public \mysqli|\PDO $conn_mysql;
 
-    public $pdoMysql;
+    public ?\PDO $pdoMysql;
 
     public $logger;
 

@@ -18,7 +18,7 @@ class adminatorController extends Controller
 
     public $logger;
 
-    public $pdoMysql;
+    public ?\PDO $pdoMysql;
 
     protected $settings;
 

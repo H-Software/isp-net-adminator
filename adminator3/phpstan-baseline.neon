@@ -213,11 +213,6 @@ parameters:
 			path: app/Core/Partner/partner.class.php
 
 		-
-			message: "#^Cannot access property \\$error on array\\|float\\|int\\|string\\|false\\.$#"
-			count: 1
-			path: app/Core/Topology.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, int given\\.$#"
 			count: 1
 			path: app/Core/Topology.php

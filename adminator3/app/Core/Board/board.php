@@ -6,7 +6,7 @@ class board
 {
     // private $container;
 
-    public $pdoMysql;
+    public ?\PDO $pdoMysql;
 
     public \mysqli|\PDO $conn_mysql;
 

@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use Exception;
+
 class Topology extends adminator
 {
     public \mysqli|\PDO $conn_mysql;
@@ -1423,12 +1425,14 @@ class Topology extends adminator
               $sql_where.
              " ORDER BY id";
 
-        $rs = $this->conn_mysql->query($sql);
+        try {
+            $rs = $this->conn_mysql->query($sql);
+        } catch (Exception $e) {
+            $text = htmlspecialchars("Error message: ". $e->getMessage());
+        }
 
         if(!$rs) {
-            $text = htmlspecialchars("Error message: ". $rs->error);
             $ret["error"] = array("2" => $text);
-
             return $ret;
         }
 

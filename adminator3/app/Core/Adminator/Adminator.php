@@ -23,7 +23,7 @@ class adminator
 
     public $logger;
 
-    public $pdoMysql;
+    public ?\PDO $pdoMysql;
 
     protected $cache;
 

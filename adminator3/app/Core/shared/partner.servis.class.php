@@ -396,7 +396,7 @@ class partner_servis
 
         echo "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";
 
-        if($add == 1) {
+        if($add) {
             echo "<div style=\"color: green; font-size: 18px; font-weight: bold;\" >Záznam úspěšně uložen.</div>";
         } else {
             echo "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
