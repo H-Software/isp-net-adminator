@@ -571,14 +571,6 @@ class vlastnik2 extends adminator
 
         $output = "";
 
-        if (!$this->conn_pgsql) {
-            die("An error occurred. The connection with pgsql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_pgsql) . ")");
-        }
-
-        if (!$this->conn_mysql) {
-            die("An error occurred. The connection with mysql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_mysql) . ")");
-        }
-
         $objekt = new \App\Core\objekt($this->container);
         $objekt->csrf_html = $this->csrf_html;
 

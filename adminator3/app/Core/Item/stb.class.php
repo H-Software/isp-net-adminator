@@ -590,9 +590,11 @@ class stb extends adminator
 
             if($res) {
                 $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n";
+                $vysledek_write = 1;
             } else {
                 $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit.</div></H3>\n";
                 $output .= "res: $res \n";
+                $vysledek_write = 0;
             }
 
             // pridame to do archivu zmen
@@ -606,10 +608,6 @@ class stb extends adminator
             $pole .= "[id_stb]=> ".$id_stb.", ";
             $pole .= "[mac_adresa]=> ".$data['mac'].", [ip_adresa]=> ".$data['ip'].", [puk]=> ".$data['puk'].", [popis]=> ".$data['popis'];
             $pole .= ", [id_nodu]=> ".$data['id_nodu'].", [sw_port]=> ".$data['port_id']." [pozn]=> ".$data['pozn'].", [id_tarifu]=> ".$data['id_tarifu'];
-
-            if($res == 1) {
-                $vysledek_write = 1;
-            }
 
             $this->conn_mysql->query(
                 "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) ".
