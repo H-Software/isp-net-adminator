@@ -8,13 +8,17 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class platbyController extends adminatorController
 {
-    public \mysqli|\PDO $conn_mysql;
-    public $smarty;
+    // public \mysqli|\PDO $conn_mysql;
+
+    // public $smarty;
+
     public $logger;
 
-    protected $sentinel;
+    // protected $sentinel;
 
     protected $adminator;
+
+    protected $container;
 
     protected ServerRequestInterface $request;
 
@@ -23,10 +27,10 @@ class platbyController extends adminatorController
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->conn_mysql = $this->container->get('connMysql');
-        $this->smarty = $this->container->get('smarty');
-        $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
+        // $this->conn_mysql = $container->get('connMysql');
+        // $this->smarty = $container->get('smarty');
+        $this->logger = $container->get('logger');
+        // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info("platbyController\__construct called");
 
