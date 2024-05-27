@@ -143,6 +143,8 @@ class work
             $output .= $item[0];
         }
 
+        // TODO: fix the rest of stuff
+        
         // //zmena NetN
         // if( ereg(".*změna.*Povolen.*Inet.*z.*", $changes) )
         // {
