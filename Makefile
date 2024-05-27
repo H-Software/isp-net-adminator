@@ -50,6 +50,11 @@ a3-rebuild-and-run-fpm:
 		--build \
 		-d
 
+.PHONY: a3-run-script-work-diff-auto
+a3-run-script-work-diff-auto:
+	php \
+		adminator3/scripts/work_diff_auto.php
+
 export MODE=development
 
 export OTEL_PHP_AUTOLOAD_ENABLED=true
