@@ -63,13 +63,14 @@ $container->set(
 
 $container->set(
     'connPgsql',
-    function ($c) {
+    self::$pdoPgsql
+    // function ($c) {
 
-        $db = new PDO('sqlite::memory:');
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //     $db = new PDO('sqlite::memory:');
+    //     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        return $db;
-    }
+    //     return $db;
+    // }
 );
 
 $container->set(
@@ -88,7 +89,8 @@ $container->set(
 
 $container->set(
     'csrf',
-    function () use ($responseFactory) {
+    // function () use ($responseFactory) {
+    function () {
 
         $guardMock = \Mockery::mock(Guard::class);
 

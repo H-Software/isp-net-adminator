@@ -40,7 +40,6 @@ final class HomeControllerTest extends AdminatorTestCase
         $self = $this;
 
         $container = self::initDIcontainer();
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
 
         // mock "underlaying" class for helper functions/logic
         $adminatorMock = \Mockery::mock(
@@ -74,6 +73,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         // $response = $this->createMock(ResponseInterface::class);
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
         $response = $homeController->home($serverRequest, $response, []);

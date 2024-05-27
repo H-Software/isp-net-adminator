@@ -26,6 +26,11 @@ final class AuthControllerTest extends AdminatorTestCase
 
     public function testLogin()
     {
+        // $this->markTestSkipped('under construction');
+        $self = $this;
+
+        $container = self::initDIcontainer();
+
 
     }
 }

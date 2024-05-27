@@ -51,10 +51,10 @@ abstract class AdminatorTestCase extends TestCase
         $builder->addDefinitions('tests/fixtures/bootstrapContainer.php');
         $container = $builder->build();
 
-        $rfMock = \Mockery::mock(ResponseFactoryInterface::class);
-        $responseFactory = $rfMock;
+        // $rfMock = \Mockery::mock(ResponseFactoryInterface::class);
+        // $responseFactory = $rfMock;
 
-        require_once __DIR__ . '/../tests/fixtures/bootstrapContainerAfter.php';
+        require __DIR__ . '/../tests/fixtures/bootstrapContainerAfter.php';
 
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);
