@@ -19,3 +19,6 @@ parameters:
 	-
 		message: "#^Function mysql_.* not found\\.$#"
 		path: include/main.function.shared.php
+	-
+		message: "#^Call to an undefined static method App\\\\Models\\\\.*$#"
+		path: app/Core/*

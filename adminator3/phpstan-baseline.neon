@@ -315,11 +315,6 @@ parameters:
 			path: app/Core/admin.php
 
 		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 2
-			path: app/Core/Board/board.php
-
-		-
 			message: "#^Parameter \\#4 \\$month of function mktime expects int\\|null, string given\\.$#"
 			count: 6
 			path: app/Core/Board/board.php
