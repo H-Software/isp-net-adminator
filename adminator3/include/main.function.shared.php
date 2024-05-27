@@ -952,7 +952,7 @@ function execute_action($number_request, $id)
 
     if($number_request == 1) { //reinhard-3 - restriction (net-n/sikana)
 
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.3\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.3\" ";
 
         $mess_ok = "reinhard-3-restriction ok ";
         $mess_er = "reinhard-3-restriction error ";
@@ -962,8 +962,8 @@ function execute_action($number_request, $id)
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 2) { //reinhard-wifi (1) - restrictions (net-n/sikana)
 
-        //$cmd = "sudo /root/bin/reinhard-wifi.remote.exec2.sh \"/etc/init.d/iptables restart\" ";
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.2\" ";
+        //$cmd = "/root/bin/reinhard-wifi.remote.exec2.sh \"/etc/init.d/iptables restart\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.2\" ";
 
         $mess_ok = "reinhard-wifi-iptables-restart ok ";
         $mess_er = "reinhard-wifi-iptables-restart error ";
@@ -973,7 +973,7 @@ function execute_action($number_request, $id)
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 3) { //reinhard-fiber (2) - iptables (net-n/sikana)
 
-        $cmd = "sudo /root/bin/reinhard-fiber.remote.exec2.sh \"/etc/init.d/iptables-simelon restart\" ";
+        $cmd = "/root/bin/reinhard-fiber.remote.exec2.sh \"/etc/init.d/iptables-simelon restart\" ";
 
         $mess_ok = "reinhard-fiber.iptables ok ";
         $mess_er = "reinhard-fiber.iptables error ";
@@ -982,7 +982,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 4) { //reinhard-fiber - radius
-        $cmd = "sudo /root/bin/reinhard-fiber.remote.exec2.sh \"/root/bin/radius.restart.sh\"";
+        $cmd = "/root/bin/reinhard-fiber.remote.exec2.sh \"/root/bin/radius.restart.sh\"";
 
         $mess_ok = "reinhard-fiber.radius ok ";
         $mess_er = "reinhard-fiber.radius error ";
@@ -991,7 +991,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 5) {
-        $cmd = "sudo /root/bin/reinhard-fiber.remote.exec2.sh \"/etc/init.d/shaper restart\" ";
+        $cmd = "/root/bin/reinhard-fiber.remote.exec2.sh \"/etc/init.d/shaper restart\" ";
 
         $mess_ok = "reinhard-fiber.shaper ok ";
         $mess_er = "reinhard-fiber.shaper error ";
@@ -1000,7 +1000,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 6) {
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"/root/bin/mikrotik.dhcp.leases.erase.sh\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"/root/bin/mikrotik.dhcp.leases.erase.sh\" ";
 
         $mess_ok = "(trinity) mikrotik.dhcp.leases.erase ok ";
         $mess_er = "(trinity) mikrotik.dhcp.leases.erase error ";
@@ -1009,7 +1009,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 7) {
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"/root/bin/scripts_fiber/sw.h3c.vlan.set.pl update\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"/root/bin/scripts_fiber/sw.h3c.vlan.set.pl update\" ";
 
         $mess_ok = "trinity.sw.h3c.vlan.set ok ";
         $mess_er = "trinity.sw.h3c.vlan.set error ";
@@ -1020,7 +1020,7 @@ function execute_action($number_request, $id)
     } elseif($number_request == 8) { //nic
 
     } elseif($number_request == 9) {
-        $cmd = "sudo /root/bin/erik.remote.exec.sh \"/root/bin/dns.restart.sh\" ";
+        $cmd = "/root/bin/erik.remote.exec.sh \"/root/bin/dns.restart.sh\" ";
 
         $mess_ok = "erik-dns.restart ok ";
         $mess_er = "erik-dns.restart-restart error ";
@@ -1029,7 +1029,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 10) {
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"/root/bin/dns.restart.sh\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"/root/bin/dns.restart.sh\" ";
 
         $mess_ok = "trinity-dns-restart ok ";
         $mess_er = "trinity-dns-restart error ";
@@ -1038,7 +1038,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 11) {
-        $cmd = "sudo /root/bin/artemis.remote.exec2.sh \"/root/bin/dns.restart.sh\" ";
+        $cmd = "/root/bin/artemis.remote.exec2.sh \"/root/bin/dns.restart.sh\" ";
 
         $mess_ok = "artemis-dns-server-restart ok ";
         $mess_er = "artemis-dns-server-restart error ";
@@ -1047,7 +1047,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 12) {
-        $cmd = "sudo /root/bin/c.ns.remote.exec2.sh \"/root/bin/dns.restart.sh\" ";
+        $cmd = "/root/bin/c.ns.remote.exec2.sh \"/root/bin/dns.restart.sh\" ";
 
         $mess_ok = "c.ns.simelon.net-dns-server-restart ok ";
         $mess_er = "c.ns.simelon.net-dns-server-restart error ";
@@ -1057,7 +1057,7 @@ function execute_action($number_request, $id)
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 13) { // reinhard-wifi (ros) - shaper (client's tariffs)
 
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_qos_handler.php 10.128.0.2\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_qos_handler.php 10.128.0.2\" ";
 
         $mess_ok = "reinhard-wifi-shaper-restart ok ";
         $mess_er = "reinhard-wifi-shaper-restart error ";
@@ -1066,10 +1066,10 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 14) {
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"/root/bin/scripts_wifi_network/rb.filter_v2.pl\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"/root/bin/scripts_wifi_network/rb.filter_v2.pl\" ";
 
         //obsolete
-        //$cmd = "sudo /root/bin/trinity.local.exec2.sh \"/root/bin/scripts_wifi_network/obsolete/rb.filter_no_fork.pl\" ";
+        //$cmd = "/root/bin/trinity.local.exec2.sh \"/root/bin/scripts_wifi_network/obsolete/rb.filter_no_fork.pl\" ";
 
         $mess_ok = "trinity-filtrace-IP-on-Mtik's-restart ok ";
         $mess_er = "trinity-filtrace-IP-on-Mtik's-restart error ";
@@ -1079,7 +1079,7 @@ function execute_action($number_request, $id)
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 15) { //trinity - Monitoring I - Footer-restart (alarms)
 
-        $cmd = "sudo /root/bin/monitoring.remote.exec2.sh \"/var/www/cgi-bin/mon1-footer.pl\" ";
+        $cmd = "/root/bin/monitoring.remote.exec2.sh \"/var/www/cgi-bin/mon1-footer.pl\" ";
 
         $mess_ok = "monitoring-I-Footer-restart ok ";
         $mess_er = "monitoring-I-Footer-restart error ";
@@ -1088,7 +1088,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 16) {
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"/var/www/cgi-bin/cgi-mon/footer_php.pl\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"/var/www/cgi-bin/cgi-mon/footer_php.pl\" ";
 
         $mess_ok = "trinity-monitoring-I-Footer-PHP-restart ok ";
         $mess_er = "trinity-monitoring-I-Footer-PHP-restart error ";
@@ -1097,7 +1097,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 17) {
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"/var/www/cgi-bin/cgi-mon/footer_cat.pl\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"/var/www/cgi-bin/cgi-mon/footer_cat.pl\" ";
 
         $mess_ok = "trinity-monitoring-I-Footer-cat-restart ok ";
         $mess_er = "trinity-monitoring-I-Footer-cat-restart error ";
@@ -1106,7 +1106,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 18) {
-        $cmd = "sudo /root/bin/monitoring.remote.exec2.sh \"/var/www/cgi-bin/mon2-feeder.pl\" ";
+        $cmd = "/root/bin/monitoring.remote.exec2.sh \"/var/www/cgi-bin/mon2-feeder.pl\" ";
 
         $mess_ok = "monitoring - Monitoring II - Feeder-restart ok ";
         $mess_er = "monitoring - Monitoring II - Feeder-restart error ";
@@ -1126,7 +1126,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 20) {
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_qos_handler.php 10.128.0.3\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_qos_handler.php 10.128.0.3\" ";
 
         $mess_ok = "reinhard-3 (ros) - shaper (client's tariffs) - restart ok ";
         $mess_er = "reinhard-3 (ros) - shaper (client's tariffs) - restart error ";
@@ -1135,7 +1135,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 21) {
-        $cmd = "sudo /root/bin/artemis.remote.exec2.sh \"/root/bin/radius.restart.sh\" ";
+        $cmd = "/root/bin/artemis.remote.exec2.sh \"/root/bin/radius.restart.sh\" ";
 
         $mess_ok = "artemis-radius-restart ok ";
         $mess_er = "artemis-radius-restart error ";
@@ -1144,7 +1144,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 22) {
-        $cmd = "sudo /root/bin/monitoring.remote.exec2.sh \"/var/www/cgi-bin/mon2-checker.pl\" ";
+        $cmd = "/root/bin/monitoring.remote.exec2.sh \"/var/www/cgi-bin/mon2-checker.pl\" ";
 
         $mess_ok = "monitoring - Monitoring II - Feeder-restart ok ";
         $mess_er = "monitoring - Monitoring II - Feeder-restart error ";
@@ -1154,7 +1154,7 @@ function execute_action($number_request, $id)
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 23) {
         //$cmd = "";
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_qos_handler.php 10.128.0.15\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_qos_handler.php 10.128.0.15\" ";
 
         $mess_ok = "reinhard-5-shaper-restart ok ";
         $mess_er = "reinhard-5-shaper-restart error ";
@@ -1163,7 +1163,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 24) {
-        $cmd = "sudo /root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.15\" ";
+        $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.15\" ";
 
         $mess_ok = "reinhard-5-iptables-restart ok ";
         $mess_er = "reinhard-5-iptables-restart error ";

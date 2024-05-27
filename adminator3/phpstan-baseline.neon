@@ -395,8 +395,4 @@ parameters:
 			count: 1
 			path: include/main.function.shared.php
 
-		-
-			message: "#^Parameter \\#1 \\$connection of function pg_last_error expects PgSql\\\\Connection\\|null, false given\\.$#"
-			count: 1
-			path: include/main.function.shared.php
 
