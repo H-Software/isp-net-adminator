@@ -12,6 +12,8 @@ class objekt extends adminator
 
     public $logger;
 
+    protected $container;
+
     // protected $validator;
 
     protected $sentinel;
@@ -100,6 +102,7 @@ class objekt extends adminator
 
     public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
         // $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
@@ -2509,6 +2512,7 @@ class objekt extends adminator
         //
         //pro osvezovani
         //
+        $work = new \App\Core\work($this->container);
 
         // TODO: fix automatic restarts
 
@@ -2516,22 +2520,24 @@ class objekt extends adminator
         $reinhard_id = adminator::find_reinhard($this->update_id, $this->conn_mysql, $this->conn_pgsql);
 
         // //zmena sikany
-        // if( ereg(".*změna.*Šikana.*z.*", $pole3) )
-        // {
-        // if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
-        // else{
+        if(preg_match("/.*změna.*Šikana.*z.*/", $pole3)) {
+            if($reinhard_id == 177) {
+                $work->work_handler("1");
+            } //reinhard-3 (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 1) {
+                $work->work_handler("2");
+            } //reinhard-wifi (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 236) {
+                $work->work_handler("24");
+            } //reinhard-5 (ros) - restrictions (net-n/sikana)
+            else {
+                //nenalezet pozadovany reinhard, takze osvezime vsechny
 
-        //     //nenalezet pozadovany reinhard, takze osvezime vsechny
-
-        //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-
-        // }
-
-        // }
+                $work->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+                $work->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                $work->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+            }
+        }
 
         // //zmena NetN
         // if( ereg(".*změna.*Povolen.*Inet.*z.*", $pole3) )

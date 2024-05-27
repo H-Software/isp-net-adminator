@@ -56,7 +56,7 @@ class work
         $rs_item_name->data_seek(0);
         list($item_name) = $rs_item_name->fetch_row();
 
-        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": parsed item_name: " . var_export($item_name,true));
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": parsed item_name: " . var_export($item_name, true));
 
         if($count > 1) {
             $output .= "<div> WARNING: Požadavek na restart \"".$item_name."\" (No. ".$item_id.") nalezen vícekrát. </div>\n";
