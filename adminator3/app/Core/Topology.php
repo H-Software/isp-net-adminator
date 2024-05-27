@@ -8,11 +8,14 @@ class Topology extends adminator
     public $smarty;
     public $logger;
 
-    public function __construct($conn_mysql, $smarty, $logger)
+    protected $settings;
+
+    public function __construct($conn_mysql, $smarty, $logger, $settings)
     {
         $this->conn_mysql = $conn_mysql;
         $this->smarty = $smarty;
         $this->logger = $logger;
+        $this->settings = $settings;
 
         $this->logger->info("topology\__construct called");
     }
@@ -1113,7 +1116,6 @@ class Topology extends adminator
                 //prvky pro listovaci odkazy
                 $paging_url = "?".$get_odkazy;
 
-                // $paging = new paging_global($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $sql_final);
                 $paging = new  c_listing_topology($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $sql_final);
 
                 $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));

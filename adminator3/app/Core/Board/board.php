@@ -13,7 +13,7 @@ class board
 
     public $logger;
 
-    public $settings;
+    protected $settings;
     public $what;
     public $action;
     public $page;

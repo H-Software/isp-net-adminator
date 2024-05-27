@@ -24,7 +24,7 @@ class adminator
 
     protected $cache;
 
-    public $settings;
+    protected $settings;
 
     public ?string $userIdentityUsername = null;
 

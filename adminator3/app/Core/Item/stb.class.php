@@ -116,7 +116,7 @@ class stb extends adminator
 
         $output .= "";
 
-        $topologyClass = new Topology($this->conn_mysql, $this->smarty, $this->logger);
+        $topologyClass = new Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
 
         $rs_select_nod = $topologyClass->filter_select_nods();
 
