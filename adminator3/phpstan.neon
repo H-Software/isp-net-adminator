@@ -10,7 +10,7 @@ parameters:
 		- app/Core/shared/ros_api_qos.php
 		- app/Core/shared/ros_api_restriction.php
 	ignoreErrors:
-# common known issues
+	# common known issues
 	-
 		message: '#Undefined variable: \$.*#'
 		path: *
@@ -23,28 +23,28 @@ parameters:
 	-
 		message: "#^Call to an undefined static method App\\\\Models\\\\.*$#"
 		path: app/Core/*
-# false positive and etc
-		-
-			message: "#^Parameter \\#1 \\$app of class Illuminate\\\\Cache\\\\CacheManager constructor expects Illuminate\\\\Contracts\\\\Foundation\\\\Application, Illuminate\\\\Container\\\\Container given\\.$#"
-			count: 1
-			path: boostrap/containerAfter.php
+	# false positive and etc
+	-
+		message: "#^Parameter \\#1 \\$app of class Illuminate\\\\Cache\\\\CacheManager constructor expects Illuminate\\\\Contracts\\\\Foundation\\\\Application, Illuminate\\\\Container\\\\Container given\\.$#"
+		count: 1
+		path: boostrap/containerAfter.php
 
-		-
-			message: "#^Access to an undefined property Cartalyst\\\\Sentinel\\\\Users\\\\UserInterface\\:\\:\\$email\\.$#"
-			count: 2
-			path: app/Controllers/Auth/AuthController.php
+	-
+		message: "#^Access to an undefined property Cartalyst\\\\Sentinel\\\\Users\\\\UserInterface\\:\\:\\$email\\.$#"
+		count: 2
+		path: app/Controllers/Auth/AuthController.php
 
-		-
-			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
-			count: 2
-			path: app/Middleware/SessionMiddleware.php
+	-
+		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
+		count: 2
+		path: app/Middleware/SessionMiddleware.php
 
-		-
-			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:regenerateId\\(\\)\\.$#"
-			count: 1
-			path: app/Middleware/SessionMiddleware.php
+	-
+		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:regenerateId\\(\\)\\.$#"
+		count: 1
+		path: app/Middleware/SessionMiddleware.php
 
-		-
-			message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:start\\(\\)\\.$#"
-			count: 1
-			path: app/Middleware/SessionMiddleware.php
+	-
+		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:start\\(\\)\\.$#"
+		count: 1
+		path: app/Middleware/SessionMiddleware.php
