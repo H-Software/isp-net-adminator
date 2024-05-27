@@ -97,7 +97,6 @@ $container->set(
 
         return $guardMock;
         // return new Guard($responseFactory);
-
     }
 );
 

@@ -21,19 +21,16 @@ $capsule->addConnection(
 //
 
 // https://stackoverflow.com/questions/34649181/multiple-database-connection-using-illuminate-database-eloquent-orm-in-codeignit/34650166#34650166
-// $capsule->addConnection(
-//     [
-//         'driver' => 'pgsql',
-//         'host' => getenv("POSTGRES_SERVER") ? getenv("POSTGRES_SERVER") : "localhost",
-//         'database' => 'adminator.new',
-//         'username' => getenv("POSTGRES_USER") ? getenv("POSTGRES_USER") : "root",
-//         'password' => getenv("POSTGRES_PASSWD") ? getenv("POSTGRES_PASSWD") : "password",
-//         'charset' => 'utf8',
-//         'collation' => 'utf8_unicode_ci',
-//         'prefix' => '',
-//     ],
-//     "pgsql"
-// );
+$capsule->addConnection(
+    [
+        'driver' => 'sqlite',
+        'database' => ':memory:',
+        'charset' => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix' => ''
+    ],
+    "pgsql"
+);
 
 $capsule->setAsGlobal();
 $capsule->bootEloquent();

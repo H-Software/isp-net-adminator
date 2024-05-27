@@ -21,6 +21,8 @@ abstract class AdminatorTestCase extends TestCase
 {
     public static $pdoMysql;
 
+    public static $pdoPgsql;
+
     public static function setUpBeforeClass(): void
     {
         $settings = require __DIR__ . '/../config/settings.php';
@@ -28,6 +30,8 @@ abstract class AdminatorTestCase extends TestCase
         // boot ORM and get DB handler
         require __DIR__ . "/fixtures/bootstrapDatabase.php";
         self::$pdoMysql = $capsule->connection("default")->getPdo();
+
+        self::$pdoPgsql = $capsule->connection("pgsql")->getPdo();
 
         // override DB connection to sqlite
         $settings['phinx']['environments']['test']['connection'] = self::$pdoMysql;
@@ -68,11 +72,14 @@ abstract class AdminatorTestCase extends TestCase
 
         $this->assertInstanceOf(Guard::class, $container->get('csrf'));
 
+        $this->assertInstanceOf(\Slim\Flash\Messages::class, $container->get('flash'));
+
         return $container;
     }
 
     public static function tearDownAfterClass(): void
     {
         self::$pdoMysql = null;
+        self::$pdoPgsql = null;
     }
 }
