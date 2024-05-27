@@ -155,7 +155,7 @@ class stb extends adminator
 
         $paging_url = "?".urlencode("order")."=".$this->order.$get_odkazy;
 
-        $paging = new paging_global($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $this->sql_query);
+        $paging = new c_listing_stb($this->conn_mysql, $paging_url, 20, $list, "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">", "</div>\n", $this->sql_query);
 
         $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
 

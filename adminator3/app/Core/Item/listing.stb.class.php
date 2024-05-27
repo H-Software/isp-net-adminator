@@ -2,7 +2,7 @@
 
 namespace App\Core;
 
-class paging_global
+class c_listing_stb
 {
     public $url;
     public $interval;
