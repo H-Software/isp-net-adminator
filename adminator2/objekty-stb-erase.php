@@ -5,8 +5,6 @@ require("include/config.php");
 require("include/check_login.php");
 require("include/check_level.php");
 
-// require("include/c_listing-objekty.php");
-
 if( !( check_level($level, 310) ) )
 { 
     // neni level

@@ -7,13 +7,11 @@ require("include/check_level.php");
 
 if(!(check_level($level, 44))) {
     // neni level
-
     $stranka = 'nolevelpage.php';
     header("Location: ".$stranka);
 
     echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
     exit;
-
 }
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
@@ -45,32 +43,34 @@ require("include/charset.php");
 // vlastni obsah
 $list = $_GET["list"];
 
+$sql_listing = "";
+
 $sql_base = "SELECT t1.id, t1.zaplaceno_dne, t2.prijmeni, t2.jmeno, t2.id_cloveka,
                 t1.firma, t1.zaplaceno_za, t1.castka, t1.id_cloveka 
                 FROM (platby AS t1 LEFT JOIN vlastnici AS t2 
                 ON t1.id_cloveka=t2.id_cloveka) WHERE hotove='1' ";
 
 //vytvoreni objektu
-$listovani = new c_Listing(
-    "./platby-hot-vypis.php?menu=1",
-    30,
-    $list,
-    "<center><div class=\"text-listing\">\n",
-    "</div></center>\n",
-    $sql_base . " ORDER BY id",
-    $db_ok2
-);
+// $listovani = new c_Listing(
+//     "./platby-hot-vypis.php?menu=1",
+//     30,
+//     $list,
+//     "<center><div class=\"text-listing\">\n",
+//     "</div></center>\n",
+//     $sql_base . " ORDER BY id",
+//     $db_ok2
+// );
 
-if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
-    $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
-} else {
-    $bude_chybet = (($list - 1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
-}
+// if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
+//     $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
+// } else {
+//     $bude_chybet = (($list - 1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
+// }
 
-$sql_listing = "";
-if($listovani->interval > 0 and $bude_chybet > 0) {
-    $sql_listing = " LIMIT ".$listovani->interval." OFFSET ".$bude_chybet;
-}
+// $sql_listing = "";
+// if($listovani->interval > 0 and $bude_chybet > 0) {
+//     $sql_listing = " LIMIT ".$listovani->interval." OFFSET ".$bude_chybet;
+// }
 
 $sql_final = $sql_base . " ORDER BY id " . $sql_listing;
 
@@ -89,7 +89,7 @@ if(!$vyber) {
 } elseif(pg_num_rows($vyber) < 1) {
     echo "<div style=\"\" >zadne platby</div>";
 } else {
-    $listovani->listInterval();    //zobrazení stránkovače
+    // $listovani->listInterval();    //zobrazení stránkovače
 
     echo "<table border=\"1\" width=\"100%\" >
       <tr>
@@ -129,7 +129,7 @@ if(!$vyber) {
 
     echo "</table>";
 
-    $listovani->listInterval();    //zobrazení stránkovače
+    // $listovani->listInterval();    //zobrazení stránkovače
 }
 
 ?>
