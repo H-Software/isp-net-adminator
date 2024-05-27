@@ -2546,7 +2546,11 @@ class objekt extends adminator
             }
         }
 
-        $output .= var_export($work_output, true);
+        // $output .= var_export($work_output, true);
+
+        foreach ($work_output as $id => $item) {
+            $output .= $item[0];
+        }
 
         // //zmena NetN
         // if( ereg(".*změna.*Povolen.*Inet.*z.*", $pole3) )
