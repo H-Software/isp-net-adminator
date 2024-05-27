@@ -10,7 +10,7 @@ class board
 
     public \mysqli|\PDO $conn_mysql;
 
-    public ?\PgSql\Connection $conn_pgsql;
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $logger;
 

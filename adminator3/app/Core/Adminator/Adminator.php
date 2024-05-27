@@ -13,11 +13,11 @@ use Exception;
 
 class adminator
 {
-    // PDO if used in tests
+    // PDO is used in tests
     public \mysqli|\PDO $conn_mysql;
 
-    // nullable for testing
-    public ?\PgSql\Connection $conn_pgsql;
+    // PDO is used in tests
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $smarty;
 

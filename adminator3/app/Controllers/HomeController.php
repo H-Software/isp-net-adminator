@@ -12,7 +12,7 @@ class HomeController extends adminatorController
 
     // public ?\PDO $pdoMysql;
 
-    public ?\PgSql\Connection $conn_pgsql;
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     protected $settings;
 
