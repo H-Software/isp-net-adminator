@@ -62,10 +62,10 @@ echo "work-diff.php stop [".strftime("%d/%m/%Y %H:%M:%S", time())."] \n";
 $output_main .= "work-diff.php stop [".strftime("%d/%m/%Y %H:%M:%S", time())."] \n";
 
 if(preg_match("/.*<span.*>.*/", $output_main)) {
-    $soubor = fopen("/var/www/html/htdocs.ssl/reinhard.remote.log", "w");
+    $soubor = fopen(__DIR__ . "/../logs/reinhard.remote.log", "w");
 } else {
     $output_main = "- - - - - - - - - - - - - -\n".$output_main;
-    $soubor = fopen("/var/www/html/htdocs.ssl/reinhard.remote.log", "a");
+    $soubor = fopen(__DIR__ . "/../logs/reinhard.remote.log", "a");
 }
 
 fwrite($soubor, $output_main);
