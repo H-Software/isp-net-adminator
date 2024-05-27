@@ -144,7 +144,7 @@ class work
         }
 
         // TODO: fix the rest of stuff
-        
+
         // //zmena NetN
         // if( ereg(".*změna.*Povolen.*Inet.*z.*", $changes) )
         // {
