@@ -16,9 +16,9 @@ class topologyController extends adminatorController
 
     protected $settings;
 
-    protected $sentinel;
+    // protected $sentinel;
 
-    protected $adminator;
+    // protected $adminator;
 
     protected ServerRequestInterface $request;
 
@@ -26,12 +26,12 @@ class topologyController extends adminatorController
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->conn_mysql = $this->container->get('connMysql');
-        $this->smarty = $this->container->get('smarty');
-        $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
-        $this->settings = $this->container->get('settings');
+        // $this->container = $container;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->smarty = $container->get('smarty');
+        $this->logger = $container->get('logger');
+        // $this->sentinel = $container->get('sentinel');
+        $this->settings = $container->get('settings');
 
         $this->logger->info("topologyController\__construct called");
 

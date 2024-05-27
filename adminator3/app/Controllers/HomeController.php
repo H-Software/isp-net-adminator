@@ -63,18 +63,19 @@ class HomeController extends adminatorController
             return $this->response;
         };
 
+        $assignData = [
+            "page_title" => "Adminator3 :: úvodní stránka",
+        ];
+
         if ($request->getMethod() == "POST") {
             $data = $request->getParsedBody();
             $this->logger->debug("homeController\home post data: ".var_export($data, true));
         }
 
-        $this->smarty->assign("page_title", "Adminator3 :: úvodní stránka");
-
-        $this->header($request, $response, $this->adminator);
-
         // messages from change-password an etc
         $flashMessages = $this->container->get('flash')->getMessages();
-        $this->smarty->assign("flash_messages", $flashMessages);
+
+        $assignData["flash_messages"] = $flashMessages
 
         //echo "<pre>" . var_export($flashMessages, true) ."</pre>";
 
@@ -108,7 +109,7 @@ class HomeController extends adminatorController
         $this->logger->info("homeController\home: end of rendering");
         $this->smarty->display('home.tpl');
 
-        return $response;
+        return $this->renderer->template($request, $response, 'topology/router-list.tpl', $assignData);
     }
 
     public function board()
