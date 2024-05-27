@@ -17,6 +17,7 @@ use App\Controllers\othersController;
 use App\Controllers\vlastniciController;
 use App\Controllers\topologyController;
 use App\Controllers\workController;
+use App\Controllers\aboutController;
 
 // routes
 
@@ -61,9 +62,9 @@ $app->group(
 
         $group->map(['GET'], '/runtime/opcache-gui', runtimeController::class . ':opcacheGui');
 
-        $group->map(['GET', 'POST'], '/about', \aboutController::class . ':about');
-        $group->map(['GET', 'POST'], '/about/changes-old', \aboutController::class . ':changesOld');
-        $group->map(['GET', 'POST'], '/about/changes', \aboutController::class . ':changes');
+        $group->map(['GET', 'POST'], '/about', aboutController::class . ':about');
+        $group->map(['GET', 'POST'], '/about/changes-old', aboutController::class . ':changesOld');
+        $group->map(['GET', 'POST'], '/about/changes', aboutController::class . ':changes');
 
         $group->map(['GET', 'POST'], '/admin', \adminController::class . ':admin');
         $group->map(['GET', 'POST'], '/admin/admin', \adminController::class . ':adminMain');
