@@ -5,6 +5,8 @@ class vlastnikfind
     public $conn_mysql;
     public $conn_pgsql;
 
+    public $container;
+
     public $csrf_html;
 
     public $echo = false;
