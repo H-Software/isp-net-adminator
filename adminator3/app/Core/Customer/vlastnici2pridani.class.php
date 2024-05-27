@@ -6,7 +6,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class vlastnici2pridani extends adminator
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $conn_pgsql;
 

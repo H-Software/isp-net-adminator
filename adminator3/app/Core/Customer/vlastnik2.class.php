@@ -5,7 +5,7 @@ use Psr\Container\ContainerInterface;
 
 class vlastnik2 extends adminator
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $conn_pgsql;
 

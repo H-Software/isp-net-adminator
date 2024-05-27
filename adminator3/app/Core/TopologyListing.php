@@ -6,7 +6,7 @@ use DivisionByZeroError;
 
 class c_listing_topology
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
     public $url;
     public $interval;
     public $sql;

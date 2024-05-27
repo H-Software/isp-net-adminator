@@ -3,7 +3,7 @@
 class zmeny_ucetni
 {
     // DI
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $logger;
 

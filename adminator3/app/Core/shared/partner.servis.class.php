@@ -5,7 +5,7 @@ class partner_servis
     //
     // variables
     //
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
     public $jmeno_klienta;
     public $bydliste;
     public $email;

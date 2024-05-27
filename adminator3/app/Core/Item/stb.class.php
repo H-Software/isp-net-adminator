@@ -11,7 +11,7 @@ use App\Models\Stb as Model;
 
 class stb extends adminator
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $conn_pgsql;
 

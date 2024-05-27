@@ -8,7 +8,7 @@ class board
 
     public $pdoMysql;
 
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $logger;
 

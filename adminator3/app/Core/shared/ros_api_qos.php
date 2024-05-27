@@ -19,7 +19,7 @@ use RouterOS\Query;
 
 class mk_synchro_qos
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $conn;            //objekt pripojeni k API na MK
     public $rosClient; // dtto

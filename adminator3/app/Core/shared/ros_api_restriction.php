@@ -15,7 +15,7 @@ use RouterOS\Query;
 
 class mk_net_n_sikana
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $conn;
 

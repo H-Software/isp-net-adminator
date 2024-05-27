@@ -10,7 +10,7 @@ use App\Renderer\Renderer;
 
 class adminatorController extends Controller
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $conn_pgsql;
 

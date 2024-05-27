@@ -2,7 +2,7 @@
 
 class vlastnikarchiv
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $conn_pgsql;
 

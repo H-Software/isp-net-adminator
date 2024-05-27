@@ -14,7 +14,7 @@ class partner extends adminator
     private $validator;
 
     public $conn_pgsql;
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public $pdoMysql;
 
