@@ -102,8 +102,8 @@ class vlastnikfind
 
                 // tady asi bude generovani fakturacnich udaju
                 if (($id_f > 0)) {
-                    $fakturacni = new fakturacni();
-                    $fakturacni->echo = false;
+                    $fakturacni = new \App\Customer\fakturacni($this->container);
+                    
                     $output .= $fakturacni->vypis($id_f, $id);
                 }
 
