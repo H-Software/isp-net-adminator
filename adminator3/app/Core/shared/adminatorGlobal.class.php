@@ -1,8 +1,8 @@
 <?php
 
-use \RouterOS\Config;
-use \RouterOS\Client;
-use \RouterOS\Query;
+use RouterOS\Config;
+use RouterOS\Client;
+use RouterOS\Query;
 
 class Aglobal
 {
@@ -106,7 +106,7 @@ class Aglobal
         // $router_ip = mysql_result($rs_q, 0, 0);
         $rs_q->data_seek(0);
         list($router_ip) = $rs_q->fetch_row();
-    
+
         $rs_login = $this->conn_mysql->query("SELECT value FROM settings WHERE name IN ('routeros_api_login_name', 'routeros_api_login_password') ");
 
         // $login_name = mysql_result($rs_login, 0, 0);
@@ -156,7 +156,7 @@ class Aglobal
             'pass' => $login_pass,
             'port' => 18728,
         ]);
-        
+
         try {
             $rosClient = new Client($rosConfig);
         } catch (Exception $exception) {
