@@ -13,8 +13,6 @@ class partnerController extends adminatorController
     public $smarty;
     public $logger;
 
-    protected $sentinel;
-
     protected $adminator;
 
     protected ServerRequestInterface $request;
@@ -29,7 +27,6 @@ class partnerController extends adminatorController
         $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info("partnerController\__construct called");
 
@@ -50,15 +47,12 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner program");
+        $assignData = array(
+            "page_title" => "Adminator3 :: Partner program",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('partner/partner-cat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'partner/partner-cat.tpl', $assignData);
     }
 
     public function orderCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
