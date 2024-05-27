@@ -583,4 +583,61 @@ class adminator
 
         return $odkaz;
     }
+
+    public static function find_reinhard($id, $conn_mysql, $conn_pgsql)
+    {
+        $id = intval($id);
+
+        $rs_objekt = pg_query($conn_pgsql, "SELECT id_nodu FROM objekty WHERE id_komplu = '$id' ");
+
+        if((pg_num_rows($rs_objekt) == 1)) {
+            while($data = pg_fetch_array($rs_objekt)) {
+                $id_nodu = $data["id_nodu"];
+            }
+        } else {
+            $id_nodu = 0; /* chyba :)*/
+        }
+
+        $rs_nod = $conn_mysql->query("SELECT router_id FROM nod_list WHERE id = '$id_nodu' ");
+
+        while($data2 = $rs_nod->fetch_array()) {
+            $router_id = $data2["router_id"];
+        }
+
+        $reinhard_id = adminator::find_parent_reinhard($router_id, $conn_mysql);
+
+        return $reinhard_id;
+
+    } //end of function find_reinhard
+
+    public static function find_parent_reinhard($router_id, $conn_mysql)
+    {
+        $router_id = intval($router_id);
+
+        $rs_router = $conn_mysql->query("SELECT nazev, parent_router FROM router_list WHERE id = '$router_id' ");
+
+        if($rs_router->num_rows == 1) {
+            while($data = $rs_router->fetch_array()) {
+                $r_nazev = $data["nazev"];
+                $r_parent = $data["parent_router"];
+            }
+        } else {
+            return 0; /* chyba :) */
+        }
+
+        if(preg_match("/^reinhard*/", $r_nazev)) {
+            //mame reinharda... vracime jeho ID
+            return $router_id;
+        } else {
+            if($r_parent == 0) {
+                return 1;
+            } else {
+                $rs = adminator::find_parent_reinhard($r_parent, $conn_mysql);
+
+                return $rs;
+            }
+        }
+
+    } //end of function find_parent_reinhard
+
 }
