@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Controllers\HomeController;
+use App\Controllers\AuthController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 
-final class HomeControllerTest extends AdminatorTestCase
+final class AuthControllerTest extends AdminatorTestCase
 {
     protected function setUp(): void
     {

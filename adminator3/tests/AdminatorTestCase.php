@@ -14,6 +14,7 @@ use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Cartalyst\Sentinel\Sentinel;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -57,6 +58,10 @@ abstract class AdminatorTestCase extends TestCase
 
         $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
         $this->assertIsObject($container->get('smarty'));
+
+        $this->assertInstanceOf(\Smarty::class, $container->get('smarty'));
+
+        $this->assertInstanceOf(Sentinel::class, $container->get('sentinel'));
 
         return $container;
     }
