@@ -2406,7 +2406,7 @@ class objekt extends adminator
 
     public function actionArchivZmenWifiDiff($vysledek_write)
     {
-        $pole3 .= "[id_komplu]=> ".$this->update_id.",";
+        $pole3 = "[id_komplu]=> ".$this->update_id.",";
 
         $pole3 .= " diferencialni data: ";
 
@@ -2501,11 +2501,9 @@ class objekt extends adminator
             } // konec if obj == val
         } // konec foreach
 
-        $pole2 .= "".$pole3;
-
         $add = $this->conn_mysql->query(
             "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
-                                        . "VALUES ('" . $pole2 . "','" . $this->loggedUserEmail . "','" . $vysledek_write . "')"
+                                        . "VALUES ('" . $pole3 . "','" . $this->loggedUserEmail . "','" . $vysledek_write . "')"
         );
 
         //
@@ -2515,7 +2513,7 @@ class objekt extends adminator
         // TODO: fix automatic restarts
 
         // //zjistit, krz kterého reinharda jde objekt
-        // $reinhard_id = adminator::find_reinhard($update_id);
+        $reinhard_id = adminator::find_reinhard($this->update_id, $this->conn_mysql, $this->conn_pgsql);
 
         // //zmena sikany
         // if( ereg(".*změna.*Šikana.*z.*", $pole3) )
