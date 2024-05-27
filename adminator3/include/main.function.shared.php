@@ -98,7 +98,7 @@ function init_postgres($app_name = "adminator")
     }
 
     if (!($db_ok2)) {
-        die($hlaska_connect.pg_last_error($db_ok2)."</div></div></body></html>");
+        die($hlaska_connect.pg_last_error()."</div></div></body></html>");
     }
     return $db_ok2;
 }
@@ -948,7 +948,7 @@ function execute_request($cmd, $mess_ok, $mess_er)
 
 function execute_action($number_request, $id)
 {
-    global $output_main, $ag, $conn_mysql;
+    global $output_main, $conn_mysql, $conn_pgsql;
 
     if($number_request == 1) { //reinhard-3 - restriction (net-n/sikana)
 
@@ -1115,7 +1115,7 @@ function execute_action($number_request, $id)
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
     } elseif($number_request == 19) {
-        $output_main .= $ag->synchro_router_list();
+        $output_main .= synchro_router_list($conn_pgsql);
 
         $mess_ok = "trinity - adminator - synchro_router_list - restart ";
 
@@ -1187,3 +1187,47 @@ function execute_action($number_request, $id)
 
 
 } //end of function execute_action
+
+function synchro_router_list(\PgSql\Connection $conn_pgsql)
+{
+    //pro duplikaci tabulky router_list do Postgre DB
+
+    $mysql_export_all = "";
+    $output = "";
+
+    //muster::
+    //mysqldump --user=backup -x --add-drop-table -nt --skip-opt --compatible=postgresql adminator2 router_list
+
+    $output .= "----- postgre synchro ---- \n";
+
+    exec("mysqldump --user=backup -x --add-drop-table -nt --default-character-set=utf8 --skip-opt --compatible=postgresql adminator2 router_list ", $mysql_export);
+
+    //konverze z pole do jedné promenne
+    foreach ($mysql_export as $key => $val) {
+        if(preg_match("/^INSERT./", $val)) {
+            $mysql_export_all .= $val;
+        }
+    }
+
+    $pg_enc = pg_query($conn_pgsql, "set client_encoding to 'UTF8';");
+
+    $pg_drop = pg_query($conn_pgsql, "DELETE FROM router_list");
+
+    if($pg_drop) {
+        $output .= "  postgre - tabulka router_list úspěšně vymazána.\n";
+    } else {
+        $output .= "  postgre - chyba pri vymazani router_list. ".pg_last_error()."\n";
+    }
+
+    $pg_import = pg_query($conn_pgsql, $mysql_export_all);
+
+    if($pg_import) {
+        $output .= "  postgre - data router_list importována. \n";
+    } else {
+        $output .= "  postgre - chyba pri importu router_list. ".pg_last_error()."\n";
+    }
+
+    $output .= "----------\n";
+
+    return $output;
+}

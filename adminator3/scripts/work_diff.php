@@ -4,13 +4,29 @@
 
 error_reporting(E_ERROR | E_PARSE | E_COMPILE_ERROR);
 
+// boostrap
+//
+require __DIR__ . '/../vendor/autoload.php';
+
 require_once __DIR__ . "/../include/main.function.shared.php";
 
-require_once __DIR__ . "/../include/config.php";
+require __DIR__ ."/../boostrap/netteLoader.php";
 
-$ag = new Aglobal();
-$ag->conn_mysql = $conn_mysql;
-$ag->conn_pgsql = $db_ok2;
+// require __DIR__ ."/../boostrap/database.php";
+$conn_mysql = init_mysql("Adminator2");
+
+$conn_pgsql = init_postgres("Adminator2");
+
+// require __DIR__ ."/../boostrap/containerBuilder.php";
+
+// old style DI stuff
+// require __DIR__ ."/../boostrap/containerAfter.php";
+
+// require __DIR__ ."/../boostrap/appFactory.php";
+
+// require __DIR__ ."/../boostrap/dependencies.php";
+
+// end of bootstrap
 
 $html_tags = 1;
 

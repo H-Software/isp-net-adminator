@@ -15,6 +15,8 @@ require __DIR__ ."/../boostrap/netteLoader.php";
 // require __DIR__ ."/../boostrap/database.php";
 $conn_mysql = init_mysql("Adminator2");
 
+$conn_pgsql = init_postgres("Adminator2");
+
 // require __DIR__ ."/../boostrap/containerBuilder.php";
 
 // old style DI stuff
