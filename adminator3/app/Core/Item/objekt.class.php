@@ -774,8 +774,6 @@ class objekt extends adminator
                 }
 
                 //prvne stavajici data docasne ulozime
-                $pole2 .= "<b>akce: uprava objektu; </b><br>";
-
                 $sql_rows = "id_komplu, dns_jmeno, ip, mac, client_ap_ip, dov_net, id_tarifu, typ, poznamka, verejna, ";
                 $sql_rows .= "sikana_status, sikana_cas, sikana_text, upravil, id_nodu, ";
                 $sql_rows .= "tunnelling_ip, tunnel_user, tunnel_pass";
@@ -853,7 +851,7 @@ class objekt extends adminator
                 // require("objekty-add-inc-archiv.php");
                 list($az_output) = $this->actionArchivZmenWifiDiff($vysledek_write);
 
-                $output  .= $az_output;
+                $output .= $az_output;
 
                 $updated = "true";
 
@@ -900,14 +898,13 @@ class objekt extends adminator
                     $output .= "<div style=\"color: red; padding-bottom: 10px; padding-left: 5px; \" >".
                     pg_last_error($this->conn_pgsql).
                     "</div>";
-
-                    $output .= "<div style=\"padding-left: 5px; \">sql: ".$sql."</div>";
                 }
 
                 // pridame to do archivu zmen
-                // require("objekty-add-inc-archiv-wifi-add.php");
                 $this->addedDataArray = $obj_add;
-                $this->actionArchivZmenWifi($vysledek_write);
+                list($az_output) = $this->actionArchivZmenWifi($vysledek_write);
+
+                $output .= $az_output;
 
                 $writed = "true";
             } // konec else - rezim pridani
@@ -1272,8 +1269,6 @@ class objekt extends adminator
                 // rezim upravy
 
                 //prvne stavajici data docasne ulozime
-                $pole2 .= "<b>akce: uprava objektu; </b><br>";
-
                 $vysl4 = pg_query($this->conn_pgsql, "select * from objekty WHERE id_komplu='$this->update_id' ");
 
                 if((pg_num_rows($vysl4) <> 1)) {
@@ -2413,8 +2408,8 @@ class objekt extends adminator
     {
         $output = "";
 
-        $pole3 = "[id_komplu]=> ".$this->update_id.",";
-
+        $pole3 = "<b>akce: uprava objektu; </b><br>";
+        $pole3 .= "[id_komplu]=> ".$this->update_id.",";
         $pole3 .= " diferencialni data: ";
 
         $obj_upd = $this->updatedDataArray;
@@ -2676,8 +2671,10 @@ class objekt extends adminator
         return array($output);
     }
 
-    public function actionArchivZmenWifi($vysledek_write)
+    public function actionArchivZmenWifi($vysledek_write): array
     {
+        $output = "";
+
         //zjistit, krz kterého reinharda jde objekt
         // $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
 
@@ -2751,6 +2748,12 @@ class objekt extends adminator
             "'".$vysledek_write."')"
         );
 
+        if($add) {
+            $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        } else {
+            $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        }
+
         //automaticke osvezovani/restarty
         // TODO: fix automatic restarts
         // if( $this->form_typ_ip == 4 )
@@ -2792,10 +2795,13 @@ class objekt extends adminator
         //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
         //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
         // }
+
+        return array($output);
     }
 
     private function actionArchivZmenFiberDiff($vysledek_write)
     {
+        $pole3 = "<b>akce: uprava objektu; </b><br>";
         $pole3 .= "[id_komplu]=> ".$this->update_id.",";
         $pole3 .= " diferencialni data: ";
 
@@ -2892,14 +2898,18 @@ class objekt extends adminator
             } // konec if obj == val
         } // konec foreach
 
-        $pole2 .= "".$pole3;
-
         $add = $this->conn_mysql->query(
             "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-                "('".$this->conn_mysql->real_escape_string($pole2)."','".
+                "('".$this->conn_mysql->real_escape_string($pole3)."','".
                 $this->conn_mysql->real_escape_string($this->loggedUserEmail)."','".
             $this->conn_mysql->real_escape_string($vysledek_write)."') "
         );
+
+        // if($add) {
+        //     $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        // } else {
+        //     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        // }
 
         // TODO: fix automatic restarts
         //zmena sikany nebo IP adresy
@@ -3040,6 +3050,12 @@ class objekt extends adminator
                 $this->conn_mysql->real_escape_string($this->loggedUserEmail)."','".
             $this->conn_mysql->real_escape_string($vysledek_write)."') "
         );
+
+        // if($add) {
+        //     $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        // } else {
+        //     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        // }
 
         //ted automaticky pridavani restartu
 
