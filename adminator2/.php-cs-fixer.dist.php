@@ -2,7 +2,8 @@
 
 $finder = (new PhpCsFixer\Finder())
     ->append([
-        './platby-hot-vypis.php'
+        './platby-hot-vypis.php',
+        './topology-router-add.php'
     ])
     // ->in(__DIR__)
     // ->exclude([

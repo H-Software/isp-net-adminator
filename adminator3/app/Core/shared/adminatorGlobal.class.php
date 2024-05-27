@@ -1,13 +1,21 @@
 <?php
 
+use RouterOS\Config;
+use RouterOS\Client;
+use RouterOS\Query;
+
 class Aglobal
 {
     public \mysqli|\PDO $conn_mysql;
 
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
+
     public function synchro_router_list()
     {
-
         //pro duplikaci tabulky router_list do Postgre DB
+
+        $mysql_export_all = "";
+        $output = "";
 
         //muster::
         //mysqldump --user=backup -x --add-drop-table -nt --skip-opt --compatible=postgresql adminator2 router_list
@@ -18,14 +26,14 @@ class Aglobal
 
         //konverze z pole do jedné promenne
         foreach ($mysql_export as $key => $val) {
-            if(ereg("^INSERT.", $val)) {
+            if(preg_match("/^INSERT./", $val)) {
                 $mysql_export_all .= $val;
             }
         }
 
-        $pg_enc = pg_query("set client_encoding to 'UTF8';");
+        $pg_enc = pg_query($this->conn_pgsql, "set client_encoding to 'UTF8';");
 
-        $pg_drop = pg_query("DELETE FROM router_list");
+        $pg_drop = pg_query($this->conn_pgsql, "DELETE FROM router_list");
 
         if($pg_drop) {
             $output .= "  postgre - tabulka router_list úspěšně vymazána.\n";
@@ -33,7 +41,7 @@ class Aglobal
             $output .= "  postgre - chyba pri vymazani router_list. ".pg_last_error()."\n";
         }
 
-        $pg_import = pg_query($mysql_export_all);
+        $pg_import = pg_query($this->conn_pgsql, $mysql_export_all);
 
         if($pg_import) {
             $output .= "  postgre - data router_list importována. \n";
@@ -83,8 +91,8 @@ class Aglobal
 
         $router_id = intval($router_id);
 
-        $rs_q = mysql_query("SELECT ip_adresa, id FROM router_list WHERE id = '".$router_id."'");
-        $rs_q_num = mysql_num_rows($rs_q);
+        $rs_q = $this->conn_mysql->query("SELECT ip_adresa, id FROM router_list WHERE id = '".$router_id."'");
+        $rs_q_num = $rs_q->num_rows;
 
         if($rs_q_num <> 1) {
 
@@ -95,12 +103,18 @@ class Aglobal
 
         }
 
-        $router_ip = mysql_result($rs_q, 0, 0);
+        // $router_ip = mysql_result($rs_q, 0, 0);
+        $rs_q->data_seek(0);
+        list($router_ip) = $rs_q->fetch_row();
 
-        $rs_login = mysql_query("SELECT value FROM settings WHERE name IN ('routeros_api_login_name', 'routeros_api_login_password') ");
+        $rs_login = $this->conn_mysql->query("SELECT value FROM settings WHERE name IN ('routeros_api_login_name', 'routeros_api_login_password') ");
 
-        $login_name = mysql_result($rs_login, 0, 0);
-        $login_pass = mysql_result($rs_login, 1, 0);
+        // $login_name = mysql_result($rs_login, 0, 0);
+        // $login_pass = mysql_result($rs_login, 1, 0);
+        $rs_login->data_seek(0);
+        list($login_name) = $rs_login->fetch_row();
+        $rs_login->data_seek(1);
+        list($login_pass) = $rs_login->fetch_row();
 
         //
         // test pingu
@@ -115,24 +129,41 @@ class Aglobal
             $ret_array[1] = "Chyba! Router neodpovídá na odezvu Ping (id: ".$router_id.", ping: ".$ping_output[0].")";
 
             return $ret_array;
-
         }
 
         //
         // test API
         //
-        $API = new RouterOS();
+        // $API = new RouterOS();
 
-        //pokus o spojeni krz API
-        $conn = $API->connect($router_ip, $login_name, $login_pass);
+        // //pokus o spojeni krz API
+        // $conn = $API->connect($router_ip, $login_name, $login_pass);
 
-        if($conn == false) {
+        // if($conn == false) {
 
+        //     $ret_array[0] = false;
+        //     $ret_array[1] .= "Chyba! Nelze se spojit s routerem krz API. (ROS_API say: couldn't connect to router) \n";
+
+        //     return $ret_array;
+
+        // }
+
+        // $conn = RouterOS::connect($ip, $login_user, $login_pass) or die("couldn't connect to router\n");
+
+        $rosConfig = new Config([
+            'host' => $router_ip,
+            'user' => $login_name,
+            'pass' => $login_pass,
+            'port' => 18728,
+        ]);
+
+        try {
+            $rosClient = new Client($rosConfig);
+        } catch (Exception $exception) {
             $ret_array[0] = false;
             $ret_array[1] .= "Chyba! Nelze se spojit s routerem krz API. (ROS_API say: couldn't connect to router) \n";
 
             return $ret_array;
-
         }
 
         //
@@ -149,7 +180,6 @@ class Aglobal
             $ret_array[1] .= "Chyba! ".$rs_snmp_f[1]."\n";
 
             return $ret_array;
-
         }
 
         $rs_snmp = snmpget($router_ip, "public", ".1.3.6.1.2.1.25.3.3.1.2.1", 300000);
@@ -160,7 +190,6 @@ class Aglobal
             $ret_array[1] .= "Chyba! Router korektne neodpovídá na SNMP GET dotaz. (".$rs_snmp.") \n";
 
             return $ret_array;
-
         }
 
         //debug result
@@ -177,7 +206,6 @@ class Aglobal
         */
         //end of debug result
 
-
         $ret_array[0] = true;
         $ret_array[1] = "Všechny testy v pořádku! \n";
 
@@ -185,6 +213,5 @@ class Aglobal
         return $ret_array;
 
     } //end of function test_router_for_monitoring
-
 
 } //konec tridy Aglobal
