@@ -178,8 +178,11 @@ if(($odeslat == "OK") and ($error != "1")) {
     echo "<br>";
 
     echo "<b>Nadřazený router: </b>";
-    $parent_router_name = mysql_result(mysql_query("SELECT nazev FROM router_list WHERE id = '".intval($update_id)."' "), 0);
-
+    $rs_rs = $conn_mysql->query("SELECT nazev FROM router_list WHERE id = '".intval($update_id)."' ");
+    // $parent_router_name = mysql_result(, 0);
+    $rs_rs->data_seek(0);
+    list($parent_router_name) = $rs_rs->fetch_row();
+  
     echo $parent_router_name." (id: ".$parent_router.")<br>";
 
     echo "<br>";
@@ -334,7 +337,7 @@ if(($odeslat == "OK") and ($error != "1")) {
             echo "<br><div style=\"color: green; font-size: 18px; \">Záznam úspěšně vložen.</div><br>";
         } else {
             echo "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
-            echo "<div style=\"\">".mysql_error()."</div>";
+            echo "<div style=\"\">".$conn_mysql->error()."</div>";
         }
 
         // pridame to do archivu zmen
