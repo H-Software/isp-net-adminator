@@ -90,7 +90,7 @@ $container->set(
     'csrf',
     function () use ($responseFactory) {
 
-        $guardMock = \Mockery::mock('Guard');
+        $guardMock = \Mockery::mock(Guard::class);
 
         $guardMock->shouldReceive('getTokenNameKey')->andReturn(42);
         $guardMock->shouldReceive('getTokenValueKey')->andReturn(42);

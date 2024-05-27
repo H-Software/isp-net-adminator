@@ -15,6 +15,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
+use Slim\Csrf\Guard;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -57,11 +58,15 @@ abstract class AdminatorTestCase extends TestCase
         $this->assertInstanceOf(ContainerInterface::class, $container);
 
         $this->assertInstanceOf(LoggerInterface::class, $container->get('logger'));
-        $this->assertIsObject($container->get('smarty'));
 
+        // $this->assertIsObject($container->get('smarty'));
         $this->assertInstanceOf(\Smarty::class, $container->get('smarty'));
 
         $this->assertInstanceOf(Sentinel::class, $container->get('sentinel'));
+
+        $this->assertInstanceOf(\PDO::class, $container->get('connPgsql'));
+
+        $this->assertInstanceOf(Guard::class, $container->get('csrf'));
 
         return $container;
     }
