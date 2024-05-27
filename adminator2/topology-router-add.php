@@ -45,7 +45,9 @@ require("include/charset.php");
  <?php
 
   $ag = new Aglobal();      
-    	  
+  $ag->conn_mysql = $conn_mysql;
+  $ag->conn_pgsql = $db_ok2;
+  
   //naplneni promenejch
   $nod_find = $_POST["nod_find"];
   $odeslat = $_POST["odeslat"];	  

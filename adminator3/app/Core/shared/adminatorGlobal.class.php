@@ -4,10 +4,14 @@ class Aglobal
 {
     public \mysqli|\PDO $conn_mysql;
 
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
+
     public function synchro_router_list()
     {
-
         //pro duplikaci tabulky router_list do Postgre DB
+
+        $mysql_export_all = "";
+        $output = "";
 
         //muster::
         //mysqldump --user=backup -x --add-drop-table -nt --skip-opt --compatible=postgresql adminator2 router_list
@@ -18,14 +22,14 @@ class Aglobal
 
         //konverze z pole do jedné promenne
         foreach ($mysql_export as $key => $val) {
-            if(ereg("^INSERT.", $val)) {
+            if(preg_match("/^INSERT./", $val)) {
                 $mysql_export_all .= $val;
             }
         }
 
-        $pg_enc = pg_query("set client_encoding to 'UTF8';");
+        $pg_enc = pg_query($this->conn_pgsql, "set client_encoding to 'UTF8';");
 
-        $pg_drop = pg_query("DELETE FROM router_list");
+        $pg_drop = pg_query($this->conn_pgsql, "DELETE FROM router_list");
 
         if($pg_drop) {
             $output .= "  postgre - tabulka router_list úspěšně vymazána.\n";
@@ -33,7 +37,7 @@ class Aglobal
             $output .= "  postgre - chyba pri vymazani router_list. ".pg_last_error()."\n";
         }
 
-        $pg_import = pg_query($mysql_export_all);
+        $pg_import = pg_query($this->conn_pgsql, $mysql_export_all);
 
         if($pg_import) {
             $output .= "  postgre - data router_list importována. \n";
