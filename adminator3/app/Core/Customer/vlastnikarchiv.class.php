@@ -8,6 +8,8 @@ class vlastnikarchiv
 
     public $logger;
 
+    public $container;
+
     public $echo = true;
 
     public $csrf_html;
@@ -135,14 +137,9 @@ class vlastnikarchiv
 
                 // $id=$data["id_cloveka"];
                 // print "debug: id: $id";
-                $objekt_a2 = new objekt_a2();
-                $objekt_a2->conn_mysql = $this->conn_mysql;
-                $objekt_a2->conn_pgsql = $this->conn_pgsql;
-                $objekt_a2->logger = $this->logger;
+                $objekt = new \App\Core\objekt($this->container);
 
-                $objekt_a2->echo = false;
-
-                $output .= $objekt_a2->vypis($sql, $co, $id);
+                $output .= $objekt->vypis($sql, $co, $id);
 
                 //tady dalsi radka asi
                 $output .= "<tr>";

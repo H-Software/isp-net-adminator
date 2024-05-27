@@ -70,11 +70,7 @@ class vlastnik2_a2
             die("An error occurred. The connection with mysql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_mysql) . ")");
         }
 
-        $objekt = new objekt_a2();
-        $objekt->echo = false;
-        $objekt->logger = $this->logger;
-        $objekt->conn_mysql = $this->conn_mysql;
-        $objekt->conn_pgsql = $this->conn_pgsql;
+        $objekt = new \App\Core\objekt($this->container);
         $objekt->csrf_html = $this->csrf_html;
 
         $objekt->listAllowedActionUpdate = $this->objektListAllowedActionUpdate;

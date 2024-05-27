@@ -8,6 +8,8 @@ class vlastnik
 
     public $csrf_html;
 
+    public $container;
+
     public $echo = true;
 
     public $vlastnici_erase_povolen = false;
@@ -43,10 +45,7 @@ class vlastnik
     {
         $output = "";
 
-        $objekt = new objekt_a2();
-        $objekt->conn_mysql = $this->conn_mysql;
-        $objekt->conn_pgsql = $this->conn_pgsql;
-        $objekt->echo = false;
+        $objekt = new \App\Core\objekt($this->container);
         $objekt->csrf_html = $this->csrf_html;
 
         $objekt->listAllowedActionUpdate = $this->objekt_update_povolen;

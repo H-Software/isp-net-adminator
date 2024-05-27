@@ -16,7 +16,7 @@ class objekt extends adminator
 
     protected $sentinel;
 
-    protected $adminator; // handler for instance of adminator class
+    public $adminator; // handler for instance of adminator class
 
     public $loggedUserEmail;
 
