@@ -41,28 +41,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $container = self::initDIcontainer();
 
-        // mock "underlaying" class for helper functions/logic
-        $adminatorMock = \Mockery::mock(
-            \App\Core\adminator::class,
-            [
-                $container->get('connMysql'),
-                $container->get('smarty'),
-                $container->get('logger'),
-                '127.0.0.1', // userIPAddress
-                $container->get('pdoMysql'),
-                $container->get('settings'),
-            ]
-        )->makePartial();
-
-        $adminatorMock->userIdentityUsername = 'test@test';
-        $adminatorMock->shouldReceive('getUserLevel')->andReturn(1);
-        $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
-        $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
-        // $adminatorMock->shouldReceive('zobraz_kategorie')->andReturn(
-        //     require __DIR__ . "/../../fixtures/zobraz_kategorie_data.php"
-        // );
-        $adminatorMock->shouldReceive('getUserToken')->andReturn(false);
-        // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
+        $adminatorMock = self::initAdminatorClass($container);
 
         $opravyMock = \Mockery::mock(
             \opravy::class,

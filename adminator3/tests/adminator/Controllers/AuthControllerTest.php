@@ -31,6 +31,8 @@ final class AuthControllerTest extends AdminatorTestCase
 
         $container = self::initDIcontainer();
 
+        $adminatorMock = self::initAdminatorClass($container);
 
+        $this->assertIsObject($adminatorMock);
     }
 }
