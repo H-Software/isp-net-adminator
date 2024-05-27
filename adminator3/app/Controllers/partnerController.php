@@ -9,11 +9,8 @@ use App\Partner\partner;
 
 class partnerController extends adminatorController
 {
-    public $conn_mysql;
     public $smarty;
     public $logger;
-
-    protected $sentinel;
 
     protected $adminator;
 
@@ -25,17 +22,14 @@ class partnerController extends adminatorController
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->conn_mysql = $this->container->get('connMysql');
-        $this->smarty = $this->container->get('smarty');
-        $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
+        $this->smarty = $container->get('smarty');
+        $this->logger = $container->get('logger');
 
         $this->logger->info("partnerController\__construct called");
 
         parent::__construct($container);
 
-        $this->partnerInstance = new partner($this->container);
+        $this->partnerInstance = new partner($container);
 
     }
 
@@ -50,15 +44,12 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner program");
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner program",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        ];
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('partner/partner-cat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'partner/partner-cat.tpl', $assignData);
     }
 
     public function orderCat(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -72,15 +63,12 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner program :: Orders");
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner program :: Orders",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        ];
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('partner/order-cat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'partner/order-cat.tpl', $assignData);
     }
 
     public function orderList(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -94,17 +82,14 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner program :: Order List");
-
-        $this->header($request, $response, $this->adminator);
-
         $listOutput = $this->partnerInstance->list();
 
-        $this->smarty->assign("body", $listOutput[0]);
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner program :: Order List",
+            "body" => $listOutput[0]
+        ];
 
-        $this->smarty->display('partner/order-list.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'partner/order-list.tpl', $assignData);
     }
 
     public function orderAdd(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -118,13 +103,12 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Add");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner :: Order Add",
+        ];
 
         // CSRF token name and value for update form
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
-
         $this->logger->debug("partnerController\orderAdd: csrf generated: ".var_export($csrf_html, true));
 
         $this->partnerInstance->csrf_html = $csrf_html;
@@ -132,7 +116,7 @@ class partnerController extends adminatorController
 
         $this->partnerInstance->add();
 
-        return $response;
+        return $this->renderer->template($request, $response, $this->partnerInstance->rendererTemplateName, $assignData);
     }
 
     public function orderAccept(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -146,13 +130,13 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Accept");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner :: Order Accept",
+        ];
 
         $this->partnerInstance->accept();
 
-        return $response;
+        return $this->renderer->template($request, $response, $this->partnerInstance->rendererTemplateName, $assignData);
     }
 
     public function orderChangeDesc(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -166,13 +150,13 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Update Desc");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner :: Order Update Desc",
+        ];
 
         $this->partnerInstance->updateDesc();
 
-        return $response;
+        return $this->renderer->template($request, $response, $this->partnerInstance->rendererTemplateName, $assignData);
     }
 
     public function orderChangeStatus(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -186,13 +170,12 @@ class partnerController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Partner :: Order Change Status");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner :: Order Change Status",
+        ];
 
         $this->partnerInstance->changeStatus();
 
-        return $response;
-
+        return $this->renderer->template($request, $response, $this->partnerInstance->rendererTemplateName, $assignData);
     }
 }

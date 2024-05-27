@@ -11,8 +11,6 @@ use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 
 class partner extends adminator
 {
-    private $container;
-
     private $validator;
 
     public $conn_pgsql;
@@ -22,9 +20,11 @@ class partner extends adminator
 
     public $logger;
 
+    protected $sentinel;
+
     public $loggedUserEmail;
 
-    public $adminator; // handler for instance of adminator class
+    public $rendererTemplateName;
 
     public $csrf_html;
 
@@ -53,7 +53,6 @@ class partner extends adminator
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->pdoMysql = $container->get('pdoMysql');
@@ -61,7 +60,9 @@ class partner extends adminator
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
 
-        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+        $this->sentinel = $container->get('sentinel');
+
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function listPrepareVars($mode = null)
@@ -198,7 +199,7 @@ class partner extends adminator
         return array($output);
     }
 
-    private function addPrepareVars()
+    private function addPrepareVars(): void
     {
         $this->form_jmeno_klienta = $_POST["jmeno_klienta"];
         $this->form_bydliste = $_POST["bydliste"];
@@ -271,7 +272,7 @@ class partner extends adminator
         return $form_data;
     }
 
-    public function add()
+    public function add(): bool
     {
         $this->logger->info("partner\add called");
 
@@ -301,11 +302,11 @@ class partner extends adminator
 
             $this->smarty->assign("insertedData", $insertedData);
 
-            $this->smarty->display('partner/order-add.tpl');
+            $this->rendererTemplateName = 'partner/order-add.tpl';
             return true;
         } else {
             // zobrazime formular
-
+            //
             if(isset($this->form_odeslat)) {
                 $this->smarty->assign("form_error_message", $this->form_error);
             }
@@ -314,7 +315,7 @@ class partner extends adminator
             // $bodyContent .=  print_r($form_data);
             $this->smarty->assign($form_data);
 
-            $this->smarty->display('partner/order-add-form.tpl');
+            $this->rendererTemplateName = 'partner/order-add-form.tpl';
             return true;
         }
     }
@@ -337,7 +338,7 @@ class partner extends adminator
             if(count($data) == 0) {
                 $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
                 $this->smarty->assign("body", $output[0]);
-                $this->smarty->display('partner/order-accept.tpl');
+                $this->rendererTemplateName = 'partner/order-accept.tpl';
                 return;
             }
 
@@ -416,7 +417,7 @@ class partner extends adminator
 
         $this->smarty->assign("body", $output[0]);
 
-        $this->smarty->display('partner/order-accept.tpl');
+        $this->rendererTemplateName = 'partner/order-accept.tpl';
     }
 
     public function updateDesc(): void
@@ -437,7 +438,7 @@ class partner extends adminator
             if(count($data) == 0) {
                 $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
                 $this->smarty->assign("body", $output[0]);
-                $this->smarty->display('partner/order-update-desc.tpl');
+                $this->rendererTemplateName = 'partner/order-update-desc.tpl';
                 return;
             }
 
@@ -517,8 +518,7 @@ class partner extends adminator
 
         $this->smarty->assign("body", $output[0]);
 
-        $this->smarty->display('partner/order-update-desc.tpl');
-
+        $this->rendererTemplateName = 'partner/order-update-desc.tpl';
     }
 
     public function changeStatus(): void
@@ -675,6 +675,6 @@ class partner extends adminator
 
         $this->smarty->assign("body", $output[0]);
 
-        $this->smarty->display('partner/order-change-status.tpl');
+        $this->rendererTemplateName = 'partner/order-change-status.tpl';
     }
 }

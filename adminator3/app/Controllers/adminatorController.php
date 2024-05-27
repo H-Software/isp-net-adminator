@@ -22,6 +22,8 @@ class adminatorController extends Controller
 
     public $settings;
 
+    protected $csrf;
+
     protected $sentinel;
 
     protected $adminator;
@@ -47,9 +49,10 @@ class adminatorController extends Controller
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
-        $this->pdoMysql = $this->container->get('pdoMysql');
-        $this->settings = $this->container->get('settings');
-        $this->renderer = $this->container->get(Renderer::class);
+        $this->pdoMysql = $container->get('pdoMysql');
+        $this->settings = $container->get('settings');
+        $this->renderer = $container->get(Renderer::class);
+        $this->csrf     = $container->get('csrf');
 
         // $this->responseFactory = $container->get(ResponseFactoryInterface::class);
 
@@ -175,7 +178,7 @@ class adminatorController extends Controller
 
     public function generateCsrfToken(ServerRequestInterface $request, ResponseInterface $response, $return_form_html = false)
     {
-        return Renderer::generateCsrfToken($request, $response, $return_form_html, $this->container->get('csrf'));
+        return Renderer::generateCsrfToken($request, $response, $return_form_html, $this->csrf);
     }
 
     public function header(ServerRequestInterface|null $request, ResponseInterface|null $response, $adminatorUnused = null)
