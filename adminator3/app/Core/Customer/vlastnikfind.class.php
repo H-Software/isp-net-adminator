@@ -3,7 +3,7 @@
 class vlastnikfind
 {
     public \mysqli|\PDO $conn_mysql;
-    public $conn_pgsql;
+    public ?\PgSql\Connection $conn_pgsql;
 
     public $container;
 
