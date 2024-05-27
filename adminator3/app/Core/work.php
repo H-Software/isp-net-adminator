@@ -137,12 +137,6 @@ class work
             }
         }
 
-        // $output .= var_export($work_output, true);
-
-        foreach ($work_output as $id => $item) {
-            $output .= $item[0];
-        }
-
         // TODO: fix the rest of stuff
 
         // //zmena NetN
@@ -263,6 +257,13 @@ class work
         //     }
         // }
 
+
+        // $output .= var_export($work_output, true);
+
+        foreach ($work_output as $id => $item) {
+            $output .= $item[0];
+        }
+
         return array($output);
     }
 
@@ -273,48 +274,58 @@ class work
         $output = "";
         $work_output = [];
 
-        // zjistit, krz kterého reinharda jde objekt
-        // $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
-
-        if( $args['form_typ_ip'] == 4 )
-        {
-            //L2TP verejka
-            $work_output[21] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
-        }
-
-        $this->work_handler("14"); // (trinity) filtrace-IP-on-Mtik's-restart
-
         $reinhard_id = adminator::find_reinhard($itemId, $this->conn_mysql, $this->conn_pgsql);
 
-        // //zde dodat if zda-li je NetN ci SikanaA
-        // if( (preg_match("/.*<b>\[dov_net\]<\/b> => n.*/", $pole) == 1)
-        //         or (preg_match("/.*<b>\[sikana_status\]<\/b> => a.*/", $pole) == 1) ){
+        if($args['form_typ_ip'] == 4) {
+            //L2TP verejka
+            $work_output[] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        }
 
+        $work_output[] = $this->work_handler("14"); // (trinity) filtrace-IP-on-Mtik's-restart
 
-        //     if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
-        //     else{
+        //zde dodat if zda-li je NetN ci SikanaA
+        if((preg_match("/.*<b>\[dov_net\]<\/b> => n.*/", $changes) == 1)
+                or (preg_match("/.*<b>\[sikana_status\]<\/b> => a.*/", $changes) == 1)) {
 
-        //         //nenalezet pozadovany reinhard, takze osvezime vsechny
+            if($reinhard_id == 177) {
+                $work_output[] = $this->work_handler("1");
+            } //reinhard-3 (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 1) {
+                $work_output[] = $this->work_handler("2");
+            } //reinhard-wifi (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 236) {
+                $work_output[] = $this->work_handler("24");
+            } //reinhard-5 (ros) - restrictions (net-n/sikana)
+            else {
+                //nenalezet pozadovany reinhard, takze osvezime vsechny
 
-        //         Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //         Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //         Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
 
-        //     } //end of else - if reinhard_id
+            } //end of else - if reinhard_id
+        }
 
-        // }
+        if($reinhard_id == 177) {
+            $work_output[] = $this->work_handler("20");
+        } //reinhard-3 (ros) - shaper (client's tariffs)
+        elseif($reinhard_id == 1) {
+            $work_output[] = $this->work_handler("13");
+        } //reinhard-wifi (ros) - shaper (client's tariffs)
+        elseif($reinhard_id == 236) {
+            $work_output[] = $this->work_handler("23");
+        } //reinhard-5 (ros) - shaper (client's tariffs)
+        else {
+            $work_output[] = $this->work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+            $work_output[] = $this->work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+            $work_output[] = $this->work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+        }
 
-        // if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)
-        // elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
-        // elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
-        // else
-        // {
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-        // }
+        // $output .= var_export($work_output, true);
+
+        foreach ($work_output as $id => $item) {
+            $output .= $item[0];
+        }
 
         return array($output);
     }

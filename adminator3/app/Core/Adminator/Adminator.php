@@ -584,7 +584,7 @@ class adminator
         return $odkaz;
     }
 
-    public static function find_reinhard(int $id, \mysqli $conn_mysql, \PgSql\Connection $conn_pgsql)
+    public static function find_reinhard(int $id, \mysqli $conn_mysql, \PgSql\Connection $conn_pgsql): int
     {
         $id = intval($id);
 
@@ -610,7 +610,7 @@ class adminator
 
     } //end of function find_reinhard
 
-    public static function find_parent_reinhard($router_id, $conn_mysql)
+    public static function find_parent_reinhard(int $router_id, \mysqli $conn_mysql): int
     {
         $router_id = intval($router_id);
 
