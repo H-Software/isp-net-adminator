@@ -14,7 +14,7 @@ use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Cartalyst\Sentinel\Sentinel;
+use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 abstract class AdminatorTestCase extends TestCase
 {
