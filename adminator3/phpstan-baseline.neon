@@ -322,35 +322,21 @@ parameters:
 			count: 1
 			path: app/Core/platby.php
 
-		-
-			message: "#^Call to method connect\\(\\) on an unknown class RouterOS\\.$#"
-			count: 1
-			path: app/Core/shared/adminatorGlobal.class.php
+		# -
+		# 	message: "#^Call to method connect\\(\\) on an unknown class RouterOS\\.$#"
+		# 	count: 1
+		# 	path: app/Core/shared/adminatorGlobal.class.php
 
-		-
-			message: "#^Function ereg not found\\.$#"
-			count: 1
-			path: app/Core/shared/adminatorGlobal.class.php
 
-		-
-			message: "#^Function mysql_num_rows not found\\.$#"
-			count: 1
-			path: app/Core/shared/adminatorGlobal.class.php
+		# -
+		# 	message: "#^Function mysql_result not found\\.$#"
+		# 	count: 3
+		# 	path: app/Core/shared/adminatorGlobal.class.php
 
-		-
-			message: "#^Function mysql_query not found\\.$#"
-			count: 2
-			path: app/Core/shared/adminatorGlobal.class.php
-
-		-
-			message: "#^Function mysql_result not found\\.$#"
-			count: 3
-			path: app/Core/shared/adminatorGlobal.class.php
-
-		-
-			message: "#^Instantiated class RouterOS not found\\.$#"
-			count: 1
-			path: app/Core/shared/adminatorGlobal.class.php
+		# -
+		# 	message: "#^Instantiated class RouterOS not found\\.$#"
+		# 	count: 1
+		# 	path: app/Core/shared/adminatorGlobal.class.php
 
 		-
 			message: "#^Offset 1 does not exist on array\\{false\\}\\.$#"
