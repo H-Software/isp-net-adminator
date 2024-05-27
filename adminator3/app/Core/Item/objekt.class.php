@@ -2530,12 +2530,7 @@ class objekt extends adminator
     {
         $output = "";
 
-        //zjistit, krz kterého reinharda jde objekt
-        // $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
-
-        // pridame to do archivu zmen
         $pole = "<b> akce: pridani objektu ; </b><br>";
-
         $pole .= "[id_komplu]=> ".intval($this->insertedId)." ";
 
         foreach ($this->addedDataArray as $key => $val) {
@@ -2611,9 +2606,9 @@ class objekt extends adminator
 
         //automaticke osvezovani/restarty
         //
-        list($work_output) = $this->work->workActionObjektyWifi($pole);
+        list($work_output) = $this->work->workActionObjektyWifi($pole, $this->insertedId);
         $output .= $work_output;
-        
+
         return array($output);
     }
 

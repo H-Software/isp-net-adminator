@@ -584,7 +584,7 @@ class adminator
         return $odkaz;
     }
 
-    public static function find_reinhard($id, $conn_mysql, $conn_pgsql)
+    public static function find_reinhard(int $id, \mysqli $conn_mysql, \PgSql\Connection $conn_pgsql)
     {
         $id = intval($id);
 

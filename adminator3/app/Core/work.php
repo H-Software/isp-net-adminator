@@ -107,7 +107,7 @@ class work
 
     } //end of function work_handler
 
-    public function workActionObjektyWifiDiff($changes, $update_id)
+    public function workActionObjektyWifiDiff($changes, $itemId)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -115,7 +115,7 @@ class work
         $work_output = [];
 
         // //zjistit, krz kterého reinharda jde objekt
-        $reinhard_id = adminator::find_reinhard($update_id, $this->conn_mysql, $this->conn_pgsql);
+        $reinhard_id = adminator::find_reinhard($itemId, $this->conn_mysql, $this->conn_pgsql);
 
         // //zmena sikany
         if(preg_match("/.*změna.*Šikana.*z.*/", $changes)) {
@@ -266,22 +266,25 @@ class work
         return array($output);
     }
 
-    public function workActionObjektyWifi($changes)
+    public function workActionObjektyWifi(string $changes, int $itemId, array $args): array
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $output = "";
         $work_output = [];
 
-                // if( $this->form_typ_ip == 4 )
-        // {
-        //     //L2TP verejka
-        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-        // }
+        // zjistit, krz kterého reinharda jde objekt
+        // $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
 
-        // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+        if( $args['form_typ_ip'] == 4 )
+        {
+            //L2TP verejka
+            $work_output[21] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        }
 
-        // $reinhard_id = adminator::find_reinhard($this->insertedId);
+        $this->work_handler("14"); // (trinity) filtrace-IP-on-Mtik's-restart
+
+        $reinhard_id = adminator::find_reinhard($itemId, $this->conn_mysql, $this->conn_pgsql);
 
         // //zde dodat if zda-li je NetN ci SikanaA
         // if( (preg_match("/.*<b>\[dov_net\]<\/b> => n.*/", $pole) == 1)
@@ -312,5 +315,7 @@ class work
         //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
         //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
         // }
+
+        return array($output);
     }
 }
