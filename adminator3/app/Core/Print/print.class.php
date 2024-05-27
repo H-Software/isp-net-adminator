@@ -550,7 +550,7 @@ class printClass extends adminator
                     $rs_tarif = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '$id_tarifu' ");
                     // $typ_tarifu = mysql_result($rs_tarif, 0, 0);
                     $rs_tarif->data_seek(0);
-                    $typ_tarifu = $rs_tarif->fetch_row();
+                    list($typ_tarifu) = $rs_tarif->fetch_row();
 
                     if($typ_tarifu == 0) {
                         $prip_tech = 3;
@@ -570,9 +570,7 @@ class printClass extends adminator
                         echo "<div style=\"font-weight: bold; color: red;\" >".
                             "Chyba! Nelze načíst údaje z databáze lokalit pro id_nodu ".intval($id_nodu).". (rows: ".$rs_nod_num.")</div>";
                     } else {
-
                         while($data_nod = $rs_nod->fetch_array()) {
-
                             // $poznamka = " NOD: ".mysql_result($rs_nod, 0, 0);
                             // $ip_rozsah = mysql_result($rs_nod, 0, 1);
                             $poznamka = " NOD: ". $data_nod['jmeno'];
@@ -1332,7 +1330,7 @@ class printClass extends adminator
                     $rs_tarif = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '$id_tarifu' ");
                     // $typ_tarifu = mysql_result($rs_tarif, 0, 0);
                     $rs_tarif->data_seek(0);
-                    $typ_tarifu = $rs_tarif->fetch_row();
+                    list($typ_tarifu) = $rs_tarif->fetch_row();
 
                     if($typ_tarifu == 0) {
                         $prip_tech = 3;
