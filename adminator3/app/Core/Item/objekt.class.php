@@ -18,7 +18,7 @@ class objekt extends adminator
 
     public $adminator; // handler for instance of adminator class
 
-    public $loggedUserEmail;
+    protected $loggedUserEmail;
 
     // public ?string $userIdentityUsername = null;
 

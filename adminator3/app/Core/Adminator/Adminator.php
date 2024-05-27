@@ -34,7 +34,7 @@ class adminator
 
     public ?int $userIdentityLevel = null;
 
-    public $loggedUserEmail;
+    protected $loggedUserEmail;
 
     protected $sentinel;
 
