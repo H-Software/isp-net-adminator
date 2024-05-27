@@ -94,13 +94,13 @@ class work
             }
 
             if($add_az) {
-                echo " - <span style=\"color: green;\"> úspěšně přidán do archivu změn.</span>";
+                $output .= " - <span style=\"color: green;\"> úspěšně přidán do archivu změn.</span>";
             } else {
-                echo " - <span style=\"color: red;\"> chyba při přidání požadavku do archivu změn.</span>";
-                echo "</div><div> sql: ".$sql_az."\n";
+                $output .= " - <span style=\"color: red;\"> chyba při přidání požadavku do archivu změn.</span>";
+                $output .= "</div><div> sql: ".$sql_az."\n";
             }
 
-            echo "</div>";
+            $output .= "</div>";
         }
 
         return array($output);
