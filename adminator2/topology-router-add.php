@@ -182,7 +182,7 @@ if(($odeslat == "OK") and ($error != "1")) {
     // $parent_router_name = mysql_result(, 0);
     $rs_rs->data_seek(0);
     list($parent_router_name) = $rs_rs->fetch_row();
-  
+
     echo $parent_router_name." (id: ".$parent_router.")<br>";
 
     echo "<br>";
