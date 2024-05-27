@@ -67,20 +67,20 @@ parameters:
 			count: 1
 			path: app/Controllers/othersController.php
 
-		-
-			message: "#^Call to an undefined static method App\\\\Models\\\\PageLevel\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: app/Core/Adminator/Adminator.php
+		# -
+		# 	message: "#^Call to an undefined static method App\\\\Models\\\\PageLevel\\:\\:find\\(\\)\\.$#"
+		# 	count: 1
+		# 	path: app/Core/Adminator/Adminator.php
 
-		-
-			message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
-			count: 4
-			path: app/Core/Adminator/Adminator.php
+		# -
+		# 	message: "#^Call to an undefined static method App\\\\Models\\\\User\\:\\:where\\(\\)\\.$#"
+		# 	count: 4
+		# 	path: app/Core/Adminator/Adminator.php
 
-		-
-			message: "#^Call to an undefined static method App\\\\Models\\\\ArchivZmen\\:\\:create\\(\\)\\.$#"
-			count: 2
-			path: app/Core/ArchivZmen.php
+		# -
+		# 	message: "#^Call to an undefined static method App\\\\Models\\\\ArchivZmen\\:\\:create\\(\\)\\.$#"
+		# 	count: 2
+		# 	path: app/Core/ArchivZmen.php
 
 		-
 			message: "#^If condition is always false\\.$#"

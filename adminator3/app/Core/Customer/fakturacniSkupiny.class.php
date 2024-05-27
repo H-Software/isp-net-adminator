@@ -22,14 +22,16 @@ class fakturacniSkupiny extends adminator
 
     protected $loggedUserEmail;
 
+    public $adminator;
+
+    // FORM
     public $csrf_html;
 
     public $form_update_id;
 
-    public $adminator_ctl;
-
     public $action_form;
 
+    // control
     private $error = "";
 
     private $fail;
@@ -105,7 +107,7 @@ class fakturacniSkupiny extends adminator
             $update_status = 1;
             $this->logger->info("fakturacniSkupiny\Action: update mode set");
 
-            if ($this->adminator_ctl->checkLevel(140) === false) {
+            if ($this->adminator->checkLevel(140) === false) {
                 $output .= "<div class=\"alert alert-danger\" role=\"alert\">Fakturacni Skupiny nelze upravovat, není dostatečné oprávnění. </div>";
                 return $output;
             }
