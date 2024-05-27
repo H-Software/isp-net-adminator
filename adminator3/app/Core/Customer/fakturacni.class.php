@@ -18,7 +18,7 @@ class fakturacni
     // protected $container;
 
     // protected $loggedUserEmail;
-    
+
     // the rest
     public $firma;
 
