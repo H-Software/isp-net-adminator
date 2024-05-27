@@ -16,6 +16,8 @@ class objekt extends adminator
 
     protected $sentinel;
 
+    protected $adminator; // handler for instance of adminator class
+
     public $loggedUserEmail;
 
     // public ?string $userIdentityUsername = null;
@@ -254,7 +256,7 @@ class objekt extends adminator
             $sql = $this->ip_find;
         }
 
-        list($se, $order) = \objekt_a2::select($this->es, $this->razeni);
+        list($se, $order) = $this->select($this->es, $this->razeni);
 
         $tarif_sql = "";
 
@@ -329,12 +331,6 @@ class objekt extends adminator
         $exportLink = "";
         $error = "";
 
-        $objekt_a2 = new \objekt_a2();
-        $objekt_a2->conn_mysql = $this->conn_mysql;
-        $objekt_a2->conn_pgsql = $this->conn_pgsql;
-        $objekt_a2->csrf_html = $this->csrf_html;
-        $objekt_a2->mod_vypisu = $this->mod_vypisu;
-
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
 
         // checking levels for update/erase/..
@@ -351,12 +347,8 @@ class objekt extends adminator
             $export_povolen = true;
         }
 
-        $objekt_a2->listAllowedActionUpdate = $this->listAllowedActionUpdate;
-        $objekt_a2->listAllowedActionErase = $this->listAllowedActionErase;
-        // $objekt_a2->listAllowedActionGarant = $this->listAllowedActionGarant;
-
         if ($export_povolen === true) {
-            $exportLink = $objekt_a2->export_vypis_odkaz();
+            $exportLink = $this->export_vypis_odkaz();
         }
 
         // prepare vars
@@ -378,9 +370,9 @@ class objekt extends adminator
             $sql = $this->ip_find;
         }
 
-        $output .= $objekt_a2->vypis_tab(1);
+        $output .= $this->vypis_tab(1);
 
-        $output .= $objekt_a2->vypis_tab_first_rows($this->mod_vypisu);
+        $output .= $this->vypis_tab_first_rows($this->mod_vypisu);
 
         list($output_razeni) = $this->listGetOrderItems();
         $output .= $output_razeni;
@@ -422,9 +414,9 @@ class objekt extends adminator
                                 . ", co: " . var_export($co, true)
         );
 
-        $output .= $objekt_a2->vypis($sql, $co, 0, $this->dotaz_source);
+        $output .= $this->vypis($sql, $co, 0, $this->dotaz_source);
 
-        $output .= $objekt_a2->vypis_tab(2);
+        $output .= $this->vypis_tab(2);
 
         // listing
         $output .= $listovani->listInterval();
@@ -3507,7 +3499,7 @@ class objekt extends adminator
             $dotaz_update = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
 
             if($dotaz_update === false) {
-                $this->logger->info("objekt_a2\\vypis: dump var dotaz_update: " . var_export($dotaz_update, true));
+                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": dump var dotaz_update: " . var_export($dotaz_update, true));
 
                 $output .= "Chyba! Nelze specifikovat tarif! (query failed)";
             } else {
@@ -3523,7 +3515,7 @@ class objekt extends adminator
                     }
                 } else {
                     $output .= "Chyba! Nelze specifikovat tarif! (wrong num_rows)";
-                    $this->logger->info("objekt_a2\\vypis: dump var rs_update: " . var_export($rs_update, true));
+                    $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": dump var rs_update: " . var_export($rs_update, true));
                 }
             }
 
