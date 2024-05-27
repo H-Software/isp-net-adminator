@@ -119,10 +119,6 @@ class objekt extends adminator
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
 
         $this->work = new \App\Core\work($this->container);
-
-        $pdo = new \PDO("mysql:host=localhost;dbname=world", 'my_user', 'my_password');
-
-
     }
 
     public function listGetOrderItems()
