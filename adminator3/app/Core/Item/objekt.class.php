@@ -2610,47 +2610,10 @@ class objekt extends adminator
         }
 
         //automaticke osvezovani/restarty
-        // TODO: fix automatic restarts
-        // if( $this->form_typ_ip == 4 )
-        // {
-        //     //L2TP verejka
-        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-        // }
-
-        // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        // $reinhard_id = adminator::find_reinhard($this->insertedId);
-
-        // //zde dodat if zda-li je NetN ci SikanaA
-        // if( (preg_match("/.*<b>\[dov_net\]<\/b> => n.*/", $pole) == 1)
-        //         or (preg_match("/.*<b>\[sikana_status\]<\/b> => a.*/", $pole) == 1) ){
-
-
-        //     if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
-        //     else{
-
-        //         //nenalezet pozadovany reinhard, takze osvezime vsechny
-
-        //         Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //         Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //         Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-
-        //     } //end of else - if reinhard_id
-
-        // }
-
-        // if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)
-        // elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
-        // elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
-        // else
-        // {
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-        // }
-
+        //
+        list($work_output) = $this->work->workActionObjektyWifi($pole);
+        $output .= $work_output;
+        
         return array($output);
     }
 
