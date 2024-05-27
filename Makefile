@@ -2,7 +2,9 @@
 # ssh czhujer@192.168.1.213 "cd ~/Documents/repos/personal/h-software-isp-net-adminator; docker compose watch fpm nginx --no-up
 # ssh czhujer@192.168.1.213 "cd ~/Documents/repos/personal/h-software-isp-net-adminator; docker compose exec -ti fpm tail -f adminator3/logs/app.log"
 # ssh czhujer@192.168.1.213 "cd ~/Documents/repos/personal/h-software-isp-net-adminator; docker compose logs fpm nginx -f"
-
+#
+# INSERT INTO `workitems` (`id`, `number_request`, `in_progress`) VALUES (7,	2,	0);
+#
 export MYSQL_SERVER=192.168.1.213
 # export MYSQL_SERVER=127.0.0.1
 
@@ -49,6 +51,16 @@ a3-rebuild-and-run-fpm:
 		fpm \
 		--build \
 		-d
+
+.PHONY: a3-run-script-work-diff-auto
+a3-run-script-work-diff-auto:
+	php \
+		adminator3/scripts/work_diff_auto.php
+
+.PHONY: a3-run-script-work-diff
+a3-run-script-work-diff:
+	php \
+		adminator3/scripts/work_diff.php
 
 export MODE=development
 
