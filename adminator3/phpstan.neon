@@ -22,7 +22,7 @@ parameters:
 		path: include/main.function.shared.php
 	-
 		message: "#^Call to an undefined static method App\\\\Models\\\\.*$#"
-		path: app/Core/*
+		path: app/*
 	# false positive and etc
 	-
 		message: "#^Parameter \\#1 \\$app of class Illuminate\\\\Cache\\\\CacheManager constructor expects Illuminate\\\\Contracts\\\\Foundation\\\\Application, Illuminate\\\\Container\\\\Container given\\.$#"
