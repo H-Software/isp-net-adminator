@@ -111,6 +111,7 @@ final class HomeControllerTest extends AdminatorTestCase
             // N.B.:
             // assert below causes printing output to stdout
             // workaround is using this foraech with assertFalse
+            // UPDATE: it works ATM.. probably :)
             */
             // $this->assertStringContainsString($output, $w);
 
