@@ -244,7 +244,7 @@ class partner_servis
 
         //kontrola emailu
         if((strlen($this->email) > 0) and ($this->odeslat == "ULOŽIT")) {
-            if(!(Aglobal::check_email($this->email))) {
+            if(!(filter_var($this->email, FILTER_VALIDATE_EMAIL))) {
                 $this->fail = true;
                 $this->error .= "<div style=\"color: red; padding-left: 10px;\" >".
                  "<H4>Pole \"Email\" neodpovídá tvaru emailu.</H4></div>";
