@@ -14,7 +14,7 @@ class fakturacniSkupiny extends adminator
     public $db_table_name = 'fakturacni_skupiny';
 
     // DI
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     protected $sentinel;
 

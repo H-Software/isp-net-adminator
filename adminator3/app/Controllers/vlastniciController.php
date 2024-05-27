@@ -8,9 +8,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class vlastniciController extends adminatorController
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
-    public $conn_pgsql;
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $smarty;
     public $logger;

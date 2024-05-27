@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class platbyController extends adminatorController
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
     public $smarty;
     public $logger;
 

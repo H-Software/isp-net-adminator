@@ -2,9 +2,9 @@
 
 class vlastnikarchiv
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
-    public $conn_pgsql;
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $logger;
 

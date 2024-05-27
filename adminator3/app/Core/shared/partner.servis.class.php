@@ -2,10 +2,10 @@
 
 class partner_servis
 {
-    //
-    // variables
-    //
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
+
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
+
     public $jmeno_klienta;
     public $bydliste;
     public $email;
@@ -27,12 +27,10 @@ class partner_servis
 
     public $prio;
 
-    //
-    //  function
-    //
-    public function __construct($conn_mysql)
+    public function __construct($conn_mysql, $connPgsql)
     {
         $this->conn_mysql = $conn_mysql;
+        $this->conn_pgsql = $connPgsql;
     }
 
     public function show_insert_form()
@@ -174,7 +172,7 @@ class partner_servis
         $select = " WHERE (nick LIKE '$fs' OR jmeno LIKE '$fs' OR prijmeni LIKE '$fs' ";
         $select .= " OR ulice LIKE '$fs' OR mesto LIKE '$fs' OR poznamka LIKE '$fs' )";
 
-        $rs_vlastnici = pg_query("SELECT id_cloveka, jmeno, prijmeni, ulice, mesto FROM vlastnici ".$select."");
+        $rs_vlastnici = pg_query($this->conn_pgsql, "SELECT id_cloveka, jmeno, prijmeni, ulice, mesto FROM vlastnici ".$select."");
 
         if($rs_vlastnici === false) {
             $RetArray[] = "<div>Nelze vypsat vlastniky. DB chyba! (" . pg_last_error() . ")</div>";
@@ -201,7 +199,7 @@ class partner_servis
     public function form_copy_values()
     {
 
-        $rs_v = pg_query("SELECT id_cloveka, jmeno, prijmeni, ulice, mesto, mail, telefon FROM vlastnici WHERE id_cloveka = '".intval($this->klient_id)."' ");
+        $rs_v = pg_query($this->conn_pgsql, "SELECT id_cloveka, jmeno, prijmeni, ulice, mesto, mail, telefon FROM vlastnici WHERE id_cloveka = '".intval($this->klient_id)."' ");
 
         while($array = pg_fetch_array($rs_v)) {
 
@@ -398,7 +396,7 @@ class partner_servis
 
         echo "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";
 
-        if($add == 1) {
+        if($add) {
             echo "<div style=\"color: green; font-size: 18px; font-weight: bold;\" >Záznam úspěšně uložen.</div>";
         } else {
             echo "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
@@ -566,7 +564,7 @@ class partner_servis
                     $pomocne = explode("V:", $jmeno);
                     $id_cloveka_pomocne = $pomocne[1];
 
-                    $dotaz_vlastnik_pom = pg_query("SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
+                    $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
 
                     while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
                         $firma_vlastnik = $data_vlastnik_pom["firma"];

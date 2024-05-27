@@ -5,9 +5,9 @@ use Psr\Container\ContainerInterface;
 
 class vlastnik2 extends adminator
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
-    public $conn_pgsql;
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $logger;
 
@@ -571,14 +571,6 @@ class vlastnik2 extends adminator
 
         $output = "";
 
-        if (!$this->conn_pgsql) {
-            die("An error occurred. The connection with pgsql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_pgsql) . ")");
-        }
-
-        if (!$this->conn_mysql) {
-            die("An error occurred. The connection with mysql does not exist.\n <br> (type of handler variable: " . gettype($this->conn_mysql) . ")");
-        }
-
         $objekt = new \App\Core\objekt($this->container);
         $objekt->csrf_html = $this->csrf_html;
 
@@ -810,7 +802,7 @@ class vlastnik2 extends adminator
                     if($data["sluzba_int_id_tarifu"] == 999) {
                         $output .= "<span style=\"color: gray; \" >- tarif nezvolen</span></div>";
                     } else {
-                        $output .= " (<a href=\"admin-tarify.php?id_tarifu=".$data["sluzba_int_id_tarifu"]."\" >tarif)</a></div>";
+                        $output .= " (<a href=\"/admin/tarify?id_tarifu=".$data["sluzba_int_id_tarifu"]."\" >tarif)</a></div>";
                     }
 
                     $sluzba_int_aktivni = "1";

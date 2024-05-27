@@ -2,8 +2,8 @@
 
 class vlastnikfind
 {
-    public $conn_mysql;
-    public $conn_pgsql;
+    public \mysqli|\PDO $conn_mysql;
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $container;
 

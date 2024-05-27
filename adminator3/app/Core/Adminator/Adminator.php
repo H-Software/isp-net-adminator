@@ -13,14 +13,17 @@ use Exception;
 
 class adminator
 {
-    public $conn_mysql;
+    // PDO is used in tests
+    public \mysqli|\PDO $conn_mysql;
 
-    public $conn_pgsql;
+    // PDO is used in tests
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $smarty;
+
     public $logger;
 
-    public $pdoMysql;
+    public ?\PDO $pdoMysql;
 
     protected $cache;
 
@@ -584,7 +587,7 @@ class adminator
         return $odkaz;
     }
 
-    public static function find_reinhard($id, $conn_mysql, $conn_pgsql)
+    public static function find_reinhard(int $id, \mysqli $conn_mysql, \PgSql\Connection $conn_pgsql): int
     {
         $id = intval($id);
 
@@ -610,7 +613,7 @@ class adminator
 
     } //end of function find_reinhard
 
-    public static function find_parent_reinhard($router_id, $conn_mysql)
+    public static function find_parent_reinhard(int $router_id, \mysqli $conn_mysql): int
     {
         $router_id = intval($router_id);
 

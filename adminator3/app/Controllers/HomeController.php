@@ -8,11 +8,11 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class HomeController extends adminatorController
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
-    // public $pdoMysql;
+    // public ?\PDO $pdoMysql;
 
-    public $conn_pgsql;
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     protected $settings;
 

@@ -2,7 +2,7 @@
 
 class Aglobal
 {
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
     public function synchro_router_list()
     {

@@ -107,7 +107,7 @@ class work
 
     } //end of function work_handler
 
-    public function workActionObjektyWifiDiff($changes, $update_id)
+    public function workActionObjektyWifiDiff($changes, $itemId)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -115,7 +115,7 @@ class work
         $work_output = [];
 
         // //zjistit, krz kterého reinharda jde objekt
-        $reinhard_id = adminator::find_reinhard($update_id, $this->conn_mysql, $this->conn_pgsql);
+        $reinhard_id = adminator::find_reinhard($itemId, $this->conn_mysql, $this->conn_pgsql);
 
         // //zmena sikany
         if(preg_match("/.*změna.*Šikana.*z.*/", $changes)) {
@@ -135,12 +135,6 @@ class work
                 $work_output[2] = $this->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
                 $work_output[24] = $this->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
             }
-        }
-
-        // $output .= var_export($work_output, true);
-
-        foreach ($work_output as $id => $item) {
-            $output .= $item[0];
         }
 
         // TODO: fix the rest of stuff
@@ -262,6 +256,76 @@ class work
         //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
         //     }
         // }
+
+
+        // $output .= var_export($work_output, true);
+
+        foreach ($work_output as $id => $item) {
+            $output .= $item[0];
+        }
+
+        return array($output);
+    }
+
+    public function workActionObjektyWifi(string $changes, int $itemId, array $args): array
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $output = "";
+        $work_output = [];
+
+        $reinhard_id = adminator::find_reinhard($itemId, $this->conn_mysql, $this->conn_pgsql);
+
+        if($args['form_typ_ip'] == 4) {
+            //L2TP verejka
+            $work_output[] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        }
+
+        $work_output[] = $this->work_handler("14"); // (trinity) filtrace-IP-on-Mtik's-restart
+
+        //zde dodat if zda-li je NetN ci SikanaA
+        if((preg_match("/.*<b>\[dov_net\]<\/b> => n.*/", $changes) == 1)
+                or (preg_match("/.*<b>\[sikana_status\]<\/b> => a.*/", $changes) == 1)) {
+
+            if($reinhard_id == 177) {
+                $work_output[] = $this->work_handler("1");
+            } //reinhard-3 (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 1) {
+                $work_output[] = $this->work_handler("2");
+            } //reinhard-wifi (ros) - restrictions (net-n/sikana)
+            elseif($reinhard_id == 236) {
+                $work_output[] = $this->work_handler("24");
+            } //reinhard-5 (ros) - restrictions (net-n/sikana)
+            else {
+                //nenalezet pozadovany reinhard, takze osvezime vsechny
+
+                $work_output[] = $this->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+
+            } //end of else - if reinhard_id
+        }
+
+        if($reinhard_id == 177) {
+            $work_output[] = $this->work_handler("20");
+        } //reinhard-3 (ros) - shaper (client's tariffs)
+        elseif($reinhard_id == 1) {
+            $work_output[] = $this->work_handler("13");
+        } //reinhard-wifi (ros) - shaper (client's tariffs)
+        elseif($reinhard_id == 236) {
+            $work_output[] = $this->work_handler("23");
+        } //reinhard-5 (ros) - shaper (client's tariffs)
+        else {
+            $work_output[] = $this->work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+            $work_output[] = $this->work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+            $work_output[] = $this->work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+        }
+
+        // $output .= var_export($work_output, true);
+
+        foreach ($work_output as $id => $item) {
+            $output .= $item[0];
+        }
 
         return array($output);
     }

@@ -18,7 +18,7 @@ class c_listing_stb
 
     public $msqError = "";
 
-    public $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
     public $db_type = "mysql";
 
     //konstruktor...naplni promenne
