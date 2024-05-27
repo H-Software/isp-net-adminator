@@ -89,7 +89,7 @@ final class HomeControllerTest extends AdminatorTestCase
         // debug
         // echo $responseContent;
 
-        // $this->assertNotEmpty($output);
+        $this->assertNotEmpty($responseContent);
 
         $outputKeywords = array(
             '<html lang="en">',
