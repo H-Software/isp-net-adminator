@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Customer;
+
 class fakturacni
 {
     public $echo = true;
