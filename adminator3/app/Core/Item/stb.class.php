@@ -15,9 +15,11 @@ class stb extends adminator
 
     public $conn_pgsql;
 
-    public $container;
+    protected $container;
 
-    public $validator;
+    protected $validator;
+
+    protected $sentinel;
 
     public $csrf_html;
 
@@ -63,8 +65,10 @@ class stb extends adminator
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
+        $this->settings = $container->get('settings');
+        $this->sentinel = $this->container->get('sentinel');
 
-        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function stbListGetBodyContent()

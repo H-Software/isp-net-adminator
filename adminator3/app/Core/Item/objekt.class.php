@@ -12,7 +12,7 @@ class objekt extends adminator
 
     public $logger;
 
-    // public $validator;
+    // protected $validator;
 
     protected $sentinel;
 
