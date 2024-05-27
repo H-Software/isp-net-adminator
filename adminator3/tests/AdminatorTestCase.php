@@ -43,8 +43,12 @@ abstract class AdminatorTestCase extends TestCase
 
     }
 
-    public function initDIcontainer(bool $sentinelMocked)
-    {
+    public function initDIcontainer(
+        bool $sentinelMocked,
+        bool $viewEnabled
+    ) {
+        $enableSession = false;
+
         // prepare DI
         $builder = new ContainerBuilder();
         $builder->addDefinitions('tests/fixtures/bootstrapContainer.php');
@@ -55,11 +59,21 @@ abstract class AdminatorTestCase extends TestCase
 
         require __DIR__ . '/../tests/fixtures/bootstrapContainerAfter.php';
 
-        if($sentinelMocked){
+        if($sentinelMocked) {
             require __DIR__ . '/../tests/fixtures/containers/sentinelMock.php';
         } else {
             require __DIR__ . '/../tests/fixtures/containers/sentinel.php';
         }
+
+        if($viewEnabled === true) {
+            require __DIR__ . '/../tests/fixtures/containers/view.php';
+            $enableSession = true;
+        }
+
+        // if($enableSession === true){
+        //     $a = require 'tests/fixtures/containers/session.php';
+        //     $container->set(key($a), $a[key($a)]);
+        // }
 
         // Not compiled
         $this->assertNotInstanceOf(CompiledContainer::class, $container);

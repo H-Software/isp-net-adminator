@@ -39,7 +39,7 @@ final class HomeControllerTest extends AdminatorTestCase
         // $this->markTestSkipped('under construction');
         $self = $this;
 
-        $container = self::initDIcontainer(true);
+        $container = self::initDIcontainer(true, false);
 
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);

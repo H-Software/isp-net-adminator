@@ -4,7 +4,6 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\DbUnit\DataSet\DataSet;
 use Slim\Csrf\Guard;
-use Cartalyst\Sentinel\Native\SentinelBootstrapper;
 
 $container->set(
     'settings',
