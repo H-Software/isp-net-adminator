@@ -26,6 +26,7 @@ final class HomeControllerTest extends AdminatorTestCase
         $_SERVER['HTTP_HOST'] = "127.0.0.1";
         $_SERVER['SCRIPT_URL'] = "/home";
         $_SERVER['REMOTE_ADDR'] = "127.0.0.1";
+        $_SERVER["REQUEST_URI"] = '/test';
     }
 
     protected function tearDown(): void
