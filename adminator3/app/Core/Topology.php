@@ -1303,7 +1303,8 @@ class Topology extends adminator
                         $output .= "<tr><td colspan=\"11\" >";
 
                         $id_routeru = $data["id"];
-
+                        $colspan_stav = "1";
+                        
                         $dotaz_top = $this->conn_mysql->query("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
                         $dotaz_top_radku = $dotaz_top->num_rows;
 
