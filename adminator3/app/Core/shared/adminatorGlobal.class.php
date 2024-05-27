@@ -1,5 +1,9 @@
 <?php
 
+use \RouterOS\Config;
+use \RouterOS\Client;
+use \RouterOS\Query;
+
 class Aglobal
 {
     public \mysqli|\PDO $conn_mysql;
@@ -99,12 +103,18 @@ class Aglobal
 
         }
 
-        $router_ip = mysql_result($rs_q, 0, 0);
+        // $router_ip = mysql_result($rs_q, 0, 0);
+        $rs_q->data_seek(0);
+        list($router_ip) = $rs_q->fetch_row();
+    
+        $rs_login = $this->conn_mysql->query("SELECT value FROM settings WHERE name IN ('routeros_api_login_name', 'routeros_api_login_password') ");
 
-        $rs_login = mysql_query("SELECT value FROM settings WHERE name IN ('routeros_api_login_name', 'routeros_api_login_password') ");
-
-        $login_name = mysql_result($rs_login, 0, 0);
-        $login_pass = mysql_result($rs_login, 1, 0);
+        // $login_name = mysql_result($rs_login, 0, 0);
+        // $login_pass = mysql_result($rs_login, 1, 0);
+        $rs_login->data_seek(0);
+        list($login_name) = $rs_login->fetch_row();
+        $rs_login->data_seek(1);
+        list($login_pass) = $rs_login->fetch_row();
 
         //
         // test pingu
@@ -119,24 +129,41 @@ class Aglobal
             $ret_array[1] = "Chyba! Router neodpovídá na odezvu Ping (id: ".$router_id.", ping: ".$ping_output[0].")";
 
             return $ret_array;
-
         }
 
         //
         // test API
         //
-        $API = new RouterOS();
+        // $API = new RouterOS();
 
-        //pokus o spojeni krz API
-        $conn = $API->connect($router_ip, $login_name, $login_pass);
+        // //pokus o spojeni krz API
+        // $conn = $API->connect($router_ip, $login_name, $login_pass);
 
-        if($conn == false) {
+        // if($conn == false) {
 
+        //     $ret_array[0] = false;
+        //     $ret_array[1] .= "Chyba! Nelze se spojit s routerem krz API. (ROS_API say: couldn't connect to router) \n";
+
+        //     return $ret_array;
+
+        // }
+
+        // $conn = RouterOS::connect($ip, $login_user, $login_pass) or die("couldn't connect to router\n");
+
+        $rosConfig = new Config([
+            'host' => $router_ip,
+            'user' => $login_name,
+            'pass' => $login_pass,
+            'port' => 18728,
+        ]);
+        
+        try {
+            $rosClient = new Client($rosConfig);
+        } catch (Exception $exception) {
             $ret_array[0] = false;
             $ret_array[1] .= "Chyba! Nelze se spojit s routerem krz API. (ROS_API say: couldn't connect to router) \n";
 
             return $ret_array;
-
         }
 
         //
@@ -153,7 +180,6 @@ class Aglobal
             $ret_array[1] .= "Chyba! ".$rs_snmp_f[1]."\n";
 
             return $ret_array;
-
         }
 
         $rs_snmp = snmpget($router_ip, "public", ".1.3.6.1.2.1.25.3.3.1.2.1", 300000);
@@ -164,7 +190,6 @@ class Aglobal
             $ret_array[1] .= "Chyba! Router korektne neodpovídá na SNMP GET dotaz. (".$rs_snmp.") \n";
 
             return $ret_array;
-
         }
 
         //debug result
@@ -181,7 +206,6 @@ class Aglobal
         */
         //end of debug result
 
-
         $ret_array[0] = true;
         $ret_array[1] = "Všechny testy v pořádku! \n";
 
@@ -189,6 +213,5 @@ class Aglobal
         return $ret_array;
 
     } //end of function test_router_for_monitoring
-
 
 } //konec tridy Aglobal
