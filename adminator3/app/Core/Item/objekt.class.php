@@ -20,6 +20,8 @@ class objekt extends adminator
 
     public $adminator; // handler for instance of adminator class
 
+    protected $work;
+
     protected $loggedUserEmail;
 
     // public ?string $userIdentityUsername = null;
@@ -112,6 +114,8 @@ class objekt extends adminator
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
+
+        $this->work = new \App\Core\work($this->container);
     }
 
     public function listGetOrderItems()
@@ -2514,163 +2518,10 @@ class objekt extends adminator
             $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
         }
 
-        //
         //pro osvezovani
         //
-        $work = new \App\Core\work($this->container);
-
-        // TODO: fix automatic restarts
-
-        // //zjistit, krz kterého reinharda jde objekt
-        $reinhard_id = adminator::find_reinhard($this->update_id, $this->conn_mysql, $this->conn_pgsql);
-
-        $work_output = [];
-
-        // //zmena sikany
-        if(preg_match("/.*změna.*Šikana.*z.*/", $pole3)) {
-            if($reinhard_id == 177) {
-                $work_output[1] = $work->work_handler("1");
-            } //reinhard-3 (ros) - restrictions (net-n/sikana)
-            elseif($reinhard_id == 1) {
-                $work_output[2] = $work->work_handler("2");
-            } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-            elseif($reinhard_id == 236) {
-                $work_output[24] = $work->work_handler("24");
-            } //reinhard-5 (ros) - restrictions (net-n/sikana)
-            else {
-                //nenalezet pozadovany reinhard, takze osvezime vsechny
-
-                $work_output[1] = $work->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-                $work_output[2] = $work->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-                $work_output[24] = $work->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-            }
-        }
-
-        // $output .= var_export($work_output, true);
-
-        foreach ($work_output as $id => $item) {
-            $output .= $item[0];
-        }
-
-        // //zmena NetN
-        // if( ereg(".*změna.*Povolen.*Inet.*z.*", $pole3) )
-        // {
-        // if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
-        // else{
-
-        //     //nenalezet pozadovany reinhard, takze osvezime vsechny
-
-        //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-
-        // }
-        // }
-
-        // //zmena IP adresy pokud je aktivni Sikana ci NetN
-        // if( (
-        //     ereg(".*změna.*IP.*adresy.*z.*", $pole3)
-        //     and
-        //     (
-        //     ($this->origDataArray["sikana_status"] == "a")
-        // or
-        // ($this->origDataArray["dov_net"] == "n")
-        //     )
-        //     )
-        // )
-        // {
-        //     //radsi vynutit restart net-n/sikany u vseho
-
-        //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("3"); //reinhard-fiber (linux) - iptables (net-n/sikana)
-        //     Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-
-        //     Aglobal::work_handler("5");  //reinhard-fiber - shaper
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-
-        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        // }
-        // //zmena IP adresy bez aktivovaného omezení
-        // elseif( ereg(".*změna.*IP.*adresy.*z.*", $pole3) )
-        // {
-        //     Aglobal::work_handler("5");  //reinhard-fiber - shaper
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-
-        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        // }
-
-        // //zmena linky -- shaper / filtrace
-        // if( ereg(".*změna.*pole.*id_tarifu.*", $pole3)
-        //     or
-        //     ereg(".*změna.*Tarifu.*", $pole3)
-        // )
-        // {
-        //     if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
-        //     else
-        //     {
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-        //     }
-
-        //     // filtrace asi neni treba
-        //     // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        // }
-
-        // //zmena tunneling_ip ci tunel záznamů
-        // // --> radius artemis
-        // // zde dodelat zmenu IP adresy, pokud tunelovana verejka
-        // if(
-        // ereg(".*změna.*pole.*tunnelling_ip.*", $pole3)
-        // or
-        // ereg(".*změna.*pole.*tunnel_user.*", $pole3)
-        // or
-        // ereg(".*změna.*pole.*tunnel_pass.*", $pole3)
-        // )
-        // {
-        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-        // }
-
-        // //zmena MAC adresy .. zatim se nepouziva u wifi
-
-        // //zmena DNS záznamu, asi jen u veřejných IP adresa
-        // // --> restart DNS auth. serveru
-        // if( ereg(".*změna.*pole.*dns_jmeno.*", $pole3) )
-        // {
-        //     Aglobal::work_handler("9"); //erik - dns-restart
-        //     Aglobal::work_handler("10"); //trinity - dns restart
-        //     Aglobal::work_handler("11"); //artemis - dns restart
-        //     Aglobal::work_handler("12"); //c.ns.simelon.net - dns.restart
-        // }
-
-        // if( ereg(".*změna.*pole.*client_ap_ip.*", $pole3) ){
-
-        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        //     if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
-        //     else
-        //     {
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-        //     }
-        // }
-
-        //nic vic mi nenapada :-)
+        list($work_output) = $this->work->workActionObjektyWifiDiff($pole3, $this->update_id);
+        $output .= $work_output;
 
         return array($output);
     }
