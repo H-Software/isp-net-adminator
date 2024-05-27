@@ -77,7 +77,7 @@ class fakturacniSkupiny extends adminator
     {
         $output = "";
         $error = "";
-        
+
         $this->action_form = $this->formInit();
 
         $update_id = $_GET["update_id"];

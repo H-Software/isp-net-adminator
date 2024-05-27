@@ -97,20 +97,20 @@ parameters:
 			count: 1
 			path: app/Core/ArchivZmen.php
 
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: app/Core/ArchivZmenUcetni.php
+		# -
+		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+		# 	count: 1
+		# 	path: app/Core/ArchivZmenUcetni.php
 
 		-
 			message: "#^Call to an undefined static method App\\\\Models\\\\FakturacniSkupina\\:\\:get\\(\\)\\.$#"
 			count: 1
 			path: app/Core/Customer/fakturacniSkupiny.class.php
 
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: app/Core/Customer/fakturacniSkupiny.class.php
+		# -
+		# 	message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+		# 	count: 1
+		# 	path: app/Core/Customer/fakturacniSkupiny.class.php
 
 		-
 			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
@@ -266,12 +266,12 @@ parameters:
 		-
 			message: "#^Deprecated in PHP 8\\.0\\: Required parameter \\$conAfter follows optional parameter \\$conList\\.$#"
 			count: 1
-			path: app/Core/Items/listing.stb.class.php
+			path: app/Core/Item/listing.stb.class.php
 
 		-
 			message: "#^Deprecated in PHP 8\\.0\\: Required parameter \\$conBefore follows optional parameter \\$conList\\.$#"
 			count: 1
-			path: app/Core/Items/listing.stb.class.php
+			path: app/Core/Item/listing.stb.class.php
 
 		-
 			message: "#^Call to an undefined static method App\\\\Models\\\\PartnerOrder\\:\\:create\\(\\)\\.$#"
