@@ -1335,7 +1335,7 @@ class vlastnici2pridani extends adminator
                         ->insertGetId([
                             'akce' => $this->action_az_pole2,
                             'vysledek' => $vysledek_write,
-                            'provedeno_kym' => \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email
+                            'provedeno_kym' => $this->adminator->userIdentityUsername
                         ]);
 
         if($id > 0) {
@@ -1448,7 +1448,7 @@ class vlastnici2pridani extends adminator
                 ->insertGetId([
                     'akce' => $pole,
                     'vysledek' => $vysledek_write,
-                    'provedeno_kym' => \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email
+                    'provedeno_kym' => $this->adminator->userIdentityUsername
                 ]);
 
         if($id > 0) {
@@ -1457,7 +1457,7 @@ class vlastnici2pridani extends adminator
             $this->p_bs_alerts["Chyba! Změnu do archivu změn se nepodařilo přidat."] = "danger";
         }
 
-        // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write')");
+        // $add=$this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . $this->adminator->userIdentityUsername . "','$vysledek_write')");
 
         $this->writed = "true";
 

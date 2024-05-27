@@ -14,7 +14,7 @@ class archivZmenController extends adminatorController
     public $logger;
 
     protected $container;
-    
+
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;

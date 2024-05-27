@@ -25,7 +25,7 @@ class fakturacniSkupiny extends adminator
     public $action_form;
 
     protected $container;
-    
+
     protected $loggedUserEmail;
 
     public function __construct(ContainerInterface $container)
