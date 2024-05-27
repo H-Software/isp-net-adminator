@@ -11,7 +11,10 @@ use Psr\Container\ContainerInterface;
 class fakturacniSkupiny extends adminator
 {
     public $db_table_name = 'fakturacni_skupiny';
+
     public $conn_mysql;
+
+    protected $sentinel;
 
     public $csrf_html;
 
@@ -21,16 +24,18 @@ class fakturacniSkupiny extends adminator
 
     public $action_form;
 
-    public $container;
+    protected $container;
+    
+    protected $loggedUserEmail;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->logger = $container->get('logger');
         $this->conn_mysql = $container->get('connMysql');
+        $this->sentinel = $container->get('sentinel');
 
-        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
-
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function getItems()

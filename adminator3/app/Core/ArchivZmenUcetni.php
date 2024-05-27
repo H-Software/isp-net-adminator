@@ -2,9 +2,12 @@
 
 class zmeny_ucetni
 {
+    // DI
     public $conn_mysql;
 
     public $logger;
+
+    protected $sentinel;
 
     //promene pro pridani
     public $send;
@@ -18,14 +21,15 @@ class zmeny_ucetni
 
     public $writed;
 
-    public $loggedUserEmail = "";
+    protected $loggedUserEmail;
 
-    public function __construct($conn_mysql, $logger)
+    public function __construct($container)
     {
-        $this->conn_mysql = $conn_mysql;
-        $this->logger = $logger;
+        $this->logger = $container->get('logger');
+        $this->conn_mysql = $container->get('connMysql');
+        $this->sentinel = $container->get('sentinel');
 
-        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function load_sql_result()
