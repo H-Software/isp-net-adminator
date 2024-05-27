@@ -46,7 +46,7 @@ class Aglobal
         return $output;
     }
 
-    public function work_handler($item_id, $nothing = null)
+    public static function work_handler($item_id, $nothing = null)
     {
 
         //item_id - cislo ktery odpovida vzdy nejaky akci :)

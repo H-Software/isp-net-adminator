@@ -417,10 +417,10 @@ parameters:
 			count: 4
 			path: app/Core/shared/adminatorGlobal.class.php
 
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(string e\\-mailová adresa\\)\\: Unexpected token \"e\\-mailová\", expected variable at offset 70$#"
-			count: 1
-			path: app/Core/shared/adminatorGlobal.class.php
+		# -
+		# 	message: "#^PHPDoc tag @param has invalid value \\(string e\\-mailová adresa\\)\\: Unexpected token \"e\\-mailová\", expected variable at offset 70$#"
+		# 	count: 1
+		# 	path: app/Core/shared/adminatorGlobal.class.php
 
 		-
 			message: "#^Access to an undefined property partner_servis\\:\\:\\$mod\\.$#"
