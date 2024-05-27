@@ -24,7 +24,7 @@ class work
         // $this->container = $container;
         $this->logger = $container->get('logger');
         $this->conn_mysql = $container->get('connMysql');
-        // $this->conn_pgsql = $container->get('connPgsql');
+        $this->conn_pgsql = $container->get('connPgsql');
 
         $this->sentinel = $container->get('sentinel');
 
