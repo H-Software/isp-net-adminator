@@ -38,6 +38,8 @@ class objekt extends adminator
 
     public $csrf_html;
 
+    public $allowedUnassignFromVlastnik = false;
+
     public $listAllowedActionUpdate = false;
 
     public $listAllowedActionErase = false;
