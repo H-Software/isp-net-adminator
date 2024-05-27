@@ -11,8 +11,6 @@ use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 
 class partner extends adminator
 {
-    private $container;
-
     private $validator;
 
     public $conn_pgsql;
@@ -22,9 +20,9 @@ class partner extends adminator
 
     public $logger;
 
-    public $loggedUserEmail;
+    protected $sentinel;
 
-    public $adminator; // handler for instance of adminator class
+    protected $loggedUserEmail;
 
     public $csrf_html;
 
@@ -53,7 +51,6 @@ class partner extends adminator
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
         $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->pdoMysql = $container->get('pdoMysql');
@@ -61,7 +58,9 @@ class partner extends adminator
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
 
-        $this->loggedUserEmail = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
+        $this->sentinel = $container->get('sentinel');
+
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function listPrepareVars($mode = null)
@@ -198,7 +197,7 @@ class partner extends adminator
         return array($output);
     }
 
-    private function addPrepareVars()
+    private function addPrepareVars(): void
     {
         $this->form_jmeno_klienta = $_POST["jmeno_klienta"];
         $this->form_bydliste = $_POST["bydliste"];
@@ -271,7 +270,7 @@ class partner extends adminator
         return $form_data;
     }
 
-    public function add()
+    public function add(): bool
     {
         $this->logger->info("partner\add called");
 
