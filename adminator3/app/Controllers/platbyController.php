@@ -27,9 +27,9 @@ class platbyController extends adminatorController
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->logger = $container->get('logger');
         // $this->conn_mysql = $container->get('connMysql');
         // $this->smarty = $container->get('smarty');
-        $this->logger = $container->get('logger');
         // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info("platbyController\__construct called");
