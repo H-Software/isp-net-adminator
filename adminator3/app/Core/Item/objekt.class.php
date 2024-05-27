@@ -2515,7 +2515,7 @@ class objekt extends adminator
         // TODO: fix automatic restarts
 
         // //zjistit, krz kterého reinharda jde objekt
-        // $reinhard_id = Aglobal::find_reinhard($update_id);
+        // $reinhard_id = adminator::find_reinhard($update_id);
 
         // //zmena sikany
         // if( ereg(".*změna.*Šikana.*z.*", $pole3) )
@@ -2741,7 +2741,7 @@ class objekt extends adminator
 
         // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
 
-        // $reinhard_id = Aglobal::find_reinhard($this->insertedId);
+        // $reinhard_id = adminator::find_reinhard($this->insertedId);
 
         // //zde dodat if zda-li je NetN ci SikanaA
         // if( (preg_match("/.*<b>\[dov_net\]<\/b> => n.*/", $pole) == 1)
