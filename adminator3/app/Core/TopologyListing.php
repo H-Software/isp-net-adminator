@@ -2,18 +2,6 @@
 
 namespace App\Core;
 
-//coded by Warden - http://warden.dharma.cz
-
-/*
-priklad vytvareni instance:
-
-$listing = new c_Listing_topology("aktivni link pro strankovani", "pocet zaznamu v jednom listu",
-    "list pro zobrazeni", "formatovani zacatku odkazu strankovani",
-    "formatovani konce odkazu strankovani", "sql dotaz pro vyber vsech zazkamu k vylistovani");
-*/
-
-//definice tridy c_Listing
-
 class c_listing_topology
 {
     public $conn_mysql;
