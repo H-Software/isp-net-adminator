@@ -54,10 +54,10 @@ class aboutController extends adminatorController
             return $this->response;
         };
 
-        $assignData = array(
+        $assignData = [
             "page_title" => "Adminator3 :: O programu :: Staré změny",
             "body" => "Prosím vyberte z podkategorie výše...."
-        );
+        ];
 
         return $this->renderer->template($request, $response, 'about/about-changes-old.tpl', $assignData);
     }

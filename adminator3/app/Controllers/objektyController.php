@@ -45,24 +45,16 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Objekty");
+        $assignData = [
+            "page_title" => "Adminator3 :: Objekty",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        ];
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('objekty/subcat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'objekty/subcat.tpl', $assignData);
     }
 
     public function stb(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
-        $csrf_html = $this->generateCsrfToken($request, $response, true);
-        $stb = new \App\Core\stb($this->container);
-        $stb->csrf_html = $csrf_html[0];
-
         $this->logger->info("objektyController\\stb called");
 
         $this->request = $request;
@@ -72,9 +64,9 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Objekty STB");
-
-        $this->header($request, $response, $this->adminator);
+        $csrf_html = $this->generateCsrfToken($request, $response, true);
+        $stb = new \App\Core\stb($this->container);
+        $stb->csrf_html = $csrf_html[0];
 
         if ($this->adminator->checkLevel(137) === true) {
             $stb->enable_modify_action = true;
@@ -88,19 +80,19 @@ class objektyController extends adminatorController
             $stb->enable_delete_action = true;
         }
 
-        $rs = $stb->stbListGetBodyContent();
+        list($content) = $stb->stbListGetBodyContent();
 
-        $this->smarty->assign("body", $rs[0]);
+        $assignData = [
+            "page_title" => "Adminator3 :: Objekty STB",
+            "body" => $content
+        ];
 
-        $this->smarty->display('objekty/stb.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'objekty/stb.tpl', $assignData);
     }
 
 
     public function stbAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("objektyController\\stbAction called");
 
         $this->request = $request;
@@ -110,9 +102,9 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: STB :: Actions");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: STB :: Action",
+        ];
 
         $stb = new \App\Core\stb($this->container);
 
@@ -123,20 +115,18 @@ class objektyController extends adminatorController
         if (isset($rs[1])) {
             // view form
             $this->smarty->assign($rs[0]);
-
-            $this->smarty->display($rs[1]);
+            $templateName = $rs[1];
         } else {
             // result view, ..
             $this->smarty->assign("body", $rs[0]);
-            $this->smarty->display('objekty/stb-action.tpl');
+            $templateName = 'objekty/stb-action.tpl';
         }
 
-        return $response;
+        return $this->renderer->template($request, $response, $templateName, $assignData);
     }
 
     public function objekty(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("objektyController\objekty called");
 
         $this->request = $request;
@@ -146,9 +136,9 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Objekty");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Objekty",
+        ];
 
         $dns_find = $_GET['dns_find'];
         $ip_find = $_GET['ip_find'];
@@ -157,11 +147,11 @@ class objektyController extends adminatorController
             $dns_find = "%";
         }
 
-        $this->smarty->assign("es", $_GET['es']);
-        $this->smarty->assign("mod_vypisu", $_GET['mod_vypisu']);
+        $assignData["es"] = $_GET['es'];
+        $assignData["mod_vypisu"] = $_GET['mod_vypisu'];
 
-        $this->smarty->assign("dns_find", $dns_find);
-        $this->smarty->assign("ip_find", $ip_find);
+        $assignData["dns_find"] = $dns_find;
+        $assignData["ip_find"] = $ip_find;
 
         $objekt = new \App\Core\objekt($this->container);
         $objekt->dns_find = $dns_find;
@@ -174,20 +164,17 @@ class objektyController extends adminatorController
         list($output, $errors, $exportLink) = $objekt->listGetBodyContent();
 
         if(strlen($errors) > 0) {
-            $this->smarty->assign("body", $errors);
+            $assignData["body"] = $errors;
         } else {
-            $this->smarty->assign("export_link", $exportLink);
-            $this->smarty->assign("body", $output);
+            $assignData["export_link"] = $exportLink;
+            $assignData["body"] = $output;
         }
 
-        $this->smarty->display('objekty/list.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'objekty/list.tpl', $assignData);
     }
 
     public function objektyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("objektyController\objektyAction called");
 
         $this->request = $request;
@@ -197,9 +184,9 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Objekty :: Action");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Objekty :: Action",
+        ];
 
         $objekt = new \App\Core\objekt($this->container);
         $objekt->csrf_html = $this->generateCsrfToken($request, $response, true);
@@ -218,9 +205,8 @@ class objektyController extends adminatorController
             $output = $objekt->actionWifi();
         }
 
-        $this->smarty->assign("body", $output);
-        $this->smarty->display('objekty/action.tpl');
+        $assignData["body"] = $output;
 
-        return $response;
+        return $this->renderer->template($request, $response, 'objekty/action.tpl', $assignData);
     }
 }
