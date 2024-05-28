@@ -134,7 +134,7 @@ class adminatorController extends Controller
             "page_title" => "Adminator3 :: wrong level",
             "body" => "<br>Neopravneny pristup /chyba pristupu. STOP <br>"
         );
-        
+
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
 
         $this->response = $this->renderer->template(null, $this->response, 'global/no-level.tpl', $assignData, 403);

@@ -68,7 +68,7 @@ final class Renderer
         }
 
         $content = $this->smarty->fetch($template);
-                
+
         $response->getBody()->write($content);
 
         return $response;

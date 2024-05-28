@@ -72,7 +72,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         // debug
         // echo $responseContent;
-        
+
         $this->assertNotEmpty($responseContent);
 
         $outputKeywords = array(
