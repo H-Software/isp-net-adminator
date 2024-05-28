@@ -88,6 +88,10 @@ final class TopologyControllerTest extends AdminatorTestCase
         // no data assert
         $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( % \) v databázi neuloženy/i', $responseContent);
 
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, __FUNCTION__ . " :: found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, __FUNCTION__ . " :: found word, which indicates error(s) or failure(s)");
+
         // clean-up
         $response = null;
         $topologyController = null;
@@ -136,9 +140,6 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertStringContainsString("Nelze zobrazit požadovanou stránku", $responseContent, __FUNCTION__ . " :: missing string 1 in response body");
         $this->assertStringContainsString("Pro otevřetí této stránky nemáte dostatečné oprávnění (level).", $responseContent, __FUNCTION__ . " :: missing string 2 in response body");
 
-        // negative asserts
-        // TODO: fix me
-        
         // clean-up
         $response = null;
         $topologyController = null;
