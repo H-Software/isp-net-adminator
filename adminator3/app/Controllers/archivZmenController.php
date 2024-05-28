@@ -121,15 +121,17 @@ class archivZmenController extends adminatorController
 
             $update_id = $_POST['update_id'];
 
-            if(($update_id > 0)) {
+            if($update_id > 0) {
                 $update_status = 1;
+            } else {
+                $update_status = 0;
             }
 
             $zmena->send = $_POST["send"];
             $zmena->odeslano = $_POST["odeslano"];
 
             //nacitani promennych
-            if(($update_status == 1 and !(isset($zmena->send)))) { //rezim upravy
+            if($update_status == 1 and strlen($zmena->send) < 1) { //rezim upravy
 
             } else { //rezim pridani
                 $zmena->typ = $_POST["typ"];

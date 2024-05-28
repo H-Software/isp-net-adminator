@@ -1,16 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: app/Controllers/archivZmenController.php
-
-		-
-			message: "#^Left side of && is always true\\.$#"
-			count: 1
-			path: app/Controllers/archivZmenController.php
-
-		-
 			message: "#^Variable \\$updated in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Controllers/archivZmenController.php
