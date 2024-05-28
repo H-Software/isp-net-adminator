@@ -39,10 +39,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     public function test_node_list_default_view()
     {
-        $this->markTestSkipped('under construction');
-        // TODO: fix missing table nod_list
-        // PDOException: SQLSTATE[HY000]: General error: 1 no such table: nod_list
-
+        // $this->markTestSkipped('under construction');
         $self = $this;
 
         $container = self::initDIcontainer(true, false);
@@ -68,6 +65,21 @@ final class TopologyControllerTest extends AdminatorTestCase
         $response = $responseFactory->createResponse();
 
         $response = $topologyController->nodeList($serverRequest, $response, []);
+
+        $this->assertEquals($response->getStatusCode(), 200);
+
+        $responseContent = $response->getBody()->__toString();
+        $this->assertNotEmpty($responseContent);
+
+        // echo $responseContent;
+
+        self::runBasicAsserts($responseContent);
+
+        // TODO: add asserts
+        // Výpis lokalit / přípojných bodů
+        // Hledání:
+        // class="alert alert-warning" role="alert" / boostrap window
+        // Žadné lokality/nody dle hladeného výrazu ( % ) v databázi neuloženy.
 
         // clean-up
         $response = null;
