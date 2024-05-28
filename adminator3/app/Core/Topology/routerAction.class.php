@@ -272,7 +272,7 @@ class RouterAction extends adminator
         $output .= '<form method="POST" action="" name="form1">';
 
         $output .= $this->csrf_html;
-        
+
         $output .= '<table border="0" width="100%" id="table2">
             <tr>
                 <td width="200px"><label>Název: </label></td>
@@ -281,7 +281,7 @@ class RouterAction extends adminator
 
             <tr>
             <td><label>IP adresa : </label></td>
-            <td><input type="text" name="ip_adresa" size="20" value="'.$ip_adresa.'" ></td>
+            <td><input type="text" name="ip_adresa" size="20" value="'.$this->form_ip_adresa.'" ></td>
             </tr>
 
             <tr>
@@ -298,7 +298,7 @@ class RouterAction extends adminator
         while($data_parent = $dotaz_parent->fetch_array()) {
             $output .= "<option value=\"".$data_parent["id"]."\" ";
 
-            if ($data_parent["id"] == $parent_router) {
+            if ($data_parent["id"] == $this->form_parent_router) {
                 $output .= " selected ";
             }
             $output .= "> ".$data_parent["nazev"]." ( ".$data_parent["ip_adresa"]." ) </option>";
@@ -312,7 +312,7 @@ class RouterAction extends adminator
         $output .= "<tr>";
 
         $output .= "<td><label>MAC: </label></td>";
-        $output .= "<td><input type=\"text\" name=\"mac\" size=\"20\" maxlength=\"17\" value=\"".$mac."\" ></td>";
+        $output .= "<td><input type=\"text\" name=\"mac\" size=\"20\" maxlength=\"17\" value=\"".$this->form_mac."\" ></td>";
 
         $output .= "</tr>";
 
@@ -324,13 +324,13 @@ class RouterAction extends adminator
         $output .= "<select name=\"monitoring\" size=\"1\" >";
 
         $output .= "<option value=\"0\" ";
-        if (($monitoring == 0) or !isset($monitoring)) {
+        if (($this->form_monitoring == 0) or !isset($this->form_monitoring)) {
             $output .= " selected ";
         }
         $output .= " > Ne </option>";
 
         $output .= "<option value=\"1\" ";
-        if ($monitoring == 1) {
+        if ($this->form_monitoring == 1) {
             $output .= " selected ";
         }
         $output .= "> Ano </option>";
@@ -339,7 +339,7 @@ class RouterAction extends adminator
 
         //klik na pregenerovaní fajlů
         $output .= "<span style=\"padding-left: 100px;\">Ruční vynucené přegenerování souborů (pro monitoring2) ".
-                "<a target=\"_new\" href=\"https://monitoring.adminator.net/mon/www/rb_all.php?ip=".$ip_adresa."&only_create=only_create\">zde</a>".
+                "<a target=\"_new\" href=\"https://monitoring.adminator.net/mon/www/rb_all.php?ip=".$this->form_ip_adresa."&only_create=only_create\">zde</a>".
                 "</span>";
 
         $output .= "</td>";
@@ -360,7 +360,7 @@ class RouterAction extends adminator
         while($data_cat = $dotaz_cat->fetch_array()) {
             $output .= "<option value=\"".$data_cat["id"]."\" ";
 
-            if ($data_cat["id"] == $monitoring_cat) {
+            if ($data_cat["id"] == $this->form_monitoring_cat) {
                 $output .= " selected ";
             }
             $output .= "> ".$data_cat["jmeno"]." </option>";
@@ -380,13 +380,13 @@ class RouterAction extends adminator
         $output .= "<select name=\"alarm\" size=\"1\" >";
 
         $output .= "<option value=\"0\" ";
-        if ($alarm == 0 or !isset($alarm)) {
+        if ($this->form_alarm == 0 or !isset($this->form_alarm)) {
             $output .= " selected ";
         }
         $output .= "> Ne </option>";
 
         $output .= "<option value=\"1\" ";
-        if ($alarm == 1) {
+        if ($this->form_alarm == 1) {
             $output .= " selected ";
         }
         $output .= " > Ano </option>";
@@ -407,13 +407,12 @@ class RouterAction extends adminator
                 <td>Nadřazený nod: (kvůli filtraci)</td>
                 <td>";
 
-            $sql_nod = "SELECT * from nod_list WHERE ( jmeno LIKE '%$nod_find%' ";
-            $sql_nod .= " OR ip_rozsah LIKE '%$nod_find%' OR adresa LIKE '%$nod_find%' ";
-            $sql_nod .= " OR pozn LIKE '%$nod_find%' ) ORDER BY jmeno ASC ";
+        $sql_nod = "SELECT * from nod_list WHERE ( jmeno LIKE '%$this->form_nod_find%' ";
+        $sql_nod .= " OR ip_rozsah LIKE '%$this->form_nod_find%' OR adresa LIKE '%$this->form_nod_find%' ";
+        $sql_nod .= " OR pozn LIKE '%$this->form_nod_find%' ) ORDER BY jmeno ASC ";
 
-            $vysledek = $this->conn_mysql->query($sql_nod);
-            //$vysledek=$conn_mysql->query("SELECT * from nod_list ORDER BY jmeno ASC" );
-            $radku = $vysledek->num_rows;
+        $vysledek = $this->conn_mysql->query($sql_nod);
+        $radku = $vysledek->num_rows;
 
         $output .= '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
 
@@ -421,14 +420,14 @@ class RouterAction extends adminator
             $output .= "<option value=\"0\" style=\"color: gray; \" selected >nelze zjistit / žádný nod nenalezen </option>";
         } else {
             $output .= '<option value="0" style="color: gray; font-style: bold; "';
-            if((!isset($selected_nod))) {
+            if((!isset($this->form_selected_nod))) {
                 $output .= "selected";
             }
             $output .= ' > Není vybráno</option>';
 
             while ($zaznam2 = $vysledek->fetch_array()) {
                 $output .= '<option value="'.$zaznam2["id"].'"';
-                if (($selected_nod == $zaznam2["id"])) {
+                if (($this->form_selected_nod == $zaznam2["id"])) {
                     $output .= " selected ";
                 }
                 $output .= '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
@@ -444,7 +443,7 @@ class RouterAction extends adminator
             <tr>
                 <td></td>
             <td><span style=\"padding-right: 20px;\">hledání:</span>
-            <input type=\"text\" name=\"nod_find\" size=\"30\" value=\"".$nod_find."\" >
+            <input type=\"text\" name=\"nod_find\" size=\"30\" value=\"".$this->form_nod_find."\" >
             <span style=\"padding-left: 20px;\">
             <input type=\"button\" value=\"Filtrovat nody\" name=\"G\" onClick=\"self.document.forms.form1.submit()\" >
             </span>
@@ -464,13 +463,13 @@ class RouterAction extends adminator
         $output .= "<select name=\"filtrace\" size=\"1\" >";
 
         $output .= "<option value=\"0\" ";
-        if ($filtrace == 0 or !isset($filtrace)) {
+        if ($this->form_filtrace == 0 or !isset($this->form_filtrace)) {
             $output .= " selected ";
         }
         $output .= "> Ne </option>";
 
         $output .= "<option value=\"1\" ";
-        if ($filtrace == 1) {
+        if ($this->form_filtrace == 1) {
             $output .= " selected ";
         }
         $output .= " > Ano </option>";
@@ -489,7 +488,7 @@ class RouterAction extends adminator
         $output .= "
             <tr>
                 <td>Poznámka</td>
-            <td><textarea name=\"poznamka\" rows=\"8\" cols=\"40\">".$poznamka."</textarea></td>
+            <td><textarea name=\"poznamka\" rows=\"8\" cols=\"40\">".$this->form_poznamka."</textarea></td>
             </tr>";
 
         $output .= '
@@ -500,7 +499,7 @@ class RouterAction extends adminator
 
                 <tr>
                 <td></td>
-                <td><input type="hidden" name="update_id" value="'.$update_id.'"><input type="submit" value="OK" name="odeslat">
+                <td><input type="hidden" name="update_id" value="'.$this->form_update_id.'"><input type="submit" value="OK" name="odeslat">
 
                 </td>
                 </tr>

@@ -106,7 +106,7 @@ class topologyController extends adminatorController
         $i = new RouterAction($this->container);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $i->csrf_html = $csrf_html;
-        
+
         list($content, $http_status_code) = $i->action();
 
         $assignData['body'] = $content;
