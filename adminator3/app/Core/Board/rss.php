@@ -10,7 +10,7 @@ class boardRss
 {
     public \mysqli|\PDO $conn_mysql;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     public function __construct(ContainerInterface $container)
     {

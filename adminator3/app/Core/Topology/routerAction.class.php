@@ -12,7 +12,7 @@ class RouterAction extends adminator
 
     public $smarty;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     protected $settings;
 

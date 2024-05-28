@@ -7,11 +7,11 @@ use Psr\Container\ContainerInterface;
 class work
 {
     // DI
-    protected $logger;
+    protected \Monolog\Logger $logger;
 
-    protected $conn_mysql;
+    protected \mysqli|\PDO $conn_mysql;
 
-    protected $conn_pgsql;
+    protected \PgSql\Connection|\PDO|null $conn_pgsql;
 
     protected $sentinel;
 
@@ -71,17 +71,17 @@ class work
 
             $add = $this->conn_mysql->query("INSERT INTO workitems (number_request) VALUES ('".intval($item_id)."') ");
 
-            if($add == 1) {
-                $rs_write = "1";
+            if($add) {
+                $rs_write = 1;
             } else {
-                $rs_write = "0";
+                $rs_write = 0;
             }
 
             $akce_az = "<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => ".$item_id;
             $akce_az .= ", [<b>item_name</b>] => ".$item_name;
 
             $sql_az = "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-               "('".$this->conn_mysql->real_escape_string($akce_az)."','" .$this->loggedUserEmail . "','".intval($rs_write)."')";
+               "('".$this->conn_mysql->real_escape_string($akce_az)."','" .$this->loggedUserEmail . "','".$rs_write."')";
 
             $add_az = $this->conn_mysql->query($sql_az);
 

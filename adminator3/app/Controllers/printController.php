@@ -10,7 +10,7 @@ use App\Print\printRegForm;
 
 class printController extends adminatorController
 {
-    public $logger;
+    public \Monolog\Logger $logger;
 
     public $smarty;
 

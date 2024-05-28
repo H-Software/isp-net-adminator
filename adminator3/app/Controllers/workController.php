@@ -12,7 +12,7 @@ class workController extends adminatorController
 
     public $smarty;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     protected $sentinel;
 

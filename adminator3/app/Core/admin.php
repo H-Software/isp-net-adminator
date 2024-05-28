@@ -5,11 +5,11 @@ use Lloricode\LaravelHtmlTable\LaravelHtmlTableGenerator;
 class admin
 {
     // private $container;
-    private $conn_mysql;
+    private \mysqli|\PDO $conn_mysql;
 
-    private $conn_pgsql;
+    private \PgSql\Connection|\PDO|null $conn_pgsql;
 
-    private $logger;
+    private \Monolog\Logger $logger;
 
     public function __construct($container)
     {

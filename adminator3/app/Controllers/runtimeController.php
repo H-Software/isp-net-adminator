@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class runtimeController extends Controller
 {
-    public $logger;
+    public \Monolog\Logger $logger;
 
     // protected $adminator;
 

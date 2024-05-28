@@ -10,7 +10,7 @@ class adminController extends adminatorController
 {
     protected $container;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     protected ServerRequestInterface $request;
 

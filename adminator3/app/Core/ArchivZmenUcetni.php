@@ -5,7 +5,7 @@ class zmeny_ucetni
     // DI
     public \mysqli|\PDO $conn_mysql;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     protected $sentinel;
 

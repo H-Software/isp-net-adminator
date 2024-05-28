@@ -19,7 +19,7 @@ class passwordHelper
 
     protected $validator;
 
-    protected $logger;
+    protected \Monolog\Logger $logger;
 
     public function __construct(ContainerInterface $container, $requestData)
     {

@@ -15,7 +15,7 @@ use Slim\Views\Twig;
 
 class AuthController extends Controller
 {
-    public $logger;
+    public \Monolog\Logger $logger;
 
     /**
      * @var Messages

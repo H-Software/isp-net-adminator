@@ -12,7 +12,7 @@ use Slim\Flash\Messages;
 
 class PasswordController extends Controller
 {
-    public $logger;
+    public \Monolog\Logger $logger;
 
     /**
      * @var Messages

@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class aboutController extends adminatorController
 {
-    public $logger;
+    public \Monolog\Logger $logger;
 
     protected ServerRequestInterface $request;
 
