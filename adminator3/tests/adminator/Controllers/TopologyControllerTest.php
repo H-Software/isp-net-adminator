@@ -109,7 +109,7 @@ final class TopologyControllerTest extends AdminatorTestCase
         $responseContent = $response->getBody()->__toString();
         $this->assertNotEmpty($responseContent);
 
-        echo $responseContent;
+        // echo $responseContent;
 
         // clean-up
         $response = null;

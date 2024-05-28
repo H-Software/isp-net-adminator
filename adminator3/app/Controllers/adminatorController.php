@@ -126,20 +126,18 @@ class adminatorController extends Controller
     //     $this->_response->withJson($response);
     // }
 
-    public function createNoLoginResponse(): ResponseInterface
+    public function createNoLoginResponse(): void
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
-
-        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
-        $this->response = $this->response
-                            ->withStatus(403);
 
         $assignData = array(
             "page_title" => "Adminator3 :: wrong level",
             "body" => "<br>Neopravneny pristup /chyba pristupu. STOP <br>"
         );
+        
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403
 
-        return $this->renderer->template(null, $this->response, 'global/no-level.tpl', $assignData);
+        $this->response = $this->renderer->template(null, $this->response, 'global/no-level.tpl', $assignData, 403);
     }
 
     public function checkLevel($page_level_id = 0): bool
