@@ -168,12 +168,12 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, int given\\.$#"
 			count: 1
-			path: app/Core/Topology.php
+			path: app/Core/Topology/Topology.php
 
 		-
 			message: "#^Parameter \\#1 \\$string of function urlencode expects string, int given\\.$#"
 			count: 5
-			path: app/Core/Topology.php
+			path: app/Core/Topology/Topology.php
 
 		-
 			message: "#^Variable \\$send in isset\\(\\) is never defined\\.$#"
