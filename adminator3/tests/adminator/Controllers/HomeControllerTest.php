@@ -36,7 +36,7 @@ final class HomeControllerTest extends AdminatorTestCase
         m::close();
     }
 
-    public function testHome()
+    public function test_ctl_home_page()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
@@ -76,14 +76,13 @@ final class HomeControllerTest extends AdminatorTestCase
         );
 
         foreach ($assertKeywordsHome as $w) {
-            if (!str_contains($responseContent, $w)) {
-                $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
-            }
+            $this->assertStringContainsString($w, $responseContent, __FUNCTION__ . " :: missing string \"" . $w . "\" in response body");
         }
 
-        // ?? |nelze
-        if (preg_match("/(chyba|nepodařil)+/i", $responseContent)) {
-            $this->assertFalse(true, __FUNCTION__ . " says: found some word(s), which indicates error(s) or failures");
-        }
+        // negative assert
+        // check word: nelze
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, __FUNCTION__ . " :: found word (" . $w. "), which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, __FUNCTION__ . " :: found word (" . $w. "), which indicates error(s) or failure(s)");
+
     }
 }

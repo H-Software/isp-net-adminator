@@ -39,7 +39,7 @@ final class AuthControllerTest extends AdminatorTestCase
     {
     }
 
-    public function test_login_page_default_view()
+    public function test_ctl_login_page_default_view()
     {
         $this->markTestSkipped('under construction');
         $self = $this;
@@ -73,5 +73,6 @@ final class AuthControllerTest extends AdminatorTestCase
 
         $response = $authController->signin($serverRequest, $response, ['flashEnabled' => false]);
 
+        // TODO: add asserts
     }
 }

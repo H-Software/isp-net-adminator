@@ -1,5 +1,8 @@
 <?php
 
+// https://www.php.net/manual/en/regexp.reference.character-classes.php
+// https://docs.phpunit.de/en/10.5/assertions.html#assertmatchesregularexpression
+
 declare(strict_types=1);
 
 namespace App\Tests;
@@ -166,16 +169,23 @@ abstract class AdminatorTestCase extends TestCase
 
         foreach ($assertKeywordsCommon as $w) {
 
-            $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
+            $this->assertStringContainsString($w, $responseContent, __FUNCTION__ . " :: missing string \"" . $w . "\" in response body");
 
             // if (!str_contains($responseContent, $w)) {
             //     $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
             // }
         }
 
+        $assertDeniedKeywordsCommon = [
+            "failed",
+            "error",
+            "selhal",
+            "nepodařil"
+        ];
+
         // some words missing, because NoLoginPage and etc
-        if (preg_match("/(failed|error|selhal|nepodařil)+/i", $responseContent)) {
-            $this->assertFalse(true, __FUNCTION__ . " says: found some word(s), which indicates error(s) or failures");
+        foreach ($assertDeniedKeywordsCommon as $w) {
+            $this->assertStringNotContainsStringIgnoringCase($w, $responseContent, __FUNCTION__ . " :: found word (" . $w. "), which indicates error(s) or failure(s)");
         }
 
         // test sqlite migration

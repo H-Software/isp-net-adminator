@@ -37,7 +37,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     }
 
-    public function test_node_list_default_view()
+    public function test_ctl_node_list_default_view()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
@@ -69,17 +69,28 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertEquals($response->getStatusCode(), 200);
 
         $responseContent = $response->getBody()->__toString();
-        $this->assertNotEmpty($responseContent);
 
         // echo $responseContent;
 
         self::runBasicAsserts($responseContent);
 
-        // TODO: add asserts
+        // page specific asserts
+        //
         // Výpis lokalit / přípojných bodů
         // Hledání:
         // class="alert alert-warning" role="alert" / boostrap window
         // Žadné lokality/nody dle hladeného výrazu ( % ) v databázi neuloženy.
+
+        $this->assertMatchesRegularExpression('/Výpis lokalit\s*\/\s*přípojných bodů/i', $responseContent);
+        $this->assertMatchesRegularExpression('/Hledání\:/i', $responseContent);
+        $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent);
+
+        // no data assert
+        $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( % \) v databázi neuloženy/i', $responseContent);
+
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, __FUNCTION__ . " :: found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, __FUNCTION__ . " :: found word, which indicates error(s) or failure(s)");
 
         // clean-up
         $response = null;
@@ -87,7 +98,7 @@ final class TopologyControllerTest extends AdminatorTestCase
         $serverRequest = null;
     }
 
-    public function test_node_list_with_low_user_level()
+    public function test_ctl_node_list_with_low_user_level()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
@@ -125,9 +136,9 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         self::runBasicAsserts($responseContent);
 
-        // TODO: add assert for specific rendered stuff
-        // Nelze zobrazit požadovanou stránku !
-        // Pro otevřetí této stránky nemáte dostatečné oprávnění (level).
+        // page specific asserts
+        $this->assertStringContainsString("Nelze zobrazit požadovanou stránku", $responseContent, __FUNCTION__ . " :: missing string 1 in response body");
+        $this->assertStringContainsString("Pro otevřetí této stránky nemáte dostatečné oprávnění (level).", $responseContent, __FUNCTION__ . " :: missing string 2 in response body");
 
         // clean-up
         $response = null;
