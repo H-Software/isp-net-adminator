@@ -41,6 +41,8 @@ abstract class AdminatorTestCase extends TestCase
 
         // override DB connection to sqlite
         $settings['phinx']['environments']['test']['connection'] = self::$pdoMysql;
+        // setup seeds for Dev
+        $settings['phinx']['paths'] = $settings['phinxDev']['paths'];
 
         // prepare DB structure and data
         self::$phinxConfig = new Config($settings['phinx']);
