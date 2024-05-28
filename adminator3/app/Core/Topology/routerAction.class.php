@@ -66,6 +66,7 @@ class RouterAction extends adminator
         $this->loadFormData();
 
         if($this->form_odeslat == "OK") { // zda je odesláno
+            // TODO: fix this
             $this->checkFormData();
         }
 
@@ -233,7 +234,7 @@ class RouterAction extends adminator
 
             if(!($dns_check)) {
                 echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                        "DNS záznam (".$this->form_nazev.") není ve správnem formátu !!!</div>";
+                        "Název (".$this->form_nazev.") není ve správnem formátu !!!</div>";
 
                 $this->form_error = 1;
             }
