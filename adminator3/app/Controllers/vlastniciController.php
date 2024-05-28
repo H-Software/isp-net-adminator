@@ -13,9 +13,10 @@ class vlastniciController extends adminatorController
     public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $smarty;
+
     public \Monolog\Logger $logger;
 
-    protected $sentinel;
+    // protected $sentinel;
 
     protected $adminator;
 
@@ -31,7 +32,7 @@ class vlastniciController extends adminatorController
 
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
+        // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -49,15 +50,12 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
+        $assignData = array(
+            "page_title" => "Adminator3 :: Zákazníci",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('vlastnici/vlastnici-cat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/vlastnici-cat.tpl', $assignData);
     }
 
     public function cross(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -786,21 +784,18 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: . :: fakturační skupiny :: Action");
-
-        $this->header($request, $response, $this->adminator);
-
         $fs = new \App\Customer\fakturacniSkupiny($this->container);
         $fs->csrf_html = $this->generateCsrfToken($request, $response, true);
         $fs->adminator = $this->adminator;
 
         $fs_action_body = $fs->Action();
 
-        $this->smarty->assign("body", $fs_action_body);
+        $assignData = array(
+            "page_title" => "Adminator3 :: fakturační skupiny :: Action",
+            "body" => $fs_action_body
+        );
 
-        $this->smarty->display('vlastnici/fakturacni-skupiny/action.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/fakturacni-skupiny/action.tpl', $assignData);
     }
 
 }
