@@ -8,7 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Topology extends adminator
 {
-    // public ?\PDO $pdoMysql;
+    public $container;
+
+    public ?\PDO $pdoMysql;
 
     public \mysqli|\PDO $conn_mysql;
 
@@ -22,14 +24,14 @@ class Topology extends adminator
 
     private $requestData;
 
-    public function __construct($conn_mysql, $smarty, $logger, $settings)
+    public function __construct(ContainerInterface $container)
     {
-        $this->conn_mysql = $conn_mysql;
-        // $this->pdoMysql = $pdoMysql;
+        $this->conn_mysql = $container->get('conn_mysql');
+        $this->pdoMysql = $container->get('pdoMysql');
 
-        $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->settings = $settings;
+        $this->smarty = $container->get('smarty');
+        $this->logger = $container->get('logger');
+        $this->settings = $container->get('settings');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
