@@ -67,7 +67,7 @@ class RouterAction extends adminator
 
         if($this->form_odeslat == "OK") { // zda je odesláno
             // TODO: fix this
-            $this->checkFormData();
+            // $this->checkFormData();
         }
 
         if(($this->form_odeslat == "OK") and ($this->form_error != 1)) {
