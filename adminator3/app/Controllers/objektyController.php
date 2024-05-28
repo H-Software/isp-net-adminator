@@ -67,7 +67,7 @@ class objektyController extends adminatorController
         $csrf_html = $this->generateCsrfToken($request, $response, true);
         $stb = new \App\Core\stb($this->container);
         $stb->csrf_html = $csrf_html[0];
-        
+
         if ($this->adminator->checkLevel(137) === true) {
             $stb->enable_modify_action = true;
         }
