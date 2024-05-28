@@ -612,17 +612,24 @@ class RouterAction extends adminator
             $pole = "<b>akce: uprava routeru;</b><br>";
 
             // prvne zjistime puvodni hodnoty
-            $dotaz_top = $this->conn_mysql->query("SELECT nazev, ip_adresa, parent_router, mac, monitoring, 
-                        monitoring_cat, alarm, filtrace, id_nodu, poznamka 
-                    FROM router_list WHERE id = '".intval($this->form_update_id)."' ");
-
-            $dotaz_top_radku = $dotaz_top->num_rows;
+            try {
+                $dotaz_top = $this->conn_mysql->query("SELECT nazev, ip_adresa, parent_router, mac, monitoring, 
+                                                        monitoring_cat, alarm, filtrace, id_nodu, poznamka 
+                                                        FROM router_list WHERE id = '".intval($this->form_update_id)."' ");
+                $dotaz_top_radku = $dotaz_top->num_rows;
+            } catch (Exception $e) {
+                $this->error_messages .= "<div style=\"color: red;\">"
+                                        . "Chyba! Nelze načíst zdrojové hodnoty pro ArchivZmen.</div>"
+                                        . "<div style=\"color: red; \"> caught error: " . $e->getMessage() . "</div>"
+                ;
+                return [$output, false];
+            }
 
             if($dotaz_top_radku < 1) {
                 $this->error_messages .= "<div style=\"color: red;\">"
                                         . "Chyba! Nelze načíst zdrojové hodnoty pro ArchivZmen. (zero rows found in DB)"
                                         . "</div>";
-                return [null, false];
+                return [$output, false];
             } else {
                 while($data_top = $dotaz_top->fetch_array()):
 
