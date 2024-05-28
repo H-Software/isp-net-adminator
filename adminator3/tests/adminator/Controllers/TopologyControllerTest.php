@@ -39,7 +39,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     public function test_node_list_default_view()
     {
-        $this->markTestSkipped('under construction');
+        // $this->markTestSkipped('under construction');
         // TODO: fix missing table nod_list
         // PDOException: SQLSTATE[HY000]: General error: 1 no such table: nod_list
 
