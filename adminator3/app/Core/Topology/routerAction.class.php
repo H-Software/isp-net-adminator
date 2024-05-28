@@ -197,7 +197,7 @@ class RouterAction extends adminator
             // $rs_test = $ag->test_router_for_monitoring($update_id);
             $rs_test = [true, 1];
 
-            if($rs_test[0] === false) {
+            if($rs_test[0] == false) {
                 echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
                     "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
 
