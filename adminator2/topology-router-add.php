@@ -16,64 +16,8 @@ if(($odeslat == "OK") and ($error != "1")) {
     //proces ukladani ..
 
     //vypsat co se vlozilo
-    echo "<b>Zadáno do formuláře : </b><br><br>";
-
-    echo "<b>Název: </b>".$nazev."<br>";
-    echo "<b>IP adresa: </b>".$ip_adresa."<br>";
-    echo "<b>MAC: </b>".$mac."<br>";
-
-    echo "<br>";
-
-    echo "<b>Nadřazený router: </b>";
-    $rs_rs = $conn_mysql->query("SELECT nazev FROM router_list WHERE id = '".intval($update_id)."' ");
-    // $parent_router_name = mysql_result(, 0);
-    $rs_rs->data_seek(0);
-    list($parent_router_name) = $rs_rs->fetch_row();
-
-    echo $parent_router_name." (id: ".$parent_router.")<br>";
-
-    echo "<br>";
-
-    echo "<b>Monitorování: </b>";
-    if($monitoring == 1) {
-        echo "Ano";
-    } elseif($monitoring == 0) {
-        echo "Ne";
-    } else {
-        echo "nelze zjistit";
-    }
-    echo "<br>";
-    echo "<b>Monitorování kategorie: </b>";
-    $monitoring_cat_name = mysql_result(mysql_query("SELECT jmeno FROM kategorie WHERE id = '".intval($monitoring_cat)."' "), 0);
-    echo $monitoring_cat_name." (id: ".$monitoring_cat.")<br>";
-
-    echo "<br>";
-
-    echo "<b>Alarm: </b>";
-    if($alarm == 1) {
-        echo "Ano";
-    } elseif($alarm == 0) {
-        echo "Ne";
-    } else {
-        echo "nelze zjistit";
-    }
-    echo "<br>";
-    echo "<b>Filtrace: </b>";
-    if($filtrace == 1) {
-        echo "Ano";
-    } elseif($filtrace == 0) {
-        echo "Ne";
-    } else {
-        echo "nelze zjistit";
-    }
-    echo "<br>";
-    echo "<b>Nadřazený nod (kvůli filtraci): </b>";
-    $nod_name = mysql_result(mysql_query("SELECT jmeno FROM nod_list WHERE id = '".intval($selected_nod)."' "), 0);
-
-    echo $nod_name." (id: ".$selected_nod.")<br>";
-
-    echo "<br><b>Poznámka: </b>".addslashes($poznamka)."<br>";
-
+    // removed
+    
     if($update_id > 0) {
 
         $pole = "<b>akce: uprava routeru;</b><br>";

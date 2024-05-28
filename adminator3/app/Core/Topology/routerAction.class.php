@@ -66,7 +66,7 @@ class RouterAction extends adminator
             // proces ukladani ..
             // T.B.A. L168 - 382
 
-            // $this->showResults();
+            $this->showResults();
 
             // $this->saveDataIntoDatabase();
 
@@ -509,5 +509,79 @@ class RouterAction extends adminator
             </form>';
 
         return [$output];
+    }
+
+    private function showResults()
+    {
+        $output = "";
+
+        $output .= "<b>Zadáno do formuláře : </b><br><br>";
+
+        $output .= "<b>Název: </b>".$this->form_nazev."<br>";
+        $output .= "<b>IP adresa: </b>".$this->form_ip_adresa."<br>";
+        $output .= "<b>MAC: </b>".$this->form_mac."<br>";
+
+        $output .= "<br>";
+
+        $output .= "<b>Nadřazený router: </b>";
+
+        $rs_rs = $this->conn_mysql->query("SELECT nazev FROM router_list WHERE id = '".intval($this->form_update_id)."' ");
+        $rs_rs->data_seek(0);
+        list($parent_router_name) = $rs_rs->fetch_row();
+
+        $output .= $parent_router_name." (id: ".$this->form_parent_router.")<br>";
+
+        $output .= "<br>";
+
+        $output .= "<b>Monitorování: </b>";
+
+        if($this->form_monitoring == 1) {
+            $output .= "Ano";
+        } elseif($this->form_monitoring == 0) {
+            $output .= "Ne";
+        } else {
+            $output .= "nelze zjistit";
+        }
+        $output .= "<br>";
+        $output .= "<b>Monitorování kategorie: </b>";
+
+        $mon_cat_name = $this->conn_mysql->query("SELECT jmeno FROM kategorie WHERE id = '".intval($this->form_monitoring_cat)."' ");
+        $mon_cat_name->data_seek(0);
+        list($monitoring_cat_name) = $mon_cat_name->fetch_row();
+
+        $output .= $monitoring_cat_name." (id: ".$this->form_monitoring_cat.")<br>";
+
+        $output .= "<br>";
+
+        $output .= "<b>Alarm: </b>";
+        if($this->form_alarm == 1) {
+            $output .= "Ano";
+        } elseif($this->form_alarm == 0) {
+            $output .= "Ne";
+        } else {
+            $output .= "nelze zjistit";
+        }
+        $output .= "<br>";
+        $output .= "<b>Filtrace: </b>";
+
+        if($this->form_filtrace == 1) {
+            $output .= "Ano";
+        } elseif($this->form_filtrace == 0) {
+            $output .= "Ne";
+        } else {
+            $output .= "nelze zjistit";
+        }
+        $output .= "<br>";
+        $output .= "<b>Nadřazený nod (kvůli filtraci): </b>";
+
+        $rs_node_name = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($this->form_selected_nod)."' ");
+        $rs_node_name->data_seek(0);
+        list($nod_name) = $rs_node_name->fetch_row();
+
+        $output .= $nod_name." (id: ".$this->form_selected_nod.")<br>";
+
+        $output .= "<br><b>Poznámka: </b>".addslashes($this->form_poznamka)."<br>";
+
+        return $output;
     }
 }
