@@ -33,14 +33,14 @@ class topologyController extends adminatorController
         // $this->sentinel = $container->get('sentinel');
         $this->settings = $container->get('settings');
 
-        $this->logger->info("topologyController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         parent::__construct($container);
     }
 
     public function nodeList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("topologyController\\nodeList called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -62,7 +62,7 @@ class topologyController extends adminatorController
 
     public function routerList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("topologyController\\routerList called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -80,5 +80,11 @@ class topologyController extends adminatorController
         ];
 
         return $this->renderer->template($request, $response, 'topology/router-list.tpl', $assignData);
+    }
+
+    public function routerAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
     }
 }
