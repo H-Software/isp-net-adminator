@@ -5,8 +5,8 @@ class CreateNodListTable extends App\Migration\Migration
 {
     public function up()
     {
-        $this->execute("ALTER DATABASE CHARACTER SET 'utf8mb3';");
-        $this->execute("ALTER DATABASE COLLATE='utf8mb3_unicode_ci';");
+        // $this->execute("ALTER DATABASE CHARACTER SET 'utf8mb3';");
+        // $this->execute("ALTER DATABASE COLLATE='utf8mb3_unicode_ci';");
         $this->table('nod_list', [
                 'id' => false,
                 'primary_key' => ['id'],

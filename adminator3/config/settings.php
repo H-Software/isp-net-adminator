@@ -87,7 +87,7 @@ $settings = [
         'phinx' => [
             'paths' => [
                 'migrations' => 'database/migrations',
-                'seeds'      => 'database/seeds',
+                'seeds'      => 'database/seeds2',
             ],
             'migration_base_class' => 'App\Migration\Migration',
             'environments' => [
@@ -99,6 +99,12 @@ $settings = [
                     'table_prefix' => ''
                 ]
             ]
+        ],
+        'phinxDev' => [
+            'paths' => [
+                'migrations' => 'database/migrations',
+                'seeds'      => 'database/seeds-dev',
+            ],
         ]
 ];
 
