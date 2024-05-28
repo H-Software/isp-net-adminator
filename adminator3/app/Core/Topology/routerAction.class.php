@@ -659,7 +659,7 @@ class RouterAction extends adminator
                     filtrace='$this->form_filtrace', id_nodu='$this->form_selected_nod', poznamka = '$this->form_poznamka' WHERE id=".intval($this->form_update_id)." Limit 1 ");
 
             if($uprava) {
-                $output .= "<div style=\"color: green; padding-top: 10px; \">Záznam úspěšně upraven.</div><br>";
+                $output .= "<div style=\"color: green; font-weight: bold; padding-top: 10px; \">Záznam úspěšně upraven.</div><br>";
                 $vysledek_write = 1;
             } else {
                 $output .= "<div style=\"color: red; padding-top: 10px; \">Záznam nelze upravit v databázi. </div><br>";
@@ -727,7 +727,7 @@ class RouterAction extends adminator
             );
 
             if($add) {
-                $output .= "<div style=\"color: green; padding-top: 10px; \">Záznam úspěšně vložen.</div>";
+                $output .= "<div style=\"color: green; font-weight: bold; padding-top: 10px; \">Záznam úspěšně vložen.</div>";
                 $vysledek_write = 1;
             } else {
                 $output .= "<div style=\"color: red; padding-top: 10px; \">Záznam nelze vložit do databáze. </div>";
