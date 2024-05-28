@@ -30,7 +30,7 @@ abstract class AdminatorTestCase extends TestCase
     public static $phinxManager;
 
     public static function setUpBeforeClass(): void
-    {        
+    {
         $settings = require __DIR__ . '/../config/settings.php';
 
         // boot ORM and get DB handler
