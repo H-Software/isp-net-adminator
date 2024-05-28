@@ -74,8 +74,11 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
-        $output = $topology->getRouterList();
+        $i = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $i->csrf_html = $csrf_html;
+
+        $output = $i->getRouterList();
 
         $assignData = [
             "page_title" => "Adminator3 :: Topologie :: Router list",
@@ -101,11 +104,11 @@ class topologyController extends adminatorController
         ];
 
         $i = new RouterAction($this->container);
-        list($content) = $i->action();
+        list($content, $http_status_code) = $i->action();
 
         $assignData['body'] = $content;
 
-        return $this->renderer->template($request, $response, 'topology/router-action.tpl', $assignData);
+        return $this->renderer->template($request, $response, 'topology/router-action.tpl', $assignData, $http_status_code);
 
     }
 }

@@ -4,6 +4,7 @@ namespace App\Core\Topology;
 
 use App\Core\adminator;
 use Psr\Container\ContainerInterface;
+use Exception;
 
 class RouterAction extends adminator
 {
@@ -49,33 +50,44 @@ class RouterAction extends adminator
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $output = "";
+        $http_status_code = 200;
 
         $output .= "<div style=\"padding-bottom: 10px; font-size: 18px; \">Přidání/úprava routeru</div>";
 
         $this->loadFormData();
 
-        if($this->form_odeslat == "OK") { //zda je odesláno
-            // T.B.A. L73 - 164
+        if($this->form_odeslat == "OK") { // zda je odesláno
             $this->checkFormData();
-
         }
 
         if(($this->form_odeslat == "OK") and ($this->form_error != 1)) {
-            //proces ukladani ..
-            // T.B.A. L168 - 382 
-        } else{
-            //nechceme ukladat, tj. zobrazit form
+            // proces ukladani ..
+            // T.B.A. L168 - 382
 
-            //pokud update, tak zjistit predchozi hodnoty
+            // $this->showResults();
+
+            // $this->saveDataIntoDatabase();
+
+        } else {
+            // nechceme ukladat, tj. zobrazit form
+
+            // pokud update, tak zjistit predchozi hodnoty
             // nacteni promennych, pokud se nedna o upravu a neodeslal sem form
             if($this->form_update_id > 0 and ($this->form_odeslat != "OK")) {
-                $this->loadPreviousData();
+                $rs = $this->loadPreviousData();
+
+                if($rs === false){
+                    $output .= $this->error_messages;
+                    return [$output, 500];
+                }
             }
 
-
+            //zobrazime formular
+            list($content) = $this->showForm();
+            $output .= $content;
         }
 
-        return [$output];
+        return [$output, $http_status_code];
     }
 
     private function loadFormData(): void
@@ -102,13 +114,20 @@ class RouterAction extends adminator
 
     private function loadPreviousData(): bool
     {
-        $dotaz_top = $this->conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($this->form_update_id)."' ");
-        $dotaz_top_radku = $dotaz_top->num_rows;
+        try {
+            $dotaz_top = $this->conn_mysql->query("SELECT * FROM router_list2 WHERE id = '".intval($this->form_update_id)."' ");
+            $dotaz_top_radku = $dotaz_top->num_rows;
+        } catch (Exception $e) {
+            $this->error_messages .= "<div style=\"color: red;\">"
+                                        . "Chyba! Nelze načíst zdrojové hodnoty pro úpravu.</div>"
+                                        . "<div style=\"color: red; \"> caught error: " . $e->getMessage() . "</div>"
+                                    ;
+            return false;
+        }
 
         if ($dotaz_top_radku < 1) {
-            // TODO: populate do renderer/controller
-            $this->error_messages .= "<span style=\"color: red; font-size: 16px; font-weight: bold;\">
-              <p> Chyba! Nelze načíst zdrojové hodnoty pro úpravu. </p></span>";
+            $this->error_messages .= "<div style=\"color: red;\">
+              <p> Chyba! Nelze načíst zdrojové hodnoty pro úpravu. (zero rows found in DB)</p></div>";
             return false;
         } else {
             while($data_top = $dotaz_top->fetch_array()):
@@ -239,5 +258,250 @@ class RouterAction extends adminator
 
             $this->form_error = 1;
         }
+    }
+
+    private function showForm(): array
+    {
+        $output = "";
+
+        print '<form method="POST" action="" name="form1">';
+
+        $output .= '<table border="0" width="100%" id="table2">
+            <tr>
+                <td width="200px"><label>Název: </label></td>
+                <td><input type="text" name="nazev" size="30" value="'.$this->form_nazev.'"></td>
+            </tr>
+
+            <tr>
+            <td><label>IP adresa : </label></td>
+            <td><input type="text" name="ip_adresa" size="20" value="'.$ip_adresa.'" ></td>
+            </tr>
+
+            <tr>
+            <td><label>Nadřazený router: </label></td>';
+
+        echo "<td>";
+
+        echo "<select name=\"parent_router\" size=\"1\" >";
+
+        $dotaz_parent = $this->conn_mysql->query("SELECT * FROM router_list ORDER BY nazev");
+
+        echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>";
+
+        while($data_parent = $dotaz_parent->fetch_array()) {
+            echo "<option value=\"".$data_parent["id"]."\" ";
+
+            if ($data_parent["id"] == $parent_router) {
+                echo " selected ";
+            }
+            echo "> ".$data_parent["nazev"]." ( ".$data_parent["ip_adresa"]." ) </option>";
+        }
+        echo "</select></td>";
+
+        echo "</tr>";
+
+        echo "<tr><td><br></td></tr>";
+
+        echo "<tr>";
+
+        echo "<td><label>MAC: </label></td>";
+        echo "<td><input type=\"text\" name=\"mac\" size=\"20\" maxlength=\"17\" value=\"".$mac."\" ></td>";
+
+        echo "</tr>";
+
+        echo "<tr>";
+
+        echo " <td><label>Monitoring: </label></td>";
+        echo " <td>";
+
+        echo "<select name=\"monitoring\" size=\"1\" >";
+
+        echo "<option value=\"0\" ";
+        if (($monitoring == 0) or !isset($monitoring)) {
+            echo " selected ";
+        }
+        echo " > Ne </option>";
+
+        echo "<option value=\"1\" ";
+        if ($monitoring == 1) {
+            echo " selected ";
+        }
+        echo "> Ano </option>";
+
+        echo "</select>";
+
+        //klik na pregenerovaní fajlů
+        echo "<span style=\"padding-left: 100px;\">Ruční vynucené přegenerování souborů (pro monitoring2) ".
+                "<a target=\"_new\" href=\"https://monitoring.adminator.net/mon/www/rb_all.php?ip=".$ip_adresa."&only_create=only_create\">zde</a>".
+                "</span>";
+
+        echo "</td>";
+
+        echo "</tr>";
+
+        echo "<tr>";
+
+        echo " <td><label>Monitoring kategorie: </label></td>";
+        echo " <td>";
+
+        echo "<select name=\"monitoring_cat\" size=\"1\" >";
+
+        $dotaz_cat = $this->conn_mysql->query("SELECT * FROM kategorie WHERE sablona LIKE 4 order by id");
+
+        echo "<option value=\"0\" class=\"select-nevybrano\"> Není zvoleno </option>";
+
+        while($data_cat = $dotaz_cat->fetch_array()) {
+            echo "<option value=\"".$data_cat["id"]."\" ";
+
+            if ($data_cat["id"] == $monitoring_cat) {
+                echo " selected ";
+            }
+            echo "> ".$data_cat["jmeno"]." </option>";
+        }
+
+        echo "</select>";
+
+        echo "</td>";
+
+        echo "</tr>";
+
+        echo "<tr>";
+
+        echo " <td><label>Alarm: </label></td>";
+        echo " <td>";
+
+        echo "<select name=\"alarm\" size=\"1\" >";
+
+        echo "<option value=\"0\" ";
+        if ($alarm == 0 or !isset($alarm)) {
+            echo " selected ";
+        }
+        echo "> Ne </option>";
+
+        echo "<option value=\"1\" ";
+        if ($alarm == 1) {
+            echo " selected ";
+        }
+        echo " > Ano </option>";
+
+        echo "</select>";
+
+        echo "</td>";
+
+        echo "</tr>";
+
+        echo "
+            <tr>
+                <td colspan=\"2\">&nbsp;</td>
+            </tr>";
+
+        echo "
+            <tr>
+                <td>Nadřazený nod: (kvůli filtraci)</td>
+                <td>";
+
+        $sql_nod = "SELECT * from nod_list WHERE ( jmeno LIKE '%$nod_find%' ";
+        $sql_nod .= " OR ip_rozsah LIKE '%$nod_find%' OR adresa LIKE '%$nod_find%' ";
+        $sql_nod .= " OR pozn LIKE '%$nod_find%' ) ORDER BY jmeno ASC ";
+
+        $vysledek = $this->conn_mysql->query($sql_nod);
+        //$vysledek=$conn_mysql->query("SELECT * from nod_list ORDER BY jmeno ASC" );
+        $radku = $vysledek->num_rows;
+
+        print '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
+
+        if(($radku == 0)) {
+            echo "<option value=\"0\" style=\"color: gray; \" selected >nelze zjistit / žádný nod nenalezen </option>";
+        } else {
+            echo '<option value="0" style="color: gray; font-style: bold; "';
+            if((!isset($selected_nod))) {
+                echo "selected";
+            }
+            echo ' > Není vybráno</option>';
+
+            while ($zaznam2 = $vysledek->fetch_array()) {
+                echo '<option value="'.$zaznam2["id"].'"';
+                if (($selected_nod == $zaznam2["id"])) {
+                    echo " selected ";
+                }
+                echo '>'." ".$zaznam2["jmeno"]." ( ".$zaznam2["ip_rozsah"]." )".'</option>'." \n";
+            } //konec while
+        } //konec else
+
+        print '</select>';
+
+        echo "</td>
+            </tr>";
+
+        echo "
+            <tr>
+                <td></td>
+            <td><span style=\"padding-right: 20px;\">hledání:</span>
+            <input type=\"text\" name=\"nod_find\" size=\"30\" value=\"".$nod_find."\" >
+            <span style=\"padding-left: 20px;\">
+            <input type=\"button\" value=\"Filtrovat nody\" name=\"G\" onClick=\"self.document.forms.form1.submit()\" >
+            </span>
+            </td>
+        </tr>";
+
+        echo "
+            <tr>
+                <td colspan=\"2\"><br></td>
+            </tr>";
+
+        echo "<tr>";
+
+        echo " <td><label>Filtrace: </label></td>";
+        echo " <td>";
+
+        echo "<select name=\"filtrace\" size=\"1\" >";
+
+        echo "<option value=\"0\" ";
+        if ($filtrace == 0 or !isset($filtrace)) {
+            echo " selected ";
+        }
+        echo "> Ne </option>";
+
+        echo "<option value=\"1\" ";
+        if ($filtrace == 1) {
+            echo " selected ";
+        }
+        echo " > Ano </option>";
+
+        echo "</select>";
+
+        echo "</td>";
+        echo "</tr>";
+
+
+        echo "
+            <tr>
+                <td colspan=\"2\"><br></td>
+            </tr>";
+
+        echo "
+            <tr>
+                <td>Poznámka</td>
+            <td><textarea name=\"poznamka\" rows=\"8\" cols=\"40\">".$poznamka."</textarea></td>
+            </tr>";
+
+        echo '
+            <tr>
+                <td><br></td>
+                <td></td>
+            </tr>
+
+                <tr>
+                <td></td>
+                <td><input type="hidden" name="update_id" value="'.$update_id.'"><input type="submit" value="OK" name="odeslat">
+
+                </td>
+                </tr>
+
+                </table>
+
+            </form>';
+
+        return [$output];
     }
 }

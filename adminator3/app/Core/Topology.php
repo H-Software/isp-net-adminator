@@ -14,6 +14,8 @@ class Topology extends adminator
 
     protected $settings;
 
+    public $csrf_html;
+
     public function __construct($conn_mysql, $smarty, $logger, $settings)
     {
         $this->conn_mysql = $conn_mysql;
@@ -843,7 +845,7 @@ class Topology extends adminator
         $output .= "<span style=\" padding-left: 5px; font-size: 16px; font-weight: bold; \" >\n".
               ".:: Výpis routerů ::. </span>\n";
         $output .= "<span style=\"padding-left: 25px; \" >
-            <a href=\"topology-router-add.php\" >přidání nového routeru</a>
+            <a href=\/topology/router/action\" >přidání nového routeru</a>
               </span>\n";
 
         $output .= "<span style=\"padding-left: 25px; \" >
@@ -1292,10 +1294,11 @@ class Topology extends adminator
 
                     //uprava
                     $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
-                    $output .=  '<form method="POST" action="topology-router-add.php">
-                          <input type="hidden" name="update_id" value="'.intval($data["id"]).'">
-                          <input type="submit" value="update">
-                          </form></span>';
+                    $output .= '<form method="POST" action="/topology/router/action">
+                                <input type="hidden" name="update_id" value="'.intval($data["id"]).'">';
+                    $output .= $this->csrf_html;
+                    $output .= '<input type="submit" value="update">
+                                </form></span>';
                     $output .= "</td>\n";
 
                     //smazat
@@ -1307,7 +1310,6 @@ class Topology extends adminator
                     $output .= "</td>\n";
 
                     $output .= "</tr>\n";
-
 
                     //pokud s kliklo na vypis subnetu
                     if(($_GET["list_nodes"] == "yes" and $f_id_routeru == $data["id"])) {
