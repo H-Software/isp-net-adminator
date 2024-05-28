@@ -202,7 +202,7 @@ class RouterAction extends adminator
             //test api a spravnosti konfigurace routeru
             // TODO: fix this
             // $rs_test = $ag->test_router_for_monitoring($update_id);
-            if(is_callable(\Aglobal::test_router_for_monitoring($this->form_update_id))){
+            if(is_callable(\Aglobal::test_router_for_monitoring($this->form_update_id))) {
                 $rs_test = [false, "1"];
             } else {
                 $rs_test = [true, "1"];
