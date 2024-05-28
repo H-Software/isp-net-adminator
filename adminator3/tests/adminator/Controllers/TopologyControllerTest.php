@@ -16,14 +16,12 @@ final class TopologyControllerTest extends AdminatorTestCase
     /** @var ServerRequestCreator */
     protected $creator;
 
+    protected $serverRequest;
+
+    protected $topologyController;
+
     protected function setUp(): void
     {
-        // prepare data for forms
-        //
-        // $_POST = array();
-        // $_GET = array();
-        // $_SERVER = array();
-
         $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
 
         $this->creator = new ServerRequestCreator(
@@ -32,11 +30,11 @@ final class TopologyControllerTest extends AdminatorTestCase
             $psr17Factory,
             $psr17Factory
         );
-
     }
 
     protected function tearDown(): void
     {
+
     }
 
     public function testNodeList()
@@ -53,14 +51,28 @@ final class TopologyControllerTest extends AdminatorTestCase
         //     RouteParserInterface::class,
         // );
 
-        $topologyController = new topologyController($container);
+        $topologyController = new topologyController($container, $adminatorMock);
 
-        $serverRequest = $this->createMock(ServerRequestInterface::class);
-        // $response = $this->createMock(ResponseInterface::class);
+        $server = [
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => '/topology/router',
+        ];
+
+        $serverRequest = $this->creator->fromArrays(
+            $server,
+            [],
+            [],
+            [],
+        );
+
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
         $response = $topologyController->nodeList($serverRequest, $response, []);
 
+        // clean-up
+        $response = null;
+        $topologyController = null;
+        $serverRequest = null;
     }
 }

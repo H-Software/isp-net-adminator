@@ -50,7 +50,10 @@ class c_listing_topology
         }
         $allRecords = $listRecord->num_rows;
         if (!$allRecords) {
-            $this->error(3);
+            // $this->error(3);
+            // $this->numLists = 0;
+            // $this->numRecords = 0;
+            return;
         }
 
         try {
