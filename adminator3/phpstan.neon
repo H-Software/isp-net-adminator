@@ -47,12 +47,12 @@ parameters:
 		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface.*$#"
 		path: app/Middleware/SessionMiddleware.php
 
-	# -
-	# 	message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:regenerateId\\(\\)\\.$#"
-	# 	count: 1
-	# 	path: app/Middleware/SessionMiddleware.php
-
-	# -
-	# 	message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:start\\(\\)\\.$#"
-	# 	count: 1
-	# 	path: app/Middleware/SessionMiddleware.php
+	# adminator2 dont have DI container with sentinel
+	-
+		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
+		count: 1
+		path: app/Core/shared/partner.servis.class.php
+	-
+		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
+		count: 1
+		path: include/main.function.shared.php
