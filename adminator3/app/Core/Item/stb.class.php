@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
 
+use App\Core\Topology\Topology;
 use App\Models\Stb as Model;
 
 class stb extends adminator
@@ -689,7 +690,7 @@ class stb extends adminator
             $this->logger->info("stb\\stbAction: update: fetch data: update_id: ".$this->id_stb.", rs_rows: ".$rs->num_rows);
         }
 
-        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
+        $topology = new Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
 
         $node_list = $topology->getNodeListForForm($data['nod_find']);
         $this->logger->debug("stb\\stbAction: node_list data: " . var_export($node_list, true));

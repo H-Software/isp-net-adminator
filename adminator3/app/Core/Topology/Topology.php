@@ -65,7 +65,7 @@ class Topology extends adminator
         $list = $_GET["list"];
         $razeni = $_GET["razeni"];
 
-        $datum = strftime("%d/%m/%Y %H:%M:%S", time());
+        // $datum = strftime("%d/%m/%Y %H:%M:%S", time());
 
         $ping = $_GET["ping"];
         $find = $_GET["find"];
