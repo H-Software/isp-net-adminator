@@ -122,6 +122,10 @@ class adminator
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": get level for identity: ". var_export($this->userIdentityUsername, true));
 
+        // if( !isset($this->userIdentityUsername) or $this->userIdentityUsername = null) {
+        //     throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentity is not set");
+        // }
+
         $level = 0;
 
         $rs = User::where(
@@ -133,6 +137,8 @@ class adminator
             // $this->logger->info("adminator\getUserLevel dump db: " . var_export($rs, true));
             $a = $rs->toArray();
             $level = $a['level'];
+        } else {
+            // throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: DB result is null");
         }
 
         if($level > 0) {
@@ -230,8 +236,8 @@ class adminator
         }
 
         if($this->userIdentityLevel == false) {
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is 0");
-            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentityLevel is 0");
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is not set");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentityLevel is not set");
         }
 
         $this->logger->info(

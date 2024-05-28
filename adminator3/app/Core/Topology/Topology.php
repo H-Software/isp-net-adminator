@@ -73,19 +73,22 @@ class Topology extends adminator
         $typ_vysilace = $_GET["typ_vysilace"];
         $stav = $_GET["stav"];
 
-        $typ_nodu = $_GET["typ_nodu"];
-        if(!isset($typ_nodu)) {
-            $typ_nodu = "1";
-        }
 
-        $find_orez = str_replace("%", "", $find);
+        if(!isset($_GET["typ_nodu"])) {
+            $typ_nodu = "1";
+        } else {
+            $typ_nodu = $_GET["typ_nodu"];
+        }
 
         if((strlen($find) < 1)) {
             $find = "%";
+            $find_orez = "";
         } else {
-            if(!(preg_match("/^%.*%$/", $find))) {
+            if(!(preg_match("/%.*%/", $find))) {
                 $find = "%".$find."%";
             }
+
+            $find_orez = str_replace("%", "", $find);
         }
 
         // "list" header
@@ -99,10 +102,10 @@ class Topology extends adminator
             Výpis lokalit/nodů s latencemi ";
 
         if($ping == 1) {
-            $output .= "<a href=\"".$_SERVER["PHP_SELF"]."?razeni=".$razeni."&ping=&find=".$find_orez;
+            $output .= "<a href=\"/topology/node-list?razeni=".$razeni."&ping=&find=".$find_orez;
             $output .= "&list=".$list."&typ_nodu=".$typ_nodu."\">vypnout</a>";
         } else {
-            $output .= "<a href=\"".$_SERVER["PHP_SELF"]."?razeni=".$razeni."&ping=1&find=".$find_orez;
+            $output .= "<a href=\"/topology/node-list?razeni=".$razeni."&ping=1&find=".$find_orez;
             $output .= "&list=".$list."&typ_nodu=".$typ_nodu."\">zapnout</a>";
         }
 
@@ -112,7 +115,7 @@ class Topology extends adminator
         // filter/search
         //
         $output .= "<div style=\"padding-left: 20px; padding-bottom: 10px;\" >
-            <form action=\"".$_SERVER["PHP_SELF"]."\" method=\"GET\" >
+            <form action=\"/topology/node-list\" method=\"GET\" >
                         
                 <input type=\"hidden\" name=\"razeni\" value=\"".$razeni."\" >
                 <input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >
@@ -246,6 +249,8 @@ class Topology extends adminator
             $order = " order by mac asc";
         } elseif ($razeni == 14) {
             $order = " order by mac desc";
+        } else {
+            $order = "";
         }
 
         $where = " WHERE ( id = '$find' OR jmeno LIKE '$find' OR adresa LIKE '$find' ";
@@ -265,7 +270,7 @@ class Topology extends adminator
 
         $sql = "select * from nod_list ".$where." ".$order;
 
-        $sql_source = "/topology/nod-list?razeni=".$razeni."&ping=".$ping;
+        $sql_source = "/topology/node-list?razeni=".$razeni."&ping=".$ping;
         $sql_source .= "&typ_vysilace=".$typ_vysilace."&stav=".$stav."&find=".$find_orez;
         $sql_source .= "&typ_nodu=".$typ_nodu;
 
@@ -1381,7 +1386,7 @@ class Topology extends adminator
 
                                 $output .= "<td class=\"top-router-dolni1\"><span style=\"color: grey; font-size: 12px; \">".$typ_vysilace2."</span></td>";
                                 $output .= "<td class=\"top-router-dolni1\">";
-                                $output .= "<a href=\"/topology/nod-list?find=".$data_top["jmeno"]."\">detail nodu </a>";
+                                $output .= "<a href=\"/topology/node-list?find=".$data_top["jmeno"]."\">detail nodu </a>";
                                 $output .= "</td>";
 
                                 $output .= "</tr>";

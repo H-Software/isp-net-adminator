@@ -39,7 +39,7 @@ final class AuthControllerTest extends AdminatorTestCase
     {
     }
 
-    public function testLogin()
+    public function test_login_page_default_view()
     {
         $this->markTestSkipped('under construction');
         $self = $this;

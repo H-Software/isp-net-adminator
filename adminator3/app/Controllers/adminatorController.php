@@ -86,6 +86,7 @@ class adminatorController extends Controller
             }
         }
 
+        // (try) get userLevel
         $this->adminator->userIdentityLevel = $this->adminator->getUserLevel();
 
         // set identity into to rendered
