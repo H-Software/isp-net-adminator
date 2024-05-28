@@ -52,6 +52,18 @@ abstract class AdminatorTestCase extends TestCase
 
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        self::$pdoMysql = null;
+        self::$pdoPgsql = null;
+        self::$capsule = null;
+
+        self::$phinxConfig = null;
+        self::$phinxManager = null;
+
+        m::close();
+    }
+
     protected function initDIcontainer(
         bool $sentinelMocked,
         bool $viewEnabled
@@ -137,15 +149,51 @@ abstract class AdminatorTestCase extends TestCase
         return $adminatorMock;
     }
 
-    public static function tearDownAfterClass(): void
+    protected function runBasicAsserts($responseContent)
     {
-        self::$pdoMysql = null;
-        self::$pdoPgsql = null;
-        self::$capsule = null;
+        $this->assertNotEmpty($responseContent);
 
-        self::$phinxConfig = null;
-        self::$phinxManager = null;
+        $assertKeywordsCommon = array(
+            '<html lang="en">',
+            '<title>Adminator3',  // adminator head rendered
+            'bootstrap.min.css" rel="stylesheet"',  // adminator head rendered
+            'Jste přihlášeni v administračním systému', // adminator header rendered
+            '<div id="obsah" >', // main container
+            '<div class="obsah-main" >', // inner container
+            '</body>', // smarty rendered whole page
+            '</html>' // smarty rendered whole page
+        );
 
-        m::close();
+        foreach ($assertKeywordsCommon as $w) {
+
+            /*
+            // N.B.:
+            // assert below causes printing output to stdout
+            // workaround is using this foraech with assertFalse
+            // UPDATE: it works ATM.. probably :)
+            */
+            // $this->assertStringContainsString($output, $w);
+
+            // TODO: maybe will works "assertThat()"
+            // -> https://docs.phpunit.de/en/9.6/assertions.html#assertthat
+
+            if (!str_contains($responseContent, $w)) {
+                $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
+            }
+        }
+
+        // some words missing, because NoLoginPage and etc
+        if (preg_match("/(failed|error|selhal|nepodařil)+/i", $responseContent)) {
+            $this->assertFalse(true, __FUNCTION__ . " says: found some word(s), which indicates error(s) or failures");
+        }
+
+        // test sqlite migration
+        // $sql = 'pragma table_info(\'board\');';
+        // $sql2 = "SELECT * FROM board";
+        // $rs = self::$pdoMysql->query($sql2);
+        // print_r($rs->fetchAll());
+
+        // debug
+        // echo $responseContent;
     }
 }

@@ -36,7 +36,7 @@ final class Renderer
 
     public ?int $userIdentityLevel = null;
 
-    private $requestData;
+    private \Symfony\Component\HttpFoundation\Request $requestData;
 
     public function __construct(
         ContainerInterface $container,
@@ -74,7 +74,7 @@ final class Renderer
         return $response;
     }
 
-    public function header(ServerRequestInterface|null $request, ResponseInterface $response)
+    public function header(ServerRequestInterface|null $request, ResponseInterface $response): void
     {
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
