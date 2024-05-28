@@ -18,6 +18,8 @@ use App\Controllers\vlastniciController;
 use App\Controllers\topologyController;
 use App\Controllers\workController;
 use App\Controllers\aboutController;
+use App\Controllers\adminController;
+use App\Controllers\objektyController;
 
 // routes
 
@@ -66,14 +68,14 @@ $app->group(
         $group->map(['GET', 'POST'], '/about/changes-old', aboutController::class . ':changesOld');
         $group->map(['GET', 'POST'], '/about/changes', aboutController::class . ':changes');
 
-        $group->map(['GET', 'POST'], '/admin', \adminController::class . ':admin');
-        $group->map(['GET', 'POST'], '/admin/admin', \adminController::class . ':adminMain');
-        $group->map(['GET', 'POST'], '/admin/level-list', \adminController::class . ':adminLevelList');
-        $group->map(['GET', 'POST'], '/admin/level-list/json', \adminController::class . ':adminLevelListJson');
-        $group->map(['GET', 'POST'], '/admin/level-action', \adminController::class . ':adminLevelAction');
+        $group->map(['GET', 'POST'], '/admin', adminController::class . ':admin');
+        $group->map(['GET', 'POST'], '/admin/admin', adminController::class . ':adminMain');
+        $group->map(['GET', 'POST'], '/admin/level-list', adminController::class . ':adminLevelList');
+        $group->map(['GET', 'POST'], '/admin/level-list/json', adminController::class . ':adminLevelListJson');
+        $group->map(['GET', 'POST'], '/admin/level-action', adminController::class . ':adminLevelAction');
 
-        $group->map(['GET', 'POST'], '/admin/tarify', \adminController::class . ':adminTarify');
-        $group->map(['GET', 'POST'], '/admin/tarify/action', \adminController::class . ':adminTarifyAction');
+        $group->map(['GET', 'POST'], '/admin/tarify', adminController::class . ':adminTarify');
+        $group->map(['GET', 'POST'], '/admin/tarify/action', adminController::class . ':adminTarifyAction');
 
         $group->map(['GET', 'POST'], '/archiv-zmen', \archivZmenController::class . ':archivZmenList');
         $group->map(['GET', 'POST'], '/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');

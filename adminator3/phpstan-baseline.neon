@@ -1,35 +1,9 @@
 parameters:
 	ignoreErrors:
-
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 2
-			path: app/Auth/Password.php
-
-		-
-			message: "#^Constructor of class App\\\\Controllers\\\\Auth\\\\PasswordController has an unused parameter \\$flash\\.$#"
-			count: 1
-			path: app/Controllers/Auth/PasswordController.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: app/Controllers/archivZmenController.php
-
-		-
-			message: "#^Left side of && is always true\\.$#"
-			count: 1
-			path: app/Controllers/archivZmenController.php
-
 		-
 			message: "#^Variable \\$updated in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Controllers/archivZmenController.php
-
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: app/Controllers/othersController.php
 
 		-
 			message: "#^If condition is always false\\.$#"
@@ -152,27 +126,6 @@ parameters:
 			path: app/Core/Item/objekt.class.php
 
 		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
-			count: 1
-			path: app/Core/Item/objektypridani.class.php
-
-		-
-			message: "#^Function mysql_num_rows not found\\.$#"
-			count: 1
-			path: app/Core/Item/objektypridani.class.php
-
-		-
-			message: "#^Function mysql_query not found\\.$#"
-			count: 1
-			path: app/Core/Item/objektypridani.class.php
-
-		-
-			message: "#^Function split not found\\.$#"
-			count: 2
-			path: app/Core/Item/objektypridani.class.php
-
-
-		-
 			message: "#^Binary operation \"\\+\" between string and 2 results in an error\\.$#"
 			count: 1
 			path: app/Core/Item/stb.class.php
@@ -220,11 +173,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$string of function urlencode expects string, int given\\.$#"
 			count: 5
-			path: app/Core/Topology.php
-
-		-
-			message: "#^Variable \\$sql_filter_nod in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
 			path: app/Core/Topology.php
 
 		-
@@ -322,22 +270,6 @@ parameters:
 			count: 1
 			path: app/Core/platby.php
 
-		# -
-		# 	message: "#^Call to method connect\\(\\) on an unknown class RouterOS\\.$#"
-		# 	count: 1
-		# 	path: app/Core/shared/adminatorGlobal.class.php
-
-
-		# -
-		# 	message: "#^Function mysql_result not found\\.$#"
-		# 	count: 3
-		# 	path: app/Core/shared/adminatorGlobal.class.php
-
-		# -
-		# 	message: "#^Instantiated class RouterOS not found\\.$#"
-		# 	count: 1
-		# 	path: app/Core/shared/adminatorGlobal.class.php
-
 		-
 			message: "#^Offset 1 does not exist on array\\{false\\}\\.$#"
 			count: 4
@@ -354,17 +286,10 @@ parameters:
 			path: app/Core/shared/partner.servis.class.php
 
 		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: app/Core/shared/partner.servis.class.php
-		-
 			message: "#^Variable \\$user in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
-		-
-			message: "#^Class adminController not found\\.$#"
-			count: 7
-			path: app/routing.php
+
 		-
 			message: "#^Class archivZmenController not found\\.$#"
 			count: 4
@@ -373,10 +298,6 @@ parameters:
 			message: "#^Class objektyController not found\\.$#"
 			count: 5
 			path: app/routing.php
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
-			count: 1
-			path: include/main.function.shared.php
 		-
 			message: "#^Comparison operation \"\\>\" between int\\<2, max\\> and 1 is always true\\.$#"
 			count: 1

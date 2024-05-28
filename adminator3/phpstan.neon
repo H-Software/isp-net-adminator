@@ -23,28 +23,44 @@ parameters:
 	-
 		message: "#^Call to an undefined static method App\\\\Models\\\\.*$#"
 		path: app/*
+	# broken only generate data
+	-
+		message: "#^Function mysql_.* not found\\.$#"
+		path: app/Core/Item/objektypridani.class.php
+	-
+		message: "#^Function split not found\\.$#"
+		count: 2
+		path: app/Core/Item/objektypridani.class.php
 	# false positive and etc
 	-
 		message: "#^Parameter \\#1 \\$app of class Illuminate\\\\Cache\\\\CacheManager constructor expects Illuminate\\\\Contracts\\\\Foundation\\\\Application, Illuminate\\\\Container\\\\Container given\\.$#"
 		count: 1
 		path: boostrap/containerAfter.php
-
+	# auth stuff
 	-
 		message: "#^Access to an undefined property Cartalyst\\\\Sentinel\\\\Users\\\\UserInterface\\:\\:\\$email\\.$#"
 		count: 2
 		path: app/Controllers/Auth/AuthController.php
-
 	-
-		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
+		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 		count: 2
-		path: app/Middleware/SessionMiddleware.php
+		path: app/Auth/Password.php
 
 	-
-		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:regenerateId\\(\\)\\.$#"
+		message: "#^Constructor of class App\\\\Controllers\\\\Auth\\\\PasswordController has an unused parameter \\$flash\\.$#"
 		count: 1
+		path: app/Controllers/Auth/PasswordController.php
+	# session stuff
+	-
+		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface.*$#"
 		path: app/Middleware/SessionMiddleware.php
 
+	# adminator2 dont have DI container with sentinel
 	-
-		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:start\\(\\)\\.$#"
+		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
 		count: 1
-		path: app/Middleware/SessionMiddleware.php
+		path: app/Core/shared/partner.servis.class.php
+	-
+		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
+		count: 1
+		path: include/main.function.shared.php
