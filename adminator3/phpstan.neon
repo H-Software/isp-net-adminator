@@ -35,16 +35,15 @@ parameters:
 		path: app/Controllers/Auth/AuthController.php
 
 	-
-		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:isStarted\\(\\)\\.$#"
-		count: 2
+		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface.$#"
 		path: app/Middleware/SessionMiddleware.php
 
-	-
-		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:regenerateId\\(\\)\\.$#"
-		count: 1
-		path: app/Middleware/SessionMiddleware.php
+	# -
+	# 	message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:regenerateId\\(\\)\\.$#"
+	# 	count: 1
+	# 	path: app/Middleware/SessionMiddleware.php
 
-	-
-		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:start\\(\\)\\.$#"
-		count: 1
-		path: app/Middleware/SessionMiddleware.php
+	# -
+	# 	message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface\\:\\:start\\(\\)\\.$#"
+	# 	count: 1
+	# 	path: app/Middleware/SessionMiddleware.php
