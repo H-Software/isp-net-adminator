@@ -2,6 +2,7 @@
 
 use Slim\Views\Twig;
 use App\View\CsrfExtension;
+use Slim\Views\TwigExtension;
 
 $container->set(
     CsrfExtension::class,

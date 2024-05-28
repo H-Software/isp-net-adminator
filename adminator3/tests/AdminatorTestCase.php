@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use Mockery as m;
 use PHPUnit\Framework\TestCase;
 use Phinx\Config\Config;
 use Phinx\Migration\Manager;
@@ -22,15 +23,17 @@ abstract class AdminatorTestCase extends TestCase
 
     public static $pdoPgsql;
 
+    public static $capsule;
+
     public static function setUpBeforeClass(): void
     {
         $settings = require __DIR__ . '/../config/settings.php';
 
         // boot ORM and get DB handler
         require __DIR__ . "/fixtures/bootstrapDatabase.php";
-        self::$pdoMysql = $capsule->connection("default")->getPdo();
+        self::$pdoMysql = self::$capsule->connection("default")->getPdo();
 
-        self::$pdoPgsql = $capsule->connection("pgsql")->getPdo();
+        self::$pdoPgsql = self::$capsule->connection("pgsql")->getPdo();
 
         // override DB connection to sqlite
         $settings['phinx']['environments']['test']['connection'] = self::$pdoMysql;
@@ -54,7 +57,7 @@ abstract class AdminatorTestCase extends TestCase
         $builder->addDefinitions('tests/fixtures/bootstrapContainer.php');
         $container = $builder->build();
 
-        // $rfMock = \Mockery::mock(ResponseFactoryInterface::class);
+        // $rfMock = m::mock(ResponseFactoryInterface::class);
         // $responseFactory = $rfMock;
 
         require __DIR__ . '/../tests/fixtures/bootstrapContainerAfter.php';
@@ -99,7 +102,7 @@ abstract class AdminatorTestCase extends TestCase
     public function initAdminatorMockClass(ContainerInterface $container)
     {
         // mock "underlaying" class for helper functions/logic
-        $adminatorMock = \Mockery::mock(
+        $adminatorMock = m::mock(
             \App\Core\adminator::class,
             [
                 $container->get('connMysql'),
@@ -125,5 +128,8 @@ abstract class AdminatorTestCase extends TestCase
     {
         self::$pdoMysql = null;
         self::$pdoPgsql = null;
+        self::$capsule = null;
+
+        m::close();
     }
 }

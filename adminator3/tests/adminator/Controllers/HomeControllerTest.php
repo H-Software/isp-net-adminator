@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use Mockery as m;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,6 +33,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
     protected function tearDown(): void
     {
+        m::close();
     }
 
     public function testHome()
@@ -44,7 +46,7 @@ final class HomeControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        $opravyMock = \Mockery::mock(
+        $opravyMock = m::mock(
             \opravy::class,
         );
         $opravyMock->shouldReceive('vypis_opravy')->andReturn(["mock -> no data"]);

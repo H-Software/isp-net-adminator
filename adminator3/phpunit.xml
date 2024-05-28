@@ -16,8 +16,15 @@
          verbose="true"
 >
     <testsuites>
-        <testsuite name="Adminator3 Test Suite">
+        <testsuite name="all">
             <directory suffix="Test.php">./tests/</directory>
+        </testsuite>
+        <testsuite name="adminator">
+            <directory suffix="Test.php">./tests/adminator</directory>
+            <directory suffix="Test.php">./tests/Sentinel</directory>
+        </testsuite>
+        <testsuite name="sentinel">
+            <directory suffix="Test.php">./tests/Sentinel</directory>
         </testsuite>
     </testsuites>
     <filter>

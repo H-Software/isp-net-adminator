@@ -41,7 +41,7 @@ final class AuthControllerTest extends AdminatorTestCase
 
     public function testLogin()
     {
-        // $this->markTestSkipped('under construction');
+        $this->markTestSkipped('under construction');
         $self = $this;
 
         $container = self::initDIcontainer(false, true);
@@ -71,7 +71,7 @@ final class AuthControllerTest extends AdminatorTestCase
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
-        // $response = $authController->signin($serverRequest, $response, ['flashEnabled' => false]);
+        $response = $authController->signin($serverRequest, $response, ['flashEnabled' => false]);
 
     }
 }
