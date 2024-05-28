@@ -241,11 +241,6 @@ parameters:
 			path: app/Core/opravy.php
 
 		-
-			message: "#^Property opravy\\:\\:\\$container is unused\\.$#"
-			count: 1
-			path: app/Core/opravy.php
-
-		-
 			message: "#^Right side of && is always false\\.$#"
 			count: 2
 			path: app/Core/opravy.php
