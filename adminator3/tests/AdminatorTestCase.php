@@ -166,7 +166,7 @@ abstract class AdminatorTestCase extends TestCase
 
         foreach ($assertKeywordsCommon as $w) {
 
-            $this->assertStringContainsString($w, $responseContent,  "missing string \"" . $w . "\" in response body");
+            $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
 
             // if (!str_contains($responseContent, $w)) {
             //     $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
