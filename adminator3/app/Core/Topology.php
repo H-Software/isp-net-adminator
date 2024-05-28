@@ -1416,13 +1416,8 @@ class Topology extends adminator
             $sql_filter_nod = " typ_nodu = ".intval($typ_nodu)." ";
         }
 
-        //sql
-        if(!empty($sql_filter_nod)) {
-            $sql_where = " WHERE ".$sql_filter_nod." ";
-        }
-
-        $sql = "SELECT id, jmeno FROM nod_list ".
-              $sql_where.
+        $sql = "SELECT id, jmeno FROM nod_list " .
+                " WHERE " . $sql_filter_nod . 
              " ORDER BY id";
 
         try {
