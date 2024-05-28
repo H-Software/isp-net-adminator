@@ -77,7 +77,7 @@ class RouterAction extends adminator
 
             $rs_db = $this->saveDataIntoDatabase();
             // if save data failed, return only error msq and corresponding status code
-            if($rs_db === false) {
+            if($rs_db == false) {
                 $output = $this->error_messages . $output;
                 return [$output, 500];
             }
