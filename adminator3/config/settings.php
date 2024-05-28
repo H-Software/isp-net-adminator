@@ -87,7 +87,7 @@ $settings = [
         'phinx' => [
             'paths' => [
                 'migrations' => 'database/migrations',
-                'seeds'      => 'database/seeds2',
+                'seeds'      => 'database/seeds/prod',
             ],
             'migration_base_class' => 'App\Migration\Migration',
             'environments' => [
@@ -103,7 +103,7 @@ $settings = [
         'phinxDev' => [
             'paths' => [
                 'migrations' => 'database/migrations',
-                'seeds'      => 'database/seeds-dev',
+                'seeds'      => 'database/seeds',
             ],
         ]
 ];
