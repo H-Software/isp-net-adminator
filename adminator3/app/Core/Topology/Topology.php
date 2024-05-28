@@ -4,6 +4,7 @@ namespace App\Core\Topology;
 
 use Exception;
 use App\Core\adminator;
+use Symfony\Component\HttpFoundation\Request;
 
 class Topology extends adminator
 {
@@ -17,6 +18,8 @@ class Topology extends adminator
 
     public $csrf_html;
 
+    private $requestData;
+
     public function __construct($conn_mysql, $smarty, $logger, $settings)
     {
         $this->conn_mysql = $conn_mysql;
@@ -25,9 +28,11 @@ class Topology extends adminator
         $this->settings = $settings;
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->requestData = Request::createFromGlobals();
     }
 
-    public function getNodeListForForm($search_string, $typ_nodu = 2, $show_zero_value = true)
+    public function getNodeListForForm($search_string, int $typ_nodu = 2, $show_zero_value = true)
     {
         $this->logger->info("topology\getNodesFiltered called");
 
@@ -39,7 +44,7 @@ class Topology extends adminator
 
         $sql = "SELECT id, jmeno, ip_rozsah from nod_list WHERE ( jmeno LIKE '%$search_string%' ";
         $sql .= " OR ip_rozsah LIKE '%$search_string%' OR adresa LIKE '%$search_string%' ";
-        $sql .= " OR pozn LIKE '%$search_string%' ) AND ( typ_nodu = '" . intval($typ_nodu) . "' ) ORDER BY jmeno ASC ";
+        $sql .= " OR pozn LIKE '%$search_string%' ) AND ( typ_nodu = '" . $typ_nodu . "' ) ORDER BY jmeno ASC ";
 
         $rs = $this->conn_mysql->query($sql);
         $num_rows = $rs->num_rows;
@@ -56,28 +61,30 @@ class Topology extends adminator
         }
     }
 
-    public function getNodeList()
+    public function getNodeList(): string
     {
         $output = "";
 
         // prepare vars
         //
-        $list = $_GET["list"];
+        $list = $this->requestData->query->get('list');
+        $typ_nodu = $this->requestData->query->get('typ_nodu');
+
+        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": query param typ_nodu: " . var_export($typ_nodu, true));
+
         $razeni = $_GET["razeni"];
 
         // $datum = strftime("%d/%m/%Y %H:%M:%S", time());
 
         $ping = $_GET["ping"];
-        $find = $_GET["find"];
+        $find = $this->requestData->query->get('find');
 
         $typ_vysilace = $_GET["typ_vysilace"];
         $stav = $_GET["stav"];
 
 
-        if(!isset($_GET["typ_nodu"])) {
-            $typ_nodu = "1";
-        } else {
-            $typ_nodu = $_GET["typ_nodu"];
+        if(is_null($typ_nodu) or $typ_nodu < 0) {
+            $typ_nodu = 0;
         }
 
         if((strlen($find) < 1)) {
@@ -270,13 +277,13 @@ class Topology extends adminator
 
         $sql = "select * from nod_list ".$where." ".$order;
 
-        $sql_source = "/topology/node-list?razeni=".$razeni."&ping=".$ping;
-        $sql_source .= "&typ_vysilace=".$typ_vysilace."&stav=".$stav."&find=".$find_orez;
-        $sql_source .= "&typ_nodu=".$typ_nodu;
+        $url_listing = "/topology/node-list?razeni=".$razeni."&ping=".$ping;
+        $url_listing .= "&typ_vysilace=".$typ_vysilace."&stav=".$stav."&find=".$find_orez;
+        $url_listing .= "&typ_nodu=".$typ_nodu;
 
         $paging = new c_listing_topology(
             $this->conn_mysql,
-            $sql_source,
+            $url_listing,
             $this->settings['app']['core']['topology']['node']['listing_interval'],
             $list,
             "<center><div class=\"text-listing\">\n",
@@ -309,10 +316,10 @@ class Topology extends adminator
             $colspan_adresa = "3";
             $colspan_pozn = "2";
             $colspan_rozsah_ip = "1";
-            $typ_nodu = "1";
+            $colspan_typ_nodu = "1";
             $colspan_umisteni = "2";
 
-            $colspan_celkem = $colspan_id + $colspan_jmeno + $colspan_adresa + $colspan_pozn + $colspan_rozsah_ip + $colspan_umisteni;
+            $colspan_celkem = $colspan_id + $colspan_jmeno + $colspan_adresa + $colspan_pozn + $colspan_rozsah_ip + $colspan_typ_nodu + $colspan_umisteni;
 
             $output .= "<table border=\"0\" >";
 
@@ -489,13 +496,13 @@ class Topology extends adminator
 
             $output .= "</td>";
 
-            $output .= "<td width=\"10%\" colspan=\"".$typ_nodu."\" class=\"tab-topology2 tab-topology-dolni2\" >
+            $output .= "<td width=\"10%\" colspan=\"".$colspan_typ_nodu."\" class=\"tab-topology2 tab-topology-dolni2\" >
                 <b>Mód nodu</b></td>";
 
             // bunky druhej radek
             $colspan_filtrace = "1";
 
-            $colspan_mac = "3";
+            // $colspan_mac = "3";
 
             $colspan_typ_vysilace = "3";
             $colspan_aktivni = "1";
@@ -563,7 +570,7 @@ class Topology extends adminator
                 //else{ $output .= "<td colspan=\"".$colspan_pozn."\" ><span style=\"font-size: 13px; \">".$zaznam["pozn"]."</span></td>\n";  }
 
                 $output .= "<td colspan=\"".$colspan_rozsah_ip."\" ><span style=\"font-size: 13px; \">".$zaznam["ip_rozsah"]."</span></td>\n";
-                $output .= "<td colspan=\"".$typ_nodu."\" ><span style=\"font-size: 13px; \">";
+                $output .= "<td colspan=\"".$colspan_typ_nodu."\" ><span style=\"font-size: 13px; \">";
                 if($zaznam["typ_nodu"] == 0) {
                     $output .= "Nezvoleno";
                 } elseif($zaznam["typ_nodu"] == 1) {
@@ -712,7 +719,7 @@ class Topology extends adminator
                   . "</div>";
 
         // TODO: show printing error from paging class
-        echo $paging->msqError;
+        // echo $paging->msqError;
 
         return $output;
     }
