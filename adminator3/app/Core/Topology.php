@@ -845,7 +845,7 @@ class Topology extends adminator
         $output .= "<span style=\" padding-left: 5px; font-size: 16px; font-weight: bold; \" >\n".
               ".:: Výpis routerů ::. </span>\n";
         $output .= "<span style=\"padding-left: 25px; \" >
-            <a href=\/topology/router/action\" >přidání nového routeru</a>
+            <a href=\"/topology/router/action\" >přidání nového routeru</a>
               </span>\n";
 
         $output .= "<span style=\"padding-left: 25px; \" >
