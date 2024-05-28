@@ -30,7 +30,7 @@ class RouterAction extends adminator
 
         $output = "";
 
-        $output .= "<div style=\"padding-bottom: 10px; padding-top: 10px; font-size: 18px; \">Přidání/úprava routeru </div>";
+        $output .= "<div style=\"padding-bottom: 10px; font-size: 18px; \">Přidání/úprava routeru</div>";
 
         return [$output];
     }

@@ -9,7 +9,7 @@ class Topology extends adminator
     public \mysqli|\PDO $conn_mysql;
 
     public $smarty;
-    
+
     public $logger;
 
     protected $settings;

@@ -88,11 +88,11 @@ class topologyController extends adminatorController
     public function routerAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
-        
+
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel()) {
+        if(!$this->checkLevel(86)) {
             return $this->response;
         };
 
