@@ -117,11 +117,6 @@ class adminator
         return $a;
     }
 
-    public function setUserLevel(int $level): bool
-    {
-        return $this->userIdentityLevel = $level;
-    }
-
     public function getUserLevel(): false|int
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
