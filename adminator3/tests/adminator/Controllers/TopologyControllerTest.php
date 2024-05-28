@@ -111,6 +111,8 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         // echo $responseContent;
 
+        self::runBasicAsserts($responseContent);
+
         // clean-up
         $response = null;
         $topologyController = null;
