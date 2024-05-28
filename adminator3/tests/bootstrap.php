@@ -25,3 +25,7 @@ $loader->addDirectory(__DIR__ . '/../app/Renderer');
 
 $loader->setTempDirectory(__DIR__ . '/../temp');
 $loader->register();
+
+require __DIR__ . '/../config/settings-tests.php';
+
+require __DIR__ . '/bootstrap/session.php';

@@ -20,9 +20,6 @@
             <directory suffix="Test.php">./tests/</directory>
         </testsuite>
         <testsuite name="adminator">
-            <!-- sentinel required, because of session start -->
-            <!-- sentinel also must be first, because of some garbage from adminator -->
-            <directory suffix="Test.php">./tests/Sentinel/Sessions</directory>
             <directory suffix="Test.php">./tests/adminator</directory>
         </testsuite>
         <testsuite name="sentinel">

@@ -30,7 +30,7 @@ abstract class AdminatorTestCase extends TestCase
     public static $phinxManager;
 
     public static function setUpBeforeClass(): void
-    {
+    {        
         $settings = require __DIR__ . '/../config/settings.php';
 
         // boot ORM and get DB handler
@@ -50,7 +50,7 @@ abstract class AdminatorTestCase extends TestCase
 
     }
 
-    public function initDIcontainer(
+    protected function initDIcontainer(
         bool $sentinelMocked,
         bool $viewEnabled
     ) {
@@ -103,7 +103,7 @@ abstract class AdminatorTestCase extends TestCase
         return $container;
     }
 
-    public function initAdminatorMockClass(ContainerInterface $container)
+    protected function initAdminatorMockClass(ContainerInterface $container)
     {
         // mock "underlaying" class for helper functions/logic
         $adminatorMock = m::mock(
@@ -136,7 +136,7 @@ abstract class AdminatorTestCase extends TestCase
 
         self::$phinxConfig = null;
         self::$phinxManager = null;
-        
+
         m::close();
     }
 }
