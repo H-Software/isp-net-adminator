@@ -1,16 +1,5 @@
 parameters:
 	ignoreErrors:
-
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 2
-			path: app/Auth/Password.php
-
-		-
-			message: "#^Constructor of class App\\\\Controllers\\\\Auth\\\\PasswordController has an unused parameter \\$flash\\.$#"
-			count: 1
-			path: app/Controllers/Auth/PasswordController.php
-
 		-
 			message: "#^If condition is always true\\.$#"
 			count: 1
@@ -25,11 +14,6 @@ parameters:
 			message: "#^Variable \\$updated in isset\\(\\) is never defined\\.$#"
 			count: 1
 			path: app/Controllers/archivZmenController.php
-
-		-
-			message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-			count: 1
-			path: app/Controllers/othersController.php
 
 		-
 			message: "#^If condition is always false\\.$#"
