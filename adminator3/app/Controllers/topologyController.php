@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Core\Topology\RouterAction;
 
 class topologyController extends adminatorController
 {
@@ -20,13 +21,15 @@ class topologyController extends adminatorController
 
     // protected $adminator;
 
+    protected $container;
+
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
 
     public function __construct(ContainerInterface $container)
     {
-        // $this->container = $container;
+        $this->container = $container;
         $this->conn_mysql = $container->get('connMysql');
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
@@ -85,6 +88,24 @@ class topologyController extends adminatorController
     public function routerAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+        
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel()) {
+            return $this->response;
+        };
+
+        $assignData = [
+            "page_title" => "Adminator3 :: Topologie :: Router Action",
+        ];
+
+        $i = new RouterAction($this->container);
+        list($content) = $i->action();
+
+        $assignData['body'] = $content;
+
+        return $this->renderer->template($request, $response, 'topology/router-action.tpl', $assignData);
 
     }
 }

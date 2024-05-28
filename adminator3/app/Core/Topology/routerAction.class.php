@@ -26,6 +26,8 @@ class RouterAction extends adminator
 
     public function action(): array
     {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
         $output = "";
 
         $output .= "<div style=\"padding-bottom: 10px; padding-top: 10px; font-size: 18px; \">Přidání/úprava routeru </div>";
