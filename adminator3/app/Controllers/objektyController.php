@@ -45,15 +45,12 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Objekty");
+        $assignData = [
+            "page_title" => "Adminator3 :: Objekty",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        ];
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('objekty/subcat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'objekty/subcat.tpl', $assignData);
     }
 
     public function stb(ServerRequestInterface $request, ResponseInterface $response, array $args)

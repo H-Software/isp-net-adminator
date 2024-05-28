@@ -21,16 +21,16 @@ class BoardData extends AbstractSeed
         // generate "fresh" posts
         for ($i = 0; $i < 4; $i++) {
             $data[] = [
-                'author'        => $faker->userName,
-                'email'         => $faker->email,
-                'subject'       => preg_replace(
-                                        "/(failed|chyba|error)/", 
-                                        '',
-                                         $faker->words(5, true)
+                'author'        => $this->sanitizeString(
+                                        $faker->userName
                                     ),
-                'body'          => preg_replace(
-                                        "/(failed|chyba|error)/",
-                                        '',
+                'email'         => $this->sanitizeString(
+                                        $faker->email
+                ),
+                'subject'       => $this->sanitizeString(
+                                        $faker->words(5, true)                                       
+                                    ),
+                'body'          => $this->sanitizeString(
                                         $faker->text(60)
                                     ),
                 'from_date'     => date('Y-m-d', strtotime('yesterday')),
@@ -43,5 +43,14 @@ class BoardData extends AbstractSeed
         
         // This is a cool short-hand method
         $this->insert('board', $data);
+    }
+
+    private function sanitizeString(string $input): string
+    {
+        return preg_replace(
+            "/(failed|chyba|error)/",
+            '',
+            $input
+        );
     }
 }
