@@ -169,13 +169,12 @@ class objektyController extends adminatorController
             $assignData["export_link"] = $exportLink;
             $assignData["body"] = $output;
         }
-        
+
         return $this->renderer->template($request, $response, 'objekty/list.tpl', $assignData);
     }
 
     public function objektyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("objektyController\objektyAction called");
 
         $this->request = $request;
@@ -185,9 +184,9 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Objekty :: Action");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Objekty :: Action",
+        ];
 
         $objekt = new \App\Core\objekt($this->container);
         $objekt->csrf_html = $this->generateCsrfToken($request, $response, true);
@@ -206,9 +205,8 @@ class objektyController extends adminatorController
             $output = $objekt->actionWifi();
         }
 
-        $this->smarty->assign("body", $output);
-        $this->smarty->display('objekty/action.tpl');
+        $assignData["body"] = $output;
 
-        return $response;
+        return $this->renderer->template($request, $response, 'objekty/action.tpl', $assignData);
     }
 }
