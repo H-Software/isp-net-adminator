@@ -18,7 +18,7 @@ class partner extends adminator
 
     public ?\PDO $pdoMysql;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     protected $sentinel;
 

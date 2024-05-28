@@ -10,7 +10,7 @@ class vlastnici2pridani extends adminator
 
     public \PgSql\Connection|\PDO|null $conn_pgsql;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     public $smarty;
 

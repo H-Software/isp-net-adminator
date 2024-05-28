@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 class fakturacni
 {
     // DI
-    public $logger;
+    public \Monolog\Logger $logger;
 
     // public \mysqli|\PDO $conn_mysql;
 

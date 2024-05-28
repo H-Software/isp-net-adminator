@@ -13,7 +13,7 @@ class vlastniciController extends adminatorController
     public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $smarty;
-    public $logger;
+    public \Monolog\Logger $logger;
 
     protected $sentinel;
 

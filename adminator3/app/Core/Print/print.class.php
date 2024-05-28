@@ -18,7 +18,7 @@ class printClass extends adminator
 
     // public ?\PDO $pdoMysql;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     public $adminator; // handler for instance of adminator class
 

@@ -16,7 +16,7 @@ class adminatorController extends Controller
 
     public $smarty;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     public ?\PDO $pdoMysql;
 

@@ -12,7 +12,7 @@ class ArchivZmen
     private $conn_pgsql;
 
     public $smarty;
-    public $logger;
+    public \Monolog\Logger $logger;
 
     public $db_table_name = 'archiv_zmen';
 

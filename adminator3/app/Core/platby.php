@@ -7,7 +7,7 @@ class platby
 
     private $conn_pgsql;
 
-    public $logger;
+    public \Monolog\Logger $logger;
 
     public function __construct($container)
     {

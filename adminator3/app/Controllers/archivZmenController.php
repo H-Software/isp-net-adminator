@@ -11,7 +11,7 @@ class archivZmenController extends adminatorController
 {
     public \mysqli|\PDO $conn_mysql;
     public $smarty;
-    public $logger;
+    public \Monolog\Logger $logger;
 
     protected $container;
 
