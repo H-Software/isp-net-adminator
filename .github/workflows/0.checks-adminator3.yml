@@ -125,6 +125,7 @@ jobs:
         if: always()
         with:
           check_name: "Test Results :: OS: ${{ matrix.os }} :: PHP: ${{ matrix.php-versions }}"
+          comment_mode: off
           files: |
             adminator3/build/report.*.xml
 
