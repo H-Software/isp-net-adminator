@@ -25,6 +25,10 @@ abstract class AdminatorTestCase extends TestCase
 
     public static $capsule;
 
+    public static $phinxConfig;
+
+    public static $phinxManager;
+
     public static function setUpBeforeClass(): void
     {
         $settings = require __DIR__ . '/../config/settings.php';
@@ -39,10 +43,10 @@ abstract class AdminatorTestCase extends TestCase
         $settings['phinx']['environments']['test']['connection'] = self::$pdoMysql;
 
         // prepare DB structure and data
-        $config = new Config($settings['phinx']);
-        $manager = new Manager($config, new StringInput(' '), new NullOutput());
-        $manager->migrate('test');
-        $manager->seed('test');
+        self::$phinxConfig = new Config($settings['phinx']);
+        self::$phinxManager = new Manager(self::$phinxConfig, new StringInput(' '), new NullOutput());
+        self::$phinxManager->migrate('test');
+        self::$phinxManager->seed('test');
 
     }
 
@@ -130,6 +134,9 @@ abstract class AdminatorTestCase extends TestCase
         self::$pdoPgsql = null;
         self::$capsule = null;
 
+        self::$phinxConfig = null;
+        self::$phinxManager = null;
+        
         m::close();
     }
 }
