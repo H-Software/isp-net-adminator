@@ -55,11 +55,6 @@ class objektyController extends adminatorController
 
     public function stb(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
-        $csrf_html = $this->generateCsrfToken($request, $response, true);
-        $stb = new \App\Core\stb($this->container);
-        $stb->csrf_html = $csrf_html[0];
-
         $this->logger->info("objektyController\\stb called");
 
         $this->request = $request;
@@ -69,10 +64,10 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Objekty STB");
-
-        $this->header($request, $response, $this->adminator);
-
+        $csrf_html = $this->generateCsrfToken($request, $response, true);
+        $stb = new \App\Core\stb($this->container);
+        $stb->csrf_html = $csrf_html[0];
+        
         if ($this->adminator->checkLevel(137) === true) {
             $stb->enable_modify_action = true;
         }
@@ -85,13 +80,14 @@ class objektyController extends adminatorController
             $stb->enable_delete_action = true;
         }
 
-        $rs = $stb->stbListGetBodyContent();
+        list($content) = $stb->stbListGetBodyContent();
 
-        $this->smarty->assign("body", $rs[0]);
+        $assignData = [
+            "page_title" => "Adminator3 :: Objekty STB",
+            "body" => $content
+        ];
 
-        $this->smarty->display('objekty/stb.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'objekty/stb.tpl', $assignData);
     }
 
 
