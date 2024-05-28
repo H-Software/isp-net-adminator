@@ -66,8 +66,7 @@ class RouterAction extends adminator
         $this->loadFormData();
 
         if($this->form_odeslat == "OK") { // zda je odesláno
-            // TODO: fix this
-            // $this->checkFormData();
+            $this->checkFormData();
         }
 
         if(($this->form_odeslat == "OK") and ($this->form_error != 1)) {
@@ -195,6 +194,7 @@ class RouterAction extends adminator
             //test api a spravnosti konfigurace routeru
             // TODO: fix this
             // $rs_test = $ag->test_router_for_monitoring($update_id);
+            $rs_test = [true, 1];
 
             if($rs_test[0] === false) {
                 echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
@@ -217,8 +217,7 @@ class RouterAction extends adminator
 
         //kontrola IP adresy
         if((strlen($this->form_ip_adresa) > 0)) {
-
-            if(!(validateIpAddress($this->form_ip_adresa))) {
+            if($this->validateIpAddress($this->form_ip_adresa) === false) {
                 echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
                         "IP adresa (".$this->form_ip_adresa.") není ve správném formátu !!!</div>";
 
@@ -236,7 +235,7 @@ class RouterAction extends adminator
                 echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
                         "DNS záznam (".$this->form_nazev.") není ve správnem formátu !!!</div>";
 
-                $error = 1;
+                $this->form_error = 1;
             }
 
             //kontrola delky
@@ -701,11 +700,12 @@ class RouterAction extends adminator
         } else {
             // rezim pridani
             $add = $this->conn_mysql->query(
-                            "INSERT INTO router_list (nazev,ip_adresa, parent_router, "
+                "INSERT INTO router_list (nazev,ip_adresa, parent_router, "
                             . "mac, monitoring, alarm, monitoring_cat, filtrace, id_nodu, poznamka) "
                             . "VALUES ('$this->form_nazev','$this->form_ip_adresa','$this->form_parent_router', "
                             . "'$this->form_mac','$this->form_monitoring','$this->form_alarm','$this->form_monitoring_cat', "
-                            . " '$this->form_filtrace', '$this->form_selected_nod', '$this->form_poznamka' ) ");
+                            . " '$this->form_filtrace', '$this->form_selected_nod', '$this->form_poznamka' ) "
+            );
 
             if($add) {
                 $output .= "<div style=\"color: green; padding-top: 10px; \">Záznam úspěšně vložen.</div>";
@@ -722,8 +722,9 @@ class RouterAction extends adminator
             $pole .= " alarm: ".$this->form_alarm.", parent_router: ".$this->form_parent_router.", mac: ".$this->form_mac.", filtrace: ".$this->form_filtrace.", id_nodu: ".$this->form_selected_nod;
 
             $add = $this->conn_mysql->query(
-                                    "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
-                                    . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') ");
+                "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
+                                    . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
+            );
 
             // TODO: fix this
 

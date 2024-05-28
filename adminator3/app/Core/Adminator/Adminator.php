@@ -643,4 +643,24 @@ class adminator
 
     } //end of function find_parent_reinhard
 
+    //function to validate ip address format in php by Roshan Bhattarai(http://roshanbh.com.np)
+    public static function validateIpAddress($ip_addr): bool
+    {
+        //first of all the format of the ip address is matched
+        if(preg_match("/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/", $ip_addr)) {
+            //now all the intger values are separated
+            $parts = explode(".", $ip_addr);
+            //now we need to check each part can range from 0-255
+            foreach($parts as $ip_parts) {
+                if(intval($ip_parts) > 255 || intval($ip_parts) < 0) {
+
+                    return false;
+                } //if number is not within range of 0-255
+            }
+
+            return true;
+        } else {
+            return false;
+        } //if format of ip address doesn't matches
+    }
 }
