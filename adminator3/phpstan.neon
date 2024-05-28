@@ -35,7 +35,7 @@ parameters:
 		path: app/Controllers/Auth/AuthController.php
 
 	-
-		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface.$#"
+		message: "#^Call to an undefined method Odan\\\\Session\\\\SessionInterface.*$#"
 		path: app/Middleware/SessionMiddleware.php
 
 	# -
