@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Core\Topology\RouterAction;
+use App\Core\Topology\Topology;
 
 class topologyController extends adminatorController
 {
@@ -52,7 +53,7 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
+        $topology = new Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
         $output = $topology->getNodeList();
 
         $assignData = [
@@ -74,7 +75,7 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $i = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
+        $i = new Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $i->csrf_html = $csrf_html;
 
