@@ -684,7 +684,7 @@ class adminator
 
         if($rs_q_num <> 1) {
             $ret_array[0] = false;
-            $ret_array[1] .= "Chyba! Nelze najít router dle předaných parametrů (id: ".$router_id.") \n";
+            $ret_array[1] = "Chyba! Nelze najít router dle předaných parametrů (id: ".$router_id.") \n";
 
             return $ret_array;
         }
@@ -747,7 +747,7 @@ class adminator
             $rosClient = new Client($rosConfig);
         } catch (Exception $exception) {
             $ret_array[0] = false;
-            $ret_array[1] .= "Chyba! Nelze se spojit s routerem krz API. (ROS_API say: couldn't connect to router) \n";
+            $ret_array[1] = "Chyba! Nelze se spojit s routerem krz API. (ROS_API say: couldn't connect to router) \n";
 
             return $ret_array;
         }
@@ -763,7 +763,7 @@ class adminator
         if($rs_snmp_f[0] === false) {
 
             $ret_array[0] = false;
-            $ret_array[1] .= "Chyba! ".$rs_snmp_f[1]."\n";
+            $ret_array[1] = "Chyba! ".$rs_snmp_f[1]."\n";
 
             return $ret_array;
         }
@@ -773,7 +773,7 @@ class adminator
         if($rs_snmp === false) {
 
             $ret_array[0] = false;
-            $ret_array[1] .= "Chyba! Router korektne neodpovídá na SNMP GET dotaz. (".$rs_snmp.") \n";
+            $ret_array[1] = "Chyba! Router korektne neodpovídá na SNMP GET dotaz. (".$rs_snmp.") \n";
 
             return $ret_array;
         }

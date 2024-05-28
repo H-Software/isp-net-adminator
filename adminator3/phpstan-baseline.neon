@@ -266,11 +266,6 @@ parameters:
 			path: app/Core/platby.php
 
 		-
-			message: "#^Offset 1 does not exist on array\\{false\\}\\.$#"
-			count: 4
-			path: app/Core/shared/adminatorGlobal.class.php
-
-		-
 			message: "#^Access to an undefined property partner_servis\\:\\:\\$mod\\.$#"
 			count: 1
 			path: app/Core/shared/partner.servis.class.php
