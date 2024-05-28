@@ -58,6 +58,8 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $response = $homeController->home($serverRequest, $response, []);
 
+        $this->assertEquals($response->getStatusCode(), 200);
+
         $responseContent = $response->getBody()->__toString();
 
         // // test sqlite migration

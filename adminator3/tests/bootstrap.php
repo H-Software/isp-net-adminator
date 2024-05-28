@@ -16,7 +16,6 @@ $loader = new Nette\Loaders\RobotLoader();
 // $loader->addDirectory(__DIR__ . '/../app/Auth');
 $loader->addDirectory(__DIR__ . '/../app/Core');
 $loader->addDirectory(__DIR__ . '/../app/Migration');
-// $loader->addDirectory(__DIR__ . '/../app/Handlers');
 // $loader->addDirectory(__DIR__ . '/../app/Middleware');
 // $loader->addDirectory(__DIR__ . '/../app/Middleware');
 // $loader->addDirectory(__DIR__ . '/../app/Models');
