@@ -62,20 +62,22 @@ class Topology extends adminator
 
         // prepare vars
         //
-        $list = isset($_GET["list"]);
-        $razeni = isset($_GET["razeni"]);
+        $list = $_GET["list"];
+        $razeni = $_GET["razeni"];
 
         // $datum = strftime("%d/%m/%Y %H:%M:%S", time());
 
-        $ping = isset($_GET["ping"]);
-        $find = isset($_GET["find"]);
+        $ping = $_GET["ping"];
+        $find = $_GET["find"];
 
-        $typ_vysilace = isset($_GET["typ_vysilace"]);
-        $stav = isset($_GET["stav"]);
+        $typ_vysilace = $_GET["typ_vysilace"];
+        $stav = $_GET["stav"];
 
-        $typ_nodu = isset($_GET["typ_nodu"]);
-        if(!isset($typ_nodu)) {
+        
+        if(!isset($_GET["typ_nodu"])) {
             $typ_nodu = "1";
+        } else {
+            $typ_nodu = $_GET["typ_nodu"];
         }
 
         if((strlen($find) < 1)) {
