@@ -53,7 +53,7 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $topology = new Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
+        $topology = new Topology($this->container);
         $output = $topology->getNodeList();
 
         $assignData = [
@@ -75,7 +75,7 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $i = new Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
+        $i = new Topology($this->container);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $i->csrf_html = $csrf_html;
 

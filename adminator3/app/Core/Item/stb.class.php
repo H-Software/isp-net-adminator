@@ -121,7 +121,7 @@ class stb extends adminator
 
         $output .= "";
 
-        $topologyClass = new Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
+        $topologyClass = new Topology($this->container);
 
         $rs_select_nod = $topologyClass->filter_select_nods();
 
@@ -690,7 +690,7 @@ class stb extends adminator
             $this->logger->info("stb\\stbAction: update: fetch data: update_id: ".$this->id_stb.", rs_rows: ".$rs->num_rows);
         }
 
-        $topology = new Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
+        $topology = new Topology($this->container);
 
         $node_list = $topology->getNodeListForForm($data['nod_find']);
         $this->logger->debug("stb\\stbAction: node_list data: " . var_export($node_list, true));
