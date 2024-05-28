@@ -7,11 +7,11 @@ use Psr\Container\ContainerInterface;
 class work
 {
     // DI
-    protected $logger;
+    protected \Monolog\Logger $logger;
 
-    protected $conn_mysql;
+    protected \mysqli|\PDO $conn_mysql;
 
-    protected $conn_pgsql;
+    protected \PgSql\Connection|\PDO|null $conn_pgsql;
 
     protected $sentinel;
 

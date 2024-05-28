@@ -3,9 +3,9 @@
 class platby
 {
     private $container;
-    private $conn_mysql;
+    private \mysqli|\PDO $conn_mysql;
 
-    private $conn_pgsql;
+    private \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public \Monolog\Logger $logger;
 
