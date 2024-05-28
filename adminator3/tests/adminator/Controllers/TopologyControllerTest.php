@@ -132,10 +132,13 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         self::runBasicAsserts($responseContent);
 
-        // TODO: add assert for specific rendered stuff
-        // Nelze zobrazit požadovanou stránku !
-        // Pro otevřetí této stránky nemáte dostatečné oprávnění (level).
+        // page specific asserts
+        $this->assertStringContainsString("Nelze zobrazit požadovanou stránku", $responseContent, __FUNCTION__ . " :: missing string 1 in response body");
+        $this->assertStringContainsString("Pro otevřetí této stránky nemáte dostatečné oprávnění (level).", $responseContent, __FUNCTION__ . " :: missing string 2 in response body");
 
+        // negative asserts
+        // TODO: fix me
+        
         // clean-up
         $response = null;
         $topologyController = null;
