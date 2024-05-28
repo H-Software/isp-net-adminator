@@ -297,11 +297,17 @@ class Topology extends adminator
             $bude_chybet = (($list - 1) * $paging->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
         }
 
-        $vysledek = $this->conn_mysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
+        // $vysledek = $this->conn_mysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
+        try {
+            $rs = $this->pdoMysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
+            $rs_data = $rs->fetchAll();
+        } catch (Exception $e) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Database query failed! Caught exception: " . $e->getMessage());
+        }
 
         $output .= "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$paging->listInterval()."</div>";    //zobrazení stránkovače
 
-        $radku = $vysledek->num_rows;
+        $radku = count($rs_data);
 
         if ($radku == 0) {
             $output .= "<div style=\"padding-top: 15px; padding-left: 15px;\" class=\"alert alert-warning\" role=\"alert\">"
@@ -539,8 +545,9 @@ class Topology extends adminator
             $output .= "<tr>";
 
             $output .= "\n";
-            while ($zaznam = $vysledek->fetch_array()):
 
+            foreach ($rs_data as $row => $zaznam)
+            {
                 $id = $zaznam["id"];
 
                 // prvni radek

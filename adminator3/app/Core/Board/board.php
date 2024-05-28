@@ -77,9 +77,8 @@ class board
         return true;
     }
 
-    public function show_messages()
+    public function show_messages(): array
     {
-
         $zpravy = array();
 
         if($this->what == "new") {
