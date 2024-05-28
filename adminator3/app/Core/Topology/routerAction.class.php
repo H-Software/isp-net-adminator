@@ -195,9 +195,13 @@ class RouterAction extends adminator
             //test api a spravnosti konfigurace routeru
             // TODO: fix this
             // $rs_test = $ag->test_router_for_monitoring($update_id);
-            $rs_test = [true, 1];
+            if(is_callable(\Aglobal::test_router_for_monitoring($this->form_update_id))){
+                $rs_test = [false, "1"];
+            } else {
+                $rs_test = [true, "1"];
+            }
 
-            if($rs_test[0] == false) {
+            if($rs_test[0]) {
                 echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
                     "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
 
