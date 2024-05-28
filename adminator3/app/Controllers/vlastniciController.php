@@ -737,7 +737,6 @@ class vlastniciController extends adminatorController
 
     public function fakturacniSkupiny(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("vlastniciController\\fakturacniSkupiny called");
 
         $this->request = $request;
@@ -747,9 +746,9 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: fakturační skupiny");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Zákazníci :: fakturační skupiny"
+        ];
 
         // list logic
         //
@@ -757,24 +756,17 @@ class vlastniciController extends adminatorController
         $fs_items = $fs->getItems();
 
         if(empty($fs_items)) {
-            $this->smarty->assign("message_no_items", "Nebyly nalezeny žádné fakturační skupiny");
-            $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
-            return $response;
+            $assignData["message_no_items"] = "Nebyly nalezeny žádné fakturační skupiny";
+            return $this->renderer->template($request, $response, 'vlastnici/fakturacni-skupiny.tpl', $assignData);
         }
 
-        $this->smarty->assign("fs_items", $fs_items);
+        $assignData["fs_items"] = $fs_items;
 
-        // debug
-        // $this->smarty->assign("fs_items_debug","<pre>" . var_export($fs_items,true). "</pre>");
-
-        $this->smarty->display('vlastnici/fakturacni-skupiny/list.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/fakturacni-skupiny/list.tpl', $assignData);
     }
 
     public function fakturacniSkupinyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info("vlastniciController\\fakturacniSkupinyAction called");
 
         $this->request = $request;
