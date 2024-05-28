@@ -75,11 +75,18 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         self::runBasicAsserts($responseContent);
 
-        // TODO: add asserts
+        // page specific asserts
+        //
         // Výpis lokalit / přípojných bodů
         // Hledání:
         // class="alert alert-warning" role="alert" / boostrap window
         // Žadné lokality/nody dle hladeného výrazu ( % ) v databázi neuloženy.
+        $this->assertMatchesRegularExpression('/Výpis lokalit\s*\/\s*přípojných bodů/i', $responseContent);
+        $this->assertMatchesRegularExpression('/Hledání\:/i', $responseContent);
+        $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent);
+
+        // no data assert
+        $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( % \) v databázi neuloženy/i', $responseContent);
 
         // clean-up
         $response = null;
