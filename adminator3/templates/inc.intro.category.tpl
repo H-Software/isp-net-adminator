@@ -54,6 +54,6 @@
 
 <div class="cara-kategorie" ></div>
 
-{if $show_se_cat eq "1"}
+{if $show_se_cat|default: '0' eq "1"}
   {include file="inc.intro.category-ext.tpl"}
 {/if}

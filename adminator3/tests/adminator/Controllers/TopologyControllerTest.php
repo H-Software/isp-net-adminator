@@ -77,9 +77,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     public function test_node_list_with_low_user_level()
     {
-        $this->markTestSkipped('under construction');
-        // TODO: fix DB leveling
-        // Illuminate\Database\QueryException: SQLSTATE[HY000]: General error: 1 no such table: leveling (Connection: default, SQL: select "level" from "leveling" where "leveling"."id" = 5 limit 1)
+        // $this->markTestSkipped('under construction');
         $self = $this;
 
         $container = self::initDIcontainer(true, false);
@@ -105,6 +103,13 @@ final class TopologyControllerTest extends AdminatorTestCase
         $response = $responseFactory->createResponse();
 
         $response = $topologyController->nodeList($serverRequest, $response, []);
+
+        $this->assertEquals($response->getStatusCode(), 403);
+
+        $responseContent = $response->getBody()->__toString();
+        $this->assertNotEmpty($responseContent);
+
+        echo $responseContent;
 
         // clean-up
         $response = null;

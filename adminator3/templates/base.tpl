@@ -64,7 +64,7 @@
           {*zde akce prihl. uziv. *}
           {include file="partials/logged.user.actions.tpl"}
 
-          {if $show_se_cat eq "1"}
+          {if $show_se_cat|default: '0' eq "1"}
             <div class="cat-cara-oddelovaci" ></div>
           {/if}
           
