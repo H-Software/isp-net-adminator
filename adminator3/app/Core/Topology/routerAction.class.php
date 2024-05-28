@@ -16,6 +16,10 @@ class RouterAction extends adminator
 
     protected $settings;
 
+    protected $sentinel;
+
+    protected $loggedUserEmail;
+
     public $csrf_html;
 
     private $error_messages;
@@ -43,8 +47,11 @@ class RouterAction extends adminator
         $this->conn_mysql = $container->get('connMysql');
         // $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
+        $this->sentinel = $container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function action(): array
@@ -59,16 +66,16 @@ class RouterAction extends adminator
         $this->loadFormData();
 
         if($this->form_odeslat == "OK") { // zda je odesláno
-            $this->checkFormData();
+            // TODO: fix this
+            // $this->checkFormData();
         }
 
         if(($this->form_odeslat == "OK") and ($this->form_error != 1)) {
             // proces ukladani ..
-            // T.B.A. L168 - 382
 
-            $this->showResults();
+            $output .= $this->showResults();
 
-            // $this->saveDataIntoDatabase();
+            $this->saveDataIntoDatabase();
 
         } else {
             // nechceme ukladat, tj. zobrazit form
@@ -497,21 +504,22 @@ class RouterAction extends adminator
                 <td></td>
             </tr>
 
-                <tr>
+            <tr>
                 <td></td>
-                <td><input type="hidden" name="update_id" value="'.$this->form_update_id.'"><input type="submit" value="OK" name="odeslat">
-
+                <td>
+                    <input type="hidden" name="update_id" value="'.$this->form_update_id.'">
+                    <input type="submit" value="OK" name="odeslat">
                 </td>
-                </tr>
+            </tr>
 
-                </table>
+            </table>';
 
-            </form>';
+        $output .= '</form>';
 
         return [$output];
     }
 
-    private function showResults()
+    private function showResults(): string
     {
         $output = "";
 
@@ -583,5 +591,165 @@ class RouterAction extends adminator
         $output .= "<br><b>Poznámka: </b>".addslashes($this->form_poznamka)."<br>";
 
         return $output;
+    }
+
+    private function saveDataIntoDatabase(): array
+    {
+        $output = "";
+
+        $this->form_poznamka = addslashes($this->form_poznamka);
+
+        if(strlen($this->form_mac) <= 0) {
+            $this->form_mac = "00:00:00:00:00:00";
+        }
+
+        if($this->form_update_id > 0) {
+
+            $pole = "<b>akce: uprava routeru;</b><br>";
+
+            // prvne zjistime puvodni hodnoty
+            $dotaz_top = $this->conn_mysql->query("SELECT nazev, ip_adresa, parent_router, mac, monitoring, 
+                        monitoring_cat, alarm, filtrace, id_nodu, poznamka 
+                    FROM router_list WHERE id = '".intval($this->form_update_id)."' ");
+
+            $dotaz_top_radku = $dotaz_top->num_rows;
+
+            if($dotaz_top_radku < 1) {
+                $this->error_messages .= "<div style=\"color: red;\">"
+                                        . "Chyba! Nelze načíst zdrojové hodnoty pro ArchivZmen. (zero rows found in DB)"
+                                        . "</div>";
+                return [null, false];
+            } else {
+                while($data_top = $dotaz_top->fetch_array()):
+
+                    $pole_puvodni_data["nazev"] = $data_top["nazev"];
+                    $pole_puvodni_data["ip_adresa"] = $data_top["ip_adresa"];
+                    $pole_puvodni_data["parent_router"] = $data_top["parent_router"];
+                    $pole_puvodni_data["mac"] = $data_top["mac"];
+                    $pole_puvodni_data["monitoring"] = $data_top["monitoring"];
+                    $pole_puvodni_data["monitoring_cat"] = $data_top["monitoring_cat"];
+                    $pole_puvodni_data["alarm"] = $data_top["alarm"];
+                    $pole_puvodni_data["filtrace"] = $data_top["filtrace"];
+                    $pole_puvodni_data["id_nodu"] = $data_top["id_nodu"];
+                    $pole_puvodni_data["poznamka"] = $data_top["poznamka"];
+
+                endwhile;
+            }
+
+            $uprava = $this->conn_mysql->query("UPDATE router_list SET nazev='$this->form_nazev', ip_adresa='$this->form_ip_adresa', parent_router='$this->form_parent_router',
+                            mac='$this->form_mac', monitoring='$this->form_monitoring', monitoring_cat='$this->form_monitoring_cat', alarm='$this->form_alarm',
+                    filtrace='$this->form_filtrace', id_nodu='$this->form_selected_nod', poznamka = '$this->form_poznamka' WHERE id=".intval($this->form_update_id)." Limit 1 ");
+
+            if($uprava) {
+                $output .= "<div style=\"color: green; padding-top: 10px; \">Záznam úspěšně upraven.</div><br>";
+                $vysledek_write = 1;
+            } else {
+                $output .= "<div style=\"color: red; padding-top: 10px; \">Záznam nelze upravit v databázi. </div><br>";
+                $vysledek_write = 0;
+            }
+
+            //ulozeni do archivu zmen
+            // TODO: fix this
+            // require("topology-router-add-inc-archiv-zmen.php");
+
+            //automatické restarty
+            // TODO: fix this
+            // if( ereg(".*změna.*Alarmu.*z.*", $pole3) )
+            // {
+            //   //kvuli alarmu
+            //   Aglobal::work_handler("15"); 		//trinity - Monitoring I - Footer-restart
+            //       }
+
+            // if( ereg(".*změna.*Monitorování.*", $pole3) or ereg(".*změna.*Monitoring kategorie.*", $pole3) )
+            // {
+            //   //kvuli monitoringu - feeder asi nepovinnej
+            //   Aglobal::work_handler("18"); 		//monitoring - Monitoring II - Feeder-restart
+            //   Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart
+            //       }
+
+            // if( ereg(".*změna.*Nadřazený router.*", $pole3) )
+            // {
+            //      Aglobal::work_handler("1");        //reinhard-3 (ros) - restrictions (net-n/sikana)
+            //      Aglobal::work_handler("20");       //reinhard-3 (ros) - shaper (client's tariffs)
+
+            //      Aglobal::work_handler("24");       //reinhard-5 (ros) - restrictions (net-n/sikana)
+            //      Aglobal::work_handler("23");       //reinhard-5 (ros) - shaper (client's tariffs)
+
+            //      Aglobal::work_handler("13");       //reinhard-wifi (ros) - shaper (client's tariffs)
+            //      Aglobal::work_handler("2");        //reinhard-wifi (ros) - restrictions (net-n/sikana)
+
+            //      Aglobal::work_handler("14");       //(trinity) filtrace-IP-on-Mtik's-restart
+
+            // }
+
+            // if( ereg(".*změna.*Připojného bodu.*", $pole3) )
+            // {
+            //      Aglobal::work_handler("14");	//(trinity) filtrace-IP-on-Mtik's-restart
+            // }
+
+            // if( ereg(".*změna.*Filtrace.*", $pole3) )
+            // {
+            //      Aglobal::work_handler("14");	//(trinity) filtrace-IP-on-Mtik's-restart
+            // }
+
+            // if( ereg(".*změna.*", $pole3) )
+            // {
+            //   //radsi vzdy (resp. zatim)
+            //   Aglobal::work_handler("19"); 		//trinity - adminator - synchro_router_list
+            //       }
+
+        } else {
+            // rezim pridani
+            $add = $this->conn_mysql->query(
+                            "INSERT INTO router_list (nazev,ip_adresa, parent_router, "
+                            . "mac, monitoring, alarm, monitoring_cat, filtrace, id_nodu, poznamka) "
+                            . "VALUES ('$this->form_nazev','$this->form_ip_adresa','$this->form_parent_router', "
+                            . "'$this->form_mac','$this->form_monitoring','$this->form_alarm','$this->form_monitoring_cat', "
+                            . " '$this->form_filtrace', '$this->form_selected_nod', '$this->form_poznamka' ) ");
+
+            if($add) {
+                $output .= "<div style=\"color: green; padding-top: 10px; \">Záznam úspěšně vložen.</div>";
+                $vysledek_write = 1;
+            } else {
+                $output .= "<div style=\"color: red; padding-top: 10px; \">Záznam nelze vložit do databáze. </div>";
+                $output .= "<div style=\"color: red; \">".$this->conn_mysql->error."</div>";
+                $vysledek_write = 0;
+            }
+
+            // pridame to do archivu zmen
+            $pole = "<b>akce: pridani routeru;</b><br>";
+            $pole .= " nazev: ".$this->form_nazev.", ip adresa: ".$this->form_ip_adresa.", monitoring: ".$this->form_monitoring.", monitoring_cat: ".$this->form_monitoring_cat;
+            $pole .= " alarm: ".$this->form_alarm.", parent_router: ".$this->form_parent_router.", mac: ".$this->form_mac.", filtrace: ".$this->form_filtrace.", id_nodu: ".$this->form_selected_nod;
+
+            $add = $this->conn_mysql->query(
+                                    "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
+                                    . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') ");
+
+            // TODO: fix this
+
+            // Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+            // Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+            // Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+
+            // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+
+            // //automatické restarty
+            // if($alarm == 1) {
+            //     //kvuli alarmu
+            //     Aglobal::work_handler("15"); //trinity - Monitoring I - Footer-restart
+            // }
+
+            // if($monitoring == 1) {
+            //     //kvuli monitoringu
+            //     Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
+            //     Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart
+            // }
+
+            // //radsi vzdy (resp. zatim)
+            // Aglobal::work_handler("19"); //trinity - adminator - synchro_router_list
+
+        } //konec if/else update_id > 0
+
+        return [$output, true];
     }
 }
