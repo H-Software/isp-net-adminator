@@ -69,19 +69,13 @@ class Topology extends adminator
         //
         $list = $this->requestData->query->get('list');
         $typ_nodu = $this->requestData->query->get('typ_nodu');
+        $ping = $this->requestData->query->get('ping');
+        $find = $this->requestData->query->get('find');
+        $razeni = $this->requestData->query->get('razeni');
+        $typ_vysilace = $this->requestData->query->get('typ_vysilace');
+        $stav = $this->requestData->query->get('stav');
 
         // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": query param typ_nodu: " . var_export($typ_nodu, true));
-
-        $razeni = $_GET["razeni"];
-
-        // $datum = strftime("%d/%m/%Y %H:%M:%S", time());
-
-        $ping = $_GET["ping"];
-        $find = $this->requestData->query->get('find');
-
-        $typ_vysilace = $_GET["typ_vysilace"];
-        $stav = $_GET["stav"];
-
 
         if(is_null($typ_nodu) or $typ_nodu < 0) {
             $typ_nodu = 0;
@@ -94,7 +88,6 @@ class Topology extends adminator
             if(!(preg_match("/%.*%/", $find))) {
                 $find = "%".$find."%";
             }
-
             $find_orez = str_replace("%", "", $find);
         }
 
@@ -559,7 +552,6 @@ class Topology extends adminator
                         "<a href=\"\"><a href=\"http://www.mapy.cz?query=".$zaznam["adresa"]."\" target=\"_blank\" >na mapě</a>".
                     "</td>\n";
 
-                //if( $_GET["typ_nodu"] == 2 )
                 {
                     $output .= "<td colspan=\"1\" ><span style=\"font-size: 13px; \">".$zaznam["pozn"]."</span></td>\n";
                     $output .= "<td colspan=\"1\" align=\"center\">
@@ -650,7 +642,7 @@ class Topology extends adminator
 
                 $akt_par = "class=\"tab-topology\" colspan=\"".$colspan_aktivni."\" ";
 
-                if (($_GET["ping"] == 1)) {
+                if (($ping == 1)) {
                     $aktivni = exec("../adminator2/scripts/ping.sh $ip_akt");
 
                     if (($aktivni > 0 and $aktivni < 50)) {
