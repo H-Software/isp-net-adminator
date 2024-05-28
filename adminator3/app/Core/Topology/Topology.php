@@ -27,7 +27,7 @@ class Topology extends adminator
 
     public function __construct(ContainerInterface $container)
     {
-        $this->conn_mysql = $container->get('conn_mysql');
+        $this->conn_mysql = $container->get('connMysql');
         $this->pdoMysql = $container->get('pdoMysql');
 
         $this->smarty = $container->get('smarty');
@@ -546,8 +546,7 @@ class Topology extends adminator
 
             $output .= "\n";
 
-            foreach ($rs_data as $row => $zaznam)
-            {
+            foreach ($rs_data as $row => $zaznam) {
                 $id = $zaznam["id"];
 
                 // prvni radek
@@ -715,7 +714,7 @@ class Topology extends adminator
 
                 $output .= "</tr>";
 
-            endwhile;
+            }
         }
 
         $output .= "</table>";
