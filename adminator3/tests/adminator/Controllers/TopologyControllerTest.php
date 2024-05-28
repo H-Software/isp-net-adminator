@@ -37,9 +37,9 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     }
 
-    public function testNodeList()
+    public function test_node_list_default_view()
     {
-        // $this->markTestSkipped('under construction');
+        $this->markTestSkipped('under construction');
         $self = $this;
 
         $container = self::initDIcontainer(true, false);
@@ -47,9 +47,40 @@ final class TopologyControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        // $routerParser = \Mockery::mock(
-        //     RouteParserInterface::class,
-        // );
+        $topologyController = new topologyController($container, $adminatorMock);
+
+        $server = [
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => '/topology/router',
+        ];
+
+        $serverRequest = $this->creator->fromArrays(
+            $server,
+            [],
+            [],
+            [],
+        );
+
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $response = $responseFactory->createResponse();
+
+        $response = $topologyController->nodeList($serverRequest, $response, []);
+
+        // clean-up
+        $response = null;
+        $topologyController = null;
+        $serverRequest = null;
+    }
+
+    public function test_node_list_with_low_user_level()
+    {
+        // $this->markTestSkipped('under construction');
+        $self = $this;
+
+        $container = self::initDIcontainer(true, false);
+
+        $adminatorMock = self::initAdminatorMockClass($container, false, 1);
+        $this->assertIsObject($adminatorMock);
 
         $topologyController = new topologyController($container, $adminatorMock);
 

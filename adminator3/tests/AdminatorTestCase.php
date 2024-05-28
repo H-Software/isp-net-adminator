@@ -103,7 +103,7 @@ abstract class AdminatorTestCase extends TestCase
         return $container;
     }
 
-    protected function initAdminatorMockClass(ContainerInterface $container)
+    protected function initAdminatorMockClass(ContainerInterface $container, bool $mockCheckLevel = true, int $userIdentityLevel = 900)
     {
         // mock "underlaying" class for helper functions/logic
         $adminatorMock = m::mock(
@@ -118,14 +118,19 @@ abstract class AdminatorTestCase extends TestCase
             ]
         )->makePartial();
 
-        $adminatorMock->userIdentityUsername = 'test@test';
-        $adminatorMock->userIdentityLevel = 999;
+        // probably useless, we have mocked sentinel object
+        // $adminatorMock->userIdentityUsername = 'test@test';
 
-        $adminatorMock->shouldReceive('getUserLevel')->andReturn(999);
-        $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
         $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
         $adminatorMock->shouldReceive('getUserToken')->andReturn(false);
         // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
+
+        if($mockCheckLevel) {
+            $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
+        } else {
+            // mock this, because we dont have data in database (probably)
+            $adminatorMock->shouldReceive('getUserLevel')->andReturn($userIdentityLevel);
+        }
 
         return $adminatorMock;
     }
