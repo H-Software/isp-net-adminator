@@ -119,7 +119,9 @@ abstract class AdminatorTestCase extends TestCase
         )->makePartial();
 
         $adminatorMock->userIdentityUsername = 'test@test';
-        $adminatorMock->shouldReceive('getUserLevel')->andReturn(1);
+        $adminatorMock->userIdentityLevel = 999;
+
+        $adminatorMock->shouldReceive('getUserLevel')->andReturn(999);
         $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
         $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
         $adminatorMock->shouldReceive('getUserToken')->andReturn(false);

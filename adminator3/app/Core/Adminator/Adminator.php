@@ -230,8 +230,8 @@ class adminator
         }
 
         if($this->userIdentityLevel == false) {
-            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is 0");
-            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentityLevel is 0");
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is not set");
+            throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentityLevel is not set");
         }
 
         $this->logger->info(
