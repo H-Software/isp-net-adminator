@@ -113,6 +113,10 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         self::runBasicAsserts($responseContent);
 
+        // TODO: add assert for specific rendered stuff
+        // Nelze zobrazit požadovanou stránku !
+        // Pro otevřetí této stránky nemáte dostatečné oprávnění (level).
+
         // clean-up
         $response = null;
         $topologyController = null;
