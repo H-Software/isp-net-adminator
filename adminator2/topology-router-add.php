@@ -5,163 +5,10 @@ require_once("include/config.php");
 require_once("include/check_login.php");
 require_once("include/check_level.php");
 
-if (!(check_level($level, 86))) { // neni level
 
-    $stranka = 'nolevelpage.php';
-    header("Location: ".$stranka);
-
-    echo "<br>Neopravneny pristup /chyba pristupu. STOP <br>";
-    exit;
-}
-
-echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"> 
-      <html> 
-      <head> ';
-
-require("include/charset.php");
-
-?>
-
-<title>Adminator2 - Topology - Router add/change</title>
-
-</head>
-
-<body>
-
-<?php include("head.php"); ?> 
-
-<?php include("category.php"); ?> 
-
-<tr>
- <td colspan="2" bgcolor="silver" >
-   <?php include("topology-cat2.php"); ?>
- </td>
-</tr>
-       
- <tr>
- <td colspan="2">
-
- <?php
-
-  $ag = new Aglobal();
+$ag = new Aglobal();
 $ag->conn_mysql = $conn_mysql;
 $ag->conn_pgsql = $db_ok2;
-
-//naplneni promenejch
-$nod_find = $_POST["nod_find"];
-$odeslat = $_POST["odeslat"];
-
-$selected_nod = $_POST["selected_nod"];
-
-$nazev = $_POST["nazev"];
-$ip_adresa = $_POST["ip_adresa"];
-$parent_router = $_POST["parent_router"];
-$monitoring = $_POST["monitoring"];
-$monitoring_cat = $_POST["monitoring_cat"];
-$alarm = $_POST["alarm"];
-
-$filtrace = $_POST["filtrace"];
-$mac = $_POST["mac"];
-$monitoring_cat = $_POST["monitoring_cat"];
-$update_id = $_POST["update_id"];
-
-$poznamka = $_POST["poznamka"];
-
-//kontrola spravnosti promennych
-
-if($odeslat == "OK") { //zda je odesláno
-
-    //monitoring potrebuje i monitoring kategorii
-    if(($monitoring_cat == 0)) {
-        echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">
-            Nelze uložit, musíte vybrat kategorii pro monitoring. </div>";
-
-        $error = 1;
-    }
-
-    if(($monitoring == 1)) {
-
-        //test api a spravnosti konfigurace routeru
-        $rs_test = $ag->test_router_for_monitoring($update_id);
-
-        if($rs_test[0] === false) {
-            echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
-
-            echo "<div style=\"color: grey;\" >výpis testu: <pre>".htmlspecialchars($rs_test[1])."</pre></div>";
-
-            $error = 1;
-
-        } //end if rs_test === false
-
-    } //end od if monitoring == 1
-
-    //nadrazený router musí být vyplnen
-    if(!(intval($parent_router) > 0)) {
-        echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">
-       Nelze uložit, je třeba vyplnit pole \"Nadřazený router\" (kvůli filtraci a QoSu na reinhardech). </div>";
-
-        $error = 1;
-    }
-
-    //kontrola IP adresy
-    if((strlen($ip_adresa) > 0)) {
-
-        if(!(validateIpAddress($ip_adresa))) {
-            echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-            "IP adresa (".$ip_adresa.") není ve správném formátu !!!</div>";
-
-            $error = 1;
-        }
-    }
-
-    //check dns nazvu
-    if((strlen($nazev) > 0)) {
-
-        //kontrola správnosti zadání
-        $dns_check = ereg('^([[:alnum:]]|\.|-)+$', $nazev);
-
-        if(!($dns_check)) {
-            echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                "DNS záznam (".$nazev.") není ve správnem formátu !!!</div>";
-
-            $error = 1;
-        }
-
-        //kontrola delky
-        if((strlen($nazev) > 40)) {
-
-            echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                "DNS záznam (".$nazev.") je moc dlouhý!!! Maximální délka je 40 znaků.</div>";
-
-            $error = 1;
-        }
-    }
-
-    //kontrola mac adresy
-    if((strlen($mac) > 0)) {
-
-        $mac_check = ereg('^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$', $mac);
-
-        if(!($mac_check)) {
-            echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-        "MAC adresa (".$mac.") není ve správném formátu !!!</div>";
-
-            $error = 1;
-        }
-    }
-
-    //povinné údaje
-    if((strlen($nazev) == 0) or (strlen($ip_adresa) == 0) or (strlen($parent_router) == 0)) {
-
-        echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">
-       Nelze uložit, nejsou vyplněny všechny potřebné údaje. (Název, IP adresa, Nadřazený router). </div>";
-
-        $error = 1;
-
-    }
-
-} //konec if odeslat == OK
 
 echo "<div style=\"padding-bottom: 10px; padding-top: 10px; font-size: 18px; \">Přidání/úprava routeru </div>";
 
@@ -373,12 +220,6 @@ if(($odeslat == "OK") and ($error != "1")) {
 
     } //konec if/else update_id > 0
 
-    //
-    // akce pri uprave i pri vlozeni
-    //
-
-    //nic :-)
-
 } // konec odeslat == OK
 else {
     //nechceme ukladat, tj. zobrazit form
@@ -386,52 +227,6 @@ else {
     //pokud update, tak zjistit predchozi hodnoty
     if($update_id > 0 and ($odeslat != "OK")) {
         // nacteni promennych, pokud se nedna o upravu a neodeslal sem form
-
-        $dotaz_top = $conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($update_id)."' ");
-        $dotaz_top_radku = $dotaz_top->num_rows;
-
-        if ($dotaz_top_radku < 1) {
-            echo "<span style=\"color: red; font-size: 16px; font-weight: bold;\">
-              <p> Chyba! Nelze načíst zdrojové hodnoty pro úravu. </p></span>";
-        } else {
-            while($data_top = $dotaz_top->fetch_array()):
-
-                if($nazev == "") {
-                    $nazev = $data_top["nazev"];
-                }
-                if($ip_adresa == "") {
-                    $ip_adresa = $data_top["ip_adresa"];
-                }
-                if($parent_router == "") {
-                    $parent_router = $data_top["parent_router"];
-                }
-
-                if($mac == "") {
-                    $mac = $data_top["mac"];
-                }
-                if($filtrace == "") {
-                    $filtrace = $data_top["filtrace"];
-                }
-                if($monitoring == "") {
-                    $monitoring = $data_top["monitoring"];
-                }
-
-                if($monitoring_cat == "") {
-                    $monitoring_cat = $data_top["monitoring_cat"];
-                }
-                if($alarm == "") {
-                    $alarm = $data_top["alarm"];
-                }
-                if($poznamka == "") {
-                    $poznamka = $data_top["poznamka"];
-                }
-                if($selected_nod == "") {
-                    $selected_nod = $data_top["id_nodu"];
-                }
-
-            endwhile;
-        }
-
     }
 
     //zobrazime formular
