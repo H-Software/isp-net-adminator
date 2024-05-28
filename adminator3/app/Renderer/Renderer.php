@@ -36,7 +36,7 @@ final class Renderer
 
     public ?int $userIdentityLevel = null;
 
-    private $request_data;
+    private $requestData;
 
     public function __construct(
         ContainerInterface $container,
@@ -45,7 +45,7 @@ final class Renderer
         $this->logger = $container->get('logger');
         $this->smarty = $container->get('smarty');
 
-        $this->request_data = Request::createFromGlobals();
+        $this->requestData = Request::createFromGlobals();
     }
 
     public function template(
@@ -133,7 +133,7 @@ final class Renderer
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: " . $this->userIdentityUsername . " (" . $this->userIdentityLevel . ")");
 
         $this->smarty->assign("nick_a_level", $this->userIdentityUsername . " (" . $this->userIdentityLevel . ")");
-        $this->smarty->assign("login_ip", $this->request_data->server->get('REMOTE_ADDR'));
+        $this->smarty->assign("login_ip", $this->requestData->server->get('REMOTE_ADDR'));
     }
 
     public static function zobraz_kategorie(string $uri): array
