@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use Mockery as m;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,6 +33,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
     protected function tearDown(): void
     {
+        m::close();
     }
 
     public function testHome()
@@ -39,33 +41,12 @@ final class HomeControllerTest extends AdminatorTestCase
         // $this->markTestSkipped('under construction');
         $self = $this;
 
-        $container = self::initDIcontainer();
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $container = self::initDIcontainer(true, false);
 
-        // mock "underlaying" class for helper functions/logic
-        $adminatorMock = \Mockery::mock(
-            \App\Core\adminator::class,
-            [
-                $container->get('connMysql'),
-                $container->get('smarty'),
-                $container->get('logger'),
-                '127.0.0.1', // userIPAddress
-                $container->get('pdoMysql'),
-                $container->get('settings'),
-            ]
-        )->makePartial();
+        $adminatorMock = self::initAdminatorMockClass($container);
+        $this->assertIsObject($adminatorMock);
 
-        $adminatorMock->userIdentityUsername = 'test@test';
-        $adminatorMock->shouldReceive('getUserLevel')->andReturn(1);
-        $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
-        $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
-        // $adminatorMock->shouldReceive('zobraz_kategorie')->andReturn(
-        //     require __DIR__ . "/../../fixtures/zobraz_kategorie_data.php"
-        // );
-        $adminatorMock->shouldReceive('getUserToken')->andReturn(false);
-        // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
-
-        $opravyMock = \Mockery::mock(
+        $opravyMock = m::mock(
             \opravy::class,
         );
         $opravyMock->shouldReceive('vypis_opravy')->andReturn(["mock -> no data"]);
@@ -74,9 +55,12 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $serverRequest = $this->createMock(ServerRequestInterface::class);
         // $response = $this->createMock(ResponseInterface::class);
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
         $response = $homeController->home($serverRequest, $response, []);
+
+        $this->assertEquals($response->getStatusCode(), 200);
 
         $responseContent = $response->getBody()->__toString();
 

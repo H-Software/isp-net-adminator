@@ -75,7 +75,8 @@
           "DI\\Test\\UnitTest\\Fixtures\\": "tests/php-di/Fixtures"
         },
         "files": [
-            "tests/AdminatorTestCase.php"
+            "tests/AdminatorTestCase.php",
+            "tests/Twig-View/TestCase.php"
         ]
         
     },
@@ -94,6 +95,10 @@
         "test": [
             "@putenv OTEL_PHP_DISABLED_INSTRUMENTATIONS=slim",
             "vendor/phpunit/phpunit/phpunit --colors=always"
+        ],
+        "test-adminator": [
+            "@putenv OTEL_PHP_DISABLED_INSTRUMENTATIONS=slim",
+            "vendor/phpunit/phpunit/phpunit --colors=always --testsuite adminator"
         ]
     }
 }

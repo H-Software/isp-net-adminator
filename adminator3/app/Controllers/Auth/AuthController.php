@@ -51,6 +51,11 @@ class AuthController extends Controller
 
     public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
+        $flashEnabled = true;
+        if (array_key_exists('flashEnabled', $args)) {
+            $flashEnabled = $args['flashEnabled'];
+        }
+
         $redirect = $request->getQueryParams()['redirect'];
 
         if ($request->getMethod() == "POST") {
@@ -110,6 +115,7 @@ class AuthController extends Controller
             $response,
             'auth\signin.twig',
             array(
+                'flashEnabled' => boolval($flashEnabled),
                 'username' => @$username,
                 'redirect' => $redirect
             )

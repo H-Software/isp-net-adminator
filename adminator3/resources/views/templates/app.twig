@@ -30,7 +30,10 @@
 		<div class="login"><img alt="logo 2" src="/img2/im-adm10b.jpg" width="400" ></div>
 
 		<div class="container">
-			{% include 'templates/partials/flash.twig' %}
+			{% if flashEnabled|default == true %}
+				{% include 'templates/partials/flash.twig' %}
+			{% endif %}
+
 			{% block content %}
 				
 			{% endblock %}

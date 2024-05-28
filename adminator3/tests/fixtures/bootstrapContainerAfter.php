@@ -4,8 +4,6 @@ use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use PHPUnit\DbUnit\DataSet\DataSet;
 use Slim\Csrf\Guard;
-use Cartalyst\Sentinel\Native\SentinelBootstrapper;
-use Cartalyst\Sentinel\Native\Facades\Sentinel;
 
 $container->set(
     'settings',
@@ -27,30 +25,6 @@ $container->set(
     }
 );
 
-$container->set('sentinel', function () use ($container) {
-    // $logger = $container->get('logger');
-
-    // $logger->debug("bootstrap\containerAfer: sentinel: called");
-
-    // $boostrap = new SentinelBootstrapper();
-
-    // $sentinel = new Sentinel($boostrap);
-
-    // return $sentinel->getSentinel();
-
-    $userObj = \Mockery::mock(
-        stdClass::class
-    );
-    $userObj->email = "admin@test";
-
-    $sentinel = \Mockery::mock(
-        Sentinel::class,
-    );
-    $sentinel->shouldReceive('getUser')->andReturn($userObj);
-
-    return $sentinel;
-});
-
 $container->set(
     'connMysql',
     self::$pdoMysql
@@ -63,13 +37,14 @@ $container->set(
 
 $container->set(
     'connPgsql',
-    function ($c) {
+    self::$pdoPgsql
+    // function ($c) {
 
-        $db = new PDO('sqlite::memory:');
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //     $db = new PDO('sqlite::memory:');
+    //     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        return $db;
-    }
+    //     return $db;
+    // }
 );
 
 $container->set(
@@ -88,16 +63,16 @@ $container->set(
 
 $container->set(
     'csrf',
-    function () use ($responseFactory) {
+    // function () use ($responseFactory) {
+    function () {
 
-        $guardMock = \Mockery::mock('Guard');
+        $guardMock = \Mockery::mock(Guard::class);
 
         $guardMock->shouldReceive('getTokenNameKey')->andReturn(42);
         $guardMock->shouldReceive('getTokenValueKey')->andReturn(42);
 
         return $guardMock;
         // return new Guard($responseFactory);
-
     }
 );
 
