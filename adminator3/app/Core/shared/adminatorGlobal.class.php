@@ -36,7 +36,7 @@ class Aglobal
     } //konec funkce test_snmp_function
 
 
-    public function test_router_for_monitoring($router_id)
+    public static function test_router_for_monitoring($router_id)
     {
 
         $ret_array = array();

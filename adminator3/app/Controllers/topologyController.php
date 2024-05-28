@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Core\Topology\RouterAction;
 
 class topologyController extends adminatorController
 {
@@ -20,27 +21,29 @@ class topologyController extends adminatorController
 
     // protected $adminator;
 
+    protected $container;
+
     protected ServerRequestInterface $request;
 
     protected ResponseInterface $response;
 
     public function __construct(ContainerInterface $container)
     {
-        // $this->container = $container;
+        $this->container = $container;
         $this->conn_mysql = $container->get('connMysql');
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
         // $this->sentinel = $container->get('sentinel');
         $this->settings = $container->get('settings');
 
-        $this->logger->info("topologyController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         parent::__construct($container);
     }
 
     public function nodeList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("topologyController\\nodeList called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -62,7 +65,7 @@ class topologyController extends adminatorController
 
     public function routerList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("topologyController\\routerList called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -71,8 +74,11 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $topology = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
-        $output = $topology->getRouterList();
+        $i = new \App\Core\Topology($this->conn_mysql, $this->smarty, $this->logger, $this->settings);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $i->csrf_html = $csrf_html;
+
+        $output = $i->getRouterList();
 
         $assignData = [
             "page_title" => "Adminator3 :: Topologie :: Router list",
@@ -80,5 +86,31 @@ class topologyController extends adminatorController
         ];
 
         return $this->renderer->template($request, $response, 'topology/router-list.tpl', $assignData);
+    }
+
+    public function routerAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(86)) {
+            return $this->response;
+        };
+
+        $assignData = [
+            "page_title" => "Adminator3 :: Topologie :: Router Action",
+        ];
+
+        $i = new RouterAction($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $i->csrf_html = $csrf_html;
+
+        list($content, $http_status_code) = $i->action();
+
+        $assignData['body'] = $content;
+
+        return $this->renderer->template($request, $response, 'topology/router-action.tpl', $assignData, $http_status_code);
     }
 }

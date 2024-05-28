@@ -130,6 +130,7 @@ $app->group(
         $group->map(['GET', 'POST'], '/topology', topologyController::class . ':nodeList');
         $group->map(['GET', 'POST'], '/topology/node-list', topologyController::class . ':nodeList');
         $group->map(['GET', 'POST'], '/topology/router-list', topologyController::class . ':routerList');
+        $group->map(['GET', 'POST'], '/topology/router/action', topologyController::class . ':routerAction');
 
         $group->map(['GET', 'POST'], '/work', workController::class . ':work');
 
