@@ -136,27 +136,6 @@ parameters:
 			path: app/Core/Item/objekt.class.php
 
 		-
-			message: "#^Function mysql_fetch_array not found\\.$#"
-			count: 1
-			path: app/Core/Item/objektypridani.class.php
-
-		-
-			message: "#^Function mysql_num_rows not found\\.$#"
-			count: 1
-			path: app/Core/Item/objektypridani.class.php
-
-		-
-			message: "#^Function mysql_query not found\\.$#"
-			count: 1
-			path: app/Core/Item/objektypridani.class.php
-
-		-
-			message: "#^Function split not found\\.$#"
-			count: 2
-			path: app/Core/Item/objektypridani.class.php
-
-
-		-
 			message: "#^Binary operation \"\\+\" between string and 2 results in an error\\.$#"
 			count: 1
 			path: app/Core/Item/stb.class.php
