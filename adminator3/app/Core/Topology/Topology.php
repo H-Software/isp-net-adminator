@@ -282,7 +282,7 @@ class Topology extends adminator
         $url_listing .= "&typ_nodu=".$typ_nodu;
 
         $paging = new c_listing_topology(
-            $this->conn_mysql,
+            $this->pdoMysql,
             $url_listing,
             $this->settings['app']['core']['topology']['node']['listing_interval'],
             $list,

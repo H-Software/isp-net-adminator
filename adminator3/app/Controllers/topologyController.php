@@ -10,7 +10,7 @@ use App\Core\Topology\Topology;
 
 class topologyController extends adminatorController
 {
-    public \mysqli|\PDO $conn_mysql;
+    // public \mysqli|\PDO $conn_mysql;
 
     public $smarty;
 
@@ -31,7 +31,7 @@ class topologyController extends adminatorController
     public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->container = $container;
-        $this->conn_mysql = $container->get('connMysql');
+        // $this->conn_mysql = $container->get('connMysql');
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
         // $this->sentinel = $container->get('sentinel');
