@@ -11,8 +11,12 @@ use Exception;
 class othersController extends adminatorController
 {
     public \mysqli|\PDO $conn_mysql;
+
     public $smarty;
+
     public $logger;
+
+    protected $adminator;
 
     protected ServerRequestInterface $request;
 
@@ -256,7 +260,7 @@ class othersController extends adminatorController
                 $this->smarty->assign("mod", 2); //zobrazujeme formular pro zadavani dat
                 $this->smarty->assign("mod_hlaska", "->> Přidat zprávu");
 
-                $this->smarty->assign("nick", \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email);
+                $this->smarty->assign("nick", $this->adminator->userIdentityUsername);
 
                 $this->smarty->assign("email", $nastenka->email);
                 $this->smarty->assign("subject", $nastenka->subject);
