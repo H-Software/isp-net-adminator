@@ -73,7 +73,7 @@ class Topology extends adminator
         $typ_vysilace = $_GET["typ_vysilace"];
         $stav = $_GET["stav"];
 
-        
+
         if(!isset($_GET["typ_nodu"])) {
             $typ_nodu = "1";
         } else {
