@@ -1,5 +1,8 @@
 <?php
 
+// https://www.php.net/manual/en/regexp.reference.character-classes.php
+// https://docs.phpunit.de/en/10.5/assertions.html#assertmatchesregularexpression
+
 declare(strict_types=1);
 
 namespace App\Tests;

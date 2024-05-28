@@ -37,7 +37,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     }
 
-    public function test_node_list_default_view()
+    public function test_ctl_node_list_default_view()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
@@ -69,7 +69,6 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertEquals($response->getStatusCode(), 200);
 
         $responseContent = $response->getBody()->__toString();
-        $this->assertNotEmpty($responseContent);
 
         // echo $responseContent;
 
@@ -81,6 +80,7 @@ final class TopologyControllerTest extends AdminatorTestCase
         // Hledání:
         // class="alert alert-warning" role="alert" / boostrap window
         // Žadné lokality/nody dle hladeného výrazu ( % ) v databázi neuloženy.
+
         $this->assertMatchesRegularExpression('/Výpis lokalit\s*\/\s*přípojných bodů/i', $responseContent);
         $this->assertMatchesRegularExpression('/Hledání\:/i', $responseContent);
         $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent);
@@ -94,7 +94,7 @@ final class TopologyControllerTest extends AdminatorTestCase
         $serverRequest = null;
     }
 
-    public function test_node_list_with_low_user_level()
+    public function test_ctl_node_list_with_low_user_level()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
