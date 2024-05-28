@@ -4,7 +4,8 @@ use Psr\Container\ContainerInterface;
 
 class opravy
 {
-    private $container;
+    // private $container;
+
     private $conn_mysql;
 
     private $conn_pgsql;
@@ -18,6 +19,8 @@ class opravy
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
         $this->logger = $container->get('logger');
+
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
     public function vypis_opravy($pocet_bunek)

@@ -7,7 +7,9 @@ use Exception;
 class Topology extends adminator
 {
     public \mysqli|\PDO $conn_mysql;
+
     public $smarty;
+    
     public $logger;
 
     protected $settings;
@@ -19,7 +21,7 @@ class Topology extends adminator
         $this->logger = $logger;
         $this->settings = $settings;
 
-        $this->logger->info("topology\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
     public function getNodeListForForm($search_string, $typ_nodu = 2, $show_zero_value = true)
