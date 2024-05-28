@@ -1417,7 +1417,7 @@ class Topology extends adminator
         }
 
         $sql = "SELECT id, jmeno FROM nod_list " .
-                " WHERE " . $sql_filter_nod . 
+                " WHERE " . $sql_filter_nod .
              " ORDER BY id";
 
         try {
