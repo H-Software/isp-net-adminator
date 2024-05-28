@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Core;
+namespace App\Core\Topology;
 
 use Exception;
+use App\Core\adminator;
 
 class Topology extends adminator
 {
