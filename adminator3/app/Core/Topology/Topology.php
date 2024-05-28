@@ -5,10 +5,13 @@ namespace App\Core\Topology;
 use Exception;
 use App\Core\adminator;
 use Symfony\Component\HttpFoundation\Request;
+use Psr\Container\ContainerInterface;
 
 class Topology extends adminator
 {
-    // public ?\PDO $pdoMysql;
+    public $container;
+
+    public ?\PDO $pdoMysql;
 
     public \mysqli|\PDO $conn_mysql;
 
@@ -22,14 +25,14 @@ class Topology extends adminator
 
     private $requestData;
 
-    public function __construct($conn_mysql, $smarty, $logger, $settings)
+    public function __construct(ContainerInterface $container)
     {
-        $this->conn_mysql = $conn_mysql;
-        // $this->pdoMysql = $pdoMysql;
+        $this->conn_mysql = $container->get('connMysql');
+        $this->pdoMysql = $container->get('pdoMysql');
 
-        $this->smarty = $smarty;
-        $this->logger = $logger;
-        $this->settings = $settings;
+        $this->smarty = $container->get('smarty');
+        $this->logger = $container->get('logger');
+        $this->settings = $container->get('settings');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -279,7 +282,7 @@ class Topology extends adminator
         $url_listing .= "&typ_nodu=".$typ_nodu;
 
         $paging = new c_listing_topology(
-            $this->conn_mysql,
+            $this->pdoMysql,
             $url_listing,
             $this->settings['app']['core']['topology']['node']['listing_interval'],
             $list,
@@ -294,11 +297,17 @@ class Topology extends adminator
             $bude_chybet = (($list - 1) * $paging->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
         }
 
-        $vysledek = $this->conn_mysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
+        // $vysledek = $this->conn_mysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
+        try {
+            $rs = $this->pdoMysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
+            $rs_data = $rs->fetchAll();
+        } catch (Exception $e) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Database query failed! Caught exception: " . $e->getMessage());
+        }
 
         $output .= "<div style=\"padding-top: 10px; padding-bottom: 10px; \" >".$paging->listInterval()."</div>";    //zobrazení stránkovače
 
-        $radku = $vysledek->num_rows;
+        $radku = count($rs_data);
 
         if ($radku == 0) {
             $output .= "<div style=\"padding-top: 15px; padding-left: 15px;\" class=\"alert alert-warning\" role=\"alert\">"
@@ -536,8 +545,8 @@ class Topology extends adminator
             $output .= "<tr>";
 
             $output .= "\n";
-            while ($zaznam = $vysledek->fetch_array()):
 
+            foreach ($rs_data as $row => $zaznam) {
                 $id = $zaznam["id"];
 
                 // prvni radek
@@ -705,7 +714,7 @@ class Topology extends adminator
 
                 $output .= "</tr>";
 
-            endwhile;
+            }
         }
 
         $output .= "</table>";

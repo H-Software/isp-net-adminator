@@ -166,20 +166,11 @@ abstract class AdminatorTestCase extends TestCase
 
         foreach ($assertKeywordsCommon as $w) {
 
-            /*
-            // N.B.:
-            // assert below causes printing output to stdout
-            // workaround is using this foraech with assertFalse
-            // UPDATE: it works ATM.. probably :)
-            */
-            // $this->assertStringContainsString($output, $w);
+            $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
 
-            // TODO: maybe will works "assertThat()"
-            // -> https://docs.phpunit.de/en/9.6/assertions.html#assertthat
-
-            if (!str_contains($responseContent, $w)) {
-                $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
-            }
+            // if (!str_contains($responseContent, $w)) {
+            //     $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
+            // }
         }
 
         // some words missing, because NoLoginPage and etc

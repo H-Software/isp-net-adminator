@@ -7,6 +7,7 @@ use DivisionByZeroError;
 class c_listing_topology
 {
     public \mysqli|\PDO $conn_mysql;
+
     public $url;
     public $interval;
     public $sql;
@@ -48,7 +49,16 @@ class c_listing_topology
         if (!$listRecord) {
             $this->error(2);
         }
-        $allRecords = $listRecord->num_rows;
+
+        if($this->conn_mysql instanceof \mysqli) {
+            $allRecords = $listRecord->num_rows;
+        } elseif($this->conn_mysql instanceof \PDO) {
+            $allRecords = count($listRecord->fetchAll());
+        } else {
+            // unknown type
+            return;
+        }
+
         if (!$allRecords) {
             // $this->error(3);
             // $this->numLists = 0;
