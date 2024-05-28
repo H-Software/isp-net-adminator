@@ -73,11 +73,11 @@ class RouterAction extends adminator
         if(($this->form_odeslat == "OK") and ($this->form_error != 1)) {
             // proces ukladani ..
 
-            $output .= $this->showResults();
-
             list($content, $rs_db) = $this->saveDataIntoDatabase();
             $output .= $content;
-            
+
+            $output .= $this->showResults();
+
             // if save data failed, return only error msq and corresponding status code
             if($rs_db == false) {
                 $output = $this->error_messages . $output;
