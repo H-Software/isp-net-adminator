@@ -1411,6 +1411,8 @@ class objekt extends adminator
             // vlozeni vlastniho formu
             $output .= $this->actionFormFiber();
 
+            $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": formFiber rendered");
+
         elseif ((isset($writed) or isset($updated))) :
 
             $output .= '<table border="0" width="50%" >
