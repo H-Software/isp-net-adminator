@@ -1404,6 +1404,8 @@ class objekt extends adminator
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
         if((isset($this->action_fail)) or (!isset($this->send))) :
+            $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": rendering form");
+
             $output .= $this->action_error;
 
             $output .= $this->action_info;
