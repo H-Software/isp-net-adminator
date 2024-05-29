@@ -939,11 +939,8 @@ class objekt extends adminator
             $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": rendering form");
 
             $output .= $this->action_error;
-
             $output .= $this->action_info;
 
-            // vlozeni vlastniho formu
-            // require("objekty-add-inc.php");
             $output .= $this->actionFormWifi();
 
             $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": actionFormWifi rendered");
@@ -1146,11 +1143,11 @@ class objekt extends adminator
         }
         //if( (strlen($this->form_selected_nod) > 0 ) ){ $this->checkcislo($this->form_selected_nod); }
 
-        // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
+        // checkne se jestli jsou vsechny udaje
         if((($this->form_dns != "") and ($this->form_ip != "")) and ($this->form_selected_nod > 0) and (($this->form_id_tarifu >= 0)) and ($this->form_mac != "")) :
 
             //kontrola dulplicitnich udaju
-            if (($update_status != 1)) {
+            if ($update_status != 1 and isset($this->odeslano)) {
                 $ip = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
@@ -1200,7 +1197,7 @@ class objekt extends adminator
                 $this->action_info .= "<div style=\"color: orange; \"><h4>UPOZORNĚNÍ: Tento přípojný bod je přetížen. </h4></div>";
             } elseif ($stav_nodu == 3) {
                 $this->action_fail = "true";
-                $this->action_error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";
+                $this->p_bs_alerts["<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný."] = "danger";
             }
 
         // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
@@ -1240,9 +1237,7 @@ class objekt extends adminator
         } // konec if jestli id_cloveka > 1 and update == 1
 
         //checkem jestli se macklo na tlacitko "OK" :)
-        if(preg_match("/^OK*/", $this->odeslano) or isset($this->action_fail)) {
-            $output .= "";
-        } else {
+        if(!preg_match("/^OK*/", $this->odeslano) and !isset($this->action_fail)) {
             $this->action_fail = "true";
             $this->action_error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
         }
@@ -1395,6 +1390,7 @@ class objekt extends adminator
         } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif(isset($this->send)) :
+            $this->action_fail = "true";
             $this->p_bs_alerts["Chybí povinné údaje! </br>(aktuálně jsou povinné: dns, ip adresa, přípojný bod, tarif)"] = "danger";
         endif;
 
