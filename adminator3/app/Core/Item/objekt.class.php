@@ -3859,7 +3859,7 @@ class objekt extends adminator
     {
         if (filter_var($mac, FILTER_VALIDATE_MAC) == false) {
             $this->action_fail = "true";
-            $this->p_bs_alerts["MAC adresa (".$mac.") není ve správném formátu! ( Správný formát je: 00:00:64:65:73:74)"] = "danger";
+            $this->p_bs_alerts["MAC adresa (".$mac.") není ve správném formátu! </br>(Správný formát je: 00:00:64:65:73:74)"] = "danger";
         }
 
         //konec funkce check-mac
