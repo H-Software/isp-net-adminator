@@ -65,13 +65,11 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(92)) {
+        if(!$this->checkLevel(302)) {
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Rozcestnik");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci :: Rozcestnik"];
 
         $vlastnik2 = new \vlastnik2($this->container);
 
@@ -80,19 +78,22 @@ class vlastniciController extends adminatorController
 
         $rs = $vlastnik2->crossCheckVars();
 
-        if($rs === false) {
+        if($rs == false) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": crossCheckVars failed.");
 
-            $this->smarty->assign("alert_type", $vlastnik2->alert_type);
-            $this->smarty->assign("alert_content", $vlastnik2->alert_content);
+            $assignData["alert_type"] = $vlastnik2->alert_type;
+            $assignData["alert_content"] = $vlastnik2->alert_content;
 
-            $this->smarty->display("vlastnici/cross-alert.tpl");
+            $rendererTemplateName = "vlastnici/cross-alert.tpl";
         } else {
+            // TODO: remove echo-ing into stdout
             $rs = $vlastnik2->crossRun();
+            $rendererTemplateName = "global/empty.tpl";
         }
 
-        return $response;
+        return $this->renderer->template($request, $response, $rendererTemplateName, $assignData);
     }
+
     public function search(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
