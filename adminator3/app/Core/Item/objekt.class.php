@@ -924,7 +924,8 @@ class objekt extends adminator
         } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif(isset($this->send)) :
-            $this->action_error = "<h4>Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) </H4>";
+            $this->action_error = "";
+            $this->p_bs_alerts["Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) "] = "danger";
         endif;
 
         if ($update_status == 1) {

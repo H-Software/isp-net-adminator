@@ -13,3 +13,7 @@
     <div class="row">
         <div class="col"></div>
         <div class="col-{$bs_layout_main_col_count|default:'10'}">
+
+        {if $p_bs_alerts|default:'0' }
+            {include file="partials/bootstrap-alert-with-columns-array.tpl"}
+        {/if}
