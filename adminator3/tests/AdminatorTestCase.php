@@ -173,7 +173,7 @@ abstract class AdminatorTestCase extends TestCase
 
         foreach ($assertKeywordsCommon as $w) {
 
-            $this->assertStringContainsString($w, $responseContent, __FUNCTION__ . " :: missing string \"" . $w . "\" in response body");
+            $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
 
             // if (!str_contains($responseContent, $w)) {
             //     $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
@@ -189,7 +189,7 @@ abstract class AdminatorTestCase extends TestCase
 
         // some words missing, because NoLoginPage and etc
         foreach ($assertDeniedKeywordsCommon as $w) {
-            $this->assertStringNotContainsStringIgnoringCase($w, $responseContent, __FUNCTION__ . " :: found word (" . $w. "), which indicates error(s) or failure(s)");
+            $this->assertStringNotContainsStringIgnoringCase($w, $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
         }
 
         // test sqlite migration

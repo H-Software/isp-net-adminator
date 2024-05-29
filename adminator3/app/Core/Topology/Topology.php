@@ -603,16 +603,16 @@ class Topology extends adminator
 
                 $router_id = $zaznam["router_id"];
 
-                if ($router_id <= 0) {
-                    $router_nazev = "<span style=\"color: red\">nelze zjistit </span>";
-                    $router_ip = "";
-                } else {
+                $router_nazev = "<span style=\"color: red\">nelze zjistit </span>";
+                $router_ip = "";
 
+                if ($router_id > 1) {
                     try {
                         $vysledek_router = $this->pdoMysql->query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
                         $data_router = $vysledek_router->fetchAll();
                     } catch (Exception $e) {
                         $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Database query failed! Caught exception: " . $e->getMessage());
+                        $data_router = [];
                     }
                     foreach ($data_router as $row => $item) {
                         $router_nazev = $item["nazev"];

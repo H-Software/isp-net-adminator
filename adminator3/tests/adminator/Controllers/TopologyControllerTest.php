@@ -103,8 +103,9 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertStringContainsString('<td><form action="/topology/nod-erase" method="POST"', $responseContent);
 
         // non-common negative asserts
-        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, __FUNCTION__ . " :: found word, which indicates error(s) or failure(s)");
-        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, __FUNCTION__ . " :: found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nelze zjistit", $responseContent, "unable to show parent router name");
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
 
         // no data assert
         // $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent, "missing no-data message container");
