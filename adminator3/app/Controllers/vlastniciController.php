@@ -86,7 +86,6 @@ class vlastniciController extends adminatorController
 
             $rendererTemplateName = "vlastnici/cross-alert.tpl";
         } else {
-            // TODO: remove echo-ing into stdout
             $rs = $vlastnik2->crossRun();
             $rendererTemplateName = "global/empty.tpl";
         }
