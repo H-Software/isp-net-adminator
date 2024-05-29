@@ -703,7 +703,7 @@ class adminator
 
         exec("scripts/ping.sh ".$router_ip, $ping_output, $ping_ret);
 
-        if(isEmpty($ping_output)) {
+        if(empty($ping_output)) {
             // ping failed
             return [false, "Chyba! Příkaz Ping se nepodařilo provést."];
         }
