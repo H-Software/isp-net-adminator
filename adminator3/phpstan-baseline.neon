@@ -82,7 +82,7 @@ parameters:
 
 		-
 			message: "#^Binary operation \"\\+\" between string and 2 results in an error\\.$#"
-			count: 1
+			count: 2
 			path: app/Core/Item/objekt.class.php
 
 		-

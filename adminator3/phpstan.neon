@@ -28,13 +28,13 @@ parameters:
 		message: "#^Call to an undefined static method App\\\\Models\\\\.*$#"
 		path: app/*
 	# broken only generate data
-	-
-		message: "#^Function mysql_.* not found\\.$#"
-		path: app/Core/Item/objektypridani.class.php
-	-
-		message: "#^Function split not found\\.$#"
-		count: 2
-		path: app/Core/Item/objektypridani.class.php
+	# -
+	# 	message: "#^Function mysql_.* not found\\.$#"
+	# 	path: app/Core/Item/objektypridani.class.php
+	# -
+	# 	message: "#^Function split not found\\.$#"
+	# 	count: 2
+	# 	path: app/Core/Item/objektypridani.class.php
 	# false positive and etc
 	-
 		message: "#^Parameter \\#1 \\$app of class Illuminate\\\\Cache\\\\CacheManager constructor expects Illuminate\\\\Contracts\\\\Foundation\\\\Application, Illuminate\\\\Container\\\\Container given\\.$#"
