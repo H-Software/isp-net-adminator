@@ -902,15 +902,20 @@ class RouterAction extends adminator
             $pole3 .= " <b>nebyly provedeny žádné změny</b> ";
         }
 
-        $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-                    "('".$this->conn_mysql->real_escape_string($pole3)."',".
-                    "'". $this->loggedUserEmail ."',".
-                    "'". $vysledek_write ."') ");
+        try {
+            $add = $this->conn_mysql->query(
+                "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
+                . "VALUES ('" . $this->conn_mysql->real_escape_string($pole3) ."', '" . $this->loggedUserEmail . "', '$vysledek_write') "
+            );
+            $db_error = "";
+        } catch (Exception $e) {
+            $db_error = '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
+        }
 
         if($add) {
             $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
         } else {
-            $this->p_bs_alerts["Akci se nepodařilo zaznamenat do archivu změn."] = "warning";
+            $this->p_bs_alerts["Akci se nepodařilo zaznamenat do archivu změn." . $db_error] = "warning";
         }
     }
 
@@ -923,7 +928,7 @@ class RouterAction extends adminator
         try {
             $add = $this->conn_mysql->query(
                 "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
-                                    . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
+                . "VALUES ('" . $this->conn_mysql->real_escape_string($pole) ."', '" . $this->loggedUserEmail . "', '$vysledek_write') "
             );
             $db_error = "";
         } catch (Exception $e) {
