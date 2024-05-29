@@ -63,8 +63,6 @@ class RouterAction extends adminator
         $output = "";
         $http_status_code = 200;
 
-        $output .= "<div style=\"padding-bottom: 10px; font-size: 18px; \">Přidání/úprava routeru</div>";
-
         $this->loadFormData();
 
         if($this->form_odeslat == "OK") { // zda je odesláno
@@ -200,23 +198,15 @@ class RouterAction extends adminator
             }
 
             //test api a spravnosti konfigurace routeru
-            // TODO: fix this
-            // $rs_test = $ag->test_router_for_monitoring($update_id);
-            if(is_callable(adminator::test_router_for_monitoring($this->conn_mysql, $this->form_update_id))) {
-                $rs_test = [false, "1"];
-            } else {
-                $rs_test = [true, "1"];
-            }
+            $rs_test = adminator::test_router_for_monitoring($this->conn_mysql, $this->form_ip_adresa);
 
-            if($rs_test[0]) {
-                echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                    "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
+            if($rs_test[0] == false) {
+                $text = "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.";
+                $text .= "<div style=\"color: grey;\" >výpis testu: <pre>".htmlspecialchars($rs_test[1])."</pre></div>";
 
-                echo "<div style=\"color: grey;\" >výpis testu: <pre>".htmlspecialchars($rs_test[1])."</pre></div>";
-
+                $this->p_bs_alerts[$text] = "danger";
                 $this->form_error = 1;
-            } //end if rs_test === false
-
+            }
         } //end od if monitoring == 1
 
         //nadrazený router musí být vyplnen
@@ -264,7 +254,7 @@ class RouterAction extends adminator
 
         //povinné údaje
         if((strlen($this->form_nazev) == 0) or (strlen($this->form_ip_adresa) == 0) or (strlen($this->form_parent_router) == 0)) {
-            $this->p_bs_alerts["Nejsou vyplněny všechny potřebné údaje. (Název, IP adresa, Nadřazený router)"] = "danger";
+            $this->p_bs_alerts["Nejsou vyplněny všechny potřebné údaje. </br>(Název, IP adresa, Nadřazený router)"] = "danger";
             $this->form_error = 1;
         }
     }
@@ -357,7 +347,7 @@ class RouterAction extends adminator
 
         $output .= "<select name=\"monitoring_cat\" size=\"1\" >";
 
-        $dotaz_cat = $this->conn_mysql->query("SELECT * FROM kategorie WHERE sablona LIKE 4 order by id");
+        $dotaz_cat = $this->conn_mysql->query("SELECT * FROM kategorie WHERE sablona = 4 order by id");
 
         $output .= "<option value=\"0\" class=\"select-nevybrano\"> Není zvoleno </option>";
 
@@ -656,6 +646,12 @@ class RouterAction extends adminator
             // TODO: fix this
             // require("topology-router-add-inc-archiv-zmen.php");
 
+            // if($id > 0) {
+            //     $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
+            // } else {
+            //     $this->p_bs_alerts["Chyba! Akci se nepodařilo zaznamenat do archivu změn."] = "danger";
+            // }
+
             //automatické restarty
             // TODO: fix this
             // if( ereg(".*změna.*Alarmu.*z.*", $pole3) )
@@ -722,14 +718,7 @@ class RouterAction extends adminator
             }
 
             // pridame to do archivu zmen
-            $pole = "<b>akce: pridani routeru;</b><br>";
-            $pole .= " nazev: ".$this->form_nazev.", ip adresa: ".$this->form_ip_adresa.", monitoring: ".$this->form_monitoring.", monitoring_cat: ".$this->form_monitoring_cat;
-            $pole .= " alarm: ".$this->form_alarm.", parent_router: ".$this->form_parent_router.", mac: ".$this->form_mac.", filtrace: ".$this->form_filtrace.", id_nodu: ".$this->form_selected_nod;
-
-            $add = $this->conn_mysql->query(
-                "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
-                                    . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
-            );
+            $this->actionArchivZmenAdd($vysledek_write);
 
             // TODO: fix this
 
@@ -757,5 +746,28 @@ class RouterAction extends adminator
         } //konec if/else update_id > 0
 
         return [$output, true];
+    }
+
+    // private function actionArchivZmenDiff()
+    // {
+
+    // }
+
+    private function actionArchivZmenAdd(int $vysledek_write): void
+    {
+        $pole = "<b>akce: pridani routeru;</b><br>";
+        $pole .= " nazev: ".$this->form_nazev.", ip adresa: ".$this->form_ip_adresa.", monitoring: ".$this->form_monitoring.", monitoring_cat: ".$this->form_monitoring_cat;
+        $pole .= " alarm: ".$this->form_alarm.", parent_router: ".$this->form_parent_router.", mac: ".$this->form_mac.", filtrace: ".$this->form_filtrace.", id_nodu: ".$this->form_selected_nod;
+
+        $add = $this->conn_mysql->query(
+            "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
+                                . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
+        );
+
+        if($add) {
+            $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
+        } else {
+            $this->p_bs_alerts["Chyba! Akci se nepodařilo zaznamenat do archivu změn."] = "danger";
+        }
     }
 }

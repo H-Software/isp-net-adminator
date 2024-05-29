@@ -674,30 +674,17 @@ class adminator
         } //if format of ip address doesn't matches
     }
 
-    public static function test_router_for_monitoring(\mysqli|\PDO $conn_mysql, int $router_id)
+    public static function test_router_for_monitoring(\mysqli|\PDO $conn_mysql, string $router_ip): array
     {
-
         $ret_array = array();
 
         //default hodnoty, ktere se pripadne prepisou..
         //        $ret_array[0] = true;
         //    $ret_array[1] = "Všechny testy v pořádku! \n";
 
-        $router_id = intval($router_id);
-
-        $rs_q = $conn_mysql->query("SELECT ip_adresa, id FROM router_list WHERE id = '".$router_id."'");
-        $rs_q_num = $rs_q->num_rows;
-
-        if($rs_q_num <> 1) {
-            $ret_array[0] = false;
-            $ret_array[1] = "Chyba! Nelze najít router dle předaných parametrů (id: ".$router_id.") \n";
-
-            return $ret_array;
+        if (filter_var($router_ip, FILTER_VALIDATE_IP) == false) {
+            return [false, "Chyba! \"$router_ip\" is not a valid IP address\n"];
         }
-
-        // $router_ip = mysql_result($rs_q, 0, 0);
-        $rs_q->data_seek(0);
-        list($router_ip) = $rs_q->fetch_row();
 
         $rs_login = $conn_mysql->query("SELECT value FROM settings WHERE name IN ('routeros_api_login_name', 'routeros_api_login_password') ");
 
@@ -714,11 +701,16 @@ class adminator
 
         exec("scripts/ping.sh ".$router_ip, $ping_output, $ping_ret);
 
+        if(empty($ping_output)) {
+            // ping failed
+            return [false, "Chyba! Příkaz Ping se nepodařilo provést."];
+        }
+
         if(!($ping_output[0] > 0)) {
             //  NENI ODEZVA NA PING
 
             $ret_array[0] = false;
-            $ret_array[1] = "Chyba! Router neodpovídá na odezvu Ping (id: ".$router_id.", ping: ".$ping_output[0].")";
+            $ret_array[1] = "Chyba! Router neodpovídá na odezvu Ping (IP adresa: ".$router_ip.", ping: ".$ping_output[0].")";
 
             return $ret_array;
         }

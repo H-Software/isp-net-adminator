@@ -558,9 +558,9 @@ class stb extends adminator
             $azRes = $az->insertItemDiff(3, $dataOrigDb, $data, $params);
 
             if(is_object($azRes)) {
-                $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+                $output .= "<br><H3><div style=\"color: green;\" >Akce byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
             } else {
-                $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
+                $output .= "<br><H3><div style=\"color: red;\" >Chyba! Akci se nepodařilo přidat do archivu změn.</div></H3>\n";
             }
 
         } else {
