@@ -329,4 +329,15 @@ class work
 
         return array($output);
     }
+
+    // public function workActionTopologyRouterAdd(): array
+    // {
+
+    // }
+
+    // public function workActionTopologyRouterDiff(): array
+    // {
+
+    // }
+
 }
