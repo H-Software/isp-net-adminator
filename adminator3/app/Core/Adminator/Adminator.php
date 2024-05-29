@@ -685,10 +685,7 @@ class adminator
         //    $ret_array[1] = "Všechny testy v pořádku! \n";
 
         if (filter_var($router_ip, FILTER_VALIDATE_IP) == false) {
-            $ret_array[0] = false;
-            $ret_array[1] = "Chyba! \"$router_ip\" is not a valid IP address\n";
-
-            return $ret_array;
+            return [false, "Chyba! \"$router_ip\" is not a valid IP address\n"];
         }
 
         $rs_login = $conn_mysql->query("SELECT value FROM settings WHERE name IN ('routeros_api_login_name', 'routeros_api_login_password') ");

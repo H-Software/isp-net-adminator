@@ -200,7 +200,7 @@ class RouterAction extends adminator
             //test api a spravnosti konfigurace routeru
             $rs_test = adminator::test_router_for_monitoring($this->conn_mysql, $this->form_ip_adresa);
 
-            if($rs_test[0]) {
+            if($rs_test[0] == false) {
                 $text = "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
                     "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
 
