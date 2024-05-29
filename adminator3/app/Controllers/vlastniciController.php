@@ -90,7 +90,7 @@ class vlastniciController extends adminatorController
             list($output) = $vlastnik2->crossRun();
             $assignData["pageContent"] = $output;
             $rendererTemplateName = "global/empty.tpl";
-            $http_status_code = 200;
+            $http_status_code = 302;
         }
 
         return $this->renderer->template($request, $response, $rendererTemplateName, $assignData, $http_status_code);
