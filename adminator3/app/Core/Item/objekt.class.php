@@ -110,6 +110,8 @@ class objekt extends adminator
 
     private $action_error;
 
+    public $p_bs_alerts = array(); // partial -> boostrap alerts
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -344,7 +346,8 @@ class objekt extends adminator
     {
         $output = "";
         $exportLink = "";
-
+        $error = "";
+        
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
 
         // checking levels for update/erase/..
@@ -612,11 +615,11 @@ class objekt extends adminator
                 $MSQ_IP = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE ip <<= '$this->ip_find' ");
 
                 if (pg_num_rows($MSQ_DNS) > 0) {
-                    $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
+                    $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
                 if (pg_num_rows($MSQ_IP) > 0) {
-                    $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
+                    $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
 
@@ -626,11 +629,11 @@ class objekt extends adminator
                     $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE tunnel_pass LIKE '$tunnel_pass' ");
 
                     if(pg_num_rows($MSQ_TUNNEL_USER) > 0) {
-                        $error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
+                        $this->action_error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
                         $fail = "true";
                     }
                     if(pg_num_rows($MSQ_TUNNEL_PASS) > 0) {
-                        $error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>";
+                        $this->action_error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>";
                         $fail = "true";
                     }
                 }
@@ -646,11 +649,11 @@ class objekt extends adminator
                 $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '".intval($this->update_id)."' ) ");
 
                 if(pg_num_rows($MSQ_DNS2) > 0) {
-                    $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
+                    $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
                 if(pg_num_rows($MSQ_IP2) > 0) {
-                    $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
+                    $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
 
@@ -660,11 +663,11 @@ class objekt extends adminator
                     $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE ( tunnel_pass LIKE '$tunnel_pass' AND id_komplu != '".intval($this->update_id)."' ) ");
 
                     if(pg_num_rows($MSQ_TUNNEL_USER) > 0) {
-                        $error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
+                        $this->action_error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
                         $fail = "true";
                     }
                     if(pg_num_rows($MSQ_TUNNEL_PASS) > 0) {
-                        $error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>";
+                        $this->action_error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>";
                         $fail = "true";
                     }
                 }
@@ -685,7 +688,7 @@ class objekt extends adminator
                 $this->action_info .= "<div style=\"color: orange; \"><h4>UPOZORNĚNÍ: Tento přípojný bod je přetížen. </h4></div>";
             } elseif ($stav_nodu == 3) {
                 $fail = "true";
-                $error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";
+                $this->action_error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";
             }
 
         // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
@@ -718,7 +721,7 @@ class objekt extends adminator
 
                 if((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
                     $fail = "true";
-                    $error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka pole \"Pozastavené fakturace\". </div>";
+                    $this->action_error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka pole \"Pozastavené fakturace\". </div>";
                 }
             }
 
@@ -729,7 +732,7 @@ class objekt extends adminator
             $output .= "";
         } else {
             $fail = "true";
-            $error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
+            $this->action_error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
         }
 
         //ulozeni
@@ -921,7 +924,7 @@ class objekt extends adminator
         } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif(isset($this->send)) :
-            $error = "<h4>Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) </H4>";
+            $this->action_error = "<h4>Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) </H4>";
         endif;
 
         if ($update_status == 1) {
@@ -931,8 +934,8 @@ class objekt extends adminator
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if((isset($error)) or (!isset($this->send))) :
-            $output .= $error;
+        if((isset($this->action_error)) or (!isset($this->send))) :
+            $output .= $this->action_error;
 
             $output .= $this->action_info;
 
@@ -1151,11 +1154,11 @@ class objekt extends adminator
                 $MSQ_IP = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ip <<= '" . $ip ."' ");
 
                 if (pg_num_rows($MSQ_DNS) > 0) {
-                    $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
+                    $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
                 if (pg_num_rows($MSQ_IP) > 0) {
-                    $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
+                    $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
             }
@@ -1169,11 +1172,11 @@ class objekt extends adminator
                 $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$ip' AND id_komplu != '$this->update_id' ) ");
 
                 if(pg_num_rows($MSQ_DNS2) > 0) {
-                    $error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
+                    $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
                 if(pg_num_rows($MSQ_IP2) > 0) {
-                    $error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
+                    $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $fail = "true";
                 }
             }
@@ -1193,7 +1196,7 @@ class objekt extends adminator
                 $this->action_info .= "<div style=\"color: orange; \"><h4>UPOZORNĚNÍ: Tento přípojný bod je přetížen. </h4></div>";
             } elseif ($stav_nodu == 3) {
                 $fail = "true";
-                $error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";
+                $this->action_error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";
             }
 
         // kontrola jestli se muze povolit inet / jestli jsou pozatavené fakturace
@@ -1225,7 +1228,7 @@ class objekt extends adminator
 
                 if((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
                     $fail = "true";
-                    $error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka fakturační skupinu. </div>";
+                    $this->action_error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka fakturační skupinu. </div>";
                 }
 
             }
@@ -1237,7 +1240,7 @@ class objekt extends adminator
             $output .= "";
         } else {
             $fail = "true";
-            $error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
+            $this->action_error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
         }
 
         //ukladani udaju ...
@@ -1388,7 +1391,7 @@ class objekt extends adminator
         } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif (isset($this->send)) :
-            $error = "<h4>Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) </H4>";
+            $this->action_error = "<h4>Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) </H4>";
         endif;
 
         if ($update_status == 1) {
@@ -1398,8 +1401,8 @@ class objekt extends adminator
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if ((isset($error)) or (!isset($this->send))) :
-            $output .= $error;
+        if ((isset($this->action_error)) or (!isset($this->send))) :
+            $output .= $this->action_error;
 
             $output .= $this->action_info;
 
@@ -3854,7 +3857,7 @@ class objekt extends adminator
     {
         if (filter_var($mac, FILTER_VALIDATE_MAC) == false) {
             $fail = "true";
-            $error .= "<div class=\"objekty-add-fail-mac\"><H4>MAC adresa ( ".$mac." ) není ve správném formátu !!! ( Správný formát je: 00:00:64:65:73:74 ) </H4></div>";
+            $this->action_error .= "<div class=\"objekty-add-fail-mac\"><H4>MAC adresa ( ".$mac." ) není ve správném formátu !!! ( Správný formát je: 00:00:64:65:73:74 ) </H4></div>";
         }
 
         //konec funkce check-mac
@@ -3866,7 +3869,7 @@ class objekt extends adminator
 
         if(($sikanacas > 9) or ($sikanacas < 1)) {
             $fail = "true";
-            $error .= "<div class=\"objekty-add-fail-mac\">".
+            $this->action_error .= "<div class=\"objekty-add-fail-mac\">".
             "<H4>Do pole \"Šikana - počet dní\" je třeba vyplnit číslo 1 až 9.</H4></div>";
         }
     } //end of function checkSikanaCas
@@ -3875,7 +3878,7 @@ class objekt extends adminator
     {
         if((strlen($sikanatext) > 150)) {
             $fail = "true";
-            $error .= "<div class=\"objekty-add-fail-mac\">".
+            $this->action_error .= "<div class=\"objekty-add-fail-mac\">".
             "<H4>Do pole \"Šikana - text\" je možno zadat max. 150 znaků. (aktuálně: ".strlen($sikanatext).")</H4></div>";
         }
     } //end of function checkSikanaText
@@ -3884,7 +3887,7 @@ class objekt extends adminator
     {
         if (filter_var($ip, FILTER_VALIDATE_IP) == false) {
             $fail = "true";
-            $error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
+            $this->action_error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
         }
     } //konec funkce check-ip
 
@@ -3894,7 +3897,7 @@ class objekt extends adminator
 
         if (!($rra_check)) {
             $fail = "true";
-            $error .= "<H4>Zadaný číselný údaj(e) ( ".$cislo." ) není ve  správném formátu !!! </H4>";
+            $this->action_error .= "<H4>Zadaný číselný údaj(e) ( ".$cislo." ) není ve  správném formátu !!! </H4>";
         }
     } //konec funkce check cislo
 
@@ -3903,7 +3906,7 @@ class objekt extends adminator
         $dns_check = preg_match('/^([[:alnum:]]|\.|-)+$/', $dns);
         if (!($dns_check)) {
             $fail = "true";
-            $error .= "<div class=\"objekty-add-fail-dns\"><H4>DNS záznam ( ".$dns." ) není ve správnem formátu !!! </H4></div>";
+            $this->action_error .= "<div class=\"objekty-add-fail-dns\"><H4>DNS záznam ( ".$dns." ) není ve správnem formátu !!! </H4></div>";
         }
     } // konec funkce check rra
 
@@ -3913,12 +3916,12 @@ class objekt extends adminator
 
         if(!($cr_check)) {
             $fail = "true";
-            $error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) není ve správnem formátu !!! </H4></div>";
+            $this->action_error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) není ve správnem formátu !!! </H4></div>";
         }
 
         if((strlen($cr) <> 4)) {
             $fail = "true";
-            $error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky !!! </H4></div>";
+            $this->action_error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky !!! </H4></div>";
         }
     } //konec funkce check_l2tp_cr
 }
