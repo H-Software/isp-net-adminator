@@ -287,6 +287,7 @@ class vlastnik2 extends adminator
             $this->alert_content = "Chyba! Nesouhlasi vstupni data. (akce) ";
             return false;
         }
+
         return true;
     }
 

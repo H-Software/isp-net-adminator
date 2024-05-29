@@ -13,9 +13,10 @@ class vlastniciController extends adminatorController
     public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $smarty;
+
     public \Monolog\Logger $logger;
 
-    protected $sentinel;
+    // protected $sentinel;
 
     protected $adminator;
 
@@ -31,7 +32,7 @@ class vlastniciController extends adminatorController
 
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
-        $this->sentinel = $this->container->get('sentinel');
+        // $this->sentinel = $this->container->get('sentinel');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -40,7 +41,7 @@ class vlastniciController extends adminatorController
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("vlastniciController\cat called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -49,15 +50,12 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
+        $assignData = array(
+            "page_title" => "Adminator3 :: Zákazníci",
+            "body" => "Prosím vyberte z podkategorie výše...."
+        );
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("body", "Prosím vyberte z podkategorie výše....");
-
-        $this->smarty->display('vlastnici/vlastnici-cat.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/vlastnici-cat.tpl', $assignData);
     }
 
     public function cross(ServerRequestInterface $request, ResponseInterface $response, array $args)
@@ -67,13 +65,11 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(92)) {
+        if(!$this->checkLevel(302)) {
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Rozcestnik");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci :: Rozcestnik"];
 
         $vlastnik2 = new \vlastnik2($this->container);
 
@@ -82,23 +78,24 @@ class vlastniciController extends adminatorController
 
         $rs = $vlastnik2->crossCheckVars();
 
-        if($rs === false) {
+        if($rs == false) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": crossCheckVars failed.");
 
-            $this->smarty->assign("alert_type", $vlastnik2->alert_type);
-            $this->smarty->assign("alert_content", $vlastnik2->alert_content);
+            $assignData["alert_type"] = $vlastnik2->alert_type;
+            $assignData["alert_content"] = $vlastnik2->alert_content;
 
-            $this->smarty->display("vlastnici/cross-alert.tpl");
+            $rendererTemplateName = "vlastnici/cross-alert.tpl";
         } else {
+            // TODO: remove echo-ing into stdout
             $rs = $vlastnik2->crossRun();
+            $rendererTemplateName = "global/empty.tpl";
         }
 
-        return $response;
+        return $this->renderer->template($request, $response, $rendererTemplateName, $assignData);
     }
+
     public function search(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $bodyContent = "";
-
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
@@ -108,9 +105,7 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: hledání");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci :: hledání"];
 
         $vlastnikfind = new \vlastnikfind();
         $vlastnikfind->conn_mysql = $this->conn_mysql;
@@ -131,23 +126,19 @@ class vlastniciController extends adminatorController
         // $sql = $this->conn_mysql->real_escape_string($find);
 
         if (empty($_GET["najdi"])) {
-            $this->smarty->assign("form_find", "%");
+            $assignData["form_find"] = "%";
         } else {
-            $this->smarty->assign("form_find", htmlspecialchars($find));
+            $assignData["form_find"] = htmlspecialchars($find);
         }
 
-        $this->smarty->assign("form_select", $form_select);
-        $this->smarty->assign("form_razeni", $form_razeni);
-        $this->smarty->assign("form_razeni2", $form_razeni2);
+        $assignData["form_select"] = $form_select;
+        $assignData["form_razeni"] = $form_razeni;
+        $assignData["form_razeni2"] = $form_razeni2;
 
         if(empty($_GET["find"])) {
-            $body = "Zadejte výraz k vyhledání.... <br>";
+            $assignData["bodyNoData"] = "Zadejte výraz k vyhledání.... <br>";
 
-            $this->smarty->assign("bodyNoData", $body);
-
-            $this->smarty->display('vlastnici/hledani.tpl');
-
-            return $response;
+            return $this->renderer->template($request, $response, 'vlastnici/hledani.tpl', $assignData);
         }
 
         $sql = "%".htmlspecialchars($find)."%";
@@ -207,10 +198,10 @@ class vlastniciController extends adminatorController
         }
 
         $bc1 = $vlastnikfind->vypis_tab(1);
-        $this->smarty->assign("body1", $bc1);
+        $assignData["body1"] = $bc1;
 
         $bc2 = $vlastnikfind->vypis($sql, $dotaz_source);
-        $this->smarty->assign("body2", $bc2);
+        $assignData["body2"] = $bc2;
 
         $sql = "".$sql."";
         $select1 = " WHERE firma is not NULL AND ( archiv = 0 or archiv is null ) AND ";
@@ -227,27 +218,24 @@ class vlastniciController extends adminatorController
         }
 
         $bc3 = $vlastnikfind->vypis($sql, $dotaz_source);
-        $this->smarty->assign("body3", $bc3);
+        $assignData["body3"] = $bc3;
 
         $sql = "".$sql."";
         $dotaz_source = "26058677";
 
         $bc4 = $vlastnikfind->vypis($sql, $dotaz_source, "2");
-        $this->smarty->assign("body4", $bc4);
+        $assignData["body4"] = $bc4;
 
         $bc5 = $vlastnikfind->vypis_tab(2);
-        $this->smarty->assign("body5", $bc5);
+        $assignData["body5"] = $bc5;
 
-        $this->smarty->display('vlastnici/hledani.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/hledani.tpl', $assignData);
     }
 
     public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $bodyContent = "";
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->logger->info("vlastniciController\\vlastnici called");
         $this->request = $request;
         $this->response = $response;
 
@@ -255,9 +243,7 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci"];
 
         $vlastnik = new \vlastnik();
         $vlastnik->conn_mysql = $this->conn_mysql;
@@ -269,11 +255,11 @@ class vlastniciController extends adminatorController
         $vlastnik->csrf_html = $csrf_html;
 
         if ($this->adminator->checkLevel(64) === true) {
-            $this->smarty->assign("vlastnici_export_povolen", "true");
+            $assignData["vlastnici_export_povolen"] = "true";
         }
 
         if ($this->adminator->checkLevel(40) === true) {
-            $this->smarty->assign("vlastnici_pridani_povoleno", "true");
+            $assignData["vlastnici_pridani_povoleno"] = "true";
         }
 
         $find_id = $_GET["find_id"];
@@ -296,14 +282,14 @@ class vlastniciController extends adminatorController
         }
 
         if (empty($_GET["find"])) {
-            $this->smarty->assign("form_find", "%");
+            $assignData["form_find"] = "%";
         } else {
-            $this->smarty->assign("form_find", htmlspecialchars($find));
+            $assignData["form_find"] = htmlspecialchars($find);
         }
 
-        $this->smarty->assign("select", $form_select);
-        $this->smarty->assign("razeni", $form_razeni);
-        $this->smarty->assign("razeni2", $form_razeni2);
+        $assignData["select"] = $form_select;
+        $assignData["razeni"] = $form_razeni;
+        $assignData["razeni2"] = $form_razeni2;
 
         //promena pro update objektu
         if ($this->adminator->checkLevel(29) === true) {
@@ -393,13 +379,9 @@ class vlastniciController extends adminatorController
         } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($sql) ."' AND firma is null AND ( archiv = 0 or archiv is null )";
         } else {
-            $body = "<div style=\"padding-top: 20px; padding-bottom: 20px; \">Zadejte výraz k vyhledání.... </div>";
+            $assignData["body"] = "<div style=\"padding-top: 20px; padding-bottom: 20px; \">Zadejte výraz k vyhledání.... </div>";
 
-            $this->smarty->assign("body", $body);
-
-            $this->smarty->display('vlastnici/vlastnici.tpl');
-
-            return $response;
+            return $this->renderer->template($request, $response, 'vlastnici/vlastnici.tpl', $assignData);
         }
 
         $list = $_GET["list"];
@@ -420,7 +402,7 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
 
-        $bodyContent .= $listovani->listInterval();
+        $bodyContent = $listovani->listInterval();
 
         $bodyContent .= $vlastnik->vypis_tab(1);
 
@@ -430,17 +412,14 @@ class vlastniciController extends adminatorController
 
         $bodyContent .= $listovani->listInterval();
 
-        $this->smarty->assign("body", $bodyContent);
+        $assignData["body"] = $bodyContent;
 
-        $this->smarty->display('vlastnici/vlastnici.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/vlastnici.tpl', $assignData);
     }
 
     public function vlastnici2(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
-        $this->logger->info("vlastniciController\\vlastnici2 called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -449,9 +428,7 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci 2");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci 2"];
 
         $vlastnik2 = new \vlastnik2($this->container);
         $vlastnik2->adminator = $this->adminator;
@@ -472,22 +449,21 @@ class vlastniciController extends adminatorController
             $fu_select = "1";
         } //pouze DU
 
-        $this->smarty->assign("select", $select);
-        $fakt_skupiny = $fs->show_fakt_skupiny($fu_select);
+        $assignData["select"] = $select;
 
-        $this->smarty->assign("fakt_skupiny", $fakt_skupiny);
+        $assignData["fakt_skupiny"] = $fs->show_fakt_skupiny($fu_select);
 
-        $this->smarty->assign("fakt_skupiny_selected", $_GET['fakt_skupina']);
+        $assignData["fakt_skupiny_selected"] = $_GET['fakt_skupina'];
 
-        $this->smarty->assign("razeni", $_GET['razeni']);
-        $this->smarty->assign("razeni2", $_GET['razeni2']);
+        $assignData["razeni"] = $_GET['razeni'];
+        $assignData["razeni2"] = $_GET['razeni2'];
 
         if ($this->adminator->checkLevel(63) === true) {
-            $this->smarty->assign("vlastnici2_export_povolen", "true");
+            $assignData["vlastnici2_export_povolen"] = "true";
         }
 
         if ($this->adminator->checkLevel(40) === true) {
-            $this->smarty->assign("vlastnici2_pridani_povoleno", "true");
+            $assignData["vlastnici2_pridani_povoleno"] = "true";
         }
 
         if(empty($_GET["find"])) {
@@ -499,20 +475,17 @@ class vlastniciController extends adminatorController
         // main table
         $bodyContent = $vlastnik2->listItems();
 
-        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": vlastnik2->listSql: " . var_export($vlastnik2->listSql, true));
+        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": vlastnik2->listSql: " . var_export($vlastnik2->listSql, true));
 
-        $this->smarty->assign("form_search_value", preg_replace('/^(%)(.*)(%)$/', '\2', $vlastnik2->listSql));
+        $assignData["form_search_value"] = preg_replace('/^(%)(.*)(%)$/', '\2', $vlastnik2->listSql);
 
-        $this->smarty->assign("body", $bodyContent);
+        $assignData["body"] = $bodyContent;
 
-        $this->smarty->display('vlastnici/vlastnici2.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/vlastnici2.tpl', $assignData);
     }
 
     public function change(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
@@ -522,30 +495,24 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Update");
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci :: Update"];
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("enable_calendar2", 1);
+        $assignData["enable_calendar2"] = 1;
 
         $vlastnik2 = new \vlastnici2pridani($this->container, $this->adminator);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $vlastnik2->csrf_html = $csrf_html;
 
-        $bodyContent = $vlastnik2->action();
+        $assignData["body"] = $vlastnik2->action();
 
-        $this->smarty->assign("body", $bodyContent);
+        $assignData["p_bs_alerts"] = $vlastnik2->p_bs_alerts;
 
-        $this->smarty->assign("p_bs_alerts", $vlastnik2->p_bs_alerts);
-
-        $this->smarty->display('vlastnici/change.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/change.tpl', $assignData);
     }
 
     public function archiv(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("vlastniciController\\fakturacniSkupiny called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -554,9 +521,7 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Archiv");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci :: Archiv"];
 
         $vlastnikArchiv = new \vlastnikarchiv();
         $vlastnikArchiv->conn_mysql = $this->conn_mysql;
@@ -590,14 +555,14 @@ class vlastniciController extends adminatorController
         }
 
         if (empty($_GET["find"])) {
-            $this->smarty->assign("form_find", "%");
+            $assignData["form_find"] = "%";
         } else {
-            $this->smarty->assign("form_find", htmlspecialchars($find));
+            $assignData["form_find"] = htmlspecialchars($find);
         }
 
-        $this->smarty->assign("form_select", $form_select);
-        $this->smarty->assign("form_razeni", $form_razeni);
-        $this->smarty->assign("form_razeni2", $form_razeni2);
+        $assignData["form_select"] = $form_select;
+        $assignData["form_razeni"] = $form_razeni;
+        $assignData["form_razeni2"] = $form_razeni2;
 
         //promena pro update objektu
         if ($this->adminator->checkLevel(29) === true) {
@@ -696,13 +661,9 @@ class vlastniciController extends adminatorController
         } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM vlastnici WHERE archiv = '1' AND id_cloveka = '$sql' ";
         } else {
-            $body = "Zadejte výraz k vyhledání.... <br>";
+            $assignData["body"] = "Zadejte výraz k vyhledání.... <br>";
 
-            $this->smarty->assign("body", $body);
-
-            $this->smarty->display('vlastnici/archiv.tpl');
-
-            return $response;
+            return $this->renderer->template($request, $response, 'vlastnici/archiv.tpl', $assignData);
         }
 
         // global $list;
@@ -724,23 +685,20 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-        $this->smarty->assign("listing", $listovani->listInterval());
+        $assignData["listing"] = $listovani->listInterval();
 
         $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
         $bodyContent .= $vlastnikArchiv->vypis_tab(2);
 
-        $this->smarty->assign("body", $bodyContent);
+        $assignData["body"] = $bodyContent;
 
-        $this->smarty->display('vlastnici/archiv.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/archiv.tpl', $assignData);
     }
 
     public function fakturacniSkupiny(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
-        $this->logger->info("vlastniciController\\fakturacniSkupiny called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -749,9 +707,9 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: fakturační skupiny");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = [
+            "page_title" => "Adminator3 :: Zákazníci :: fakturační skupiny"
+        ];
 
         // list logic
         //
@@ -759,25 +717,18 @@ class vlastniciController extends adminatorController
         $fs_items = $fs->getItems();
 
         if(empty($fs_items)) {
-            $this->smarty->assign("message_no_items", "Nebyly nalezeny žádné fakturační skupiny");
-            $this->smarty->display('vlastnici/fakturacni-skupiny.tpl');
-            return $response;
+            $assignData["message_no_items"] = "Nebyly nalezeny žádné fakturační skupiny";
+            return $this->renderer->template($request, $response, 'vlastnici/fakturacni-skupiny.tpl', $assignData);
         }
 
-        $this->smarty->assign("fs_items", $fs_items);
+        $assignData["fs_items"] = $fs_items;
 
-        // debug
-        // $this->smarty->assign("fs_items_debug","<pre>" . var_export($fs_items,true). "</pre>");
-
-        $this->smarty->display('vlastnici/fakturacni-skupiny/list.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/fakturacni-skupiny/list.tpl', $assignData);
     }
 
     public function fakturacniSkupinyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
-        $this->logger->info("vlastniciController\\fakturacniSkupinyAction called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -786,21 +737,18 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: . :: fakturační skupiny :: Action");
-
-        $this->header($request, $response, $this->adminator);
-
         $fs = new \App\Customer\fakturacniSkupiny($this->container);
         $fs->csrf_html = $this->generateCsrfToken($request, $response, true);
         $fs->adminator = $this->adminator;
 
         $fs_action_body = $fs->Action();
 
-        $this->smarty->assign("body", $fs_action_body);
+        $assignData = array(
+            "page_title" => "Adminator3 :: fakturační skupiny :: Action",
+            "body" => $fs_action_body
+        );
 
-        $this->smarty->display('vlastnici/fakturacni-skupiny/action.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/fakturacni-skupiny/action.tpl', $assignData);
     }
 
 }
