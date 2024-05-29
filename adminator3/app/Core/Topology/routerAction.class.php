@@ -256,7 +256,7 @@ class RouterAction extends adminator
 
         //povinné údaje
         if((strlen($this->form_nazev) == 0) or (strlen($this->form_ip_adresa) == 0) or (strlen($this->form_parent_router) == 0)) {
-            $this->p_bs_alerts["Nejsou vyplněny všechny potřebné údaje. (Název, IP adresa, Nadřazený router)"] = "danger";
+            $this->p_bs_alerts["Nejsou vyplněny všechny potřebné údaje. </br>(Název, IP adresa, Nadřazený router)"] = "danger";
             $this->form_error = 1;
         }
     }
@@ -349,7 +349,7 @@ class RouterAction extends adminator
 
         $output .= "<select name=\"monitoring_cat\" size=\"1\" >";
 
-        $dotaz_cat = $this->conn_mysql->query("SELECT * FROM kategorie WHERE sablona LIKE 4 order by id");
+        $dotaz_cat = $this->conn_mysql->query("SELECT * FROM kategorie WHERE sablona = 4 order by id");
 
         $output .= "<option value=\"0\" class=\"select-nevybrano\"> Není zvoleno </option>";
 
