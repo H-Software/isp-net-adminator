@@ -510,7 +510,6 @@ class vlastniciController extends adminatorController
 
     public function change(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
@@ -520,30 +519,24 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Update");
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci :: Update"];
 
-        $this->header($request, $response, $this->adminator);
-
-        $this->smarty->assign("enable_calendar2", 1);
+        $assignData["enable_calendar2"] = 1;
 
         $vlastnik2 = new \vlastnici2pridani($this->container, $this->adminator);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $vlastnik2->csrf_html = $csrf_html;
 
-        $bodyContent = $vlastnik2->action();
+        $assignData["body"] = $vlastnik2->action();
 
-        $this->smarty->assign("body", $bodyContent);
+        $assignData["p_bs_alerts"] = $vlastnik2->p_bs_alerts;
 
-        $this->smarty->assign("p_bs_alerts", $vlastnik2->p_bs_alerts);
-
-        $this->smarty->display('vlastnici/change.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/change.tpl', $assignData);
     }
 
     public function archiv(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("vlastniciController\\fakturacniSkupiny called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -729,7 +722,7 @@ class vlastniciController extends adminatorController
 
     public function fakturacniSkupiny(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("vlastniciController\\fakturacniSkupiny called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -759,7 +752,7 @@ class vlastniciController extends adminatorController
 
     public function fakturacniSkupinyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("vlastniciController\\fakturacniSkupinyAction called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
