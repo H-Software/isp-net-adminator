@@ -94,7 +94,15 @@ class CreateRouterListTable extends App\Migration\Migration
                 'after' => 'warn',
             ])
             ->addIndex(['id'], [
-                'name' => 'id',
+                'name' => 'id_unique',
+                'unique' => true,
+            ])
+            ->addIndex(['nazev'], [
+                'name' => 'nazev',
+                'unique' => true,
+            ])
+            ->addIndex(['ip_adresa'], [
+                'name' => 'ip_adresa',
                 'unique' => true,
             ])
             ->create();
