@@ -347,7 +347,7 @@ class objekt extends adminator
         $output = "";
         $exportLink = "";
         $error = "";
-        
+
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
 
         // checking levels for update/erase/..
