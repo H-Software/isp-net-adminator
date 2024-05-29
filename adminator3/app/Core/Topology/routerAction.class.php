@@ -246,10 +246,8 @@ class RouterAction extends adminator
         //kontrola mac adresy
         if((strlen($this->form_mac) > 0)) {
 
-            $mac_check = preg_match('/^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$/', $this->form_mac);
-
-            if($mac_check == false) {
-                $this->p_bs_alerts["MAC adresa (".$this->form_mac.") není ve správném formátu !"] = "danger";
+            if (filter_var($this->form_mac, FILTER_VALIDATE_MAC) == false) {
+                $this->p_bs_alerts["MAC adresa (".$this->form_mac.") není ve správném formátu!"] = "danger";
                 $this->form_error = 1;
             }
         }
@@ -596,8 +594,8 @@ class RouterAction extends adminator
 
             // prvne zjistime puvodni hodnoty
             try {
-                $dotaz_top = $this->conn_mysql->query("SELECT nazev, ip_adresa, parent_router, mac, monitoring, 
-                                                        monitoring_cat, alarm, filtrace, id_nodu, poznamka 
+                $dotaz_top = $this->conn_mysql->query("SELECT nazev, ip_adresa, parent_router, mac, monitoring,
+                                                        monitoring_cat, alarm, filtrace, id_nodu, poznamka
                                                         FROM router_list WHERE id = '".intval($this->form_update_id)."' ");
                 $dotaz_top_radku = $dotaz_top->num_rows;
             } catch (Exception $e) {
