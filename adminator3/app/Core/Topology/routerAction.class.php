@@ -748,10 +748,10 @@ class RouterAction extends adminator
         return [$output, true];
     }
 
-    private function actionArchivZmenDiff()
-    {
+    // private function actionArchivZmenDiff()
+    // {
 
-    }
+    // }
 
     private function actionArchivZmenAdd(int $vysledek_write): void
     {
