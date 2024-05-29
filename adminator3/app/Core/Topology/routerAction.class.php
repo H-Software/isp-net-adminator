@@ -219,7 +219,7 @@ class RouterAction extends adminator
 
         //kontrola IP adresy
         if((strlen($this->form_ip_adresa) > 0)) {
-            if($this->validateIpAddress($this->form_ip_adresa) === false) {
+            if (filter_var($this->form_ip_adresa, FILTER_VALIDATE_IP) == false) {
                 $this->p_bs_alerts["IP adresa (".$this->form_ip_adresa.") není ve správném formátu !!!"] = "danger";
                 $this->form_error = 1;
             }
