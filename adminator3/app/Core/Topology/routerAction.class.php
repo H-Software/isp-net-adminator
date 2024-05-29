@@ -643,6 +643,8 @@ class RouterAction extends adminator
             }
 
             //ulozeni do archivu zmen
+            $this->actionArchivZmenDiff();
+
             // TODO: fix this
             // require("topology-router-add-inc-archiv-zmen.php");
 
@@ -748,10 +750,10 @@ class RouterAction extends adminator
         return [$output, true];
     }
 
-    // private function actionArchivZmenDiff()
-    // {
+    private function actionArchivZmenDiff()
+    {
 
-    // }
+    }
 
     private function actionArchivZmenAdd(int $vysledek_write): void
     {
@@ -760,14 +762,14 @@ class RouterAction extends adminator
         $pole .= " alarm: ".$this->form_alarm.", parent_router: ".$this->form_parent_router.", mac: ".$this->form_mac.", filtrace: ".$this->form_filtrace.", id_nodu: ".$this->form_selected_nod;
 
         $add = $this->conn_mysql->query(
-            "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
+            "INSERT INTO archiv_zmen2 (akce,provedeno_kym,vysledek) "
                                 . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
         );
 
         if($add) {
             $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
         } else {
-            $this->p_bs_alerts["Chyba! Akci se nepodařilo zaznamenat do archivu změn."] = "danger";
+            $this->p_bs_alerts["Akci se nepodařilo zaznamenat do archivu změn."] = "warning";
         }
     }
 }
