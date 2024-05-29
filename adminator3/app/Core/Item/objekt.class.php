@@ -399,7 +399,7 @@ class objekt extends adminator
         }
         // paging
         //
-        $poradek = "es=".$this->es."&najdi=".$najdi."&odeslano=".$_GET['odeslano']."&dns_find=".$this->dns_find."&ip_find=".$this->ip_find."&razeni=".$_get['razeni'];
+        $poradek = "es=".$this->es."&najdi=".$najdi."&odeslano=".$_GET['odeslano']."&dns_find=".$this->dns_find."&ip_find=".$this->ip_find."&razeni=".$_GET['razeni'];
         $poradek .= "&mod_vypisu=".$this->mod_vypisu;
 
         //vytvoreni objektu
@@ -566,38 +566,38 @@ class objekt extends adminator
         $this->generujdata();
 
         if((strlen($this->form_ip) > 0)) {
-            \objektypridani::checkip($this->form_ip);
+            $this->checkip($this->form_ip);
         }
 
         if((strlen($this->form_dns) > 0)) {
-            \objektypridani::checkdns($this->form_dns);
+            $this->checkdns($this->form_dns);
         }
         if((strlen($this->form_mac) > 0)) {
-            \objektypridani::checkmac($this->form_mac);
+            $this->checkmac($this->form_mac);
         }
         if((strlen($this->form_sikana_cas) > 0)) {
-            \objektypridani::checkcislo($this->form_sikana_cas);
+            $this->checkcislo($this->form_sikana_cas);
         }
         if((strlen($this->form_selected_nod) > 0)) {
-            \objektypridani::checkcislo($this->form_selected_nod);
+            $this->checkcislo($this->form_selected_nod);
         }
 
         if((strlen($this->form_client_ap_ip) > 0)) {
-            \objektypridani::checkip($this->form_client_ap_ip);
+            $this->checkip($this->form_client_ap_ip);
         }
 
         if($this->form_sikana_status == 2) {
-            \objektypridani::checkSikanaCas($this->form_sikana_cas);
+            $this->checkSikanaCas($this->form_sikana_cas);
 
-            \objektypridani::checkSikanaText($this->form_sikana_text);
+            $this->checkSikanaText($this->form_sikana_text);
         }
 
         if($this->form_typ_ip == 4) {
             if((strlen($tunnel_user) > 0)) {
-                \objektypridani::check_l2tp_cr($tunnel_user);
+                $this->check_l2tp_cr($tunnel_user);
             }
             if((strlen($tunnel_pass) > 0)) {
-                \objektypridani::check_l2tp_cr($tunnel_pass);
+                $this->check_l2tp_cr($tunnel_pass);
             }
         }
 
@@ -1124,20 +1124,20 @@ class objekt extends adminator
 
         //kontrola vlozenych promennych ..
         if((strlen($this->form_ip) > 0)) {
-            \objektypridani::checkip($this->form_ip);
+            $this->checkip($this->form_ip);
         }
 
         if((strlen($this->form_dns) > 0)) {
-            \objektypridani::checkdns($this->form_dns);
+            $this->checkdns($this->form_dns);
         }
         if((strlen($this->form_mac) > 0)) {
-            \objektypridani::checkmac($this->form_mac);
+            $this->checkmac($this->form_mac);
         }
 
         if((strlen($this->form_sikana_cas) > 0)) {
-            \objektypridani::checkcislo($this->form_sikana_cas);
+            $this->checkcislo($this->form_sikana_cas);
         }
-        //if( (strlen($this->form_selected_nod) > 0 ) ){ \objektypridani::checkcislo($this->form_selected_nod); }
+        //if( (strlen($this->form_selected_nod) > 0 ) ){ $this->checkcislo($this->form_selected_nod); }
 
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
         if((($this->form_dns != "") and ($this->form_ip != "")) and ($this->form_selected_nod > 0) and (($this->form_id_tarifu >= 0)) and ($this->form_mac != "")) :
@@ -3850,4 +3850,75 @@ class objekt extends adminator
         return $output;
     }
 
+    public static function checkmac($mac)
+    {
+        if (filter_var($mac, FILTER_VALIDATE_MAC) == false) {
+            $fail = "true";
+            $error .= "<div class=\"objekty-add-fail-mac\"><H4>MAC adresa ( ".$mac." ) není ve správném formátu !!! ( Správný formát je: 00:00:64:65:73:74 ) </H4></div>";
+        }
+
+        //konec funkce check-mac
+    }
+
+    public static function checkSikanaCas($sikanacas)
+    {
+        $sikanacas = intval($sikanacas);
+
+        if(($sikanacas > 9) or ($sikanacas < 1)) {
+            $fail = "true";
+            $error .= "<div class=\"objekty-add-fail-mac\">".
+            "<H4>Do pole \"Šikana - počet dní\" je třeba vyplnit číslo 1 až 9.</H4></div>";
+        }
+    } //end of function checkSikanaCas
+
+    public static function checkSikanaText($sikanatext)
+    {
+        if((strlen($sikanatext) > 150)) {
+            $fail = "true";
+            $error .= "<div class=\"objekty-add-fail-mac\">".
+            "<H4>Do pole \"Šikana - text\" je možno zadat max. 150 znaků. (aktuálně: ".strlen($sikanatext).")</H4></div>";
+        }
+    } //end of function checkSikanaText
+
+    public static function checkip($ip)
+    {
+        if (filter_var($ip, FILTER_VALIDATE_IP) == false) {
+            $fail = "true";
+            $error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
+        }
+    } //konec funkce check-ip
+
+    public static function checkcislo($cislo)
+    {
+        $rra_check = preg_match('/^([[:digit:]]+)$/', $cislo);
+
+        if (!($rra_check)) {
+            $fail = "true";
+            $error .= "<H4>Zadaný číselný údaj(e) ( ".$cislo." ) není ve  správném formátu !!! </H4>";
+        }
+    } //konec funkce check cislo
+
+    public static function checkdns($dns)
+    {
+        $dns_check = preg_match('/^([[:alnum:]]|\.|-)+$/', $dns);
+        if (!($dns_check)) {
+            $fail = "true";
+            $error .= "<div class=\"objekty-add-fail-dns\"><H4>DNS záznam ( ".$dns." ) není ve správnem formátu !!! </H4></div>";
+        }
+    } // konec funkce check rra
+
+    public static function check_l2tp_cr($cr)
+    {
+        $cr_check = preg_match('/^([[:alnum:]])+$/', $cr);
+
+        if(!($cr_check)) {
+            $fail = "true";
+            $error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) není ve správnem formátu !!! </H4></div>";
+        }
+
+        if((strlen($cr) <> 4)) {
+            $fail = "true";
+            $error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky !!! </H4></div>";
+        }
+    } //konec funkce check_l2tp_cr
 }
