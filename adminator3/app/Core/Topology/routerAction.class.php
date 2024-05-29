@@ -199,21 +199,16 @@ class RouterAction extends adminator
 
             //test api a spravnosti konfigurace routeru
             // TODO: fix this
-            // $rs_test = $ag->test_router_for_monitoring($update_id);
-            if(is_callable(adminator::test_router_for_monitoring($this->conn_mysql, $this->form_update_id))) {
-                $rs_test = [false, "1"];
-            } else {
-                $rs_test = [true, "1"];
-            }
+            // $rs_test = adminator::test_router_for_monitoring($this->conn_mysql, $routerId);
 
-            if($rs_test[0]) {
-                echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                    "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
+            // if($rs_test[0]) {
+            //     echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
+            //         "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
 
-                echo "<div style=\"color: grey;\" >výpis testu: <pre>".htmlspecialchars($rs_test[1])."</pre></div>";
+            //     echo "<div style=\"color: grey;\" >výpis testu: <pre>".htmlspecialchars($rs_test[1])."</pre></div>";
 
-                $this->form_error = 1;
-            } //end if rs_test === false
+            //     $this->form_error = 1;
+            // } //end if rs_test === false
 
         } //end od if monitoring == 1
 
