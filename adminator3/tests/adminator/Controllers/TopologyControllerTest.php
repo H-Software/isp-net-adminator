@@ -39,7 +39,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     public function test_ctl_node_list_view_all()
     {
-        $this->markTestSkipped('under construction');
+        // $this->markTestSkipped('under construction');
         $self = $this;
 
         $container = self::initDIcontainer(true, false);
