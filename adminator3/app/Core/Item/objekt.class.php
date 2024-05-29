@@ -108,9 +108,9 @@ class objekt extends adminator
 
     private $action_info;
 
-    private $action_error;
+    private $action_error; // indication/control variable for non-fatal error
 
-    private $action_fail;
+    private $action_fail; // indication/control variable for blocker
 
     public $p_bs_alerts = array(); // partial -> boostrap alerts
 
@@ -730,7 +730,7 @@ class objekt extends adminator
         } // konec if jestli id_cloveka > 1 and update == 1
 
         //checkem jestli se macklo na tlacitko "OK" :)
-        if(preg_match("/^OK$/", $this->odeslano)) {
+        if(preg_match("/^OK$/", $this->odeslano) or isset($this->action_fail)) {
             $output .= "";
         } else {
             $this->action_fail = "true";
@@ -926,7 +926,6 @@ class objekt extends adminator
         } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif(isset($this->send)) :
-            $this->action_error = "";
             $this->p_bs_alerts["Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) "] = "danger";
         endif;
 
@@ -937,7 +936,7 @@ class objekt extends adminator
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if((isset($this->action_error)) or (!isset($this->send))) :
+        if((isset($this->action_fail)) or (!isset($this->send))) :
             $output .= $this->action_error;
 
             $output .= $this->action_info;
@@ -1239,7 +1238,7 @@ class objekt extends adminator
         } // konec if jestli id_cloveka > 1 and update == 1
 
         //checkem jestli se macklo na tlacitko "OK" :)
-        if(preg_match("/^OK*/", $this->odeslano)) {
+        if(preg_match("/^OK*/", $this->odeslano) or isset($this->action_fail)) {
             $output .= "";
         } else {
             $this->action_fail = "true";
@@ -3866,7 +3865,7 @@ class objekt extends adminator
         //konec funkce check-mac
     }
 
-    public function checkSikanaCas($sikanacas)
+    private function checkSikanaCas($sikanacas)
     {
         $sikanacas = intval($sikanacas);
 
@@ -3877,7 +3876,7 @@ class objekt extends adminator
         }
     } //end of function checkSikanaCas
 
-    public function checkSikanaText($sikanatext)
+    private function checkSikanaText($sikanatext)
     {
         if((strlen($sikanatext) > 150)) {
             $this->action_fail = "true";
@@ -3886,7 +3885,7 @@ class objekt extends adminator
         }
     } //end of function checkSikanaText
 
-    public function checkip($ip)
+    private function checkip($ip)
     {
         if (filter_var($ip, FILTER_VALIDATE_IP) == false) {
             $this->action_fail = "true";
@@ -3894,7 +3893,7 @@ class objekt extends adminator
         }
     } //konec funkce check-ip
 
-    public function checkcislo($cislo)
+    private function checkcislo($cislo)
     {
         $rra_check = preg_match('/^([[:digit:]]+)$/', $cislo);
 
@@ -3904,7 +3903,7 @@ class objekt extends adminator
         }
     } //konec funkce check cislo
 
-    public function checkdns($dns)
+    private function checkdns($dns)
     {
         $dns_check = preg_match('/^([[:alnum:]]|\.|-)+$/', $dns);
         if (!($dns_check)) {
@@ -3913,7 +3912,7 @@ class objekt extends adminator
         }
     } // konec funkce check rra
 
-    public function check_l2tp_cr($cr)
+    private function check_l2tp_cr($cr)
     {
         $cr_check = preg_match('/^([[:alnum:]])+$/', $cr);
 
