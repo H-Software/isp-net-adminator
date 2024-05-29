@@ -15,6 +15,8 @@ use RouterOS\Config;
 use RouterOS\Client;
 use RouterOS\Query;
 
+use function PHPUnit\Framework\isEmpty;
+
 class adminator
 {
     // PDO is used in tests
@@ -674,7 +676,7 @@ class adminator
         } //if format of ip address doesn't matches
     }
 
-    public static function test_router_for_monitoring(\mysqli|\PDO $conn_mysql, string $router_ip)
+    public static function test_router_for_monitoring(\mysqli|\PDO $conn_mysql, string $router_ip): array
     {
         $ret_array = array();
 
@@ -703,6 +705,12 @@ class adminator
         //
 
         exec("scripts/ping.sh ".$router_ip, $ping_output, $ping_ret);
+
+        if(isEmpty($ping_output)) {
+            // ping failed
+            $ret_array[0] = false;
+            $ret_array[1] = "Chyba! Příkaz Ping se nepodařilo provést.";
+        }
 
         if(!($ping_output[0] > 0)) {
             //  NENI ODEZVA NA PING
