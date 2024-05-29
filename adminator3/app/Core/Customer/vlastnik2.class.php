@@ -294,6 +294,7 @@ class vlastnik2 extends adminator
     public function crossRun(): array
     {
         $output = "";
+        $http_status_code = 200;
 
         $akce = intval($_GET["akce"]);
         $id_cloveka = intval($_GET["id_cloveka"]);
@@ -477,7 +478,7 @@ class vlastnik2 extends adminator
             $output .= "Pokud nedojde k automatickému přesměrování, pokračujte <a href=\"#\" onclick=\"document.frm.submit()\" >zde</a>";
 
             $output .= "</body>\n</html>\n";
-            return [$output];
+            return [$output, $http_status_code];
 
         } elseif($akce == 8) { //vlozeni vypovedi
             $output .= $html_init;
@@ -493,7 +494,7 @@ class vlastnik2 extends adminator
             <script language=\"JavaScript\" > document.frm.submit(); </script>";
 
             $output .= "</body></html>";
-            return [$output];
+            return [$output, $http_status_code];
 
         } elseif($akce == 9) { //vlozIT hot. platbu
             $output .= $html_init;
@@ -509,7 +510,7 @@ class vlastnik2 extends adminator
             $output .= "<script language=\"JavaScript\" > document.frm.submit(); </script>";
 
             $output .= "</body></html>";
-            return [$output];
+            return [$output, $http_status_code];
 
         } elseif($akce == 10) { //vypis plateb
             $stranka = fix_link_to_another_adminator("/platby-vypis.php?id_vlastnika=".$id_cloveka."&ok=OK");
@@ -547,7 +548,9 @@ class vlastnik2 extends adminator
 
         $output .= "</body></html>";
 
-        return [$output];
+        // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_redirection
+        // settnigs status code looks like it's not necessary, but for sure
+        return [$output, 302];
     }
 
     public function vypis_tab($par)

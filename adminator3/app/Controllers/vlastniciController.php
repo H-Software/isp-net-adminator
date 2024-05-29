@@ -87,10 +87,9 @@ class vlastniciController extends adminatorController
             $rendererTemplateName = "vlastnici/cross-alert.tpl";
             $http_status_code = 500;
         } else {
-            list($output) = $vlastnik2->crossRun();
+            list($output, $http_status_code) = $vlastnik2->crossRun();
             $assignData["pageContent"] = $output;
             $rendererTemplateName = "global/empty.tpl";
-            $http_status_code = 302; // looks like it's not necessary, but for sure
         }
 
         return $this->renderer->template($request, $response, $rendererTemplateName, $assignData, $http_status_code);
