@@ -15,8 +15,6 @@ use RouterOS\Config;
 use RouterOS\Client;
 use RouterOS\Query;
 
-use function PHPUnit\Framework\isEmpty;
-
 class adminator
 {
     // PDO is used in tests
