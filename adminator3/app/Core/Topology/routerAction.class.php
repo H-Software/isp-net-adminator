@@ -852,7 +852,7 @@ class RouterAction extends adminator
                     $pole3 .= "změna <b>Připojného bodu</b> z: ";
 
                     $vysl_t1 = $this->conn_mysql->query("select jmeno FROM nod_list WHERE id = '$val'");
-                    while ($data_t1 = mysql_fetch_array($vysl_t1)) {
+                    while ($data_t1 = $vysl_t1->fetch_array()) {
                         $pole3 .= "<span class=\"az-s1\">".$data_t1["jmeno"]."</span>";
                     }
 
@@ -861,7 +861,7 @@ class RouterAction extends adminator
                     $val2 = $nod_upd[$key];
 
                     $vysl_t2 = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '$val2'");
-                    while ($data_t2 = mysql_fetch_array($vysl_t2)) {
+                    while ($data_t2 = $vysl_t2->fetch_array()) {
                         $pole3 .= "<span class=\"az-s2\">".$data_t2["jmeno"]."</span>";
                     }
 
