@@ -922,7 +922,7 @@ class RouterAction extends adminator
 
         try {
             $add = $this->conn_mysql->query(
-                "INSERT INTO archiv_zmen2 (akce,provedeno_kym,vysledek) "
+                "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
                                     . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
             );
             $db_error = "";
