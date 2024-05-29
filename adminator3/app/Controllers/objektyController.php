@@ -206,6 +206,7 @@ class objektyController extends adminatorController
         }
 
         $assignData["body"] = $output;
+        $assignData["p_bs_alerts"] = $objekt->p_bs_alerts;
 
         return $this->renderer->template($request, $response, 'objekty/action.tpl', $assignData);
     }
