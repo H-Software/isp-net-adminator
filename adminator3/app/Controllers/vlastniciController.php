@@ -250,9 +250,7 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci"];
 
         $vlastnik = new \vlastnik();
         $vlastnik->conn_mysql = $this->conn_mysql;
@@ -264,11 +262,11 @@ class vlastniciController extends adminatorController
         $vlastnik->csrf_html = $csrf_html;
 
         if ($this->adminator->checkLevel(64) === true) {
-            $this->smarty->assign("vlastnici_export_povolen", "true");
+            $assignData["vlastnici_export_povolen"] = "true";
         }
 
         if ($this->adminator->checkLevel(40) === true) {
-            $this->smarty->assign("vlastnici_pridani_povoleno", "true");
+            $assignData["vlastnici_pridani_povoleno"] = "true";
         }
 
         $find_id = $_GET["find_id"];
@@ -291,14 +289,14 @@ class vlastniciController extends adminatorController
         }
 
         if (empty($_GET["find"])) {
-            $this->smarty->assign("form_find", "%");
+            $assignData["form_find"] = "%";
         } else {
-            $this->smarty->assign("form_find", htmlspecialchars($find));
+            $assignData["form_find"] = htmlspecialchars($find);
         }
 
-        $this->smarty->assign("select", $form_select);
-        $this->smarty->assign("razeni", $form_razeni);
-        $this->smarty->assign("razeni2", $form_razeni2);
+        $assignData["select"] = $form_select;
+        $assignData["razeni"] = $form_razeni;
+        $assignData["razeni2"] = $form_razeni2;
 
         //promena pro update objektu
         if ($this->adminator->checkLevel(29) === true) {
@@ -388,13 +386,9 @@ class vlastniciController extends adminatorController
         } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM vlastnici WHERE id_cloveka = '" . intval($sql) ."' AND firma is null AND ( archiv = 0 or archiv is null )";
         } else {
-            $body = "<div style=\"padding-top: 20px; padding-bottom: 20px; \">Zadejte výraz k vyhledání.... </div>";
+            $assignData["body"] = "<div style=\"padding-top: 20px; padding-bottom: 20px; \">Zadejte výraz k vyhledání.... </div>";
 
-            $this->smarty->assign("body", $body);
-
-            $this->smarty->display('vlastnici/vlastnici.tpl');
-
-            return $response;
+            return $this->renderer->template($request, $response, 'vlastnici/vlastnici.tpl', $assignData);
         }
 
         $list = $_GET["list"];
@@ -425,11 +419,9 @@ class vlastniciController extends adminatorController
 
         $bodyContent .= $listovani->listInterval();
 
-        $this->smarty->assign("body", $bodyContent);
+        $assignData["body"] = $bodyContent;
 
-        $this->smarty->display('vlastnici/vlastnici.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/vlastnici.tpl', $assignData);
     }
 
     public function vlastnici2(ServerRequestInterface $request, ResponseInterface $response, array $args)
