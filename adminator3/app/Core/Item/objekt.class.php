@@ -2430,7 +2430,7 @@ class objekt extends adminator
 
         if($radku_ip == 1) {
             while ($data_ip = $vysl_ip->fetch_array()) {
-                 $ip_rs = preg_split("/[\.]/", $data_ip["ip_rozsah"]);
+                $ip_rs = preg_split("/[\.]/", $data_ip["ip_rozsah"]);
             }
 
             if($ip_rs == false) {
@@ -2469,11 +2469,10 @@ class objekt extends adminator
                     }
 
                     $ip_rs = preg_split("/[\.]/", $gen_ip);
-                    if($ip_rs == false){
+                    if($ip_rs == false) {
                         $gen_ip = "E4"; // split failed
                         return false;
-                    }
-                    else {
+                    } else {
                         list($a, $b, $c, $d) = $ip_rs;
                         $c = intval($c);
                     }
