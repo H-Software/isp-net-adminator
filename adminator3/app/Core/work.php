@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use Psr\Container\ContainerInterface;
+use SebastianBergmann\Type\VoidType;
 
 class work
 {
@@ -330,14 +331,78 @@ class work
         return array($output);
     }
 
-    // public function workActionTopologyRouterAdd(): array
-    // {
+    public function workActionTopologyRouterAdd(): void
+    {
+        // TODO: fix this
 
-    // }
+        // Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+        // Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+        // Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
 
-    // public function workActionTopologyRouterDiff(): array
-    // {
+        // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
 
-    // }
+        // //automatické restarty
+        // if($alarm == 1) {
+        //     //kvuli alarmu
+        //     Aglobal::work_handler("15"); //trinity - Monitoring I - Footer-restart
+        // }
+
+        // if($monitoring == 1) {
+        //     //kvuli monitoringu
+        //     Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
+        //     Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart
+        // }
+
+        // //radsi vzdy (resp. zatim)
+        // Aglobal::work_handler("19"); //trinity - adminator - synchro_router_list
+    }
+
+    public function workActionTopologyRouterDiff(): void
+    {
+        // TODO: fix this
+        // if( ereg(".*změna.*Alarmu.*z.*", $pole3) )
+        // {
+        //   //kvuli alarmu
+        //   Aglobal::work_handler("15"); 		//trinity - Monitoring I - Footer-restart
+        //       }
+
+        // if( ereg(".*změna.*Monitorování.*", $pole3) or ereg(".*změna.*Monitoring kategorie.*", $pole3) )
+        // {
+        //   //kvuli monitoringu - feeder asi nepovinnej
+        //   Aglobal::work_handler("18"); 		//monitoring - Monitoring II - Feeder-restart
+        //   Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart
+        //       }
+
+        // if( ereg(".*změna.*Nadřazený router.*", $pole3) )
+        // {
+        //      Aglobal::work_handler("1");        //reinhard-3 (ros) - restrictions (net-n/sikana)
+        //      Aglobal::work_handler("20");       //reinhard-3 (ros) - shaper (client's tariffs)
+
+        //      Aglobal::work_handler("24");       //reinhard-5 (ros) - restrictions (net-n/sikana)
+        //      Aglobal::work_handler("23");       //reinhard-5 (ros) - shaper (client's tariffs)
+
+        //      Aglobal::work_handler("13");       //reinhard-wifi (ros) - shaper (client's tariffs)
+        //      Aglobal::work_handler("2");        //reinhard-wifi (ros) - restrictions (net-n/sikana)
+
+        //      Aglobal::work_handler("14");       //(trinity) filtrace-IP-on-Mtik's-restart
+
+        // }
+
+        // if( ereg(".*změna.*Připojného bodu.*", $pole3) )
+        // {
+        //      Aglobal::work_handler("14");	//(trinity) filtrace-IP-on-Mtik's-restart
+        // }
+
+        // if( ereg(".*změna.*Filtrace.*", $pole3) )
+        // {
+        //      Aglobal::work_handler("14");	//(trinity) filtrace-IP-on-Mtik's-restart
+        // }
+
+        // if( ereg(".*změna.*", $pole3) )
+        // {
+        //   //radsi vzdy (resp. zatim)
+        //   Aglobal::work_handler("19"); 		//trinity - adminator - synchro_router_list
+        //       }
+    }
 
 }
