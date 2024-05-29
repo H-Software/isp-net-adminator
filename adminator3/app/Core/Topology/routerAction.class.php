@@ -920,15 +920,20 @@ class RouterAction extends adminator
         $pole .= " nazev: ".$this->form_nazev.", ip adresa: ".$this->form_ip_adresa.", monitoring: ".$this->form_monitoring.", monitoring_cat: ".$this->form_monitoring_cat;
         $pole .= " alarm: ".$this->form_alarm.", parent_router: ".$this->form_parent_router.", mac: ".$this->form_mac.", filtrace: ".$this->form_filtrace.", id_nodu: ".$this->form_selected_nod;
 
-        $add = $this->conn_mysql->query(
-            "INSERT INTO archiv_zmen2 (akce,provedeno_kym,vysledek) "
-                                . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
-        );
+        try {
+            $add = $this->conn_mysql->query(
+                "INSERT INTO archiv_zmen2 (akce,provedeno_kym,vysledek) "
+                                    . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
+            );
+            $db_error = "";
+        } catch (Exception $e) {
+            $db_error = '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
+        }
 
         if($add) {
             $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
         } else {
-            $this->p_bs_alerts["Akci se nepodařilo zaznamenat do archivu změn."] = "warning";
+            $this->p_bs_alerts["Akci se nepodařilo zaznamenat do archivu změn." . $db_error] = "warning";
         }
     }
 }
