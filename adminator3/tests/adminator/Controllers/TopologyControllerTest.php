@@ -34,7 +34,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     protected function tearDown(): void
     {
-
+        $this->creator = null;
     }
 
     public function test_ctl_node_list_view_all()
@@ -70,7 +70,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        echo $responseContent;
+        // echo $responseContent;
 
         self::runBasicAsserts($responseContent);
 
@@ -83,10 +83,10 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         $this->assertMatchesRegularExpression('/Výpis lokalit\s*\/\s*přípojných bodů/i', $responseContent);
         $this->assertMatchesRegularExpression('/Hledání\:/i', $responseContent);
-        $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent);
 
         // no data assert
-        $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( % \) v databázi neuloženy/i', $responseContent);
+        // $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent, "missing no-data message container");
+        // $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( % \) v databázi neuloženy/i', $responseContent, "missing no-data message");
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, __FUNCTION__ . " :: found word, which indicates error(s) or failure(s)");

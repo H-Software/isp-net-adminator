@@ -297,7 +297,6 @@ class Topology extends adminator
             $bude_chybet = (($list - 1) * $paging->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
         }
 
-        // $vysledek = $this->conn_mysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
         try {
             $rs = $this->pdoMysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
             $rs_data = $rs->fetchAll();
@@ -608,10 +607,16 @@ class Topology extends adminator
                     $router_nazev = "<span style=\"color: red\">nelze zjistit </span>";
                     $router_ip = "";
                 } else {
-                    $vysledek_router = $this->conn_mysql->query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
-                    while($data_router = $vysledek_router->fetch_array()) {
-                        $router_nazev = $data_router["nazev"];
-                        $router_ip = $data_router["ip_adresa"];
+
+                    try {
+                        $vysledek_router = $this->pdoMysql->query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
+                        $data_router = $vysledek_router->fetchAll();
+                    } catch (Exception $e) {
+                        $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Database query failed! Caught exception: " . $e->getMessage());
+                    }
+                    foreach ($data_router as $row => $item) {
+                        $router_nazev = $item["nazev"];
+                        $router_ip = $item["ip_adresa"];
                     }
                 }
 
