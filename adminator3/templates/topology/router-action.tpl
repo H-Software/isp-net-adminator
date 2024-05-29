@@ -4,7 +4,11 @@
 
     <div class="global-cat-body2" >
 
-        {$body}
+    {if $p_bs_alerts|default:'0' }
+        {include file="partials/bootstrap-alert-with-columns-array.tpl"}
+    {/if}
+
+    {$body}
 
     </div>
 

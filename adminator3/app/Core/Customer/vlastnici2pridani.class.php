@@ -122,7 +122,7 @@ class vlastnici2pridani extends adminator
 
     private $writed;
 
-    public $p_bs_alerts = array();
+    public $p_bs_alerts = array(); // partial -> boostrap alerts
 
     public function __construct(ContainerInterface $container, $adminator)
     {

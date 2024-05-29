@@ -112,6 +112,8 @@ class topologyController extends adminatorController
 
         $assignData['body'] = $content;
 
+        $assignData["p_bs_alerts"] = $i->p_bs_alerts;
+
         return $this->renderer->template($request, $response, 'topology/router-action.tpl', $assignData, $http_status_code);
     }
 }
