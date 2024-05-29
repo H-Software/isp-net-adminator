@@ -74,23 +74,41 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         self::runBasicAsserts($responseContent);
 
-        // page specific asserts
-        //
-        // Výpis lokalit / přípojných bodů
-        // Hledání:
-        // class="alert alert-warning" role="alert" / boostrap window
-        // Žadné lokality/nody dle hladeného výrazu ( % ) v databázi neuloženy.
+        // section sub-cat asserts
+        $this->assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/router-list">Routery<\/a>/i', $responseContent);
+        $this->assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/node-list">Výpis lokalit\/nodů<\/a>/i', $responseContent);
+        $this->assertMatchesRegularExpression('/<a class="cat2" href="topology-user-list.php">Výpis objektů dle přiřazení \/ dle nodů<\/a>/i', $responseContent);
 
+        // page header & selector/fiters asserts
         $this->assertMatchesRegularExpression('/Výpis lokalit\s*\/\s*přípojných bodů/i', $responseContent);
         $this->assertMatchesRegularExpression('/Hledání\:/i', $responseContent);
+        $this->assertStringContainsString('<select name="typ_vysilace"', $responseContent);
+        $this->assertStringContainsString('<select name="typ_nodu" size="1"', $responseContent);
 
-        // no data assert
-        // $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent, "missing no-data message container");
-        // $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( % \) v databázi neuloženy/i', $responseContent, "missing no-data message");
+        // table header asserts
+        $this->assertStringContainsString('Umístění aliasu (název routeru):', $responseContent);
+        $this->assertStringContainsString('Stav: </span>', $responseContent);
+        $this->assertStringContainsString('Úprava / Smazání:', $responseContent);
+        $this->assertStringContainsString('<select name="typ_nodu" size="1"', $responseContent);
+
+        // listing asserts
+        $this->assertStringContainsString('<div class="text-listing">', $responseContent, "missing listing container");
+        $this->assertStringContainsString('<a href="/topology/node-list', $responseContent, "missing listing link");
+
+        // table body asserts
+        $this->assertStringContainsString('<td width="5%" colspan="1"  class="tab-topology2 tab-topology-dolni2"', $responseContent);
+        $this->assertStringContainsString('target="_blank" >na mapě</a>', $responseContent);
+        $this->assertMatchesRegularExpression('/<a href="\/archiv-zmen\?id_nodu=[0-9]+" style="font-size: 12px; ">H: [0-9]+/i', $responseContent);
+        $this->assertStringContainsString('<td><form method="POST" action="/topology/nod-update">', $responseContent);
+        $this->assertStringContainsString('<td><form action="/topology/nod-erase" method="POST"', $responseContent);
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, __FUNCTION__ . " :: found word, which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, __FUNCTION__ . " :: found word, which indicates error(s) or failure(s)");
+
+        // no data assert
+        // $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent, "missing no-data message container");
+        // $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( % \) v databázi neuloženy/i', $responseContent, "missing no-data message");
 
         // clean-up
         $response = null;

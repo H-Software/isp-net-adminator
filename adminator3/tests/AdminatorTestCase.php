@@ -158,10 +158,14 @@ abstract class AdminatorTestCase extends TestCase
 
         $assertKeywordsCommon = array(
             '<html lang="en">',
+            'link href="/public/css/style.css" rel="stylesheet" type="text/css" ',
             '<title>Adminator3',  // adminator head rendered
             'bootstrap.min.css" rel="stylesheet"',  // adminator head rendered
             'Jste přihlášeni v administračním systému', // adminator header rendered
+            '<span class="intro-banner-logged"', // logged details container
             '<div id="obsah" >', // main container
+            '<a class="cat" href="/vlastnici/cat" target="_top" >Zákazníci</a>', // categories - 1.line
+            '<a class="cat" href="/partner/cat" target="_top" >Partner program</a>', // categories - 2.line
             '<div class="obsah-main" >', // inner container
             '</body>', // smarty rendered whole page
             '</html>' // smarty rendered whole page
