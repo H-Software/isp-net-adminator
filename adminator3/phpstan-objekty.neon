@@ -35,38 +35,18 @@ parameters:
 			path: app/Core/Item/objekt.class.php
 
 		-
-			message: "#^If condition is always false\\.$#"
-			count: 2
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 4
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Left side of && is always true\\.$#"
-			count: 4
-			path: app/Core/Item/objekt.class.php
-
-		-
 			message: "#^Regex pattern is invalid\\: Unknown modifier '\\)' in pattern\\: /\\^\\(\\[\\[\\:digit\\:\\]\\]\\|\\\\\\.\\|/\\)\\+\\$/$#"
 			count: 1
 			path: app/Core/Item/objekt.class.php
 
 		-
 			message: "#^Right side of && is always true\\.$#"
-			count: 4
+			count: 1
 			path: app/Core/Item/objekt.class.php
 
 		-
 			message: "#^Variable \\$find_tarif in isset\\(\\) is never defined\\.$#"
 			count: 1
-			path: app/Core/Item/objekt.class.php
-
-		-
-			message: "#^Variable \\$writed in isset\\(\\) is never defined\\.$#"
-			count: 2
 			path: app/Core/Item/objekt.class.php
 
 		-
