@@ -472,6 +472,8 @@ class objekt extends adminator
 
         if (($this->update_id > 0)) {
             $update_status = 1;
+        } else {
+            $update_status = 0;
         }
 
         // TODO: add check others reload stuff
@@ -777,7 +779,7 @@ class objekt extends adminator
 
             $this->form_sikana_cas = intval($this->form_sikana_cas);
 
-            if($update_status == "1") {
+            if($update_status == 1) {
                 // rezim upravy
 
                 if ($this->adminator->checkLevel(29) === false) {
@@ -1033,6 +1035,8 @@ class objekt extends adminator
 
         if (($this->update_id > 0)) {
             $update_status = 1;
+        } else {
+            $update_status = 0;
         }
 
         //nacitani predchozich dat ...
@@ -1097,8 +1101,7 @@ class objekt extends adminator
                 endwhile;
 
             }
-        } else
-        {
+        } else {
             // rezim pridani, nacitame z POSTu
 
             $this->form_dns = trim($_POST["dns"]);
@@ -1272,7 +1275,7 @@ class objekt extends adminator
                 $this->form_another_vlan_id = null;
             }
 
-            if($update_status == "1") {
+            if($update_status == 1) {
 
                 if ($this->adminator->checkLevel(29) === false) {
                     $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
