@@ -656,7 +656,7 @@ class Topology extends adminator
                 $akt_par = "class=\"tab-topology\" colspan=\"".$colspan_aktivni."\" ";
 
                 if (($ping == 1)) {
-                    $aktivni = exec("../adminator2/scripts/ping.sh $ip_akt");
+                    $aktivni = exec("scripts/ping.sh $ip_akt");
 
                     if (($aktivni > 0 and $aktivni < 50)) {
                         $output .= "<td ".$akt_par." align=\"center\" bgcolor=\"green\"><span style=\"color: white; font-size: 13px; \">".$aktivni."</span>";
