@@ -614,7 +614,7 @@ class objekt extends adminator
                 $this->ip_find = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
+                $MSQ_DNS = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE dns_jmeno = '$this->form_dns' ");
                 $MSQ_IP = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE ip <<= '$this->ip_find' ");
 
                 if (pg_num_rows($MSQ_DNS) <> 0) {
@@ -628,8 +628,8 @@ class objekt extends adminator
 
                 //duplicitni tunnel_pass/user
                 if($this->form_typ_ip == 4) {
-                    $MSQ_TUNNEL_USER = pg_query($this->conn_pgsql, "SELECT tunnel_user FROM objekty WHERE tunnel_user LIKE '$tunnel_user' ");
-                    $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE tunnel_pass LIKE '$tunnel_pass' ");
+                    $MSQ_TUNNEL_USER = pg_query($this->conn_pgsql, "SELECT tunnel_user FROM objekty WHERE tunnel_user = '$tunnel_user' ");
+                    $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE tunnel_pass = '$tunnel_pass' ");
 
                     if(pg_num_rows($MSQ_TUNNEL_USER) <> 0) {
                         $this->action_error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
@@ -648,7 +648,7 @@ class objekt extends adminator
                 $this->ip_find = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '".intval($this->update_id)."' ) ");
+                $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno = '$this->form_dns' AND id_komplu != '".intval($this->update_id)."' ) ");
                 $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '".intval($this->update_id)."' ) ");
 
                 if(pg_num_rows($MSQ_DNS2) <> 0) {
@@ -662,8 +662,8 @@ class objekt extends adminator
 
                 //duplicitni tunnel_pass/user
                 if($this->form_typ_ip == 4) {
-                    $MSQ_TUNNEL_USER = pg_query($this->conn_pgsql, "SELECT tunnel_user FROM objekty WHERE ( tunnel_user LIKE '$tunnel_user' AND id_komplu != '".intval($this->update_id)."' ) ");
-                    $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE ( tunnel_pass LIKE '$tunnel_pass' AND id_komplu != '".intval($this->update_id)."' ) ");
+                    $MSQ_TUNNEL_USER = pg_query($this->conn_pgsql, "SELECT tunnel_user FROM objekty WHERE ( tunnel_user = '$tunnel_user' AND id_komplu != '".intval($this->update_id)."' ) ");
+                    $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE ( tunnel_pass = '$tunnel_pass' AND id_komplu != '".intval($this->update_id)."' ) ");
 
                     if(pg_num_rows($MSQ_TUNNEL_USER) > 0) {
                         $this->action_error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
@@ -1154,7 +1154,7 @@ class objekt extends adminator
                 $ip = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE dns_jmeno LIKE '" . $this->form_dns ."' ");
+                $MSQ_DNS = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE dns_jmeno = '" . $this->form_dns ."' ");
                 $MSQ_IP = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ip <<= '" . $ip ."' ");
 
                 if (pg_num_rows($MSQ_DNS) <> 0) {
@@ -1172,7 +1172,7 @@ class objekt extends adminator
                 $ip = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
-                $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
+                $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno = '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
                 $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$ip' AND id_komplu != '$this->update_id' ) ");
 
                 if(pg_num_rows($MSQ_DNS2) <> 0) {
