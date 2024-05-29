@@ -221,7 +221,7 @@ class RouterAction extends adminator
 
         //nadrazený router musí být vyplnen
         if(intval($this->form_parent_router) < 1) {
-            $this->p_bs_alerts["Je třeba vyplnit pole \"Nadřazený router\" (kvůli filtraci a QoSu na reinhardech)."] = "danger";
+            $this->p_bs_alerts["Je třeba vyplnit pole \"Nadřazený router\" </br>(kvůli filtraci a QoSu na reinhardech)."] = "danger";
             $this->form_error = 1;
         }
 
@@ -239,19 +239,14 @@ class RouterAction extends adminator
             //kontrola správnosti zadání
             $dns_check = preg_match('/^([[:alnum:]]|\.|-)+$/', $this->form_nazev);
 
-            if(!($dns_check)) {
-                echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                        "Název (".$this->form_nazev.") není ve správnem formátu !!!</div>";
-
+            if($dns_check == false) {
+                $this->p_bs_alerts["Název (".$this->form_nazev.") není ve správnem formátu."] = "danger";
                 $this->form_error = 1;
             }
 
             //kontrola delky
             if((strlen($this->form_nazev) > 40)) {
-
-                echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                    "DNS záznam (".$this->form_nazev.") je moc dlouhý!!! Maximální délka je 40 znaků.</div>";
-
+                $this->p_bs_alerts["DNS záznam (".$this->form_nazev.") je moc dlouhý! Maximální délka je 40 znaků."] = "danger";
                 $this->form_error = 1;
             }
         }
@@ -261,20 +256,15 @@ class RouterAction extends adminator
 
             $mac_check = preg_match('/^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$/', $this->form_mac);
 
-            if(!($mac_check)) {
-                echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                    "MAC adresa (".$this->form_mac.") není ve správném formátu !!!</div>";
-
+            if($mac_check == false) {
+                $this->p_bs_alerts["MAC adresa (".$this->form_mac.") není ve správném formátu !"] = "danger";
                 $this->form_error = 1;
             }
         }
 
         //povinné údaje
         if((strlen($this->form_nazev) == 0) or (strlen($this->form_ip_adresa) == 0) or (strlen($this->form_parent_router) == 0)) {
-
-            echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">
-                Nelze uložit, nejsou vyplněny všechny potřebné údaje. (Název, IP adresa, Nadřazený router). </div>";
-
+            $this->p_bs_alerts["Nejsou vyplněny všechny potřebné údaje. (Název, IP adresa, Nadřazený router)"] = "danger";
             $this->form_error = 1;
         }
     }

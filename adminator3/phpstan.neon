@@ -11,10 +11,6 @@ parameters:
 		- app/Core/shared/ros_api_qos.php
 		- app/Core/shared/ros_api_restriction.php
 	ignoreErrors:
-	# temporary known issues
-	-
-		message: "#^Method App\\\\Core\\\\Topology\\\\RouterAction\\:\\:checkFormData\\(\\) is unused\\.$#"
-		path: app/Core/Topology/routerAction.class.php
 	# common known issues
 	-
 		message: '#Undefined variable: \$.*#'
