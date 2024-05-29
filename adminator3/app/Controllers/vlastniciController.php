@@ -41,7 +41,7 @@ class vlastniciController extends adminatorController
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("vlastniciController\cat called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -95,8 +95,6 @@ class vlastniciController extends adminatorController
     }
     public function search(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $bodyContent = "";
-
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
@@ -243,9 +241,8 @@ class vlastniciController extends adminatorController
 
     public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $bodyContent = "";
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $this->logger->info("vlastniciController\\vlastnici called");
         $this->request = $request;
         $this->response = $response;
 
@@ -418,7 +415,7 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
 
-        $bodyContent .= $listovani->listInterval();
+        $bodyContent = $listovani->listInterval();
 
         $bodyContent .= $vlastnik->vypis_tab(1);
 
@@ -437,8 +434,7 @@ class vlastniciController extends adminatorController
 
     public function vlastnici2(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
-        $this->logger->info("vlastniciController\\vlastnici2 called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -447,9 +443,7 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci 2");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci 2"];
 
         $vlastnik2 = new \vlastnik2($this->container);
         $vlastnik2->adminator = $this->adminator;
@@ -470,22 +464,21 @@ class vlastniciController extends adminatorController
             $fu_select = "1";
         } //pouze DU
 
-        $this->smarty->assign("select", $select);
-        $fakt_skupiny = $fs->show_fakt_skupiny($fu_select);
+        $assignData["select"] = $select;
 
-        $this->smarty->assign("fakt_skupiny", $fakt_skupiny);
+        $assignData["fakt_skupiny"] = $fs->show_fakt_skupiny($fu_select);
 
-        $this->smarty->assign("fakt_skupiny_selected", $_GET['fakt_skupina']);
+        $assignData["fakt_skupiny_selected"] = $_GET['fakt_skupina'];
 
-        $this->smarty->assign("razeni", $_GET['razeni']);
-        $this->smarty->assign("razeni2", $_GET['razeni2']);
+        $assignData["razeni"] = $_GET['razeni'];
+        $assignData["razeni2"] = $_GET['razeni2'];
 
         if ($this->adminator->checkLevel(63) === true) {
-            $this->smarty->assign("vlastnici2_export_povolen", "true");
+            $assignData["vlastnici2_export_povolen"] = "true";
         }
 
         if ($this->adminator->checkLevel(40) === true) {
-            $this->smarty->assign("vlastnici2_pridani_povoleno", "true");
+            $assignData["vlastnici2_pridani_povoleno"] = "true";
         }
 
         if(empty($_GET["find"])) {
@@ -497,15 +490,13 @@ class vlastniciController extends adminatorController
         // main table
         $bodyContent = $vlastnik2->listItems();
 
-        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": vlastnik2->listSql: " . var_export($vlastnik2->listSql, true));
+        // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": vlastnik2->listSql: " . var_export($vlastnik2->listSql, true));
 
-        $this->smarty->assign("form_search_value", preg_replace('/^(%)(.*)(%)$/', '\2', $vlastnik2->listSql));
+        $assignData["form_search_value"] = preg_replace('/^(%)(.*)(%)$/', '\2', $vlastnik2->listSql);
 
-        $this->smarty->assign("body", $bodyContent);
+        $assignData["body"] = $bodyContent;
 
-        $this->smarty->display('vlastnici/vlastnici2.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/vlastnici2.tpl', $assignData);
     }
 
     public function change(ServerRequestInterface $request, ResponseInterface $response, array $args)
