@@ -4,8 +4,7 @@ class objektypridani
 {
     public static function checkmac($mac)
     {
-        $mac_check = preg_match('/^([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})\:([[:xdigit:]]{2,2})$/', $mac);
-        if (!($mac_check)) {
+        if (filter_var($mac, FILTER_VALIDATE_MAC) == false) {
             global $fail;
             $fail = "true";
             global $error;
@@ -45,30 +44,9 @@ class objektypridani
 
     } //end of function checkSikanaText
 
-    //function to validate ip address format in php by Roshan Bhattarai(http://roshanbh.com.np)
-    public static function validateIpAddress($ip_addr)
-    {
-        //first of all the format of the ip address is matched
-        if(preg_match("/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/", $ip_addr)) {
-            //now all the intger values are separated
-            $parts = explode(".", $ip_addr);
-            //now we need to check each part can range from 0-255
-            foreach($parts as $ip_parts) {
-                if(intval($ip_parts) > 255 || intval($ip_parts) < 0) {
-
-                    return false; //if number is not within range of 0-255
-                }
-            }
-
-            return true;
-        } else {
-            return false; //if format of ip address doesn't matches
-        }
-    }
-
     public static function checkip($ip)
     {
-        if (!(objektypridani::validateIpAddress($ip))) {
+        if (filter_var($ip, FILTER_VALIDATE_IP) == false) {
             global $fail;
             $fail = "true";
             global $error;
