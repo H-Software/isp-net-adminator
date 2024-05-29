@@ -4,6 +4,7 @@ namespace App\Core;
 
 use Psr\Container\ContainerInterface;
 use Illuminate\Database\Capsule\Manager as DB;
+use Exception;
 
 class objekt extends adminator
 {
@@ -559,7 +560,7 @@ class objekt extends adminator
         //co mame: v promeny selected_nod mame id nodu kam se to bude pripojovat
         // co chcete: ip adresu , idealne ze spravnyho rozsahu :)
 
-        \objektypridani::generujdata($this->form_selected_nod, $this->form_typ_ip, $this->form_dns, $this->conn_mysql);
+        $this->generujdata();
 
         if((strlen($this->form_ip) > 0)) {
             \objektypridani::checkip($this->form_ip);
@@ -2274,7 +2275,7 @@ class objekt extends adminator
         return $output;
     }
 
-    public function generujDataFiber()
+    private function generujDataFiber()
     {
 
         if($this->form_selected_nod < 1) {
@@ -2283,8 +2284,11 @@ class objekt extends adminator
         }
 
         // skusime ip vygenerovat
-        $vysl_nod = $this->conn_mysql->query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($this->form_selected_nod)."'");
-        $radku_nod = $vysl_nod->num_rows;
+        try {
+            $vysl_nod = $this->conn_mysql->query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($this->form_selected_nod)."'");
+            $radku_nod = $vysl_nod->num_rows;
+        } catch (Exception $e) {
+        }
 
         if($radku_nod <> 1) {
             if((strlen($this->form_ip) < 1)) {
@@ -2409,7 +2413,7 @@ class objekt extends adminator
         }
 
         //return true;
-    } //konec funkce generujdata
+    }
 
     public function actionArchivZmenWifiDiff($vysledek_write): array
     {
@@ -3622,5 +3626,216 @@ class objekt extends adminator
         } // konec while
 
         return $output;
+    }
+
+    private function generujdata()
+    {
+        // promenne ktere potrebujem, a ktere budeme ovlivnovat
+        // global $ip, $mac, $ip_rozsah, $umisteni_aliasu, $tunnel_user, $tunnel_pass, $fail, $error;
+        // $this->form_selected_nod, $this->form_typ_ip, $this->form_dns, $this->conn_mysql
+
+        // skusime ip vygenerovat
+        try {
+            $vysl_ip = $this->conn_mysql->query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($this->form_selected_nod)."' ");
+            $radku_ip = $vysl_ip->num_rows;
+        } catch (Exception $e) {
+        }
+
+        //print "<div style=\"color: grey;\" >debug sql: "."SELECT ip_rozsah, umisteni_aliasu FROM nod_list WHERE id = '".intval($this->form_selected_nod)."' "."</div>";
+
+        if($radku_ip == 1) {
+            while ($data_ip = $vysl_ip->fetch_array()) {
+
+                $ip_rozsah = $data_ip["ip_rozsah"];
+
+                list($a, $b, $c, $d) = preg_split("/[.]/", $ip_rozsah);
+            }
+
+            /*
+            if( $ip_rozsah){
+
+            $gen_ip="E_4";
+
+            if( ( strlen($ip) <= 0) ){ $ip=$gen_ip; }
+            return false;
+            }
+            */
+
+            if($c == 0) {
+                // b-ckova ip
+                $gen_ip_find = $a.".".$b.".".$c.".".$d."/16";
+
+                $msq_check_ip = pg_query("SELECT ip FROM objekty WHERE ip <<= '$gen_ip_find' order by ip asc");
+                $msq_check_ip_radku = pg_num_rows($msq_check_ip);
+
+                if ($msq_check_ip_radku == 0) {
+                    $c = 10;
+                    $gen_ip = $a.".".$b.".".$c.".".$d;
+                } else {
+
+                    while ($data_check_ip = pg_fetch_array($msq_check_ip)) {
+                        $gen_ip = $data_check_ip["ip"];
+                    }
+
+                    list($a, $b, $c, $d) = preg_split("/[.]/", $gen_ip);
+
+                    $limit = 250;
+                    global $ip_error;
+
+                    if(($a == "212") and ($b == "80")) {
+                        $gen_ip = $ip_rozsah;
+                        $ip_error = "1";
+                    } elseif(($c >= $limit)) {
+                        $gen_ip = $ip_rozsah;
+                        $ip_error = "1";
+                    } else {
+                        list($a, $b, $c, $d) = split("[.]", $gen_ip);
+                        $c = $c + 1;
+                        $d = "3";
+                        $gen_ip = $a.".".$b.".".$c.".".$d;
+
+                    } //konec else gen ip > 255
+
+                } //konec else msq_check_ip_radku == 0
+
+            } //konec if c == 0
+            elseif(($a == "212") and ($b == "80")) { //verejny, 2 -- rout. prima, 4 -- tunelovana
+
+                $sql_src = "SELECT INET_NTOA(ip_address) AS ip_address FROM public_ip_to_use ";
+
+                if($typ_ip == 2) {
+                    $sql_src .= " WHERE mode = '1' ";
+                } elseif($typ_ip == 4) {
+                    $sql_src .= " WHERE mode = '0' ";
+                } else {
+                    $gen_ip = $ip_rozsah;
+
+                    if((strlen($ip) <= 0)) {
+                        $ip = $gen_ip;
+                    }
+                    return false;
+                }
+
+                $sql_src .= " ORDER BY public_ip_to_use.ip_address ASC ";
+
+                try {
+                    $dotaz = $this->conn_mysql->query($sql_src);
+                    $radku = $dotaz->num_rows;
+                } catch (Exception $e) {
+                    $radku = 0;
+                }
+
+                if($radku == 0) {
+                    $gen_ip = "E_3";
+
+                    if((strlen($ip) <= 0)) {
+                        $ip = $gen_ip;
+                    }
+                    return false;
+                }
+
+                while($data = $dotaz->fetch_array()) {
+                    $ip_address = $data["ip_address"];
+
+                    //kontrola :-)
+                    //if(true){ $gen_ip = $ip_address; }
+
+                    $dotaz_check = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE ip <<= '$ip_address' ");
+                    $dotaz_check_radku = pg_num_rows($dotaz_check);
+
+                    if(($dotaz_check_radku > 1)) { //chyba, vice adres vyhovelo vyberu
+                        $gen_ip = "E_4";
+
+                        if((strlen($ip) <= 0)) {
+                            $ip = $gen_ip;
+                        }
+                        return false;
+                    } elseif($dotaz_check_radku == 0) { //ip v DB není, OK
+                        $gen_ip = $ip_address;
+
+                        if((strlen($ip) <= 0)) {
+                            $ip = $gen_ip;
+                        }
+                        break;
+                    }
+
+                } //end of while data fetch dotaz
+
+            } //end of generate public IP address
+            elseif (($d == 0 and $c != 0)) {
+                // c-ckova ip
+                $gen_ip_find = $a.".".$b.".".$c.".".$d."/24";
+
+                $msq_check_ip = pg_query("SELECT * FROM objekty WHERE ip <<= '$gen_ip_find' order by ip asc");
+                $msq_check_ip_radku = pg_num_rows($msq_check_ip);
+
+                if($msq_check_ip_radku == 0) {
+                    $d = 10;
+                    $gen_ip = $a.".".$b.".".$c.".".$d;
+                } else {
+                    while($data_check_ip = pg_fetch_array($msq_check_ip)) {
+                        $gen_ip = $data_check_ip["ip"];
+                    }
+
+                    list($a, $b, $c, $d) = split("[.]", $gen_ip);
+
+                    global $ip_error;
+
+                    if($d >= "254") {
+                        $gen_ip = $a.".".$b.".".$c.".0";
+                        $ip_error = "1";
+                        $ip_rozsah = $gen_ip;
+                    } else {
+                        $d = $d + 2;
+                        $gen_ip = $a.".".$b.".".$c.".".$d;
+                    }
+                } // konec else radku == 0
+
+                // konec gen. ceckovy ip
+            } else {
+                $gen_ip = "E1"; //echo "chybnej vyber";
+            }
+
+            // vysledek predame
+            if((strlen($ip) <= 0)) {
+                $ip = $gen_ip;
+            }
+
+
+        } //end of: if $radku_ip == 1
+        else {
+
+            // vysledek predame
+            if((strlen($ip) <= 0)) {
+                $gen_ip = "E2"; //asi neprosel SQL dotaz
+            }
+
+            return false;
+        }
+
+        //zde generovani dalsich velicin
+        if($typ_ip == 4) {
+            if(((strlen($dns) <= 0) and (strlen($tunnel_user) <= 0) and (strlen($tunnel_pass) <= 0))) {
+                $gen_user = "E_DNS";
+                $gen_pass = "E_DNS";
+            } else {
+                $dns_trim = substr($dns, 0, 3).rand(0, 9);
+                $dns_trim2 = substr($dns, 0, 2).rand(0, 99);
+
+
+                $gen_user = $dns_trim;
+                $gen_pass = $dns_trim2;
+            }
+
+            if((strlen($tunnel_user) <= 0)) {
+                $tunnel_user = $gen_user;
+            }
+            if((strlen($tunnel_pass) <= 0)) {
+                $tunnel_pass = $gen_pass;
+            }
+
+
+        } //konec if typ_ip == 4
+
     }
 }
