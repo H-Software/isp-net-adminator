@@ -106,6 +106,10 @@ class objekt extends adminator
 
     private int $insertedId;
 
+    private $action_info;
+
+    private $action_error;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -340,7 +344,6 @@ class objekt extends adminator
     {
         $output = "";
         $exportLink = "";
-        $error = "";
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
 
@@ -584,13 +587,10 @@ class objekt extends adminator
         }
 
         if($this->form_sikana_status == 2) {
-
             \objektypridani::checkSikanaCas($this->form_sikana_cas);
 
             \objektypridani::checkSikanaText($this->form_sikana_text);
-
         }
-
 
         if($this->form_typ_ip == 4) {
             if((strlen($tunnel_user) > 0)) {
@@ -680,9 +680,9 @@ class objekt extends adminator
             }
 
             if ($stav_nodu == 2) {
-                $info .= "<div style=\"color: orange; \" ><h4>UPOZORNĚNÍ: Tento přípojný bod je vytížen, mohou se vyskytovat problémy. </h4></div>";
+                $this->action_info .= "<div style=\"color: orange; \" ><h4>UPOZORNĚNÍ: Tento přípojný bod je vytížen, mohou se vyskytovat problémy. </h4></div>";
             } elseif ($stav_nodu == 3) {
-                $info .= "<div style=\"color: orange; \"><h4>UPOZORNĚNÍ: Tento přípojný bod je přetížen. </h4></div>";
+                $this->action_info .= "<div style=\"color: orange; \"><h4>UPOZORNĚNÍ: Tento přípojný bod je přetížen. </h4></div>";
             } elseif ($stav_nodu == 3) {
                 $fail = "true";
                 $error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";
@@ -934,7 +934,7 @@ class objekt extends adminator
         if((isset($error)) or (!isset($this->send))) :
             $output .= $error;
 
-            $output .= $info;
+            $output .= $this->action_info;
 
             // vlozeni vlastniho formu
             // require("objekty-add-inc.php");
@@ -950,9 +950,9 @@ class objekt extends adminator
             </table>';
 
             $output .= '<br>
-            Objekt byl přidán/upraven , zadané údaje:<br><br> 
-            <b>Dns záznam</b>: ' . $this->form_dns . '<br> 
-            <b>IP adresa</b>: ' . $this->form_ip . '<br> 
+            Objekt byl přidán/upraven , zadané údaje:<br><br>
+            <b>Dns záznam</b>: ' . $this->form_dns . '<br>
+            <b>IP adresa</b>: ' . $this->form_ip . '<br>
             <b>client ap ip </b>: ' . $this->form_client_ap_ip . '<br>'
             . "<br><b>Typ objektu </b>:";
 
@@ -966,7 +966,7 @@ class objekt extends adminator
                 $output .= "chybný výběr";
             }
 
-        $output .= '<br> 
+        $output .= '<br>
                  <b>Linka</b>: ';
 
         $vysledek4 = $this->conn_mysql->query("SELECT jmeno_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu='".intval($this->form_id_tarifu)."' ");
@@ -989,7 +989,7 @@ class objekt extends adminator
         }
         $output .= '<br>
             <br>
-            <b>MAC </b>: ' . $this->form_mac . '<br> 
+            <b>MAC </b>: ' . $this->form_mac . '<br>
             <br>
             <b>Poznámka</b>: ' . $this->form_pozn . '<br>
             <b>Přípojný bod</b>:';
@@ -1188,9 +1188,9 @@ class objekt extends adminator
             }
 
             if ($stav_nodu == 2) {
-                $info .= "<div style=\"color: orange; \" ><h4>UPOZORNĚNÍ: Tento přípojný bod je vytížen, mohou se vyskytovat problémy. </h4></div>";
+                $this->action_info .= "<div style=\"color: orange; \" ><h4>UPOZORNĚNÍ: Tento přípojný bod je vytížen, mohou se vyskytovat problémy. </h4></div>";
             } elseif (($stav_nodu == 3) and ($update_status == 1)) {
-                $info .= "<div style=\"color: orange; \"><h4>UPOZORNĚNÍ: Tento přípojný bod je přetížen. </h4></div>";
+                $this->action_info .= "<div style=\"color: orange; \"><h4>UPOZORNĚNÍ: Tento přípojný bod je přetížen. </h4></div>";
             } elseif ($stav_nodu == 3) {
                 $fail = "true";
                 $error .= "<div style=\"color: red; \" ><h4>Tento přípojný bod je přetížen, vyberte prosím jiný. </h4></div>";
@@ -1401,7 +1401,7 @@ class objekt extends adminator
         if ((isset($error)) or (!isset($this->send))) :
             $output .= $error;
 
-            $output .= $info;
+            $output .= $this->action_info;
 
             // vlozeni vlastniho formu
             $output .= $this->actionFormFiber();
@@ -1413,9 +1413,9 @@ class objekt extends adminator
                 <td align="right">Zpět na objekty </td>
                 <td><form action="/objekty" method="GET" >
                 <input type="hidden" ' . "value=\"".$this->form_dns."\"" . ' name="dns_find" >
-                
+
                 <input type="hidden" value="2" name="mod_vypisu" >
-                
+
                 <input type="submit" value="ZDE" name="odeslat" > </form></td>
             <!--
                 <td align="right">Restart (optika all) </td>
@@ -1428,8 +1428,8 @@ class objekt extends adminator
             </table>
 
             <br>
-            Objekt byl přidán/upraven , zadané údaje:<br><br> 
-            <b>Dns záznam</b>: ' .  $this->form_dns . '<br> 
+            Objekt byl přidán/upraven , zadané údaje:<br><br>
+            <b>Dns záznam</b>: ' .  $this->form_dns . '<br>
             <b>IP adresa</b>: ' . $this->form_ip . '<br>
             <b>MAC adresa:</b>' . $this->form_mac . '<br>';
 
@@ -1445,7 +1445,7 @@ class objekt extends adminator
                 $output .= "chybný výběr";
             }
 
-        $output .= '<br> 
+        $output .= '<br>
 
             <b>Linka</b>:';
 
@@ -1523,7 +1523,7 @@ class objekt extends adminator
         $output .= $this->csrf_html[0];
 
         $output .= '<table border="0" width="100%" >
-            
+
             <tr>
             <td><span style="font-weight: bold; font-size: 18px; color: teal;" >Mód:</span></td>
             <td >
@@ -1536,12 +1536,12 @@ class objekt extends adminator
         if($this->mod_objektu == 2) {
             $output .= " selected ";
         } $output .= ' >Optická síť</option>
-            </select>  
+            </select>
             </td>
             </tr>
 
             <tr><td colspan="4" ><br></td></td>
-            
+
             <tr>
             <td width="170px" >dns záznam:</td>
             <td width="380px" ><input type="Text" name="dns" size="30" maxlength="50" value="'.$this->form_dns.'" ></td>
@@ -1575,7 +1575,7 @@ class objekt extends adminator
         $output .= '<span style="padding-left: 5px; padding-right: 5px;"> | </span>
                 <span style="padding-right: 10px;">Veřejná </span>
                 </td>
-                <td> 
+                <td>
                 <select size="1" name="typ_ip" onchange="self.document.forms.form1.submit()" >';
         $output .= '<option value="1" class="select-nevybrano" ';
         if($this->form_typ_ip == 1) {
@@ -1603,11 +1603,11 @@ class objekt extends adminator
                 </td>
                 </tr>
                 </table>
-                                    
+
                 <input type="hidden" name="vip_rozsah" value="1" >
 
             </td>
-                
+
             <td><label> Přípojný bod: </label></td>
             <td>';
 
@@ -1644,11 +1644,11 @@ class objekt extends adminator
 
         $output .= '<input type="button" value="Generovat / hledat (nody)" name="G" onClick="self.document.forms.form1.submit()" >
                     </td>
-                    
+
             </tr>
-            
+
             <tr><td colspan="4" ><br></td></tr>
-                                                        
+
             <tr>
                 <td>ip adresa:</td>
                 <td><input type="Text" name="ip" size="30" maxlength="20" value="'.$this->form_ip.'" >';
@@ -1663,7 +1663,7 @@ class objekt extends adminator
         if($this->form_typ_ip == 3) {
             $output .= "<label> Lokální adresa k veřejné: </label>";
         } elseif($this->form_typ_ip == 4) {
-            $output .= "Přihlašovací údaje 
+            $output .= "Přihlašovací údaje
                         <span style=\"font-size: 11px;\">(k tunelovacímu serveru): </span>";
         } else {
             $output .= "<span style=\"color: gray; \" >Není dostupné </span>";
@@ -1716,9 +1716,9 @@ class objekt extends adminator
         $output .= '
                 </td>
             </tr>
-            
+
             <tr><td colspan="4" ><br></td></tr>
-            
+
             <tr>
                 <td>mac adresa: <div style="font-size: 12px;">(prouze pro DHCP server/y)</div></td>
                 <td>';
@@ -1731,11 +1731,11 @@ class objekt extends adminator
 
         $output .= '
                 </td>
-            
+
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>	
+                <td>&nbsp;</td>
             </tr>
-                                                        
+
             <tr><td colspan="4"><br></td></tr>
 
             <tr>
@@ -1772,14 +1772,14 @@ class objekt extends adminator
         }
         $output .= "</td>";
 
-        $output .= '   
+        $output .= '
             </tr>
             <tr><td colspan="4" ><br></td></tr>
-            
+
             <tr>
             <td>Typ:</td>
             <td>
-            
+
             <select name="typ" onChange="self.document.forms.form1.submit()" >
                     <option value="1" ';
         if ($this->form_typ == 1) {
@@ -1794,7 +1794,7 @@ class objekt extends adminator
             $output .= " selected ";
         } $output .= ' >AP</option>
             </select>
-            
+
             </td>
             <td>Šikana: </td>
             <td>';
@@ -1820,7 +1820,7 @@ class objekt extends adminator
 
                 <tr><td colspan="4" ><br></td></tr>
 
-                <tr>	
+                <tr>
                 <td style="" >Tarif:</td>
                 <td>';
 
@@ -1877,7 +1877,7 @@ class objekt extends adminator
             $output .= "<input type=\"text\" name=\"sikana_cas\" size=\"5\" value=\"".$this->form_sikana_cas."\" >";
         }
 
-        $output .= '	    
+        $output .= '
             </td>
             </tr>
 
@@ -1888,7 +1888,7 @@ class objekt extends adminator
                     <td>
                         <textarea name="pozn" cols="30" rows="6" wrap="soft">' . $this->form_pozn . '</textarea>
                     </td>
-                    
+
                     <td><label>Šikana - text: </label></td>
                     <td>';
 
@@ -1906,7 +1906,7 @@ class objekt extends adminator
                 <tr><td colspan="4" ><br></td></tr>
 
                 <tr>
-                    <td colspan="2" align="center">	
+                    <td colspan="2" align="center">
                     <hr>
                     <input name="odeslano" type="submit" value="OK">
                     </td>
@@ -1914,7 +1914,7 @@ class objekt extends adminator
                     <br>
                     </td>
                 </tr>
-                    
+
                 </table>
                 </form>';
 
@@ -1933,7 +1933,7 @@ class objekt extends adminator
         $output .= $this->csrf_html[0];
 
         $output .= '<table border="0" width="100%" cellspacing="5" >
-                
+
                 <tr>
                 <td><span style="font-weight: bold; font-size: 18px; color: teal;" >Mód:</span></td>
                 <td >
@@ -1946,12 +1946,12 @@ class objekt extends adminator
         if($this->mod_objektu == 2) {
             $output .= " selected ";
         } $output .= ' >Optická síť</option>
-                </select>  
+                </select>
                 </td>
                 </tr>
 
                 <tr><td colspan="4" ><br></td></td>
-                
+
                 <tr>
                 <td width="20%" >dns záznam:</td>
                 <td width="" ><input type="Text" name="dns" size="30" maxlength="50" value="'.$this->form_dns.'" ></td>
@@ -1971,14 +1971,14 @@ class objekt extends adminator
             $output .= "checked";
         } $output .= ' >
                     <label>Neveřejná | </label>
-                    
+
                     <input type="radio" name="typ_ip" onchange="self.document.forms.form1.submit()" value="2" ';
         if ($this->form_typ_ip == 2) {
             $output .= " checked ";
         } $output .= ' >
                     <label>Veřejná </label>
                 </td>
-                    
+
                 <td><label> Přípojný bod: </label></td>
                     <td>';
 
@@ -2015,9 +2015,9 @@ class objekt extends adminator
         $output .= '<input type="button" value="Hledat (nody)" name="G" onClick="self.document.forms.form1.submit()" >
                     </td>
                 </tr>
-                
+
                 <tr><td colspan="4" ><br></td></tr>
-                                                            
+
                 <tr>
                 <td>ip adresa:</td>
                 <td><input type="Text" name="ip" size="30" maxlength="20"  value="'.$this->form_ip.'" >';
@@ -2029,7 +2029,7 @@ class objekt extends adminator
         $output .= '
                     </td>
                     <td>Linka: </td>
-                    
+
                     <td>';
 
         if(!isset($this->form_id_tarifu)) {
@@ -2063,7 +2063,7 @@ class objekt extends adminator
         $output .= "</td>";
 
 
-        $output .= '    
+        $output .= '
                 </td>
                 </tr>';
 
@@ -2073,17 +2073,17 @@ class objekt extends adminator
                 <td>mac adresa:</td>
                 <td><input type="text" name="mac" size="30" "value="'.$this->form_mac.'" ></td>
                 <td colspan="2" align="center" >
-                <input type="button" value="Generovat údaje ...." name="G" 
+                <input type="button" value="Generovat údaje ...." name="G"
                     style="width: 300px; background-color: red; color: white; " onClick="self.document.forms.form1.submit()" >
                 </td></tr>
 
                 <tr><td colspan="4" ><br></td></tr>
-                
+
                 <tr>
 
                 <td>Typ:</td>
                 <td>
-                    
+
                 <select name="typ" onChange="self.document.forms.form1.submit()" >
                         <option value="1" ';
         if ($this->form_typ == 1) {
@@ -2094,7 +2094,7 @@ class objekt extends adminator
             $output .= " selected ";
         } $output .= ' >poc (free)</option>
                 </select>
-                
+
                 </td>
 
                 <td>Povolen NET:</td>
@@ -2122,11 +2122,11 @@ class objekt extends adminator
         }
         $output .= "</td>";
 
-        $output .= '  
+        $output .= '
                 </tr>
-                
+
                 <tr><td colspan="4" ><br></td></tr>
-                
+
             <tr>
 
                     <td>Číslo portu (ve switchi): </td>
@@ -2148,7 +2148,7 @@ class objekt extends adminator
         $output .= '
                 </select>
                 </td>
-                
+
                 <td>Šikana:</td>
                 <td>';
 
@@ -2173,9 +2173,9 @@ class objekt extends adminator
                 </tr>
 
                 <tr><td colspan="4" ><br></td></tr>
-                
-                <tr> 
-                
+
+                <tr>
+
                 <td> </td>
                 <td> </td>';
 
@@ -2199,7 +2199,7 @@ class objekt extends adminator
                 <td>
                     <textarea name="pozn" cols="30" rows="6" wrap="soft" >' . $this->form_pozn . '</textarea>
                 </td>
-                
+
                 <td><label>Šikana - text: </label></td>
                 <td>';
 
@@ -2233,7 +2233,7 @@ class objekt extends adminator
             }
 
             $output .= " >".$data_vlan["jmeno"];
-            $output .= " ( vlan_id: ".$data_vlan["vlan_id"]." )		
+            $output .= " ( vlan_id: ".$data_vlan["vlan_id"]." )
                         </option>";
         }
 
@@ -2268,7 +2268,7 @@ class objekt extends adminator
             <tr><td colspan="4" align="center" >
             <input type="submit" value="OK / Odeslat / Uložit .... " name="odeslano" style="width: 400px; background-color: green; color: white; " >
             </td></tr>
-                
+
             </table>
             </form>';
 
