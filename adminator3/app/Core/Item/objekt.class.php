@@ -2420,10 +2420,8 @@ class objekt extends adminator
 
     private function generujdata(): bool
     {
-        // promenne ktere potrebujem, a ktere budeme ovlivnovat
-        // global $mac, $ip_rozsah, $umisteni_aliasu, $tunnel_user, $tunnel_pass;
+        // skusime ip adresu vygenerovat
 
-        // skusime ip vygenerovat
         try {
             $vysl_ip = $this->conn_mysql->query("SELECT ip_rozsah FROM nod_list WHERE id = '".intval($this->form_selected_nod)."' ");
             $radku_ip = $vysl_ip->num_rows;
@@ -2472,7 +2470,6 @@ class objekt extends adminator
                         $gen_ip = $ip_rozsah;
                         $this->form_ip_error = 1;
                     } else {
-                        list($a, $b, $c, $d) = preg_match("/[.]/", $gen_ip);
                         $c = $c + 1;
                         $d = "3";
                         $gen_ip = $a.".".$b.".".$c.".".$d;
@@ -2578,8 +2575,8 @@ class objekt extends adminator
             }
 
             // vysledek predame
-            if((strlen($ip) <= 0)) {
-                $ip = $gen_ip;
+            if((strlen($this->form_ip) <= 0)) {
+                $this->form_ip = $gen_ip;
             }
 
 
@@ -2587,7 +2584,7 @@ class objekt extends adminator
         else {
 
             // vysledek predame
-            if((strlen($ip) <= 0)) {
+            if((strlen($this->form_ip) <= 0)) {
                 $gen_ip = "E2"; //asi neprosel SQL dotaz
             }
 
