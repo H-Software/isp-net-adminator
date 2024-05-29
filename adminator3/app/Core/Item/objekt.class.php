@@ -2317,7 +2317,7 @@ class objekt extends adminator
 
         if(!($gen_poradi > 0)) {
             //znama chyba, nechame prazdne...
-            //if( ( strlen($ip) < 1 ) ){ $ip = "E_3"; }
+            //if( ( strlen($this->form_ip) < 1 ) ){ $ip = "E_3"; }
             return false;
         }
 
@@ -2421,7 +2421,7 @@ class objekt extends adminator
     private function generujdata(): bool
     {
         // promenne ktere potrebujem, a ktere budeme ovlivnovat
-        // global $ip, $mac, $ip_rozsah, $umisteni_aliasu, $tunnel_user, $tunnel_pass, $fail;
+        // global $mac, $ip_rozsah, $umisteni_aliasu, $tunnel_user, $tunnel_pass;
 
         // skusime ip vygenerovat
         try {
@@ -2464,14 +2464,13 @@ class objekt extends adminator
                     list($a, $b, $c, $d) = preg_split("/[.]/", $gen_ip);
 
                     $limit = 250;
-                    global $ip_error;
 
                     if(($a == "212") and ($b == "80")) {
                         $gen_ip = $ip_rozsah;
-                        $ip_error = "1";
+                        $this->form_ip_error = 1;
                     } elseif(($c >= $limit)) {
                         $gen_ip = $ip_rozsah;
-                        $ip_error = "1";
+                        $this->form_ip_error = 1;
                     } else {
                         list($a, $b, $c, $d) = preg_match("/[.]/", $gen_ip);
                         $c = $c + 1;
@@ -2494,8 +2493,8 @@ class objekt extends adminator
                 } else {
                     $gen_ip = $ip_rozsah;
 
-                    if((strlen($ip) <= 0)) {
-                        $ip = $gen_ip;
+                    if((strlen($this->form_ip) <= 0)) {
+                        $this->form_ip = $gen_ip;
                     }
                     return false;
                 }
@@ -2512,8 +2511,8 @@ class objekt extends adminator
                 if($radku == 0) {
                     $gen_ip = "E_3";
 
-                    if((strlen($ip) <= 0)) {
-                        $ip = $gen_ip;
+                    if((strlen($this->form_ip) <= 0)) {
+                        $this->form_ip = $gen_ip;
                     }
                     return false;
                 }
@@ -2530,15 +2529,15 @@ class objekt extends adminator
                     if(($dotaz_check_radku > 1)) { //chyba, vice adres vyhovelo vyberu
                         $gen_ip = "E_4";
 
-                        if((strlen($ip) <= 0)) {
-                            $ip = $gen_ip;
+                        if((strlen($this->form_ip) <= 0)) {
+                            $this->form_ip = $gen_ip;
                         }
                         return false;
                     } elseif($dotaz_check_radku == 0) { //ip v DB není, OK
                         $gen_ip = $ip_address;
 
-                        if((strlen($ip) <= 0)) {
-                            $ip = $gen_ip;
+                        if((strlen($this->form_ip) <= 0)) {
+                            $this->form_ip = $gen_ip;
                         }
                         break;
                     }
@@ -2563,11 +2562,9 @@ class objekt extends adminator
 
                     list($a, $b, $c, $d) = preg_split("/[.]/", $gen_ip);
 
-                    global $ip_error;
-
                     if($d >= "254") {
                         $gen_ip = $a.".".$b.".".$c.".0";
-                        $ip_error = "1";
+                        $this->form_ip_error = 1;
                         $ip_rozsah = $gen_ip;
                     } else {
                         $d = $d + 2;
