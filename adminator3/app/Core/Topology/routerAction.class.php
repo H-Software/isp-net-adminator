@@ -44,6 +44,8 @@ class RouterAction extends adminator
 
     public $p_bs_alerts = array(); // partial -> boostrap alerts
 
+    public $origDataArray;
+
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
@@ -592,8 +594,6 @@ class RouterAction extends adminator
 
         if($this->form_update_id > 0) {
 
-            $pole = "<b>akce: uprava routeru;</b><br>";
-
             // prvne zjistime puvodni hodnoty
             try {
                 $dotaz_top = $this->conn_mysql->query("SELECT nazev, ip_adresa, parent_router, mac, monitoring, 
@@ -616,16 +616,16 @@ class RouterAction extends adminator
             } else {
                 while($data_top = $dotaz_top->fetch_array()):
 
-                    $pole_puvodni_data["nazev"] = $data_top["nazev"];
-                    $pole_puvodni_data["ip_adresa"] = $data_top["ip_adresa"];
-                    $pole_puvodni_data["parent_router"] = $data_top["parent_router"];
-                    $pole_puvodni_data["mac"] = $data_top["mac"];
-                    $pole_puvodni_data["monitoring"] = $data_top["monitoring"];
-                    $pole_puvodni_data["monitoring_cat"] = $data_top["monitoring_cat"];
-                    $pole_puvodni_data["alarm"] = $data_top["alarm"];
-                    $pole_puvodni_data["filtrace"] = $data_top["filtrace"];
-                    $pole_puvodni_data["id_nodu"] = $data_top["id_nodu"];
-                    $pole_puvodni_data["poznamka"] = $data_top["poznamka"];
+                    $this->origDataArray["nazev"] = $data_top["nazev"];
+                    $this->origDataArray["ip_adresa"] = $data_top["ip_adresa"];
+                    $this->origDataArray["parent_router"] = $data_top["parent_router"];
+                    $this->origDataArray["mac"] = $data_top["mac"];
+                    $this->origDataArray["monitoring"] = $data_top["monitoring"];
+                    $this->origDataArray["monitoring_cat"] = $data_top["monitoring_cat"];
+                    $this->origDataArray["alarm"] = $data_top["alarm"];
+                    $this->origDataArray["filtrace"] = $data_top["filtrace"];
+                    $this->origDataArray["id_nodu"] = $data_top["id_nodu"];
+                    $this->origDataArray["poznamka"] = $data_top["poznamka"];
 
                 endwhile;
             }
@@ -643,16 +643,10 @@ class RouterAction extends adminator
             }
 
             //ulozeni do archivu zmen
-            $this->actionArchivZmenDiff();
+            $this->actionArchivZmenDiff($vysledek_write);
 
             // TODO: fix this
             // require("topology-router-add-inc-archiv-zmen.php");
-
-            // if($id > 0) {
-            //     $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
-            // } else {
-            //     $this->p_bs_alerts["Chyba! Akci se nepodařilo zaznamenat do archivu změn."] = "danger";
-            // }
 
             //automatické restarty
             // TODO: fix this
@@ -750,9 +744,176 @@ class RouterAction extends adminator
         return [$output, true];
     }
 
-    private function actionArchivZmenDiff()
+    private function actionArchivZmenDiff(int $vysledek_write): void
     {
+        $nod_upd["nazev"] = $this->form_nazev;
+        $nod_upd["ip_adresa"] = $this->form_ip_adresa;
+        $nod_upd["parent_router"] = $this->form_parent_router;
+        $nod_upd["mac"] = $this->form_mac;
+        $nod_upd["monitoring"] = $this->form_monitoring;
+        $nod_upd["monitoring_cat"] = $this->form_monitoring_cat;
+        $nod_upd["alarm"] = $this->form_alarm;
+        //    $nod_upd["device_type_id"] = $device_type_id;
 
+        $nod_upd["filtrace"] = $this->form_filtrace;
+        $nod_upd["id_nodu"] = $this->form_selected_nod;
+        $nod_upd["poznamka"] = $this->form_poznamka;
+
+        //$pole3 .= "[id_nodu] => ".$id_new;
+        $pole3 = "<b>akce: uprava routeru;</b><br>";
+        $pole3 .= " [id_routeru] => <a href=\"/topology/router\">".$this->form_update_id."</a> diferencialni data: ";
+
+        //novy zpusob archivovani dat
+        foreach($this->origDataArray as $key => $val) {
+            if(!($nod_upd[$key] == $val)) {
+                if($key == "parent_router") {
+                    $pole3 .= "změna <b>Nadřazený router</b> z: ";
+                    $pole3 .= "<span class=\"az-s1\">";
+
+                    $dotaz_router1 = $this->conn_mysql->query("SELECT nazev FROM router_list WHERE id = '$val'");
+                    if(($dotaz_router1->num_rows == 1)) {
+                        while($data = $dotaz_router1->fetch_array()) {
+                            $pole3 .= $data["nazev"]." (".$val.")";
+                        }
+                    } else {
+                        $pole3 .= $val;
+                    }
+
+                    $pole3 .= "</span> na: <span class=\"az-s2\">";
+
+                    $id = $nod_upd[$key];
+                    $dotaz_router2 = $this->conn_mysql->query("SELECT nazev FROM router_list WHERE id = '$id'");
+                    if(($dotaz_router2->num_rows == 1)) {
+                        while($data = $dotaz_router2->fetch_array()) {
+                            $pole3 .= $data["nazev"]." (".$id.")";
+                        }
+                    } else {
+                        $pole3 .= $id;
+                    }
+
+                    $pole3 .= "</span>";
+                    $pole3 .= ", ";
+                } //konec key == parent_router
+                elseif($key == "monitoring") {
+                    $pole3 .= "změna <b>Monitorování</b> z: "."<span class=\"az-s1\">";
+
+                    if($val == 1) {
+                        $pole3 .= "Ano";
+                    } elseif($val == 0) {
+                        $pole3 .= "Ne";
+                    } else {
+                        $pole3 .= $val;
+                    }
+
+                    $pole3 .= "</span>";
+                    $pole3 .= " na: <span class=\"az-s2\">";
+
+                    if($nod_upd[$key] == 1) {
+                        $pole3 .= "Ano";
+                    } elseif($nod_upd[$key] == 0) {
+                        $pole3 .= "Ne";
+                    } else {
+                        $pole3 .= $nod_upd[$key];
+                    }
+
+                    $pole3 .= "</span>";
+                    $pole3 .= ", ";
+                } //konec key == monitoring
+                elseif($key == "monitoring_cat") {
+                    $pole3 .= "změna <b>Monitoring kategorie</b> z: "."<span class=\"az-s1\">".$val."</span>";
+                    $pole3 .= " na: <span class=\"az-s2\">".$nod_upd[$key]."</span>, ";
+                } //konec key == monitoring_cat
+                elseif($key == "alarm") {
+                    $pole3 .= "změna <b>Alarmu</b> z: "."<span class=\"az-s1\">";
+
+                    if($val == 1) {
+                        $pole3 .= "Zapnuto";
+                    } elseif($val == 0) {
+                        $pole3 .= "Vypnuto";
+                    } else {
+                        $pole3 .= $val;
+                    }
+
+                    $pole3 .= "</span>";
+                    $pole3 .= " na: <span class=\"az-s2\">";
+
+                    if($nod_upd[$key] == 1) {
+                        $pole3 .= "Zapnuto";
+                    } elseif($nod_upd[$key] == 0) {
+                        $pole3 .= "Vypnuto";
+                    } else {
+                        $pole3 .= $nod_upd[$key];
+                    }
+
+                    $pole3 .= "</span>";
+                    $pole3 .= ", ";
+                } //konec key == alarm
+                elseif($key == "id_nodu") {
+                    $pole3 .= "změna <b>Připojného bodu</b> z: ";
+
+                    $vysl_t1 = $this->conn_mysql->query("select jmeno FROM nod_list WHERE id = '$val'");
+                    while ($data_t1 = mysql_fetch_array($vysl_t1)) {
+                        $pole3 .= "<span class=\"az-s1\">".$data_t1["jmeno"]."</span>";
+                    }
+
+                    $pole3 .= " na: ";
+
+                    $val2 = $nod_upd[$key];
+
+                    $vysl_t2 = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '$val2'");
+                    while ($data_t2 = mysql_fetch_array($vysl_t2)) {
+                        $pole3 .= "<span class=\"az-s2\">".$data_t2["jmeno"]."</span>";
+                    }
+
+                    $pole3 .= ", ";
+                } // konec key == id_nodu
+                elseif($key == "filtrace") {
+                    $pole3 .= "změna <b>Filtrace</b> z: "."<span class=\"az-s1\">";
+
+                    if($val == 1) {
+                        $pole3 .= "Ano";
+                    } elseif($val == 0) {
+                        $pole3 .= "Ne";
+                    } else {
+                        $pole3 .= $val;
+                    }
+
+                    $pole3 .= "</span>";
+                    $pole3 .= " na: <span class=\"az-s2\">";
+
+                    if($nod_upd[$key] == 1) {
+                        $pole3 .= "Ano";
+                    } elseif($nod_upd[$key] == 0) {
+                        $pole3 .= "Ne";
+                    } else {
+                        $pole3 .= $nod_upd[$key];
+                    }
+
+                    $pole3 .= "</span>";
+                    $pole3 .= ", ";
+                } //konec key == filtrace
+
+                else { // ostatni mody, nerozpoznane
+                    $pole3 .= "změna pole: <b>".$key."</b> z: <span class=\"az-s1\" >".$val."</span> ";
+                    $pole3 .= "na: <span class=\"az-s2\">".$nod_upd[$key]."</span>, ";
+                } //konec else
+            } // konec if key == val
+        } // konec foreach
+
+        if(preg_match("/.*změna.*/", $pole3) == false) {
+            $pole3 .= " <b>nebyly provedeny žádné změny</b> ";
+        }
+
+        $add = $this->conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+                    "('".$this->conn_mysql->real_escape_string($pole3)."',".
+                    "'". $this->loggedUserEmail ."',".
+                    "'". $vysledek_write ."') ");
+
+        if($add) {
+            $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
+        } else {
+            $this->p_bs_alerts["Akci se nepodařilo zaznamenat do archivu změn."] = "warning";
+        }
     }
 
     private function actionArchivZmenAdd(int $vysledek_write): void
