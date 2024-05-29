@@ -104,9 +104,7 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: hledání");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci :: hledání"];
 
         $vlastnikfind = new \vlastnikfind();
         $vlastnikfind->conn_mysql = $this->conn_mysql;
@@ -127,23 +125,19 @@ class vlastniciController extends adminatorController
         // $sql = $this->conn_mysql->real_escape_string($find);
 
         if (empty($_GET["najdi"])) {
-            $this->smarty->assign("form_find", "%");
+            $assignData["form_find"] = "%";
         } else {
-            $this->smarty->assign("form_find", htmlspecialchars($find));
+            $assignData["form_find"] = htmlspecialchars($find);
         }
 
-        $this->smarty->assign("form_select", $form_select);
-        $this->smarty->assign("form_razeni", $form_razeni);
-        $this->smarty->assign("form_razeni2", $form_razeni2);
+        $assignData["form_select"] = $form_select;
+        $assignData["form_razeni"] = $form_razeni;
+        $assignData["form_razeni2"] = $form_razeni2;
 
         if(empty($_GET["find"])) {
-            $body = "Zadejte výraz k vyhledání.... <br>";
+            $assignData["bodyNoData"] = "Zadejte výraz k vyhledání.... <br>";
 
-            $this->smarty->assign("bodyNoData", $body);
-
-            $this->smarty->display('vlastnici/hledani.tpl');
-
-            return $response;
+            return $this->renderer->template($request, $response, 'vlastnici/hledani.tpl', $assignData);
         }
 
         $sql = "%".htmlspecialchars($find)."%";
@@ -203,10 +197,10 @@ class vlastniciController extends adminatorController
         }
 
         $bc1 = $vlastnikfind->vypis_tab(1);
-        $this->smarty->assign("body1", $bc1);
+        $assignData["body1"] = $bc1;
 
         $bc2 = $vlastnikfind->vypis($sql, $dotaz_source);
-        $this->smarty->assign("body2", $bc2);
+        $assignData["body2"] = $bc2;
 
         $sql = "".$sql."";
         $select1 = " WHERE firma is not NULL AND ( archiv = 0 or archiv is null ) AND ";
@@ -223,20 +217,18 @@ class vlastniciController extends adminatorController
         }
 
         $bc3 = $vlastnikfind->vypis($sql, $dotaz_source);
-        $this->smarty->assign("body3", $bc3);
+        $assignData["body3"] = $bc3;
 
         $sql = "".$sql."";
         $dotaz_source = "26058677";
 
         $bc4 = $vlastnikfind->vypis($sql, $dotaz_source, "2");
-        $this->smarty->assign("body4", $bc4);
+        $assignData["body4"] = $bc4;
 
         $bc5 = $vlastnikfind->vypis_tab(2);
-        $this->smarty->assign("body5", $bc5);
+        $assignData["body5"] = $bc5;
 
-        $this->smarty->display('vlastnici/hledani.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/hledani.tpl', $assignData);
     }
 
     public function vlastnici(ServerRequestInterface $request, ResponseInterface $response, array $args)
