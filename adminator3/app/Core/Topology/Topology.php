@@ -603,10 +603,10 @@ class Topology extends adminator
 
                 $router_id = $zaznam["router_id"];
 
-                $router_nazev = "<span style=\"color: red\">nelze zjistit </span>";
+                $router_nazev = "<span style=\"color: red\">nelze zjistit (ID: ".$router_id.")</span>";
                 $router_ip = "";
 
-                if ($router_id > 1) {
+                if ($router_id > 0) {
                     try {
                         $vysledek_router = $this->pdoMysql->query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
                         $data_router = $vysledek_router->fetchAll();

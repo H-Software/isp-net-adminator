@@ -161,9 +161,56 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertStringContainsString("Nelze zobrazit požadovanou stránku", $responseContent, __FUNCTION__ . " :: missing string 1 in response body");
         $this->assertStringContainsString("Pro otevřetí této stránky nemáte dostatečné oprávnění (level).", $responseContent, __FUNCTION__ . " :: missing string 2 in response body");
 
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
+
         // clean-up
         $response = null;
         $topologyController = null;
         $serverRequest = null;
     }
+
+    public function test_ctl_node_list_view_non_exist()
+    {
+        $this->markTestSkipped('under construction');
+        $self = $this;
+
+        $container = self::initDIcontainer(true, false);
+
+        $adminatorMock = self::initAdminatorMockClass($container);
+        $this->assertIsObject($adminatorMock);
+
+        $topologyController = new topologyController($container, $adminatorMock);
+
+        $server = [
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => '/topology/router',
+        ];
+
+        $serverRequest = $this->creator->fromArrays(
+            $server,
+            [],
+            [],
+            [],
+        );
+
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $response = $responseFactory->createResponse();
+
+        $response = $topologyController->nodeList($serverRequest, $response, []);
+
+        $this->assertEquals($response->getStatusCode(), 200);
+
+        $responseContent = $response->getBody()->__toString();
+
+        // echo $responseContent;
+
+        self::runBasicAsserts($responseContent);
+
+        // clean-up
+        $response = null;
+        $topologyController = null;
+        $serverRequest = null;
+    }
+
 }
