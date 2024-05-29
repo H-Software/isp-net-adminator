@@ -681,7 +681,7 @@ class objekt extends adminator
 
             if ($stav_nodu == 2) {
                 $info .= "<div style=\"color: orange; \" ><h4>UPOZORNĚNÍ: Tento přípojný bod je vytížen, mohou se vyskytovat problémy. </h4></div>";
-            } elseif (($stav_nodu == 3) and ($update_status == 1)) {
+            } elseif ($stav_nodu == 3) {
                 $info .= "<div style=\"color: orange; \"><h4>UPOZORNĚNÍ: Tento přípojný bod je přetížen. </h4></div>";
             } elseif ($stav_nodu == 3) {
                 $fail = "true";
@@ -2434,7 +2434,7 @@ class objekt extends adminator
             }
 
             if($ip_rs == false) {
-                $gen_ip = "E3"; // split failed
+                $gen_ip = "E4"; // split failed
                 return false;
             } else {
                 list($a, $b, $c, $d) = $ip_rs;
@@ -2470,13 +2470,13 @@ class objekt extends adminator
 
                     $ip_rs = preg_split("/[\.]/", $gen_ip);
                     if($ip_rs == false){
-                        $gen_ip = "E3"; // split failed
+                        $gen_ip = "E4"; // split failed
                         return false;
                     }
                     else {
                         list($a, $b, $c, $d) = $ip_rs;
+                        $c = intval($c);
                     }
-                    $c = intval($c);
 
                     $limit = 250;
 
@@ -2526,7 +2526,7 @@ class objekt extends adminator
                 }
 
                 if($radku == 0) {
-                    $gen_ip = "E_3";
+                    $gen_ip = "E3";
 
                     if((strlen($this->form_ip) <= 0)) {
                         $this->form_ip = $gen_ip;
