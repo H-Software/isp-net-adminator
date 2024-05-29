@@ -17,7 +17,7 @@ CREATE TABLE `archiv_zmen` (
   `provedeno_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `vysledek` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=191 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysledek`) VALUES
 (1,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 5, [mac_adresa]=> 43:22:33:44:55:66, [ip_adresa]=> 10.10.10.4, [puk]=> , [popis]=> stb4, [id_nodu]=> 2, [sw_port]=> 4 [pozn]=> pozn 4, [id_tarifu]=> 1',	'2024-04-12 09:34:49',	'admin',	1),
@@ -189,7 +189,20 @@ INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysl
 (187,	'<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => 2, [<b>item_name</b>] => reinhard-wifi (ros) - restrictions (net-n/sikana)',	'2024-05-27 17:02:15',	'admin@admin',	1),
 (188,	'<b>akce: uprava objektu; </b><br>[id_komplu]=> 1, diferencialni data: změna pole: <b>dns_jmeno</b> z: <span class=\"az-s1\" >test-wifi-1                                                                                                                                           </span> na: <span class=\"az-s2\">test-wifi-1</span>, změna pole: <b>poznamka</b> z: <span class=\"az-s1\" >test 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </span> na: <span class=\"az-s2\">test 2</span>, změna <b>Šikana</b> z: <span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>, ',	'2024-05-27 17:19:31',	'admin@admin',	1),
 (189,	'<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => 2, [<b>item_name</b>] => reinhard-wifi (ros) - restrictions (net-n/sikana)',	'2024-05-27 17:19:31',	'admin@admin',	1),
-(190,	'<b>akce: pridani routeru;</b><br> nazev: router-test-4, ip adresa: 10.14.14.14, monitoring: 1, monitoring_cat: 0 alarm: 0, parent_router: 445, mac: 00:00:00:00:00:00, filtrace: 0, id_nodu: 0',	'2024-05-28 14:10:07',	'admin@admin',	1);
+(190,	'<b>akce: pridani routeru;</b><br> nazev: router-test-4, ip adresa: 10.14.14.14, monitoring: 1, monitoring_cat: 0 alarm: 0, parent_router: 445, mac: 00:00:00:00:00:00, filtrace: 0, id_nodu: 0',	'2024-05-28 14:10:07',	'admin@admin',	1),
+(191,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 16 diferencialni data: ',	'2024-05-28 22:55:05',	'admin@admin',	0),
+(192,	'<b>akce: uprava fakturacni skupiny; </b><br>[id_fs] => 14 diferencialni data: ',	'2024-05-28 22:55:32',	'admin@admin',	0),
+(193,	'<b>akce: uprava vlastnika; </b><br> diferencialni data:  [id_cloveka] => 8 , změna pole: <b>nick</b> z: <span class=\"az-s1\" >petrp3                                                                                                                                                </span> na: <span class=\"az-s2\">petrp3</span>, změna pole: <b>jmeno</b> z: <span class=\"az-s1\" >Petr                                                                                                </span> na: <span class=\"az-s2\">Petr</span>, změna pole: <b>prijmeni</b> z: <span class=\"az-s1\" >Pavel Archivni                                                                                      </span> na: <span class=\"az-s2\">Pavel Archivni</span>, změna pole: <b>ulice</b> z: <span class=\"az-s1\" >Hrad 1                                                                                              </span> na: <span class=\"az-s2\">Hrad 1</span>, změna pole: <b>mesto</b> z: <span class=\"az-s1\" >Praha                                                                                               </span> na: <span class=\"az-s2\">Praha</span>, změna pole: <b>icq</b> z: <span class=\"az-s1\" >                                                  </span> na: <span class=\"az-s2\"></span>, změna pole: <b>mail</b> z: <span class=\"az-s1\" >pavel@hrad.gov.cz                                 </span> na: <span class=\"az-s2\">pavel@hrad.gov.cz</span>, ',	'2024-05-29 07:36:15',	'admin@admin',	1),
+(194,	'<b>akce: uprava vlastnika; </b><br> diferencialni data:  [id_cloveka] => 2 , změna pole: <b>nick</b> z: <span class=\"az-s1\" >petrp                                                                                                                                                 </span> na: <span class=\"az-s2\">petrp</span>, změna pole: <b>jmeno</b> z: <span class=\"az-s1\" >Petr                                                                                                </span> na: <span class=\"az-s2\">Petr</span>, změna pole: <b>prijmeni</b> z: <span class=\"az-s1\" >Pavel Fakturacni                                                                                    </span> na: <span class=\"az-s2\">Pavel Fakturacni</span>, změna pole: <b>ulice</b> z: <span class=\"az-s1\" >Hrad 1                                                                                              </span> na: <span class=\"az-s2\">Hrad 1</span>, změna pole: <b>mesto</b> z: <span class=\"az-s1\" >Praha                                                                                               </span> na: <span class=\"az-s2\">Praha</span>, změna pole: <b>icq</b> z: <span class=\"az-s1\" >                                                  </span> na: <span class=\"az-s2\"></span>, změna pole: <b>mail</b> z: <span class=\"az-s1\" >pavel@hrad.gov.cz                                 </span> na: <span class=\"az-s2\">pavel@hrad.gov.cz</span>, ',	'2024-05-29 07:45:17',	'admin@admin',	1),
+(195,	'<b>akce: pridani routeru;</b><br> nazev: test-router-x1, ip adresa: 10.18.18.0, monitoring: 0, monitoring_cat: 0 alarm: 0, parent_router: 1, mac: 00:00:00:00:00:00, filtrace: 0, id_nodu: 0',	'2024-05-29 10:34:28',	'admin@admin',	1),
+(196,	'<b>akce: pridani routeru;</b><br> nazev: test-router-x4, ip adresa: 10.18.29.1, monitoring: 0, monitoring_cat: 0 alarm: 0, parent_router: 3, mac: 00:00:00:00:00:00, filtrace: 0, id_nodu: 0',	'2024-05-29 12:20:01',	'admin@admin',	1),
+(197,	'<b>akce: uprava routeru;</b><br> [id_routeru] => <a href=\"/topology/router\">451</a> diferencialni data: změna pole: <b>mac</b> z: <span class=\"az-s1\" >00:00:00:00:00:00</span> na: <span class=\"az-s2\">22:00:00:00:00:33</span>, změna pole: <b>poznamka</b> z: <span class=\"az-s1\" >xxx</span> na: <span class=\"az-s2\">xxx2</span>, ',	'2024-05-29 12:20:21',	'admin@admin',	1),
+(198,	'<b>akce: uprava routeru;</b><br> [id_routeru] => <a href=\"/topology/router-list?odeslano=OK&f_search=10.18.19.2\">449</a> diferencialni data: změna pole: <b>ip_adresa</b> z: <span class=\"az-s1\" >10.18.19.1</span> na: <span class=\"az-s2\">10.18.19.2</span>, změna pole: <b>poznamka</b> z: <span class=\"az-s1\" ></span> na: <span class=\"az-s2\">222</span>, ',	'2024-05-29 12:23:28',	'admin@admin',	1),
+(199,	'<b>akce: uprava routeru;</b><br> [id_routeru] => <a href=\"/topology/router-list?odeslano=OK&f_id_routeru=451\">451</a> diferencialni data: změna pole: <b>poznamka</b> z: <span class=\"az-s1\" >xxx2</span> na: <span class=\"az-s2\">xxx2x</span>, ',	'2024-05-29 12:24:51',	'admin@admin',	1),
+(200,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 8  <b>[dns_jmeno]</b> => xx , <b>[ip]</b> => 10.10.10.14 , <b>tarif</b> => small city , <b>[dov_net]</b> => a , <b>Typ</b> => poc (platici) , <b>Veřejná IP</b> => Ne , <b>[pridal]</b> => admin@admin , <b>přípojný bod</b> => druhy nod , <b>[sikana_status]</b> => n , <b>[sikana_cas]</b> => 0 ,',	'2024-05-29 14:21:41',	'admin@admin',	1),
+(201,	'<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => 14, [<b>item_name</b>] => ',	'2024-05-29 14:21:41',	'admin@admin',	1),
+(202,	'<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => 13, [<b>item_name</b>] => ',	'2024-05-29 14:21:41',	'admin@admin',	1),
+(203,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 11  <b>[dns_jmeno]</b> => test-wifi-333 , <b>[ip]</b> => 10.10.10.125 , <b>tarif</b> => small city , <b>[dov_net]</b> => a , <b>Typ</b> => poc (platici) , <b>Veřejná IP</b> => Ne , <b>[pridal]</b> => admin@admin , <b>přípojný bod</b> => druhy nod , <b>[sikana_status]</b> => n , <b>[sikana_cas]</b> => 0 ,',	'2024-05-29 15:05:26',	'admin@admin',	1);
 
 DROP TABLE IF EXISTS `archiv_zmen_work`;
 CREATE TABLE `archiv_zmen_work` (
@@ -239,12 +252,12 @@ SET NAMES utf8mb4;
 DROP TABLE IF EXISTS `board`;
 CREATE TABLE `board` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `author` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `author` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `from_date` date NOT NULL,
   `to_date` date NOT NULL,
-  `subject` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `body` varchar(4096) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `body` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -265,16 +278,12 @@ INSERT INTO `board` (`id`, `author`, `email`, `from_date`, `to_date`, `subject`,
 
 DROP TABLE IF EXISTS `cache_locks`;
 CREATE TABLE `cache_locks` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `cache_locks` (`key`, `owner`, `expiration`) VALUES
-('a3cache::vlastnici2pridani:update:2',	'admin@admin',	1716727372),
-('a3cache::vlastnici2pridani:update:3',	'admin@admin',	1716715825),
-('a3cache::vlastnici2pridani:update:8',	'admin@admin',	1716751150);
 
 DROP TABLE IF EXISTS `fakturacni_skupiny`;
 CREATE TABLE `fakturacni_skupiny` (
@@ -282,7 +291,7 @@ CREATE TABLE `fakturacni_skupiny` (
   `nazev` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `typ` int unsigned NOT NULL DEFAULT '0',
   `typ_sluzby` int unsigned NOT NULL DEFAULT '0',
-  `fakturacni_text` varchar(4096) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `fakturacni_text` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `vlozil_kdo` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `sluzba_int` int NOT NULL DEFAULT '0',
   `sluzba_int_id_tarifu` int NOT NULL DEFAULT '0',
@@ -315,26 +324,26 @@ INSERT INTO `fakturacni_skupiny` (`id`, `nazev`, `typ`, `typ_sluzby`, `fakturacn
 DROP TABLE IF EXISTS `faktury_neuhrazene`;
 CREATE TABLE `faktury_neuhrazene` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `Cislo` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `VarSym` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Cislo` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `VarSym` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `Datum` date DEFAULT NULL,
   `DatSplat` date DEFAULT NULL,
-  `KcCelkem` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `KcLikv` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `Firma` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `Jmeno` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ICO` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `DIC` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `KcCelkem` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `KcLikv` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Firma` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Jmeno` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `ICO` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `DIC` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `par_id_vlastnika` int unsigned DEFAULT NULL,
   `par_stav` int DEFAULT NULL,
   `datum_vlozeni` date DEFAULT NULL,
   `overeno` int unsigned DEFAULT '0',
-  `aut_email_stav` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `aut_email_stav` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `aut_email_datum` date DEFAULT NULL,
-  `aut_sms_stav` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `aut_sms_stav` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `aut_sms_datum` date DEFAULT NULL,
   `ignorovat` int unsigned DEFAULT '0',
-  `po_splatnosti_vlastnik` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `po_splatnosti_vlastnik` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -350,21 +359,22 @@ CREATE TABLE `fn_import_log` (
 DROP TABLE IF EXISTS `kategorie`;
 CREATE TABLE `kategorie` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `jmeno` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `jmeno` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `sablona` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `kategorie` (`id`, `jmeno`, `sablona`) VALUES
-(1,	'kategorie 1',	'0');
+(1,	'kategorie 1',	'4');
 
 DROP TABLE IF EXISTS `leveling`;
 CREATE TABLE `leveling` (
   `id` int NOT NULL AUTO_INCREMENT,
   `level` int unsigned NOT NULL DEFAULT '0',
   `popis` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=312 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=312 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci ROW_FORMAT=DYNAMIC;
 
 INSERT INTO `leveling` (`id`, `level`, `popis`) VALUES
 (1,	6,	'a2: objekty'),
@@ -499,17 +509,17 @@ CREATE TABLE `mon_grafy` (
 DROP TABLE IF EXISTS `nod_list`;
 CREATE TABLE `nod_list` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `jmeno` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `adresa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `pozn` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ip_rozsah` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `typ_nodu` int unsigned NOT NULL,
+  `jmeno` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `adresa` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `pozn` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ip_rozsah` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `typ_nodu` int unsigned NOT NULL DEFAULT '0',
   `typ_vysilace` int unsigned NOT NULL DEFAULT '0',
-  `stav` int unsigned NOT NULL,
-  `router_id` int unsigned NOT NULL,
+  `stav` int unsigned NOT NULL DEFAULT '0',
+  `router_id` int unsigned NOT NULL DEFAULT '0',
   `vlan_id` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=372 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=371 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci ROW_FORMAT=DYNAMIC;
 
 INSERT INTO `nod_list` (`id`, `jmeno`, `adresa`, `pozn`, `ip_rozsah`, `typ_nodu`, `typ_vysilace`, `stav`, `router_id`, `vlan_id`) VALUES
 (1,	'prvni nod',	'u me doma',	'test pozn',	'10.10.10.0/24',	1,	0,	0,	1,	0),
@@ -573,20 +583,20 @@ INSERT INTO `opravy` (`id_opravy`, `id_predchozi_opravy`, `id_vlastnika`, `datum
 DROP TABLE IF EXISTS `partner_klienti`;
 CREATE TABLE `partner_klienti` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tel` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `jmeno` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `adresa` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `email` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `poznamky` varchar(450) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `tel` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `jmeno` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `adresa` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `poznamky` varchar(450) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `prio` int NOT NULL DEFAULT '0',
-  `vlozil` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `vlozil` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `datum_vlozeni` datetime DEFAULT CURRENT_TIMESTAMP,
   `pripojeno` int NOT NULL DEFAULT '0',
   `pripojeno_linka` int NOT NULL DEFAULT '0',
   `typ_balicku` int NOT NULL DEFAULT '0',
   `typ_linky` int NOT NULL DEFAULT '0',
   `akceptovano` int NOT NULL DEFAULT '0',
-  `akceptovano_kym` varchar(50) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `akceptovano_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `akceptovano_pozn` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
@@ -600,13 +610,13 @@ INSERT INTO `partner_klienti` (`id`, `tel`, `jmeno`, `adresa`, `email`, `poznamk
 DROP TABLE IF EXISTS `partner_klienti_servis`;
 CREATE TABLE `partner_klienti_servis` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tel` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `jmeno` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `adresa` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `email` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `poznamky` varchar(4096) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `tel` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `jmeno` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `adresa` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `email` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `poznamky` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `prio` int NOT NULL DEFAULT '0',
-  `vlozil` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `vlozil` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `akceptovano` int NOT NULL DEFAULT '2',
   `akceptovano_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `akceptovano_pozn` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
@@ -621,8 +631,8 @@ INSERT INTO `partner_klienti_servis` (`id`, `tel`, `jmeno`, `adresa`, `email`, `
 DROP TABLE IF EXISTS `partner_login`;
 CREATE TABLE `partner_login` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `login` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `password` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `login` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `password` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_unique` (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -646,27 +656,29 @@ INSERT INTO `phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `
 (20240506234600,	'CreateFakturyNeuhrazeneTable',	'2024-05-25 09:29:57',	'2024-05-25 09:29:57',	0),
 (20240507011300,	'CreateFakturyFnImportLogTable',	'2024-05-10 17:19:21',	'2024-05-10 17:19:22',	0),
 (20240510191400,	'AddColumnTokenToUsersTable',	'2024-05-10 17:20:07',	'2024-05-10 17:20:08',	0),
-(20240525110430,	'CreateCacheLocksTable',	'2024-05-25 09:29:57',	'2024-05-25 09:29:57',	0);
+(20240525110430,	'CreateCacheLocksTable',	'2024-05-25 09:29:57',	'2024-05-25 09:29:57',	0),
+(20240528174606,	'CreateNodListTable',	'2024-05-28 18:03:28',	'2024-05-28 18:03:28',	0),
+(20240528184558,	'CreateLevelingTable',	'2024-05-28 18:54:07',	'2024-05-28 18:54:08',	0);
 
 DROP TABLE IF EXISTS `router_list`;
 CREATE TABLE `router_list` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `nazev` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `nazev` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ip_adresa` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `parent_router` int NOT NULL DEFAULT '0',
-  `mac` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `mac` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `monitoring` int NOT NULL DEFAULT '0',
   `monitoring_cat` int NOT NULL DEFAULT '0',
   `alarm` int NOT NULL DEFAULT '0',
   `alarm_stav` int NOT NULL DEFAULT '0',
   `filtrace` int NOT NULL DEFAULT '0',
   `id_nodu` int DEFAULT NULL,
-  `poznamka` varchar(4096) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `poznamka` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `warn` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `mail` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=447 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=452 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `router_list` (`id`, `nazev`, `ip_adresa`, `parent_router`, `mac`, `monitoring`, `monitoring_cat`, `alarm`, `alarm_stav`, `filtrace`, `id_nodu`, `poznamka`, `warn`, `mail`) VALUES
 (1,	'reinhard-wifi',	'10.10.10.10',	0,	'',	0,	0,	0,	0,	0,	NULL,	NULL,	'',	''),
@@ -674,13 +686,18 @@ INSERT INTO `router_list` (`id`, `nazev`, `ip_adresa`, `parent_router`, `mac`, `
 (3,	'child of router 2',	'10.20.10.10',	2,	'',	0,	0,	0,	0,	0,	NULL,	NULL,	'',	''),
 (444,	'reinhard-fiber',	'10.128.0.1',	1,	'',	0,	0,	0,	0,	0,	NULL,	NULL,	'',	''),
 (445,	'router-test-3',	'10.12.1.10',	1,	'11:11:8a:8a:22:33',	0,	0,	0,	0,	0,	NULL,	NULL,	'',	''),
-(446,	'router-test-4',	'10.14.14.14',	445,	'00:00:00:00:00:00',	1,	0,	0,	0,	0,	0,	'test 4',	NULL,	NULL);
+(446,	'router-test-4',	'10.14.14.14',	445,	'00:00:00:00:00:00',	1,	0,	0,	0,	0,	0,	'test 4',	NULL,	NULL),
+(447,	'test-router-x1',	'10.18.18.0',	1,	'00:00:00:00:00:00',	0,	0,	0,	0,	0,	0,	'',	NULL,	NULL),
+(448,	'test-router-x1',	'10.22.18.1',	445,	'a2:b2:33:44:55:6f',	0,	0,	0,	0,	1,	0,	'test x',	NULL,	NULL),
+(449,	'test-router-x2',	'10.18.19.2',	1,	'11:2b:33:44:55:66',	0,	0,	0,	0,	1,	0,	'222',	NULL,	NULL),
+(450,	'test-router-x3',	'10.18.19.2',	444,	'11:2b:33:44:55:66',	0,	0,	0,	0,	1,	0,	'',	NULL,	NULL),
+(451,	'test-router-x4',	'10.18.29.1',	3,	'22:00:00:00:00:33',	0,	0,	0,	0,	0,	0,	'xxx2x',	NULL,	NULL);
 
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `value` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `name` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `value` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
@@ -701,7 +718,7 @@ CREATE TABLE `tarify_int` (
   `cena_bez_dph` float NOT NULL DEFAULT '0',
   `cena_s_dph` float NOT NULL DEFAULT '0',
   `gen_poradi` int NOT NULL DEFAULT '0',
-  `barva` varchar(50) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `barva` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `garant` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_tarifu`),
   UNIQUE KEY `id_tarifu` (`id_tarifu`),
@@ -732,16 +749,16 @@ INSERT INTO `tarify_iptv` (`id_tarifu`, `jmeno_tarifu`, `zkratka_tarifu`) VALUES
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `permissions` text COLLATE utf8mb3_unicode_ci,
+  `username` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `permissions` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
   `last_login` timestamp NULL DEFAULT NULL,
   `level` int unsigned NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `first_name` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `last_name` varchar(255) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `first_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `last_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `token` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_username_unique` (`username`),
@@ -749,7 +766,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `level`, `created_at`, `updated_at`, `first_name`, `last_name`, `token`) VALUES
-(1,	'Administrator',	'admin@admin',	'$2y$10$uZ7ZBCl/Shp9sW.QRy10CuFxkO/Vg7Yr1kbVJzhSACNQoohChkxaW',	NULL,	'2024-05-28 13:22:55',	101,	'2024-05-01 12:29:13',	'2024-05-28 13:22:55',	NULL,	NULL,	'564e18654c5853bb19e2145866298914'),
+(1,	'Administrator',	'admin@admin',	'$2y$10$uZ7ZBCl/Shp9sW.QRy10CuFxkO/Vg7Yr1kbVJzhSACNQoohChkxaW',	NULL,	'2024-05-29 08:31:45',	101,	'2024-05-01 12:29:13',	'2024-05-29 08:31:45',	NULL,	NULL,	'564e18654c5853bb19e2145866298914'),
 (2,	'admin2',	'admin2@admin',	'$2y$10$H1razrcagxKIoRQWbPmnLu5kUfOo0qeCVic2/J4kNliB8wmTX.6Vi',	NULL,	'2024-05-26 00:57:25',	99,	'2024-05-04 07:50:34',	'2024-05-26 00:57:25',	NULL,	NULL,	NULL);
 
 DROP TABLE IF EXISTS `users_old`;
@@ -777,18 +794,18 @@ DROP TABLE IF EXISTS `users_persistences`;
 CREATE TABLE `users_persistences` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL,
-  `code` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `code` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_persistences_code_unique` (`code`),
   KEY `users_persistences_user_id_foreign` (`user_id`),
   CONSTRAINT `users_persistences_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=283 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=291 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `users_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
 (263,	2,	'irc8HcXfXwnCPhwTXfNO8fmlnTvPF11C',	'2024-05-26 00:57:25',	'2024-05-26 00:57:25'),
-(282,	1,	'ua8eIgQ20yW8AoprRgmDgPY5FmXp7cqI',	'2024-05-28 13:22:55',	'2024-05-28 13:22:55');
+(290,	1,	'KZeYO5zniwnSt0fVqsLVMvajqOTDO4hI',	'2024-05-29 08:31:45',	'2024-05-29 08:31:45');
 
 DROP TABLE IF EXISTS `vypovedi`;
 CREATE TABLE `vypovedi` (
@@ -810,15 +827,17 @@ CREATE TABLE `workitems` (
   `number_request` int NOT NULL,
   `in_progress` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `workitems` (`id`, `number_request`, `in_progress`) VALUES
-(7,	2,	0);
+(7,	2,	0),
+(8,	14,	0),
+(9,	13,	0);
 
 DROP TABLE IF EXISTS `workitems_names`;
 CREATE TABLE `workitems_names` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(150) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `name` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `priority` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
@@ -832,11 +851,11 @@ INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 DROP TABLE IF EXISTS `workzamek`;
 CREATE TABLE `workzamek` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `zamek` varchar(10) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `zamek` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `workzamek` (`id`, `zamek`) VALUES
 (1,	'ne');
 
--- 2024-05-28 14:35:42
+-- 2024-05-29 15:42:00
