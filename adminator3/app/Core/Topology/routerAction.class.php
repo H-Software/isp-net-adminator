@@ -201,9 +201,7 @@ class RouterAction extends adminator
             $rs_test = adminator::test_router_for_monitoring($this->conn_mysql, $this->form_ip_adresa);
 
             if($rs_test[0] == false) {
-                $text = "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-                    "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
-
+                $text = "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.";
                 $text .= "<div style=\"color: grey;\" >výpis testu: <pre>".htmlspecialchars($rs_test[1])."</pre></div>";
 
                 $this->p_bs_alerts[$text] = "danger";
