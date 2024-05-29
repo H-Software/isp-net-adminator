@@ -552,9 +552,7 @@ class vlastniciController extends adminatorController
             return $this->response;
         };
 
-        $this->smarty->assign("page_title", "Adminator3 :: Zákazníci :: Archiv");
-
-        $this->header($request, $response, $this->adminator);
+        $assignData = ["page_title" => "Adminator3 :: Zákazníci :: Archiv"];
 
         $vlastnikArchiv = new \vlastnikarchiv();
         $vlastnikArchiv->conn_mysql = $this->conn_mysql;
@@ -588,14 +586,14 @@ class vlastniciController extends adminatorController
         }
 
         if (empty($_GET["find"])) {
-            $this->smarty->assign("form_find", "%");
+            $assignData["form_find"] = "%";
         } else {
-            $this->smarty->assign("form_find", htmlspecialchars($find));
+            $assignData["form_find"] = htmlspecialchars($find);
         }
 
-        $this->smarty->assign("form_select", $form_select);
-        $this->smarty->assign("form_razeni", $form_razeni);
-        $this->smarty->assign("form_razeni2", $form_razeni2);
+        $assignData["form_select"] = $form_select;
+        $assignData["form_razeni"] = $form_razeni;
+        $assignData["form_razeni2"] = $form_razeni2;
 
         //promena pro update objektu
         if ($this->adminator->checkLevel(29) === true) {
@@ -694,13 +692,9 @@ class vlastniciController extends adminatorController
         } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM vlastnici WHERE archiv = '1' AND id_cloveka = '$sql' ";
         } else {
-            $body = "Zadejte výraz k vyhledání.... <br>";
+            $assignData["body"] = "Zadejte výraz k vyhledání.... <br>";
 
-            $this->smarty->assign("body", $body);
-
-            $this->smarty->display('vlastnici/archiv.tpl');
-
-            return $response;
+            return $this->renderer->template($request, $response, 'vlastnici/archiv.tpl', $assignData);
         }
 
         // global $list;
@@ -722,17 +716,15 @@ class vlastniciController extends adminatorController
 
         $dotaz_final = $dotaz_source." LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-        $this->smarty->assign("listing", $listovani->listInterval());
+        $assignData["listing"] = $listovani->listInterval();
 
         $bodyContent .= $vlastnikArchiv->vypis($sql, $co, $dotaz_final);
 
         $bodyContent .= $vlastnikArchiv->vypis_tab(2);
 
-        $this->smarty->assign("body", $bodyContent);
+        $assignData["body"] = $bodyContent;
 
-        $this->smarty->display('vlastnici/archiv.tpl');
-
-        return $response;
+        return $this->renderer->template($request, $response, 'vlastnici/archiv.tpl', $assignData);
     }
 
     public function fakturacniSkupiny(ServerRequestInterface $request, ResponseInterface $response, array $args)
