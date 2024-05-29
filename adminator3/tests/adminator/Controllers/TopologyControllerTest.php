@@ -11,10 +11,13 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Interfaces\RouteParserInterface;
 use Nyholm\Psr7Server\ServerRequestCreator;
 
+use Symfony\Component\HttpFoundation\Request;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+
 final class TopologyControllerTest extends AdminatorTestCase
 {
-    /** @var ServerRequestCreator */
-    protected $creator;
+    protected $psrHttpFactory;
 
     protected $serverRequest;
 
@@ -24,17 +27,19 @@ final class TopologyControllerTest extends AdminatorTestCase
     {
         $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
 
-        $this->creator = new ServerRequestCreator(
+        // https://symfony.com/doc/current/components/psr7.html#converting-from-httpfoundation-objects-to-psr-7
+        $this->psrHttpFactory = new PsrHttpFactory(
             $psr17Factory,
             $psr17Factory,
             $psr17Factory,
             $psr17Factory
         );
+
     }
 
     protected function tearDown(): void
     {
-        $this->creator = null;
+        $this->psrHttpFactory = null;
     }
 
     public function test_ctl_node_list_view_all()
@@ -42,24 +47,20 @@ final class TopologyControllerTest extends AdminatorTestCase
         // $this->markTestSkipped('under construction');
         $self = $this;
 
+        $request = Request::create(
+            '/topology/node-list',
+            'GET',
+            []
+        );
+        $request->overrideGlobals();
+        $serverRequest = $this->psrHttpFactory->createRequest($request);
+
         $container = self::initDIcontainer(true, false);
 
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
         $topologyController = new topologyController($container, $adminatorMock);
-
-        $server = [
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/topology/router',
-        ];
-
-        $serverRequest = $this->creator->fromArrays(
-            $server,
-            [],
-            [],
-            [],
-        );
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
@@ -109,10 +110,6 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
 
-        // no data assert
-        // $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent, "missing no-data message container");
-        // $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( % \) v databázi neuloženy/i', $responseContent, "missing no-data message");
-
         // clean-up
         $response = null;
         $topologyController = null;
@@ -124,24 +121,20 @@ final class TopologyControllerTest extends AdminatorTestCase
         // $this->markTestSkipped('under construction');
         $self = $this;
 
+        $request = Request::create(
+            '/topology/node-list',
+            'GET',
+            []
+        );
+        $request->overrideGlobals();
+        $serverRequest = $this->psrHttpFactory->createRequest($request);
+
         $container = self::initDIcontainer(true, false);
 
         $adminatorMock = self::initAdminatorMockClass($container, false, 1);
         $this->assertIsObject($adminatorMock);
 
         $topologyController = new topologyController($container, $adminatorMock);
-
-        $server = [
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/topology/router',
-        ];
-
-        $serverRequest = $this->creator->fromArrays(
-            $server,
-            [],
-            [],
-            [],
-        );
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
@@ -172,8 +165,16 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     public function test_ctl_node_list_view_non_exist()
     {
-        $this->markTestSkipped('under construction');
+        // $this->markTestSkipped('under construction');
         $self = $this;
+
+        $request = Request::create(
+            '/topology/node-list',
+            'GET',
+            ['find' => 'this-realy-dont-exist']
+        );
+        $request->overrideGlobals();
+        $serverRequest = $this->psrHttpFactory->createRequest($request);
 
         $container = self::initDIcontainer(true, false);
 
@@ -181,18 +182,6 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertIsObject($adminatorMock);
 
         $topologyController = new topologyController($container, $adminatorMock);
-
-        $server = [
-            'REQUEST_METHOD' => 'GET',
-            'REQUEST_URI' => '/topology/router',
-        ];
-
-        $serverRequest = $this->creator->fromArrays(
-            $server,
-            [],
-            [],
-            [],
-        );
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
@@ -206,6 +195,10 @@ final class TopologyControllerTest extends AdminatorTestCase
         // echo $responseContent;
 
         self::runBasicAsserts($responseContent);
+
+        // no-data assert
+        $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent, "missing no-data message container");
+        $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( %.*% \) v databázi neuloženy/i', $responseContent, "missing no-data message");
 
         // clean-up
         $response = null;
