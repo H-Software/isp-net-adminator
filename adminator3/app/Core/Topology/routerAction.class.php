@@ -759,7 +759,7 @@ class RouterAction extends adminator
 
         //$pole3 .= "[id_nodu] => ".$id_new;
         $pole3 = "<b>akce: uprava routeru;</b><br>";
-        $pole3 .= ' [id_routeru] => <a href="/topology/router-list?odeslano=OK&f_search=' . $this->form_ip_adresa . '">'.$this->form_update_id."</a>";
+        $pole3 .= ' [id_routeru] => <a href="/topology/router-list?odeslano=OK&f_id_routeru=' . $this->form_update_id . '">'.$this->form_update_id."</a>";
         $pole3 .= " diferencialni data: ";
 
         //novy zpusob archivovani dat
