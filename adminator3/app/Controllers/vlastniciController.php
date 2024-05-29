@@ -85,13 +85,14 @@ class vlastniciController extends adminatorController
             $assignData["alert_content"] = $vlastnik2->alert_content;
 
             $rendererTemplateName = "vlastnici/cross-alert.tpl";
+            $http_status_code = 500;
         } else {
-            // TODO: remove echo-ing into stdout
-            $rs = $vlastnik2->crossRun();
+            list($output, $http_status_code) = $vlastnik2->crossRun();
+            $assignData["pageContent"] = $output;
             $rendererTemplateName = "global/empty.tpl";
         }
 
-        return $this->renderer->template($request, $response, $rendererTemplateName, $assignData);
+        return $this->renderer->template($request, $response, $rendererTemplateName, $assignData, $http_status_code);
     }
 
     public function search(ServerRequestInterface $request, ResponseInterface $response, array $args)
