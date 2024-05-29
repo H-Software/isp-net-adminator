@@ -63,8 +63,6 @@ class RouterAction extends adminator
         $output = "";
         $http_status_code = 200;
 
-        $output .= "<div style=\"padding-bottom: 10px; font-size: 18px; \">Přidání/úprava routeru</div>";
-
         $this->loadFormData();
 
         if($this->form_odeslat == "OK") { // zda je odesláno
@@ -656,6 +654,12 @@ class RouterAction extends adminator
             // TODO: fix this
             // require("topology-router-add-inc-archiv-zmen.php");
 
+            // if($id > 0) {
+            //     $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
+            // } else {
+            //     $this->p_bs_alerts["Chyba! Akci se nepodařilo zaznamenat do archivu změn."] = "danger";
+            // }
+
             //automatické restarty
             // TODO: fix this
             // if( ereg(".*změna.*Alarmu.*z.*", $pole3) )
@@ -722,14 +726,7 @@ class RouterAction extends adminator
             }
 
             // pridame to do archivu zmen
-            $pole = "<b>akce: pridani routeru;</b><br>";
-            $pole .= " nazev: ".$this->form_nazev.", ip adresa: ".$this->form_ip_adresa.", monitoring: ".$this->form_monitoring.", monitoring_cat: ".$this->form_monitoring_cat;
-            $pole .= " alarm: ".$this->form_alarm.", parent_router: ".$this->form_parent_router.", mac: ".$this->form_mac.", filtrace: ".$this->form_filtrace.", id_nodu: ".$this->form_selected_nod;
-
-            $add = $this->conn_mysql->query(
-                "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
-                                    . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
-            );
+            $this->actionArchivZmenAdd($vysledek_write);
 
             // TODO: fix this
 
@@ -757,5 +754,28 @@ class RouterAction extends adminator
         } //konec if/else update_id > 0
 
         return [$output, true];
+    }
+
+    private function actionArchivZmenDiff()
+    {
+
+    }
+
+    private function actionArchivZmenAdd(int $vysledek_write): void
+    {
+        $pole = "<b>akce: pridani routeru;</b><br>";
+        $pole .= " nazev: ".$this->form_nazev.", ip adresa: ".$this->form_ip_adresa.", monitoring: ".$this->form_monitoring.", monitoring_cat: ".$this->form_monitoring_cat;
+        $pole .= " alarm: ".$this->form_alarm.", parent_router: ".$this->form_parent_router.", mac: ".$this->form_mac.", filtrace: ".$this->form_filtrace.", id_nodu: ".$this->form_selected_nod;
+
+        $add = $this->conn_mysql->query(
+            "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) "
+                                . "VALUES ('$pole', '" . $this->loggedUserEmail . "', '$vysledek_write') "
+        );
+
+        if($add) {
+            $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
+        } else {
+            $this->p_bs_alerts["Chyba! Akci se nepodařilo zaznamenat do archivu změn."] = "danger";
+        }
     }
 }
