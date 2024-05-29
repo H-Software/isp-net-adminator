@@ -474,6 +474,7 @@ class objekt extends adminator
             $update_status = 1;
         }
 
+        // TODO: add check others reload stuff
         if(($update_status == 1 and !(isset($this->send)))) {
             //rezim upravy
             $dotaz_upd = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
@@ -616,11 +617,11 @@ class objekt extends adminator
                 $MSQ_DNS = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE dns_jmeno LIKE '$this->form_dns' ");
                 $MSQ_IP = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE ip <<= '$this->ip_find' ");
 
-                if (pg_num_rows($MSQ_DNS) > 0) {
+                if (pg_num_rows($MSQ_DNS) <> 0) {
                     $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
-                if (pg_num_rows($MSQ_IP) > 0) {
+                if (pg_num_rows($MSQ_IP) <> 0) {
                     $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
@@ -630,11 +631,11 @@ class objekt extends adminator
                     $MSQ_TUNNEL_USER = pg_query($this->conn_pgsql, "SELECT tunnel_user FROM objekty WHERE tunnel_user LIKE '$tunnel_user' ");
                     $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE tunnel_pass LIKE '$tunnel_pass' ");
 
-                    if(pg_num_rows($MSQ_TUNNEL_USER) > 0) {
+                    if(pg_num_rows($MSQ_TUNNEL_USER) <> 0) {
                         $this->action_error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
                         $this->action_fail = "true";
                     }
-                    if(pg_num_rows($MSQ_TUNNEL_PASS) > 0) {
+                    if(pg_num_rows($MSQ_TUNNEL_PASS) <> 0) {
                         $this->action_error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>";
                         $this->action_fail = "true";
                     }
@@ -650,11 +651,11 @@ class objekt extends adminator
                 $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '".intval($this->update_id)."' ) ");
                 $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '".intval($this->update_id)."' ) ");
 
-                if(pg_num_rows($MSQ_DNS2) > 0) {
+                if(pg_num_rows($MSQ_DNS2) <> 0) {
                     $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
-                if(pg_num_rows($MSQ_IP2) > 0) {
+                if(pg_num_rows($MSQ_IP2) <> 0) {
                     $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
@@ -1035,6 +1036,7 @@ class objekt extends adminator
         }
 
         //nacitani predchozich dat ...
+        // TODO: add check others reload stuff
         if (($update_status == 1 and !(isset($this->send)))) {
             //rezim upravy,takze nacitame z databaze ...
 
@@ -1095,7 +1097,8 @@ class objekt extends adminator
                 endwhile;
 
             }
-        } else {
+        } else
+        {
             // rezim pridani, nacitame z POSTu
 
             $this->form_dns = trim($_POST["dns"]);
@@ -1154,11 +1157,11 @@ class objekt extends adminator
                 $MSQ_DNS = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE dns_jmeno LIKE '" . $this->form_dns ."' ");
                 $MSQ_IP = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ip <<= '" . $ip ."' ");
 
-                if (pg_num_rows($MSQ_DNS) > 0) {
+                if (pg_num_rows($MSQ_DNS) <> 0) {
                     $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
-                if (pg_num_rows($MSQ_IP) > 0) {
+                if (pg_num_rows($MSQ_IP) <> 0) {
                     $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
@@ -1172,11 +1175,11 @@ class objekt extends adminator
                 $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno LIKE '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
                 $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$ip' AND id_komplu != '$this->update_id' ) ");
 
-                if(pg_num_rows($MSQ_DNS2) > 0) {
+                if(pg_num_rows($MSQ_DNS2) <> 0) {
                     $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
-                if(pg_num_rows($MSQ_IP2) > 0) {
+                if(pg_num_rows($MSQ_IP2) <> 0) {
                     $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
@@ -1391,7 +1394,7 @@ class objekt extends adminator
 
         elseif(isset($this->send)) :
             $this->action_fail = "true";
-            $this->p_bs_alerts["Chybí povinné údaje! </br>(aktuálně jsou povinné: dns, ip adresa, přípojný bod, tarif)"] = "danger";
+            $this->p_bs_alerts["Chybí povinné údaje! </br>(aktuálně jsou povinné: dns, ip adresa, mac adresa, přípojný bod, tarif)"] = "danger";
         endif;
 
         if ($update_status == 1) {
