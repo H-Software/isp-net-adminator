@@ -926,7 +926,7 @@ class objekt extends adminator
         } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
         elseif(isset($this->send)) :
-            $this->p_bs_alerts["Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) "] = "danger";
+            $this->p_bs_alerts["Chybí povinné údaje! </br>(aktuálně jsou povinné: dns, ip adresa, přípojný bod, tarif)"] = "danger";
         endif;
 
         if ($update_status == 1) {
@@ -1392,8 +1392,8 @@ class objekt extends adminator
         } else {
         } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
-        elseif (isset($this->send)) :
-            $this->action_error = "<h4>Chybí povinné údaje !!! (aktuálně jsou povinné:  dns, ip adresa, přípojný bod, tarif) </H4>";
+        elseif(isset($this->send)) :
+            $this->p_bs_alerts["Chybí povinné údaje! </br>(aktuálně jsou povinné: dns, ip adresa, přípojný bod, tarif)"] = "danger";
         endif;
 
         if ($update_status == 1) {
@@ -1403,7 +1403,7 @@ class objekt extends adminator
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if ((isset($this->action_error)) or (!isset($this->send))) :
+        if((isset($this->action_fail)) or (!isset($this->send))) :
             $output .= $this->action_error;
 
             $output .= $this->action_info;
@@ -3859,7 +3859,7 @@ class objekt extends adminator
     {
         if (filter_var($mac, FILTER_VALIDATE_MAC) == false) {
             $this->action_fail = "true";
-            $this->action_error .= "<div class=\"objekty-add-fail-mac\"><H4>MAC adresa ( ".$mac." ) není ve správném formátu !!! ( Správný formát je: 00:00:64:65:73:74 ) </H4></div>";
+            $this->p_bs_alerts["MAC adresa (".$mac.") není ve správném formátu! ( Správný formát je: 00:00:64:65:73:74)"] = "danger";
         }
 
         //konec funkce check-mac
@@ -3871,8 +3871,7 @@ class objekt extends adminator
 
         if(($sikanacas > 9) or ($sikanacas < 1)) {
             $this->action_fail = "true";
-            $this->action_error .= "<div class=\"objekty-add-fail-mac\">".
-            "<H4>Do pole \"Šikana - počet dní\" je třeba vyplnit číslo 1 až 9.</H4></div>";
+            $this->p_bs_alerts["Do pole \"Šikana - počet dní\" je třeba vyplnit číslo 1 až 9."] = "danger";
         }
     } //end of function checkSikanaCas
 
@@ -3880,8 +3879,7 @@ class objekt extends adminator
     {
         if((strlen($sikanatext) > 150)) {
             $this->action_fail = "true";
-            $this->action_error .= "<div class=\"objekty-add-fail-mac\">".
-            "<H4>Do pole \"Šikana - text\" je možno zadat max. 150 znaků. (aktuálně: ".strlen($sikanatext).")</H4></div>";
+            $this->p_bs_alerts["Do pole \"Šikana - text\" je možno zadat max. 150 znaků. (aktuálně: ".strlen($sikanatext).")"] = "danger";
         }
     } //end of function checkSikanaText
 
@@ -3889,7 +3887,7 @@ class objekt extends adminator
     {
         if (filter_var($ip, FILTER_VALIDATE_IP) == false) {
             $this->action_fail = "true";
-            $this->action_error .= "<div class=\"objekty-add-fail-ip\"><H4>IP adresa ( ".$ip." ) není ve správném formátu !!!</H4></div>";
+            $this->p_bs_alerts["IP adresa (".$ip.") není ve správném formátu!"] = "danger";
         }
     } //konec funkce check-ip
 
@@ -3899,7 +3897,7 @@ class objekt extends adminator
 
         if (!($rra_check)) {
             $this->action_fail = "true";
-            $this->action_error .= "<H4>Zadaný číselný údaj(e) ( ".$cislo." ) není ve  správném formátu !!! </H4>";
+            $this->p_bs_alerts["Zadaný číselný údaj(e) ( ".$cislo." ) není ve  správném formátu!"] = "danger";
         }
     } //konec funkce check cislo
 
@@ -3908,7 +3906,7 @@ class objekt extends adminator
         $dns_check = preg_match('/^([[:alnum:]]|\.|-)+$/', $dns);
         if (!($dns_check)) {
             $this->action_fail = "true";
-            $this->action_error .= "<div class=\"objekty-add-fail-dns\"><H4>DNS záznam ( ".$dns." ) není ve správnem formátu !!! </H4></div>";
+            $this->p_bs_alerts["DNS záznam ( ".$dns." ) není ve správnem formátu!"] = "danger";
         }
     } // konec funkce check rra
 
@@ -3918,12 +3916,12 @@ class objekt extends adminator
 
         if(!($cr_check)) {
             $this->action_fail = "true";
-            $this->action_error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) není ve správnem formátu !!! </H4></div>";
+            $this->p_bs_alerts["Tunel. login/heslo ( ".$cr." ) není ve správnem formátu!"] = "danger";
         }
 
         if((strlen($cr) <> 4)) {
             $this->action_fail = "true";
-            $this->action_error .= "<div class=\"objekty-add-fail-dns\"><H4>Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky !!! </H4></div>";
+            $this->p_bs_alerts["Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky!"] = "danger";
         }
     } //konec funkce check_l2tp_cr
 }
