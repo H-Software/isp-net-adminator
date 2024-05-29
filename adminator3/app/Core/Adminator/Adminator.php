@@ -708,8 +708,7 @@ class adminator
 
         if(isEmpty($ping_output)) {
             // ping failed
-            $ret_array[0] = false;
-            $ret_array[1] = "Chyba! Příkaz Ping se nepodařilo provést.";
+            return [false, "Chyba! Příkaz Ping se nepodařilo provést."];
         }
 
         if(!($ping_output[0] > 0)) {
