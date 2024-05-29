@@ -198,18 +198,17 @@ class RouterAction extends adminator
             }
 
             //test api a spravnosti konfigurace routeru
-            // TODO: fix this
-            // $rs_test = adminator::test_router_for_monitoring($this->conn_mysql, $routerId);
+            $rs_test = adminator::test_router_for_monitoring($this->conn_mysql, $this->form_ip_adresa);
 
-            // if($rs_test[0]) {
-            //     echo "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
-            //         "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
+            if($rs_test[0]) {
+                $text = "<div style=\"color: red; font-weight: bold; padding-top: 10px; \">".
+                    "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.</div>";
 
-            //     echo "<div style=\"color: grey;\" >výpis testu: <pre>".htmlspecialchars($rs_test[1])."</pre></div>";
+                $text .= "<div style=\"color: grey;\" >výpis testu: <pre>".htmlspecialchars($rs_test[1])."</pre></div>";
 
-            //     $this->form_error = 1;
-            // } //end if rs_test === false
-
+                $this->p_bs_alerts[$text] = "danger";
+                $this->form_error = 1;
+            }
         } //end od if monitoring == 1
 
         //nadrazený router musí být vyplnen
