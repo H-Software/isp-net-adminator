@@ -527,7 +527,6 @@ class vlastnik2 extends adminator
             $stranka = fix_link_to_another_adminator("/pohoda_sql/phd_list_fa.php?id_vlastnika=".$id_cloveka);
         }
 
-        // vlastnici2-add-obj.php
         if (filter_var($stranka, FILTER_VALIDATE_URL)) {
             $full_url = $stranka;
         } else {
