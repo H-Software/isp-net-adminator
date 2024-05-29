@@ -2430,7 +2430,16 @@ class objekt extends adminator
 
         if($radku_ip == 1) {
             while ($data_ip = $vysl_ip->fetch_array()) {
-                list($a, $b, $c, $d) = preg_split("/[.]/", $data_ip["ip_rozsah"]);
+                 $ip_rs = preg_split("/[\.]/", $data_ip["ip_rozsah"]);
+            }
+
+            if($ip_rs == false) {
+                $gen_ip = "E3"; // split failed
+                return false;
+            } else {
+                list($a, $b, $c, $d) = $ip_rs;
+                $c = intval($c);
+                $d = intval($d);
             }
 
             /*
@@ -2459,7 +2468,15 @@ class objekt extends adminator
                         $gen_ip = $data_check_ip["ip"];
                     }
 
-                    list($a, $b, $c, $d) = preg_split("/[.]/", $gen_ip);
+                    $ip_rs = preg_split("/[\.]/", $gen_ip);
+                    if($ip_rs == false){
+                        $gen_ip = "E3"; // split failed
+                        return false;
+                    }
+                    else {
+                        list($a, $b, $c, $d) = $ip_rs;
+                    }
+                    $c = intval($c);
 
                     $limit = 250;
 
@@ -2469,12 +2486,15 @@ class objekt extends adminator
                     } elseif(($c >= $limit)) {
                         $gen_ip = $ip_rozsah;
                         $this->form_ip_error = 1;
-                    } else {
+                    } elseif ($c == 0) {
                         $c = $c + 1;
                         $d = "3";
                         $gen_ip = $a.".".$b.".".$c.".".$d;
 
-                    } //konec else gen ip > 255
+                    } else {
+                        $gen_ip = "E3";
+                        return false;
+                    }
 
                 } //konec else msq_check_ip_radku == 0
 
@@ -2557,7 +2577,7 @@ class objekt extends adminator
                         $gen_ip = $data_check_ip["ip"];
                     }
 
-                    list($a, $b, $c, $d) = preg_split("/[.]/", $gen_ip);
+                    list($a, $b, $c, $d) = preg_split("/[\.]/", $gen_ip);
 
                     if($d >= "254") {
                         $gen_ip = $a.".".$b.".".$c.".0";
