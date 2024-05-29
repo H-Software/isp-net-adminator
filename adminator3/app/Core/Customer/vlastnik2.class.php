@@ -291,8 +291,10 @@ class vlastnik2 extends adminator
         return true;
     }
 
-    public function crossRun(): bool
+    public function crossRun(): array
     {
+        $output = "";
+
         $akce = intval($_GET["akce"]);
         $id_cloveka = intval($_GET["id_cloveka"]);
 
@@ -349,12 +351,12 @@ class vlastnik2 extends adminator
         } elseif($akce == 6) {
             $stranka = fix_link_to_another_adminator("/opravy-vlastnik.php?typ=2&id_vlastnika=".$id_cloveka."&ok=OK");
         } elseif($akce == 7) { //tisk smlouvy
-            echo $html_init;
+            $output .= $html_init;
 
             $url = "/print/smlouva-2012-05";
-            echo "<form action=\"".$url."\" method=\"post\" name=\"frm\" >\n\n";
+            $output .= "<form action=\"".$url."\" method=\"post\" name=\"frm\" >\n\n";
 
-            echo $this->csrf_html;
+            $output .= $this->csrf_html;
 
             $rs_vl1 = pg_query($this->conn_pgsql, "SELECT fakturacni_skupina_id FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
 
@@ -367,7 +369,7 @@ class vlastnik2 extends adminator
                 $fakturacni_skupina_typ = $data["typ_sluzby"];
             }
 
-            echo "<input type=\"hidden\" name=\"id_cloveka\" value=\"".intval($id_cloveka)."\" >\n";
+            $output .= "<input type=\"hidden\" name=\"id_cloveka\" value=\"".intval($id_cloveka)."\" >\n";
 
             $sql = "SELECT t1.id_cloveka, t1.jmeno, t1.prijmeni, t1.ulice, t1.psc, t1.mesto, t1.mail, t1.telefon, t1.k_platbe, t1.vs,
                             t1.fakturacni, t1.fakturacni_skupina_id, t1.billing_freq, t1.typ_smlouvy, t1.trvani_do, 
@@ -383,30 +385,30 @@ class vlastnik2 extends adminator
                 $vs = intval($data_vl["vs"]);
                 $ec = ($vs == 0) ? '' : $vs;
 
-                print "<input type=\"hidden\" name=\"ec\" value=\"".$ec."\" >\n";
+                $output .= "<input type=\"hidden\" name=\"ec\" value=\"".$ec."\" >\n";
 
-                print "<input type=\"hidden\" name=\"vs\" value=\"".$vs."\" >\n";
+                $output .= "<input type=\"hidden\" name=\"vs\" value=\"".$vs."\" >\n";
 
                 $jmeno = $data_vl["jmeno"]." ".$data_vl["prijmeni"];
-                print "<input type=\"hidden\" name=\"jmeno\" value=\"".$jmeno."\" >\n";
-                print "<input type=\"hidden\" name=\"adresa\" value=\"".$data_vl["ulice"]."\" >\n";
-                print "<input type=\"hidden\" name=\"telefon\" value=\"".$data_vl["telefon"]."\" >\n";
-                print "<input type=\"hidden\" name=\"email\" value=\"".$data_vl["mail"]."\" >\n";
+                $output .= "<input type=\"hidden\" name=\"jmeno\" value=\"".$jmeno."\" >\n";
+                $output .= "<input type=\"hidden\" name=\"adresa\" value=\"".$data_vl["ulice"]."\" >\n";
+                $output .= "<input type=\"hidden\" name=\"telefon\" value=\"".$data_vl["telefon"]."\" >\n";
+                $output .= "<input type=\"hidden\" name=\"email\" value=\"".$data_vl["mail"]."\" >\n";
 
-                print "<input type=\"hidden\" name=\"mesto\" value=\"".$data_vl["psc"]." ".$data_vl["mesto"]."\" >\n\n";
+                $output .= "<input type=\"hidden\" name=\"mesto\" value=\"".$data_vl["psc"]." ".$data_vl["mesto"]."\" >\n\n";
 
                 /*
                 //cetnost fakturaci
                 if($data_vl["billing_freq"] == 1){
-                    print "<input type=\"hidden\" name=\"platba\" value=\"2\" >\n\n";
+                    $output .= "<input type=\"hidden\" name=\"platba\" value=\"2\" >\n\n";
                 }
 
                 //smlouva - typ, atd
                 if( $data_vl["typ_smlouvy"] == 2){
-                    print "<input type=\"hidden\" name=\"min_plneni\" value=\"2\" >\n";
+                    $output .= "<input type=\"hidden\" name=\"min_plneni\" value=\"2\" >\n";
 
                     //list($a, $b, $c) = explode("-", $data_vl["trvani_do"]);
-                    //print "<input type=\"hidden\" name=\"min_plneni_doba\" value=\"".$c.".".$b.".".$a."\" >\n\n";
+                    //$output .= "<input type=\"hidden\" name=\"min_plneni_doba\" value=\"".$c.".".$b.".".$a."\" >\n\n";
 
                 }
                 */
@@ -414,15 +416,15 @@ class vlastnik2 extends adminator
                 //firemní údaje
                 if($data_vl["fakturacni"] > 0) {
 
-                    print "<input type=\"hidden\" name=\"nazev_spol\" value=\"".$data_vl["ftitle"]."\" >\n\n";
+                    $output .= "<input type=\"hidden\" name=\"nazev_spol\" value=\"".$data_vl["ftitle"]."\" >\n\n";
 
-                    print "<input type=\"hidden\" name=\"f_adresa\" value=\"".$data_vl["fulice"]."\" >\n\n";
+                    $output .= "<input type=\"hidden\" name=\"f_adresa\" value=\"".$data_vl["fulice"]."\" >\n\n";
 
-                    print "<input type=\"hidden\" name=\"f_mesto\" value=\"".$data_vl["fmesto"].", ".$data_vl["fpsc"]."\" >\n\n";
+                    $output .= "<input type=\"hidden\" name=\"f_mesto\" value=\"".$data_vl["fmesto"].", ".$data_vl["fpsc"]."\" >\n\n";
 
-                    print "<input type=\"hidden\" name=\"ico\" value=\"".$data_vl["ico"]."\" >\n";
+                    $output .= "<input type=\"hidden\" name=\"ico\" value=\"".$data_vl["ico"]."\" >\n";
 
-                    print "<input type=\"hidden\" name=\"dic\" value=\"".$data_vl["dic"]."\" >\n";
+                    $output .= "<input type=\"hidden\" name=\"dic\" value=\"".$data_vl["dic"]."\" >\n";
 
                 }
 
@@ -446,68 +448,68 @@ class vlastnik2 extends adminator
                         $rs_obj_num = pg_num_rows($rs_obj);
 
                         if($rs_obj_num == 1) {
-                            print "<input type=\"hidden\" name=\"internet_sluzba\" value=\"1\" >\n";
+                            $output .= "<input type=\"hidden\" name=\"internet_sluzba\" value=\"1\" >\n";
                         } elseif($rs_obj_num == 2) {
-                            print "<input type=\"hidden\" name=\"internet_sluzba\" value=\"2\" >\n";
+                            $output .= "<input type=\"hidden\" name=\"internet_sluzba\" value=\"2\" >\n";
                         }
                     }
 
                     //sluzba IPTV
                     if($rs_fs_r[4] == 1) {
                         //sluzba IPTV - ANO
-                        print "<input type=\"hidden\" name=\"iptv_sluzba\" value=\"1\" >\n";
+                        $output .= "<input type=\"hidden\" name=\"iptv_sluzba\" value=\"1\" >\n";
                         //tarif
                         //	$iptv_sluzba_id_tarifu = intval(mysql_result($rs_fs, 0, 5));
-                        //	print "<input type=\"hidden\" name=\"iptv_sluzba_id_tarifu\" value=\"".$iptv_sluzba_id_tarifu."\" >\n";
+                        //	$output .= "<input type=\"hidden\" name=\"iptv_sluzba_id_tarifu\" value=\"".$iptv_sluzba_id_tarifu."\" >\n";
                     }
 
                     //VOIP
                     if($rs_fs_r[6] == 1) {
-                        print "<input type=\"hidden\" name=\"voip_sluzba\" value=\"1\" >\n";
+                        $output .= "<input type=\"hidden\" name=\"voip_sluzba\" value=\"1\" >\n";
                     }
                 } //konec if( mysql_num_rows rs_fs == 1 )
-                //print "<input type=\"hidden\" name=\"tarif\" value=\"".$tarif."\" >\n";
+                //$output .= "<input type=\"hidden\" name=\"tarif\" value=\"".$tarif."\" >\n";
             }
 
-            echo "</form>\n";
+            $output .= "</form>\n";
 
-            echo "<script language=\"JavaScript\" >document.frm.submit(); </script>";
-            echo "Pokud nedojde k automatickému přesměrování, pokračujte <a href=\"#\" onclick=\"document.frm.submit()\" >zde</a>";
+            $output .= "<script language=\"JavaScript\" >document.frm.submit(); </script>";
+            $output .= "Pokud nedojde k automatickému přesměrování, pokračujte <a href=\"#\" onclick=\"document.frm.submit()\" >zde</a>";
 
-            echo "</body>\n</html>\n";
-            exit;
+            $output .= "</body>\n</html>\n";
+            return [$output];
 
         } elseif($akce == 8) { //vlozeni vypovedi
-            echo $html_init;
+            $output .= $html_init;
 
             $url = fix_link_to_another_adminator("/vypovedi-vlozeni.php");
-            echo "<form action=\"".$url."\" method=\"post\" name=\"frm\" >";
+            $output .= "<form action=\"".$url."\" method=\"post\" name=\"frm\" >";
 
-            print "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
-            print "<input type=\"hidden\" name=\"klient\" value=\"".$id_cloveka."\" >";
+            $output .= "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
+            $output .= "<input type=\"hidden\" name=\"klient\" value=\"".$id_cloveka."\" >";
 
-            echo "
+            $output .= "
             </form> 
             <script language=\"JavaScript\" > document.frm.submit(); </script>";
 
-            echo "</body></html>";
-            exit;
+            $output .= "</body></html>";
+            return [$output];
 
         } elseif($akce == 9) { //vlozIT hot. platbu
-            echo $html_init;
+            $output .= $html_init;
 
             $url = fix_link_to_another_adminator("/platby-akce2.php");
-            echo "<form action=\"".$url."\" method=\"post\" name=\"frm\" >";
+            $output .= "<form action=\"".$url."\" method=\"post\" name=\"frm\" >";
 
-            print "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
-            print "<input type=\"hidden\" name=\"klient\" value=\"".$id_cloveka."\" >";
+            $output .= "<input type=\"hidden\" name=\"firma\" value=\"2\" >";
+            $output .= "<input type=\"hidden\" name=\"klient\" value=\"".$id_cloveka."\" >";
 
-            echo "</form>";
+            $output .= "</form>";
 
-            echo "<script language=\"JavaScript\" > document.frm.submit(); </script>";
+            $output .= "<script language=\"JavaScript\" > document.frm.submit(); </script>";
 
-            echo "</body></html>";
-            exit;
+            $output .= "</body></html>";
+            return [$output];
 
         } elseif($akce == 10) { //vypis plateb
             $stranka = fix_link_to_another_adminator("/platby-vypis.php?id_vlastnika=".$id_cloveka."&ok=OK");
@@ -541,12 +543,12 @@ class vlastnik2 extends adminator
 
         header("Location: ".$full_url);
 
-        echo $html_init;
-        echo "<div><a href=\"" . $full_url . "\" >" . $full_url . "</a></div>";
+        $output .= $html_init;
+        $output .= "<div><a href=\"" . $full_url . "\" >" . $full_url . "</a></div>";
 
-        echo "</body></html>";
+        $output .= "</body></html>";
 
-        return true;
+        return [$output];
     }
 
     public function vypis_tab($par)
@@ -579,8 +581,6 @@ class vlastnik2 extends adminator
         $objekt->listAllowedActionErase = $this->objektListAllowedActionErase;
         // $objekt-> = $this->objektListAllowedActionGarant;
         $objekt->allowedUnassignFromVlastnik = $this->vlastnikAllowedUnassignObject;
-
-        // echo "<pre>" . var_export($dotaz_final, true) . "</pre>";
 
         $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
 
@@ -907,8 +907,6 @@ class vlastnik2 extends adminator
                 $pocet_wifi_obj = $objekt->zjistipocet(1, $id);
 
                 $pocet_fiber_obj = $objekt->zjistipocet(2, $id);
-
-                // echo "<pre>pocty objs: " . $pocet_wifi_obj . " a " . $pocet_fiber_obj . "</pre>";
 
                 if($pocet_wifi_obj > 0) {
                     //objekty wifi
