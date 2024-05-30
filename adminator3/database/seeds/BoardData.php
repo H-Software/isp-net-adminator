@@ -28,7 +28,7 @@ class BoardData extends AbstractSeed
                                         $faker->email
                 ),
                 'subject'       => $this->sanitizeString(
-                                        $faker->words(5, true)                                       
+                                        $faker->words(5, true)
                                     ),
                 'body'          => $this->sanitizeString(
                                         $faker->text(60)
@@ -40,7 +40,7 @@ class BoardData extends AbstractSeed
 
         // generate "old" posts
         // TODO: add second loop with dates in past
-        
+
         // This is a cool short-hand method
         $this->insert('board', $data);
     }
@@ -48,8 +48,8 @@ class BoardData extends AbstractSeed
     private function sanitizeString(string $input): string
     {
         return preg_replace(
-            "/(failed|chyba|error)/",
-            '',
+            "/(failed|error)/i",
+            'omg',
             $input
         );
     }

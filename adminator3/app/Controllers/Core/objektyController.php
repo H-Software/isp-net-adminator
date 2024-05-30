@@ -22,7 +22,7 @@ class objektyController extends adminatorController
 
     protected ResponseInterface $response;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->container = $container;
         $this->conn_mysql = $this->container->get('connMysql');
@@ -30,14 +30,14 @@ class objektyController extends adminatorController
         $this->logger = $this->container->get('logger');
         $this->sentinel = $this->container->get('sentinel');
 
-        $this->logger->info("objektyController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        parent::__construct($container);
+        parent::__construct($container, $adminatorInstance);
     }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("objektyController\cat called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -56,7 +56,7 @@ class objektyController extends adminatorController
 
     public function stb(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("objektyController\\stb called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -94,7 +94,7 @@ class objektyController extends adminatorController
 
     public function stbAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("objektyController\\stbAction called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -128,7 +128,7 @@ class objektyController extends adminatorController
 
     public function objekty(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("objektyController\objekty called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -176,7 +176,7 @@ class objektyController extends adminatorController
 
     public function objektyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("objektyController\objektyAction called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
