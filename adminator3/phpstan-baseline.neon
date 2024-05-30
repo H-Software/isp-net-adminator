@@ -181,14 +181,6 @@ parameters:
 			path: app/Core/shared/partner.servis.class.php
 
 		-
-			message: "#^Class archivZmenController not found\\.$#"
-			count: 4
-			path: app/routing.php
-		-
-			message: "#^Class objektyController not found\\.$#"
-			count: 5
-			path: app/routing.php
-		-
 			message: "#^Comparison operation \"\\>\" between int\\<2, max\\> and 1 is always true\\.$#"
 			count: 1
 			path: include/main.function.shared.php
