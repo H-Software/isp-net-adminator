@@ -251,7 +251,7 @@ class partnerServisController extends adminatorController
                     <span style=\"border-bottom: 1px solid grey; \" >Akceptování žádosti o servis</span>
              </div>";
 
-            if(preg_match('/^([[:digit:]]xxx)+$/', $_GET["id"]) == false) {
+            if(preg_match('/^([[:digit:]])+$/', $_GET["id"]) == false) {
                 $bodyContent .= "<div style=\"color: red; font-weight: bold; padding-left: 20px; padding-bottom: 20px; \">
                     Chyba! Zákazníka nelze akceptovat! Vstupní data jsou ve špatném formátu! </div> ";
                 $assignData["body"] = $bodyContent;
