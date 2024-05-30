@@ -105,7 +105,7 @@ class partnerServisController extends adminatorController
             "body" => $bodyContent
         ];
 
-        return $this->renderer->template($request, $response, 'partner/servis-list.tpl', $assignData);
+        return $this->renderer->template($request, $response, 'partner/servis-list2.tpl', $assignData);
     }
 
     public function add(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
