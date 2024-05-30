@@ -348,6 +348,107 @@ abstract class AdminatorTestCase extends TestCase
         $this->queryAssertion($response, $path, true);
     }
 
+        /**
+     * Assert against DOM/XPath selection; node should contain content
+     *
+     * @param string $path CSS selector path
+     * @param string $match content that should be contained in matched nodes
+     * @param bool $useXpath
+     */
+    private function queryContentContainsAssertion($response, $path, $match, $useXpath = false): void
+    {
+        $result = $this->query($response, $path, $useXpath);
+
+        if ($result->count() === 0) {
+            throw new ExpectationFailedException(sprintf(
+                'Failed asserting node DENOTED BY %s EXISTS',
+                $path
+            ));
+        }
+
+        $nodeValues = [];
+
+        foreach ($result as $node) {
+            if ($node->nodeValue === $match) {
+                $this->assertEquals($match, $node->nodeValue);
+                return;
+            }
+
+            $nodeValues[] = $node->nodeValue;
+        }
+
+        throw new ExpectationFailedException(sprintf(
+            'Failed asserting node denoted by %s CONTAINS content "%s", Contents: [%s]',
+            $path,
+            $match,
+            implode(',', $nodeValues)
+        ));
+    }
+
+        /**
+     * Assert against DOM/XPath selection; node should match content
+     *
+     * @param string $path CSS selector path
+     * @param string $pattern Pattern that should be contained in matched nodes
+     * @param bool $useXpath
+     */
+    private function queryContentRegexAssertion($response, $path, $pattern, $useXpath = false): void
+    {
+        $result = $this->query($response, $path, $useXpath);
+        if ($result->count() === 0) {
+            throw new ExpectationFailedException(sprintf(
+                'Failed asserting node DENOTED BY %s EXISTS',
+                $path
+            ));
+        }
+
+        $found      = false;
+        $nodeValues = [];
+
+        foreach ($result as $node) {
+            $nodeValues[] = $node->nodeValue;
+            if (preg_match($pattern, (string) $node->nodeValue)) {
+                $found = true;
+                break;
+            }
+        }
+
+        if (! $found) {
+            throw new ExpectationFailedException(sprintf(
+                'Failed asserting node denoted by %s CONTAINS content MATCHING "%s", actual content is "%s"',
+                $path,
+                $pattern,
+                implode('', $nodeValues)
+            ));
+        }
+
+        $this->assertTrue($found);
+    }
+
+        /**
+     * Assert against XPath selection; node should contain content
+     *
+     * @param string $path XPath path
+     * @param string $match content that should be contained in matched nodes
+     * @return void
+     */
+    public function assertXpathQueryContentContains($response, $path, $match)
+    {
+        $this->queryContentContainsAssertion($response, $path, $match, true);
+    }
+
+     /**
+     * Assert against XPath selection; node should match content
+     *
+     * @param string $path XPath path
+     * @param string $pattern Pattern that should be contained in matched nodes
+     * @return void
+     */
+    public function assertXpathQueryContentRegex($response, $path, $pattern)
+    {
+        $this->queryContentRegexAssertion($response, $path, $pattern, true);
+    }
+
     /*
     * end of code copied from laminas-test
     */
