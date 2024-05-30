@@ -200,7 +200,7 @@ class partnerServisController extends adminatorController
             {
                 $filtr .= " AND akceptovano = ".$filtr_akceptovano." ";
             }
-            
+
             if($filtr_prio > 0) {
                 $filtr .= " AND prio = ".$filtr_prio." ";
             }
