@@ -77,11 +77,25 @@ final class AdminatorAssert extends TestCase
     {
         $responseContent = $response->getBody()->__toString();
 
-        $self::assertEquals($response->getStatusCode(), 403);
-
+        self::assertEquals($response->getStatusCode(), 403);
 
         self::assertStringContainsString("Nelze zobrazit požadovanou stránku", $responseContent, "missing string 1 in response body");
         self::assertStringContainsString("Pro otevřetí této stránky nemáte dostatečné oprávnění (level).", $responseContent, "missing string 2 in response body");
+    }
+
+    public static function assertHomePagePanels($responseContent)
+    {
+        $assertKeywordsHome = array(
+            '<div class="home-vypis-useru-napis" >Přihlašení uživatelé: </div>', // loggeduser banner
+            'uživatel: <span class="home-vypis-useru-font1" >', // logger user row
+            'Výpis Závad/oprav',
+            'Bulletin Board - Nástěnka', // board header exists
+            '<div class="table zprava-main" >', // board message exists
+        );
+
+        foreach ($assertKeywordsHome as $w) {
+            self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
+        }
     }
 
     public static function assertTopologySubCat($content)
