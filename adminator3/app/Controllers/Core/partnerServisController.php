@@ -103,4 +103,67 @@ class partnerServisController extends adminatorController
         return $this->renderer->template($request, $response, 'partner/servis-list.tpl', $assignData);
     }
 
+    public function add(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(304)) {
+            return $this->response;
+        };
+
+        $bodyContent = "";
+
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+
+        $this->psi->klient_hledat = $this->conn_mysql->real_escape_string($_POST["klient_hledat"]);
+        $this->psi->klient_id = intval($_POST["klient_id"]);
+
+        $this->psi->fill_form = $this->conn_mysql->real_escape_string($_POST["fill_form"]);
+
+        if( (strlen($this->psi->fill_form) > 4 ) ){
+           $this->psi->form_copy_values();
+        }
+        else {
+           $this->psi->jmeno_klienta = $this->conn_mysql->real_escape_string($_POST["jmeno_klienta"]);
+           $this->psi->bydliste      = $this->conn_mysql->real_escape_string($_POST["bydliste"]);
+           $this->psi->email 	       = $this->conn_mysql->real_escape_string($_POST["email"]);
+           $this->psi->tel 	       = $this->conn_mysql->real_escape_string($_POST["tel"]);
+        }
+
+        $this->psi->pozn = $this->conn_mysql->real_escape_string($_POST["pozn"]);
+        $this->psi->prio = intval($_POST["prio"]);
+
+        $this->psi->odeslat = $this->conn_mysql->real_escape_string($_POST["odeslat"]);
+
+        //kontrola promennych
+        $this->psi->check_insert_value();
+
+        if( ( ($this->psi->odeslat == "ULOŽIT") and ($this->psi->fail == false) ) )
+        { // mod ukladani
+            $bodyContent .= $this->psi->save_form();
+        }
+        else
+        { // zobrazime formular
+            $bodyContent .= "<form action=\"\" method=\"post\" class=\"form-partner-servis-insert\" >";
+            $bodyContent .= $csrf_html;
+            
+            if( isset($this->psi->odeslat) ){
+                $bodyContent .= $this->psi->error;
+            }
+
+            $bodyContent .= $this->psi->show_insert_form();
+
+            $bodyContent .= "</form>";
+        }
+
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner program :: Servis Add",
+            "body" => $bodyContent
+        ];
+
+        return $this->renderer->template($request, $response, 'partner/servis-list.tpl', $assignData);
+    }
 }

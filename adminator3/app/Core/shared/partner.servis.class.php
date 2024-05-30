@@ -27,16 +27,20 @@ class partner_servis
 
     public $prio;
 
+    public $user;
+    public $mod;
+
     public function __construct($conn_mysql, $connPgsql)
     {
         $this->conn_mysql = $conn_mysql;
         $this->conn_pgsql = $connPgsql;
     }
 
-    public function show_insert_form()
+    public function show_insert_form(): string
     {
+        $output = "";
 
-        echo "  <div style=\"padding-left: 40px; padding-bottom: 10px; padding-top: 10px; font-weight: bold; font-size: 18px; \">
+        $output .= "  <div style=\"padding-left: 40px; padding-bottom: 10px; padding-top: 10px; font-weight: bold; font-size: 18px; \">
                  <span style=\"border-bottom: 1px solid grey; \" >
                    Vložení servisního zásahu
                  </span>
@@ -57,50 +61,50 @@ class partner_servis
 
         if((strlen($this->klient_hledat) == 0)) {
 
-            echo "<span style=\"padding-right: 70px; font-weight: bold;\">Zadejte výraz pro hledání</span>\n";
+            $output .= "<span style=\"padding-right: 70px; font-weight: bold;\">Zadejte výraz pro hledání</span>\n";
         } else {
 
             $vlastnici = $this->find_clients($this->klient_hledat);
 
             if(is_countable($vlastnici) && count($vlastnici) == 0) {
-                echo "Žádné výsledky dle hledaného výrazu \n";
+                $output .= "Žádné výsledky dle hledaného výrazu \n";
             } elseif(is_countable($vlastnici) && count($vlastnici) > 200) {
 
-                echo "<span>více nalezených klientů, prosím specifikujte hledání</span>\n";
+                $output .= "<span>více nalezených klientů, prosím specifikujte hledání</span>\n";
             } elseif(is_array($vlastnici)) {
 
-                echo "<select size=\"1\" name=\"klient_id\">\n";
-                echo "<option value=\"0\" class=\"select-nevybrano\">není vybráno</option>\n";
+                $output .= "<select size=\"1\" name=\"klient_id\">\n";
+                $output .= "<option value=\"0\" class=\"select-nevybrano\">není vybráno</option>\n";
 
                 $klient_id = intval($this->klient_id);
 
                 foreach($vlastnici as $key => $value) {
-                    echo "\t\t<option value=\"".intval($value["id_cloveka"])."\" ";
+                    $output .= "\t\t<option value=\"".intval($value["id_cloveka"])."\" ";
 
                     if($value["id_cloveka"] == $klient_id) {
-                        echo " selected ";
+                        $output .= " selected ";
                     }
 
-                    echo " >".$value["prijmeni"]." ".$value["jmeno"];
-                    echo " -- ".$value["ulice"].", ".$value["mesto"]."";
-                    echo "</option>\n";
+                    $output .= " >".$value["prijmeni"]." ".$value["jmeno"];
+                    $output .= " -- ".$value["ulice"].", ".$value["mesto"]."";
+                    $output .= "</option>\n";
                 }
 
-                echo "</select>\n";
+                $output .= "</select>\n";
 
             } else {
-                echo "<span style=\"color: red;\"> error: select from vlastnici \"failed\" </span>";
+                $output .= "<span style=\"color: red;\"> error: select from vlastnici \"failed\" </span>";
             }
 
         }
 
-        echo "</span>";
+        $output .= "</span>";
 
-        echo "<span style=\"padding-left: 90px;\" >
+        $output .= "<span style=\"padding-left: 90px;\" >
                 	    <input type=\"submit\" name=\"fill_form\" value=\"PŘENÉST DO FORMULÁŘE\">
                        </span>";
 
-        echo "      </div>
+        $output .= "      </div>
 
                 <div style=\"padding-bottom: 20px; \">
                  <span style=\"padding-left: 45px; padding-right: 30px; \">Jméno a příjmení klienta: </span>
@@ -137,20 +141,20 @@ class partner_servis
                  <span style=\"padding-left: 273px; \" >
                   <select size=\"3\" name=\"prio\">";
 
-        echo "<option value=\"1\" ";
+        $output .= "<option value=\"1\" ";
         if($this->prio == 1) {
-            echo "selected";
-        } echo " >Vysoká</option>";
-        echo "<option value=\"2\" ";
+            $output .= "selected";
+        } $output .= " >Vysoká</option>";
+        $output .= "<option value=\"2\" ";
         if($this->prio == 2 or !isset($this->prio)) {
-            echo "selected";
-        } echo " >Normal</option>";
-        echo "<option value=\"3\" ";
+            $output .= "selected";
+        } $output .= " >Normal</option>";
+        $output .= "<option value=\"3\" ";
         if($this->prio == 3) {
-            echo "selected";
-        } echo " >Nízká</option>";
+            $output .= "selected";
+        } $output .= " >Nízká</option>";
 
-        echo "</select>
+        $output .= "</select>
                 </div>
 
                 <div style=\" padding-top: 40px; \">
@@ -162,11 +166,12 @@ class partner_servis
                  </span>
                 </div>";
 
+        return $output;
+
     } //end of function
 
-    public function find_clients($find_string)
+    public function find_clients($find_string): array
     {
-
         $fs = "%".$this->conn_mysql->real_escape_string($find_string)."%";
 
         $select = " WHERE (nick LIKE '$fs' OR jmeno LIKE '$fs' OR prijmeni LIKE '$fs' ";
@@ -192,27 +197,24 @@ class partner_servis
 
         }
 
-
         return $RetArray;
     } //end of function
 
-    public function form_copy_values()
+    public function form_copy_values(): void
     {
 
         $rs_v = pg_query($this->conn_pgsql, "SELECT id_cloveka, jmeno, prijmeni, ulice, mesto, mail, telefon FROM vlastnici WHERE id_cloveka = '".intval($this->klient_id)."' ");
 
         while($array = pg_fetch_array($rs_v)) {
-
             $this->jmeno_klienta = $array["jmeno"]." ".$array["prijmeni"];
             $this->bydliste = $array["ulice"].", ".$array["mesto"];
             $this->email = $array["mail"];
             $this->tel = $array["telefon"];
-
         }
 
     } //end of function
 
-    public function check_insert_value()
+    public function check_insert_value(): void
     {
 
         // zde kontrola, popr. naplneni promenne error
@@ -317,14 +319,15 @@ class partner_servis
 
     } //end of function
 
-    public function save_form()
+    public function save_form(): string
     {
+        $output = "";
 
         if(isset($this->klient_id)) {
             $this->jmeno_klienta .= ",  V:".$this->klient_id;
         }
 
-        echo "  <div style=\"padding-bottom: 20px; padding-top: 20px; padding-left: 20px; font-size: 18px; font-weight: bold; \">
+        $output .= "  <div style=\"padding-bottom: 20px; padding-top: 20px; padding-left: 20px; font-size: 18px; font-weight: bold; \">
              <span style=\"border-bottom: 1px solid grey; \" >
                 Vložené informace:
              </span>
@@ -359,15 +362,15 @@ class partner_servis
                 <span style=\"font-weight: bold; \" >Priorita: </span>
                 <span style=\"padding-left: 184px; \" > ";
         if($this->prio == 1) {
-            echo "Vysoká";
+            $output .= "Vysoká";
         } elseif($this->prio == 2) {
-            echo "Normální";
+            $output .= "Normální";
         } elseif($this->prio == 3) {
-            echo "Nízká";
+            $output .= "Nízká";
         } else {
-            echo "Nejze zjistit (".intval($this->prio).")";
+            $output .= "Nejze zjistit (".intval($this->prio).")";
         }
-        echo "</span>
+        $output .= "</span>
             </div>
 
           <div style=\"padding-top: 5px; \" ></div>";
@@ -394,17 +397,18 @@ class partner_servis
                             VALUES ('$tel','$jmeno_klienta','$bydliste','$email','$pozn', '$prio', '$user_plaint') "
         );
 
-        echo "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";
+        $output .= "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";
 
         if($add) {
-            echo "<div style=\"color: green; font-size: 18px; font-weight: bold;\" >Záznam úspěšně uložen.</div>";
+            $output .= "<div style=\"color: green; font-size: 18px; font-weight: bold;\" >Záznam úspěšně uložen.</div>";
         } else {
-            echo "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
-            // echo "<div style=\"color: grey; \">debug: ".mysql_error()."</div>";
+            $output .= "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
+            // $output .= "<div style=\"color: grey; \">debug: ".mysql_error()."</div>";
         }
 
-        echo "</div>";
+        $output .= "</div>";
 
+        return $output;
 
     } //end of function
 
@@ -489,8 +493,8 @@ class partner_servis
 
                    </td></tr>";
 
-        $output .= "<input type=\"hidden\" name=\"user\" value=\"".htmlspecialchars($user)."\" >
-                   <input type=\"hidden\" name=\"mod\" value=\"".htmlspecialchars($mod)."\" >";
+        $output .= "<input type=\"hidden\" name=\"user\" value=\"".htmlspecialchars($this->user)."\" >
+                   <input type=\"hidden\" name=\"mod\" value=\"".htmlspecialchars($this->mod)."\" >";
 
         $output .= "</form>";
 
