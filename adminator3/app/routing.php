@@ -111,6 +111,7 @@ $app->group(
         $group->map(['GET', 'POST'], '/partner/servis/list', partnerServisController::class . ':list');
         $group->map(['GET', 'POST'], '/partner/servis/add', partnerServisController::class . ':add');
         $group->map(['GET', 'POST'], '/partner/servis/accept', partnerServisController::class . ':servisAccept');
+        $group->map(['GET', 'POST'], '/partner/servis/change-desc', partnerServisController::class . ':changeDesc');
 
         $group->map(['GET', 'POST'], '/platby/cat', platbyController::class . ':cat');
         $group->map(['GET', 'POST'], '/platby/fn', platbyController::class . ':fn');

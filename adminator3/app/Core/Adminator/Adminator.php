@@ -343,6 +343,35 @@ class adminator
         return $tarifs;
     }
 
+    public static function getLinkToVlastnik(\PgSql\Connection|\PDO $conn_pgsql, int $id_cloveka): array
+    {
+        try {
+            $rs = pg_query($conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."'");
+        } catch (Exception $e) {
+            return [false, $e->getMessage()];
+        }
+
+        $rs_nums = pg_num_rows($rs);
+        if($rs_nums <> 1) {
+            return [false, "no rows in database"];
+        }
+
+        while ($data = pg_fetch_array($rs)) {
+            $firma_vlastnik = $data["firma"];
+            $archiv_vlastnik = $data["archiv"];
+        }
+
+        if ($archiv_vlastnik == 1) {
+            $link = "/vlastnici/archiv?find_id=".$id_cloveka;
+        } elseif($firma_vlastnik == 1) {
+            $link = "/vlastnici2?find_id=".$id_cloveka;
+        } else {
+            $link = "/vlastnici?find_id=".$id_cloveka;
+        }
+
+        return [true, $link];
+    }
+
     //
     // vypis neuhrazenych faktur
     //

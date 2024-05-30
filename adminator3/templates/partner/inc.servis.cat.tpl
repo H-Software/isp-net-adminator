@@ -8,6 +8,6 @@
 
     <span style="margin-left: 40px; "><a href="/partner/servis/accept" class="cat2" >Akceptování žádosti o servis</a></span>
 
-    <span style="margin-left: 40px; "><a href="/partner/servis/pozn-update" class="cat2" >Změna poznámky</a></span>
+    <span style="margin-left: 40px; "><a href="/partner/servis/change-desc" class="cat2" >Změna poznámky</a></span>
 
 </div>
