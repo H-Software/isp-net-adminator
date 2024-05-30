@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+
 // use App\Partner\partner;
 
 class partnerServisController extends adminatorController
@@ -55,8 +56,12 @@ class partnerServisController extends adminatorController
 
         //priprava dotazu
 
-        if($filtr_akceptovano > 0){ $filtr .= " AND akceptovano = ".$filtr_akceptovano." "; }
-        if($filtr_prio > 0){ $filtr .= " AND prio = ".$filtr_prio." "; }
+        if($filtr_akceptovano > 0) {
+            $filtr .= " AND akceptovano = ".$filtr_akceptovano." ";
+        }
+        if($filtr_prio > 0) {
+            $filtr .= " AND prio = ".$filtr_prio." ";
+        }
 
         $dotaz_sql = "SELECT tel, jmeno, adresa, email, poznamky, prio, vlozil, akceptovano, ".
             "akceptovano_kym, akceptovano_pozn, DATE_FORMAT(datum_vlozeni, '%d.%m.%Y %H:%i:%s') ".
@@ -91,7 +96,7 @@ class partnerServisController extends adminatorController
 
         $bodyContent .= $this->psi->list_show_legend(); // promena vyrizeni a update asi zde prazdne
 
-        $bodyContent .= $this->psi->list_show_items($filtr_akceptovano,$filtr_prio,$dotaz_sql);
+        $bodyContent .= $this->psi->list_show_items($filtr_akceptovano, $filtr_prio, $dotaz_sql);
 
         // $listovani->listInterval();
 
@@ -123,14 +128,13 @@ class partnerServisController extends adminatorController
 
         $this->psi->fill_form = $this->conn_mysql->real_escape_string($_POST["fill_form"]);
 
-        if( (strlen($this->psi->fill_form) > 4 ) ){
-           $this->psi->form_copy_values();
-        }
-        else {
-           $this->psi->jmeno_klienta = $this->conn_mysql->real_escape_string($_POST["jmeno_klienta"]);
-           $this->psi->bydliste      = $this->conn_mysql->real_escape_string($_POST["bydliste"]);
-           $this->psi->email 	       = $this->conn_mysql->real_escape_string($_POST["email"]);
-           $this->psi->tel 	       = $this->conn_mysql->real_escape_string($_POST["tel"]);
+        if((strlen($this->psi->fill_form) > 4)) {
+            $this->psi->form_copy_values();
+        } else {
+            $this->psi->jmeno_klienta = $this->conn_mysql->real_escape_string($_POST["jmeno_klienta"]);
+            $this->psi->bydliste      = $this->conn_mysql->real_escape_string($_POST["bydliste"]);
+            $this->psi->email 	       = $this->conn_mysql->real_escape_string($_POST["email"]);
+            $this->psi->tel 	       = $this->conn_mysql->real_escape_string($_POST["tel"]);
         }
 
         $this->psi->pozn = $this->conn_mysql->real_escape_string($_POST["pozn"]);
@@ -141,16 +145,13 @@ class partnerServisController extends adminatorController
         //kontrola promennych
         $this->psi->check_insert_value();
 
-        if( ( ($this->psi->odeslat == "ULOŽIT") and ($this->psi->fail == false) ) )
-        { // mod ukladani
+        if((($this->psi->odeslat == "ULOŽIT") and ($this->psi->fail == false))) { // mod ukladani
             $bodyContent .= $this->psi->save_form();
-        }
-        else
-        { // zobrazime formular
+        } else { // zobrazime formular
             $bodyContent .= "<form action=\"\" method=\"post\" class=\"form-partner-servis-insert\" >";
             $bodyContent .= $csrf_html;
-            
-            if( isset($this->psi->odeslat) ){
+
+            if(isset($this->psi->odeslat)) {
                 $bodyContent .= $this->psi->error;
             }
 
