@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class objektyController extends adminatorController
 {
     public \mysqli|\PDO $conn_mysql;
-    public $smarty;
+    public \Smarty $smarty;
 
     public \Monolog\Logger $logger;
     public $app;

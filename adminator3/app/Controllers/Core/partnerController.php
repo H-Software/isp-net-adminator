@@ -9,7 +9,7 @@ use App\Partner\partner;
 
 class partnerController extends adminatorController
 {
-    public $smarty;
+    public \Smarty $smarty;
 
     public \Monolog\Logger $logger;
 

@@ -16,7 +16,7 @@ class HomeController extends adminatorController
 
     protected $settings;
 
-    public $smarty;
+    public \Smarty $smarty;
 
     public \Monolog\Logger $logger;
 

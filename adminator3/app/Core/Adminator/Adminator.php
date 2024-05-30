@@ -23,7 +23,7 @@ class adminator
     // PDO is used in tests
     public \PgSql\Connection|\PDO|null $conn_pgsql;
 
-    public $smarty;
+    public \Smarty $smarty;
 
     public \Monolog\Logger $logger;
 

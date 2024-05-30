@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class partnerServisController extends adminatorController
 {
-    public $smarty;
+    public \Smarty $smarty;
 
     public \Monolog\Logger $logger;
 

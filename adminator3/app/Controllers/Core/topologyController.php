@@ -12,7 +12,7 @@ class topologyController extends adminatorController
 {
     // public \mysqli|\PDO $conn_mysql;
 
-    public $smarty;
+    public \Smarty $smarty;
 
     public \Monolog\Logger $logger;
 

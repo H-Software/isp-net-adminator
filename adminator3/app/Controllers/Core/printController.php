@@ -12,7 +12,7 @@ class printController extends adminatorController
 {
     public \Monolog\Logger $logger;
 
-    public $smarty;
+    public \Smarty $smarty;
 
     protected $sentinel;
 
