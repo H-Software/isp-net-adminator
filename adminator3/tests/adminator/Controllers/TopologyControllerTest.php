@@ -13,28 +13,16 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 
 final class TopologyControllerTest extends AdminatorTestCase
 {
-    protected $psrHttpFactory;
-
     protected $serverRequest;
 
     protected $topologyController;
 
     protected function setUp(): void
     {
-        $psr17Factory = new Psr17Factory();
-
-        // https://symfony.com/doc/current/components/psr7.html#converting-from-httpfoundation-objects-to-psr-7
-        $this->psrHttpFactory = new PsrHttpFactory(
-            $psr17Factory,
-            $psr17Factory,
-            $psr17Factory,
-            $psr17Factory
-        );
     }
 
     protected function tearDown(): void
     {
-        $this->psrHttpFactory = null;
     }
 
     public function test_ctl_node_list_view_all()
@@ -48,7 +36,7 @@ final class TopologyControllerTest extends AdminatorTestCase
             []
         );
         $request->overrideGlobals();
-        $serverRequest = $this->psrHttpFactory->createRequest($request);
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
 
         $container = self::initDIcontainer(true, false);
 
@@ -116,7 +104,7 @@ final class TopologyControllerTest extends AdminatorTestCase
             []
         );
         $request->overrideGlobals();
-        $serverRequest = $this->psrHttpFactory->createRequest($request);
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
 
         $container = self::initDIcontainer(true, false);
 
@@ -165,7 +153,7 @@ final class TopologyControllerTest extends AdminatorTestCase
             ['find' => 'this-realy-dont-exist']
         );
         $request->overrideGlobals();
-        $serverRequest = $this->psrHttpFactory->createRequest($request);
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
 
         $container = self::initDIcontainer(true, false);
 

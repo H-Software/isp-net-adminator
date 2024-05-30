@@ -19,6 +19,8 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Csrf\Guard;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -31,6 +33,8 @@ abstract class AdminatorTestCase extends TestCase
     public static $phinxConfig;
 
     public static $phinxManager;
+
+    public static $psrHttpFactory;
 
     public static function setUpBeforeClass(): void
     {
@@ -52,6 +56,18 @@ abstract class AdminatorTestCase extends TestCase
         self::$phinxManager = new Manager(self::$phinxConfig, new StringInput(' '), new NullOutput());
         self::$phinxManager->migrate('test');
         self::$phinxManager->seed('test');
+
+        // factory for requests
+        $psr17Factory = new Psr17Factory();
+
+        // https://symfony.com/doc/current/components/psr7.html#converting-from-httpfoundation-objects-to-psr-7
+        self::$psrHttpFactory = new PsrHttpFactory(
+            $psr17Factory,
+            $psr17Factory,
+            $psr17Factory,
+            $psr17Factory
+        );
+
     }
 
     public static function tearDownAfterClass(): void

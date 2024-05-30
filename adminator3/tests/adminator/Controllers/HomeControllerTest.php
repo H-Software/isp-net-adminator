@@ -6,7 +6,6 @@ namespace App\Tests;
 
 use Mockery as m;
 use App\Controllers\HomeController;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -15,42 +14,24 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
-    protected $psrHttpFactory;
-
     protected $serverRequest;
 
     protected function setUp(): void
     {
-        // prepare data for forms
-        //
-        // $_POST = array();
-        // $_POST['show_se_cat'] = "null";
+        // $psr17Factory = new Psr17Factory();
 
-        // $_GET = array();
-        // $_GET["v_reseni_filtr"] = 99;
-        // $_GET["vyreseno_filtr"] = 0;
-        // $_GET["limit"] = 10;
-
-        // $_SERVER = array();
-        // $_SERVER['HTTP_HOST'] = "127.0.0.1";
-        // $_SERVER['SCRIPT_URL'] = "/home";
-        // $_SERVER['REMOTE_ADDR'] = "127.0.0.1";
-        // $_SERVER["REQUEST_URI"] = '/test';
-
-        $psr17Factory = new Psr17Factory();
-
-        // https://symfony.com/doc/current/components/psr7.html#converting-from-httpfoundation-objects-to-psr-7
-        $this->psrHttpFactory = new PsrHttpFactory(
-            $psr17Factory,
-            $psr17Factory,
-            $psr17Factory,
-            $psr17Factory
-        );
+        // // https://symfony.com/doc/current/components/psr7.html#converting-from-httpfoundation-objects-to-psr-7
+        // $this->psrHttpFactory = new PsrHttpFactory(
+        //     $psr17Factory,
+        //     $psr17Factory,
+        //     $psr17Factory,
+        //     $psr17Factory
+        // );
     }
 
     protected function tearDown(): void
     {
-        $this->psrHttpFactory = null;
+        // $this->psrHttpFactory = null;
 
         m::close();
     }
@@ -76,7 +57,7 @@ final class HomeControllerTest extends AdminatorTestCase
         );
 
         $request->overrideGlobals();
-        $serverRequest = $this->psrHttpFactory->createRequest($request);
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
 
         $container = self::initDIcontainer(true, false);
 
