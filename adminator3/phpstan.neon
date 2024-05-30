@@ -11,6 +11,11 @@ parameters:
 		- app/Core/shared/ros_api_qos.php
 		- app/Core/shared/ros_api_restriction.php
 	ignoreErrors:
+    # known issues
+    -
+        message: "#^Variable \\$user in isset\\(\\) is never defined\\.$#"
+        count: 1
+        path: app/Core/shared/partner.servis.class.php
 	# common known issues
 	-
 		message: '#Undefined variable: \$.*#'

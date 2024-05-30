@@ -151,7 +151,7 @@ class partnerServisController extends adminatorController
             $bodyContent .= "<form action=\"\" method=\"post\" class=\"form-partner-servis-insert\" >";
             $bodyContent .= $csrf_html;
 
-            if(isset($this->psi->odeslat)) {
+            if(isset($this->psi->odeslat) and isset($this->psi->error)) {
                 $bodyContent .= $this->psi->error;
             }
 
