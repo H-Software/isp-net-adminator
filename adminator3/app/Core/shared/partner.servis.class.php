@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\adminator;
+
 class partner_servis
 {
     public \mysqli|\PDO $conn_mysql;
@@ -565,33 +567,19 @@ class partner_servis
             while($data = $dotaz->fetch_array()) {
                 $jmeno = htmlspecialchars($data["jmeno"]);
 
-                //nahrazeni id vlasntníka odkazem
+                //nahrazeni id vlastníka odkazem
                 if(preg_match("/V:\d/", $jmeno)) {
                     $id_cloveka_res = "";
-                    $pomocne = explode("V:", $jmeno);
-                    $id_cloveka_pomocne = $pomocne[1];
+                    list($v, $id_cloveka) = explode("V:", $jmeno);
+                    $id_cloveka = intval($id_cloveka);
 
-                    $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
+                    list($link_rs, $link_text) = adminator::getLinkToVlastnik($this->conn_pgsql, $id_cloveka);
 
-                    while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
-                        $firma_vlastnik = $data_vlastnik_pom["firma"];
-                        $archiv_vlastnik = $data_vlastnik_pom["archiv"];
+                    if($link_rs == true) {
+                        $id_cloveka_res = "<a href=\"" . $link_text . "\" >V: " . $id_cloveka . "</a>";
                     }
 
-                    if($archiv_vlastnik == 1) {
-                        $id_cloveka_res .= "<a href=\"/vlastnici-archiv.php";
-                    } elseif($firma_vlastnik == 1) {
-                        $id_cloveka_res .= "<a href=\"/vlastnici2.php";
-                    } else {
-                        $id_cloveka_res .= "<a href=\"/vlastnici.php";
-                    }
-
-                    $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >V:".$id_cloveka_pomocne."</a>";
-
-                    // TODO: probably wrong "migrate" from ereg
-                    // http://php.adamharvey.name/manual/en/function.preg-replace.php
-                    $jmeno = preg_replace("/V:".$id_cloveka_pomocne."/", $id_cloveka_res, $jmeno);
-
+                    $jmeno = preg_replace("/V:".$id_cloveka."/", $id_cloveka_res, $jmeno);
                 }
 
                 if(($this->vyrizeni == true) or ($this->update == true)) {

@@ -352,7 +352,7 @@ class adminator
         }
 
         $rs_nums = pg_num_rows($rs);
-        if($rs_nums <> 1){
+        if($rs_nums <> 1) {
             return [false, "no rows in database"];
         }
 
@@ -362,13 +362,13 @@ class adminator
         }
 
         if ($archiv_vlastnik == 1) {
-            $link = "/vlastnici/archiv?find_id=".$data["id_cloveka"];
+            $link = "/vlastnici/archiv?find_id=".$id_cloveka;
         } elseif($firma_vlastnik == 1) {
-            $link = "/vlastnici2?find_id=".$data["id_cloveka"];
+            $link = "/vlastnici2?find_id=".$id_cloveka;
         } else {
-            $link = "/vlastnici?find_id=".$data["id_cloveka"];
+            $link = "/vlastnici?find_id=".$id_cloveka;
         }
-        
+
         return [true, $link];
     }
 
