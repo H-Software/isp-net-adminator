@@ -71,7 +71,7 @@ final class Renderer
             $content = $this->smarty->fetch($template);
         } catch (\SmartyException $e) {
             // try render "known" template
-            
+
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": caught SmartyException: " . var_export($e->getMessage(), true));
 
             $this->smarty->assign("page_title", "Renderer Error");
