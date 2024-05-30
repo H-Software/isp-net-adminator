@@ -7,10 +7,8 @@ namespace App\Tests;
 use Mockery as m;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseFactoryInterface;
-
 use Symfony\Component\HttpFoundation\Request;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase as HttpController;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
@@ -81,6 +79,9 @@ final class HomeControllerTest extends AdminatorTestCase
         foreach ($assertKeywordsHome as $w) {
             $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
         }
+
+        // board stuff
+        // HttpController::assertXpathQuery("xx");
 
         // negative assert
         // check word: nelze

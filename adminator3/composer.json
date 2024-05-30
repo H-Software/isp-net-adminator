@@ -63,7 +63,8 @@
         "mnapoli/phpunit-easymock": "^1.3",
         "misantron/dbunit": "^5.3",
         "php-mock/php-mock-phpunit": "^2.10",
-        "fakerphp/faker": "^1.2"
+        "fakerphp/faker": "^1.2",
+        "laminas/laminas-test": "4.7.*"
     },
     "suggest": {
         "illuminate/database": "By default, Sentinel utilizes the powerful Illuminate database layer.",
