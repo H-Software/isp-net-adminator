@@ -18,14 +18,14 @@ class adminController extends adminatorController
 
     private $admin;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->container = $container;
         $this->logger = $this->container->get('logger');
 
-        $this->logger->info("adminController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        parent::__construct($container);
+        parent::__construct($container, $adminatorInstance);
 
         $this->admin = new \admin($this->container);
     }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Controllers\aboutController;
+use App\Controllers\adminController;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-final class AboutControllerTest extends AdminatorTestCase
+final class AdminControllerTest extends AdminatorTestCase
 {
     protected function setUp(): void
     {
@@ -18,13 +18,13 @@ final class AboutControllerTest extends AdminatorTestCase
     {
     }
 
-    public function test_ctl_base()
+    public function test_ctl_admin()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
 
         $request = Request::create(
-            '/about',
+            '/admin',
             'GET',
             []
         );
@@ -36,12 +36,12 @@ final class AboutControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        $controller = new aboutController($container, $adminatorMock);
+        $controller = new adminController($container, $adminatorMock);
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
-        $response = $controller->about($serverRequest, $response, []);
+        $response = $controller->admin($serverRequest, $response, []);
 
         $responseContent = $response->getBody()->__toString();
 
@@ -53,28 +53,18 @@ final class AboutControllerTest extends AdminatorTestCase
 
         // TODO: add asserts
 
-        //     <span style="margin-left: 20px; "><a href="/home" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>\n
-        //     \n
-        //     <span style="padding-left: 20px; "><a class="cat2" href="/about/changes-old">Staré změny (Adminator2)</a></span>\n
-        // \n
-        //     <span style="padding-left: 20px; "><a class="cat2" href="/about/changes">Změny v systému</a></span>\n
-        // \n
-        // </div>\n
-        // \n
-        // <div class="others-cat-body" >Prosím vyberte z podkategorie výše....</div>\n
-
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
 
-    public function test_ctl_base_with_low_user_level()
+    public function test_ctl_admin_with_low_user_level()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
 
         $request = Request::create(
-            '/about',
+            '/admin',
             'GET',
             []
         );
@@ -86,12 +76,12 @@ final class AboutControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container, false, 1);
         $this->assertIsObject($adminatorMock);
 
-        $topologyController = new aboutController($container, $adminatorMock);
+        $topologyController = new adminController($container, $adminatorMock);
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
-        $response = $topologyController->about($serverRequest, $response, []);
+        $response = $topologyController->admin($serverRequest, $response, []);
 
         $responseContent = $response->getBody()->__toString();
         $this->assertNotEmpty($responseContent);
@@ -108,8 +98,10 @@ final class AboutControllerTest extends AdminatorTestCase
 
     }
 
-    // TODO: add test for changesOld
+    // TODO: add test for /admin/admin (adminMain function)
 
-    // TODO: add test for changes
+    // TODO: add tests for level list/action
+
+    // TODO: add tests for tarify list/action
 
 }
