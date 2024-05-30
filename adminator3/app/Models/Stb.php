@@ -31,6 +31,6 @@ class Stb extends Model
         'mac_adresa' => null,
         'puk' => null,
         'ip_adresa' => null,
-        // TODO: add the of columns
+        // TODO: add the rest of columns
     ];
 }

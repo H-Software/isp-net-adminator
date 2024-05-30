@@ -8,7 +8,7 @@ ini_set('display_startup_errors', 1);
 date_default_timezone_set('Europe/Prague');
 
 $loaderOrig = require dirname(__DIR__) . '/vendor/autoload.php';
-// TODO: test this
+// TODO: test better loading files or WTF is this
 // $loaderOrig = findFile();
 
 require __DIR__ . '/bootstrap/netteLoader.php';

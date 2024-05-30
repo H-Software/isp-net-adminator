@@ -138,7 +138,7 @@ class work
             }
         }
 
-        // TODO: fix the rest of stuff
+        // TODO: fix the rest of actions for objektyWifiDiff
 
         // //zmena NetN
         // if( ereg(".*změna.*Povolen.*Inet.*z.*", $changes) )
@@ -333,7 +333,7 @@ class work
 
     public function workActionTopologyRouterAdd(): void
     {
-        // TODO: fix this
+        // TODO: enable actions for topology/router-add
 
         // Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
         // Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
@@ -359,7 +359,7 @@ class work
 
     public function workActionTopologyRouterDiff(): void
     {
-        // TODO: fix this
+        // TODO: enable actions for topology/router-update
         // if( ereg(".*změna.*Alarmu.*z.*", $pole3) )
         // {
         //   //kvuli alarmu

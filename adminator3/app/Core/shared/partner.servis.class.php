@@ -46,9 +46,9 @@ class partner_servis
                  <span style=\"padding-left: 45px; padding-right: 30px; \">Stávající klient: </span>
                  <span style=\"padding-left: 195px; \">hledání</span>
                  <span style=\"padding-left: 45px; \" ><input type=\"text\" name=\"klient_hledat\" size=\"25\" value=\"".$this->klient_hledat."\" ></span>
-                
+
                  <span style=\"padding-left: 195px; \"><input type=\"submit\" name=\"filtrovat\" value=\"HLEDAT\" ></span>
-                
+
                 </div>
 
                 <div style=\"padding-bottom: 20px; \">
@@ -476,7 +476,7 @@ class partner_servis
         if ($filtr_prio == 3) {
             echo " selected ";
         } echo " >Nízká</option>
-                         
+
                         </select>
                     </span>
 
@@ -518,7 +518,7 @@ class partner_servis
                         <td class=\"table-vypis-1-line2\" ><span style=\"font-weight: bold; \">Telefon: </span></td>
 
                         <td class=\"table-vypis-1-line2\" ><span style=\"font-weight: bold;\">Akceptováno technikem: </span></td>
-                        
+
                         <td class=\"table-vypis-1-line2\" ><span style=\"font-weight: bold; \">&nbsp;</span></td>\n";
 
             if ($this->vyrizeni == true) {
@@ -581,7 +581,7 @@ class partner_servis
 
                     $id_cloveka_res .= "?find_id=".$id_cloveka_pomocne."\" >V:".$id_cloveka_pomocne."</a>";
 
-                    // TODO: probably wrong switch from ereg
+                    // TODO: probably wrong "migrate" from ereg
                     // http://php.adamharvey.name/manual/en/function.preg-replace.php
                     $jmeno = preg_replace("/V:".$id_cloveka_pomocne."/", $id_cloveka_res, $jmeno);
 
