@@ -41,7 +41,7 @@ abstract class AdminatorTestCase extends TestCase
     public static $psrHttpFactory;
 
     /*
-    * code copied from laminas-test
+    * code originated from laminas-test
     */
 
     /**
@@ -59,7 +59,7 @@ abstract class AdminatorTestCase extends TestCase
     protected $xpathNamespaces = [];
 
     /*
-    * end of code copied from laminas-test
+    * end of code originated from laminas-test
     */
 
     public static function setUpBeforeClass(): void
