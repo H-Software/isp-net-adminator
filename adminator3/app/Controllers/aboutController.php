@@ -14,14 +14,14 @@ class aboutController extends adminatorController
 
     protected ResponseInterface $response;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->container = $container;
         $this->logger = $this->container->get('logger');
 
-        $this->logger->info("aboutController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        parent::__construct($container);
+        parent::__construct($container, $adminatorInstance);
     }
 
     public function about(ServerRequestInterface $request, ResponseInterface $response, array $args)
