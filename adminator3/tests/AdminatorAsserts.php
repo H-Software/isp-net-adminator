@@ -96,8 +96,10 @@ final class AdminatorAssert extends AdminatorTestCase
         foreach ($assertKeywordsHome as $w) {
             self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
         }
+    }
 
-        // board
+    public static function assertBoardList($response, $responseContent)
+    {
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/Bulletin.*Board.*/');
         // TODO: fix missing token
         // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=[[:alnum:]]{10,}$/'); // RSS link with token

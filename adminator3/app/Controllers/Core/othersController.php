@@ -194,16 +194,19 @@ class othersController extends adminatorController
         $nastenka->page = $_GET["page"];
 
         $nastenka->send = $_GET["send"];
-        $nastenka->sent = $_POST["sent"];
 
-        $nastenka->author = $_POST["author"];
-        $nastenka->email = $_POST["email"];
+        if ($request->getMethod() == "POST") {
+            $nastenka->sent = $_POST["sent"];
 
-        $nastenka->to_date = $_POST["to_date"];
-        $nastenka->from_date = $_POST["from_date"];
+            $nastenka->author = $_POST["author"];
+            $nastenka->email = $_POST["email"];
 
-        $nastenka->subject = $_POST["subject"];
-        $nastenka->body = $_POST["body"];
+            $nastenka->to_date = $_POST["to_date"];
+            $nastenka->from_date = $_POST["from_date"];
+
+            $nastenka->subject = $_POST["subject"];
+            $nastenka->body = $_POST["body"];
+        }
 
         $nastenka->prepare_vars();
 
