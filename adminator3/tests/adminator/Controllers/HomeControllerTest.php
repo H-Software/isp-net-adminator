@@ -8,7 +8,6 @@ use Mockery as m;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase as HttpController;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
@@ -81,7 +80,7 @@ final class HomeControllerTest extends AdminatorTestCase
         }
 
         // board stuff
-        // HttpController::assertXpathQuery("xx");
+        self::assertXpathQuery("xx");
 
         // negative assert
         // check word: nelze

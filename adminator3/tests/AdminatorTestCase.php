@@ -20,6 +20,8 @@ use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use PHPUnit\Framework\ExpectationFailedException;
+use Symfony\Component\DomCrawler\Crawler;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -165,5 +167,157 @@ abstract class AdminatorTestCase extends TestCase
 
         return $adminatorMock;
     }
+
+    /*
+    * code copied from laminas-test
+    */
+
+    /**
+    * Create a failure message.
+    *
+    * If $traceError is true, appends exception details, if any.
+    *
+    * @deprecated (use LaminasContraint instead)
+    *
+    * @param string $message
+    * @return string
+    */
+    protected function createFailureMessage($message)
+    {
+        if (! $this->traceError) {
+            return $message;
+        }
+
+        $exception = $this->getApplication()->getMvcEvent()->getParam('exception');
+        if (! $exception instanceof Throwable && ! $exception instanceof Exception) {
+            return $message;
+        }
+
+        $messages = [];
+        do {
+            $messages[] = sprintf(
+                "Exception '%s' with message '%s' in %s:%d",
+                $exception::class,
+                $exception->getMessage(),
+                $exception->getFile(),
+                $exception->getLine()
+            );
+        } while ($exception = $exception->getPrevious());
+
+        return sprintf("%s\n\nExceptions raised:\n%s\n", $message, implode("\n\n", $messages));
+    }
+
+    /**
+    * Get the application response object
+    *
+    * @return Response
+    */
+    public function getResponse()
+    {
+        $response = $this->getApplication()->getMvcEvent()->getResponse();
+
+        assert($response instanceof Response);
+
+        return $response;
+    }
+
+    /**
+    * Execute a DOM/XPath query
+    *
+    * @param  string $path
+    * @param  bool $useXpath
+    * @return Crawler
+    */
+    private function query($path, $useXpath = false)
+    {
+        $response = $this->getResponse();
+        $document = new Crawler($response->getContent());
+
+        if ($useXpath) {
+            foreach ($this->xpathNamespaces as $prefix => $namespace) {
+                $document->registerNamespace($prefix, $namespace);
+            }
+        }
+
+        return $useXpath ? $document->filterXPath($path) : $document->filter($path);
+    }
+
+    /**
+     * Execute a xpath query
+     *
+     * @param string $path
+     */
+    private function xpathQuery($path): Crawler
+    {
+        return $this->query($path, true);
+    }
+
+    /**
+    * Count the dom query executed
+    *
+    * @param  string $path
+    * @return int
+    */
+    private function queryCount($path)
+    {
+        return count($this->query($path, false));
+    }
+
+    /**
+     * Count the dom query executed
+     *
+     * @param  string $path
+     * @return int
+     */
+    private function xpathQueryCount($path)
+    {
+        return $this->xpathQuery($path)->count();
+    }
+
+    /**
+     * @param string $path
+     * @param bool $useXpath
+     */
+    private function queryCountOrxpathQueryCount($path, $useXpath = false): int
+    {
+        if ($useXpath) {
+            return $this->xpathQueryCount($path);
+        }
+
+        return $this->queryCount($path);
+    }
+
+    /**
+     * Assert against DOM/XPath selection
+     *
+     * @param string $path
+     * @param bool $useXpath
+     */
+    private function queryAssertion($path, $useXpath = false): void
+    {
+        $match = $this->queryCountOrxpathQueryCount($path, $useXpath);
+        if (! $match > 0) {
+            throw new ExpectationFailedException($this->createFailureMessage(sprintf(
+                'Failed asserting node DENOTED BY %s EXISTS',
+                $path
+            )));
+        }
+        $this->assertTrue($match > 0);
+    }
+
+    /**
+     * Assert against XPath selection
+     *
+     * @param string $path XPath path
+     * @return void
+     */
+    public function assertXpathQuery($path)
+    {
+        $this->queryAssertion($path, true);
+    }
+
+    /*
+    * end of code copied from laminas-test
+    */
 
 }
