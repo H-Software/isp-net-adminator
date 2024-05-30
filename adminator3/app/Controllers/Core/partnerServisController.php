@@ -21,7 +21,7 @@ class partnerServisController extends adminatorController
 
     private $psi;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
@@ -30,7 +30,7 @@ class partnerServisController extends adminatorController
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        parent::__construct($container);
+        parent::__construct($container, $adminatorInstance);
 
         $this->psi = new \partner_servis($this->conn_mysql, $this->conn_pgsql);
     }

@@ -20,14 +20,14 @@ class partnerController extends adminatorController
 
     private $partnerInstance;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        parent::__construct($container);
+        parent::__construct($container, $adminatorInstance);
 
         $this->partnerInstance = new partner($container);
 
