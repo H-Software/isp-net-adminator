@@ -54,7 +54,7 @@ final class AboutControllerTest extends AdminatorTestCase
         adminatorAssert::assertBase($responseContent);
 
         // TODO: add asserts
-        
+
         //     <span style="margin-left: 20px; "><a href="/home" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>\n
         //     \n
         //     <span style="padding-left: 20px; "><a class="cat2" href="/about/changes-old">Staré změny (Adminator2)</a></span>\n
@@ -109,5 +109,9 @@ final class AboutControllerTest extends AdminatorTestCase
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
 
     }
+
+    // TODO: add test for changesOld
+
+    // TODO: add test for changes
 
 }
