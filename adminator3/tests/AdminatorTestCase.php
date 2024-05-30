@@ -45,13 +45,6 @@ abstract class AdminatorTestCase extends TestCase
     */
 
     /**
-     * Trace error when exception is throwed in application
-     *
-     * @var bool
-     */
-    protected $traceError = true;
-
-    /**
      * XPath namespaces
      *
      * @var array<string,string>
