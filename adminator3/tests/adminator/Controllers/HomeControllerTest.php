@@ -69,9 +69,9 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $response = $homeController->home($serverRequest, $response, []);
 
-        $this->assertEquals($response->getStatusCode(), 200);
-
         $responseContent = $response->getBody()->__toString();
+
+        $this->assertEquals($response->getStatusCode(), 200);
 
         adminatorAssert::assertBase($responseContent);
 
@@ -85,13 +85,13 @@ final class HomeControllerTest extends AdminatorTestCase
         );
 
         foreach ($assertKeywordsHome as $w) {
-            $this->assertStringContainsString($w, $responseContent, __FUNCTION__ . " :: missing string \"" . $w . "\" in response body");
+            $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
         }
 
         // negative assert
         // check word: nelze
-        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, __FUNCTION__ . " :: found word (" . $w. "), which indicates error(s) or failure(s)");
-        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, __FUNCTION__ . " :: found word (" . $w. "), which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent,"found word (" . $w. "), which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
 
     }
 }

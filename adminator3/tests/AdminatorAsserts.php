@@ -77,7 +77,8 @@ final class AdminatorAssert extends TestCase
     {
         $responseContent = $response->getBody()->__toString();
 
-        self::assertEquals($response->getStatusCode(), 403);
+        $self::assertEquals($response->getStatusCode(), 403);
+
 
         self::assertStringContainsString("Nelze zobrazit požadovanou stránku", $responseContent, "missing string 1 in response body");
         self::assertStringContainsString("Pro otevřetí této stránky nemáte dostatečné oprávnění (level).", $responseContent, "missing string 2 in response body");
