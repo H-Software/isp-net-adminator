@@ -78,6 +78,7 @@
         },
         "files": [
             "tests/AdminatorTestCase.php",
+            "tests/AdminatorAsserts.php",
             "tests/Twig-View/TestCase.php"
         ]
 

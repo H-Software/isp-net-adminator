@@ -6,6 +6,7 @@ namespace App\Tests;
 
 use Mockery as m;
 use App\Controllers\HomeController;
+use App\Core\adminator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -69,29 +70,27 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $response = $homeController->home($serverRequest, $response, []);
 
-        $this->assertEquals($response->getStatusCode(), 200);
-
         $responseContent = $response->getBody()->__toString();
 
-        self::runBasicAsserts($responseContent);
+        $this->assertEquals($response->getStatusCode(), 200);
 
+        adminatorAssert::assertBase($responseContent);
+
+        AdminatorAssert::assertHomePagePanels($responseContent);
+
+        // page specific asserts
         $assertKeywordsHome = array(
-            '<title>Adminator3 :: úvodní stránka</title>',  // adminator head rendered
-            '<div class="home-vypis-useru-napis" >Přihlašení uživatelé: </div>', // loggeduser banner
-            'uživatel: <span class="home-vypis-useru-font1" >', // logger user row
-            'Výpis Závad/oprav',
-            'Bulletin Board - Nástěnka', // board header exists
-            '<div class="table zprava-main" >', // board message exists
+            '<title>Adminator3 :: úvodní stránka</title>',  // corrent title
         );
 
         foreach ($assertKeywordsHome as $w) {
-            $this->assertStringContainsString($w, $responseContent, __FUNCTION__ . " :: missing string \"" . $w . "\" in response body");
+            $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
         }
 
         // negative assert
         // check word: nelze
-        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, __FUNCTION__ . " :: found word (" . $w. "), which indicates error(s) or failure(s)");
-        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, __FUNCTION__ . " :: found word (" . $w. "), which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
 
     }
 }
