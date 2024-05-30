@@ -3,12 +3,12 @@ parameters:
 		-
 			message: "#^Variable \\$updated in isset\\(\\) is never defined\\.$#"
 			count: 1
-			path: app/Controllers/archivZmenController.php
+			path: app/Controllers/Core/archivZmenController.php
 
 		-
 			message: "#^If condition is always false\\.$#"
 			count: 1
-			path: app/Controllers/othersController.php
+			path: app/Controllers/Core/othersController.php
 
 		-
 			message: "#^If condition is always false\\.$#"

@@ -8,6 +8,10 @@ class partner_servis
 
     public \PgSql\Connection|\PDO|null $conn_pgsql;
 
+    protected $sentinel;
+
+    protected $loggedUserEmail;
+
     public $jmeno_klienta;
     public $bydliste;
     public $email;
@@ -32,10 +36,14 @@ class partner_servis
     public $user;
     public $mod;
 
-    public function __construct($conn_mysql, $connPgsql)
+    public function __construct($conn_mysql, $connPgsql, $sentinel)
     {
         $this->conn_mysql = $conn_mysql;
         $this->conn_pgsql = $connPgsql;
+
+        $this->sentinel = $sentinel;
+
+        $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
     public function show_insert_form(): string
@@ -375,12 +383,6 @@ class partner_servis
 
           <div style=\"padding-top: 5px; \" ></div>";
 
-        if(isset($user)) {
-            $user_plaint = $_SESSION["user_plaint"];
-        } else {
-            $user_plaint = \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email;
-        }
-
         $tel = $this->conn_mysql->real_escape_string($this->tel);
         $email = $this->conn_mysql->real_escape_string($this->email);
 
@@ -390,11 +392,9 @@ class partner_servis
 
         $prio = intval($this->prio);
 
-        $user_plaint = $this->conn_mysql->real_escape_string($user_plaint);
-
         $add = $this->conn_mysql->query(
             "INSERT INTO partner_klienti_servis (tel, jmeno, adresa, email, poznamky, prio, vlozil)
-                            VALUES ('$tel','$jmeno_klienta','$bydliste','$email','$pozn', '$prio', '$user_plaint') "
+                            VALUES ('$tel','$jmeno_klienta','$bydliste','$email','$pozn', '$prio', '" . $this->loggedUserEmail ."') "
         );
 
         $output .= "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";

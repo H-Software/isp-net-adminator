@@ -32,7 +32,7 @@ class partnerServisController extends adminatorController
 
         parent::__construct($container, $adminatorInstance);
 
-        $this->psi = new \partner_servis($this->conn_mysql, $this->conn_pgsql);
+        $this->psi = new \partner_servis($this->conn_mysql, $this->conn_pgsql, $this->sentinel);
     }
 
     public function list(ServerRequestInterface $request, ResponseInterface $response, array $args)
