@@ -20,6 +20,7 @@ use App\Controllers\workController;
 use App\Controllers\aboutController;
 use App\Controllers\adminController;
 use App\Controllers\objektyController;
+use App\Controllers\archivZmenController;
 
 // routes
 
@@ -77,10 +78,10 @@ $app->group(
         $group->map(['GET', 'POST'], '/admin/tarify', adminController::class . ':adminTarify');
         $group->map(['GET', 'POST'], '/admin/tarify/action', adminController::class . ':adminTarifyAction');
 
-        $group->map(['GET', 'POST'], '/archiv-zmen', \archivZmenController::class . ':archivZmenList');
-        $group->map(['GET', 'POST'], '/archiv-zmen/cat', \archivZmenController::class . ':archivZmenCat');
-        $group->map(['GET', 'POST'], '/archiv-zmen/work', \archivZmenController::class . ':archivZmenWork');
-        $group->map(['GET', 'POST'], '/archiv-zmen/ucetni', \archivZmenController::class . ':archivZmenUcetni');
+        $group->map(['GET', 'POST'], '/archiv-zmen', archivZmenController::class . ':archivZmenList');
+        $group->map(['GET', 'POST'], '/archiv-zmen/cat', archivZmenController::class . ':archivZmenCat');
+        $group->map(['GET', 'POST'], '/archiv-zmen/work', archivZmenController::class . ':archivZmenWork');
+        $group->map(['GET', 'POST'], '/archiv-zmen/ucetni', archivZmenController::class . ':archivZmenUcetni');
 
         $group->map(['GET', 'POST'], '/others', othersController::class . ':others');
         $group->map(['GET', 'POST'], '/others/company-web', othersController::class . ':companyWeb');
@@ -88,11 +89,11 @@ $app->group(
         $group->map(['GET', 'POST'], '/others/board', othersController::class . ':board');
         $group->map(['GET'], '/board/rss', othersController::class . ':boardRss');
 
-        $group->map(['GET', 'POST'], '/objekty/cat', \objektyController::class . ':cat');
-        $group->map(['GET', 'POST'], '/objekty', \objektyController::class . ':objekty');
-        $group->map(['GET', 'POST'], '/objekty/action', \objektyController::class . ':objektyAction');
-        $group->map(['GET', 'POST'], '/objekty/stb', \objektyController::class . ':stb');
-        $group->map(['GET', 'POST'], '/objekty/stb/action', \objektyController::class . ':stbAction');
+        $group->map(['GET', 'POST'], '/objekty/cat', objektyController::class . ':cat');
+        $group->map(['GET', 'POST'], '/objekty', objektyController::class . ':objekty');
+        $group->map(['GET', 'POST'], '/objekty/action', objektyController::class . ':objektyAction');
+        $group->map(['GET', 'POST'], '/objekty/stb', objektyController::class . ':stb');
+        $group->map(['GET', 'POST'], '/objekty/stb/action', objektyController::class . ':stbAction');
 
         $group->map(['GET', 'POST'], '/partner', partnerController::class . ':cat');
         $group->map(['GET', 'POST'], '/partner/cat', partnerController::class . ':cat');
