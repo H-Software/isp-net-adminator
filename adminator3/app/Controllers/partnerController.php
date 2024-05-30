@@ -25,7 +25,7 @@ class partnerController extends adminatorController
         $this->smarty = $container->get('smarty');
         $this->logger = $container->get('logger');
 
-        $this->logger->info("partnerController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         parent::__construct($container);
 

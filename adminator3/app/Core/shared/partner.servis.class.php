@@ -27,16 +27,20 @@ class partner_servis
 
     public $prio;
 
+    public $user;
+    public $mod;
+
     public function __construct($conn_mysql, $connPgsql)
     {
         $this->conn_mysql = $conn_mysql;
         $this->conn_pgsql = $connPgsql;
     }
 
-    public function show_insert_form()
+    public function show_insert_form(): string
     {
+        $output = "";
 
-        echo "  <div style=\"padding-left: 40px; padding-bottom: 10px; padding-top: 10px; font-weight: bold; font-size: 18px; \">
+        $output .= "  <div style=\"padding-left: 40px; padding-bottom: 10px; padding-top: 10px; font-weight: bold; font-size: 18px; \">
                  <span style=\"border-bottom: 1px solid grey; \" >
                    Vložení servisního zásahu
                  </span>
@@ -56,51 +60,49 @@ class partner_servis
                  <span style=\"padding-left: 52px; \" >";
 
         if((strlen($this->klient_hledat) == 0)) {
-
-            echo "<span style=\"padding-right: 70px; font-weight: bold;\">Zadejte výraz pro hledání</span>\n";
+            $output .= "<span style=\"padding-right: 70px; font-weight: bold;\">Zadejte výraz pro hledání</span>\n";
         } else {
 
             $vlastnici = $this->find_clients($this->klient_hledat);
 
             if(is_countable($vlastnici) && count($vlastnici) == 0) {
-                echo "Žádné výsledky dle hledaného výrazu \n";
+                $output .= "Žádné výsledky dle hledaného výrazu \n";
             } elseif(is_countable($vlastnici) && count($vlastnici) > 200) {
 
-                echo "<span>více nalezených klientů, prosím specifikujte hledání</span>\n";
-            } elseif(is_array($vlastnici)) {
+                $output .= "<span>více nalezených klientů, prosím specifikujte hledání</span>\n";
+            } elseif(is_countable($vlastnici) && count($vlastnici) > 1) {
 
-                echo "<select size=\"1\" name=\"klient_id\">\n";
-                echo "<option value=\"0\" class=\"select-nevybrano\">není vybráno</option>\n";
+                $output .= "<select size=\"1\" name=\"klient_id\">\n";
+                $output .= "<option value=\"0\" class=\"select-nevybrano\">není vybráno</option>\n";
 
                 $klient_id = intval($this->klient_id);
 
                 foreach($vlastnici as $key => $value) {
-                    echo "\t\t<option value=\"".intval($value["id_cloveka"])."\" ";
+                    $output .= "\t\t<option value=\"".intval($value["id_cloveka"])."\" ";
 
                     if($value["id_cloveka"] == $klient_id) {
-                        echo " selected ";
+                        $output .= " selected ";
                     }
 
-                    echo " >".$value["prijmeni"]." ".$value["jmeno"];
-                    echo " -- ".$value["ulice"].", ".$value["mesto"]."";
-                    echo "</option>\n";
+                    $output .= " >".$value["prijmeni"]." ".$value["jmeno"];
+                    $output .= " -- ".$value["ulice"].", ".$value["mesto"]."";
+                    $output .= "</option>\n";
                 }
 
-                echo "</select>\n";
+                $output .= "</select>\n";
 
             } else {
-                echo "<span style=\"color: red;\"> error: select from vlastnici \"failed\" </span>";
+                $output .= "<span style=\"color: red;\"> error: select from vlastnici \"failed\" </span>";
             }
-
         }
 
-        echo "</span>";
+        $output .= "</span>";
 
-        echo "<span style=\"padding-left: 90px;\" >
+        $output .= "<span style=\"padding-left: 90px;\" >
                 	    <input type=\"submit\" name=\"fill_form\" value=\"PŘENÉST DO FORMULÁŘE\">
                        </span>";
 
-        echo "      </div>
+        $output .= "      </div>
 
                 <div style=\"padding-bottom: 20px; \">
                  <span style=\"padding-left: 45px; padding-right: 30px; \">Jméno a příjmení klienta: </span>
@@ -137,20 +139,20 @@ class partner_servis
                  <span style=\"padding-left: 273px; \" >
                   <select size=\"3\" name=\"prio\">";
 
-        echo "<option value=\"1\" ";
+        $output .= "<option value=\"1\" ";
         if($this->prio == 1) {
-            echo "selected";
-        } echo " >Vysoká</option>";
-        echo "<option value=\"2\" ";
+            $output .= "selected";
+        } $output .= " >Vysoká</option>";
+        $output .= "<option value=\"2\" ";
         if($this->prio == 2 or !isset($this->prio)) {
-            echo "selected";
-        } echo " >Normal</option>";
-        echo "<option value=\"3\" ";
+            $output .= "selected";
+        } $output .= " >Normal</option>";
+        $output .= "<option value=\"3\" ";
         if($this->prio == 3) {
-            echo "selected";
-        } echo " >Nízká</option>";
+            $output .= "selected";
+        } $output .= " >Nízká</option>";
 
-        echo "</select>
+        $output .= "</select>
                 </div>
 
                 <div style=\" padding-top: 40px; \">
@@ -162,10 +164,13 @@ class partner_servis
                  </span>
                 </div>";
 
+        return $output;
+
     } //end of function
 
-    public function find_clients($find_string)
+    public function find_clients($find_string): array
     {
+        $RetArray = array();
 
         $fs = "%".$this->conn_mysql->real_escape_string($find_string)."%";
 
@@ -192,27 +197,24 @@ class partner_servis
 
         }
 
-
         return $RetArray;
     } //end of function
 
-    public function form_copy_values()
+    public function form_copy_values(): void
     {
 
         $rs_v = pg_query($this->conn_pgsql, "SELECT id_cloveka, jmeno, prijmeni, ulice, mesto, mail, telefon FROM vlastnici WHERE id_cloveka = '".intval($this->klient_id)."' ");
 
         while($array = pg_fetch_array($rs_v)) {
-
             $this->jmeno_klienta = $array["jmeno"]." ".$array["prijmeni"];
             $this->bydliste = $array["ulice"].", ".$array["mesto"];
             $this->email = $array["mail"];
             $this->tel = $array["telefon"];
-
         }
 
     } //end of function
 
-    public function check_insert_value()
+    public function check_insert_value(): void
     {
 
         // zde kontrola, popr. naplneni promenne error
@@ -317,14 +319,15 @@ class partner_servis
 
     } //end of function
 
-    public function save_form()
+    public function save_form(): string
     {
+        $output = "";
 
         if(isset($this->klient_id)) {
             $this->jmeno_klienta .= ",  V:".$this->klient_id;
         }
 
-        echo "  <div style=\"padding-bottom: 20px; padding-top: 20px; padding-left: 20px; font-size: 18px; font-weight: bold; \">
+        $output .= "  <div style=\"padding-bottom: 20px; padding-top: 20px; padding-left: 20px; font-size: 18px; font-weight: bold; \">
              <span style=\"border-bottom: 1px solid grey; \" >
                 Vložené informace:
              </span>
@@ -359,15 +362,15 @@ class partner_servis
                 <span style=\"font-weight: bold; \" >Priorita: </span>
                 <span style=\"padding-left: 184px; \" > ";
         if($this->prio == 1) {
-            echo "Vysoká";
+            $output .= "Vysoká";
         } elseif($this->prio == 2) {
-            echo "Normální";
+            $output .= "Normální";
         } elseif($this->prio == 3) {
-            echo "Nízká";
+            $output .= "Nízká";
         } else {
-            echo "Nejze zjistit (".intval($this->prio).")";
+            $output .= "Nejze zjistit (".intval($this->prio).")";
         }
-        echo "</span>
+        $output .= "</span>
             </div>
 
           <div style=\"padding-top: 5px; \" ></div>";
@@ -394,47 +397,53 @@ class partner_servis
                             VALUES ('$tel','$jmeno_klienta','$bydliste','$email','$pozn', '$prio', '$user_plaint') "
         );
 
-        echo "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";
+        $output .= "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";
 
         if($add) {
-            echo "<div style=\"color: green; font-size: 18px; font-weight: bold;\" >Záznam úspěšně uložen.</div>";
+            $output .= "<div style=\"color: green; font-size: 18px; font-weight: bold;\" >Záznam úspěšně uložen.</div>";
         } else {
-            echo "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
-            // echo "<div style=\"color: grey; \">debug: ".mysql_error()."</div>";
+            $output .= "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
+            // $output .= "<div style=\"color: grey; \">debug: ".mysql_error()."</div>";
         }
 
-        echo "</div>";
+        $output .= "</div>";
 
+        return $output;
 
     } //end of function
 
-    public function list_show_legend($vyrizeni = false, $update = false)
+    public function list_show_legend($vyrizeni = false, $update = false): string
     {
+        $output = "";
+
         if($vyrizeni == true) {
 
-            echo "  <div style=\"padding-left: 40px; padding-top: 20px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
+            $output .= "  <div style=\"padding-left: 40px; padding-top: 20px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
                  <span style=\"border-bottom: 1px solid grey; \" >Akceptování žádostí o připojení</span>
                 </div>";
         } elseif($update == true) {
-            echo "  <div style=\"padding-left: 40px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
+            $output .= "  <div style=\"padding-left: 40px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
                  <span style=\"border-bottom: 1px solid grey; \" >Změna poznámky</span>
                 </div>";
         } else {
-            echo "  <div style=\"padding-left: 40px; padding-bottom: 20px; padding-top: 10px; font-weight: bold; font-size: 18px; \">
+            $output .= "  <div style=\"padding-left: 40px; padding-bottom: 20px; padding-top: 10px; font-weight: bold; font-size: 18px; \">
                  <span style=\"border-bottom: 1px solid grey; \" >Výpis vložených položek</span>
                 </div>";
         }
 
+        return $output;
     } //end of function list show legend
 
-    public function list_show_items($filtr_akceptovano, $filtr_prio, $dotaz_sql)
+    public function list_show_items($filtr_akceptovano, $filtr_prio, $dotaz_sql): string
     {
-        echo "<div style=\"padding-left: 45px; \">
+        $output = "";
+
+        $output .= "<div style=\"padding-left: 45px; \">
                 <table border=\"0\" width=\"90%\" cellpadding=\"5\" >\n";
 
-        echo "<form action=\"\" method=\"GET\" >\n";
+        $output .= "<form action=\"\" method=\"GET\" >\n";
 
-        echo "<tr><td colspan=\"8\" >
+        $output .= "<tr><td colspan=\"8\" >
                     <span style=\"font-weight: bold; \" >Filtrování:</span>
 
                     <span style=\"font-weight: bold; padding-left: 20px; color: gray; \" >Akceptováno technikem:</span>
@@ -442,17 +451,17 @@ class partner_servis
                         <select name=\"filtr_akceptovano\">
                         <option value=\"0\" ";
         if ($filtr_akceptovano == 0 or !isset($filtr_akceptovano)) {
-            echo " selected ";
+            $output .= " selected ";
         }
-        echo "class=\"select-nevybrano\">Nevybráno</option>
+        $output .= "class=\"select-nevybrano\">Nevybráno</option>
                          <option value=\"1\" ";
         if ($filtr_akceptovano == 1) {
-            echo " selected ";
-        } echo ">Ano</option>
+            $output .= " selected ";
+        } $output .= ">Ano</option>
                          <option value=\"2\" ";
         if ($filtr_akceptovano == 2) {
-            echo " selected ";
-        } echo ">Ne</option>
+            $output .= " selected ";
+        } $output .= ">Ne</option>
                         </select>
                     </span>
 
@@ -461,21 +470,21 @@ class partner_servis
                         <select name=\"filtr_prio\" size=\"1\">
                          <option value=\"0\" ";
         if ($filtr_prio == 0 or !isset($filtr_prio)) {
-            echo " selected ";
+            $output .= " selected ";
         }
-        echo " class=\"select-nevybrano\">Nevybráno</option>
+        $output .= " class=\"select-nevybrano\">Nevybráno</option>
                          <option value=\"1\" ";
         if ($filtr_prio == 1) {
-            echo " selected ";
-        } echo " >Vysoká</option>
+            $output .= " selected ";
+        } $output .= " >Vysoká</option>
                          <option value=\"2\" ";
         if ($filtr_prio == 2) {
-            echo " selected ";
-        } echo " >Normální</option>
+            $output .= " selected ";
+        } $output .= " >Normální</option>
                          <option value=\"3\" ";
         if ($filtr_prio == 3) {
-            echo " selected ";
-        } echo " >Nízká</option>
+            $output .= " selected ";
+        } $output .= " >Nízká</option>
 
                         </select>
                     </span>
@@ -484,12 +493,12 @@ class partner_servis
 
                    </td></tr>";
 
-        echo "<input type=\"hidden\" name=\"user\" value=\"".htmlspecialchars($user)."\" >
-                   <input type=\"hidden\" name=\"mod\" value=\"".htmlspecialchars($mod)."\" >";
+        $output .= "<input type=\"hidden\" name=\"user\" value=\"".htmlspecialchars($this->user)."\" >
+                   <input type=\"hidden\" name=\"mod\" value=\"".htmlspecialchars($this->mod)."\" >";
 
-        echo "</form>";
+        $output .= "</form>";
 
-        echo "<tr><td colspan=\"8\" ><br></td></tr>";
+        $output .= "<tr><td colspan=\"8\" ><br></td></tr>";
 
         $filtr = "";
 
@@ -498,19 +507,19 @@ class partner_servis
         $dotaz = $this->conn_mysql->query($dotaz_sql);
 
         //if( !$dotaz )
-        //{ echo "error: mysql_query: ".mysql_error().": sql: ".$dotaz_sql."\n"; }
+        //{ $output .= "error: mysql_query: ".mysql_error().": sql: ".$dotaz_sql."\n"; }
 
         $dotaz_radku = $dotaz->num_rows;
 
         if ($dotaz_radku > 0) {
-            echo "<tr><td colspan=\"8\" >
+            $output .= "<tr><td colspan=\"8\" >
                     <span style=\"font-weight: bold;\" >Počet zákazníků:</span> ".$dotaz_radku."
                    </td></tr>";
 
-            echo "<tr><td colspan=\"8\" ><br></td></tr>";
+            $output .= "<tr><td colspan=\"8\" ><br></td></tr>";
 
             // popis sloupcu
-            echo "<tr>
+            $output .= "<tr>
                         <td class=\"table-vypis-1-line2\"><span style=\"font-weight: bold; \">Jméno klienta: </span></td>
                         <td class=\"table-vypis-1-line2\"><span style=\"font-weight: bold; \">Bydliště: </span></td>
 
@@ -522,17 +531,17 @@ class partner_servis
                         <td class=\"table-vypis-1-line2\" ><span style=\"font-weight: bold; \">&nbsp;</span></td>\n";
 
             if ($this->vyrizeni == true) {
-                echo "<td class=\"table-vypis-1-line2\" colspan=\"2\" ><span style=\"font-weight: bold; \">Akceptovat</span></td>\n";
+                $output .= "<td class=\"table-vypis-1-line2\" colspan=\"2\" ><span style=\"font-weight: bold; \">Akceptovat</span></td>\n";
             } elseif($this->update == true) {
-                echo "<td class=\"table-vypis-1-line2\" colspan=\"2\" ><span style=\"font-weight: bold; \">Upravit</span></td>\n";
+                $output .= "<td class=\"table-vypis-1-line2\" colspan=\"2\" ><span style=\"font-weight: bold; \">Upravit</span></td>\n";
             } else {
-                echo "<td class=\"table-vypis-1-line2\" ><span style=\"font-weight: bold; \">&nbsp;</span></td>
+                $output .= "<td class=\"table-vypis-1-line2\" ><span style=\"font-weight: bold; \">&nbsp;</span></td>
 				<td class=\"table-vypis-1-line2\" ><span style=\"font-weight: bold; \">&nbsp;</span></td>\n";
             }
 
             if (!($this->vyrizeni == true) and !($this->update == true)) {
 
-                echo "</tr>
+                $output .= "</tr>
                     <tr>
                       <td colspan=\"2\" class=\"table-vypis-1-line\">
                         <span style=\"font-weight: bold; \">Poznámka/servis. úkol: </span>
@@ -553,7 +562,7 @@ class partner_servis
                     </tr>";
             }
 
-            echo "<tr><td colspan=\"8\" ><br></td></tr>";
+            $output .= "<tr><td colspan=\"8\" ><br></td></tr>";
 
             while($data = $dotaz->fetch_array()) {
                 $jmeno = htmlspecialchars($data["jmeno"]);
@@ -591,115 +600,115 @@ class partner_servis
                     $class = "table-vypis-suda-radka";
                 }
 
-                echo "<tr>";
+                $output .= "<tr>";
 
-                echo "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">".$jmeno."</span></td>";
+                $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">".$jmeno."</span></td>";
 
-                echo "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
+                $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
                 if((strlen($data["adresa"]) < 1)) {
-                    echo "&nbsp;";
+                    $output .= "&nbsp;";
                 } else {
-                    echo htmlspecialchars($data["adresa"]);
+                    $output .= htmlspecialchars($data["adresa"]);
                 }
-                echo "</span></td>";
+                $output .= "</span></td>";
 
-                echo "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
+                $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
                 if((strlen($data["email"]) < 1)) {
-                    echo "&nbsp;";
+                    $output .= "&nbsp;";
                 } else {
-                    echo htmlspecialchars($data["email"]);
+                    $output .= htmlspecialchars($data["email"]);
                 }
-                echo "</span></td>";
+                $output .= "</span></td>";
 
-                echo "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
+                $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
                 if((strlen($data["tel"]) < 1)) {
-                    echo "&nbsp;";
+                    $output .= "&nbsp;";
                 } else {
-                    echo htmlspecialchars($data["tel"]);
+                    $output .= htmlspecialchars($data["tel"]);
                 }
-                echo "</span></td>";
+                $output .= "</span></td>";
 
-                echo "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
+                $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
 
 
                 if($data["akceptovano"] == 1) {
-                    echo "<span style=\"color: green; font-weight: bold; \">Ano </span>";
-                    echo "<span style=\"\">(".htmlspecialchars($data["akceptovano_kym"]).")</span>";
+                    $output .= "<span style=\"color: green; font-weight: bold; \">Ano </span>";
+                    $output .= "<span style=\"\">(".htmlspecialchars($data["akceptovano_kym"]).")</span>";
                 } else {
-                    echo "<span style=\"color: orange; font-weight: bold; \" >Ne</span>";
+                    $output .= "<span style=\"color: orange; font-weight: bold; \" >Ne</span>";
                 }
 
-                echo "</span></td>";
+                $output .= "</span></td>";
 
-                echo "<td class=\"".$class."\" >&nbsp;</td>";
-                echo "<td class=\"".$class."\" >&nbsp;</td>";
+                $output .= "<td class=\"".$class."\" >&nbsp;</td>";
+                $output .= "<td class=\"".$class."\" >&nbsp;</td>";
 
                 if($this->vyrizeni == true) {
-                    echo "<td colspan=\"2\" class=\"".$class."\"><a href=\"".$_SERVER["PHP_SELF"]."?accept=1&id=".intval($data["id"])."\">akceptovat</a></td>";
+                    $output .= "<td colspan=\"2\" class=\"".$class."\"><a href=\"".$_SERVER["PHP_SELF"]."?accept=1&id=".intval($data["id"])."\">akceptovat</a></td>";
                 } elseif($this->update == true) {
-                    echo "<td colspan=\"2\" class=\"".$class."\"><a href=\"".$_SERVER["PHP_SELF"]."?edit=1&id=".intval($data["id"])."\">upravit</a></td>";
+                    $output .= "<td colspan=\"2\" class=\"".$class."\"><a href=\"".$_SERVER["PHP_SELF"]."?edit=1&id=".intval($data["id"])."\">upravit</a></td>";
                 } else {
 
-                    echo "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">&nbsp;</span></td>";
+                    $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">&nbsp;</span></td>";
 
                 }
 
-                echo "</tr>";
+                $output .= "</tr>";
 
                 if (!($this->vyrizeni == true) and !($this->update == true)) {
                     // druha radka
 
-                    echo "<tr>";
+                    $output .= "<tr>";
 
-                    echo "<td colspan=\"2\" class=\"table-vypis-suda-radka\" ><span style=\"font-size: 12px; color: #555555; \">";
+                    $output .= "<td colspan=\"2\" class=\"table-vypis-suda-radka\" ><span style=\"font-size: 12px; color: #555555; \">";
                     if((strlen($data["poznamky"]) < 1)) {
-                        echo "poznámka nevložena";
+                        $output .= "poznámka nevložena";
                     } else {
-                        echo htmlspecialchars($data["poznamky"]);
+                        $output .= htmlspecialchars($data["poznamky"]);
                     }
-                    echo "</span></td>";
+                    $output .= "</span></td>";
 
-                    echo "<td colspan=\"1\" class=\"table-vypis-suda-radka\" ><span style=\"font-size: 12px; color: #555555; \">";
+                    $output .= "<td colspan=\"1\" class=\"table-vypis-suda-radka\" ><span style=\"font-size: 12px; color: #555555; \">";
                     if((strlen($data["vlozil"]) < 1)) {
-                        echo "vložil";
+                        $output .= "vložil";
                     } else {
-                        echo htmlspecialchars($data["vlozil"]);
+                        $output .= htmlspecialchars($data["vlozil"]);
                     }
-                    echo "</span></td>";
+                    $output .= "</span></td>";
 
-                    echo "<td class=\"table-vypis-suda-radka\" ><span style=\"font-size: 13px; color: gray; \">";
+                    $output .= "<td class=\"table-vypis-suda-radka\" ><span style=\"font-size: 13px; color: gray; \">";
 
                     if($data["prio"] == 1) {
-                        echo "<span style=\"color: #990033;\">Vysoká</span>";
+                        $output .= "<span style=\"color: #990033;\">Vysoká</span>";
                     } elseif($data["prio"] == 2) {
-                        echo "Normální";
+                        $output .= "Normální";
                     } elseif($data["prio"] == 3) {
-                        echo "Nízká";
+                        $output .= "Nízká";
                     } else {
-                        echo "Nelze zjistit";
+                        $output .= "Nelze zjistit";
                     }
 
-                    echo "</span></td>";
+                    $output .= "</span></td>";
 
-                    echo "<td colspan=\"2\" class=\"table-vypis-suda-radka\" ><span style=\"font-size: 12px; color: #555555; \">";
+                    $output .= "<td colspan=\"2\" class=\"table-vypis-suda-radka\" ><span style=\"font-size: 12px; color: #555555; \">";
                     if((strlen($data["akceptovano_pozn"]) < 1)) {
-                        echo "poznámka nevložena";
+                        $output .= "poznámka nevložena";
                     } else {
-                        echo $data["akceptovano_pozn"];
+                        $output .= $data["akceptovano_pozn"];
                     }
-                    echo "</span></td>";
+                    $output .= "</span></td>";
 
-                    echo "<td colspan=\"2\" class=\"table-vypis-suda-radka\" >
+                    $output .= "<td colspan=\"2\" class=\"table-vypis-suda-radka\" >
                         <span style=\"font-size: 12px; color: #555555; \">";
                     if($data["datum_vlozeni2"] == "00.00.0000 00:00:00") {
-                        echo "není dostupné";
+                        $output .= "není dostupné";
                     } else {
-                        echo $data["datum_vlozeni2"];
+                        $output .= $data["datum_vlozeni2"];
                     }
-                    echo "</span>
+                    $output .= "</span>
                       </td>";
 
-                    echo "</tr>";
+                    $output .= "</tr>";
 
                 } // konec if ! vyrizeno == true
 
@@ -707,13 +716,14 @@ class partner_servis
 
         } // konec if dotaz_radku vetsi > 0
         else {
-            echo "<tr><td colspan=\"\" ><span style=\"font-size: 16px;\">Žádný zákazník v databázi neuložen.</span></td></tr>";
+            $output .= "<tr><td colspan=\"\" ><span style=\"font-size: 16px;\">Žádný zákazník v databázi neuložen.</span></td></tr>";
         }
 
         //konec vnitrni kabulky
-        echo "</table></div>";
+        $output .= "</table></div>";
 
 
+        return $output;
     } //end of function
 
 } //end of class

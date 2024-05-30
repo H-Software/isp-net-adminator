@@ -166,29 +166,6 @@ parameters:
 			path: app/Core/platby.php
 
 		-
-			message: "#^Access to an undefined property partner_servis\\:\\:\\$mod\\.$#"
-			count: 1
-			path: app/Core/shared/partner.servis.class.php
-
-		-
-			message: "#^Access to an undefined property partner_servis\\:\\:\\$user\\.$#"
-			count: 1
-			path: app/Core/shared/partner.servis.class.php
-
-		-
-			message: "#^Variable \\$user in isset\\(\\) is never defined\\.$#"
-			count: 1
-			path: app/Core/shared/partner.servis.class.php
-
-		-
-			message: "#^Class archivZmenController not found\\.$#"
-			count: 4
-			path: app/routing.php
-		-
-			message: "#^Class objektyController not found\\.$#"
-			count: 5
-			path: app/routing.php
-		-
 			message: "#^Comparison operation \"\\>\" between int\\<2, max\\> and 1 is always true\\.$#"
 			count: 1
 			path: include/main.function.shared.php
