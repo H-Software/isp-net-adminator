@@ -60,7 +60,6 @@ class partner_servis
                  <span style=\"padding-left: 52px; \" >";
 
         if((strlen($this->klient_hledat) == 0)) {
-
             $output .= "<span style=\"padding-right: 70px; font-weight: bold;\">Zadejte výraz pro hledání</span>\n";
         } else {
 
@@ -71,7 +70,7 @@ class partner_servis
             } elseif(is_countable($vlastnici) && count($vlastnici) > 200) {
 
                 $output .= "<span>více nalezených klientů, prosím specifikujte hledání</span>\n";
-            } elseif(is_array($vlastnici)) {
+            } elseif(is_countable($vlastnici) && count($vlastnici) > 1) {
 
                 $output .= "<select size=\"1\" name=\"klient_id\">\n";
                 $output .= "<option value=\"0\" class=\"select-nevybrano\">není vybráno</option>\n";
@@ -95,7 +94,6 @@ class partner_servis
             } else {
                 $output .= "<span style=\"color: red;\"> error: select from vlastnici \"failed\" </span>";
             }
-
         }
 
         $output .= "</span>";
@@ -172,6 +170,8 @@ class partner_servis
 
     public function find_clients($find_string): array
     {
+        $RetArray = array();
+
         $fs = "%".$this->conn_mysql->real_escape_string($find_string)."%";
 
         $select = " WHERE (nick LIKE '$fs' OR jmeno LIKE '$fs' OR prijmeni LIKE '$fs' ";
