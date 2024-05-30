@@ -348,7 +348,7 @@ abstract class AdminatorTestCase extends TestCase
         $this->queryAssertion($response, $path, true);
     }
 
-        /**
+    /**
      * Assert against DOM/XPath selection; node should contain content
      *
      * @param string $path CSS selector path
@@ -385,7 +385,7 @@ abstract class AdminatorTestCase extends TestCase
         ));
     }
 
-        /**
+    /**
      * Assert against DOM/XPath selection; node should match content
      *
      * @param string $path CSS selector path
@@ -425,7 +425,7 @@ abstract class AdminatorTestCase extends TestCase
         $this->assertTrue($found);
     }
 
-        /**
+    /**
      * Assert against XPath selection; node should contain content
      *
      * @param string $path XPath path
@@ -437,13 +437,13 @@ abstract class AdminatorTestCase extends TestCase
         $this->queryContentContainsAssertion($response, $path, $match, true);
     }
 
-     /**
-     * Assert against XPath selection; node should match content
-     *
-     * @param string $path XPath path
-     * @param string $pattern Pattern that should be contained in matched nodes
-     * @return void
-     */
+    /**
+    * Assert against XPath selection; node should match content
+    *
+    * @param string $path XPath path
+    * @param string $pattern Pattern that should be contained in matched nodes
+    * @return void
+    */
     public function assertXpathQueryContentRegex($response, $path, $pattern)
     {
         $this->queryContentRegexAssertion($response, $path, $pattern, true);
