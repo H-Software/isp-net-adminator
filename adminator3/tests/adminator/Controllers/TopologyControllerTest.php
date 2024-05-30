@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\Controllers\topologyController;
-// use Psr\Http\Message\ResponseInterface;
-// use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-// use Slim\Interfaces\RouteParserInterface;
 
 use Symfony\Component\HttpFoundation\Request;
 use Nyholm\Psr7\Factory\Psr17Factory;
