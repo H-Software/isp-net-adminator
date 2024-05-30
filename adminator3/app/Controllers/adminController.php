@@ -32,7 +32,7 @@ class adminController extends adminatorController
 
     public function admin(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("adminController\admin called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -51,8 +51,7 @@ class adminController extends adminatorController
 
     public function adminMain(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
-        $this->logger->info("adminController\adminMain called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -71,8 +70,7 @@ class adminController extends adminatorController
 
     public function adminLevelList(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-
-        $this->logger->info("adminController\adminLevelList called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -96,7 +94,7 @@ class adminController extends adminatorController
 
     public function adminLevelListJson(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("adminController\adminLevelListJson called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -115,7 +113,7 @@ class adminController extends adminatorController
 
     public function adminLevelAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("adminController\adminLevelAction called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -145,7 +143,7 @@ class adminController extends adminatorController
 
     public function adminTarify(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("adminController\adminTarify called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -166,7 +164,7 @@ class adminController extends adminatorController
 
     public function adminTarifyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("adminController\adminTarify called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;

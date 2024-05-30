@@ -10,6 +10,7 @@ use App\Controllers\HomeController;
 use App\Controllers\Auth\AuthController;
 use App\Controllers\Auth\PasswordController;
 use App\Controllers\partnerController;
+use App\Controllers\partnerServisController;
 use App\Controllers\platbyController;
 use App\Controllers\runtimeController;
 use App\Controllers\printController;
@@ -105,6 +106,9 @@ $app->group(
         $group->map(['GET', 'POST'], '/partner/order/accept', partnerController::class . ':orderAccept');
         $group->map(['GET', 'POST'], '/partner/order/change-status', partnerController::class . ':orderChangeStatus');
         $group->map(['GET', 'POST'], '/partner/order/change-desc', partnerController::class . ':orderChangeDesc');
+
+        $group->map(['GET', 'POST'], '/partner/servis', partnerServisController::class . ':list');
+        $group->map(['GET', 'POST'], '/partner/servis/list', partnerServisController::class . ':list');
 
         $group->map(['GET', 'POST'], '/platby/cat', platbyController::class . ':cat');
         $group->map(['GET', 'POST'], '/platby/fn', platbyController::class . ':fn');
