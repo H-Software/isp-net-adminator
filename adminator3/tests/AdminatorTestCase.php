@@ -40,21 +40,6 @@ abstract class AdminatorTestCase extends TestCase
 
     public static $psrHttpFactory;
 
-    /*
-    * code originated from laminas-test
-    */
-
-    /**
-     * XPath namespaces
-     *
-     * @var array<string,string>
-     */
-    protected $xpathNamespaces = [];
-
-    /*
-    * end of code originated from laminas-test
-    */
-
     public static function setUpBeforeClass(): void
     {
         $settings = require __DIR__ . '/../config/settings.php';
@@ -197,12 +182,13 @@ abstract class AdminatorTestCase extends TestCase
     * @param  bool $useXpath
     * @return Crawler
     */
-    private function query($response, $path, $useXpath = false)
+    private static function query($response, $path, $useXpath = false)
     {
+        $xpathNamespaces = [];
         $document = new Crawler($response->getBody()->__toString());
 
         if ($useXpath) {
-            foreach ($this->xpathNamespaces as $prefix => $namespace) {
+            foreach ($xpathNamespaces as $prefix => $namespace) {
                 $document->registerNamespace($prefix, $namespace);
             }
         }
@@ -215,9 +201,9 @@ abstract class AdminatorTestCase extends TestCase
      *
      * @param string $path
      */
-    private function xpathQuery($response, $path): Crawler
+    private static function xpathQuery($response, $path): Crawler
     {
-        return $this->query($response, $path, true);
+        return self::query($response, $path, true);
     }
 
     /**
@@ -226,9 +212,9 @@ abstract class AdminatorTestCase extends TestCase
     * @param  string $path
     * @return int
     */
-    private function queryCount($response, $path)
+    private static function queryCount($response, $path)
     {
-        return count($this->query($response, $path, false));
+        return count(self::query($response, $path, false));
     }
 
     /**
@@ -237,22 +223,22 @@ abstract class AdminatorTestCase extends TestCase
      * @param  string $path
      * @return int
      */
-    private function xpathQueryCount($response, $path)
+    private static function xpathQueryCount($response, $path)
     {
-        return $this->xpathQuery($response, $path)->count();
+        return self::xpathQuery($response, $path)->count();
     }
 
     /**
      * @param string $path
      * @param bool $useXpath
      */
-    private function queryCountOrxpathQueryCount($response, $path, $useXpath = false): int
+    private static function queryCountOrxpathQueryCount($response, $path, $useXpath = false): int
     {
         if ($useXpath) {
-            return $this->xpathQueryCount($response, $path);
+            return self::xpathQueryCount($response, $path);
         }
 
-        return $this->queryCount($response, $path);
+        return self::queryCount($response, $path);
     }
 
     /**
@@ -261,9 +247,9 @@ abstract class AdminatorTestCase extends TestCase
      * @param string $path
      * @param bool $useXpath
      */
-    private function queryAssertion($response, $path, $useXpath = false): void
+    private static function queryAssertion($response, $path, $useXpath = false): void
     {
-        $match = $this->queryCountOrxpathQueryCount($response, $path, $useXpath);
+        $match = self::queryCountOrxpathQueryCount($response, $path, $useXpath);
         // if (! $match > 0) {
         //     throw new ExpectationFailedException($this->createFailureMessage(sprintf(
         //         'Failed asserting node DENOTED BY %s EXISTS',
@@ -276,7 +262,7 @@ abstract class AdminatorTestCase extends TestCase
                 $path
             ));
         }
-        $this->assertTrue($match > 0);
+        self::assertTrue($match > 0);
     }
 
     /**
@@ -285,11 +271,11 @@ abstract class AdminatorTestCase extends TestCase
      * @param string $path XPath path
      * @return void
      */
-    public function assertXpathQuery($response, $path)
+    public static function assertXpathQuery($response, $path)
     {
         assert($response instanceof ResponseInterface);
 
-        $this->queryAssertion($response, $path, true);
+        self::queryAssertion($response, $path, true);
     }
 
     /**
@@ -299,9 +285,9 @@ abstract class AdminatorTestCase extends TestCase
      * @param string $match content that should be contained in matched nodes
      * @param bool $useXpath
      */
-    private function queryContentContainsAssertion($response, $path, $match, $useXpath = false): void
+    private static function queryContentContainsAssertion($response, $path, $match, $useXpath = false): void
     {
-        $result = $this->query($response, $path, $useXpath);
+        $result = self::query($response, $path, $useXpath);
 
         if ($result->count() === 0) {
             throw new ExpectationFailedException(sprintf(
@@ -314,7 +300,7 @@ abstract class AdminatorTestCase extends TestCase
 
         foreach ($result as $node) {
             if ($node->nodeValue === $match) {
-                $this->assertEquals($match, $node->nodeValue);
+                self::assertEquals($match, $node->nodeValue);
                 return;
             }
 
@@ -336,9 +322,9 @@ abstract class AdminatorTestCase extends TestCase
      * @param string $pattern Pattern that should be contained in matched nodes
      * @param bool $useXpath
      */
-    private function queryContentRegexAssertion($response, $path, $pattern, $useXpath = false): void
+    private static function queryContentRegexAssertion($response, $path, $pattern, $useXpath = false): void
     {
-        $result = $this->query($response, $path, $useXpath);
+        $result = self::query($response, $path, $useXpath);
         if ($result->count() === 0) {
             throw new ExpectationFailedException(sprintf(
                 'Failed asserting node DENOTED BY %s EXISTS',
@@ -373,7 +359,7 @@ abstract class AdminatorTestCase extends TestCase
             ));
         }
 
-        $this->assertTrue($found);
+        self::assertTrue($found);
     }
 
     /**
@@ -383,9 +369,9 @@ abstract class AdminatorTestCase extends TestCase
      * @param string $match content that should be contained in matched nodes
      * @return void
      */
-    public function assertXpathQueryContentContains($response, $path, $match)
+    public static function assertXpathQueryContentContains($response, $path, $match)
     {
-        $this->queryContentContainsAssertion($response, $path, $match, true);
+        self::queryContentContainsAssertion($response, $path, $match, true);
     }
 
     /**
@@ -396,9 +382,11 @@ abstract class AdminatorTestCase extends TestCase
     * @param string $pattern Pattern that should be contained in matched nodes
     * @return void
     */
-    public function assertXpathQueryContentRegex($response, $path, $pattern)
+    public static function assertXpathQueryContentRegex($response, $path, $pattern)
     {
-        $this->queryContentRegexAssertion($response, $path, $pattern, true);
+        assert($response instanceof ResponseInterface);
+
+        self::queryContentRegexAssertion($response, $path, $pattern, true);
     }
 
     /*

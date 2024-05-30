@@ -68,7 +68,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        AdminatorAssert::assertHomePagePanels($responseContent);
+        AdminatorAssert::assertHomePagePanels($response, $responseContent);
 
         // page specific asserts
         //
@@ -79,12 +79,6 @@ final class HomeControllerTest extends AdminatorTestCase
         foreach ($assertKeywordsHome as $w) {
             $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
         }
-
-        // board
-        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/Bulletin.*Board.*/');
-        // TODO: fix missing token
-        // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=[[:alnum:]]{10,}$/'); // RSS link with token
-        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=$/'); // RSS link with token
 
         // negative assert
         // check word: nelze
