@@ -22,9 +22,55 @@ final class AdminatorAssert extends TestCase
     //     self::fail($message);
     // }
 
-    public static function assertBase()
+    public static function assertBase($responseContent)
+    // protected function runBasicAsserts($responseContent)
     {
+        self::assertNotEmpty($responseContent);
 
+        $assertKeywordsCommon = array(
+            '<html lang="en">',
+            'link href="/public/css/style.css" rel="stylesheet" type="text/css" ',
+            '<title>Adminator3',  // adminator head rendered
+            'bootstrap.min.css" rel="stylesheet"',  // adminator head rendered
+            'Jste přihlášeni v administračním systému', // adminator header rendered
+            '<span class="intro-banner-logged"', // logged details container
+            '<div id="obsah" >', // main container
+            '<a class="cat" href="/vlastnici/cat" target="_top" >Zákazníci</a>', // categories - 1.line
+            '<a class="cat" href="/partner/cat" target="_top" >Partner program</a>', // categories - 2.line
+            '<div class="obsah-main" >', // inner container
+            '</body>', // smarty rendered whole page
+            '</html>' // smarty rendered whole page
+        );
+
+        foreach ($assertKeywordsCommon as $w) {
+
+            self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
+
+            // if (!str_contains($responseContent, $w)) {
+            //     $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
+            // }
+        }
+
+        $assertDeniedKeywordsCommon = [
+            "failed",
+            "error",
+            "selhal",
+            "nepodařil"
+        ];
+
+        // some words missing, because NoLoginPage and etc
+        foreach ($assertDeniedKeywordsCommon as $w) {
+            self::assertStringNotContainsStringIgnoringCase($w, $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
+        }
+
+        // test sqlite migration
+        // $sql = 'pragma table_info(\'board\');';
+        // $sql2 = "SELECT * FROM board";
+        // $rs = self::$pdoMysql->query($sql2);
+        // print_r($rs->fetchAll());
+
+        // debug
+        // echo $responseContent;
     }
 
     public static function assertTopologySubCat($content)

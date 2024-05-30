@@ -73,7 +73,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        self::runBasicAsserts($responseContent);
+        adminatorAssert::assertBase($responseContent);
 
         $assertKeywordsHome = array(
             '<title>Adminator3 :: úvodní stránka</title>',  // adminator head rendered

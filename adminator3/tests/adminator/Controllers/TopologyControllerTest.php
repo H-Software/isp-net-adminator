@@ -22,8 +22,6 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     protected $topologyController;
 
-    protected $adminatorAssert;
-
     protected function setUp(): void
     {
         $psr17Factory = new Psr17Factory();
@@ -35,9 +33,6 @@ final class TopologyControllerTest extends AdminatorTestCase
             $psr17Factory,
             $psr17Factory
         );
-
-        $this->adminatorAssert = new AdminatorAssert();
-
     }
 
     protected function tearDown(): void
@@ -70,15 +65,15 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         $response = $topologyController->nodeList($serverRequest, $response, []);
 
-        $this->assertEquals($response->getStatusCode(), 200);
-
         $responseContent = $response->getBody()->__toString();
 
         // echo $responseContent;
 
-        self::runBasicAsserts($responseContent);
+        $this->assertEquals($response->getStatusCode(), 200);
 
-        $this->adminatorAssert->assertTopologySubCat($responseContent);
+        adminatorAssert::assertBase($responseContent);
+
+        adminatorAssert::assertTopologySubCat($responseContent);
 
         // page header & selector/fiters asserts
         $this->assertMatchesRegularExpression('/Výpis lokalit\s*\/\s*přípojných bodů/i', $responseContent);
@@ -148,7 +143,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         // echo $responseContent;
 
-        self::runBasicAsserts($responseContent);
+        adminatorAssert::assertBase($responseContent);
 
         // page specific asserts
         $this->assertStringContainsString("Nelze zobrazit požadovanou stránku", $responseContent, __FUNCTION__ . " :: missing string 1 in response body");
@@ -194,11 +189,11 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         // echo $responseContent;
 
-        self::runBasicAsserts($responseContent);
+        adminatorAssert::assertBase($responseContent);
 
-        $this->adminatorAssert->assertTopologySubCat($responseContent);
+        adminatorAssert::assertTopologySubCat($responseContent);
 
-        $this->adminatorAssert->assertTopologyNodeListNoDataFound($responseContent);
+        adminatorAssert::assertTopologyNodeListNoDataFound($responseContent);
 
         // clean-up
         $response = null;
