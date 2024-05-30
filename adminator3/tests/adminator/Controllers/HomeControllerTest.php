@@ -7,10 +7,7 @@ namespace App\Tests;
 use Mockery as m;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseFactoryInterface;
-
 use Symfony\Component\HttpFoundation\Request;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
@@ -74,6 +71,7 @@ final class HomeControllerTest extends AdminatorTestCase
         AdminatorAssert::assertHomePagePanels($responseContent);
 
         // page specific asserts
+        //
         $assertKeywordsHome = array(
             '<title>Adminator3 :: úvodní stránka</title>',  // corrent title
         );
@@ -81,6 +79,12 @@ final class HomeControllerTest extends AdminatorTestCase
         foreach ($assertKeywordsHome as $w) {
             $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
         }
+
+        // board
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/Bulletin.*Board.*/');
+        // TODO: fix missing token
+        // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=[[:alnum:]]{10,}$/'); // RSS link with token
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=$/'); // RSS link with token
 
         // negative assert
         // check word: nelze

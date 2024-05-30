@@ -17,10 +17,14 @@ use DI\CompiledContainer;
 use DI\ContainerBuilder;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Csrf\Guard;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use PHPUnit\Framework\ExpectationFailedException;
+use Symfony\Component\DomCrawler\Crawler;
+use Throwable;
+use Exception;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -35,6 +39,21 @@ abstract class AdminatorTestCase extends TestCase
     public static $phinxManager;
 
     public static $psrHttpFactory;
+
+    /*
+    * code originated from laminas-test
+    */
+
+    /**
+     * XPath namespaces
+     *
+     * @var array<string,string>
+     */
+    protected $xpathNamespaces = [];
+
+    /*
+    * end of code originated from laminas-test
+    */
 
     public static function setUpBeforeClass(): void
     {
@@ -166,5 +185,224 @@ abstract class AdminatorTestCase extends TestCase
 
         return $adminatorMock;
     }
+
+    /*
+    * code originated from laminas-test
+    */
+
+    /**
+    * Execute a DOM/XPath query
+    *
+    * @param  string $path
+    * @param  bool $useXpath
+    * @return Crawler
+    */
+    private function query($response, $path, $useXpath = false)
+    {
+        $document = new Crawler($response->getBody()->__toString());
+
+        if ($useXpath) {
+            foreach ($this->xpathNamespaces as $prefix => $namespace) {
+                $document->registerNamespace($prefix, $namespace);
+            }
+        }
+
+        return $useXpath ? $document->filterXPath($path) : $document->filter($path);
+    }
+
+    /**
+     * Execute a xpath query
+     *
+     * @param string $path
+     */
+    private function xpathQuery($response, $path): Crawler
+    {
+        return $this->query($response, $path, true);
+    }
+
+    /**
+    * Count the dom query executed
+    *
+    * @param  string $path
+    * @return int
+    */
+    private function queryCount($response, $path)
+    {
+        return count($this->query($response, $path, false));
+    }
+
+    /**
+     * Count the dom query executed
+     *
+     * @param  string $path
+     * @return int
+     */
+    private function xpathQueryCount($response, $path)
+    {
+        return $this->xpathQuery($response, $path)->count();
+    }
+
+    /**
+     * @param string $path
+     * @param bool $useXpath
+     */
+    private function queryCountOrxpathQueryCount($response, $path, $useXpath = false): int
+    {
+        if ($useXpath) {
+            return $this->xpathQueryCount($response, $path);
+        }
+
+        return $this->queryCount($response, $path);
+    }
+
+    /**
+     * Assert against DOM/XPath selection
+     *
+     * @param string $path
+     * @param bool $useXpath
+     */
+    private function queryAssertion($response, $path, $useXpath = false): void
+    {
+        $match = $this->queryCountOrxpathQueryCount($response, $path, $useXpath);
+        // if (! $match > 0) {
+        //     throw new ExpectationFailedException($this->createFailureMessage(sprintf(
+        //         'Failed asserting node DENOTED BY %s EXISTS',
+        //         $path
+        //     )));
+        // }
+        if (! $match > 0) {
+            throw new ExpectationFailedException(sprintf(
+                'Failed asserting node DENOTED BY %s EXISTS',
+                $path
+            ));
+        }
+        $this->assertTrue($match > 0);
+    }
+
+    /**
+     * Assert against XPath selection
+     *
+     * @param string $path XPath path
+     * @return void
+     */
+    public function assertXpathQuery($response, $path)
+    {
+        assert($response instanceof ResponseInterface);
+
+        $this->queryAssertion($response, $path, true);
+    }
+
+    /**
+     * Assert against DOM/XPath selection; node should contain content
+     *
+     * @param string $path CSS selector path
+     * @param string $match content that should be contained in matched nodes
+     * @param bool $useXpath
+     */
+    private function queryContentContainsAssertion($response, $path, $match, $useXpath = false): void
+    {
+        $result = $this->query($response, $path, $useXpath);
+
+        if ($result->count() === 0) {
+            throw new ExpectationFailedException(sprintf(
+                'Failed asserting node DENOTED BY %s EXISTS',
+                $path
+            ));
+        }
+
+        $nodeValues = [];
+
+        foreach ($result as $node) {
+            if ($node->nodeValue === $match) {
+                $this->assertEquals($match, $node->nodeValue);
+                return;
+            }
+
+            $nodeValues[] = $node->nodeValue;
+        }
+
+        throw new ExpectationFailedException(sprintf(
+            'Failed asserting node denoted by %s CONTAINS content "%s", Contents: [%s]',
+            $path,
+            $match,
+            implode(',', $nodeValues)
+        ));
+    }
+
+    /**
+     * Assert against DOM/XPath selection; node should match content
+     *
+     * @param string $path CSS selector path
+     * @param string $pattern Pattern that should be contained in matched nodes
+     * @param bool $useXpath
+     */
+    private function queryContentRegexAssertion($response, $path, $pattern, $useXpath = false): void
+    {
+        $result = $this->query($response, $path, $useXpath);
+        if ($result->count() === 0) {
+            throw new ExpectationFailedException(sprintf(
+                'Failed asserting node DENOTED BY %s EXISTS',
+                $path
+            ));
+        }
+
+        $found      = false;
+        $nodeValues = [];
+
+        foreach ($result as $node) {
+            $nodeValues[] = $node->nodeValue;
+            if (preg_match($pattern, (string) $node->nodeValue)) {
+                $found = true;
+                break;
+            }
+            if($node->hasAttribute('href')) {
+                $nodeValues[] = $node->getAttribute('href');
+                if (preg_match($pattern, (string) $node->getAttribute('href'))) {
+                    $found = true;
+                    break;
+                }
+            }
+        }
+
+        if (! $found) {
+            throw new ExpectationFailedException(sprintf(
+                'Failed asserting node denoted by %s CONTAINS content/href attribute MATCHING "%s", actual content/href attribute is "%s"',
+                $path,
+                $pattern,
+                implode(', ', $nodeValues)
+            ));
+        }
+
+        $this->assertTrue($found);
+    }
+
+    /**
+     * Assert against XPath selection; node should contain content
+     *
+     * @param string $path XPath path
+     * @param string $match content that should be contained in matched nodes
+     * @return void
+     */
+    public function assertXpathQueryContentContains($response, $path, $match)
+    {
+        $this->queryContentContainsAssertion($response, $path, $match, true);
+    }
+
+    /**
+    * Assert against XPath selection; node or href attribute should match content
+    *
+    * @param ResponseInterface $response Psr\Http\Message response object
+    * @param string $path XPath path
+    * @param string $pattern Pattern that should be contained in matched nodes
+    * @return void
+    */
+    public function assertXpathQueryContentRegex($response, $path, $pattern)
+    {
+        $this->queryContentRegexAssertion($response, $path, $pattern, true);
+    }
+
+    /*
+    * end of code originated from laminas-test
+    */
 
 }
