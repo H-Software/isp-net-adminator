@@ -189,17 +189,13 @@ class othersController extends adminatorController
         }
         $this->smarty->assign("datum", date("j. m. Y"));
 
-        // $nastenka->what = $_GET["what"];
-        // $nastenka->action = $_GET["action"];
-        // $nastenka->page = $_GET["page"];
-        // $nastenka->send = $_GET["send"];
-
         $get_params = $request->getQueryParams();
         foreach ($get_params as $i => $v) {
-            if(strlen($v) > 0) {
-                $nastenka->$i = $get_params[$i];
+            if(preg_match('/^(what|action|page|send)$/', $i)){
+                if(strlen($v) > 0) {
+                    $nastenka->$i = $get_params[$i];
+                }
             }
-
         }
 
         if ($request->getMethod() == "POST") {
