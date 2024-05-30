@@ -98,10 +98,10 @@ final class OthersControllerTest extends AdminatorTestCase
 
     }
 
-    // TODO: add test for Work
+    // TODO: add test for CompanyWeb
 
-    // TODO: add tests for list
+    // TODO: add tests for Board
 
-    // TODO: add tests for Ucetni
+    // TODO: add tests for BoardRSS
 
 }
