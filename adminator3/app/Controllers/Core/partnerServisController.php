@@ -196,9 +196,11 @@ class partnerServisController extends adminatorController
 
             //priprava dotazu
 
-            if($filtr_akceptovano > 0) {
+            // if($filtr_akceptovano > 0)
+            {
                 $filtr .= " AND akceptovano = ".$filtr_akceptovano." ";
             }
+            
             if($filtr_prio > 0) {
                 $filtr .= " AND prio = ".$filtr_prio." ";
             }

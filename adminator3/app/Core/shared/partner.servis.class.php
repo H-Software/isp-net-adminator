@@ -184,7 +184,6 @@ class partner_servis
         }
 
         while($array = pg_fetch_array($rs_vlastnici)) {
-
             $row = array();
 
             $row["id_cloveka"] = $array["id_cloveka"];
@@ -194,7 +193,6 @@ class partner_servis
             $row["mesto"] = $array["mesto"];
 
             $RetArray[] = $row;
-
         }
 
         return $RetArray;
