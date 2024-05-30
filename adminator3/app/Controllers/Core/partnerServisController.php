@@ -380,9 +380,9 @@ class partnerServisController extends adminatorController
 
             $this->psi->update = true;
 
-            $this->psi->list_show_legend();
+            $bodyContent .= $this->psi->list_show_legend();
 
-            $this->psi->list_show_items($filtr_akceptovano, $filtr_prio, $dotaz_sql);
+            $bodyContent .= $this->psi->list_show_items($filtr_akceptovano, $filtr_prio, $dotaz_sql);
 
             // $listovani->listInterval();
 
