@@ -83,6 +83,9 @@ final class HomeControllerTest extends AdminatorTestCase
         self::assertXpathQuery($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div'); // board title
         self::assertXpathQuery($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a'); // board title
 
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/Bulletin.*Board.*/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/\/board\/rss\?token=.*/'); // RSS token
+        // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[4]/div/a', '/.*href="[0-9a-zA-Z]{10,}".*/');
         // negative assert
         // check word: nelze
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");

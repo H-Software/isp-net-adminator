@@ -194,57 +194,8 @@ abstract class AdminatorTestCase extends TestCase
     }
 
     /*
-    * code copied from laminas-test
+    * code originated from laminas-test
     */
-
-    /**
-    * Create a failure message.
-    *
-    * If $traceError is true, appends exception details, if any.
-    *
-    * @deprecated (use LaminasContraint instead)
-    *
-    * @param string $message
-    * @return string
-    */
-    // protected function createFailureMessage($message)
-    // {
-    //     if (! $this->traceError) {
-    //         return $message;
-    //     }
-
-    //     $exception = $this->getApplication()->getMvcEvent()->getParam('exception');
-    //     if (! $exception instanceof Throwable && ! $exception instanceof Exception) {
-    //         return $message;
-    //     }
-
-    //     $messages = [];
-    //     do {
-    //         $messages[] = sprintf(
-    //             "Exception '%s' with message '%s' in %s:%d",
-    //             $exception::class,
-    //             $exception->getMessage(),
-    //             $exception->getFile(),
-    //             $exception->getLine()
-    //         );
-    //     } while ($exception = $exception->getPrevious());
-
-    //     return sprintf("%s\n\nExceptions raised:\n%s\n", $message, implode("\n\n", $messages));
-    // }
-
-    /**
-    * Get the application response object
-    *
-    * @return Response
-    */
-    // public function getResponse()
-    // {
-    //     $response = $this->getApplication()->getMvcEvent()->getResponse();
-
-    //     assert($response instanceof Response);
-
-    //     return $response;
-    // }
 
     /**
     * Execute a DOM/XPath query
@@ -411,14 +362,21 @@ abstract class AdminatorTestCase extends TestCase
                 $found = true;
                 break;
             }
+            if($node->hasAttribute('href')) {
+                $nodeValues[] = $node->getAttribute('href');
+                if (preg_match($pattern, (string) $node->getAttribute('href'))) {
+                    $found = true;
+                    break;
+                }
+            }
         }
 
         if (! $found) {
             throw new ExpectationFailedException(sprintf(
-                'Failed asserting node denoted by %s CONTAINS content MATCHING "%s", actual content is "%s"',
+                'Failed asserting node denoted by %s CONTAINS content/href attribute MATCHING "%s", actual content/href attribute is "%s"',
                 $path,
                 $pattern,
-                implode('', $nodeValues)
+                implode(', ', $nodeValues)
             ));
         }
 
@@ -438,8 +396,9 @@ abstract class AdminatorTestCase extends TestCase
     }
 
     /**
-    * Assert against XPath selection; node should match content
+    * Assert against XPath selection; node or href attribute should match content
     *
+    * @param ResponseInterface $response Psr\Http\Message response object
     * @param string $path XPath path
     * @param string $pattern Pattern that should be contained in matched nodes
     * @return void
@@ -450,7 +409,7 @@ abstract class AdminatorTestCase extends TestCase
     }
 
     /*
-    * end of code copied from laminas-test
+    * end of code originated from laminas-test
     */
 
 }
