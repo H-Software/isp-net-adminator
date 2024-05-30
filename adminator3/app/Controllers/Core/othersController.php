@@ -22,21 +22,21 @@ class othersController extends adminatorController
 
     protected ResponseInterface $response;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->container = $container;
         $this->conn_mysql = $this->container->get('connMysql');
         $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
 
-        $this->logger->info("othersController\__construct called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        parent::__construct($container);
+        parent::__construct($container, $adminatorInstance);
     }
 
     public function others(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("othersController\others called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -166,7 +166,7 @@ class othersController extends adminatorController
 
     public function board(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("othersController\board called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
