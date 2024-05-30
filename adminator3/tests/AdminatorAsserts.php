@@ -98,12 +98,33 @@ final class AdminatorAssert extends AdminatorTestCase
         }
     }
 
-    public static function assertBoardList($response, $responseContent)
+    public static function assertBoardCommon($response, $responseContent)
     {
+
+        $assertKeywordsHome = array(
+            'Bulletin Board - Nástěnka', // board header exists
+        );
+
+        foreach ($assertKeywordsHome as $w) {
+            self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
+        }
+
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/Bulletin.*Board.*/');
         // TODO: fix missing token
         // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=[[:alnum:]]{10,}$/'); // RSS link with token
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=$/'); // RSS link with token
+    }
+
+    public static function assertBoardMessages($response, $responseContent)
+    {
+
+        $assertKeywordsHome = array(
+            '<div class="table zprava-main" >', // board message exists
+        );
+
+        foreach ($assertKeywordsHome as $w) {
+            self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
+        }
     }
 
     public static function assertTopologySubCat($content)
