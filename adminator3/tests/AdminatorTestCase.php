@@ -20,9 +20,8 @@ use Psr\Log\LoggerInterface;
 use Slim\Csrf\Guard;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
-use Laminas\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-abstract class AdminatorTestCase extends AbstractHttpControllerTestCase
+abstract class AdminatorTestCase extends TestCase
 {
     public static $pdoMysql;
 
