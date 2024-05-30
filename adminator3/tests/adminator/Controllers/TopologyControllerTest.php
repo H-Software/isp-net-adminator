@@ -22,6 +22,8 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     protected $topologyController;
 
+    protected $adminatorAssert;
+
     protected function setUp(): void
     {
         $psr17Factory = new Psr17Factory();
@@ -33,6 +35,8 @@ final class TopologyControllerTest extends AdminatorTestCase
             $psr17Factory,
             $psr17Factory
         );
+
+        $this->adminatorAssert = new AdminatorAssert();
 
     }
 
@@ -74,10 +78,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         self::runBasicAsserts($responseContent);
 
-        // section sub-cat asserts
-        $this->assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/router-list">Routery<\/a>/i', $responseContent);
-        $this->assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/node-list">Výpis lokalit\/nodů<\/a>/i', $responseContent);
-        $this->assertMatchesRegularExpression('/<a class="cat2" href="topology-user-list.php">Výpis objektů dle přiřazení \/ dle nodů<\/a>/i', $responseContent);
+        $this->adminatorAssert->assertTopologySubCat($responseContent);
 
         // page header & selector/fiters asserts
         $this->assertMatchesRegularExpression('/Výpis lokalit\s*\/\s*přípojných bodů/i', $responseContent);
@@ -195,9 +196,9 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         self::runBasicAsserts($responseContent);
 
-        // no-data assert
-        $this->assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $responseContent, "missing no-data message container");
-        $this->assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( %.*% \) v databázi neuloženy/i', $responseContent, "missing no-data message");
+        $this->adminatorAssert->assertTopologySubCat($responseContent);
+
+        $this->adminatorAssert->assertTopologyNodeListNoDataFound($responseContent);
 
         // clean-up
         $response = null;
