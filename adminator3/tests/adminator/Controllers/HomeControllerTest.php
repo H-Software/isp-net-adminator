@@ -6,50 +6,47 @@ namespace App\Tests;
 
 use Mockery as m;
 use App\Controllers\HomeController;
-use App\Core\adminator;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+
+use Symfony\Component\HttpFoundation\Request;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
+    protected $serverRequest;
+
     protected function setUp(): void
     {
-        // prepare data for forms
-        //
-        $_POST = array();
-        $_POST['show_se_cat'] = "null";
-
-        $_GET = array();
-        $_GET["v_reseni_filtr"] = 99;
-        $_GET["vyreseno_filtr"] = 0;
-        $_GET["limit"] = 10;
-
-        // $_SERVER = array();
-        $_SERVER['HTTP_HOST'] = "127.0.0.1";
-        $_SERVER['SCRIPT_URL'] = "/home";
-        $_SERVER['REMOTE_ADDR'] = "127.0.0.1";
-        $_SERVER["REQUEST_URI"] = '/test';
     }
 
     protected function tearDown(): void
     {
         m::close();
-
-        // unset($_SERVER['HTTP_HOST']);
-        // unset($_SERVER['SCRIPT_URL']);
-        // unset($_SERVER['REMOTE_ADDR']);
-        // unset($_SERVER["REQUEST_URI"]);
-
-        unset($_GET["v_reseni_filtr"]);
-        unset($_GET["vyreseno_filtr"]);
-        unset($_GET["limit"]);
     }
 
     public function test_ctl_home_page()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
+
+        $request = Request::create(
+            '/home',
+            'GET',
+            [
+                "v_reseni_filtr" => 99,
+                "vyreseno_filtr" => 0,
+                "limit" => 10,
+            ],
+            [],
+            [],
+            [
+                'SCRIPT_URL' => "/home",
+            ],
+        );
+
+        $request->overrideGlobals();
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
 
         $container = self::initDIcontainer(true, false);
 
@@ -63,8 +60,6 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $homeController = new HomeController($container, $adminatorMock, $opravyMock);
 
-        $serverRequest = $this->createMock(ServerRequestInterface::class);
-        // $response = $this->createMock(ResponseInterface::class);
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
@@ -91,6 +86,5 @@ final class HomeControllerTest extends AdminatorTestCase
         // check word: nelze
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
-
     }
 }

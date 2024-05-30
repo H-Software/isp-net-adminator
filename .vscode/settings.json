@@ -2,4 +2,10 @@
     "php.version": "8.2",
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
+    "php.problems.scope" : "all",
+    "php.problems.exclude" : {
+        "adminator3/templates_c" : true,
+        "adminator3/vendor/" : true,
+        "adminator2/vendor/" : true,
+    }
 }
