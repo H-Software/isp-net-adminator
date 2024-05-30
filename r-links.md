@@ -7,6 +7,9 @@
 - https://hub.docker.com/_/php/tags?page=&page_size=&ordering=&name=5.6
 - https://containrrr.dev/watchtower/
 
+### git hooks
+- https://gist.github.com/jwage/b1614c96ea22ccaf68b7
+
 ### devcontainers
 - https://github.com/microsoft/vscode-remote-try-php
 - https://docs.dapr.io/developing-applications/local-development/ides/vscode/vscode-remote-dev-containers/

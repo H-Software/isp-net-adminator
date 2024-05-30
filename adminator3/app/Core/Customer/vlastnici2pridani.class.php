@@ -12,7 +12,7 @@ class vlastnici2pridani extends adminator
 
     public \Monolog\Logger $logger;
 
-    public $smarty;
+    public \Smarty $smarty;
 
     protected $cache;
 
@@ -517,9 +517,9 @@ class vlastnici2pridani extends adminator
         }
 
         $output .= '
-        Objekt byl přidán/upraven , zadané údaje:<br><br> 
-        <b>Nick</b>: ' . $this->form_nick . ' <br> 
-        <b>VS</b>: ' . $this->form_vs . ' <br> 
+        Objekt byl přidán/upraven , zadané údaje:<br><br>
+        <b>Nick</b>: ' . $this->form_nick . ' <br>
+        <b>VS</b>: ' . $this->form_vs . ' <br>
         <b>K_platbě</b>: ' . $this->form_k_platbe . ' <br>';
 
         $output .= '<br>';
@@ -533,7 +533,7 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>e-mail</b>: ' . $this->form_email . '<br>
         <b>icq</b>: ' . $this->form_icq . '<br>
-        <b>telefon</b>: ' . $this->form_tel . '<br> 
+        <b>telefon</b>: ' . $this->form_tel . '<br>
         <br>';
 
         $output .= '<b>firma</b>: ';
@@ -761,7 +761,7 @@ class vlastnici2pridani extends adminator
             $output .= "<span style=\"color: grey; \" >není dostupné</span>";
         }
 
-        $output .= '        
+        $output .= '
                 </select>
                 </td>
             </tr>'
@@ -801,7 +801,7 @@ class vlastnici2pridani extends adminator
 
              .'<tr>
                 <td>Telefon: </td>
-                <td><input type="text" name="tel" size="30" value="'.$this->form_tel.'"> 
+                <td><input type="text" name="tel" size="30" value="'.$this->form_tel.'">
                 </td>'
 
             . '</tr>'
@@ -851,7 +851,7 @@ class vlastnici2pridani extends adminator
                 <td colspan="" >';
 
         if($this->firma == 1) {
-            $output .= '<select name="typ_smlouvy" size="1" onChange="self.document.forms.form1.submit()" >    
+            $output .= '<select name="typ_smlouvy" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0"';
             if(($this->form_typ_smlouvy == 0) or (!isset($this->form_typ_smlouvy))) {
                 $output .= " selected ";
@@ -1139,17 +1139,17 @@ class vlastnici2pridani extends adminator
         $output .= '
             </td>
             </tr>
-            
+
             <tr><td colspan="3" ><br></td></tr>
-            
+
             <tr>
             <td colspan="2" align="center">
-            
+
             <hr>
             <input name="odeslano" type="submit" value="OK" >
             </td>
             <td><br></td>
-            
+
             </tr>
 
             <tr><td colspan="3" ><br></td></tr>

@@ -11,7 +11,7 @@ class vlastnik2 extends adminator
 
     public \Monolog\Logger $logger;
 
-    public $smarty;
+    public \Smarty $smarty;
 
     public $container;
 
@@ -199,7 +199,7 @@ class vlastnik2 extends adminator
             }
 
             $this->dotaz_source = " SELECT *, to_char(billing_suspend_start,'FMDD. FMMM. YYYY') as billing_suspend_start_f,
-							to_char(billing_suspend_stop,'FMDD. FMMM. YYYY') as billing_suspend_stop_f 
+							to_char(billing_suspend_stop,'FMDD. FMMM. YYYY') as billing_suspend_stop_f
 						 FROM vlastnici ".$select1.$select2.$select3.$select6.$select4;
         } elseif($this->listMode == 3) {
 
@@ -373,9 +373,9 @@ class vlastnik2 extends adminator
             $output .= "<input type=\"hidden\" name=\"id_cloveka\" value=\"".intval($id_cloveka)."\" >\n";
 
             $sql = "SELECT t1.id_cloveka, t1.jmeno, t1.prijmeni, t1.ulice, t1.psc, t1.mesto, t1.mail, t1.telefon, t1.k_platbe, t1.vs,
-                            t1.fakturacni, t1.fakturacni_skupina_id, t1.billing_freq, t1.typ_smlouvy, t1.trvani_do, 
+                            t1.fakturacni, t1.fakturacni_skupina_id, t1.billing_freq, t1.typ_smlouvy, t1.trvani_do,
                             t2.ftitle, t2.fulice, t2.fmesto, t2.fpsc, t2.ico, t2.dic
-                                        
+
                             FROM ( vlastnici AS t1 LEFT JOIN fakturacni AS t2 ON t1.fakturacni=t2.id )
                             WHERE id_cloveka = '".intval($id_cloveka)."'";
 
@@ -430,9 +430,9 @@ class vlastnik2 extends adminator
                 }
 
                 //FS
-                $rs_fs = $this->conn_mysql->query("SELECT typ_sluzby, sluzba_int, sluzba_int_id_tarifu, nazev, 
-                                sluzba_iptv, sluzba_iptv_id_tarifu, sluzba_voip 
-                                FROM fakturacni_skupiny 
+                $rs_fs = $this->conn_mysql->query("SELECT typ_sluzby, sluzba_int, sluzba_int_id_tarifu, nazev,
+                                sluzba_iptv, sluzba_iptv_id_tarifu, sluzba_voip
+                                FROM fakturacni_skupiny
                                 WHERE id = '".intval($data_vl["fakturacni_skupina_id"])."'");
 
                 if($rs_fs->num_rows == 1) {
@@ -490,7 +490,7 @@ class vlastnik2 extends adminator
             $output .= "<input type=\"hidden\" name=\"klient\" value=\"".$id_cloveka."\" >";
 
             $output .= "
-            </form> 
+            </form>
             <script language=\"JavaScript\" > document.frm.submit(); </script>";
 
             $output .= "</body></html>";
@@ -601,7 +601,7 @@ class vlastnik2 extends adminator
                             <tr>
                             <td class=\"vlastnici-td-black\"><br></td>
                             <td class=\"vlastnici-td-black\" colspan=\"3\" width=\"\" >
-                            
+
                             id: [".$data["id_cloveka"]."]".
 
                                     ", Účetní index: [";
@@ -621,9 +621,9 @@ class vlastnik2 extends adminator
                 $output .=  sprintf("%05d", $data["ucetni_index"]);
 
                 $output .= "], Splatnost ke dni: [".$data["splatnost"]."]</td>
-	    
+
                             <td class=\"vlastnici-td-black\" colspan=\"2\">VS: ".$data["vs"]."</td>
-                        
+
                             <td class=\"vlastnici-td-black\" colspan=\"4\"> Platit (bez DPH): ".$data["k_platbe"]."</td>
                             <td class=\"vlastnici-td-black\" colspan=\"6\" align=\"right\" width=\"\" >";
 
@@ -781,8 +781,8 @@ class vlastnik2 extends adminator
 
                 $output .= "</tr>";
 
-                $output .= " 
-                            <tr> 
+                $output .= "
+                            <tr>
                             <td><br></td>
                             <td colspan=\"3\" >".$data["jmeno"]." ".$data["prijmeni"]."<br>
                             ".$data["ulice"]." ";
