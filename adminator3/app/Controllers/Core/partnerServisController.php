@@ -339,7 +339,8 @@ class partnerServisController extends adminatorController
             $filtr_akceptovano = 1;
 
             //priprava dotazu
-            if($filtr_akceptovano > 0) {
+            // if($filtr_akceptovano > 0)
+            {
                 $filtr .= " AND akceptovano = ".$filtr_akceptovano." ";
             }
             if($filtr_prio > 0) {
@@ -396,8 +397,8 @@ class partnerServisController extends adminatorController
                 $bodyContent .= "<div style=\"color: red; font-weight: bold; padding-left: 20px; padding-bottom: 20px; \">
                                     Chyba! Zákazníka nelze akceptovat! Vstupní data jsou ve špatném formátu! </div> ";
 
-             $assignData["body"] = $bodyContent;
-             return $this->renderer->template($request, $response, 'partner/servis-accept.tpl', $assignData, 500);
+                $assignData["body"] = $bodyContent;
+                return $this->renderer->template($request, $response, 'partner/servis-accept.tpl', $assignData, 500);
             }
 
             if($_GET["odeslat"] == "OK") {
@@ -408,7 +409,7 @@ class partnerServisController extends adminatorController
 
                 $uprava = $this->conn_mysql->query("UPDATE partner_klienti_servis SET akceptovano_pozn = '".$pozn."' WHERE id=".$id." Limit 1 ");
 
-                if($uprava == 1) {
+                if($uprava) {
                     $bodyContent .= "<br><H3><div style=\"color: green; padding-left: 20px;\" >Poznámka u zákazníka úspěšně aktualizována.</div></H3><br>\n";
                 } else {
                     $bodyContent .= "<div style=\"color: red; \">Chyba! Poznámku nelze upravit.</div><br>\n";
