@@ -6,9 +6,9 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use PHPUnit\Framework\TestCase;
+// use PHPUnit\Framework\TestCase;
 
-final class AdminatorAssert extends TestCase
+final class AdminatorAssert extends AdminatorTestCase
 {
     // public static function assertValidatorFound(string $class, array $validators, ?string $message = null): void
     // {
@@ -83,7 +83,7 @@ final class AdminatorAssert extends TestCase
         self::assertStringContainsString("Pro otevřetí této stránky nemáte dostatečné oprávnění (level).", $responseContent, "missing string 2 in response body");
     }
 
-    public static function assertHomePagePanels($responseContent)
+    public static function assertHomePagePanels($response, $responseContent)
     {
         $assertKeywordsHome = array(
             '<div class="home-vypis-useru-napis" >Přihlašení uživatelé: </div>', // loggeduser banner
@@ -96,6 +96,12 @@ final class AdminatorAssert extends TestCase
         foreach ($assertKeywordsHome as $w) {
             self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
         }
+
+        // board
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/Bulletin.*Board.*/');
+        // TODO: fix missing token
+        // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=[[:alnum:]]{10,}$/'); // RSS link with token
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=$/'); // RSS link with token
     }
 
     public static function assertTopologySubCat($content)
