@@ -644,13 +644,11 @@ class partner_servis
                 $output .= "<td class=\"".$class."\" >&nbsp;</td>";
 
                 if($this->vyrizeni == true) {
-                    $output .= "<td colspan=\"2\" class=\"".$class."\"><a href=\"".$_SERVER["PHP_SELF"]."?accept=1&id=".intval($data["id"])."\">akceptovat</a></td>";
+                    $output .= "<td colspan=\"2\" class=\"".$class."\"><a href=\"?accept=1&id=".intval($data["id"])."\">akceptovat</a></td>";
                 } elseif($this->update == true) {
-                    $output .= "<td colspan=\"2\" class=\"".$class."\"><a href=\"".$_SERVER["PHP_SELF"]."?edit=1&id=".intval($data["id"])."\">upravit</a></td>";
+                    $output .= "<td colspan=\"2\" class=\"".$class."\"><a href=\"?edit=1&id=".intval($data["id"])."\">upravit</a></td>";
                 } else {
-
                     $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">&nbsp;</span></td>";
-
                 }
 
                 $output .= "</tr>";
