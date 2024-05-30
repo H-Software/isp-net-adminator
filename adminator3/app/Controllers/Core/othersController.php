@@ -201,12 +201,6 @@ class othersController extends adminatorController
             }
 
         }
-        // if(count($get_params) > 0){
-
-        //     $nastenka->action = $get_params["action"];
-        //     $nastenka->page = $get_params["page"];
-        //     $nastenka->send = $get_params["send"];
-        // }
 
         if ($request->getMethod() == "POST") {
             $nastenka->sent = $_POST["sent"];
