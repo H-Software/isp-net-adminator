@@ -62,6 +62,8 @@ class partner extends adminator
 
         $this->sentinel = $container->get('sentinel');
 
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
@@ -382,7 +384,7 @@ class partner extends adminator
                 <input type=\"submit\" name=\"odeslat\" value=\"OK\" >
             </div>";
 
-            $output .=  "<input type=\"hidden\" name=\"accept\" value=\"1\"> 
+            $output .=  "<input type=\"hidden\" name=\"accept\" value=\"1\">
                 <input type=\"hidden\" name=\"id\" value=\"".intval($_GET["id"])."\" >";
             $output .=  "</form>";
 
@@ -485,7 +487,7 @@ class partner extends adminator
                 <input type=\"submit\" name=\"odeslat\" value=\"OK\" >
             </div>"
 
-            . "<input type=\"hidden\" name=\"edit\" value=\"1\"> 
+            . "<input type=\"hidden\" name=\"edit\" value=\"1\">
             <input type=\"hidden\" name=\"id\" value=\"".$id."\" >"
 
             . "</form>";
@@ -594,7 +596,7 @@ class partner extends adminator
               Vyberte stav pole \"Připojeno\": </div>\n"
 
                  . "<div style=\"padding-left: 20px; \" >
-           
+
                 <select name=\"pripojeno\" size=\"1\" >
                     <option value=\"0\" class=\"select-nevybrano\" ";
             if ($pripojeno == 0) {
@@ -609,7 +611,7 @@ class partner extends adminator
               Vyberte stav pole \"Aktuální linka\": </div>\n\n"
 
             . "<div style=\"padding-top: 20px; padding-bottom: 20px; \" >
-           
+
               <select name=\"akt_tarif\" size=\"1\" >
                <option value=\"0\" class=\"select-nevybrano\" ";
             if ($akt_tarif == 0) {
@@ -631,14 +633,14 @@ class partner extends adminator
                 $output .= " selected ";
             }
             $output .= " >Jiná</option>\n
-               
+
               </select>
               </div>"
 
               . "</div></td>"
 
               . "<td valign=\"top\" width=\"30%\" >
-          
+
                 <div style=\"padding-left: 20px; padding-bottom: 20px; font-weight: bold; \">
                     Potvrdit: </div>\n\n"
 

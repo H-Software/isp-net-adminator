@@ -11,11 +11,6 @@ parameters:
 		- app/Core/shared/ros_api_qos.php
 		- app/Core/shared/ros_api_restriction.php
 	ignoreErrors:
-    # known issues
-	-
-		message: "#^Variable \\$user in isset\\(\\) is never defined\\.$#"
-		count: 1
-		path: app/Core/shared/partner.servis.class.php
 	# common known issues
 	-
 		message: '#Undefined variable: \$.*#'
@@ -53,10 +48,6 @@ parameters:
 		path: app/Middleware/SessionMiddleware.php
 
 	# adminator2 dont have DI container with sentinel
-	-
-		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:getUser\\(\\)\\.$#"
-		count: 1
-		path: app/Core/shared/partner.servis.class.php
 	-
 		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
 		count: 1
