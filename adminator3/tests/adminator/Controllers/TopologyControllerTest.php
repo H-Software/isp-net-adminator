@@ -75,17 +75,9 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertTopologySubCat($responseContent);
 
-        // page header & selector/fiters asserts
-        $this->assertMatchesRegularExpression('/Výpis lokalit\s*\/\s*přípojných bodů/i', $responseContent);
-        $this->assertMatchesRegularExpression('/Hledání\:/i', $responseContent);
-        $this->assertStringContainsString('<select name="typ_vysilace"', $responseContent);
-        $this->assertStringContainsString('<select name="typ_nodu" size="1"', $responseContent);
+        AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
 
-        // table header asserts
-        $this->assertStringContainsString('Umístění aliasu (název routeru):', $responseContent);
-        $this->assertStringContainsString('Stav: </span>', $responseContent);
-        $this->assertStringContainsString('Úprava / Smazání:', $responseContent);
-        $this->assertStringContainsString('<select name="typ_nodu" size="1"', $responseContent);
+        AdminatorAssert::assertTopologyNodeListTableHeader($responseContent);
 
         // listing asserts
         $this->assertStringContainsString('<div class="text-listing">', $responseContent, "missing listing container");
@@ -106,9 +98,14 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
 
         // clean-up
+        $responseContent = null;
         $response = null;
+        $responseFactory = null;
         $topologyController = null;
+        $adminatorMock = null;
+        $container = null;
         $serverRequest = null;
+        $request = null;
     }
 
     public function test_ctl_node_list_with_low_user_level()
@@ -136,8 +133,6 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         $response = $topologyController->nodeList($serverRequest, $response, []);
 
-        $this->assertEquals($response->getStatusCode(), 403);
-
         $responseContent = $response->getBody()->__toString();
         $this->assertNotEmpty($responseContent);
 
@@ -146,19 +141,23 @@ final class TopologyControllerTest extends AdminatorTestCase
         adminatorAssert::assertBase($responseContent);
 
         // page specific asserts
-        $this->assertStringContainsString("Nelze zobrazit požadovanou stránku", $responseContent, __FUNCTION__ . " :: missing string 1 in response body");
-        $this->assertStringContainsString("Pro otevřetí této stránky nemáte dostatečné oprávnění (level).", $responseContent, __FUNCTION__ . " :: missing string 2 in response body");
+        AdminatorAssert::assertNoLevelPage($response);
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
 
         // clean-up
+        $responseContent = null;
         $response = null;
+        $responseFactory = null;
         $topologyController = null;
+        $adminatorMock = null;
+        $container = null;
         $serverRequest = null;
+        $request = null;
     }
 
-    public function test_ctl_node_list_view_non_exist()
+    public function test_ctl_node_list_view_with_non_exist_find_param()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
@@ -183,9 +182,9 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         $response = $topologyController->nodeList($serverRequest, $response, []);
 
-        $this->assertEquals($response->getStatusCode(), 200);
-
         $responseContent = $response->getBody()->__toString();
+
+        $this->assertEquals($response->getStatusCode(), 200);
 
         // echo $responseContent;
 
@@ -193,12 +192,19 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertTopologySubCat($responseContent);
 
+        AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
+
         adminatorAssert::assertTopologyNodeListNoDataFound($responseContent);
 
         // clean-up
+        $responseContent = null;
         $response = null;
+        $responseFactory = null;
         $topologyController = null;
+        $adminatorMock = null;
+        $container = null;
         $serverRequest = null;
+        $request = null;
     }
 
 }

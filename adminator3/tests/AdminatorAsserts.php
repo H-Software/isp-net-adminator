@@ -73,11 +73,37 @@ final class AdminatorAssert extends TestCase
         // echo $responseContent;
     }
 
+    public static function assertNoLevelPage($response)
+    {
+        $responseContent = $response->getBody()->__toString();
+
+        self::assertEquals($response->getStatusCode(), 403);
+
+        self::assertStringContainsString("Nelze zobrazit požadovanou stránku", $responseContent, "missing string 1 in response body");
+        self::assertStringContainsString("Pro otevřetí této stránky nemáte dostatečné oprávnění (level).", $responseContent, "missing string 2 in response body");
+    }
+
     public static function assertTopologySubCat($content)
     {
         self::assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/router-list">Routery<\/a>/i', $content);
         self::assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/node-list">Výpis lokalit\/nodů<\/a>/i', $content);
         self::assertMatchesRegularExpression('/<a class="cat2" href="topology-user-list.php">Výpis objektů dle přiřazení \/ dle nodů<\/a>/i', $content);
+    }
+
+    public static function assertTopologyNodeListHeaderAndSelectors($responseContent)
+    {
+        self::assertMatchesRegularExpression('/Výpis lokalit\s*\/\s*přípojných bodů/i', $responseContent);
+        self::assertMatchesRegularExpression('/Hledání\:/i', $responseContent);
+        self::assertStringContainsString('<select name="typ_vysilace"', $responseContent);
+        self::assertStringContainsString('<select name="typ_nodu" size="1"', $responseContent);
+    }
+
+    public static function assertTopologyNodeListTableHeader($responseContent)
+    {
+        self::assertStringContainsString('Umístění aliasu (název routeru):', $responseContent);
+        self::assertStringContainsString('Stav: </span>', $responseContent);
+        self::assertStringContainsString('Úprava / Smazání:', $responseContent);
+        self::assertStringContainsString('<select name="typ_nodu" size="1"', $responseContent);
     }
 
     public static function assertTopologyNodeListNoDataFound($content)
