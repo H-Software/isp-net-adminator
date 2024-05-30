@@ -17,6 +17,7 @@ class HomeController extends adminatorController
     protected $settings;
 
     public $smarty;
+
     public \Monolog\Logger $logger;
 
     // protected $sentinel;

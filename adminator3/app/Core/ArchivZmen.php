@@ -12,6 +12,7 @@ class ArchivZmen
     private \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public $smarty;
+
     public \Monolog\Logger $logger;
 
     public $db_table_name = 'archiv_zmen';
@@ -234,7 +235,7 @@ class ArchivZmen
         $output .= "<span style=\"margin-right: 20px; \" >
                         <label>Vyberte počet záznamů: </label>
                     </span>
-        
+
                     <select name=\"pocet\" size=\"1\" >
                         <option value=\"50\" ";
         if ($pocet == "50" or !isset($pocet)) {
@@ -248,12 +249,12 @@ class ArchivZmen
         if($pocet == "150") {
             $output .= " selected ";
         } $output .= " >150</option>
-                        
+
                         <option value=\"1000\"";
         if($pocet == "500") {
             $output .= " selected ";
         } $output .= " >500</option>
-                        
+
                     </select>\n";
 
         if(!isset($id_nodu) and !isset($id) and !isset($id_stb) and !isset($id_cloveka) and !isset($id_routeru)) {
@@ -265,9 +266,9 @@ class ArchivZmen
             if ($typ == "0" or !isset($typ)) {
                 $output .= " selected ";
             } $output .= " >Vše</option>
-        
+
             <optgroup label=\"objekty\" >
-        
+
             <option value=\"1\" ";
             if($typ == "1") {
                 $output .= " selected ";
@@ -280,7 +281,7 @@ class ArchivZmen
             if($typ == "3") {
                 $output .= " selected ";
             } $output .= " >akce: smazáni objektu</option>
-        
+
             <option value=\"4\"";
             if($typ == "4") {
                 $output .= " selected ";
@@ -293,9 +294,9 @@ class ArchivZmen
             if($typ == "6") {
                 $output .= " selected ";
             } $output .= " >akce: smazaní stb objektu</option>
-            
+
             <optgroup label=\"vlastníci\" >
-        
+
             <option value=\"7\"";
             if($typ == "7") {
                 $output .= " selected ";
@@ -304,7 +305,7 @@ class ArchivZmen
             if($typ == "8") {
                 $output .= " selected ";
             } $output .= " >akce: přidáni vlastníka</option>
-        
+
             <option value=\"9\"";
             if($typ == "9") {
                 $output .= " selected ";
@@ -317,13 +318,13 @@ class ArchivZmen
             if($typ == "11") {
                 $output .= " selected ";
             } $output .= " >akce: smazání fakturační adresy</option>
-        
+
         <!-- akce: poslani emailu z duvodu neplaceni -->
-        
+
         <!-- akce: poslani SMS z duvodu neplacení -->
-        
+
             <optgroup label=\"obojí (objekty i vlastníci)\" >
-        
+
             <option value=\"12\"";
             if($typ == "12") {
                 $output .= " selected ";
@@ -348,7 +349,7 @@ class ArchivZmen
             } $output .= " >akce: zakazani netu z duvodu sikany</option>
 
         <!-- akce: automaticke nastaveni sikany z duvodu neuhr. faktur -->
-        
+
             <optgroup label=\"topologie - routery \" >
 
             <option value=\"17\"";
@@ -396,18 +397,18 @@ class ArchivZmen
             if($typ == "16") {
                 $output .= " selected ";
             } $output .= " >akce: požadavek na restart</option>
-                
-    <!--	    	
+
+    <!--
             <option value=\"\"";
             if($typ == "") {
                 $output .= " selected ";
             } $output .= " >akce: pridani hotovostni platby</option>
 
             akce: pridani opravy
-            
+
             akce: voip - pridani klienta (customer)
     -->
-            
+
         </select>\n";
 
         }
@@ -416,7 +417,7 @@ class ArchivZmen
         <span style=\"margin-left: 40px; \">";
         $output .=  '<!--<a href="include\export-archiv-zmen.php">-->export dat<!--</a>-->';
         $output .= "</span>
-        
+
         </form></div>\n\n";
 
         $output .= "</div>\n"; //konec hlavni divu
@@ -959,7 +960,7 @@ class ArchivZmen
         $output .= "<div style=\" \" ><form method=\"GET\" action=\"\" >";
 
         $output .= "<span style=\"margin-right: 20px; \" ><label>Vyberte počet záznamů: </label></span>
-        
+
                     <select name=\"pocet\" size=\"1\" >
                         <option value=\"1\" ";
         if ($pocet == "1" or !isset($pocet)) {
@@ -976,13 +977,13 @@ class ArchivZmen
                     </select>";
 
         $output .= "<span style=\"margin-left: 10px; \"><input type=\"submit\" name=\"odeslano\" value=\"OK\" ></span>
-        
+
                     <span style=\"margin-left: 40px; \">
                         <!-- <a href=\"include\export-archiv-zmen.php\"> -->
                         export dat
                         <!--</a>-->
                     </span>
-                    
+
                     </form></div>";
 
         $output .= "</div>"; //konec hlavni divu

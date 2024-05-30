@@ -10,7 +10,8 @@ use Psr\Http\Message\ServerRequestInterface;
 class archivZmenController extends adminatorController
 {
     public \mysqli|\PDO $conn_mysql;
-    public $smarty;
+    public \Smarty $smarty;
+
     public \Monolog\Logger $logger;
 
     protected $container;
