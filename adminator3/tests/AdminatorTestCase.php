@@ -158,10 +158,14 @@ abstract class AdminatorTestCase extends TestCase
 
         $assertKeywordsCommon = array(
             '<html lang="en">',
+            'link href="/public/css/style.css" rel="stylesheet" type="text/css" ',
             '<title>Adminator3',  // adminator head rendered
             'bootstrap.min.css" rel="stylesheet"',  // adminator head rendered
             'Jste přihlášeni v administračním systému', // adminator header rendered
+            '<span class="intro-banner-logged"', // logged details container
             '<div id="obsah" >', // main container
+            '<a class="cat" href="/vlastnici/cat" target="_top" >Zákazníci</a>', // categories - 1.line
+            '<a class="cat" href="/partner/cat" target="_top" >Partner program</a>', // categories - 2.line
             '<div class="obsah-main" >', // inner container
             '</body>', // smarty rendered whole page
             '</html>' // smarty rendered whole page
@@ -169,7 +173,7 @@ abstract class AdminatorTestCase extends TestCase
 
         foreach ($assertKeywordsCommon as $w) {
 
-            $this->assertStringContainsString($w, $responseContent, __FUNCTION__ . " :: missing string \"" . $w . "\" in response body");
+            $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
 
             // if (!str_contains($responseContent, $w)) {
             //     $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
@@ -185,7 +189,7 @@ abstract class AdminatorTestCase extends TestCase
 
         // some words missing, because NoLoginPage and etc
         foreach ($assertDeniedKeywordsCommon as $w) {
-            $this->assertStringNotContainsStringIgnoringCase($w, $responseContent, __FUNCTION__ . " :: found word (" . $w. "), which indicates error(s) or failure(s)");
+            $this->assertStringNotContainsStringIgnoringCase($w, $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
         }
 
         // test sqlite migration

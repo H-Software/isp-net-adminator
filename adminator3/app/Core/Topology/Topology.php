@@ -103,8 +103,8 @@ class Topology extends adminator
             <span style=\"padding-left: 20px; font-size: 20px; font-weight: bold; \">
             Výpis lokalit / přípojných bodů
             </span>
-            <span style=\"padding-left: 80px; \" ><!--<a href=\"include/export-topology.php\" >-->export lokalit/nodů<!--</a>--></span>  
-        
+            <span style=\"padding-left: 80px; \" ><!--<a href=\"include/export-topology.php\" >-->export lokalit/nodů<!--</a>--></span>
+
             <span style=\"padding-left: 80px; \" >
             Výpis lokalit/nodů s latencemi ";
 
@@ -123,45 +123,45 @@ class Topology extends adminator
         //
         $output .= "<div style=\"padding-left: 20px; padding-bottom: 10px;\" >
             <form action=\"/topology/node-list\" method=\"GET\" >
-                        
+
                 <input type=\"hidden\" name=\"razeni\" value=\"".$razeni."\" >
                 <input type=\"hidden\" name=\"ping\" value=\"".$ping."\" >
-                    
+
                 <span style=\"font-weight: bold; \" >Hledání:</span>
-                
+
                 <span style=\"padding-left: 10px; \" >
                     <input type=\"text\" name=\"find\" size=\"15\" value=\"".$find_orez."\" style=\"font-size: 12px; \" >
                 </span>
-            
-            
+
+
             <span style=\"padding-left: 10px; \" ><span style=\"color: grey; font-weight: bold; \">filtr:</span></span>
-            
+
             <span style=\"padding-left: 10px; \" >typ:</span>
-            
+
             <span style=\"padding-left: 10px; \" >
                 <select name=\"typ_vysilace\" size=\"1\">
-                <option value=\"0\" class=\"select-nevybrano\" >Nevybráno</option>    
+                <option value=\"0\" class=\"select-nevybrano\" >Nevybráno</option>
                 <option value=\"1\" ";
         if($typ_vysilace == 1) {
             $output .= " selected ";
-        } $output .= ">Metallic</option>    
-                    
+        } $output .= ">Metallic</option>
+
                 <option value=\"2\" ";
         if($typ_vysilace == 2) {
             $output .= " selected ";
-        } $output .= ">ap-2,4GHz-OMNI</option>    
+        } $output .= ">ap-2,4GHz-OMNI</option>
                     <option value=\"3\" ";
         if($typ_vysilace == 3) {
             $output .= " selected ";
-        } $output .= ">ap-2,4GHz-sektor</option>    
+        } $output .= ">ap-2,4GHz-sektor</option>
                     <option value=\"4\" ";
         if($typ_vysilace == 4) {
             $output .= " selected ";
-        } $output .= ">ap-2.4GHz-smerovka</option>    
+        } $output .= ">ap-2.4GHz-smerovka</option>
                     <option value=\"5\" ";
         if($typ_vysilace == 5) {
             $output .= " selected ";
-        } $output .= ">ap-5.8Ghz-OMNI</option>    
+        } $output .= ">ap-5.8Ghz-OMNI</option>
                     <option value=\"6\" ";
         if($typ_vysilace == 6) {
             $output .= " selected ";
@@ -174,7 +174,7 @@ class Topology extends adminator
         if($typ_vysilace == 8) {
             $output .= " selected ";
         } $output .= ">jiné</option>
-                    
+
                 </select>
             </span>
 
@@ -197,7 +197,7 @@ class Topology extends adminator
         } $output .= ">Přetížen</option>
                 </select>
             </span>
-            
+
             <span style=\"padding-left: 10px; \" >mód:</span>
                 <select name=\"typ_nodu\" size=\"1\" >
                 <option value=\"0\" class=\"select-nevybrano\">Nevybráno</option>
@@ -206,19 +206,19 @@ class Topology extends adminator
             $output .= " selected ";
         }
         $output .= ">bezdrátová síť</option>
-                
+
                 <option value=\"2\" style=\"color: #e37d2b; font-weight: bold;\" ";
         if($typ_nodu == 2) {
             $output .= " selected ";
         }
         $output .= ">optická síť</option>
                 </select>
-            
+
             <span style=\"padding-left: 30px; \" ><input type=\"submit\" name=\"odeslat\" value=\"OK\" ></span>
-            
+
             </form>
         </div>
-        
+
         <div style=\"padding-left: 20px; padding-bottom: 10px; \" >
             <span style=\"font-weight: bold; padding-right: 10px; \">Hledaný výraz:</span> ".$find."
         </div>";
@@ -297,7 +297,6 @@ class Topology extends adminator
             $bude_chybet = (($list - 1) * $paging->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
         }
 
-        // $vysledek = $this->conn_mysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
         try {
             $rs = $this->pdoMysql->query($sql . " LIMIT ".$bude_chybet.",".$paging->interval." ");
             $rs_data = $rs->fetchAll();
@@ -333,13 +332,13 @@ class Topology extends adminator
 
             $output .= "\n<tr>
                 <td width=\"5%\" colspan=\"".$colspan_id."\"  class=\"tab-topology2 tab-topology-dolni2\" >
-                
+
                 <table border=\"0\" width=\"\" >
                 <tr>
                     <td><b>id:</b></td>";
 
             $output .= "<td>";
-            $output .= "<form name=\"form1\" method=\"GET\" action=\"\" > ";
+            $output .= "<form name=\"form1\" method=\"GET\" > ";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"1\" >";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -350,7 +349,7 @@ class Topology extends adminator
                 <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
 
-            $output .= "<form  name=\"form2\" method=\"GET\" action=\"\" > ";
+            $output .= "<form  name=\"form2\" method=\"GET\" > ";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"2\">";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -366,13 +365,13 @@ class Topology extends adminator
             $output .= "</td>";
 
             $output .= "<td width=\"20%\" colspan=\"".$colspan_jmeno."\" class=\"tab-topology2 tab-topology-dolni2\" >
-            
+
             <table border=\"0\" width=\"100%\" >
             <tr>
                 <td><b>Jméno: </b></td>";
 
             $output .= "<td >";
-            $output .= "<form  name=\"form3\" method=\"GET\" action=\"\" >";
+            $output .= "<form  name=\"form3\" method=\"GET\" >";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"3\" >";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -383,7 +382,7 @@ class Topology extends adminator
                 <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
 
-            $output .= "<form  name=\"form4\" method=\"GET\" action=\"\" >";
+            $output .= "<form  name=\"form4\" method=\"GET\" >";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"4\">";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -400,13 +399,13 @@ class Topology extends adminator
 
 
             $output .= "<td colspan=\"".$colspan_adresa."\" class=\"tab-topology2 tab-topology-dolni2\" >
-            
+
             <table border=\"0\" width=\"100%\" >
             <tr>
                 <td><b>Adresa: </b></td>";
 
             $output .= "<td>";
-            $output .= "<form  name=\"form5\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+            $output .= "<form  name=\"form5\" method=\"GET\" \">";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"5\" >";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -417,7 +416,7 @@ class Topology extends adminator
                 <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
 
-            $output .= "<form  name=\"form6\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+            $output .= "<form  name=\"form6\" method=\"GET\" >";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"6\">";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -433,13 +432,13 @@ class Topology extends adminator
             $output .= "</td>";
 
             $output .= "<td colspan=\"1\" class=\"tab-topology2 tab-topology-dolni2\" >
-            
+
             <table border=\"0\" width=\"100%\" >
             <tr>
                 <td><b>Poznámka: </b></td>";
 
             $output .= "<td>";
-            $output .= "<form  name=\"form7\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+            $output .= "<form  name=\"form7\" method=\"GET\" >";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"7\" >";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -450,7 +449,7 @@ class Topology extends adminator
                 <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
 
-            $output .= "<form  name=\"form8\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+            $output .= "<form  name=\"form8\" method=\"GET\" >";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"8\">";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -470,13 +469,13 @@ class Topology extends adminator
 
 
             $output .= "<td width=\"10%\" colspan=\"".$colspan_rozsah_ip."\" class=\"tab-topology2 tab-topology-dolni2\" >
-            
+
             <table border=\"0\" width=\"100%\" >
             <tr>
                 <td><b>Rozsah ip adres: </b></td>";
 
             $output .= "<td>";
-            $output .= "<form  name=\"form9\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+            $output .= "<form  name=\"form9\" method=\"GET\" >";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"9\" >";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -487,7 +486,7 @@ class Topology extends adminator
                 <img src=\"/img2/vzes.png\" width=\"20px\" height=\"10px\" border=\"0\" alt=\"Po kliknutí se formulář odešle\">
                 </a></form>";
 
-            $output .= "<form  name=\"form10\" method=\"GET\" action=\"".$_SERVER["PHP_SELF"]."\">";
+            $output .= "<form  name=\"form10\" method=\"GET\" >";
             $output .= "<input type=\"hidden\" name=\"razeni\" value=\"10\">";
 
             $output .= "<input type=\"hidden\" name=\"find\" value=\"".$find_orez."\" >";
@@ -518,22 +517,22 @@ class Topology extends adminator
             $colspan_smazani = "2";
 
             $output .= "
-            
+
             </tr>
-            
+
             <tr>
             <td colspan=\"1\" class=\"tab-topology2\" ><br></td>
             <td colspan=\"3\" class=\"tab-topology2\" >
                 <span style=\"color: #666666; font-weight: bold; \">Umístění aliasu (název routeru): </span></td>
-            
+
             <td colspan=\"".$colspan_typ_vysilace."\" class=\"tab-topology2\" ><span style=\"color: #666666; font-weight: bold; \">Typ vysílače: </span></td>
-            
+
             <td colspan=\"".$colspan_aktivni."\" class=\"tab-topology2\" align=\"center\" >
             <span style=\"color: #666666; font-weight: bold; \">Aktivní: </span></td>
             <td colspan=\"".$colspan_stav."\" class=\"tab-topology2\" align=\"center\" ><span style=\"color: #666666; font-weight: bold; \">Stav: </span></td>
-                    
+
             <td colspan=\"".$colspan_uprava."\" class=\"tab-topology2\" ><span style=\"color: #666666; font-weight: bold; \">Úprava / Smazání: </span></td>
-            
+
                 </tr>\n";
 
             //treti radek
@@ -604,14 +603,20 @@ class Topology extends adminator
 
                 $router_id = $zaznam["router_id"];
 
-                if ($router_id <= 0) {
-                    $router_nazev = "<span style=\"color: red\">nelze zjistit </span>";
-                    $router_ip = "";
-                } else {
-                    $vysledek_router = $this->conn_mysql->query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
-                    while($data_router = $vysledek_router->fetch_array()) {
-                        $router_nazev = $data_router["nazev"];
-                        $router_ip = $data_router["ip_adresa"];
+                $router_nazev = "<span style=\"color: red\">nelze zjistit (ID: ".$router_id.")</span>";
+                $router_ip = "";
+
+                if ($router_id > 0) {
+                    try {
+                        $vysledek_router = $this->pdoMysql->query("SELECT nazev, ip_adresa FROM router_list where id = ".intval($router_id)." ");
+                        $data_router = $vysledek_router->fetchAll();
+                    } catch (Exception $e) {
+                        $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Database query failed! Caught exception: " . $e->getMessage());
+                        $data_router = [];
+                    }
+                    foreach ($data_router as $row => $item) {
+                        $router_nazev = $item["nazev"];
+                        $router_ip = $item["ip_adresa"];
                     }
                 }
 
@@ -877,7 +882,7 @@ class Topology extends adminator
         $output .= "</div>\n";
 
 
-        $output .= "<form method=\"GET\" action=\"\" >";
+        $output .= "<form method=\"GET\" >";
 
         //filtr - hlavni okno
         $output .= "<div id=\"routers_filter\" style=\"display: ".$display.";\" >";

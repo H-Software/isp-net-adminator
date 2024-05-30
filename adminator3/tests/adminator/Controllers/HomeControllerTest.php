@@ -24,7 +24,7 @@ final class HomeControllerTest extends AdminatorTestCase
         $_GET["vyreseno_filtr"] = 0;
         $_GET["limit"] = 10;
 
-        $_SERVER = array();
+        // $_SERVER = array();
         $_SERVER['HTTP_HOST'] = "127.0.0.1";
         $_SERVER['SCRIPT_URL'] = "/home";
         $_SERVER['REMOTE_ADDR'] = "127.0.0.1";
@@ -34,6 +34,15 @@ final class HomeControllerTest extends AdminatorTestCase
     protected function tearDown(): void
     {
         m::close();
+
+        // unset($_SERVER['HTTP_HOST']);
+        // unset($_SERVER['SCRIPT_URL']);
+        // unset($_SERVER['REMOTE_ADDR']);
+        // unset($_SERVER["REQUEST_URI"]);
+
+        unset($_GET["v_reseni_filtr"]);
+        unset($_GET["vyreseno_filtr"]);
+        unset($_GET["limit"]);
     }
 
     public function test_ctl_home_page()
