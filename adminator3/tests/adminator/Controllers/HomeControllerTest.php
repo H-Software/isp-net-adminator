@@ -89,7 +89,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         // negative assert
         // check word: nelze
-        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent,"found word (" . $w. "), which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
 
     }
