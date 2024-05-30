@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Controllers\objektyController;
+use App\Controllers\vlastniciController;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ObjektyControllerTest extends AdminatorTestCase
+final class VlastniciControllerTest extends AdminatorTestCase
 {
     protected function setUp(): void
     {
@@ -24,7 +24,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
         $self = $this;
 
         $request = Request::create(
-            '/objekty/cat',
+            '/vlastnici/cat',
             'GET',
             []
         );
@@ -36,7 +36,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        $controller = new objektyController($container, $adminatorMock);
+        $controller = new vlastniciController($container, $adminatorMock);
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
@@ -64,7 +64,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
         $self = $this;
 
         $request = Request::create(
-            '/objekty/cat',
+            '/vlastnici/cat',
             'GET',
             []
         );
@@ -76,7 +76,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container, false, 1);
         $this->assertIsObject($adminatorMock);
 
-        $controller = new objektyController($container, $adminatorMock);
+        $controller = new vlastniciController($container, $adminatorMock);
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
@@ -98,12 +98,20 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
     }
 
-    // TODO: add test for stb
+    // TODO: add test for cross
 
-    // TODO: add tests for stbAction
+    // TODO: add tests for search
 
-    // TODO: add tests for objekty
+    // TODO: add tests for Vlastnici
 
-    // TODO: add tests for objektyAction
+    // TODO: add tests for Vlastnici2
+
+    // TODO: add tests for Archiv
+
+    // TODO: add tests for change
+
+    // TODO: add tests for fakturacniSkupiny
+
+    // TODO: add tests for fakturacniSkupinyAction
 
 }

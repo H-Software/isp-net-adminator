@@ -94,7 +94,7 @@ class objektyController extends adminatorController
 
     public function stbAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("objektyController\\stbAction called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -128,7 +128,7 @@ class objektyController extends adminatorController
 
     public function objekty(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("objektyController\objekty called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;
@@ -176,7 +176,7 @@ class objektyController extends adminatorController
 
     public function objektyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
-        $this->logger->info("objektyController\objektyAction called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $this->request = $request;
         $this->response = $response;

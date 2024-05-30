@@ -24,7 +24,7 @@ class vlastniciController extends adminatorController
 
     protected ResponseInterface $response;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $adminatorInstance = null)
     {
         $this->container = $container;
         $this->conn_mysql = $this->container->get('connMysql');
@@ -36,7 +36,7 @@ class vlastniciController extends adminatorController
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        parent::__construct($container);
+        parent::__construct($container, $adminatorInstance);
     }
 
     public function cat(ServerRequestInterface $request, ResponseInterface $response, array $args)
