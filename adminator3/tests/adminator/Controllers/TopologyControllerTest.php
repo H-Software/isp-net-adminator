@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\Controllers\topologyController;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+// use Psr\Http\Message\ResponseInterface;
+// use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Slim\Interfaces\RouteParserInterface;
-use Nyholm\Psr7Server\ServerRequestCreator;
+// use Slim\Interfaces\RouteParserInterface;
 
 use Symfony\Component\HttpFoundation\Request;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -25,7 +24,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     protected function setUp(): void
     {
-        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
+        $psr17Factory = new Psr17Factory();
 
         // https://symfony.com/doc/current/components/psr7.html#converting-from-httpfoundation-objects-to-psr-7
         $this->psrHttpFactory = new PsrHttpFactory(
