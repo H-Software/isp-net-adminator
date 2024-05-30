@@ -22,6 +22,9 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\DomCrawler\Crawler;
+use Throwable;
+use Exception;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -36,6 +39,28 @@ abstract class AdminatorTestCase extends TestCase
     public static $phinxManager;
 
     public static $psrHttpFactory;
+
+    /*
+    * code copied from laminas-test
+    */
+
+    /**
+     * Trace error when exception is throwed in application
+     *
+     * @var bool
+     */
+    protected $traceError = true;
+
+    /**
+     * XPath namespaces
+     *
+     * @var array<string,string>
+     */
+    protected $xpathNamespaces = [];
+
+    /*
+    * end of code copied from laminas-test
+    */
 
     public static function setUpBeforeClass(): void
     {
@@ -182,44 +207,44 @@ abstract class AdminatorTestCase extends TestCase
     * @param string $message
     * @return string
     */
-    protected function createFailureMessage($message)
-    {
-        if (! $this->traceError) {
-            return $message;
-        }
+    // protected function createFailureMessage($message)
+    // {
+    //     if (! $this->traceError) {
+    //         return $message;
+    //     }
 
-        $exception = $this->getApplication()->getMvcEvent()->getParam('exception');
-        if (! $exception instanceof Throwable && ! $exception instanceof Exception) {
-            return $message;
-        }
+    //     $exception = $this->getApplication()->getMvcEvent()->getParam('exception');
+    //     if (! $exception instanceof Throwable && ! $exception instanceof Exception) {
+    //         return $message;
+    //     }
 
-        $messages = [];
-        do {
-            $messages[] = sprintf(
-                "Exception '%s' with message '%s' in %s:%d",
-                $exception::class,
-                $exception->getMessage(),
-                $exception->getFile(),
-                $exception->getLine()
-            );
-        } while ($exception = $exception->getPrevious());
+    //     $messages = [];
+    //     do {
+    //         $messages[] = sprintf(
+    //             "Exception '%s' with message '%s' in %s:%d",
+    //             $exception::class,
+    //             $exception->getMessage(),
+    //             $exception->getFile(),
+    //             $exception->getLine()
+    //         );
+    //     } while ($exception = $exception->getPrevious());
 
-        return sprintf("%s\n\nExceptions raised:\n%s\n", $message, implode("\n\n", $messages));
-    }
+    //     return sprintf("%s\n\nExceptions raised:\n%s\n", $message, implode("\n\n", $messages));
+    // }
 
     /**
     * Get the application response object
     *
     * @return Response
     */
-    public function getResponse()
-    {
-        $response = $this->getApplication()->getMvcEvent()->getResponse();
+    // public function getResponse()
+    // {
+    //     $response = $this->getApplication()->getMvcEvent()->getResponse();
 
-        assert($response instanceof Response);
+    //     assert($response instanceof Response);
 
-        return $response;
-    }
+    //     return $response;
+    // }
 
     /**
     * Execute a DOM/XPath query
@@ -228,10 +253,9 @@ abstract class AdminatorTestCase extends TestCase
     * @param  bool $useXpath
     * @return Crawler
     */
-    private function query($path, $useXpath = false)
+    private function query($response, $path, $useXpath = false)
     {
-        $response = $this->getResponse();
-        $document = new Crawler($response->getContent());
+        $document = new Crawler($response->getBody()->__toString());
 
         if ($useXpath) {
             foreach ($this->xpathNamespaces as $prefix => $namespace) {
@@ -247,9 +271,9 @@ abstract class AdminatorTestCase extends TestCase
      *
      * @param string $path
      */
-    private function xpathQuery($path): Crawler
+    private function xpathQuery($response, $path): Crawler
     {
-        return $this->query($path, true);
+        return $this->query($response, $path, true);
     }
 
     /**
@@ -258,9 +282,9 @@ abstract class AdminatorTestCase extends TestCase
     * @param  string $path
     * @return int
     */
-    private function queryCount($path)
+    private function queryCount($response, $path)
     {
-        return count($this->query($path, false));
+        return count($this->query($response, $path, false));
     }
 
     /**
@@ -269,22 +293,22 @@ abstract class AdminatorTestCase extends TestCase
      * @param  string $path
      * @return int
      */
-    private function xpathQueryCount($path)
+    private function xpathQueryCount($response, $path)
     {
-        return $this->xpathQuery($path)->count();
+        return $this->xpathQuery($response, $path)->count();
     }
 
     /**
      * @param string $path
      * @param bool $useXpath
      */
-    private function queryCountOrxpathQueryCount($path, $useXpath = false): int
+    private function queryCountOrxpathQueryCount($response, $path, $useXpath = false): int
     {
         if ($useXpath) {
-            return $this->xpathQueryCount($path);
+            return $this->xpathQueryCount($response, $path);
         }
 
-        return $this->queryCount($path);
+        return $this->queryCount($response, $path);
     }
 
     /**
@@ -293,14 +317,20 @@ abstract class AdminatorTestCase extends TestCase
      * @param string $path
      * @param bool $useXpath
      */
-    private function queryAssertion($path, $useXpath = false): void
+    private function queryAssertion($response, $path, $useXpath = false): void
     {
-        $match = $this->queryCountOrxpathQueryCount($path, $useXpath);
+        $match = $this->queryCountOrxpathQueryCount($response, $path, $useXpath);
+        // if (! $match > 0) {
+        //     throw new ExpectationFailedException($this->createFailureMessage(sprintf(
+        //         'Failed asserting node DENOTED BY %s EXISTS',
+        //         $path
+        //     )));
+        // }
         if (! $match > 0) {
-            throw new ExpectationFailedException($this->createFailureMessage(sprintf(
+            throw new ExpectationFailedException(sprintf(
                 'Failed asserting node DENOTED BY %s EXISTS',
                 $path
-            )));
+            ));
         }
         $this->assertTrue($match > 0);
     }
@@ -311,9 +341,11 @@ abstract class AdminatorTestCase extends TestCase
      * @param string $path XPath path
      * @return void
      */
-    public function assertXpathQuery($path)
+    public function assertXpathQuery($response, $path)
     {
-        $this->queryAssertion($path, true);
+        assert($response instanceof ResponseInterface);
+
+        $this->queryAssertion($response, $path, true);
     }
 
     /*

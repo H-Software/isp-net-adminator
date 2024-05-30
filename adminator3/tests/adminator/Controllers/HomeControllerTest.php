@@ -80,7 +80,7 @@ final class HomeControllerTest extends AdminatorTestCase
         }
 
         // board stuff
-        self::assertXpathQuery("xx");
+        self::assertXpathQuery($response, '//*[@id="obsah"]');
 
         // negative assert
         // check word: nelze
