@@ -108,7 +108,7 @@ class partnerServisController extends adminatorController
         return $this->renderer->template($request, $response, 'partner/servis-list.tpl', $assignData);
     }
 
-    public function add(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    public function add(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -166,5 +166,28 @@ class partnerServisController extends adminatorController
         ];
 
         return $this->renderer->template($request, $response, 'partner/servis-list.tpl', $assignData);
+    }
+
+    public function servisAccept(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(306)) {
+            return $this->response;
+        };
+
+        $bodyContent = "";
+
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+
+        $assignData = [
+            "page_title" => "Adminator3 :: Partner program :: Servis Accept",
+            "body" => $bodyContent
+        ];
+
+        return $this->renderer->template($request, $response, 'partner/servis-accept.tpl', $assignData);
     }
 }
