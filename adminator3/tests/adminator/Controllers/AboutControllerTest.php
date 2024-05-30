@@ -47,12 +47,14 @@ final class AboutControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        echo $responseContent;
+        // echo $responseContent;
 
         $this->assertEquals($response->getStatusCode(), 200);
 
         adminatorAssert::assertBase($responseContent);
 
+        // TODO: add asserts
+        
         //     <span style="margin-left: 20px; "><a href="/home" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>\n
         //     \n
         //     <span style="padding-left: 20px; "><a class="cat2" href="/about/changes-old">Staré změny (Adminator2)</a></span>\n
@@ -66,13 +68,11 @@ final class AboutControllerTest extends AdminatorTestCase
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
-
-
     }
 
     public function test_ctl_base_with_low_user_level()
     {
-        $this->markTestSkipped('under construction');
+        // $this->markTestSkipped('under construction');
         $self = $this;
 
         $request = Request::create(
@@ -87,6 +87,26 @@ final class AboutControllerTest extends AdminatorTestCase
 
         $adminatorMock = self::initAdminatorMockClass($container, false, 1);
         $this->assertIsObject($adminatorMock);
+
+        $topologyController = new aboutController($container, $adminatorMock);
+
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $response = $responseFactory->createResponse();
+
+        $response = $topologyController->about($serverRequest, $response, []);
+
+        $responseContent = $response->getBody()->__toString();
+        $this->assertNotEmpty($responseContent);
+
+        // echo $responseContent;
+
+        adminatorAssert::assertBase($responseContent);
+
+        // page specific asserts
+        AdminatorAssert::assertNoLevelPage($response);
+
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
 
     }
 
