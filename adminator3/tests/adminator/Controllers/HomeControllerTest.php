@@ -18,21 +18,10 @@ final class HomeControllerTest extends AdminatorTestCase
 
     protected function setUp(): void
     {
-        // $psr17Factory = new Psr17Factory();
-
-        // // https://symfony.com/doc/current/components/psr7.html#converting-from-httpfoundation-objects-to-psr-7
-        // $this->psrHttpFactory = new PsrHttpFactory(
-        //     $psr17Factory,
-        //     $psr17Factory,
-        //     $psr17Factory,
-        //     $psr17Factory
-        // );
     }
 
     protected function tearDown(): void
     {
-        // $this->psrHttpFactory = null;
-
         m::close();
     }
 
@@ -71,8 +60,6 @@ final class HomeControllerTest extends AdminatorTestCase
 
         $homeController = new HomeController($container, $adminatorMock, $opravyMock);
 
-        // $serverRequest = $this->createMock(ServerRequestInterface::class);
-        // $response = $this->createMock(ResponseInterface::class);
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
