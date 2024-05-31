@@ -472,22 +472,14 @@ class adminator
         // $v_reseni_filtr = $_GET["v_reseni_filtr"];
         // $vyreseno_filtr = $_GET["vyreseno_filtr"];
         // $limit = $_GET["limit"];
+        $v_reseni_filtr = "99";
+        $vyreseno_filtr = "0";
+        $limit = "10";
 
         foreach ($request->getQueryParams() as $i => $v) {
             if(preg_match('/^(v_reseni_filtr|vyreseno_filtr|limit)$/', $i) and strlen($v) > 0) {
                 $i = $request->getQueryParams()[$i];
             }
-        }
-
-        if(!isset($v_reseni_filtr)) {
-            $v_reseni_filtr = "99";
-        }
-        if(!isset($vyreseno_filtr)) {
-            $vyreseno_filtr = "0";
-        }
-
-        if(!isset($limit)) {
-            $limit = "10";
         }
 
         // vypis
