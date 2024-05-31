@@ -31,6 +31,10 @@ class opravy
         $ret = array();
         $this->vypis_opravy_content_html = "";
 
+        $v_reseni_filtr = "99";
+        $vyreseno_filtr = "0";
+        $limit = "10";
+
         // $v_reseni_filtr = $_GET["v_reseni_filtr"];
         // $vyreseno_filtr = $_GET["vyreseno_filtr"];
         // $limit = $_GET["limit"];
@@ -47,21 +51,8 @@ class opravy
         //     }
         // }
 
-        if (!isset($v_reseni_filtr)) {
-            $v_reseni_filtr = "99";
-        }
-        if (!isset($vyreseno_filtr)) {
-            $vyreseno_filtr = "0";
-        }
-
-        if (!isset($limit)) {
-            $limit = "10";
-        }
-
         $sql = "SELECT * FROM opravy WHERE ( id_opravy > 0 ";
-
         $order = " ORDER BY datum_vlozeni DESC ";
-
         $sf = $sql." ) ".$order;
 
         try {
