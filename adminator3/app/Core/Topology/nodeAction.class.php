@@ -53,7 +53,7 @@ class nodeAction extends adminator
         }
 
         //kontrola platnych udaju
-        if(isset($odeslano)) {
+        if(isset($odeslano)) { /* @phpstan-ignore isset.variable */
             if(preg_match("/\//", $ip_rozsah)) {
                 $this->error .= "<div style=\"color: red; \" ><H4>Pole \"IP rozsah\" obsahuje nepovolený znak \"/\" !</H4></div>";
             }
