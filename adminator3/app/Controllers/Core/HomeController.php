@@ -97,7 +97,7 @@ class HomeController extends adminatorController
 
         if ($this->adminator->checkLevel(101) === true) {
             $this->logger->info("homeController\opravy_a_zavady allowed");
-            $this->adminator->get_opravy_a_zavady($this->opravyInstance);
+            $this->adminator->get_opravy_a_zavady($request, $this->opravyInstance);
         } else {
             $this->logger->warning("homeController\opravy_a_zavady not allowed");
         }

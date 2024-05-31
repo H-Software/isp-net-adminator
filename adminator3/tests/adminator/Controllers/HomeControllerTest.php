@@ -31,9 +31,9 @@ final class HomeControllerTest extends AdminatorTestCase
             '/home',
             'GET',
             [
-                "v_reseni_filtr" => 99,
-                "vyreseno_filtr" => 0,
-                "limit" => 10,
+                // "v_reseni_filtr" => 99,
+                // "vyreseno_filtr" => 0,
+                // "limit" => 10,
             ],
             [],
             [],
@@ -71,9 +71,12 @@ final class HomeControllerTest extends AdminatorTestCase
 
         // page specific asserts
         //
+        // self::assertXpathQueryContentRegex($response, '/html/head/title', '/^Bulletin.*Board.*/');
+
         $assertKeywordsHome = array(
             '<title>Adminator3 :: úvodní stránka</title>',  // corrent title
         );
+        //
 
         foreach ($assertKeywordsHome as $w) {
             $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");

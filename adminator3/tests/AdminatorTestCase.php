@@ -180,8 +180,7 @@ abstract class AdminatorTestCase extends TestCase
         $container,
         object|array $mockedInstance,
         $assertHttpCode = 200
-        ): ResponseInterface
-    {
+    ): ResponseInterface {
         if(is_array($mockedInstance)) {
             $controller = new $controllerClass($container, $mockedInstance['adminatorMock'], $mockedInstance['opravyMock']);
         } else {

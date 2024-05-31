@@ -462,16 +462,22 @@ class adminator
         $this->smarty->assign("logged_users", $data);
     }
 
-    public function get_opravy_a_zavady($opravy): void
+    public function get_opravy_a_zavady(ServerRequestInterface $request, $opravy): void
     {
         //opravy a zavady vypis
         $pocet_bunek = 11;
 
         $this->logger->info("adminator\get_opravy_a_zavady called");
 
-        $v_reseni_filtr = $_GET["v_reseni_filtr"];
-        $vyreseno_filtr = $_GET["vyreseno_filtr"];
-        $limit = $_GET["limit"];
+        // $v_reseni_filtr = $_GET["v_reseni_filtr"];
+        // $vyreseno_filtr = $_GET["vyreseno_filtr"];
+        // $limit = $_GET["limit"];
+
+        foreach ($request->getQueryParams() as $i => $v) {
+            if(preg_match('/^(v_reseni_filtr|vyreseno_filtr|limit)$/', $i) and strlen($v) > 0) {
+                $i = $request->getQueryParams()[$i];
+            }
+        }
 
         if(!isset($v_reseni_filtr)) {
             $v_reseni_filtr = "99";
@@ -495,7 +501,7 @@ class adminator
 
         $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
 
-        $rs_vypis = $opravy->vypis_opravy($pocet_bunek);
+        $rs_vypis = $opravy->vypis_opravy($request, $pocet_bunek);
         // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));
 
         if($rs_vypis) {
