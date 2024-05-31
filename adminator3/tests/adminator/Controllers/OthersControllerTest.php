@@ -306,8 +306,6 @@ final class OthersControllerTest extends AdminatorTestCase
                 "sent"  => "true",
                 "author" => "test@test",
                 "email" => "",
-                // "to_date" => "x",
-                // "from_date" => "y",
                 "subject" => "test subject",
                 "body" => "test subject message body",
             ],

@@ -221,6 +221,7 @@ class othersController extends adminatorController
                 $nastenka->convert_vars();
                 $add = $nastenka->insert_into_db();
 
+                $assignData["mod_hlaska"] = "->> Přidat zprávu";
                 $assignData["rs"] = $add;
                 $assignData["body"] = $nastenka->error;
 
