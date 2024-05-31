@@ -79,7 +79,7 @@ class topologyController extends adminatorController
         $i = new nodeAction($this->container);
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
         $i->csrf_html = $csrf_html;
-        $output = $i->add();
+        $output = $i->add($request);
 
         $assignData = [
             "page_title" => "Adminator3 :: Topologie :: Node Add",
