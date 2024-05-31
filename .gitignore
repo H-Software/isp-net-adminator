@@ -26,6 +26,7 @@ extras/documentation
 # IDE
 .DS_Store
 /.idea/
+.vscode/settings.json
 
 # logs
 adminator2/logs/
@@ -58,4 +59,3 @@ adminator3/tests2/
 adminator3/print/temp
 .env
 test
-.vscode/settings.json
