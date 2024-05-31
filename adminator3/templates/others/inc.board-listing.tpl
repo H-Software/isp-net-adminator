@@ -22,7 +22,7 @@
           </div>
         {/section}
 
-        <div style="text-align: right; border-top: 1px solid #7D7642; padding-top: 5px; " class="table" id="board-list-padding" >
+        <div style="text-align: right; border-top: 1px solid #7D7642; padding-top: 5px; " class="table" id="board-list-pagging" >
           <b>strana
 
           {section name="page" loop=$strany}
