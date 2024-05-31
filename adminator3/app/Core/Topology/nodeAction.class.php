@@ -6,7 +6,7 @@ use App\Core\adminator;
 use Psr\Container\ContainerInterface;
 use Exception;
 
-class RouterAction extends adminator
+class nodeAction extends adminator
 {
     public \mysqli|\PDO $conn_mysql;
 
