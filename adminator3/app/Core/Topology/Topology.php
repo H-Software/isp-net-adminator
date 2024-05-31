@@ -740,30 +740,38 @@ class Topology extends adminator
 
         // prepare vars
         //
-        $typ = $_GET["typ"];
+        $typ = $this->requestData->query->get('typ');
+        $filtrace = $this->requestData->query->get('filtrace');
+        $f_monitoring = $this->requestData->query->get('f_monitoring');
+        $f_alarm = $this->requestData->query->get('f_alarm');
+        $f_alarm_stav = $this->requestData->query->get('f_alarm_stav');
+        $f_id_routeru = $this->requestData->query->get('f_id_routeru');
+        $f_search = $this->requestData->query->get('f_search');
+        $list = $this->requestData->query->get('list');
+        $odeslano = $this->requestData->query->get('odeslano');
 
         $arr_sql_where = array();
 
-        if((strlen($_GET["filtrace"]) > 0)) {
-            $filtrace = intval($_GET["filtrace"]);
+        if((strlen($filtrace) > 0)) {
+            $filtrace = intval($filtrace);
         } else {
             $filtrace = 99;
         }
 
-        if((strlen($_GET["f_monitoring"]) > 0)) {
-            $f_monitoring = intval($_GET["f_monitoring"]);
+        if((strlen($f_monitoring) > 0)) {
+            $f_monitoring = intval($f_monitoring);
         } else {
             $f_monitoring = 99;
         }
 
-        if((strlen($_GET["f_alarm"]) > 0)) {
-            $f_alarm = intval($_GET["f_alarm"]);
+        if((strlen($f_alarm) > 0)) {
+            $f_alarm = intval($f_alarm);
         } else {
             $f_alarm = 99;
         }
 
-        if((strlen($_GET["f_alarm_stav"]) > 0)) {
-            $f_alarm_stav = intval($_GET["f_alarm_stav"]);
+        if((strlen($f_alarm_stav) > 0)) {
+            $f_alarm_stav = intval($f_alarm_stav);
 
             if($f_alarm_stav == 0 or $f_alarm_stav == 1 or $f_alarm_stav == 2) {
                 $f_alarm = 1;
@@ -772,23 +780,15 @@ class Topology extends adminator
             $f_alarm_stav = 99;
         }
 
-        if((strlen($_GET["f_id_routeru"]) > 0)) {
-            $f_id_routeru = intval($_GET["f_id_routeru"]);
+        if((strlen($f_id_routeru) > 0)) {
+            $f_id_routeru = intval($f_id_routeru);
         }
 
-        if((strlen($_GET["f_search"]) > 0)) {
-            $f_search = $_GET["f_search"];
+        if((strlen($list) > 0)) {
+            $list = intval($list);
         }
 
-        if((strlen($_GET["list"]) > 0)) {
-            $list = intval($_GET["list"]);
-        }
-
-        if((strlen($_GET["odeslano"]) > 0)) {
-            $odeslano = $_GET["odeslano"];
-        }
-
-        if($_GET["odeslano"] == "OK") {
+        if($odeslano == "OK") {
             $display = "visible";
         } else {
             $display = "none";
@@ -837,6 +837,7 @@ class Topology extends adminator
                     " ) ";
         }
 
+        $sql_where2 = "";
         if((count($arr_sql_where) == 1)) {
 
             foreach ($arr_sql_where as $key => $val) {
