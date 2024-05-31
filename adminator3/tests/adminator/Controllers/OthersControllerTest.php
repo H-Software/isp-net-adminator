@@ -169,20 +169,8 @@ final class OthersControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        $controller = new othersController($container, $adminatorMock);
-
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
-        $response = $responseFactory->createResponse();
-
-        $response = $controller->board($serverRequest, $response, []);
-
+        $response = self::callControllerFunction($serverRequest, 'App\Controllers\othersController', 'board', $container, $adminatorMock);
         $responseContent = $response->getBody()->__toString();
-
-        // echo $responseContent;
-
-        $this->assertEquals($response->getStatusCode(), 200);
-
-        adminatorAssert::assertBase($responseContent);
 
         adminatorAssert::assertBoardCommon($response, $responseContent);
         adminatorAssert::assertBoardMessages($response, $responseContent);
@@ -320,20 +308,8 @@ final class OthersControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        $controller = new othersController($container, $adminatorMock);
-
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
-        $response = $responseFactory->createResponse();
-
-        $response = $controller->board($serverRequest, $response, []);
-
+        $response = self::callControllerFunction($serverRequest, 'App\Controllers\othersController', 'board', $container, $adminatorMock);
         $responseContent = $response->getBody()->__toString();
-
-        echo $responseContent;
-
-        $this->assertEquals($response->getStatusCode(), 200);
-
-        adminatorAssert::assertBase($responseContent);
 
         adminatorAssert::assertBoardCommon($response, $responseContent);
 
@@ -342,6 +318,31 @@ final class OthersControllerTest extends AdminatorTestCase
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
+
+        // check, if record is in database
+        $request2 = Request::create(
+            '/others/board',
+            'GET',
+            [
+                "action" => "view",
+                "what" => "new"
+            ],
+            [],
+            []
+        );
+        $request2->overrideGlobals();
+        $serverRequest2 = self::$psrHttpFactory->createRequest($request2);
+
+        $response2 = self::callControllerFunction($serverRequest2, 'App\Controllers\othersController', 'board', $container, $adminatorMock);
+        $responseContent2 = $response2->getBody()->__toString();
+
+        adminatorAssert::assertBoardCommon($response2, $responseContent2);
+
+        // TODO: add asserts for inserted message
+
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent2, "found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent2, " found word, which indicates error(s) or failure(s)");
     }
 
     // TODO: add tests for BoardRSS
