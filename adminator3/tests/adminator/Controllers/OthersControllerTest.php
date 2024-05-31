@@ -100,7 +100,6 @@ final class OthersControllerTest extends AdminatorTestCase
 
     // TODO: add test for CompanyWeb
 
-    // TODO: add tests for Board
     public function test_ctl_board()
     {
         // $this->markTestSkipped('under construction');
@@ -109,12 +108,7 @@ final class OthersControllerTest extends AdminatorTestCase
         $request = Request::create(
             '/others/board',
             'GET',
-            [
-                // "what" => "",
-                // "action" => "",
-                // "page" => "",
-                // "send" => "",
-            ],
+            [],
             [],
             []
         );

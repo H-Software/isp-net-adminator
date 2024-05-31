@@ -1,6 +1,7 @@
 <?php
 
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class board
 {
@@ -54,6 +55,21 @@ class board
         $this->sentinel = $container->get('sentinel');
 
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
+    }
+
+    public function load_vars(ServerRequestInterface $request)
+    {
+        foreach ($request->getQueryParams() as $i => $v) {
+            if(preg_match('/^(what|action|page|send)$/', $i) and strlen($v) > 0) {
+                $this->$i = $request->getQueryParams()[$i];
+            }
+        }
+
+        foreach ($request->getParsedBody() as $i => $v) {
+            if(preg_match('/^(sent|author|email|to_date|from_date|subject|body)$/', $i) and strlen($v) > 0) {
+                $this->$i = $request->getParsedBody()[$i];
+            }
+        }
     }
 
     public function prepare_vars($nothing = null)

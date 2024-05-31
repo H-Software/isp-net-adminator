@@ -12,7 +12,7 @@ class othersController extends adminatorController
 {
     public \mysqli|\PDO $conn_mysql;
 
-    public \Smarty $smarty;
+    // public \Smarty $smarty;
 
     public \Monolog\Logger $logger;
 
@@ -26,7 +26,7 @@ class othersController extends adminatorController
     {
         $this->container = $container;
         $this->conn_mysql = $this->container->get('connMysql');
-        $this->smarty = $this->container->get('smarty');
+        // $this->smarty = $this->container->get('smarty');
         $this->logger = $this->container->get('logger');
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
@@ -183,58 +183,31 @@ class othersController extends adminatorController
 
         $rss_token = $this->adminator->getUserToken();
         if($rss_token !== false) {
-            $this->smarty->assign("token", $rss_token);
+            $assignData["token"] = $rss_token;
         } else {
             $this->logger->error("othersController\board: getUserToken failed");
         }
-        $this->smarty->assign("datum", date("j. m. Y"));
+        $assignData["datum"] = date("j. m. Y");
 
-        $get_params = $request->getQueryParams();
-        foreach ($get_params as $i => $v) {
-            if(preg_match('/^(what|action|page|send)$/', $i)){
-                if(strlen($v) > 0) {
-                    $nastenka->$i = $get_params[$i];
-                }
-            }
-        }
-
-        if ($request->getMethod() == "POST") {
-            $nastenka->sent = $_POST["sent"];
-
-            $nastenka->author = $_POST["author"];
-            $nastenka->email = $_POST["email"];
-
-            $nastenka->to_date = $_POST["to_date"];
-            $nastenka->from_date = $_POST["from_date"];
-
-            $nastenka->subject = $_POST["subject"];
-            $nastenka->body = $_POST["body"];
-        }
-
+        $nastenka->load_vars($request);
         $nastenka->prepare_vars();
 
-        if($nastenka->action == "view") :
-
-            $this->smarty->assign("mod", 1);
+        if($nastenka->action == "view") {
+            $assignData["mod"] = 1;
 
             if($nastenka->what == "new") {
-                $this->smarty->assign("mod_hlaska", "->> Aktuální zprávy");
+                $assignData["mod_hlaska"] = "->> Aktuální zprávy";
             } else {
-                $this->smarty->assign("mod_hlaska", "->> Staré zprávy");
+                $assignData["mod_hlaska"] = "->> Staré zprávy";
             }
 
-        $nastenka->view_number = 10; //zprávy budou zobrazeny po ...
+            $nastenka->view_number = 10; //zprávy budou zobrazeny po ...
 
-        $zpravy = $nastenka->show_messages();
+            $assignData["zpravy"] = $nastenka->show_messages();
+            $assignData["strany"] = $nastenka->show_pages();
 
-        $this->smarty->assign("zpravy", $zpravy);
-
-        $page = $nastenka->show_pages();
-        $this->smarty->assign("strany", $page);
-
-        else:
-
-            $this->smarty->assign("mod", 2);
+        } else {
+            $assignData["mod"] = 2;
 
             $nastenka->write = false; //prvne předpokládáme zobr. formuláře
 
@@ -243,43 +216,35 @@ class othersController extends adminatorController
             }
 
             if($nastenka->write) { //ulozeni dat
-
-                $this->smarty->assign("mod", 3); //vysledny formular ulozeni
+                $assignData["mod"] = 3; //vysledny formular ulozeni
 
                 $nastenka->convert_vars();
                 $add = $nastenka->insert_into_db();
 
-                $this->smarty->assign("rs", $add);
-                $this->smarty->assign("body", $nastenka->error);
+                $assignData["rs"] = $add;
+                $assignData["body"] = $nastenka->error;
 
                 // if($add){
                 //     header("Location: others-board.php"); //přesuneme se na úvodní stránku
                 // }
             } else { //zobrazujeme formulář
 
-                $csrf = $this->generateCsrfToken($request, $response, true);
+                list($csrf_html) = $this->generateCsrfToken($request, $response, true);
                 // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
-                $this->smarty->assign("csrf_html", $csrf[0]);
+                $assignData["csrf_html"] = $csrf_html;
 
-                $this->smarty->assign("enable_calendar", 1);
-
-                $this->smarty->assign("mod", 2); //zobrazujeme formular pro zadavani dat
-                $this->smarty->assign("mod_hlaska", "->> Přidat zprávu");
-
-                $this->smarty->assign("nick", $this->adminator->userIdentityUsername);
-
-                $this->smarty->assign("email", $nastenka->email);
-                $this->smarty->assign("subject", $nastenka->subject);
-
-                $this->smarty->assign("from_date", $nastenka->from_date);
-                $this->smarty->assign("to_date", $nastenka->to_date);
-
-                $this->smarty->assign("body", $nastenka->body);
-
-                $this->smarty->assign("error", $nastenka->error);
+                $assignData["enable_calendar"] = 1;
+                $assignData["mod"] = 2; //zobrazujeme formular pro zadavani dat
+                $assignData["mod_hlaska"] = "->> Přidat zprávu";
+                $assignData["nick"] = $this->adminator->userIdentityUsername;
+                $assignData["email"] = $nastenka->email;
+                $assignData["subject"] = $nastenka->subject;
+                $assignData["from_date"] = $nastenka->from_date;
+                $assignData["to_date"] = $nastenka->to_date;
+                $assignData["body"] = $nastenka->body;
+                $assignData["error"] = $nastenka->error;
             }
-
-        endif;
+        }
 
         return $this->renderer->template($request, $response, 'others/board.tpl', $assignData);
     }
