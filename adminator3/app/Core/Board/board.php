@@ -171,7 +171,7 @@ class board
                 $this->error .= 'Datum OD nesmí být menší než dnešní datum.';
             }
         } else {
-            $d=strtotime("today");
+            $d = strtotime("today");
             $this->from_date = date("d-m-Y", $d);
         }
 
@@ -182,7 +182,7 @@ class board
                 $this->error .= 'Datum OD nesmí být větší než datum DO.';
             }
         } else {
-            $d=strtotime("+7 Days");
+            $d = strtotime("+7 Days");
             $this->to_date = date("d-m-Y", $d);
         }
 

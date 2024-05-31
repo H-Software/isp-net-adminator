@@ -222,7 +222,7 @@ class othersController extends adminatorController
                 $rs = $nastenka->insert_into_db();
 
                 $assignData["mod_hlaska"] = "->> Přidat zprávu";
-                if($rs == false){
+                if($rs == false) {
                     $assignData["rs"] = $rs;
                     $assignData["body"] = $nastenka->error;
                 } else {
