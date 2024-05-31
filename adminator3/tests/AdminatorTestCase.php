@@ -178,11 +178,16 @@ abstract class AdminatorTestCase extends TestCase
         string $controllerClass,
         string $controllerFunction,
         $container,
-        $adminatorMock,
+        object|array $mockedInstance,
         $assertHttpCode = 200
         ): ResponseInterface
     {
-        $controller = new $controllerClass($container, $adminatorMock);
+        if(is_array($mockedInstance)) {
+            $controller = new $controllerClass($container, $mockedInstance['adminatorMock'], $mockedInstance['opravyMock']);
+        } else {
+            // legacy call
+            $controller = new $controllerClass($container, $mockedInstance);
+        }
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();

@@ -55,7 +55,16 @@ final class HomeControllerTest extends AdminatorTestCase
         );
         $opravyMock->shouldReceive('vypis_opravy')->andReturn(["mock -> no data"]);
 
-        $response = self::callControllerFunction($serverRequest, 'App\Controllers\HomeController', 'home', $container, $adminatorMock);
+        $response = self::callControllerFunction(
+            $serverRequest,
+            'App\Controllers\HomeController',
+            'home',
+            $container,
+            array(
+                "adminatorMock" => $adminatorMock,
+                "opravyMock" => $opravyMock,
+            )
+        );
         $responseContent = $response->getBody()->__toString();
 
         AdminatorAssert::assertHomePagePanels($response, $responseContent);
