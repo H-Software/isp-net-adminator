@@ -339,6 +339,11 @@ final class OthersControllerTest extends AdminatorTestCase
         adminatorAssert::assertBoardCommon($response2, $responseContent2);
 
         // TODO: add asserts for inserted message
+        // echo $responseContent2;
+        // subject
+        self::assertXpathQueryContentRegex($response2, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[3]/b', '/test subject/');
+        // body
+        self::assertXpathQueryContentRegex($response2, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[3]/div', '/test subject message body/');
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent2, "found word, which indicates error(s) or failure(s)");
