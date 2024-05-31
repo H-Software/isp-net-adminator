@@ -194,12 +194,11 @@ class board
         $this->body = str_replace("\r\n", " <BR> ", $this->body);    //nahradíme konce řádků na tagy <BR>
 
         //$body = wordwrap($body, 90, "\n", 1); //rozdělíme dlouhá slova
-        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": body lenght: " . strlen($this->body));
 
         //vytvoříme odkazy
-        $this->body = preg_replace("/(http://[^ ]+\.[^ ]+)/i", " <a href=\1>\1</a>", $this->body);
-        $this->body = preg_replace("/[^/](www\.[^ ]+\.[^ ]+)/i", " <a href=http://\1>\1</a>", $this->body);
-        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": body lenght: " . strlen($this->body));
+        // TODO: fix zero-ing body variable
+        // $this->body = preg_replace("/(http://[^ ]+\.[^ ]+)/i", " <a href=\1>\1</a>", $this->body);
+        // $this->body = preg_replace("/[^/](www\.[^ ]+\.[^ ]+)/i", " <a href=http://\1>\1</a>", $this->body);
 
         //povolíme tyto tagy - <b> <u> <i>, možnost přidat další
         $tag = array("b", "u", "i");
