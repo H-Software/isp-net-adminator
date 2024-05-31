@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace App\Tests;
 
 // use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 
 final class AdminatorAssert extends AdminatorTestCase
 {
@@ -121,17 +122,18 @@ final class AdminatorAssert extends AdminatorTestCase
         self::assertXpathQueryContentRegex($response, '//*[@id="board-list-pagging"]/b', '/strana\s*\|/');
     }
 
-    public static function assertOtherCat($content)
+    public static function assertOtherCat(ResponseInterface $response)
     {
-        // <span style="margin-left: 20px; "><a href="/home" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>
+        // level up
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^| O úrověn výš | $/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^\/home$/');
 
+        // TODO: add asserts for other links
         // <span style="padding-left: 20px; "><a class="cat2" href="/others/board">Nástěnka</a></span>
 
         // <span style="padding-left: 20px; "><a class="cat2" href="/print">Tisk</a></span>
 
         // <span style="padding-left: 20px; "><a class="cat2" href="/others/company-web">Company Web</a></span>
-
-        // TODO: add asserts and call this function
     }
 
     public static function assertTopologySubCat($content)

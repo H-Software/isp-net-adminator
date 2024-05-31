@@ -53,15 +53,13 @@ final class PartnerControllerTest extends AdminatorTestCase
 
         // TODO: add asserts
 
-        //     <span style="margin-left: 20px; "><a href="/home" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>\n
-        //     \n
-        //     <span style="padding-left: 20px; "><a class="cat2" href="/about/changes-old">Staré změny (Adminator2)</a></span>\n
-        // \n
-        //     <span style="padding-left: 20px; "><a class="cat2" href="/about/changes">Změny v systému</a></span>\n
-        // \n
-        // </div>\n
-        // \n
-        // <div class="others-cat-body" >Prosím vyberte z podkategorie výše....</div>\n
+        //     <span style="margin-left: 20px; "><a href="/partner/order" class="cat2" >Připojování nových klientů</a></span>
+
+        //     <span style="margin-left: 20px; "><a href="/partner/servis/list" class="cat2" >Servisní zásahy</a></span>
+
+        // </div>
+
+        // <div class="global-cat-body" >Prosím vyberte z podkategorie výše....</div>
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
