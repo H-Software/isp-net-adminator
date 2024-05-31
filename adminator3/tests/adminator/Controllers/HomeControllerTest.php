@@ -22,7 +22,7 @@ final class HomeControllerTest extends AdminatorTestCase
         m::close();
     }
 
-    public function test_ctl_home_page()
+    public function test_ctl_home_w_mocked_auth_and_opravy()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
@@ -55,18 +55,8 @@ final class HomeControllerTest extends AdminatorTestCase
         );
         $opravyMock->shouldReceive('vypis_opravy')->andReturn(["mock -> no data"]);
 
-        $homeController = new HomeController($container, $adminatorMock, $opravyMock);
-
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
-        $response = $responseFactory->createResponse();
-
-        $response = $homeController->home($serverRequest, $response, []);
-
+        $response = self::callControllerFunction($serverRequest, 'App\Controllers\HomeController', 'home', $container, $adminatorMock);
         $responseContent = $response->getBody()->__toString();
-
-        $this->assertEquals($response->getStatusCode(), 200);
-
-        adminatorAssert::assertBase($responseContent);
 
         AdminatorAssert::assertHomePagePanels($response, $responseContent);
 
