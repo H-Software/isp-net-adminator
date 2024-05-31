@@ -232,9 +232,10 @@ class board
 
         $this->logger->info("board\\insert_into_db: query result: " . var_export($add, true));
 
-        if($add === false) {
+        if($add) {
+        } else {
             $this->error .= "<div>Došlo k chybě při zpracování SQL dotazu v databázi!</div>\n";
-            $this->error .= "<div>Error description: " . $this->conn_mysql->error."</div>\n";
+            $this->error .= "<div>Error description: " . $this->conn_mysql->error.", ". $e->getMessage() ."</div>\n";
         }
         return $add;
     }
