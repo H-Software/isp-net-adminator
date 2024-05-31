@@ -691,7 +691,7 @@ class ArchivZmen
                         $id_cloveka_pomocne = $pomocne[10];
                     }
 
-                    $dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."'");
+                    $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."'");
                     while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                         $data_kompl_dns = $data_kompl["dns_jmeno"];
                     }
@@ -700,7 +700,7 @@ class ArchivZmen
 
                     $akce = preg_replace("/\[id_komplu\]=> (".$id_komplu_pomocne.")/", "id_komplu]=> ".$id_komplu_pomocne_rs, $akce);
 
-                    $dotaz_vlastnik_pom = pg_query("SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
+                    $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
                     while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
                         $firma_vlastnik = $data_vlastnik_pom["firma"];
                         $archiv_vlastnik = $data_vlastnik_pom["archiv"];
@@ -745,7 +745,7 @@ class ArchivZmen
                     $pomocne3 = explode("<br>", $pomocne2[1]);
                     $id_komplu_pomocne = trim($pomocne3[0]);
 
-                    $dotaz_id_komplu = pg_query("SELECT dns_jmeno FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+                    $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT dns_jmeno FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
                     while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                         $data_kompl_dns = $data_kompl["dns_jmeno"];
@@ -820,7 +820,7 @@ class ArchivZmen
                     $pomocne2 = explode(" ", $pomocne[1]);
                     $id_komplu_pomocne = preg_replace("/,/", "", $pomocne2[1]);
 
-                    $dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+                    $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
                     while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                         $data_kompl_dns = $data_kompl["dns_jmeno"];
@@ -836,7 +836,7 @@ class ArchivZmen
                     $id_komplu_pomocne = preg_replace("/,/", "", $pomocne2[1]);
 
                     if(is_numeric($id_komplu_pomocne)) {
-                        $dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+                        $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
                         while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                             $data_kompl_dns = $data_kompl["dns_jmeno"];
@@ -855,7 +855,7 @@ class ArchivZmen
                     //$id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
 
                     if(is_numeric($id_komplu_pomocne)) {
-                        $dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+                        $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
                         while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                             $data_kompl_dns = $data_kompl["dns_jmeno"];
@@ -890,7 +890,7 @@ class ArchivZmen
                     $pomocne3 = explode("<br>", $pomocne2[1]);
                     $id_komplu_pomocne = trim($pomocne3[0]);
 
-                    $dotaz_id_komplu = pg_query("SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+                    $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
                     while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                         $data_kompl_dns = $data_kompl["dns_jmeno"];

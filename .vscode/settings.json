@@ -7,5 +7,21 @@
         "adminator3/templates_c" : true,
         "adminator3/vendor/" : true,
         "adminator2/vendor/" : true,
-    }
+    },
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "192.168.1.213",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "192.168.1.213",
+            "database": "adminator2",
+            "username": "root",
+            "password": "isp-net-passwd"
+        }
+    ]
 }
