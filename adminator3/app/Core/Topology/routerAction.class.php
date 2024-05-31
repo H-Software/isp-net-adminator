@@ -10,11 +10,11 @@ class RouterAction extends adminator
 {
     public \mysqli|\PDO $conn_mysql;
 
-    public \Smarty $smarty;
+    // public \Smarty $smarty;
 
     public \Monolog\Logger $logger;
 
-    protected $settings;
+    // protected $settings;
 
     protected $sentinel;
 

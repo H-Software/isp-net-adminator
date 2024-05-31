@@ -65,14 +65,14 @@ parameters:
 			count: 1
 			path: app/Core/Partner/partner.class.php
 
-		-
-			message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, int given\\.$#"
-			count: 1
-			path: app/Core/Topology/Topology.php
+		# -
+		# 	message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, int given\\.$#"
+		# 	count: 1
+		# 	path: app/Core/Topology/Topology.php
 
 		-
 			message: "#^Parameter \\#1 \\$string of function urlencode expects string, int given\\.$#"
-			count: 5
+			count: 4
 			path: app/Core/Topology/Topology.php
 
 		-
