@@ -8,6 +8,7 @@ use Mockery as m;
 use App\Controllers\HomeController;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Exception;
 
 final class HomeControllerTest extends AdminatorTestCase
 {
@@ -72,7 +73,6 @@ final class HomeControllerTest extends AdminatorTestCase
         $assertKeywordsHome = array(
             '<title>Adminator3 :: úvodní stránka</title>',  // corrent title
         );
-        //
 
         foreach ($assertKeywordsHome as $w) {
             $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
@@ -185,7 +185,6 @@ final class HomeControllerTest extends AdminatorTestCase
         $assertKeywordsHome = array(
             '<title>Adminator3 :: úvodní stránka</title>',  // corrent title
         );
-        //
 
         foreach ($assertKeywordsHome as $w) {
             $this->assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
@@ -195,5 +194,48 @@ final class HomeControllerTest extends AdminatorTestCase
         // check word: nelze
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
+    }
+
+    public function test_ctl_home_w_mocked_oprav_without_mocked_auth()
+    {
+        // $this->markTestSkipped('under construction');
+        $self = $this;
+
+        $request = Request::create(
+            '/home',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'SCRIPT_URL' => "/home",
+            ],
+        );
+
+        $request->overrideGlobals();
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
+
+        $container = self::initDIcontainer(false, false);
+
+        $adminatorMock = self::initAdminatorMockClass($container, false);
+        $this->assertIsObject($adminatorMock);
+
+        $opravyMock = m::mock(
+            \opravy::class,
+        );
+        $opravyMock->shouldReceive('vypis_opravy')->andReturn(["mock -> no data"]);
+
+        $controller = new HomeController($container, $adminatorMock, $opravyMock);
+
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $response = $responseFactory->createResponse();
+
+        try {
+            $response = $controller->home($serverRequest, $response, []);
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
+        $this->assertStringContainsString('Call App\Core\adminator\checkLevel failed: empty userIdentityUsername', $error);
     }
 }
