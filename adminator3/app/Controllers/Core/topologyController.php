@@ -54,8 +54,11 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $topology = new Topology($this->container);
-        $output = $topology->getNodeList();
+        $i = new Topology($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $i->csrf_html = $csrf_html;
+
+        $output = $i->getNodeList();
 
         $assignData = [
             "page_title" => "Adminator3 :: Topologie :: Node list",
@@ -93,22 +96,24 @@ class topologyController extends adminatorController
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        // $this->request = $request;
-        // $this->response = $response;
+        $this->request = $request;
+        $this->response = $response;
 
-        // if(!$this->checkLevel(5)) {
-        //     return $this->response;
-        // };
+        if(!$this->checkLevel(25)) {
+            return $this->response;
+        };
 
-        // $topology = new Topology($this->container);
-        // $output = $topology->getNodeList();
+        $i = new nodeAction($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $i->csrf_html = $csrf_html;
+        $output = $i->update($request);
 
-        // $assignData = [
-        //     "page_title" => "Adminator3 :: Topologie :: Node list",
-        //     "body" => $output
-        // ];
+        $assignData = [
+            "page_title" => "Adminator3 :: Topologie :: Node Update",
+            "body" => $output
+        ];
 
-        // return $this->renderer->template($request, $response, 'topology/node-list.tpl', $assignData);
+        return $this->renderer->template($request, $response, 'topology/node-update.tpl', $assignData);
     }
 
     public function routerList(ServerRequestInterface $request, ResponseInterface $response, array $args)

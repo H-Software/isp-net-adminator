@@ -697,18 +697,18 @@ class Topology extends adminator
                 $output .= "<table width=\"100%\" border=\"0\"><tr>";
 
                 // upraveni
-                $output .= "<td><form method=\"POST\" action=\"/topology/nod-update\">
-                <input type=\"hidden\" name=\"update_id\" value=\"".$id."\">
-                <input type=\"submit\" value=\"update\">
-                </form>
-                </td>";
+                $output .= "<td><form method=\"POST\" action=\"/topology/node/update\">"
+                         . $this->csrf_html
+                         . "<input type=\"hidden\" name=\"update_id\" value=\"".$id."\">
+                            <input type=\"submit\" value=\"update\">
+                            </form>
+                            </td>";
 
                 //smazani
-                //$output .= "<td class=\"tab-topology\" colspan=\"\" >";
-
-                $output .= "<td><form action=\"/topology/nod-erase\" method=\"POST\" >";
-                $output .= "<input type=\"hidden\" name=\"erase_id\" value=\"".$id."\">";
-                $output .= "<input type=\"submit\" value=\"Smazat\">
+                $output .= "<td><form action=\"/topology/node/erase\" method=\"POST\" >"
+                        . $this->csrf_html
+                        . "<input type=\"hidden\" name=\"erase_id\" value=\"".$id."\">"
+                        . "<input type=\"submit\" value=\"Smazat\">
                     </form>
                     </td>";
 
