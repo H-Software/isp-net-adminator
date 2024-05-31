@@ -329,8 +329,8 @@ class nodeAction extends adminator
 
         $output = "";
 
-        echo "<div style=\"padding-bottom: 10px; padding-top: 10px; font-size: 18px; font-weight: bold; \">";
-        echo "Úprava lokality/nodu</div>";
+        $output .= "<div style=\"padding-bottom: 10px; padding-top: 10px; font-size: 18px; font-weight: bold; \">";
+        $output .= "Úprava lokality/nodu</div>";
 
         if($_POST["jmeno_new"]) {
             //budeme updatovat
@@ -365,58 +365,58 @@ class nodeAction extends adminator
                 $nazev_routeru = $router_id;
             }
 
-            echo "<b><H4>Zadáno do formuláře:</b></H4>";
-            echo "<b>Název</b>: ".$jmeno."<br>";
-            echo "<b>Adresa</b>: ".$adresa."<br>";
-            echo "<b>Poznámka</b>: ".$pozn."<br>";
-            echo "<b>IP rozsah</b>: ".$ip_rozsah."<br>";
-            echo "<b>Typ vysílače</b>: ";
+            $output .= "<b><H4>Zadáno do formuláře:</b></H4>";
+            $output .= "<b>Název</b>: ".$jmeno."<br>";
+            $output .= "<b>Adresa</b>: ".$adresa."<br>";
+            $output .= "<b>Poznámka</b>: ".$pozn."<br>";
+            $output .= "<b>IP rozsah</b>: ".$ip_rozsah."<br>";
+            $output .= "<b>Typ vysílače</b>: ";
 
             if($typ_vysilace == 0) {
-                echo "Nezvoleno";
+                $output .= "Nezvoleno";
             } elseif($typ_vysilace == 1) {
-                echo "Metallic";
+                $output .= "Metallic";
             } elseif($typ_vysilace == 2) {
-                echo "ap-2,4GHz-OMNI";
+                $output .= "ap-2,4GHz-OMNI";
             } elseif($typ_vysilace == 3) {
-                echo "ap-2,4Ghz-sektor";
+                $output .= "ap-2,4Ghz-sektor";
             } elseif($typ_vysilace == 4) {
-                echo "ap-2.4Ghz-smerovka";
+                $output .= "ap-2.4Ghz-smerovka";
             } elseif($typ_vysilace == 5) {
-                echo "ap-5.8Ghz-OMNI";
+                $output .= "ap-5.8Ghz-OMNI";
             } elseif($typ_vysilace == 6) {
-                echo "ap-5.8Ghz-sektor";
+                $output .= "ap-5.8Ghz-sektor";
             } elseif($typ_vysilace == 7) {
-                echo "ap-5.8Ghz-smerovka";
+                $output .= "ap-5.8Ghz-smerovka";
             } elseif($typ_vysilace == 8) {
-                echo "jiné";
+                $output .= "jiné";
             } else {
-                echo $typ_vysilace;
+                $output .= $typ_vysilace;
             }
 
-            echo "<br>";
-            echo "<b>stav vysílače</b>: ";
+            $output .= "<br>";
+            $output .= "<b>stav vysílače</b>: ";
 
             if($stav == 0) {
-                echo "Není zvoleno";
+                $output .= "Není zvoleno";
             } elseif($stav == 1) {
-                echo "v pořádku ";
+                $output .= "v pořádku ";
             } elseif($stav == 2) {
-                echo "vytížen";
+                $output .= "vytížen";
             } elseif($stav == 3) {
-                echo "přetížen";
+                $output .= "přetížen";
             } else {
-                echo $stav;
+                $output .= $stav;
             }
 
-            echo "<br>";
-            echo "<b>Router</b>: ".$nazev_routeru."<br>";
+            $output .= "<br>";
+            $output .= "<b>Router</b>: ".$nazev_routeru."<br>";
 
-            echo "<b>Typ nodu</b>: ".$typ_nodu."<br>";
-            echo "<b>vlan id</b>: ".$vlan_id."<br>";
-            echo "<b>id routeru, kde se filtrujou IP</b>: ".$filter_router_id."<br>";
+            $output .= "<b>Typ nodu</b>: ".$typ_nodu."<br>";
+            $output .= "<b>vlan id</b>: ".$vlan_id."<br>";
+            $output .= "<b>id routeru, kde se filtrujou IP</b>: ".$filter_router_id."<br>";
 
-            echo "<b>Typ(model) koncového zařízení (switche):</b> ".$device_type_id."<br>";
+            $output .= "<b>Typ(model) koncového zařízení (switche):</b> ".$device_type_id."<br>";
 
             $pole = "<b>akce: uprava nodu;</b><br>";
             //$pole .= "puvodni data: ";
@@ -425,7 +425,7 @@ class nodeAction extends adminator
             $radku = $vysledek->num_rows;
 
             if ($radku == 0) {
-                echo "<div style=\"padding: 5px; color: red; font-weight: bold; \">Chyba! Nelze zjistit přechozí hodnoty! </div>";
+                $output .= "<div style=\"padding: 5px; color: red; font-weight: bold; \">Chyba! Nelze zjistit přechozí hodnoty! </div>";
                 $pole .= "[error] => nelze zjistit predchozi hodnoty, ";
             } else {
                 while ($zaznam = $vysledek->fetch_array()):
@@ -452,10 +452,10 @@ class nodeAction extends adminator
                     device_type_id = '$device_type_id' WHERE id=".$id_new." Limit 1 ");
 
             if($uprava) {
-                echo "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně upraven.</span><br><br>";
+                $output .= "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně upraven.</span><br><br>";
             } else {
-                echo "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Chyba! Záznam nelze upravit. </div>";
-                echo "<div>chyba: ".$this->conn_mysql->error."</div>\n";
+                $output .= "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Chyba! Záznam nelze upravit. </div>";
+                $output .= "<div>chyba: ".$this->conn_mysql->error."</div>\n";
             }
 
             //ulozeni do archivu zmen
@@ -508,8 +508,8 @@ class nodeAction extends adminator
             $radku = $vysledek->num_rows;
 
             if($radku == 0) {
-                echo "<div style=\"padding: 5px; color: red; font-weight: bold; \">";
-                echo "Chyba! Nelze zjistit původní hodnoty!</div>";
+                $output .= "<div style=\"padding: 5px; color: red; font-weight: bold; \">";
+                $output .= "Chyba! Nelze zjistit původní hodnoty!</div>";
             } else {
                 while ($zaznam = $vysledek->fetch_array()):
 
@@ -537,20 +537,20 @@ class nodeAction extends adminator
 
             //checkem jestli se macklo na tlacitko "OK" :)
             if(preg_match("/^OK$/", $_POST["B1"])) {
-                echo "";
+                $output .= "";
             } else {
-                print "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito ".
+                $output .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito ".
                 "tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
             }
 
             //zde kontrola zda jiz jsme odeslali $_POST["jmeno_new"]
 
-            echo '
+            $output .= '
             <form method="POST" action="">';
 
-            echo $this->csrf_html;
+            $output .= $this->csrf_html;
 
-            echo '<table border="0" width="950px;" id="table2" name="form1" >
+            $output .= '<table border="0" width="950px;" id="table2" name="form1" >
 
             <tr>
             <td width="25%"><label>Jméno lokality/nodu: </label></td>
@@ -577,41 +577,41 @@ class nodeAction extends adminator
                <td>
                <select name="typ_vysilace" size="1" >';
 
-            echo "<option value=\"0\" "." class=\"select-nevybrano\" > Není zvoleno </option>";
-            echo "<option value=\"1\" ";
+            $output .= "<option value=\"0\" "." class=\"select-nevybrano\" > Není zvoleno </option>";
+            $output .= "<option value=\"1\" ";
             if ($typ_vysilace == 1) {
-                echo " selected ";
-            } echo "> Metallic </option>";
-            echo "<option value=\"2\" ";
+                $output .= " selected ";
+            } $output .= "> Metallic </option>";
+            $output .= "<option value=\"2\" ";
             if ($typ_vysilace == 2) {
-                echo " selected ";
-            } echo "> ap-2,4GHz-OMNI </option>";
-            echo "<option value=\"3\" ";
+                $output .= " selected ";
+            } $output .= "> ap-2,4GHz-OMNI </option>";
+            $output .= "<option value=\"3\" ";
             if ($typ_vysilace == 3) {
-                echo " selected ";
-            } echo "> ap-2,4Ghz-sektor </option>";
-            echo "<option value=\"4\" ";
+                $output .= " selected ";
+            } $output .= "> ap-2,4Ghz-sektor </option>";
+            $output .= "<option value=\"4\" ";
             if ($typ_vysilace == 4) {
-                echo " selected ";
-            } echo "> ap-2.4Ghz-smerovka </option>";
-            echo "<option value=\"5\" ";
+                $output .= " selected ";
+            } $output .= "> ap-2.4Ghz-smerovka </option>";
+            $output .= "<option value=\"5\" ";
             if ($typ_vysilace == 5) {
-                echo " selected ";
-            } echo "> ap-5.8Ghz-OMNI </option>";
-            echo "<option value=\"6\" ";
+                $output .= " selected ";
+            } $output .= "> ap-5.8Ghz-OMNI </option>";
+            $output .= "<option value=\"6\" ";
             if ($typ_vysilace == 6) {
-                echo " selected ";
-            } echo "> ap-5.8Ghz-sektor</option>";
-            echo "<option value=\"7\" ";
+                $output .= " selected ";
+            } $output .= "> ap-5.8Ghz-sektor</option>";
+            $output .= "<option value=\"7\" ";
             if ($typ_vysilace == 7) {
-                echo " selected ";
-            } echo "> ap-5.8Ghz-smerovka </option>";
-            echo "<option value=\"8\" ";
+                $output .= " selected ";
+            } $output .= "> ap-5.8Ghz-smerovka </option>";
+            $output .= "<option value=\"8\" ";
             if ($typ_vysilace == 8) {
-                echo " selected ";
-            } echo "> jiné </option>";
+                $output .= " selected ";
+            } $output .= "> jiné </option>";
 
-            echo '</select>
+            $output .= '</select>
                </td>
            </tr>
 
@@ -619,91 +619,91 @@ class nodeAction extends adminator
                <td><label>Stav: </label></td>
                <td><select name="stav" >';
 
-            echo "<option value=\"0\" "." class=\"select-nevybrano\" > Není zvoleno </option>";
-            echo "<option value=\"1\" ";
+            $output .= "<option value=\"0\" "." class=\"select-nevybrano\" > Není zvoleno </option>";
+            $output .= "<option value=\"1\" ";
             if ($stav == 1) {
-                echo " selected ";
-            } echo "> v pořádku </option>";
-            echo "<option value=\"2\" ";
+                $output .= " selected ";
+            } $output .= "> v pořádku </option>";
+            $output .= "<option value=\"2\" ";
             if ($stav == 2) {
-                echo " selected ";
-            } echo "> vytížen </option>";
-            echo "<option value=\"3\" ";
+                $output .= " selected ";
+            } $output .= "> vytížen </option>";
+            $output .= "<option value=\"3\" ";
             if ($stav == 3) {
-                echo " selected ";
-            } echo "> přetížen </option>";
+                $output .= " selected ";
+            } $output .= "> přetížen </option>";
 
-            echo '</select></td>
+            $output .= '</select></td>
            </tr>
 
            <tr>
              <td><label>Router id: (na kterém routeru IP alias visí)</label></td>
              <td>';
 
-            echo "<select name=\"router_id\" size=\"1\" >";
+            $output .= "<select name=\"router_id\" size=\"1\" >";
 
             $dotaz_parent = $this->conn_mysql->query("SELECT * FROM router_list order by nazev");
-            echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>";
+            $output .= "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>";
 
             while($data_parent = $dotaz_parent->fetch_array()) {
-                echo "<option value=\"".$data_parent["id"]."\" ";
+                $output .= "<option value=\"".$data_parent["id"]."\" ";
                 if ($data_parent["id"] == $router_id) {
-                    echo " selected ";
+                    $output .= " selected ";
                 }
-                echo "> ".$data_parent["nazev"]." ( ".$data_parent["ip_adresa"]." ) </option>\n";
+                $output .= "> ".$data_parent["nazev"]." ( ".$data_parent["ip_adresa"]." ) </option>\n";
             }
-            echo "</select>\n";
+            $output .= "</select>\n";
 
-            echo '</td>
+            $output .= '</td>
            </tr>';
 
-            echo "<tr>
+            $output .= "<tr>
              <td><br></td>
              <td></td>
            </tr>";
 
-            echo "<tr>
+            $output .= "<tr>
              <td>Mód nodu:</td>
              <td>";
 
-            echo "<select size=\"1\" name=\"typ_nodu\" >";
+            $output .= "<select size=\"1\" name=\"typ_nodu\" >";
 
-            echo "<option value=\"0\" style=\"color: gray; \" ";
+            $output .= "<option value=\"0\" style=\"color: gray; \" ";
             if($typ_nodu == 0) {
-                echo " selected ";
+                $output .= " selected ";
             }
-            echo " >Nezvoleno</option>";
+            $output .= " >Nezvoleno</option>";
 
-            echo "<option value=\"1\" style=\"color: #CC0033; \" ";
+            $output .= "<option value=\"1\" style=\"color: #CC0033; \" ";
             if($typ_nodu == 1) {
-                echo " selected ";
+                $output .= " selected ";
             }
-            echo " >Bezdrátová síť</option>";
+            $output .= " >Bezdrátová síť</option>";
 
-            echo "<option value=\"2\" style=\"color: #e37d2b; font-weight: bold;\" ";
+            $output .= "<option value=\"2\" style=\"color: #e37d2b; font-weight: bold;\" ";
             if($typ_nodu == 2) {
-                echo " selected ";
+                $output .= " selected ";
             }
-            echo " >Optická síť</option>";
+            $output .= " >Optická síť</option>";
 
-            echo "</select>";
+            $output .= "</select>";
 
-            echo "</td>
+            $output .= "</td>
                </tr>";
 
-            echo "<tr>
+            $output .= "<tr>
              <td><br></td>
              <td></td>
            </tr>\n";
 
-            echo "<tr>
+            $output .= "<tr>
              <td>Vlan id:</td>
              <td><input type=\"text\" name=\"vlan_id\" size=\"10\" value=\"".$vlan_id."\" ></td>
             </tr>\n";
 
             if($typ_nodu == 1) {
 
-                echo '<tr>
+                $output .= '<tr>
               <td><br></td>
               <td></td>
              </tr>
@@ -712,7 +712,7 @@ class nodeAction extends adminator
              <td><label>Router, kde se provádí filtrace: </label></td>
              <td>';
 
-                echo "<select name=\"filter_router_id\" size=\"1\" >";
+                $output .= "<select name=\"filter_router_id\" size=\"1\" >";
 
                 if($rid_recom == "yes") {
                     $sql_filtr = "SELECT id,nazev,ip_adresa FROM router_list WHERE (filtrace = 1) ORDER BY nazev";
@@ -721,67 +721,67 @@ class nodeAction extends adminator
                 }
 
                 $dotaz_parent = $this->conn_mysql->query($sql_filtr);
-                echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
+                $output .= "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
 
                 while($data_parent = $dotaz_parent->fetch_array()) {
-                    echo "<option value=\"".$data_parent["id"]."\" ";
+                    $output .= "<option value=\"".$data_parent["id"]."\" ";
                     if($data_parent["id"] == $filter_router_id) {
-                        echo " selected ";
+                        $output .= " selected ";
                     }
-                    echo "> ".$data_parent["nazev"]." ( ".$data_parent["ip_adresa"]." ) </option>\n";
+                    $output .= "> ".$data_parent["nazev"]." ( ".$data_parent["ip_adresa"]." ) </option>\n";
                 }
-                echo "</select>\n";
+                $output .= "</select>\n";
 
-                echo "<span style=\"padding-left: 40px;\">Pouze doporučené:
+                $output .= "<span style=\"padding-left: 40px;\">Pouze doporučené:
                <input type=\"checkbox\" name=\"rid_recom\" value=\"yes\" onclick=\"this.form.submit();\" ";
                 if($rid_recom == "yes") {
-                    echo " checked ";
-                } echo " ></span>";
+                    $output .= " checked ";
+                } $output .= " ></span>";
 
-                echo '</td>
+                $output .= '</td>
                </tr>';
 
             } else {
-                echo "<input type=\"hidden\" name=\"filter_router_id\" value=\"114\" >\n";
+                $output .= "<input type=\"hidden\" name=\"filter_router_id\" value=\"114\" >\n";
             }
 
-            echo '<tr>
+            $output .= '<tr>
              <td colspan="2"><br></td>
              <td></td>
            </tr>';
 
             if($typ_nodu == 2) {
-                echo ' <tr>
+                $output .= ' <tr>
                <td><label>Typ(model) koncového zařízení (switche): </label></td>
                <td>';
 
-                echo "<select name=\"device_type_id\" size=\"1\" >";
-                echo "<option value=\"0\" >default :: AT-8000S/24</option>\n";
-                echo "<option value=\"1\" ";
+                $output .= "<select name=\"device_type_id\" size=\"1\" >";
+                $output .= "<option value=\"0\" >default :: AT-8000S/24</option>\n";
+                $output .= "<option value=\"1\" ";
                 if($device_type_id == 1) {
-                    echo " selected ";
+                    $output .= " selected ";
                 }
-                echo " >h3c s3100 (26tp-ei) - with mac-vlan</option>\n";
+                $output .= " >h3c s3100 (26tp-ei) - with mac-vlan</option>\n";
 
-                echo "<option value=\"2\" ";
+                $output .= "<option value=\"2\" ";
                 if($device_type_id == 2) {
-                    echo " selected ";
+                    $output .= " selected ";
                 }
-                echo " >h3c s3100 (26tp-ei) - with DVA</option>\n";
+                $output .= " >h3c s3100 (26tp-ei) - with DVA</option>\n";
 
 
-                echo "</select>";
+                $output .= "</select>";
 
-                echo '</td>
+                $output .= '</td>
               </tr>';
             }
 
-            echo '<tr>
+            $output .= '<tr>
              <td colspan="2"><br></td>
              <td></td>
            </tr>';
 
-            echo '<tr>
+            $output .= '<tr>
              <td><input type="hidden" name="update_id_new" value="'.$id.'">&nbsp;</td>
              <td><input type="submit" value="OK" name="B1"></td>
             </tr>
