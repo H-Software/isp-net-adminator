@@ -84,7 +84,7 @@ class topologyController extends adminatorController
             "body" => $output
         ];
 
-        return $this->renderer->template($request, $response, '', $assignData);
+        return $this->renderer->template($request, $response, 'topology/node-add.tpl', $assignData);
     }
 
     public function nodeUpdate(ServerRequestInterface $request, ResponseInterface $response, array $args)
