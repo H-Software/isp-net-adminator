@@ -121,6 +121,19 @@ final class AdminatorAssert extends AdminatorTestCase
         self::assertXpathQueryContentRegex($response, '//*[@id="board-list-pagging"]/b', '/strana\s*\|/');
     }
 
+    public static function assertOtherCat($content)
+    {
+        // <span style="margin-left: 20px; "><a href="/home" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>
+
+        // <span style="padding-left: 20px; "><a class="cat2" href="/others/board">Nástěnka</a></span>
+
+        // <span style="padding-left: 20px; "><a class="cat2" href="/print">Tisk</a></span>
+
+        // <span style="padding-left: 20px; "><a class="cat2" href="/others/company-web">Company Web</a></span>
+
+        // TODO: add asserts and call this function
+    }
+
     public static function assertTopologySubCat($content)
     {
         self::assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/router-list">Routery<\/a>/i', $content);

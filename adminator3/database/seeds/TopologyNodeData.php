@@ -40,8 +40,8 @@ class TopologyNodeData extends AbstractSeed
     private function sanitizeString(string $input): string
     {
         return preg_replace(
-            "/(failed|chyba|error)/",
-            '',
+            "/(failed|chyba|error)/i",
+            'omg',
             $input
         );
     }
