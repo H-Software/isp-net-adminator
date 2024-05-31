@@ -170,6 +170,9 @@ class board
             if(mktime(0, 0, 0, $from_month, $from_day, $from_year) < mktime(0, 0, 0, date("m"), date("d"), date("Y"))) {
                 $this->error .= 'Datum OD nesmí být menší než dnešní datum.';
             }
+        } else {
+            $d=strtotime("today");
+            $this->from_date = date("d-m-Y", $d);
         }
 
         if(strlen($this->to_date) > 0) {
@@ -178,6 +181,9 @@ class board
             if(mktime(0, 0, 0, $from_month, $from_day, $from_year) > mktime(0, 0, 0, $to_month, $to_day, $to_year)) { //zkontrolujeme data od-do
                 $this->error .= 'Datum OD nesmí být větší než datum DO.';
             }
+        } else {
+            $d=strtotime("+7 Days");
+            $this->to_date = date("d-m-Y", $d);
         }
 
         if($this->author == "" || $this->subject == "" || $this->body == "") {  //byly vyplněny všechny povinné údaje?
