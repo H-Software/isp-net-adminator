@@ -8,7 +8,7 @@ function check_level ($user_level, $id, $adminator = null) {
   // databazi levelu pro jednotlivy stranky
 
   // co chceme
-  // porovnat level uzivatele s prislusnym levelem 
+  // porovnat level uzivatele s prislusnym levelem
   // stranky podle jejiho id
 
   global $conn_mysql, $logger, $smarty;
@@ -21,7 +21,10 @@ function check_level ($user_level, $id, $adminator = null) {
   }
   else
   {
-      $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
+        if($smarty == null){
+            $smarty = new Smarty();
+        }
+        $a = new \App\Core\adminator($conn_mysql, $smarty, $logger);
   }
 
   if ($id < 1){
@@ -36,13 +39,13 @@ function check_level ($user_level, $id, $adminator = null) {
   $logger->debug("checkLevel: current identity: ".var_export($a->userIdentityUsername, true) . ", level: " . var_export($a->userIdentityLevel, true));
 
   $checkLevel = $a->checkLevel();
-  
+
   $logger->info("checkLevel: A->checkLevel result: ".var_export($checkLevel, true));
 
   if($checkLevel === false){
       return false;
   }
-  
+
   return true;
 
 }
