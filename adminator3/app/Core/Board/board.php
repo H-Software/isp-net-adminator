@@ -215,6 +215,7 @@ class board
         $this->from_date = date("Y-m-d", mktime(0, 0, 0, $from_month, $from_day, $from_year)); //od
         $this->to_date = date("Y-m-d", mktime(0, 0, 0, $to_month, $to_day, $to_year));//do
 
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": body lenght: " . strlen($this->body));
     }
 
     public function insert_into_db()
