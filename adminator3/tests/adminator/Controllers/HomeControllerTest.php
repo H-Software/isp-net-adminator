@@ -30,11 +30,7 @@ final class HomeControllerTest extends AdminatorTestCase
         $request = Request::create(
             '/home',
             'GET',
-            [
-                // "v_reseni_filtr" => 99,
-                // "vyreseno_filtr" => 0,
-                // "limit" => 10,
-            ],
+            [],
             [],
             [],
             [
@@ -86,5 +82,56 @@ final class HomeControllerTest extends AdminatorTestCase
         // check word: nelze
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, "found word (" . $w. "), which indicates error(s) or failure(s)");
+    }
+
+    public function test_ctl_home_with_low_user_level()
+    {
+        // $this->markTestSkipped('under construction');
+        $self = $this;
+
+        $request = Request::create(
+            '/home',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'SCRIPT_URL' => "/home",
+            ],
+        );
+
+        $request->overrideGlobals();
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
+
+        $container = self::initDIcontainer(true, false);
+
+        $adminatorMock = self::initAdminatorMockClass($container, false, 1);
+        $this->assertIsObject($adminatorMock);
+
+        $opravyMock = m::mock(
+            \opravy::class,
+        );
+        $opravyMock->shouldReceive('vypis_opravy')->andReturn(["mock -> no data"]);
+
+        $response = self::callControllerFunction(
+            $serverRequest,
+            'App\Controllers\HomeController',
+            'home',
+            $container,
+            array(
+                "adminatorMock" => $adminatorMock,
+                "opravyMock" => $opravyMock,
+            ),
+            403
+        );
+        $responseContent = $response->getBody()->__toString();
+
+        adminatorAssert::assertBase($responseContent);
+
+        // page specific asserts
+        AdminatorAssert::assertNoLevelPage($response);
+
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
 }
