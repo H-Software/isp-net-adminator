@@ -196,17 +196,16 @@ class board
         //$body = wordwrap($body, 90, "\n", 1); //rozdělíme dlouhá slova
 
         //vytvoříme odkazy
-        $this->body = preg_replace("/(http://[^ ]+\.[^ ]+)/i", " <a href=\\1>\\1</a>", $this->body);
-        $this->body = preg_replace("/[^/](www\.[^ ]+\.[^ ]+)/i", " <a href=http://\\1>\\1</a>", $this->body);
+        $this->body = preg_replace("/(http://[^ ]+\.[^ ]+)/i", " <a href=\1>\1</a>", $this->body);
+        $this->body = preg_replace("/[^/](www\.[^ ]+\.[^ ]+)/i", " <a href=http://\1>\1</a>", $this->body);
 
         //povolíme tyto tagy - <b> <u> <i>, možnost přidat další
         $tag = array("b", "u", "i");
 
-        // TODO: fix zero-ing body variable
-        // for($y = 0;$y < count($tag);$y++):
-        //     $this->body = preg_replace("/&lt;/i" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
-        //     $this->body = preg_replace("/&lt;\//i" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);
-        // endfor;
+        for($y = 0;$y < count($tag);$y++):
+            $this->body = preg_replace("/&lt;/i" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
+            $this->body = preg_replace("/&lt;\//i" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);
+        endfor;
 
         //prevedeni datumu
         list($from_day, $from_month, $from_year) = explode("-", $this->from_date);
@@ -222,7 +221,8 @@ class board
     {
         try {
             $add = $this->conn_mysql->query(
-                "INSERT INTO board VALUES (NULL, '$this->author', '$this->email', '$this->from_date',
+                "INSERT INTO board (author, email, from_date, to_date, subject, body) "
+                . "VALUES (NULL, '$this->author', '$this->email', '$this->from_date',
 			'$this->to_date', '$this->subject', '$this->body')"
             );
         } catch (Exception $e) {
