@@ -41,7 +41,7 @@ class opravy
 
         foreach ($request->getQueryParams() as $i => $v) {
             if(preg_match('/^(v_reseni_filtr|vyreseno_filtr|limit)$/', $i) and strlen($v) > 0) {
-                $i = $request->getQueryParams()[$i];
+                $$i = $request->getQueryParams()[$i];
             }
         }
 
