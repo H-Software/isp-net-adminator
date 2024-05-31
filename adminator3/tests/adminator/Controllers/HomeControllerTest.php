@@ -232,7 +232,7 @@ final class HomeControllerTest extends AdminatorTestCase
 
         try {
             $response = $controller->home($serverRequest, $response, []);
-        } Catch (Exception $e) {
+        } catch (Exception $e) {
             $error = $e->getMessage();
         }
 

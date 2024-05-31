@@ -79,7 +79,7 @@ class adminatorController extends Controller
         // moved this into constructor for using identity across whole application
         if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             // check if user exists (for testing purposes)
-            if($this->sentinel->getUser()){
+            if($this->sentinel->getUser()) {
                 if($this->sentinel->getUser()->email == null) {
                     $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": getUser from sentinel failed");
                     throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity! (getUser from sentinel)");
