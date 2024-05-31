@@ -1,6 +1,7 @@
 <?php
 
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class board
 {
@@ -56,7 +57,22 @@ class board
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
     }
 
-    public function prepare_vars($nothing = null)
+    public function load_vars(ServerRequestInterface $request)
+    {
+        foreach ($request->getQueryParams() as $i => $v) {
+            if(preg_match('/^(what|action|page|send)$/', $i) and strlen($v) > 0) {
+                $this->$i = $request->getQueryParams()[$i];
+            }
+        }
+
+        foreach ($request->getParsedBody() as $i => $v) {
+            if(preg_match('/^(sent|author|email|to_date|from_date|subject|body)$/', $i) and strlen($v) > 0) {
+                $this->$i = $request->getParsedBody()[$i];
+            }
+        }
+    }
+
+    public function prepare_vars()
     {
         if(!isset($this->author)) {
             if(is_object($this->sentinel)) {
@@ -148,19 +164,35 @@ class board
 
     public function check_vars()
     {
-        list($from_day, $from_month, $from_year) = explode("-", $this->from_date);
-        list($to_day, $to_month, $to_year) = explode("-", $this->to_date);
+        if(strlen($this->from_date) > 0) {
+            // TODO: check date format
+            list($from_day, $from_month, $from_year) = explode("-", $this->from_date);
+            if(mktime(0, 0, 0, $from_month, $from_day, $from_year) < mktime(0, 0, 0, date("m"), date("d"), date("Y"))) {
+                $this->error .= 'Datum OD nesmí být menší než dnešní datum.';
+            }
+        } else {
+            $d = strtotime("today");
+            $this->from_date = date("d-m-Y", $d);
+        }
 
-        //byl odeslán formulář?
-        if($this->author == "" || $this->subject == "" || $this->body == "") :  //byly vyplněny všechny povinné údaje?
+        if(strlen($this->to_date) > 0) {
+            // TODO: check date format
+            list($to_day, $to_month, $to_year) = explode("-", $this->to_date);
+            if(mktime(0, 0, 0, $from_month, $from_day, $from_year) > mktime(0, 0, 0, $to_month, $to_day, $to_year)) { //zkontrolujeme data od-do
+                $this->error .= 'Datum OD nesmí být větší než datum DO.';
+            }
+        } else {
+            $d = strtotime("+7 Days");
+            $this->to_date = date("d-m-Y", $d);
+        }
+
+        if($this->author == "" || $this->subject == "" || $this->body == "") {  //byly vyplněny všechny povinné údaje?
             $this->error .= 'Musíte vyplnit všechny povinné údaje - označeny tučným písmem.';
-        elseif(mktime(0, 0, 0, $from_month, $from_day, $from_year) > mktime(0, 0, 0, $to_month, $to_day, $to_year)) : //zkontrolujeme data od-do
-            $this->error .= 'Datum OD nesmí být větší než datum DO.';
-        elseif(mktime(0, 0, 0, $from_month, $from_day, $from_year) < mktime(0, 0, 0, date("m"), date("d"), date("Y"))) :
-            $this->error .= 'Datum OD nesmí být menší než dnešní datum.';
-        else:
+        }
+
+        if(strlen($this->error) < 1) {
             $this->write = true; //provedeme zápis
-        endif;
+        }
     }
 
     public function convert_vars()
@@ -170,6 +202,8 @@ class board
         $this->email = htmlspecialchars($this->email);
         $this->subject = htmlspecialchars($this->subject);
 
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": body lenght: " . strlen($this->body));
+
         $this->body = substr($this->body, 0, 1500);         //bereme pouze 1500 znaků
         $this->body = trim($this->body);                            //odstraníme mezery ze začátku a konce řetězce
         $this->body = htmlspecialchars($this->body);        //odstraníme nebezpečné znaky
@@ -178,15 +212,17 @@ class board
         //$body = wordwrap($body, 90, "\n", 1); //rozdělíme dlouhá slova
 
         //vytvoříme odkazy
-        $this->body = preg_replace("/(http://[^ ]+\.[^ ]+)/i", " <a href=\\1>\\1</a>", $this->body);
-        $this->body = preg_replace("/[^/](www\.[^ ]+\.[^ ]+)/i", " <a href=http://\\1>\\1</a>", $this->body);
+        // TODO: fix zero-ing body variable
+        // $this->body = preg_replace("/(http://[^ ]+\.[^ ]+)/i", " <a href=\1>\1</a>", $this->body);
+        // $this->body = preg_replace("/[^/](www\.[^ ]+\.[^ ]+)/i", " <a href=http://\1>\1</a>", $this->body);
 
         //povolíme tyto tagy - <b> <u> <i>, možnost přidat další
         $tag = array("b", "u", "i");
 
         for($y = 0;$y < count($tag);$y++):
-            $this->body = preg_replace("/&lt;/i" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
-            $this->body = preg_replace("/&lt;\//i" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);
+            // TODO: fix zero-ing body variable
+            // $this->body = preg_replace("/&lt;/i" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
+            // $this->body = preg_replace("/&lt;\//i" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);
         endfor;
 
         //prevedeni datumu
@@ -196,25 +232,23 @@ class board
         $this->from_date = date("Y-m-d", mktime(0, 0, 0, $from_month, $from_day, $from_year)); //od
         $this->to_date = date("Y-m-d", mktime(0, 0, 0, $to_month, $to_day, $to_year));//do
 
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": body lenght: " . strlen($this->body));
     }
 
     public function insert_into_db()
     {
         try {
-            $add = $this->conn_mysql->query(
-                "INSERT INTO board VALUES (NULL, '$this->author', '$this->email', '$this->from_date',
+            $add = $this->pdoMysql->query(
+                "INSERT INTO board (author, email, from_date, to_date, subject, body) "
+                . "VALUES ('$this->author', '$this->email', '$this->from_date',
 			'$this->to_date', '$this->subject', '$this->body')"
             );
         } catch (Exception $e) {
-            $this->logger->error("board\\insert_into_db: query failed: Catched Exception " . var_export($e->getMessage(), true));
+            $this->logger->error("board\\insert_into_db: query failed: Caught Exception: " . var_export($e->getMessage(), true));
+            $this->error .= "Caught Exception: ". $e->getMessage();
+            return false;
         }
 
-        $this->logger->info("board\\insert_into_db: query result: " . var_export($add, true));
-
-        if($add === false) {
-            $this->error .= "<div>Došlo k chybě při zpracování SQL dotazu v databázi!</div>\n";
-            $this->error .= "<div>Error description: " . $this->conn_mysql->error."</div>\n";
-        }
         return $add;
     }
 }

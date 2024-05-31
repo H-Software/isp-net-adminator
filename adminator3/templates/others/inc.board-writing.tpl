@@ -2,11 +2,8 @@
 <div class="row justify-content-md-center">
     <div class="col"></div>
     <div class="col-8">
-        <div class="panel panel-default">
-            <div class="panel-heading">{$mod_hlaska}</div>
-            <!-- <div class="tableheadingwrite typ-zprav" >{$mod_hlaska}</div> -->
-        </div>
-        
+        <div class="tableheading typ-zprav" >{$mod_hlaska}</div>
+
         {if strlen($error) gt 0}
             <div class="alert alert-danger pt-15" role="alert">
                 {$error}
@@ -50,7 +47,7 @@
             new tcal ({'formname':'form-board','controlname':'to_date','selected':s_selected});
             </script>
             {/literal}
-                    
+
             </div>
 
             <div class="table writing-left2" >Předmět:</div>
@@ -68,7 +65,7 @@
             <div style="text-align: center; padding-top: 10px;" >
                 <input type="submit" name="send" value="Odeslat" class="btn btn-default">
             </div>
-            
+
             <input type="hidden" name="sent" value="true" >
             </form>
         </div>

@@ -4,7 +4,7 @@
 
 
         <div class="tableheading typ-zprav" >{$mod_hlaska|default:''}</div>
-        
+
         {if strlen($query_error|default:'') gt 0}
           <div class="alert alert-danger pt-15" role="alert">
               {$query_error}
@@ -21,12 +21,12 @@
             <div class="board-message-body">{$zpravy[entry].body}</div>
           </div>
         {/section}
-          
-        <div style="text-align: right; border-top: 1px solid #7D7642; padding-top: 5px; " class="table" >
+
+        <div style="text-align: right; border-top: 1px solid #7D7642; padding-top: 5px; " class="table" id="board-list-pagging" >
           <b>strana
 
           {section name="page" loop=$strany}
-            | 
+            |
           {if $strany[page].i == $strany[page].i_akt}
             {$strany[page].i2}
           {else}
@@ -35,7 +35,7 @@
                 </a>
           {/if}
           {/section}
-          
+
           |</b>
 
         </div>

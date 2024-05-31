@@ -25,6 +25,7 @@ use Symfony\Component\DomCrawler\Crawler;
 use Throwable;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -169,6 +170,24 @@ abstract class AdminatorTestCase extends TestCase
         }
 
         return $adminatorMock;
+    }
+
+    public static function callControllerFunction($serverRequest, $controllerClass, $controllerFunction, $container, $adminatorMock, $assertHttpCode = 200)
+    {
+        $controller = new $controllerClass($container, $adminatorMock);
+
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $response = $responseFactory->createResponse();
+
+        $response = $controller->$controllerFunction($serverRequest, $response, []);
+
+        $responseContent = $response->getBody()->__toString();
+
+        self::assertEquals($response->getStatusCode(), $assertHttpCode);
+
+        adminatorAssert::assertBase($responseContent);
+
+        return $response;
     }
 
     /*

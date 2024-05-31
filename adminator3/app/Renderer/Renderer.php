@@ -113,8 +113,10 @@ final class Renderer
         $show_se_cat = 0;
         if($request != null) {
             if ($request->getMethod() == "POST") {
-                $show_se_cat = $request->getParsedBody()['show_se_cat'];
-                $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": parsed show_se_cat with: ".var_export($show_se_cat, true));
+                if(array_key_exists('show_se_cat', $request->getParsedBody())) {
+                    $show_se_cat = $request->getParsedBody()['show_se_cat'];
+                    $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": parsed show_se_cat with: ".var_export($show_se_cat, true));
+                }
             }
 
             $this->smarty->assign("show_se_cat_values", array("0","1"));
