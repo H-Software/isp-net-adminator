@@ -282,8 +282,9 @@ final class OthersControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        // TODO: add asserts
         adminatorAssert::assertBoardCommon($response, $responseContent);
+
+        // TODO: add asserts for form
 
         // test board mode
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[1]', '/^\s*->> Přidat zprávu\s*$/');
@@ -293,22 +294,22 @@ final class OthersControllerTest extends AdminatorTestCase
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
 
-    public function test_ctl_board_post()
+    public function test_ctl_board_add_message_sent()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
 
         $request = Request::create(
-            '/others/board',
+            '/others/board?action=post',
             'POST',
             [
-                "sent"  => "",
-                "author" => "",
+                "sent"  => "true",
+                "author" => "test@test",
                 "email" => "",
-                "to_date" => "",
-                "from_date" => "",
-                "subject" => "",
-                "body" => "",
+                // "to_date" => "x",
+                // "from_date" => "y",
+                "subject" => "test subject",
+                "body" => "test subject message body",
             ],
             [],
             []
@@ -330,14 +331,15 @@ final class OthersControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        // echo $responseContent;
+        echo $responseContent;
 
         $this->assertEquals($response->getStatusCode(), 200);
 
         adminatorAssert::assertBase($responseContent);
 
-        // TODO: add asserts
         adminatorAssert::assertBoardCommon($response, $responseContent);
+
+        // TODO: add asserts for bootstrap window with action result
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");

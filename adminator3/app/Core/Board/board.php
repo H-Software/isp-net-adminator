@@ -164,19 +164,29 @@ class board
 
     public function check_vars()
     {
-        list($from_day, $from_month, $from_year) = explode("-", $this->from_date);
-        list($to_day, $to_month, $to_year) = explode("-", $this->to_date);
+        if(strlen($this->from_date) > 0) {
+            // TODO: check date format
+            list($from_day, $from_month, $from_year) = explode("-", $this->from_date);
+            if(mktime(0, 0, 0, $from_month, $from_day, $from_year) < mktime(0, 0, 0, date("m"), date("d"), date("Y"))) {
+                $this->error .= 'Datum OD nesmí být menší než dnešní datum.';
+            }
+        }
 
-        //byl odeslán formulář?
-        if($this->author == "" || $this->subject == "" || $this->body == "") :  //byly vyplněny všechny povinné údaje?
+        if(strlen($this->to_date) > 0) {
+            // TODO: check date format
+            list($to_day, $to_month, $to_year) = explode("-", $this->to_date);
+            if(mktime(0, 0, 0, $from_month, $from_day, $from_year) > mktime(0, 0, 0, $to_month, $to_day, $to_year)) { //zkontrolujeme data od-do
+                $this->error .= 'Datum OD nesmí být větší než datum DO.';
+            }
+        }
+
+        if($this->author == "" || $this->subject == "" || $this->body == "") {  //byly vyplněny všechny povinné údaje?
             $this->error .= 'Musíte vyplnit všechny povinné údaje - označeny tučným písmem.';
-        elseif(mktime(0, 0, 0, $from_month, $from_day, $from_year) > mktime(0, 0, 0, $to_month, $to_day, $to_year)) : //zkontrolujeme data od-do
-            $this->error .= 'Datum OD nesmí být větší než datum DO.';
-        elseif(mktime(0, 0, 0, $from_month, $from_day, $from_year) < mktime(0, 0, 0, date("m"), date("d"), date("Y"))) :
-            $this->error .= 'Datum OD nesmí být menší než dnešní datum.';
-        else:
+        }
+
+        if(strlen($this->error) < 1) {
             $this->write = true; //provedeme zápis
-        endif;
+        }
     }
 
     public function convert_vars()
