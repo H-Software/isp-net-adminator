@@ -90,7 +90,9 @@ abstract class AdminatorTestCase extends TestCase
 
     protected function initDIcontainer(
         bool $sentinelMocked,
-        bool $viewEnabled
+        bool $viewEnabled = false,
+        bool $validatorEnabled = false,
+        bool $validatorMocked = true,
     ) {
         $enableSession = false;
 
@@ -113,6 +115,12 @@ abstract class AdminatorTestCase extends TestCase
         if($viewEnabled === true) {
             require __DIR__ . '/../tests/fixtures/containers/view.php';
             $enableSession = true;
+        }
+
+        if($validatorEnabled == true) {
+            if($validatorMocked == true) {
+                require __DIR__ . '/../tests/fixtures/containers/validatorMock.php';
+            }
         }
 
         // if($enableSession === true){

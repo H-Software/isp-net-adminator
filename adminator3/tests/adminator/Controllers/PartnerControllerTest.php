@@ -31,7 +31,7 @@ final class PartnerControllerTest extends AdminatorTestCase
         $request->overrideGlobals();
         $serverRequest = self::$psrHttpFactory->createRequest($request);
 
-        $container = self::initDIcontainer(true, false);
+        $container = self::initDIcontainer(true, false, true);
 
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
@@ -81,7 +81,7 @@ final class PartnerControllerTest extends AdminatorTestCase
         $request->overrideGlobals();
         $serverRequest = self::$psrHttpFactory->createRequest($request);
 
-        $container = self::initDIcontainer(true, false);
+        $container = self::initDIcontainer(true, false, true);
 
         $adminatorMock = self::initAdminatorMockClass($container, false, 1);
         $this->assertIsObject($adminatorMock);
