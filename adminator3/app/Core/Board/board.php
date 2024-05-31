@@ -72,7 +72,7 @@ class board
         }
     }
 
-    public function prepare_vars($nothing = null)
+    public function prepare_vars()
     {
         if(!isset($this->author)) {
             if(is_object($this->sentinel)) {
@@ -186,12 +186,15 @@ class board
         $this->email = htmlspecialchars($this->email);
         $this->subject = htmlspecialchars($this->subject);
 
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": body lenght: " . strlen($this->body));
+
         $this->body = substr($this->body, 0, 1500);         //bereme pouze 1500 znaků
         $this->body = trim($this->body);                            //odstraníme mezery ze začátku a konce řetězce
         $this->body = htmlspecialchars($this->body);        //odstraníme nebezpečné znaky
         $this->body = str_replace("\r\n", " <BR> ", $this->body);    //nahradíme konce řádků na tagy <BR>
 
         //$body = wordwrap($body, 90, "\n", 1); //rozdělíme dlouhá slova
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": body lenght: " . strlen($this->body));
 
         //vytvoříme odkazy
         $this->body = preg_replace("/(http://[^ ]+\.[^ ]+)/i", " <a href=\\1>\\1</a>", $this->body);
@@ -204,6 +207,8 @@ class board
             $this->body = preg_replace("/&lt;/i" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
             $this->body = preg_replace("/&lt;\//i" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);
         endfor;
+
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": body lenght: " . strlen($this->body));
 
         //prevedeni datumu
         list($from_day, $from_month, $from_year) = explode("-", $this->from_date);

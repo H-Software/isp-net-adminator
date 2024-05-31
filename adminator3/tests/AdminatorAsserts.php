@@ -117,7 +117,6 @@ final class AdminatorAssert extends AdminatorTestCase
 
     public static function assertBoardMessages($response, $responseContent)
     {
-
         $assertKeywordsHome = array(
             '<div class="table zprava-main" >', // board message exists
         );
