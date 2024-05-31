@@ -67,8 +67,8 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertStringContainsString('<td width="5%" colspan="1"  class="tab-topology2 tab-topology-dolni2"', $responseContent);
         $this->assertStringContainsString('target="_blank" >na mapě</a>', $responseContent);
         $this->assertMatchesRegularExpression('/<a href="\/archiv-zmen\?id_nodu=[0-9]+" style="font-size: 12px; ">H: [0-9]+/i', $responseContent);
-        $this->assertStringContainsString('<td><form method="POST" action="/topology/nod-update">', $responseContent);
-        $this->assertStringContainsString('<td><form action="/topology/nod-erase" method="POST"', $responseContent);
+        $this->assertStringContainsString('<td><form method="POST" action="/topology/node/update">', $responseContent);
+        $this->assertStringContainsString('<td><form action="/topology/node/erase" method="POST"', $responseContent);
 
         // page specific negative asserts
         $this->assertStringNotContainsStringIgnoringCase("nelze zjistit", $responseContent, "unable to show parent router name");

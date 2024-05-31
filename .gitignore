@@ -58,3 +58,4 @@ adminator3/tests2/
 adminator3/print/temp
 .env
 test
+.vscode/settings.json
