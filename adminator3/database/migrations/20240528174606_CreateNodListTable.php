@@ -78,6 +78,18 @@ class CreateNodListTable extends App\Migration\Migration
                 'signed' => false,
                 'after' => 'router_id',
             ])
+            ->addColumn('filter_router_id', 'integer', [
+                'null' => false,
+                'default' => '0',
+                'signed' => false,
+                'after' => 'vlan_id',
+            ])
+            ->addColumn('device_type_id', 'integer', [
+                'null' => false,
+                'default' => '0',
+                'signed' => false,
+                'after' => 'filter_router_id',
+            ])
             ->create();
     }
 
