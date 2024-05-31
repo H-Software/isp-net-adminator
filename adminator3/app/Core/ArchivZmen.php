@@ -878,7 +878,7 @@ class ArchivZmen
                             $nazev_nodu = $data_nod["jmeno"];
                         }
 
-                        $id_nodu_rs = "<a href=\"/topology/node/list?find=".$nazev_nodu."&typ_nodu=0";
+                        $id_nodu_rs = "<a href=\"/topology/node-list?find=".$nazev_nodu."&typ_nodu=0";
                         $id_nodu_rs .= "\" >".$id_nodu_pomocne."</a>";
 
                         //$id_nodu_pomocne2 = "[id_nodu] => ".$id_nodu_pomocne;
