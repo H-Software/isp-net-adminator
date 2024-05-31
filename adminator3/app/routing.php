@@ -136,7 +136,11 @@ $app->group(
         $group->map(['GET', 'POST'], '/vlastnici2/fakturacni-skupiny/action', vlastniciController::class . ':fakturacniSkupinyAction');
 
         $group->map(['GET', 'POST'], '/topology', topologyController::class . ':nodeList');
+
         $group->map(['GET', 'POST'], '/topology/node-list', topologyController::class . ':nodeList');
+        $group->map(['GET', 'POST'], '/topology/node/add', topologyController::class . ':nodeAdd');
+        $group->map(['GET', 'POST'], '/topology/node/update', topologyController::class . ':nodeUpdate');
+
         $group->map(['GET', 'POST'], '/topology/router-list', topologyController::class . ':routerList');
         $group->map(['GET', 'POST'], '/topology/router/action', topologyController::class . ':routerAction');
 

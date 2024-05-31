@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Core\Topology\RouterAction;
 use App\Core\Topology\Topology;
+use App\Core\Topology\nodeAction;
 
 class topologyController extends adminatorController
 {
@@ -62,6 +63,50 @@ class topologyController extends adminatorController
         ];
 
         return $this->renderer->template($request, $response, 'topology/node-list.tpl', $assignData);
+    }
+
+    public function nodeAdd(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $this->request = $request;
+        $this->response = $response;
+
+        if(!$this->checkLevel(4)) {
+            return $this->response;
+        };
+
+        $i = new nodeAction($this->container);
+        $output = $i->add();
+
+        $assignData = [
+            "page_title" => "Adminator3 :: Topologie :: Node Add",
+            "body" => $output
+        ];
+
+        return $this->renderer->template($request, $response, '', $assignData);
+    }
+
+    public function nodeUpdate(ServerRequestInterface $request, ResponseInterface $response, array $args)
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        // $this->request = $request;
+        // $this->response = $response;
+
+        // if(!$this->checkLevel(5)) {
+        //     return $this->response;
+        // };
+
+        // $topology = new Topology($this->container);
+        // $output = $topology->getNodeList();
+
+        // $assignData = [
+        //     "page_title" => "Adminator3 :: Topologie :: Node list",
+        //     "body" => $output
+        // ];
+
+        // return $this->renderer->template($request, $response, 'topology/node-list.tpl', $assignData);
     }
 
     public function routerList(ServerRequestInterface $request, ResponseInterface $response, array $args)

@@ -24,7 +24,6 @@ class nodeAction extends adminator
 
     public $csrf_html;
 
-
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
