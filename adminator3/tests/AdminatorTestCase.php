@@ -26,6 +26,7 @@ use Throwable;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -172,9 +173,20 @@ abstract class AdminatorTestCase extends TestCase
         return $adminatorMock;
     }
 
-    public static function callControllerFunction($serverRequest, $controllerClass, $controllerFunction, $container, $adminatorMock, $assertHttpCode = 200)
-    {
-        $controller = new $controllerClass($container, $adminatorMock);
+    public static function callControllerFunction(
+        ServerRequestInterface $serverRequest,
+        string $controllerClass,
+        string $controllerFunction,
+        $container,
+        object|array $mockedInstance,
+        $assertHttpCode = 200
+    ): ResponseInterface {
+        if(is_array($mockedInstance)) {
+            $controller = new $controllerClass($container, $mockedInstance['adminatorMock'], $mockedInstance['opravyMock']);
+        } else {
+            // legacy call
+            $controller = new $controllerClass($container, $mockedInstance);
+        }
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
@@ -360,8 +372,11 @@ abstract class AdminatorTestCase extends TestCase
                 $found = true;
                 break;
             }
+            /** @disregard */
             if($node->hasAttribute('href')) {
+                /** @disregard */
                 $nodeValues[] = $node->getAttribute('href');
+                /** @disregard */
                 if (preg_match($pattern, (string) $node->getAttribute('href'))) {
                     $found = true;
                     break;

@@ -1,6 +1,7 @@
 <?php
 
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class opravy
 {
@@ -23,33 +24,35 @@ class opravy
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
-    public function vypis_opravy($pocet_bunek)
+    public function vypis_opravy(ServerRequestInterface $request, $pocet_bunek)
     {
         $this->logger->info("opravy\\vypis_opravy called");
         $this->logger->info("opravy\\vypis_opravy: script_url: ".$_SERVER['SCRIPT_URL']);
         $ret = array();
         $this->vypis_opravy_content_html = "";
 
-        $v_reseni_filtr = $_GET["v_reseni_filtr"];
-        $vyreseno_filtr = $_GET["vyreseno_filtr"];
+        $v_reseni_filtr = "99";
+        $vyreseno_filtr = "0";
+        $limit = "10";
 
-        $limit = $_GET["limit"];
+        // $v_reseni_filtr = $_GET["v_reseni_filtr"];
+        // $vyreseno_filtr = $_GET["vyreseno_filtr"];
+        // $limit = $_GET["limit"];
 
-        if (!isset($v_reseni_filtr)) {
-            $v_reseni_filtr = "99";
-        }
-        if (!isset($vyreseno_filtr)) {
-            $vyreseno_filtr = "0";
+        foreach ($request->getQueryParams() as $i => $v) {
+            if(preg_match('/^(v_reseni_filtr|vyreseno_filtr|limit)$/', $i) and strlen($v) > 0) {
+                $$i = $request->getQueryParams()[$i];
+            }
         }
 
-        if (!isset($limit)) {
-            $limit = "10";
-        }
+        // foreach ($request->getParsedBody() as $i => $v) {
+        //     if(preg_match('/^(sent|author|email|to_date|from_date|subject|body)$/', $i) and strlen($v) > 0) {
+        //         $this->$i = $request->getParsedBody()[$i];
+        //     }
+        // }
 
         $sql = "SELECT * FROM opravy WHERE ( id_opravy > 0 ";
-
         $order = " ORDER BY datum_vlozeni DESC ";
-
         $sf = $sql." ) ".$order;
 
         try {

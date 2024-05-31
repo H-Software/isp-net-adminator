@@ -11,7 +11,7 @@
     
       <tr>
         <td colspan="3" ><span style="font-size: 14px; font-weight: bold;" >
-                <a href="opravy-index.php?zobr_vlastnika=0&typ=2&priorita_filtr=99&v_reseni_filtr=99&vyreseno_filtr=99" >Výpis Závad/oprav </a></span>
+                <a href="/opravy/list?zobr_vlastnika=0&typ=2&priorita_filtr=99&v_reseni_filtr=99&vyreseno_filtr=99" >Výpis Závad/oprav </a></span>
         </td>
         <td colspan="8" class="opravy-form-control-items">
 
