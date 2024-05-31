@@ -4,7 +4,7 @@ namespace App\Core\Topology;
 
 use App\Core\adminator;
 use Psr\Container\ContainerInterface;
-use Exception;
+use Psr\Http\Message\ServerRequestInterface;
 
 class nodeAction extends adminator
 {
@@ -14,11 +14,11 @@ class nodeAction extends adminator
 
     public \Monolog\Logger $logger;
 
-    protected $settings;
+    // protected $settings;
 
     protected $sentinel;
 
-    protected $work;
+    // protected $work;
 
     protected $loggedUserEmail;
 
@@ -40,25 +40,17 @@ class nodeAction extends adminator
         // $this->work = new \App\Core\work($container);
     }
 
-    public function add(): string
+    public function add(ServerRequestInterface $request): string
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $output = "";
 
-        $odeslano = $_POST["odeslano"];
-        $jmeno = $_POST["jmeno"];
-        $adresa = $_POST["adresa"];
-        $pozn = $_POST["pozn"];
-        $ip_rozsah = $_POST["ip_rozsah"];
-
-        $typ_vysilace = $_POST["typ_vysilace"];
-        $stav = $_POST["stav"];
-
-        $router_id = $_POST["router_id"];
-        $typ_nodu = $_POST["typ_nodu"];
-
-        $filter_router_id = $_POST["filter_router_id"];
+        foreach ($request->getParsedBody() as $i => $v) {
+            if(preg_match('/^(odeslano|jmeno|adresa|pozn|ip_rozsah|typ_vysilace|stav|router_id|typ_nodu|filter_router_id)$/', $i) and strlen($v) > 0) {
+                $$i = $request->getParsedBody()[$i];
+            }
+        }
 
         //kontrola platnych udaju
         if(isset($odeslano)) {
