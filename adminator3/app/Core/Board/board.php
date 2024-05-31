@@ -224,7 +224,7 @@ class board
         try {
             $add = $this->conn_mysql->query(
                 "INSERT INTO board (author, email, from_date, to_date, subject, body) "
-                . "VALUES (NULL, '$this->author', '$this->email', '$this->from_date',
+                . "VALUES ('$this->author', '$this->email', '$this->from_date',
 			'$this->to_date', '$this->subject', '$this->body')"
             );
         } catch (Exception $e) {
