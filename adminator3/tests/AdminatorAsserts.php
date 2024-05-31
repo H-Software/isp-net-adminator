@@ -128,12 +128,14 @@ final class AdminatorAssert extends AdminatorTestCase
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^| O úrověn výš | $/');
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^\/home$/');
 
-        // TODO: add asserts for other links
-        // <span style="padding-left: 20px; "><a class="cat2" href="/others/board">Nástěnka</a></span>
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[2]/a', '/^Nástěnka$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[2]/a', '/^\/others\/board$/');
 
-        // <span style="padding-left: 20px; "><a class="cat2" href="/print">Tisk</a></span>
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^Tisk$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^\/print$/');
 
-        // <span style="padding-left: 20px; "><a class="cat2" href="/others/company-web">Company Web</a></span>
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^Company Web$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^\/others\/company-web$/');
     }
 
     public static function assertTopologySubCat($content)
