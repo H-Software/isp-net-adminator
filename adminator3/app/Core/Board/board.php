@@ -199,6 +199,7 @@ class board
         //vytvoříme odkazy
         $this->body = preg_replace("/(http://[^ ]+\.[^ ]+)/i", " <a href=\1>\1</a>", $this->body);
         $this->body = preg_replace("/[^/](www\.[^ ]+\.[^ ]+)/i", " <a href=http://\1>\1</a>", $this->body);
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": body lenght: " . strlen($this->body));
 
         //povolíme tyto tagy - <b> <u> <i>, možnost přidat další
         $tag = array("b", "u", "i");
