@@ -479,7 +479,7 @@ class adminator
         foreach ($request->getQueryParams() as $i => $v) {
             if(preg_match('/^(v_reseni_filtr|vyreseno_filtr|limit)$/', $i) and strlen($v) > 0) {
                 var_dump("set: " . $i . " to value: " . $v);
-                $i = $request->getQueryParams()[$i];
+                $$i = $request->getQueryParams()[$i];
             }
         }
 
