@@ -205,8 +205,8 @@ class board
 
         for($y = 0;$y < count($tag);$y++):
             // TODO: fix zero-ing body variable
-            // $this->body = preg_replace("/&lt;/i" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
-            // $this->body = preg_replace("/&lt;\//i" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);
+            $this->body = preg_replace("/&lt;/i" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
+            $this->body = preg_replace("/&lt;\//i" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);
         endfor;
 
         //prevedeni datumu
