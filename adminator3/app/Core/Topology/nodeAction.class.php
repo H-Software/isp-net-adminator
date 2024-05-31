@@ -329,17 +329,17 @@ class nodeAction extends adminator
 
         $output = "";
 
-        foreach ($request->getParsedBody() as $i => $v) {
-            if(preg_match('/^(odeslano)$/', $i) and strlen($v) > 0) {
-                $$i = $request->getParsedBody()[$i];
-            }
-        }
-
         echo "<div style=\"padding-bottom: 10px; padding-top: 10px; font-size: 18px; font-weight: bold; \">";
         echo "Úprava lokality/nodu</div>";
 
         if($_POST["jmeno_new"]) {
             //budeme updatovat
+            foreach ($request->getParsedBody() as $i => $v) {
+                if(preg_match('/^(typ_vysilace|stav|router_id|typ_nodu|vlan_id|filter_router_id|device_type_id|rid_recom)$/', $i) and strlen($v) > 0) {
+                    $$i = $request->getParsedBody()[$i];
+                }
+            }
+
             $jmeno = $_POST["jmeno_new"];
             $adresa = $_POST["adresa_new"];
             $pozn = $_POST["pozn_new"];
@@ -347,26 +347,18 @@ class nodeAction extends adminator
             $umisteni_aliasu = $_POST["umisteni_aliasu_new"];
             $id_new = $_POST["update_id_new"];
             $mac = $_POST["mac_new"];
-
-            $typ_vysilace = $_POST["typ_vysilace"];
-            $stav = $_POST["stav"];
-            $router_id = $_POST["router_id"];
             $filtrace = $_POST["filtrace_new"];
 
             $id = $_POST["update_id"];
-            $typ_nodu = $_POST["typ_nodu"];
-            $vlan_id = $_POST["vlan_id"];
 
             $filter_router_id = $_POST["filter_router_id"];
-            $device_type_id = intval($_POST["device_type_id"]);
-
-            $rid_recom = $_POST["rid_recom"];
+            $device_type_id = intval($device_type_id);
         }
 
         if(($_POST["B1"] == "OK")) {
-            $dotaz_router = $conn_mysql->query("SELECT nazev FROM router_list WHERE id = '$router_id'");
-            if((mysql_num_rows($dotaz_router) == 1)) {
-                while($data_parent = mysql_fetch_array($dotaz_router)) {
+            $dotaz_router = $this->conn_mysql->query("SELECT nazev FROM router_list WHERE id = '$router_id'");
+            if(($dotaz_router->num_rows == 1)) {
+                while($data_parent = $dotaz_router->fetch_array()) {
                     $nazev_routeru = $data_parent["nazev"]." (".$router_id.")";
                 }
             } else {
@@ -429,8 +421,8 @@ class nodeAction extends adminator
             $pole = "<b>akce: uprava nodu;</b><br>";
             //$pole .= "puvodni data: ";
 
-            $vysledek = $conn_mysql->query("select * from nod_list where id=".$id_new);
-            $radku = $vysledek->num_rows();
+            $vysledek = $this->conn_mysql->query("select * from nod_list where id=".$id_new);
+            $radku = $vysledek->num_rows;
 
             if ($radku == 0) {
                 echo "<div style=\"padding: 5px; color: red; font-weight: bold; \">Chyba! Nelze zjistit přechozí hodnoty! </div>";
@@ -454,7 +446,7 @@ class nodeAction extends adminator
                 endwhile;
             }
 
-            $uprava = $conn_mysql->query("UPDATE nod_list SET jmeno='$jmeno', adresa='$adresa' , pozn='$pozn', ip_rozsah='$ip_rozsah',
+            $uprava = $this->conn_mysql->query("UPDATE nod_list SET jmeno='$jmeno', adresa='$adresa' , pozn='$pozn', ip_rozsah='$ip_rozsah',
                     typ_vysilace='$typ_vysilace',stav='$stav',router_id='$router_id',
                     typ_nodu = '$typ_nodu', vlan_id = '$vlan_id', filter_router_id = '$filter_router_id',
                     device_type_id = '$device_type_id' WHERE id=".$id_new." Limit 1 ");
@@ -463,54 +455,56 @@ class nodeAction extends adminator
                 echo "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně upraven.</span><br><br>";
             } else {
                 echo "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Chyba! Záznam nelze upravit. </div>";
-                echo "<div>chyba: ".mysql_errno().": ".mysql_error()."</div>\n";
+                echo "<div>chyba: ".$this->conn_mysql->error."</div>\n";
             }
 
             //ulozeni do archivu zmen
+            // TODO: fix this
             // require("topology-nod-update-inc-archiv-zmen.php");
 
             //automaticke restarty
-            if(ereg(".*Routeru, kde se provádí filtrace.*", $pole3)) {
-                Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-            }
+            // TODO: fix automatic restarts
+            // if(ereg(".*Routeru, kde se provádí filtrace.*", $pole3)) {
+            //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+            // }
 
-            if(ereg(".*<b>Routeru</b>.*", $pole3)) {
-                Aglobal::work_handler("1");	//reinhard-3 (ros) - restrictions (net-n/sikana)
-                Aglobal::work_handler("20"); 	//reinhard-3 (ros) - shaper (client's tariffs)
+            // if(ereg(".*<b>Routeru</b>.*", $pole3)) {
+            //     Aglobal::work_handler("1");	//reinhard-3 (ros) - restrictions (net-n/sikana)
+            //     Aglobal::work_handler("20"); 	//reinhard-3 (ros) - shaper (client's tariffs)
 
-                Aglobal::work_handler("24");	//reinhard-5 (ros) - restrictions (net-n/sikana)
-                Aglobal::work_handler("23");	//reinhard-5 (ros) - shaper (client's tariffs)
+            //     Aglobal::work_handler("24");	//reinhard-5 (ros) - restrictions (net-n/sikana)
+            //     Aglobal::work_handler("23");	//reinhard-5 (ros) - shaper (client's tariffs)
 
-                Aglobal::work_handler("13");	//reinhard-wifi (ros) - shaper (client's tariffs)
-                Aglobal::work_handler("2");	//reinhard-wifi (ros) - restrictions (net-n/sikana)
+            //     Aglobal::work_handler("13");	//reinhard-wifi (ros) - shaper (client's tariffs)
+            //     Aglobal::work_handler("2");	//reinhard-wifi (ros) - restrictions (net-n/sikana)
 
-                Aglobal::work_handler("14"); 	//(trinity) filtrace-IP-on-Mtik's-restart
+            //     Aglobal::work_handler("14"); 	//(trinity) filtrace-IP-on-Mtik's-restart
 
-            }
+            // }
 
-            if(ereg(".*vlan_id.*", $pole3)) {
-                Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
+            // if(ereg(".*vlan_id.*", $pole3)) {
+            //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
 
-                Aglobal::work_handler("4"); //reinhard-fiber - radius
-                Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-            }
+            //     Aglobal::work_handler("4"); //reinhard-fiber - radius
+            //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+            // }
 
-            if(ereg(".*změna.*koncového.*zařízení.*", $pole3)) {
-                Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
+            // if(ereg(".*změna.*koncového.*zařízení.*", $pole3)) {
+            //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
 
-                Aglobal::work_handler("4"); //reinhard-fiber - radius
-                Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-            }
+            //     Aglobal::work_handler("4"); //reinhard-fiber - radius
+            //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+            // }
 
         } else {
             //zobrazime formular
-            $id = $_POST["update_id"];
-
-            if(!($id)) {
-                $id = $_POST["update_id_new"];
+            if (array_key_exists('update_id', $request->getParsedBody())) {
+                $id = $request->getParsedBody()['update_id'];
+            } elseif (array_key_exists('update_id_new', $request->getParsedBody())) {
+                $id = $request->getParsedBody()['update_id_new'];
             }
 
-            $vysledek = $conn_mysql->query("select * from nod_list where id=".intval($id)."");
+            $vysledek = $this->conn_mysql->query("select * from nod_list where id=".intval($id)."");
             $radku = $vysledek->num_rows;
 
             if($radku == 0) {
@@ -542,7 +536,7 @@ class nodeAction extends adminator
             }
 
             //checkem jestli se macklo na tlacitko "OK" :)
-            if(ereg("^OK$", $_POST["B1"])) {
+            if(preg_match("/^OK$/", $_POST["B1"])) {
                 echo "";
             } else {
                 print "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito ".
@@ -552,8 +546,11 @@ class nodeAction extends adminator
             //zde kontrola zda jiz jsme odeslali $_POST["jmeno_new"]
 
             echo '
-            <form method="POST" action="">
-            <table border="0" width="950px;" id="table2" name="form1" >
+            <form method="POST" action="">';
+
+            echo $this->csrf_html;
+
+            echo '<table border="0" width="950px;" id="table2" name="form1" >
 
             <tr>
             <td width="25%"><label>Jméno lokality/nodu: </label></td>
@@ -645,7 +642,7 @@ class nodeAction extends adminator
 
             echo "<select name=\"router_id\" size=\"1\" >";
 
-            $dotaz_parent = $conn_mysql->query("SELECT * FROM router_list order by nazev");
+            $dotaz_parent = $this->conn_mysql->query("SELECT * FROM router_list order by nazev");
             echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>";
 
             while($data_parent = $dotaz_parent->fetch_array()) {
@@ -723,7 +720,7 @@ class nodeAction extends adminator
                     $sql_filtr = "SELECT id,nazev,ip_adresa FROM router_list ORDER BY nazev";
                 }
 
-                $dotaz_parent = $conn_mysql->query($sql_filtr);
+                $dotaz_parent = $this->conn_mysql->query($sql_filtr);
                 echo "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
 
                 while($data_parent = $dotaz_parent->fetch_array()) {
