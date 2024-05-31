@@ -136,39 +136,39 @@ class nodeAction extends adminator
 
             $output .= $this->error;
 
-            $output .= '
-           <form method="POST" action="" >
-           <table border="0" width="100%" id="table2">
-           <tr>
-           <td width="25%"><label>Jméno lokality/nodu: </label></td>
-           <td><input type="text" name="jmeno" size="30" value="'.htmlspecialchars($jmeno).'" ></td>
-           </tr>
+            $output .= '<form method="POST" action="" >';
+            $output .= $this->csrf_html;
 
-           <tr>
-           <td><label>Adresa nodu (umístění) : </label></td>
-           <td><input type="text" name="adresa" size="40" value="'.htmlspecialchars($adresa).'" ></td>
-           </tr>
+            $output .= '<table border="0" width="100%" id="table2">
+                    <tr>
+                    <td width="25%"><label>Jméno lokality/nodu: </label></td>
+                    <td><input type="text" name="jmeno" size="30" value="'.htmlspecialchars($jmeno).'" ></td>
+                    </tr>
 
-          <tr>
-           <td><label>Poznámka : </label></td>
-           <td><textarea name="pozn" cols="30" rows="3">'.htmlspecialchars($pozn).'</textarea></td>
-          </tr>
+                    <tr>
+                    <td><label>Adresa nodu (umístění) : </label></td>
+                    <td><input type="text" name="adresa" size="40" value="'.htmlspecialchars($adresa).'" ></td>
+                    </tr>
 
+                    <tr>
+                    <td><label>Poznámka : </label></td>
+                    <td><textarea name="pozn" cols="30" rows="3">'.htmlspecialchars($pozn).'</textarea></td>
+                    </tr>
 
-           <tr>
-              <td><label>IP rozsah pro lokalitu/nod: </label></td>
-              <td><input type="text" name="ip_rozsah" size="20" value="'.htmlspecialchars($ip_rozsah).'" ></td>
-          </tr>
+                    <tr>
+                        <td><label>IP rozsah pro lokalitu/nod: </label></td>
+                        <td><input type="text" name="ip_rozsah" size="20" value="'.htmlspecialchars($ip_rozsah).'" ></td>
+                    </tr>
 
-          <tr>
-            <td><br></td>
-            <td></td>
-          </tr>
+                    <tr>
+                        <td><br></td>
+                        <td></td>
+                    </tr>
 
-          <tr>
-            <td><label>Typ vysílače: </label></td>
-            <td>
-              <select name="typ_vysilace" size="1" >';
+                    <tr>
+                        <td><label>Typ vysílače: </label></td>
+                        <td>
+                        <select name="typ_vysilace" size="1" >';
 
             $output .= "<option value=\"0\" "." class=\"select-nevybrano\" > Není zvoleno </option> \n";
             $output .= "<option value=\"1\" ";
@@ -205,12 +205,12 @@ class nodeAction extends adminator
             } $output .= "> jiné </option>\n";
 
             $output .= '</select>
-             </td>
-          </tr>
+                        </td>
+                    </tr>
 
-          <tr>
-             <td><label>Stav: </label></td>
-             <td><select name="stav" >';
+                    <tr>
+                        <td><label>Stav: </label></td>
+                        <td><select name="stav" >';
 
             $output .= "<option value=\"0\" class=\"select-nevybrano\" > Není zvoleno </option>\n";
             $output .= "<option value=\"1\" ";
@@ -236,8 +236,8 @@ class nodeAction extends adminator
                 </tr>
 
                 <tr>
-                        <td><label>Router id: </label></td>
-                    <td>';
+                  <td><label>Router id: </label></td>
+                  <td>';
 
             $output .= "<select name=\"router_id\" size=\"1\" >\n";
             $output .= "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
@@ -254,11 +254,11 @@ class nodeAction extends adminator
             $output .= "</select>\n";
 
             $output .= '</td>
-              </tr>';
+                        </tr>';
 
             $output .= "<tr>
-                   <td>Mód nodu:</td>
-                   <td>\n";
+                        <td>Mód nodu:</td>
+                        <td>\n";
 
             $output .= "<select size=\"1\" name=\"typ_nodu\" >\n";
 
@@ -282,11 +282,11 @@ class nodeAction extends adminator
             $output .= "</select>\n";
 
             $output .= "</td>
-               </tr>\n";
+                        </tr>\n";
 
             $output .= '<tr>
-                   <td><label>Router, kde se provádí filtrace: </label></td>
-            <td>';
+                        <td><label>Router, kde se provádí filtrace: </label></td>
+                    <td>';
 
             $output .= "<select name=\"filter_router_id\" size=\"1\" >\n";
 
@@ -305,27 +305,27 @@ class nodeAction extends adminator
             $output .= "</select>\n";
 
             $output .= '</td>
-              </tr>
+                        </tr>
 
-          <tr>
-            <td><br></td>
-            <td></td>
-          </tr>';
+                    <tr>
+                        <td><br></td>
+                        <td></td>
+                    </tr>';
 
             $output .= '</tr>
-            <td><br></td>
-            <td></td>
-          </tr>
+                        <td><br></td>
+                        <td></td>
+                    </tr>
 
-           <tr>
-           <td></td>
-           <td><input type="submit" value="OK" name="odeslano" >
+                    <tr>
+                    <td></td>
+                    <td><input type="submit" value="OK" name="odeslano" >
 
-           </td>
-             </tr>
-            </table>
+                    </td>
+                        </tr>
+                        </table>
 
-          </form>';
+                    </form>';
         }
 
         return $output;
