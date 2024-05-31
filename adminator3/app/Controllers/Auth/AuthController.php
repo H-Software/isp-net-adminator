@@ -56,7 +56,10 @@ class AuthController extends Controller
             $flashEnabled = $args['flashEnabled'];
         }
 
-        $redirect = $request->getQueryParams()['redirect'];
+        $redirect = null;
+        if (array_key_exists('redirect', $request->getQueryParams())) {
+            $redirect = $request->getQueryParams()['redirect'];
+        }
 
         if ($request->getMethod() == "POST") {
 

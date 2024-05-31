@@ -97,11 +97,21 @@ parameters:
 
 		-
 			message: "#^If condition is always false\\.$#"
-			count: 2
+			count: 5
 			path: app/Core/opravy.php
 
 		-
 			message: "#^Right side of && is always false\\.$#"
+			count: 3
+			path: app/Core/opravy.php
+
+		-
+			message: "#^Left side of && is always true\\.$#"
+			count: 1
+			path: app/Core/opravy.php
+
+		-
+			message: "#^Elseif condition is always (false|true)\\.$#"
 			count: 2
 			path: app/Core/opravy.php
 
