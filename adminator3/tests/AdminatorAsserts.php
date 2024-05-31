@@ -95,6 +95,7 @@ final class AdminatorAssert extends AdminatorTestCase
             self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
         }
 
+        adminatorAssert::assertBoardCommon($response, $responseContent);
         adminatorAssert::assertBoardMessages($response, $responseContent);
     }
 

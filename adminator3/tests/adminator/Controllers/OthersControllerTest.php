@@ -135,9 +135,11 @@ final class OthersControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        // TODO: add asserts
         adminatorAssert::assertBoardCommon($response, $responseContent);
         adminatorAssert::assertBoardMessages($response, $responseContent);
+
+        // test board mode
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[1]', '/^->> Aktuální zprávy$/');
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
@@ -182,9 +184,11 @@ final class OthersControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        // TODO: add asserts
         adminatorAssert::assertBoardCommon($response, $responseContent);
         adminatorAssert::assertBoardMessages($response, $responseContent);
+
+        // test board mode
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[1]', '/^->> Aktuální zprávy$/');
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
@@ -229,10 +233,12 @@ final class OthersControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        // TODO: add asserts
         adminatorAssert::assertBoardCommon($response, $responseContent);
         // TODO: fix missing data in DB - old messages
         // adminatorAssert::assertBoardMessages($response, $responseContent);
+
+        // test board mode
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[1]', '/^->> Staré zprávy$/');
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
@@ -249,8 +255,6 @@ final class OthersControllerTest extends AdminatorTestCase
             'GET',
             [
                 "action" => "post",
-                // "page" => "",
-                // "send" => "",
             ],
             [],
             []
@@ -280,6 +284,9 @@ final class OthersControllerTest extends AdminatorTestCase
 
         // TODO: add asserts
         adminatorAssert::assertBoardCommon($response, $responseContent);
+
+        // test board mode
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[1]', '/^\s*->> Přidat zprávu\s*$/');
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
