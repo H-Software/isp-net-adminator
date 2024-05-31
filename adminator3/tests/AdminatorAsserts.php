@@ -134,12 +134,15 @@ final class AdminatorAssert extends AdminatorTestCase
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^Tisk$/');
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^\/print$/');
 
-        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^Company Web$/');
-        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^\/others\/company-web$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[4]/a', '/^Company Web$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[4]/a', '/^\/others\/company-web$/');
     }
 
-    public static function assertTopologySubCat($content)
+    public static function assertTopologySubCat($response, $content)
     {
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a[2]', '/^přidání$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a[2]', '/^\/topology\/router\/action$/');
+
         self::assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/router-list">Routery<\/a>/i', $content);
         self::assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/node-list">Výpis lokalit\/nodů<\/a>/i', $content);
         self::assertMatchesRegularExpression('/<a class="cat2" href="topology-user-list.php">Výpis objektů dle přiřazení \/ dle nodů<\/a>/i', $content);

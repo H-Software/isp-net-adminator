@@ -53,7 +53,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        adminatorAssert::assertTopologySubCat($responseContent);
+        adminatorAssert::assertTopologySubCat($response, $responseContent);
 
         AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
 
@@ -150,7 +150,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        adminatorAssert::assertTopologySubCat($responseContent);
+        adminatorAssert::assertTopologySubCat($response, $responseContent);
 
         AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
 
@@ -192,7 +192,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        adminatorAssert::assertTopologySubCat($responseContent);
+        adminatorAssert::assertTopologySubCat($response, $responseContent);
 
         AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
 
