@@ -89,27 +89,19 @@ final class AdminatorAssert extends AdminatorTestCase
             '<div class="home-vypis-useru-napis" >Přihlašení uživatelé: </div>', // loggeduser banner
             'uživatel: <span class="home-vypis-useru-font1" >', // logger user row
             'Výpis Závad/oprav',
-            'Bulletin Board - Nástěnka', // board header exists
-            '<div class="table zprava-main" >', // board message exists
         );
 
         foreach ($assertKeywordsHome as $w) {
             self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
         }
+
+        adminatorAssert::assertBoardMessages($response, $responseContent);
     }
 
     public static function assertBoardCommon($response, $responseContent)
     {
-
-        $assertKeywordsHome = array(
-            'Bulletin Board - Nástěnka', // board header exists
-        );
-
-        foreach ($assertKeywordsHome as $w) {
-            self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
-        }
-
-        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/Bulletin.*Board.*/');
+        // board header
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/^Bulletin.*Board.*/');
         // TODO: fix missing token
         // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=[[:alnum:]]{10,}$/'); // RSS link with token
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=$/'); // RSS link with token
@@ -117,13 +109,15 @@ final class AdminatorAssert extends AdminatorTestCase
 
     public static function assertBoardMessages($response, $responseContent)
     {
-        $assertKeywordsHome = array(
-            '<div class="table zprava-main" >', // board message exists
-        );
+        // header
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[2]', '/^zpráva č. [[:digit:]]{1,}/');
+        // subject
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[3]/b', '/^([[:word:]]|[[:space:]]){5,}/');
+        // body
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[3]/div', '/^([[:word:]]|[[:space:]]){15,}/');
 
-        foreach ($assertKeywordsHome as $w) {
-            self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
-        }
+        // page number/listing
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[22]', '/^"strana \|/');
     }
 
     public static function assertTopologySubCat($content)
