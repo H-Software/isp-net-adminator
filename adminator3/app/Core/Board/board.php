@@ -238,22 +238,17 @@ class board
     public function insert_into_db()
     {
         try {
-            $add = $this->conn_mysql->query(
+            $add = $this->pdoMysql->query(
                 "INSERT INTO board (author, email, from_date, to_date, subject, body) "
                 . "VALUES ('$this->author', '$this->email', '$this->from_date',
 			'$this->to_date', '$this->subject', '$this->body')"
             );
         } catch (Exception $e) {
-            $this->logger->error("board\\insert_into_db: query failed: Catched Exception " . var_export($e->getMessage(), true));
+            $this->logger->error("board\\insert_into_db: query failed: Caught Exception: " . var_export($e->getMessage(), true));
+            $this->error .= "Caught Exception: ". $e->getMessage();
+            return false;
         }
 
-        $this->logger->info("board\\insert_into_db: query result: " . var_export($add, true));
-
-        if($add) {
-        } else {
-            $this->error .= "<div>Došlo k chybě při zpracování SQL dotazu v databázi!</div>\n";
-            $this->error .= "<div>Error description: " . $this->conn_mysql->error.", ". $e->getMessage() ."</div>\n";
-        }
         return $add;
     }
 }

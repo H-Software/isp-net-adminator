@@ -219,11 +219,15 @@ class othersController extends adminatorController
                 $assignData["mod"] = 3; //vysledny formular ulozeni
 
                 $nastenka->convert_vars();
-                $add = $nastenka->insert_into_db();
+                $rs = $nastenka->insert_into_db();
 
                 $assignData["mod_hlaska"] = "->> Přidat zprávu";
-                $assignData["rs"] = $add;
-                $assignData["body"] = $nastenka->error;
+                if($rs == false){
+                    $assignData["rs"] = $rs;
+                    $assignData["body"] = $nastenka->error;
+                } else {
+                    $assignData["rs"] = true;
+                }
 
                 // if($add){
                 //     header("Location: others-board.php"); //přesuneme se na úvodní stránku
