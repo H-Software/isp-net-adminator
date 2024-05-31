@@ -54,8 +54,11 @@ class topologyController extends adminatorController
             return $this->response;
         };
 
-        $topology = new Topology($this->container);
-        $output = $topology->getNodeList();
+        $i = new Topology($this->container);
+        list($csrf_html) = $this->generateCsrfToken($request, $response, true);
+        $i->csrf_html = $csrf_html;
+
+        $output = $i->getNodeList();
 
         $assignData = [
             "page_title" => "Adminator3 :: Topologie :: Node list",
