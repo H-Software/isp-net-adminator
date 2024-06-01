@@ -1388,7 +1388,7 @@ class Topology extends adminator
     {
         $output = "";
 
-        $sql_final = "SELECT * FROM router_list2 WHERE id = 1 order by id";
+        $sql_final = "SELECT * FROM router_list WHERE id = 1 order by id";
         list($dotaz_router_data, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
 
         if($dotaz_router_error != null) {
