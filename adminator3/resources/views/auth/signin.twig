@@ -31,7 +31,7 @@
 
                         <button type="submit" class="btn btn-primary">Sign In</button>
 
-                        {{ csrf()|ident(12) }}
+                        {{ csrf() }}
 
                         <input type="hidden" name="redirect" value="{{ redirect }}">
                     </form>

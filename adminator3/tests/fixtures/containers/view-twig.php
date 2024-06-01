@@ -35,13 +35,6 @@ $container->set(
 
         $view->getEnvironment()->enableStrictVariables();
 
-        $filter = new TwigFilter('ident', function ($string, $number) {
-            $spaces = str_repeat(' ', $number);
-            return rtrim(preg_replace('#^(.+)$#m', sprintf('%1$s$1', $spaces), $string));
-        }, array('is_safe' => array('all')));
-
-        $view->getEnvironment()->addFilter($filter);
-
         $view->addExtension($container->get(CsrfExtension::class));
 
         // "simulate" twig-middleware
