@@ -1421,7 +1421,7 @@ class Topology extends adminator
 
             $output .= "</td>\n</tr>\n";
 
-            $sql_final = "SELECT * FROM router_list WHERE parent_router = 1 order by id";
+            $sql_final = "SELECT id FROM router_list WHERE parent_router = 1 order by id";
             list($dotaz_router_1_rs, $dotaz_router_1_error) = $this->callPdoQueryAndFetch($sql_final);
 
             if(count($dotaz_router_1_rs) > 0) {
@@ -1543,7 +1543,7 @@ class Topology extends adminator
     {
         $output = "";
 
-        $sql_final = "SELECT * FROM router_list WHERE id = '".intval($id) ."' order by id";
+        $sql_final = "SELECT id, nazev, ip_adresa FROM router_list WHERE id = '".intval($id) ."' order by id";
         list($dotaz_router_rs, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
 
         if (count($dotaz_router_rs) > 0) {
@@ -1559,17 +1559,14 @@ class Topology extends adminator
                 $output .= "<td>";
 
                 $output .= " [".$data_router["id"]."] <b>".$data_router["nazev"]."</b>";
-
                 $output .= " <span style=\"color:grey; \">( ".$data_router["ip_adresa"]." ) </span>";
 
                 $output .= "</td>";
-
                 $output .= "</tr>";
 
                 //zde rekurze
-                $parent_id = $data_router["id"];
-
-                $sql_final = "SELECT * FROM router_list WHERE parent_router = '" . $id . "' order by id";
+                //
+                $sql_final = "SELECT id FROM router_list WHERE parent_router = '" . $data_router["id"] . "' order by id";
                 list($dotaz_router_parent_rs, $dotaz_router_parent_error) = $this->callPdoQueryAndFetch($sql_final);
 
                 if (count($dotaz_router_parent_rs) > 0) {
