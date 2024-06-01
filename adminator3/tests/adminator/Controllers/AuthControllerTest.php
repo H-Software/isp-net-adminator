@@ -94,7 +94,7 @@ final class AuthControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        // echo $responseContent;
+        echo $responseContent;
 
         $this->assertEquals($response->getStatusCode(), 401);
 
