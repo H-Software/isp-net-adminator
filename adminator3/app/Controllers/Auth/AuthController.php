@@ -99,7 +99,7 @@ class AuthController extends Controller
                 }
             } catch (Exception $e) {
                 // handle wrong login
-                $this->logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
 
                 $this->flash->addMessageNow('error', "Login was not successful.");
                 $this->flash->addMessageNow('error', $e->getMessage());
