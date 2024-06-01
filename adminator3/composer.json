@@ -65,7 +65,8 @@
         "php-mock/php-mock-phpunit": "^2.10",
         "fakerphp/faker": "^1.2",
         "symfony/dom-crawler": "^7.0",
-        "symfony/css-selector": "^7.0"
+        "symfony/css-selector": "^7.0",
+        "vincentlanglet/twig-cs-fixer": "^2.10"
     },
     "suggest": {
         "illuminate/database": "By default, Sentinel utilizes the powerful Illuminate database layer.",
@@ -97,6 +98,7 @@
         "phpcs": "phpcs -s",
         "cs:check": "./vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots --diff --dry-run",
         "cs:fix": "./vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=dots",
+        "twig:cs:fix": "vendor/bin/twig-cs-fixer lint --fix resources/views",
         "test": [
             "@putenv OTEL_PHP_DISABLED_INSTRUMENTATIONS=slim",
             "vendor/phpunit/phpunit/phpunit --colors=always"
