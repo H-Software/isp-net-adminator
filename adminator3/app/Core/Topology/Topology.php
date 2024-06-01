@@ -1112,18 +1112,19 @@ class Topology extends adminator
 
             $sql_final = $sql_base." ".$sql_where2." ORDER BY router_list.id";
 
-            $dotaz_routery = $this->conn_mysql->query($sql_final);
-            $dotaz_routery_radku = $dotaz_routery->num_rows;
+            try {
+                $dotaz_routery = $this->pdoMysql->query($sql_final);
+            } catch (Exception $e) {
+                $dotaz_error = $e->getMessage();
+            }
 
-            $dotaz_routery = $this->pdoMysql->query("SELECT akceptovano_pozn FROM partner_klienti WHERE id = '" . $id. "' ");
             $data = $dotaz_routery->fetchAll();
 
             if(!$dotaz_routery) {
 
                 $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
                 $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
-                // $output .= "<div style=\"\" >".mysql_error()."</div>";
-
+                $output .= "<div style=\"\" >".$dotaz_error."</div>";
             } elseif(count($data) < 1) {
                 $output .= "<div style=\"margin-left: 10px; padding-left: 10px; padding-right: 10px; ".
                     "background-color: #ff8c00; height: 30px; width: 980px; \" >".
