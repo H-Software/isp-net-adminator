@@ -1118,7 +1118,7 @@ class Topology extends adminator
                 $dotaz_error = $e->getMessage();
             }
 
-            if(is_object($dotaz_routery)){
+            if(is_object($dotaz_routery)) {
                 $data = $dotaz_routery->fetchAll();
 
             } else {
