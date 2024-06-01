@@ -41,7 +41,7 @@ class Topology extends adminator
 
     public function getNodeListForForm($search_string, int $typ_nodu = 2, $show_zero_value = true)
     {
-        $this->logger->info("topology\getNodesFiltered called");
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         if($show_zero_value === true) {
             $nodes[0] = "Není vybráno";
@@ -70,6 +70,8 @@ class Topology extends adminator
 
     public function getNodeList(): string
     {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
         $output = "";
 
         // prepare vars
@@ -1122,11 +1124,12 @@ class Topology extends adminator
                 $data = $dotaz_routery->fetchAll();
 
             } else {
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO result is not object");
                 $data = [];
             }
 
             if(!$dotaz_routery) {
-
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_error, true));
                 $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
                 $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
                 $output .= "<div style=\"\" >".$dotaz_error."</div>";
