@@ -1569,14 +1569,14 @@ class Topology extends adminator
                 //zde rekurze
                 $parent_id = $data_router["id"];
 
-                $dotaz_router_parent = $this->conn_mysql->query("SELECT * FROM router_list WHERE parent_router = $id order by id");
-                $dotaz_router_parent_radku = $dotaz_router_parent->num_rows;
+                $sql_final = "SELECT * FROM router_list WHERE parent_router = $id order by id";
+                list($dotaz_router_parent_rs, $dotaz_router_parent_error) = $this->callPdoQueryAndFetch($sql_final);
 
-                if ($dotaz_router_parent_radku > 0) {
+                if (count($dotaz_router_parent_rs) > 0) {
 
                     $iterace = 1;
 
-                    while($data_router_parent = $dotaz_router_parent->fetch_array()) {
+                    foreach ($dotaz_router_parent_rs as $row => $data_router_parent) {
 
                         $uroven++;
 
