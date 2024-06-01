@@ -12,14 +12,9 @@ use Psr\Http\Message\ResponseInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Cartalyst\Sentinel\Sentinel;
 use App\Renderer\Renderer;
+use Slim\Interfaces\RouteParserInterface;
 
 return [
-
-    // App::class => function (ContainerInterface $container) {
-    //     $app = Bridge::create($container);
-    //     return $app;
-    // },
-
     LoggerInterface::class => function (ContainerInterface $container) {
         return $container->get('logger');
     },
@@ -50,9 +45,10 @@ return [
     //     return new Guard($container->get(ResponseInterface::class), 'csrf', $storage, null, 200, 32, true);
     // },
 
-    // RouteParserInterface::class => function (ContainerInterface $container) {
-    //     return $container->get(App::class)->getRouteCollector()->getRouteParser();
-    // },
+    // prepare for auto-wiring for controllers and etc
+    RouteParserInterface::class => function (ContainerInterface $container) use ($app) {
+        return $app->getRouteCollector()->getRouteParser();
+    },
 
     // ResponseInterface::class => function (ContainerInterface $container) {
     //     return $container->get(App::class)->getResponseFactory();

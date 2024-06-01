@@ -47,9 +47,12 @@
 - https://www.slimframework.com/docs/v3/tutorial/first-app.html
 - https://github.com/slimphp/Tutorial-First-Application/blob/master/src/public/index.php
 - https://odan.github.io/slim4-skeleton/configuration.html
-#### slim twig
+
+#### twig
 - https://packagist.org/packages/slim/twig-view
-#### slim auth Old)
+- https://twig.symfony.com/doc/3.x/api.html#using-extensions
+
+#### slim auth (Old)
 - https://github.com/darkalchemy/Slim-Auth
 - https://discourse.slimframework.com/t/slim-framework-3-skeleton-application-has-authentication-mvc-construction/2088
 - https://github.com/HavenShen/slim-born/tree/v1.0.6
