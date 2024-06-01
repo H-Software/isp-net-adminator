@@ -25,6 +25,10 @@ class Topology extends adminator
 
     private $requestData;
 
+    private $list_nodes;
+
+    private $f_id_routeru;
+
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
@@ -769,12 +773,12 @@ class Topology extends adminator
         $f_monitoring = $this->requestData->query->get('f_monitoring');
         $f_alarm = $this->requestData->query->get('f_alarm');
         $f_alarm_stav = $this->requestData->query->get('f_alarm_stav');
-        $f_id_routeru = $this->requestData->query->get('f_id_routeru');
+        $this->f_id_routeru = $this->requestData->query->get('f_id_routeru');
         $f_search = $this->requestData->query->get('f_search');
         $list = $this->requestData->query->get('list');
         $odeslano = $this->requestData->query->get('odeslano');
 
-        $list_nodes = $this->requestData->query->get('list_nodes');
+        $this->list_nodes = $this->requestData->query->get('list_nodes');
 
         $arr_sql_where = array();
 
@@ -806,8 +810,8 @@ class Topology extends adminator
             $f_alarm_stav = 99;
         }
 
-        if((strlen($f_id_routeru) > 0)) {
-            $f_id_routeru = intval($f_id_routeru);
+        if((strlen($this->f_id_routeru) > 0)) {
+            $this->f_id_routeru = intval($this->f_id_routeru);
         }
 
         if((strlen($list) > 0)) {
@@ -827,7 +831,7 @@ class Topology extends adminator
                   "&".urlencode("f_alarm_stav")."=".urlencode($f_alarm_stav).
                   "&".urlencode("odeslano")."=".urlencode($odeslano).
                   "&".urlencode("f_search")."=".urlencode($f_search).
-                  "&".urlencode("f_id_routeru")."=".urlencode($f_id_routeru).
+                  "&".urlencode("f_id_routeru")."=".$this->f_id_routeru.
               "";
 
         //priprava filtracnich podminek do pole
@@ -848,8 +852,8 @@ class Topology extends adminator
             $arr_sql_where[] = " router_list.alarm_stav = '".$f_alarm_stav."'  ";
         }
 
-        if($f_id_routeru > 0) {
-            $arr_sql_where[] = "router_list.id = '".$f_id_routeru."'";
+        if($this->f_id_routeru > 0) {
+            $arr_sql_where[] = "router_list.id = '".$this->f_id_routeru."'";
         }
 
         if(isset($f_search)) {
@@ -1021,7 +1025,7 @@ class Topology extends adminator
         $output .= "<div style=\"float: left; padding-left: 20px; \" >ID routeru: </div>\n";
 
         $output .= "<div style=\"float: left; padding-left: 20px; \" >".
-        "<input type=\"text\" name=\"f_id_routeru\" size=\"3\" value=\"".htmlspecialchars($f_id_routeru)."\" ></div>\n";
+        "<input type=\"text\" name=\"f_id_routeru\" size=\"3\" value=\"".$this->f_id_routeru."\" ></div>\n";
 
         //tlacitko
         $output .= "<div style=\"float: left; padding-left: 40px; \" >".
@@ -1042,8 +1046,7 @@ class Topology extends adminator
             return $output;
         }
 
-        {
-            //vypis routeru normal
+        //vypis routeru normal
 
             $sql_rows = "router_list.id, router_list.nazev, router_list.ip_adresa, router_list.parent_router, ".
                 "router_list.mac, router_list.monitoring, router_list.monitoring_cat, router_list.alarm, ".
@@ -1155,8 +1158,6 @@ class Topology extends adminator
 
             //listovani
             $output .= $paging->listInterval();
-
-        }
 
         return $output;
     }
@@ -1294,14 +1295,14 @@ class Topology extends adminator
             $output .= "</tr>\n";
 
             //pokud s kliklo na vypis subnetu
-            if($list_nodes == "yes" and $f_id_routeru == $data["id"]) {
+            if($this->list_nodes == "yes" and $this->f_id_routeru == $data["id"]) {
 
                 $output .= "<tr><td colspan=\"11\" >\n";
 
                 // $id_routeru = $data["id"];
                 $colspan_stav = "1";
 
-                list($rs_data2, $rs_error2) = $this->callPdoQueryAndFetch("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
+                list($rs_data2, $rs_error2) = $this->callPdoQueryAndFetch("SELECT * FROM nod_list WHERE router_id = '". $this->f_id_routeru ."' ");
 
                 // TODO: add detect and display error
 
