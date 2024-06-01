@@ -861,7 +861,7 @@ class Topology extends adminator
 
             $rs_q = $this->pdoMysql->quote($f_search_prep);
 
-            if($rs_q == false){
+            if($rs_q == false) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO has not implemented quote");
                 throw new Exception("PDO has not implemented quote");
 
@@ -1377,7 +1377,7 @@ class Topology extends adminator
                         // $id_routeru = $data["id"];
                         $colspan_stav = "1";
 
-                        list ($rs_data2, $rs_error2) = $this->callPdoQueryAndFetch("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
+                        list($rs_data2, $rs_error2) = $this->callPdoQueryAndFetch("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
 
                         // TODO: add detect and display error
 
