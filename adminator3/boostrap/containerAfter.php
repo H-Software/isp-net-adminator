@@ -181,7 +181,9 @@ $container->set(
         $view = Twig::create(
             $settings['twig']['path'],
             [
-                'cache' => false,
+                'cache' => $settings['twig']['cache'],
+                'debug' => $settings['twig']['debug'],
+
             ]
         );
 

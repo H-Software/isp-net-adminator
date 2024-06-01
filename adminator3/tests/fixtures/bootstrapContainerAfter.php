@@ -2,7 +2,6 @@
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
-use PHPUnit\DbUnit\DataSet\DataSet;
 use Slim\Csrf\Guard;
 
 $container->set(
@@ -63,16 +62,16 @@ $container->set(
 
 $container->set(
     'csrf',
-    // function () use ($responseFactory) {
     function () {
 
         $guardMock = \Mockery::mock(Guard::class);
 
-        $guardMock->shouldReceive('getTokenNameKey')->andReturn(42);
-        $guardMock->shouldReceive('getTokenValueKey')->andReturn(42);
+        $guardMock->shouldReceive('getTokenNameKey')->andReturn("nameKey42");
+        $guardMock->shouldReceive('getTokenValueKey')->andReturn("Value42");
+        $guardMock->shouldReceive('getTokenName')->andReturn("name42");
+        $guardMock->shouldReceive('getTokenValue')->andReturn("value42");
 
         return $guardMock;
-        // return new Guard($responseFactory);
     }
 );
 
