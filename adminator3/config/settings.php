@@ -29,6 +29,8 @@ $settings = [
         ],
         'twig' => [
             'path' => __DIR__ . '/../resources/views/',
+            'cache' => false,
+            'debug' => true,
         ],
         'session' => [
             'name' => 'adminator3-slimapp',

@@ -113,8 +113,8 @@ abstract class AdminatorTestCase extends TestCase
         }
 
         if($viewEnabled === true) {
-            require __DIR__ . '/../tests/fixtures/containers/view.php';
-            $enableSession = true;
+            require __DIR__ . '/../tests/fixtures/containers/view-twig.php';
+            require __DIR__ . '/../tests/fixtures/containers/routeParserMock.php';
         }
 
         if($validatorEnabled == true) {
