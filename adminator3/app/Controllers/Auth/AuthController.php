@@ -51,6 +51,8 @@ class AuthController extends Controller
 
     public function signin(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
+        $data = [];
+
         $flashEnabled = true;
         if (array_key_exists('flashEnabled', $args)) {
             $flashEnabled = $args['flashEnabled'];
@@ -63,11 +65,11 @@ class AuthController extends Controller
 
         if ($request->getMethod() == "POST") {
 
-            $redirect = $request->getParsedBody()['redirect'];
-            $data = array(
-                'email' => $request->getParsedBody()['slimUsername'],
-                'password' => $request->getParsedBody()['slimPassword'],
-            );
+            $redirect = array_key_exists('redirect', $request->getParsedBody()) ? $request->getParsedBody()['redirect'] : null;
+
+            $data['email'] = array_key_exists('slimUsername', $request->getParsedBody()) ? $request->getParsedBody()['slimUsername'] : null;
+            $data['password'] = array_key_exists('slimPassword', $request->getParsedBody()) ? $request->getParsedBody()['slimPassword'] : null;
+
 
             try {
                 if (!$this->sentinel->authenticate(
@@ -81,6 +83,7 @@ class AuthController extends Controller
                     true
                 )
                 ) {
+                    // login wrong
                     throw new Exception('Incorrect email or password.');
                 } else {
                     // login OK
@@ -95,8 +98,12 @@ class AuthController extends Controller
                     return $response->withStatus(302)->withHeader('Location', $redirect ?: $url);
                 }
             } catch (Exception $e) {
-                $this->flash->addMessageNow('error', $e->getMessage());
+                // handle wrong login
                 $this->logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
+
+                $this->flash->addMessageNow('error', "Login was not successful.");
+                $this->flash->addMessageNow('error', $e->getMessage());
+                $response = $response->withStatus(401);
             }
         }
 
@@ -107,10 +114,6 @@ class AuthController extends Controller
         } else {
             $username = null;
         }
-
-        // echo "<pre>END: ERROR: " . var_export($this->flash->getMessages()["error"], true) . "</pre>";
-        // echo "<pre>END OLD: " . var_export($this->flash->getMessages()["old"], true) . "</pre>";
-        // echo "<pre>END OLD NOW: " . var_export($this->flash->getMessages()["oldNow"], true) . "</pre>";
 
         $this->logger->debug("AuthController/signin: redirect url: " . var_export($redirect, true));
 

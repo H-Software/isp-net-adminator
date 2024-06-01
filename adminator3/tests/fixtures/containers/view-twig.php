@@ -7,6 +7,7 @@ use Slim\Interfaces\RouteParserInterface;
 use Slim\Views\TwigRuntimeExtension;
 use Slim\Views\TwigRuntimeLoader;
 use Psr\Http\Message\UriInterface;
+use Twig\TwigFilter;
 
 $container->set(
     CsrfExtension::class,
