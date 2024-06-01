@@ -833,7 +833,13 @@ class Topology extends adminator
         }
 
         if(isset($f_search)) {
-            $rs_q = $this->pdoMysql->quote($f_search);
+            if(preg_match('/^(%)(.*)(%)$/', $f_search)) {
+                $f_search_prep = $f_search;
+            } else {
+                $f_search_prep = "%" . $f_search . "%";
+            }
+
+            $rs_q = $this->pdoMysql->quote($f_search_prep);
 
             if($rs_q == false){
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO has not implemented quote");
@@ -843,11 +849,11 @@ class Topology extends adminator
                 $f_search_safe = $rs_q;
             }
 
-            $arr_sql_where[] = "( router_list.nazev LIKE '%".$f_search_safe."%' OR ".
-                    " router_list.ip_adresa LIKE '%".$f_search_safe."%' OR ".
-                    " router_list.mac LIKE '%".$f_search_safe."%' OR ".
-                    " router_list2.nazev LIKE '%".$f_search_safe."%' OR ".
-                    " kategorie.jmeno LIKE '%".$f_search_safe."%' ".
+            $arr_sql_where[] = "( router_list.nazev LIKE ".$f_search_safe." OR ".
+                    " router_list.ip_adresa LIKE ".$f_search_safe." OR ".
+                    " router_list.mac LIKE ".$f_search_safe." OR ".
+                    " router_list2.nazev LIKE ".$f_search_safe." OR ".
+                    " kategorie.jmeno LIKE ".$f_search_safe." ".
                     " ) ";
         }
 
@@ -1169,7 +1175,7 @@ class Topology extends adminator
             } elseif(count($rs_data) < 1) {
                 $output .= "<div style=\"margin-left: 10px; padding-left: 10px; padding-right: 10px; ".
                     "background-color: #ff8c00; height: 30px; width: 980px; \" >".
-                    "<div style=\"padding-top: 5px;\" > Žádné záznamy dle hledaného kritéria. </div>".
+                    "<div style=\"padding-top: 5px;\" >Žádné záznamy dle hledaného kritéria.</div>".
                     "</div>";
 
                 /*

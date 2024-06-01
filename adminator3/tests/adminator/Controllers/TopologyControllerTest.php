@@ -254,7 +254,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         // TODO: router_list_view_with_non_exist_find_param: add assert for table header
 
-        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/^Žádné záznamy dle hledaného kritéria.$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/^Žádné záznamy dle hledaného kritéria\.$/');
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
