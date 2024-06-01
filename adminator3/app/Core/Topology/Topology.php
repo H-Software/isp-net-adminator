@@ -29,6 +29,10 @@ class Topology extends adminator
 
     private $f_id_routeru;
 
+    // private $list_hierarchy_level;
+
+    private $list_hierarchy_max;
+
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
@@ -1388,7 +1392,7 @@ class Topology extends adminator
     {
         $output = "";
 
-        $sql_final = "SELECT * FROM router_list WHERE id = 1 order by id";
+        $sql_final = "SELECT id, nazev, ip_adresa FROM router_list WHERE id = 1 order by id";
         list($dotaz_router_data, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
 
         if($dotaz_router_error != null) {
@@ -1406,59 +1410,60 @@ class Topology extends adminator
 
         foreach ($dotaz_router_data as $row => $data_main) {
 
-            $uroven_max = 1;
+            $this->list_hierarchy_max = 1;
 
             $output .= "<table border=\"1\" width=\"1000px\" >\n";
             $output .= "<tr>\n";
 
-            $output .= "<td> [".$data_main["id"]."] ".$data_main["nazev"];
-
-            $output .= " <span style=\"color:grey; \">( ".$data_main["ip_adresa"]." ) </span>";
+            $output .= "<td>"
+                    . "<span id=\"router-list-hierarchy-level-0-name\">[".$data_main["id"]."] <b>".$data_main["nazev"] . "</b></span>\n"
+                    . " "
+                    . "<span id=\"router-list-hierarchy-level-0-ip\" style=\"color:grey; \">(".$data_main["ip_adresa"].")</span>\n";
 
             $output .= "</td>\n</tr>\n";
 
-            $dotaz_router_1 = $this->conn_mysql->query("SELECT * FROM router_list WHERE parent_router = 1 order by id");
-            $dotaz_router_radku_1 = $dotaz_router_1->num_rows;
+            $sql_final = "SELECT id, parent_router FROM router_list WHERE parent_router = 1 order by id";
+            list($dotaz_router_1_rs, $dotaz_router_1_error) = $this->callPdoQueryAndFetch($sql_final);
 
-            if($dotaz_router_radku_1 > 0) {
+            if(count($dotaz_router_1_rs) > 0) {
                 //prvni uroven
-                while($data_router_1 = $dotaz_router_1->fetch_array()) {
-                    global $uroven;
-
+                foreach ($dotaz_router_1_rs as $row => $data_router_1) {
                     $id = $data_router_1["id"];
 
-                    $rs_hierarchy = hierarchy_vypis_router($id, "0");
+                    $rs_hierarchy = $this->hierarchy_vypis_router($id, "0");
                     if($rs_hierarchy === false) {
-                        $output .= "<div class=\"alert alert-danger\" role=\"alert\">chyba hiearcheckeho vypisu routeru (no routers found in database)</div>";
+                        $output .= "<div class=\"alert alert-danger\" role=\"alert\">chyba hierarchickeho vypisu routeru (no depedent routers found in database)</div>";
                     } else {
                         $output .= $rs_hierarchy;
                     }
                 } // while dotaz_router
             } // konec if dotaz_router_radku > 0
+            else {
+                $output .= "<div class=\"alert alert-danger\" role=\"alert\">No depedent routers found in database</div>";
+            }
 
             // $output .= "pokracujem ...";
 
         } // konec while
 
         //neprirazene rb
-        $uroven_max = $uroven_max + 2;
+        $this->list_hierarchy_max = $this->list_hierarchy_max + 2;
 
         $output .= "<tr><td><br></td></tr>";
 
-        $output .= "<tr><td colspan=\"".$uroven_max."\" ><hr></td></tr>";
+        $output .= "<tr><td colspan=\"".$this->list_hierarchy_max."\" ><hr></td></tr>";
 
-        $output .= "<tr><td colspan=\"".$uroven_max."\" ><br></td></tr>";
+        $output .= "<tr><td colspan=\"".$this->list_hierarchy_max."\" ><br></td></tr>";
 
-        $output .= "<tr><td colspan=\"".$uroven_max."\" >Nepřiřazené routery:  </td></tr>";
+        $output .= "<tr><td colspan=\"".$this->list_hierarchy_max."\" >Nepřiřazené routery:  </td></tr>";
 
-        $dotaz_routery = $this->conn_mysql->query("SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id");
-        $dotaz_routery_radku = $dotaz_routery->num_rows;
+        $sql_final = "SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id";
+        list($dotaz_routery_rs, $dotaz_routery_error) = $this->callPdoQueryAndFetch($sql_final);
 
-        if ($dotaz_routery_radku < 1) {
+        if (count($dotaz_routery_rs) < 1) {
             $output .= "<tr><td colspan=\"5\" > Žádné routery v databázi. </td></tr>";
         } else {
-            while($data = $dotaz_routery->fetch_array()):
-
+            foreach ($dotaz_routery_rs as $row => $data) {
                 $output .= "<tr>";
 
                 $output .= "<td>".$data["id"]."</td>";
@@ -1482,7 +1487,7 @@ class Topology extends adminator
 
                 $output .= "<td>".$data["mac"]."</td>";
 
-            endwhile;
+            }
 
         }
 
@@ -1491,7 +1496,6 @@ class Topology extends adminator
 
     public function filter_select_nods($typ_nodu = '')
     {
-
         $ret = array();
 
         if(empty($typ_nodu)) {
@@ -1536,4 +1540,67 @@ class Topology extends adminator
         return $ret;
 
     } //end of function filter_select_nods
+
+    public function hierarchy_vypis_router($id, $uroven): string|false
+    {
+        $output = "";
+
+        $sql_final = "SELECT id, nazev, ip_adresa, parent_router FROM router_list WHERE id = '".intval($id) ."' order by id";
+        list($dotaz_router_rs, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
+
+        if (count($dotaz_router_rs) > 0) {
+
+            foreach ($dotaz_router_rs as $row => $data_router) {
+                // if($data_router["id"] == $data_router["parent_router"]) {
+                //     $output .= "<div class=\"alert alert-danger\" role=\"alert\">Error! Router \"" . $data_router['nazev'] . "\" has dependecy (parent router) to itself!</div>";
+                // }
+
+                $output .= "<tr>\n";
+
+                for ($j = 0;$j < $uroven; $j++) {
+                    $output .= "<td><br></td>\n";
+                }
+
+                $output .= "<td align=\"center\">|------> </td>";
+
+                $output .= "<td>\n"
+                        . "<span id=\"router-list-hierarchy-level-". ($uroven + 1). "-name\">[".$data_router["id"]."] <b>".$data_router["nazev"] . "</b></span>\n"
+                        . " "
+                        . "<span id=\"router-list-hierarchy-level-". ($uroven + 1). "-ip\" style=\"color:grey; \">(".$data_router["ip_adresa"].")</span>\n";
+
+                $output .= "</td></tr>\n";
+
+                //zde rekurze
+                //
+                $sql_final = "SELECT id FROM router_list WHERE parent_router = '" . $data_router["id"] . "' order by id";
+                list($dotaz_router_parent_rs, $dotaz_router_parent_error) = $this->callPdoQueryAndFetch($sql_final);
+
+                if (count($dotaz_router_parent_rs) > 0) {
+                    $iterace = 1;
+
+                    foreach ($dotaz_router_parent_rs as $row => $data_router_parent) {
+                        $uroven++;
+
+                        if (($uroven > $this->list_hierarchy_max)) {
+                            $this->list_hierarchy_max = $uroven;
+                        }
+
+                        $output .= $this->hierarchy_vypis_router($data_router_parent["id"], $uroven);
+
+                        $iterace++;
+
+                        $uroven--;
+                    }
+                    // else
+                    // { $uroven--; }
+                }
+            }
+
+        } else {
+            return false;
+        }
+
+        return $output;
+    }
+
 }

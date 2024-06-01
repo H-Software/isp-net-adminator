@@ -358,7 +358,53 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
 
-    // TODO: add test for router-list for hierarchy mode (typ = 1)
+    public function test_ctl_router_list_hierarchy()
+    {
+        // $this->markTestSkipped('under construction');
+        $self = $this;
+
+        $request = Request::create(
+            '/topology/router-list',
+            'GET',
+            [
+                'typ' => '1',
+            ]
+        );
+        $request->overrideGlobals();
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
+
+        $container = self::initDIcontainer(true, false);
+
+        $adminatorMock = self::initAdminatorMockClass($container);
+        $this->assertIsObject($adminatorMock);
+
+        $topologyController = new topologyController($container, $adminatorMock);
+
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $response = $responseFactory->createResponse();
+
+        $response = $topologyController->routerList($serverRequest, $response, []);
+
+        $responseContent = $response->getBody()->__toString();
+
+        // echo $responseContent;
+
+        $this->assertEquals($response->getStatusCode(), 200);
+
+        adminatorAssert::assertBase($responseContent);
+
+        adminatorAssert::assertTopologySubCat($response, $responseContent);
+
+        // assert 1. level
+        self::assertXpathQueryContentRegex($response, '//*[@id="router-list-hierarchy-level-0-name"]', '/^(\w|\W|\s){5,}$/');
+
+        // assert 2. level
+        self::assertXpathQueryContentRegex($response, '//*[@id="router-list-hierarchy-level-1-name"]', '/^(\w|\W|\s){5,}$/');
+
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
+    }
 
     // TODO: add test for node-list with search
 

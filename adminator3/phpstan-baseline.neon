@@ -134,8 +134,3 @@ parameters:
 			message: "#^Property platby\\:\\:\\$container is unused\\.$#"
 			count: 1
 			path: app/Core/platby.php
-
-		-
-			message: "#^Comparison operation \"\\>\" between int\\<2, max\\> and 1 is always true\\.$#"
-			count: 1
-			path: include/main.function.shared.php
