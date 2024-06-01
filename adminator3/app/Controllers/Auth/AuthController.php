@@ -70,20 +70,6 @@ class AuthController extends Controller
             $data['email'] = array_key_exists('slimUsername', $request->getParsedBody()) ? $request->getParsedBody()['slimUsername'] : null;
             $data['password'] = array_key_exists('slimPassword', $request->getParsedBody()) ? $request->getParsedBody()['slimPassword'] : null;
 
-            // $redirect = $request->getParsedBody()['redirect'];
-
-            // if () {
-            //     $redirect = $request->getParsedBody()['redirect'];
-            // }
-
-            // if (array_key_exists('redirect', $request->getParsedBody())) {
-            //     $redirect = $request->getParsedBody()['redirect'];
-            // }
-
-            // $data = array(
-            //     'email' => $request->getParsedBody()['slimUsername'],
-            //     'password' => $request->getParsedBody()['slimPassword'],
-            // );
 
             try {
                 if (!$this->sentinel->authenticate(
@@ -97,6 +83,7 @@ class AuthController extends Controller
                     true
                 )
                 ) {
+                    // login wrong
                     throw new Exception('Incorrect email or password.');
                 } else {
                     // login OK
@@ -111,8 +98,11 @@ class AuthController extends Controller
                     return $response->withStatus(302)->withHeader('Location', $redirect ?: $url);
                 }
             } catch (Exception $e) {
-                $this->flash->addMessageNow('error', $e->getMessage());
+                // handle wrong login
                 $this->logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
+
+                $this->flash->addMessageNow('error', "<div>Login was not successful.</div>" . $e->getMessage());
+                $response = $response->withStatus(401);
             }
         }
 
