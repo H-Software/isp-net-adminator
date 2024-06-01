@@ -754,6 +754,8 @@ class Topology extends adminator
         $list = $this->requestData->query->get('list');
         $odeslano = $this->requestData->query->get('odeslano');
 
+        $list_nodes = $this->requestData->query->get('list_nodes');
+
         $arr_sql_where = array();
 
         if((strlen($filtrace) > 0)) {
@@ -1178,9 +1180,9 @@ class Topology extends adminator
                 $sql_final = $sql_final . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
                 // $output .= "<div>SQL DUMP: ".$sql_final . "</div>";
-                $dotaz_routery = $this->conn_mysql->query($sql_final);
+                // $dotaz_routery = $this->conn_mysql->query($sql_final);
 
-                $dotaz_routery_radku = $dotaz_routery->num_rows;
+                // $dotaz_routery_radku = $dotaz_routery->num_rows;
 
                 //listovani
                 $output .= $paging->listInterval();
@@ -1351,7 +1353,7 @@ class Topology extends adminator
                     $output .= "</tr>\n";
 
                     //pokud s kliklo na vypis subnetu
-                    if(($_GET["list_nodes"] == "yes" and $f_id_routeru == $data["id"])) {
+                    if($list_nodes == "yes" and $f_id_routeru == $data["id"]) {
 
                         $output .= "<tr><td colspan=\"11\" >";
 

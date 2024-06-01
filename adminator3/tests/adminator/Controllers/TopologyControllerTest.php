@@ -159,7 +159,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
     public function test_ctl_router_list_view_all()
     {
-        $this->markTestSkipped('under construction');
+        // $this->markTestSkipped('under construction');
         // TODO: router-list: switch to PDO
         $self = $this;
 
@@ -215,6 +215,8 @@ final class TopologyControllerTest extends AdminatorTestCase
         // $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
         // $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
+
+    // TODO: add test for router-list with "vypsat vysílače/nody"
 
     // TODO: add test for node-list with search
 
