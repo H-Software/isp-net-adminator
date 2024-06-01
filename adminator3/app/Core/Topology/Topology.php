@@ -1146,7 +1146,7 @@ class Topology extends adminator
                 " router_list.alarm_stav, router_list.filtrace, router_list.warn, router_list.mail, ".
                 " kategorie.jmeno AS kategorie_jmeno, router_list2.nazev AS parent_router_nazev";
 
-            $sql_base = "SELECT ".$sql_rows." FROM router_list2 ".
+            $sql_base = "SELECT ".$sql_rows." FROM router_list ".
                 " LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ".
                 " LEFT JOIN router_list AS router_list2 ON router_list.parent_router = router_list2.id ";
 
@@ -1173,7 +1173,6 @@ class Topology extends adminator
             $sql_final .= " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
             list($rs_data, $dotaz_error) = $this->callPdoQueryAndFetch($sql_final);
-
 
             if($dotaz_error != null) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_error, true));
