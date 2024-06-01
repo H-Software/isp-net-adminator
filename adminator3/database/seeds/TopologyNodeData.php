@@ -30,7 +30,7 @@ class TopologyNodeData extends AbstractSeed
                                         $faker->text(30)
                                     ),
                 'ip_rozsah'         => $faker->localIpv4(), // https://fakerphp.org/formatters/internet/#localipv4
-                'router_id'         => $faker->numberBetween(1, 5),
+                'router_id'         => ($i + 1),
             ];
         }
 
