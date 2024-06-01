@@ -61,6 +61,9 @@ final class AuthControllerTest extends AdminatorTestCase
         adminatorAssert::assertBaseCommon($responseContent);
 
         // TODO: test_ctl_login_page_default_view: add asserts for login form
+        adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-title"]', '/^Sign In$/');
+        adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-submit"]', '/^Sign In$/');
+
     }
 
     public function test_ctl_login_page_post()
@@ -102,8 +105,10 @@ final class AuthControllerTest extends AdminatorTestCase
 
         // TODO: test_ctl_login_page_post: add asserts for flash meessage (needs enabled Flash)
 
-        // TODO: test_ctl_login_page_post: add asserts for (re-rendered_ login form
+        // TODO: test_ctl_login_page_post: add asserts for (re-rendered) login form
     }
+
+    // TODO: add tests for check (failed) csrf
 
     // TODO: add tests for password-changes
 
