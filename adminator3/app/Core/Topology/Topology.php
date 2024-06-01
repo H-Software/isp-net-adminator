@@ -1106,7 +1106,7 @@ class Topology extends adminator
                 " router_list.alarm_stav, router_list.filtrace, router_list.warn, router_list.mail, ".
                 " kategorie.jmeno AS kategorie_jmeno, router_list2.nazev AS parent_router_nazev";
 
-            $sql_base = "SELECT ".$sql_rows." FROM router_list ".
+            $sql_base = "SELECT ".$sql_rows." FROM router_list2 ".
                 " LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ".
                 " LEFT JOIN router_list AS router_list2 ON router_list.parent_router = router_list2.id ";
 
@@ -1115,13 +1115,16 @@ class Topology extends adminator
             $dotaz_routery = $this->conn_mysql->query($sql_final);
             $dotaz_routery_radku = $dotaz_routery->num_rows;
 
+            $dotaz_routery = $this->pdoMysql->query("SELECT akceptovano_pozn FROM partner_klienti WHERE id = '" . $id. "' ");
+            $data = $dotaz_routery->fetchAll();
+
             if(!$dotaz_routery) {
 
                 $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
                 $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
                 // $output .= "<div style=\"\" >".mysql_error()."</div>";
 
-            } elseif($dotaz_routery_radku < 1) {
+            } elseif(count($data) < 1) {
                 $output .= "<div style=\"margin-left: 10px; padding-left: 10px; padding-right: 10px; ".
                     "background-color: #ff8c00; height: 30px; width: 980px; \" >".
                     "<div style=\"padding-top: 5px;\" > Žádné záznamy dle hledaného kritéria. </div>".
