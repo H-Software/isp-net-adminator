@@ -3,11 +3,12 @@
 use App\Middleware\SessionMiddleware;
 use Slim\Views\TwigMiddleware;
 use Slim\Csrf\Guard;
+use Slim\Interfaces\RouteParserInterface;
 
 $logger = $container->get('logger');
 // $feature = $container->get('openfeature');
 
-$container->set(Slim\Interfaces\RouteParserInterface::class, $routeParser);
+$container->set(RouteParserInterface::class, $routeParser);
 
 $container->set(
     'csrf',

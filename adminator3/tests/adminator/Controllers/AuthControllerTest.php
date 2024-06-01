@@ -25,7 +25,7 @@ final class AuthControllerTest extends AdminatorTestCase
 
     public function test_ctl_login_page_default_view()
     {
-        $this->markTestSkipped('under construction');
+        // $this->markTestSkipped('under construction');
         $self = $this;
 
         $request = Request::create(
