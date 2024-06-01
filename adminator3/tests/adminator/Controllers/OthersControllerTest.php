@@ -99,8 +99,6 @@ final class OthersControllerTest extends AdminatorTestCase
 
     }
 
-    // TODO: add test for CompanyWeb
-
     public function test_ctl_board()
     {
         // $this->markTestSkipped('under construction');
@@ -353,10 +351,10 @@ final class OthersControllerTest extends AdminatorTestCase
         // echo $responseContent2;
 
         // subject
-        // TODO: fix missing text
+        // TODO: board_add_message_sent: fix missing inserted data
         // self::assertXpathQueryContentRegex($response2, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[3]/b', '/test subject/');
         // body
-        // TODO: fix missing text
+        // TODO: board_add_message_sent: fix missing inserted data
         // self::assertXpathQueryContentRegex($response2, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[3]/div', '/test subject message body/');
 
         // non-common negative asserts
@@ -365,5 +363,7 @@ final class OthersControllerTest extends AdminatorTestCase
     }
 
     // TODO: add tests for BoardRSS
+
+    // TODO: add test for CompanyWeb
 
 }

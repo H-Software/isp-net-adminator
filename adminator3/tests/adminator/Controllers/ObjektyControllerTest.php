@@ -51,7 +51,9 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        // TODO: add asserts
+        // TODO: add asserts for sub-categories
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]', '/^Prosím vyberte z podkategorie výše....$/');
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
