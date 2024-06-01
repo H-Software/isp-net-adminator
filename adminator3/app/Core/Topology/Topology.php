@@ -833,7 +833,15 @@ class Topology extends adminator
         }
 
         if(isset($f_search)) {
-            $f_search_safe = $this->conn_mysql->real_escape_string($f_search);
+            $rs_q = $this->pdoMysql->quote($f_search);
+
+            if($rs_q == false){
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO has not implemented quote");
+                throw new Exception("PDO has not implemented quote");
+
+            } else {
+                $f_search_safe = $rs_q;
+            }
 
             $arr_sql_where[] = "( router_list.nazev LIKE '%".$f_search_safe."%' OR ".
                     " router_list.ip_adresa LIKE '%".$f_search_safe."%' OR ".
@@ -1138,6 +1146,7 @@ class Topology extends adminator
             //uprava sql
             $sql_final .= " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
+            $dotaz_routery = null;
             try {
                 $dotaz_routery = $this->pdoMysql->query($sql_final);
             } catch (Exception $e) {
