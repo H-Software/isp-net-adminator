@@ -34,6 +34,8 @@ class TopologyNodeData extends AbstractSeed
             ];
         }
 
+        // TODO: add router without parent router (parent_router column = 0)
+
         $this->insert('nod_list', $data);
     }
 

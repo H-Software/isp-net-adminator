@@ -387,13 +387,23 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        echo $responseContent;
+        // echo $responseContent;
 
         $this->assertEquals($response->getStatusCode(), 200);
 
         adminatorAssert::assertBase($responseContent);
 
         adminatorAssert::assertTopologySubCat($response, $responseContent);
+
+        // assert 1. level
+        self::assertXpathQueryContentRegex($response, '//*[@id="router-list-hierarchy-level-0-name"]', '/^(\w|\W|\s){5,}$/');
+
+        // assert 2. level
+        self::assertXpathQueryContentRegex($response, '//*[@id="router-list-hierarchy-level-1-name"]', '/^(\w|\W|\s){5,}$/');
+
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
 
     // TODO: add test for node-list with search

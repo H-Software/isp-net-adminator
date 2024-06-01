@@ -1415,9 +1415,10 @@ class Topology extends adminator
             $output .= "<table border=\"1\" width=\"1000px\" >\n";
             $output .= "<tr>\n";
 
-            $output .= "<td> [".$data_main["id"]."] ".$data_main["nazev"];
-
-            $output .= " <span style=\"color:grey; \">( ".$data_main["ip_adresa"]." ) </span>";
+            $output .= "<td>"
+                    . "<span id=\"router-list-hierarchy-level-0-name\">[".$data_main["id"]."] <b>".$data_main["nazev"] . "</b></span>\n"
+                    . " "
+                    . "<span id=\"router-list-hierarchy-level-0-ip\" style=\"color:grey; \">(".$data_main["ip_adresa"].")</span>\n";
 
             $output .= "</td>\n</tr>\n";
 
@@ -1554,19 +1555,20 @@ class Topology extends adminator
                 //     $output .= "<div class=\"alert alert-danger\" role=\"alert\">Error! Router \"" . $data_router['nazev'] . "\" has dependecy (parent router) to itself!</div>";
                 // }
 
-                $output .= "<tr>";
+                $output .= "<tr>\n";
 
                 for ($j = 0;$j < $uroven; $j++) {
-                    $output .= "<td><br></td>";
+                    $output .= "<td><br></td>\n";
                 }
 
-                $output .= "<td align=\"center\">|------> </td>"
-                            . "<td>";
+                $output .= "<td align=\"center\">|------> </td>";
 
-                $output .= " [".$data_router["id"]."] <b>".$data_router["nazev"]."</b>"
-                          ." <span style=\"color:grey; \">( ".$data_router["ip_adresa"]." ) </span>";
+                $output .= "<td>\n"
+                        . "<span id=\"router-list-hierarchy-level-". ($uroven + 1). "-name\">[".$data_router["id"]."] <b>".$data_router["nazev"] . "</b></span>\n"
+                        . " "
+                        . "<span id=\"router-list-hierarchy-level-". ($uroven + 1). "-ip\" style=\"color:grey; \">(".$data_router["ip_adresa"].")</span>\n";
 
-                $output .= "</td></tr>";
+                $output .= "</td></tr>\n";
 
                 //zde rekurze
                 //
