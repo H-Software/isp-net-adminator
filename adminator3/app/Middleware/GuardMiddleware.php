@@ -98,12 +98,11 @@ class GuardMiddleware implements MiddlewareInterface
 
                 $response = $responseFactory->createResponse();
 
-                $assignData = array(
-                    "page_title" => "Adminator3 - chybny CSRF token",
-                );
-
                 if ($sentinel->check()) {
-                    $assignData["body"] = "<br>Failed CSRF check!<br>";
+                    $assignData = [
+                        "page_title" => "Adminator3 - chybny CSRF token",
+                        "body" => "<br>Failed CSRF check!<br>",
+                    ];
 
                     $response =  $renderer->template(null, $response, 'global/no-csrf.tpl', $assignData, 400);
                 } else {
