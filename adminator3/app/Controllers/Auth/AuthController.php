@@ -101,7 +101,8 @@ class AuthController extends Controller
                 // handle wrong login
                 $this->logger->error("authController\signin " . $e->getMessage(), $this->array_clean($data, ['email', 'persist', 'csrf_name', 'csrf_value']));
 
-                $this->flash->addMessageNow('error', "<div>Login was not successful.</div>" . $e->getMessage());
+                $this->flash->addMessageNow('error', "Login was not successful.");
+                $this->flash->addMessageNow('error', $e->getMessage());
                 $response = $response->withStatus(401);
             }
         }

@@ -60,7 +60,7 @@ final class AuthControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBaseCommon($responseContent);
 
-        // TODO: add asserts for login form
+        // TODO: test_ctl_login_page_default_view: add asserts for login form
     }
 
     public function test_ctl_login_page_post()
@@ -76,7 +76,7 @@ final class AuthControllerTest extends AdminatorTestCase
         $request->overrideGlobals();
         $serverRequest = self::$psrHttpFactory->createRequest($request);
 
-        $container = self::initDIcontainer(false, true);
+        $container = self::initDIcontainer(true, true);
 
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
@@ -96,11 +96,13 @@ final class AuthControllerTest extends AdminatorTestCase
 
         echo $responseContent;
 
-        $this->assertEquals($response->getStatusCode(), 200);
+        $this->assertEquals($response->getStatusCode(), 401);
 
         adminatorAssert::assertBaseCommon($responseContent);
 
-        // TODO: add asserts for login form
+        // TODO: test_ctl_login_page_post: add asserts for flash meessage (needs enabled Flash)
+
+        // TODO: test_ctl_login_page_post: add asserts for (re-rendered_ login form
     }
 
     // TODO: add tests for password-changes
