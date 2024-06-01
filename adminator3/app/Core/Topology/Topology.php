@@ -1037,18 +1037,23 @@ class Topology extends adminator
 
         if($typ == 1) {
 
-            $dotaz_router_main = $this->conn_mysql->query("SELECT * FROM router_list2 WHERE id = 1 order by id");
-            $dotaz_router_main_radku = $dotaz_router_main->num_rows;
+            $sql_final = "SELECT * FROM router_list2 WHERE id = 1 order by id";
+            list($dotaz_router_data, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
 
-            if($dotaz_router_main_radku <> 1) {
-                $output .= "<div style=\"font-size: 16px; font-weight: bold; color: red; \">Nelze vybrat hlavní router</div>\n";
-                exit;
+            if($dotaz_router_error != null) {
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_router_error, true));
+                $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
+                $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
+                $output .= "<div style=\"\" >".$dotaz_router_error."</div>";
+
+                return $output;
+            }
+            if( count($dotaz_router_data) <> 1) {
+                $output .= "<div style=\"font-size: 16px; font-weight: bold; color: red; \">Nelze vybrat hlavní router. (wrong DB num rows)</div>\n";
+                return $output;
             }
 
-            while($data_main = $dotaz_router_main->fetch_array()) {
-                //pouze erik
-
-                global $uroven_max;
+            foreach ($dotaz_router_data as $row => $data_main) {
 
                 $uroven_max = 1;
 
