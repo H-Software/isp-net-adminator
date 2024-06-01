@@ -1,0 +1,22 @@
+{% extends 'templates/app.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-6">
+
+            <div class="card fw-medium pt-2" style="margin-top: 50px;">
+                <div class="card-title bg-black bg-opacity-25 pb-2 pt-2">Unable to load page</div>
+                <div class="card-text">
+                    <div class="alert alert-danger">
+                        Failed CSRF check!
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col"></div>
+    </div>
+
+{% endblock %}
