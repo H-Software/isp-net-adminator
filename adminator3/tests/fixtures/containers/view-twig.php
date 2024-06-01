@@ -40,6 +40,11 @@ $container->set(
         $runtimeLoader = new TwigRuntimeLoader($routeParser, $ui);
         $view->addRuntimeLoader($runtimeLoader);
 
+        // TODO: maybe better option without routeParser and Uri
+        // $runtimeLoader =$this->getMockBuilder(TwigRuntimeLoader::class)
+        //                 ->disableOriginalConstructor()
+        //                 ->getMock();
+
         return $view;
     }
 );
