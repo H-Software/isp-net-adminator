@@ -98,12 +98,11 @@ final class AuthControllerTest extends AdminatorTestCase
 
         $this->assertEquals($response->getStatusCode(), 302);
 
-        print_r($response->getHeader('Location'));
-
-        // TODO: test_ctl_login_page_post: add asserts for flash meessage (needs enabled Flash)
-
-        // TODO: test_ctl_login_page_post: add asserts for (re-rendered) login form
+        list($hLocation) =  $response->getHeader('Location');
+        $this->assertEquals($hLocation, '/home');
     }
+
+    // TODO: add tests with unmocked sentinel
 
     // TODO: add tests for check (failed) csrf
 
