@@ -13,6 +13,8 @@ use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
 use Slim\Csrf\Guard;
 use App\Renderer\Renderer;
+use Cartalyst\Sentinel\Sentinel;
+use Slim\Views\Twig;
 
 class GuardMiddleware implements MiddlewareInterface
 {
@@ -41,16 +43,25 @@ class GuardMiddleware implements MiddlewareInterface
     */
     protected Renderer $renderer;
 
+    /**
+     * @var Twig
+     */
+    protected Twig $view;
+
+    protected Sentinel $sentinel;
+
     public function __construct(
         ContainerInterface $container,
         ResponseFactoryInterface $responseFactory,
-        Renderer $renderer
+        Renderer $renderer,
     ) {
         $this->container = $container;
         $this->responseFactory = $responseFactory;
         $this->renderer = $renderer;
 
         $this->logger = $container->get('logger');
+        $this->sentinel = $container->get('sentinel');
+        $this->view = $container->get('view');
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . " called");
     }
@@ -67,27 +78,48 @@ class GuardMiddleware implements MiddlewareInterface
         $logger = $this->logger;
         $renderer = $this->renderer;
         $responseFactory = $this->responseFactory;
+        $sentinel = $this->sentinel;
+        $view = $this->view;
 
         // https://github.com/slimphp/Slim-Csrf?tab=readme-ov-file#handling-validation-failure
-        $this->guard->setFailureHandler(function (ServerRequestInterface $request, RequestHandlerInterface $handler) use ($logger, $renderer, $responseFactory) {
+        $this->guard->setFailureHandler(
+            function (
+                ServerRequestInterface $request,
+                RequestHandlerInterface $handler
+            ) use ($logger, $renderer, $responseFactory, $sentinel, $view) {
 
-            $logger->error(
-                __CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ",
-                array(
-                    "uri" => $request->getUri(),
-                    "headers" => var_export($request->getHeaders(), true)
-                )
-            );
+                $logger->error(
+                    __CLASS__ . "\\" . __FUNCTION__ . ": csrf check failed! ",
+                    array(
+                        "uri" => $request->getUri(),
+                        "headers" => var_export($request->getHeaders(), true)
+                    )
+                );
 
-            $response = $responseFactory->createResponse();
+                $response = $responseFactory->createResponse();
 
-            $assignData = array(
-                "page_title" => "Adminator3 - chybny CSRF token",
-                "body" => "<br>Failed CSRF check!<br>"
-            );
+                $assignData = array(
+                    "page_title" => "Adminator3 - chybny CSRF token",
+                );
 
-            return $renderer->template(null, $response, 'global/no-csrf.tpl', $assignData, 400);
-        });
+                if ($sentinel->check()){
+                    $assignData["body"] = "<br>Failed CSRF check!<br>";
+
+                    $response =  $renderer->template(null, $response, 'global/no-csrf.tpl', $assignData, 400);
+                }
+                else {
+                    $response = $response
+                                ->withStatus(400);
+
+                    $response = $view->render(
+                        $response,
+                        'guard\csrf.twig',
+                    );
+                }
+
+                return $response;
+            }
+        );
     }
 
     /**
