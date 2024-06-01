@@ -1456,14 +1456,13 @@ class Topology extends adminator
 
         $output .= "<tr><td colspan=\"".$this->list_hierarchy_max."\" >Nepřiřazené routery:  </td></tr>";
 
-        $dotaz_routery = $this->conn_mysql->query("SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id");
-        $dotaz_routery_radku = $dotaz_routery->num_rows;
+        $sql_final = "SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id";
+        list($dotaz_routery_rs, $dotaz_routery_error) = $this->callPdoQueryAndFetch($sql_final);
 
-        if ($dotaz_routery_radku < 1) {
+        if (count($dotaz_routery_rs) < 1) {
             $output .= "<tr><td colspan=\"5\" > Žádné routery v databázi. </td></tr>";
         } else {
-            while($data = $dotaz_routery->fetch_array()):
-
+            foreach ($dotaz_routery_rs as $row => $data) {
                 $output .= "<tr>";
 
                 $output .= "<td>".$data["id"]."</td>";
@@ -1487,7 +1486,7 @@ class Topology extends adminator
 
                 $output .= "<td>".$data["mac"]."</td>";
 
-            endwhile;
+            }
 
         }
 
@@ -1496,7 +1495,6 @@ class Topology extends adminator
 
     public function filter_select_nods($typ_nodu = '')
     {
-
         $ret = array();
 
         if(empty($typ_nodu)) {

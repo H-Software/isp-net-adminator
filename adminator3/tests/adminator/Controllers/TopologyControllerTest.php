@@ -387,7 +387,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        // echo $responseContent;
+        echo $responseContent;
 
         $this->assertEquals($response->getStatusCode(), 200);
 
