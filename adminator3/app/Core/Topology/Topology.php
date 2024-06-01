@@ -1048,62 +1048,51 @@ class Topology extends adminator
 
         //vypis routeru normal
 
-            $sql_rows = "router_list.id, router_list.nazev, router_list.ip_adresa, router_list.parent_router, ".
-                "router_list.mac, router_list.monitoring, router_list.monitoring_cat, router_list.alarm, ".
-                " router_list.alarm_stav, router_list.filtrace, router_list.warn, router_list.mail, ".
-                " kategorie.jmeno AS kategorie_jmeno, router_list2.nazev AS parent_router_nazev";
+        $sql_rows = "router_list.id, router_list.nazev, router_list.ip_adresa, router_list.parent_router, ".
+            "router_list.mac, router_list.monitoring, router_list.monitoring_cat, router_list.alarm, ".
+            " router_list.alarm_stav, router_list.filtrace, router_list.warn, router_list.mail, ".
+            " kategorie.jmeno AS kategorie_jmeno, router_list2.nazev AS parent_router_nazev";
 
-            $sql_base = "SELECT ".$sql_rows." FROM router_list ".
-                " LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ".
-                " LEFT JOIN router_list AS router_list2 ON router_list.parent_router = router_list2.id ";
+        $sql_base = "SELECT ".$sql_rows." FROM router_list ".
+            " LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ".
+            " LEFT JOIN router_list AS router_list2 ON router_list.parent_router = router_list2.id ";
 
-            $sql_final = $sql_base." ".$sql_where2." ORDER BY router_list.id";
+        $sql_final = $sql_base." ".$sql_where2." ORDER BY router_list.id";
 
-            //prvky pro listovaci odkazy
-            $paging_url = "?".$get_odkazy;
+        //prvky pro listovaci odkazy
+        $paging_url = "?".$get_odkazy;
 
-            $paging = new c_listing_topology(
-                $this->pdoMysql,
-                $paging_url,
-                $this->settings['app']['core']['topology']['router']['listing_interval'],
-                $list,
-                "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
-                "</div>\n",
-                $sql_final
-            );
+        $paging = new c_listing_topology(
+            $this->pdoMysql,
+            $paging_url,
+            $this->settings['app']['core']['topology']['router']['listing_interval'],
+            $list,
+            "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
+            "</div>\n",
+            $sql_final
+        );
 
-            $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
+        $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
 
-            $interval = $paging->interval;
+        $interval = $paging->interval;
 
-            $sql_final .= " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+        $sql_final .= " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-            // fetch data
-            list($rs_data, $dotaz_error) = $this->callPdoQueryAndFetch($sql_final);
+        // fetch data
+        list($rs_data, $dotaz_error) = $this->callPdoQueryAndFetch($sql_final);
 
-            if($dotaz_error != null) {
-                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_error, true));
-                $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
-                $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
-                $output .= "<div style=\"\" >".$dotaz_error."</div>";
+        if($dotaz_error != null) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_error, true));
+            $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
+            $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
+            $output .= "<div style=\"\" >".$dotaz_error."</div>";
 
-                return $output;
-            } elseif(count($rs_data) < 1) {
-                $output .= "<div style=\"margin-left: 10px; padding-left: 10px; padding-right: 10px; ".
-                    "background-color: #ff8c00; height: 30px; width: 980px; \" >".
-                    "<div style=\"padding-top: 5px;\" >Žádné záznamy dle hledaného kritéria.</div>".
-                    "</div>";
-
-                /*
-                    //debug radka
-                    $output .= "<div style=\"padding-top: 15px; padding-bottom: 25px; color: gray; \" >\n";
-                    $output .=  $sql_final;
-                    $output .= "</div>\n";
-                    //konec debug
-                */
-
-                return $output;
-            }
+            return $output;
+        } elseif(count($rs_data) < 1) {
+            $output .= "<div style=\"margin-left: 10px; padding-left: 10px; padding-right: 10px; ".
+                "background-color: #ff8c00; height: 30px; width: 980px; \" >".
+                "<div style=\"padding-top: 5px;\" >Žádné záznamy dle hledaného kritéria.</div>".
+                "</div>";
 
             /*
                 //debug radka
@@ -1113,51 +1102,62 @@ class Topology extends adminator
                 //konec debug
             */
 
-            $output .= $paging->listInterval();
+            return $output;
+        }
 
-            //hlavní tabulka
-            $output .= "<table border=\"0\" style=\"width: 1000px; margin-left: 10px; \" >";
+        /*
+            //debug radka
+            $output .= "<div style=\"padding-top: 15px; padding-bottom: 25px; color: gray; \" >\n";
+            $output .=  $sql_final;
+            $output .= "</div>\n";
+            //konec debug
+        */
 
-            $pocet_sloupcu = "8";
+        $output .= $paging->listInterval();
 
-            $output .= "<tr>\n".
-                    "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"30px\" >id: </td>\n".
-                    "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"250px\" >název: </td>\n".
-                    "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"120px\" >IP adresa: </td>\n".
-                    "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"140px\">mac adresa: </td>\n".
+        //hlavní tabulka
+        $output .= "<table border=\"0\" style=\"width: 1000px; margin-left: 10px; \" >";
 
-                    "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"60px\" >alarm: </td>\n".
-                    "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"40px\" >filtrace: </td>\n".
+        $pocet_sloupcu = "8";
 
-                    "<td colspan=\"2\" style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"40px\" >detailní výpis</td>\n".
+        $output .= "<tr>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"30px\" >id: </td>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"250px\" >název: </td>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"120px\" >IP adresa: </td>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"140px\">mac adresa: </td>\n".
 
-                  "</tr>\n";
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"60px\" >alarm: </td>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"40px\" >filtrace: </td>\n".
 
-            //kategorie - druhy radek
-            $output .= "<tr>\n".
-                    "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"30px\" >&nbsp;</td>\n".
-                    "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"250px\" >nadřazený router: </td>\n".
-                    "<td colspan=\"2\" style=\"border-bottom: 1px solid black; font-weight: bold;\" >monitorování (kategorie): </td>\n".
+                "<td colspan=\"2\" style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"40px\" >detailní výpis</td>\n".
 
-                    "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >&nbsp;</td>\n".
+              "</tr>\n";
 
-                    "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >soubory: </td>\n".
+        //kategorie - druhy radek
+        $output .= "<tr>\n".
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"30px\" >&nbsp;</td>\n".
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"250px\" >nadřazený router: </td>\n".
+                "<td colspan=\"2\" style=\"border-bottom: 1px solid black; font-weight: bold;\" >monitorování (kategorie): </td>\n".
 
-                    "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >úprava: </td>\n".
-                    "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >smazání: </td>\n".
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >&nbsp;</td>\n".
 
-                  "</tr>\n";
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >soubory: </td>\n".
 
-            $output .= "<tr>\n<td colspan=\"".$pocet_sloupcu."\" >&nbsp;\n</td>\n</tr>\n";
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >úprava: </td>\n".
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >smazání: </td>\n".
+
+              "</tr>\n";
+
+        $output .= "<tr>\n<td colspan=\"".$pocet_sloupcu."\" >&nbsp;\n</td>\n</tr>\n";
 
 
-            // while($data = $dotaz_routery->fetch_array()):
-            $output .= $this->renderRouterListTableRow($rs_data);
+        // while($data = $dotaz_routery->fetch_array()):
+        $output .= $this->renderRouterListTableRow($rs_data);
 
-            $output .= "</table>\n";
+        $output .= "</table>\n";
 
-            //listovani
-            $output .= $paging->listInterval();
+        //listovani
+        $output .= $paging->listInterval();
 
         return $output;
     }
@@ -1399,7 +1399,7 @@ class Topology extends adminator
 
             return $output;
         }
-        if( count($dotaz_router_data) <> 1) {
+        if(count($dotaz_router_data) <> 1) {
             $output .= "<div style=\"font-size: 16px; font-weight: bold; color: red; \">Nelze vybrat hlavní router. (wrong DB num rows)</div>\n";
             return $output;
         }
