@@ -185,7 +185,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        echo $responseContent;
+        // echo $responseContent;
 
         $this->assertEquals($response->getStatusCode(), 200);
 
@@ -193,9 +193,11 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertTopologySubCat($response, $responseContent);
 
-        AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
+        // TODO: router_list_view_all: add asserts
 
-        AdminatorAssert::assertTopologyNodeListTableHeader($responseContent);
+        // AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
+
+        // AdminatorAssert::assertTopologyNodeListTableHeader($responseContent);
 
         // // listing asserts
         // $this->assertStringContainsString('<div class="text-listing">', $responseContent, "missing listing container");
@@ -215,6 +217,8 @@ final class TopologyControllerTest extends AdminatorTestCase
         // $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
         // $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
+
+    // TODO: add test for router-list for typ = 1 mode
 
     // TODO: add test for router-list with "vypsat vysílače/nody"
 

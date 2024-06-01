@@ -1118,6 +1118,26 @@ class Topology extends adminator
 
             $sql_final = $sql_base." ".$sql_where2." ORDER BY router_list.id";
 
+            //prvky pro listovaci odkazy
+            $paging_url = "?".$get_odkazy;
+
+            $paging = new c_listing_topology(
+                $this->pdoMysql,
+                $paging_url,
+                $this->settings['app']['core']['topology']['router']['listing_interval'],
+                $list,
+                "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
+                "</div>\n",
+                $sql_final
+            );
+
+            $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
+
+            $interval = $paging->interval;
+
+            //uprava sql
+            $sql_final .= " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+
             try {
                 $dotaz_routery = $this->pdoMysql->query($sql_final);
             } catch (Exception $e) {
@@ -1158,31 +1178,6 @@ class Topology extends adminator
                     $output .= "</div>\n";
                     //konec debug
                 */
-
-                //prvky pro listovaci odkazy
-                $paging_url = "?".$get_odkazy;
-
-                $paging = new c_listing_topology(
-                    $this->pdoMysql,
-                    $paging_url,
-                    $this->settings['app']['core']['topology']['router']['listing_interval'],
-                    $list,
-                    "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
-                    "</div>\n",
-                    $sql_final
-                );
-
-                $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
-
-                $interval = $paging->interval;
-
-                //uprava sql
-                $sql_final = $sql_final . " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
-
-                // $output .= "<div>SQL DUMP: ".$sql_final . "</div>";
-                // $dotaz_routery = $this->conn_mysql->query($sql_final);
-
-                // $dotaz_routery_radku = $dotaz_routery->num_rows;
 
                 //listovani
                 $output .= $paging->listInterval();
