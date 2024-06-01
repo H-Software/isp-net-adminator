@@ -3,15 +3,19 @@
     <div class="col-6">
 
     {% if flash.getMessage('info') %}
+        {% for msg in flash.getMessage('info') %}
         <div class="alert alert-info">
-            {{ flash.getMessage('info')|first }}
+            {{ msg }}
         </div>
+        {% endfor %}
     {% endif %}
 
     {% if flash.getMessage('error') %}
+        {% for msg in flash.getMessage('error') %}
         <div class="alert alert-danger">
-            {{ flash.getMessage('error')|first }}
+            {{ msg }}
         </div>
+        {% endfor %}
     {% endif %}
     </div>
     <div class="col"></div>
