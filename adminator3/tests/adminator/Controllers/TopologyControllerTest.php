@@ -261,9 +261,98 @@ final class TopologyControllerTest extends AdminatorTestCase
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
 
-    // TODO: add test for router-list for typ = 1 mode
+    public function test_ctl_router_list_view_with_find_id_routeru()
+    {
+        // $this->markTestSkipped('under construction');
+        $self = $this;
 
-    // TODO: add test for router-list with "vypsat vysílače/nody"
+        $request = Request::create(
+            '/topology/router-list',
+            'GET',
+            ['f_id_routeru' => '1']
+        );
+        $request->overrideGlobals();
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
+
+        $container = self::initDIcontainer(true, false);
+
+        $adminatorMock = self::initAdminatorMockClass($container);
+        $this->assertIsObject($adminatorMock);
+
+        $topologyController = new topologyController($container, $adminatorMock);
+
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $response = $responseFactory->createResponse();
+
+        $response = $topologyController->routerList($serverRequest, $response, []);
+
+        $responseContent = $response->getBody()->__toString();
+
+        // echo $responseContent;
+
+        $this->assertEquals($response->getStatusCode(), 200);
+
+        adminatorAssert::assertBase($responseContent);
+
+        adminatorAssert::assertTopologySubCat($response, $responseContent);
+
+        // TODO: router_list_view_with_non_exist_find_param: add assert for table header
+
+        // TODO: router_list_view_with_non_exist_find_param: add assert for router item
+
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
+    }
+
+    public function test_ctl_router_list_view_with_list_nodes()
+    {
+        // $this->markTestSkipped('under construction');
+        $self = $this;
+
+        $request = Request::create(
+            '/topology/router-list',
+            'GET',
+            [
+                'f_id_routeru' => '1',
+                'list_nodes'   => 'yes',
+            ]
+        );
+        $request->overrideGlobals();
+        $serverRequest = self::$psrHttpFactory->createRequest($request);
+
+        $container = self::initDIcontainer(true, false);
+
+        $adminatorMock = self::initAdminatorMockClass($container);
+        $this->assertIsObject($adminatorMock);
+
+        $topologyController = new topologyController($container, $adminatorMock);
+
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+        $response = $responseFactory->createResponse();
+
+        $response = $topologyController->routerList($serverRequest, $response, []);
+
+        $responseContent = $response->getBody()->__toString();
+
+        echo $responseContent;
+
+        $this->assertEquals($response->getStatusCode(), 200);
+
+        adminatorAssert::assertBase($responseContent);
+
+        adminatorAssert::assertTopologySubCat($response, $responseContent);
+
+        // TODO: router_list_view_with_non_exist_find_param: add assert for table header
+
+        // TODO: router_list_view_with_non_exist_find_param: add assert for router item
+
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
+    }
+
+    // TODO: add test for router-list for hierarchy mode (typ = 1)
 
     // TODO: add test for node-list with search
 
