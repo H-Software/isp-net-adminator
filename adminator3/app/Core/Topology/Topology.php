@@ -1539,7 +1539,7 @@ class Topology extends adminator
 
     } //end of function filter_select_nods
 
-    public function hierarchy_vypis_router($id)
+    public function hierarchy_vypis_router($id, $uroven)
     {
         $output = "";
 
@@ -1552,7 +1552,7 @@ class Topology extends adminator
 
                 $output .= "<tr>";
 
-                for ($j = 0;$j < $this->list_hierarchy_level; $j++) {
+                for ($j = 0;$j < $uroven; $j++) {
                     $output .= "<td><br></td>";
                 }
 
@@ -1579,24 +1579,24 @@ class Topology extends adminator
 
                     while($data_router_parent = $dotaz_router_parent->fetch_array()) {
 
-                        $this->list_hierarchy_level++;
+                        $uroven++;
 
-                        if (($this->list_hierarchy_level > $this->list_hierarchy_max)) {
-                            $this->list_hierarchy_max = $this->list_hierarchy_level;
+                        if (($uroven > $this->list_hierarchy_max)) {
+                            $this->list_hierarchy_max = $uroven;
                         }
 
                         $id = $data_router_parent["id"];
 
-                        $this->hierarchy_vypis_router($id);
+                        $this->hierarchy_vypis_router($id, $uroven);
 
                         $iterace++;
 
                         if ($iterace > 1) {
-                            $this->list_hierarchy_level--;
+                            $uroven--;
                         }
                     }
                     // else
-                    // { $this->list_hierarchy_level--; }
+                    // { $uroven--; }
 
                 }
 
