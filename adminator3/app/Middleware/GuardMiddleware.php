@@ -106,8 +106,7 @@ class GuardMiddleware implements MiddlewareInterface
 
                     $response =  $renderer->template(null, $response, 'global/no-csrf.tpl', $assignData, 400);
                 } else {
-                    $response = $response
-                                ->withStatus(400);
+                    $response = $response->withStatus(400);
 
                     $response = $view->render(
                         $response,
