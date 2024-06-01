@@ -1589,16 +1589,11 @@ class Topology extends adminator
 
                         $iterace++;
 
-                        if ($iterace > 1) {
-                            $uroven--;
-                        }
+                        $uroven--;
                     }
                     // else
                     // { $uroven--; }
-
                 }
-
-                //return echo $text;
             }
 
         } else {
