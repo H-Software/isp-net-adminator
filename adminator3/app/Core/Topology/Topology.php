@@ -1417,17 +1417,17 @@ class Topology extends adminator
 
             $output .= "</td>\n</tr>\n";
 
-            $dotaz_router_1 = $this->conn_mysql->query("SELECT * FROM router_list WHERE parent_router = 1 order by id");
-            $dotaz_router_radku_1 = $dotaz_router_1->num_rows;
+            $sql_final = "SELECT * FROM router_list WHERE parent_router = 1 order by id";
+            list($dotaz_router_1_rs, $dotaz_router_1_error) = $this->callPdoQueryAndFetch($sql_final);
 
-            if($dotaz_router_radku_1 > 0) {
+            if(count($dotaz_router_1_rs) > 0) {
                 //prvni uroven
-                while($data_router_1 = $dotaz_router_1->fetch_array()) {
+                foreach ($dotaz_router_1_rs as $row => $data_router_1) {
                     global $uroven;
 
                     $id = $data_router_1["id"];
 
-                    $rs_hierarchy = hierarchy_vypis_router($id, "0");
+                    $rs_hierarchy = $this->hierarchy_vypis_router($id, "0");
                     if($rs_hierarchy === false) {
                         $output .= "<div class=\"alert alert-danger\" role=\"alert\">chyba hiearcheckeho vypisu routeru (no routers found in database)</div>";
                     } else {
@@ -1536,4 +1536,78 @@ class Topology extends adminator
         return $ret;
 
     } //end of function filter_select_nods
+
+    function hierarchy_vypis_router($id, $uroven)
+    {
+        global $uroven_max;
+
+        $output = "";
+
+        $dotaz_router = $conn_mysql->query("SELECT * FROM router_list WHERE id = ".intval($id) ." order by id");
+        $dotaz_router_radku = $dotaz_router->num_rows;
+
+        if ($dotaz_router_radku > 0) {
+
+            while($data_router = $dotaz_router->fetch_array()) {
+
+                $output .= "<tr>";
+
+                for ($j = 0;$j < $uroven; $j++) {
+                    $output .= "<td><br></td>";
+                }
+
+                $output .= "<td align=\"center\">|------> </td>";
+                $output .= "<td>";
+
+                $output .= " [".$data_router["id"]."] <b>".$data_router["nazev"]."</b>";
+
+                $output .= " <span style=\"color:grey; \">( ".$data_router["ip_adresa"]." ) </span>";
+
+                $output .= "</td>";
+
+                $output .= "</tr>";
+
+                //zde rekurze
+                $parent_id = $data_router["id"];
+
+                $dotaz_router_parent = $conn_mysql->query("SELECT * FROM router_list WHERE parent_router = $id order by id");
+                $dotaz_router_parent_radku = $dotaz_router_parent->num_rows;
+
+                if ($dotaz_router_parent_radku > 0) {
+
+                    $iterace = 1;
+
+                    while($data_router_parent = $dotaz_router_parent->fetch_array()) {
+
+                        $uroven++;
+
+                        if (($uroven > $uroven_max)) {
+                            $uroven_max = $uroven;
+                        }
+
+                        $id = $data_router_parent["id"];
+
+                        hierarchy_vypis_router($id, $uroven);
+
+                        $iterace++;
+
+                        if ($iterace > 1) {
+                            $uroven--;
+                        }
+                    }
+                    // else
+                    // { $uroven--; }
+
+                }
+
+                //return echo $text;
+            }
+
+        } else {
+            return false;
+        }
+
+        return $output;
+    }
+
 }
