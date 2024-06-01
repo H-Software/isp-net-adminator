@@ -1102,8 +1102,8 @@ class Topology extends adminator
 
             //vypis routeru normal
 
-            $sql_base_old = "SELECT router_list.id, nazev, ip_adresa, parent_router, mac, monitoring, monitoring_cat, alarm, alarm_stav, filtrace, ".
-                "kategorie.jmeno as kategorie_jmeno FROM `router_list` LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ";
+            // $sql_base_old = "SELECT router_list.id, nazev, ip_adresa, parent_router, mac, monitoring, monitoring_cat, alarm, alarm_stav, filtrace, ".
+            //     "kategorie.jmeno as kategorie_jmeno FROM `router_list` LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ";
 
             $sql_rows = "router_list.id, router_list.nazev, router_list.ip_adresa, router_list.parent_router, ".
                 "router_list.mac, router_list.monitoring, router_list.monitoring_cat, router_list.alarm, ".
@@ -1123,11 +1123,11 @@ class Topology extends adminator
             }
 
             if(is_object($dotaz_routery)) {
-                $data = $dotaz_routery->fetchAll();
+                $rs_data = $dotaz_routery->fetchAll();
 
             } else {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO result is not object");
-                $data = [];
+                $rs_data = [];
             }
 
             if(!$dotaz_routery) {
@@ -1135,7 +1135,7 @@ class Topology extends adminator
                 $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
                 $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
                 $output .= "<div style=\"\" >".$dotaz_error."</div>";
-            } elseif(count($data) < 1) {
+            } elseif(count($rs_data) < 1) {
                 $output .= "<div style=\"margin-left: 10px; padding-left: 10px; padding-right: 10px; ".
                     "background-color: #ff8c00; height: 30px; width: 980px; \" >".
                     "<div style=\"padding-top: 5px;\" > Žádné záznamy dle hledaného kritéria. </div>".
@@ -1221,7 +1221,8 @@ class Topology extends adminator
                 $output .= "<tr>\n<td colspan=\"".$pocet_sloupcu."\" >&nbsp;\n</td>\n</tr>\n";
 
 
-                while($data = $dotaz_routery->fetch_array()):
+                // while($data = $dotaz_routery->fetch_array()):
+                foreach ($rs_data as $row => $data) {
 
                     $alarm = $data["alarm"];
 
@@ -1433,12 +1434,13 @@ class Topology extends adminator
 
                     } // konec if get id == data id
 
-                endwhile;
+                }
+                // endwhile;
 
                 $output .= "</table>";
 
                 //listovani
-                $output .=  $paging->listInterval();
+                $output .= $paging->listInterval();
 
             }
 
