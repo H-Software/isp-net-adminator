@@ -1163,11 +1163,11 @@ class Topology extends adminator
                 $paging_url = "?".$get_odkazy;
 
                 $paging = new c_listing_topology(
-                    $this->conn_mysql,
+                    $this->pdoMysql,
                     $paging_url,
                     $this->settings['app']['core']['topology']['router']['listing_interval'],
                     $list,
-                    "<div class=\"text-listing2\" style=\"width: 1000px; text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
+                    "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
                     "</div>\n",
                     $sql_final
                 );
