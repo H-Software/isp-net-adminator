@@ -39,6 +39,26 @@ class Topology extends adminator
         $this->requestData = Request::createFromGlobals();
     }
 
+    public function callPdoQueryAndFetch($query): array
+    {
+        $rs_error = null;
+        try {
+            $rs = $this->pdoMysql->query($query);
+        } catch (Exception $e) {
+            $rs_error = $e->getMessage();
+        }
+
+        if(is_object($rs)) {
+            $rs_data = $rs->fetchAll();
+
+        } else {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO result is not object");
+            $rs_data = [];
+        }
+
+        return [$rs_data, $rs_error];
+    }
+
     public function getNodeListForForm($search_string, int $typ_nodu = 2, $show_zero_value = true)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
@@ -1354,57 +1374,58 @@ class Topology extends adminator
 
                     //smazat
                     $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >\n";
-                    $output .=  '<form method="POST" action="topology-router-erase.php">
-                          <input type="hidden" name="erase_id" value="'.intval($data["id"]).'">
+                    $output .=  '<form method="POST" action="topology-router-erase.php">' . "\n"
+                          . '<input type="hidden" name="erase_id" value="'.intval($data["id"]).'">
                           <input type="submit" name="smazat" value="smazat" >
                           </form></span>';
-                    $output .= "</td>\n";
+                    $output .= "\n</td>\n";
 
                     $output .= "</tr>\n";
 
                     //pokud s kliklo na vypis subnetu
                     if($list_nodes == "yes" and $f_id_routeru == $data["id"]) {
 
-                        $output .= "<tr><td colspan=\"11\" >";
+                        $output .= "<tr><td colspan=\"11\" >\n";
 
-                        $id_routeru = $data["id"];
+                        // $id_routeru = $data["id"];
                         $colspan_stav = "1";
 
-                        $dotaz_top = $this->conn_mysql->query("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
-                        $dotaz_top_radku = $dotaz_top->num_rows;
+                        list ($rs_data2, $rs_error2) = $this->callPdoQueryAndFetch("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
 
-                        if ($dotaz_top_radku < 1) {
+                        // TODO: add detect and display error
+
+                        if (count($rs_data2) < 1) {
                             $output .= "<span style=\"color: teal; font-size: 16px; font-weight: bold;\">
-                                <p> Žádné aliasy/nody v databázi. </p></span>";
+                                <p> Žádné aliasy/nody v databázi. </p></span>\n";
                         } else {
 
-                            $output .= "<table border=\"0\" width=\"100%\" >";
+                            $output .= "<table border=\"0\" width=\"100%\" id=\"topology-router-list-node-view-table\" >\n";
 
-                            while($data_top = $dotaz_top->fetch_array()):
+                            foreach ($rs_data2 as $row => $data_top) {
 
-                                $output .= "<tr>";
+                                $output .= "<tr>\n";
 
                                 $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">";
-                                $output .=  $data_top["jmeno"]."</span></td>";
+                                $output .=  $data_top["jmeno"]."</span></td>\n";
 
-                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["adresa"]."</span></td>";
+                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["adresa"]."</span></td>\n";
 
-                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["ip_rozsah"]."</span></td>";
+                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["ip_rozsah"]."</span></td>\n";
 
-                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["mac"]."</span></td>";
+                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".($data_top["mac"] ?? "")."</span></td>\n";
 
                                 if ($data_top["stav"] == 1) {
                                     $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"green\" align=\"center\" >
-                                    <span style=\"color: white; font-size: 13px; \"> v pořádku </span></td>";
+                                    <span style=\"color: white; font-size: 13px; \"> v pořádku </span></td>\n";
                                 } elseif ($data_top["stav"] == 2) {
                                     $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"orange\" align=\"center\" >
-                                    <span style=\"color: white; font-size: 13px; \"> vytížen </span></td>";
+                                    <span style=\"color: white; font-size: 13px; \"> vytížen </span></td>\n";
                                 } elseif($data_top["stav"] == 3) {
                                     $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"red\" align=\"center\" >
-                                <span style=\"color: white; font-size: 13px; \"> přetížen </span></td>";
+                                <span style=\"color: white; font-size: 13px; \"> přetížen </span></td>\n";
                                 } else {
                                     $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" >
-                                <span style=\"color: #666666; font-size: 13px; \">".$data_top["stav"]."</span></td>";
+                                <span style=\"color: #666666; font-size: 13px; \">".$data_top["stav"]."</span></td>\n";
                                 }
 
                                 $typ_vysilace = $data_top["typ_vysilace"];
@@ -1429,27 +1450,26 @@ class Topology extends adminator
                                     $typ_vysilace2 = $typ_vysilace;
                                 }
 
-                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: grey; font-size: 12px; \">".$typ_vysilace2."</span></td>";
+                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: grey; font-size: 12px; \">".$typ_vysilace2."</span></td>\n";
                                 $output .= "<td class=\"top-router-dolni1\">";
                                 $output .= "<a href=\"/topology/node-list?find=".$data_top["jmeno"]."\">detail nodu </a>";
-                                $output .= "</td>";
+                                $output .= "</td>\n";
 
-                                $output .= "</tr>";
+                                $output .= "</tr>\n";
+                            }
 
-                            endwhile;
-
-                            $output .= "</table>";
+                            $output .= "</table>\n";
 
                         } // konec else dotaz_top_radku < 1
 
-                        $output .= "</td></tr>";
+                        $output .= "</td></tr>\n";
 
                     } // konec if get id == data id
 
                 }
                 // endwhile;
 
-                $output .= "</table>";
+                $output .= "</table>\n";
 
                 //listovani
                 $output .= $paging->listInterval();

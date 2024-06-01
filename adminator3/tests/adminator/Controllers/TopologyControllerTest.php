@@ -347,6 +347,12 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         // TODO: router_list_view_with_non_exist_find_param: add assert for router item
 
+        // node list view
+        //
+        // self::assertXpathQueryContentRegex($response, '//*[@id="topology-router-list-node-view-table"]/tbody/tr[1]/td[1]/span', '/^(\w|\s){5,}$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="topology-router-list-node-view-table"]/tbody/tr[1]/td[7]/a', '/^detail nodu \s*$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="topology-router-list-node-view-table"]/tbody/tr[1]/td[7]/a', '/^\/topology\/node-list\?find=\w{3,}$/');
+
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
