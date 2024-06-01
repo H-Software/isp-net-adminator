@@ -1146,7 +1146,7 @@ class Topology extends adminator
                 " router_list.alarm_stav, router_list.filtrace, router_list.warn, router_list.mail, ".
                 " kategorie.jmeno AS kategorie_jmeno, router_list2.nazev AS parent_router_nazev";
 
-            $sql_base = "SELECT ".$sql_rows." FROM router_list ".
+            $sql_base = "SELECT ".$sql_rows." FROM router_list2 ".
                 " LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ".
                 " LEFT JOIN router_list AS router_list2 ON router_list.parent_router = router_list2.id ";
 
@@ -1172,22 +1172,10 @@ class Topology extends adminator
             //uprava sql
             $sql_final .= " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-            $dotaz_routery = null;
-            try {
-                $dotaz_routery = $this->pdoMysql->query($sql_final);
-            } catch (Exception $e) {
-                $dotaz_error = $e->getMessage();
-            }
+            list($rs_data, $dotaz_error) = $this->callPdoQueryAndFetch($sql_final);
 
-            if(is_object($dotaz_routery)) {
-                $rs_data = $dotaz_routery->fetchAll();
 
-            } else {
-                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO result is not object");
-                $rs_data = [];
-            }
-
-            if(!$dotaz_routery) {
+            if($dotaz_error != null) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_error, true));
                 $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
                 $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
