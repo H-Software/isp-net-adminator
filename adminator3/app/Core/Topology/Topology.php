@@ -1405,7 +1405,7 @@ class Topology extends adminator
 
                                 $output .= "<tr>\n";
 
-                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">";
+                                $output .= "<td class=\"top-router-dolni1\" id=\"topology-router-list-node-view-name-".$row."\"><span style=\"color: #777777; \">";
                                 $output .=  $data_top["jmeno"]."</span></td>\n";
 
                                 $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["adresa"]."</span></td>\n";
@@ -1451,7 +1451,7 @@ class Topology extends adminator
                                 }
 
                                 $output .= "<td class=\"top-router-dolni1\"><span style=\"color: grey; font-size: 12px; \">".$typ_vysilace2."</span></td>\n";
-                                $output .= "<td class=\"top-router-dolni1\">";
+                                $output .= "<td class=\"top-router-dolni1\" id=\"topology-router-list-node-view-detail-link-".$row."\" >";
                                 $output .= "<a href=\"/topology/node-list?find=".$data_top["jmeno"]."\">detail nodu </a>";
                                 $output .= "</td>\n";
 

@@ -335,7 +335,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        echo $responseContent;
+        // echo $responseContent;
 
         $this->assertEquals($response->getStatusCode(), 200);
 
@@ -349,9 +349,9 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         // node list view
         //
-        // self::assertXpathQueryContentRegex($response, '//*[@id="topology-router-list-node-view-table"]/tbody/tr[1]/td[1]/span', '/^(\w|\s){5,}$/');
-        self::assertXpathQueryContentRegex($response, '//*[@id="topology-router-list-node-view-table"]/tbody/tr[1]/td[7]/a', '/^detail nodu \s*$/');
-        self::assertXpathQueryContentRegex($response, '//*[@id="topology-router-list-node-view-table"]/tbody/tr[1]/td[7]/a', '/^\/topology\/node-list\?find=\w{3,}$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="topology-router-list-node-view-name-0"]', '/^(\w|\W|\s){5,}$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="topology-router-list-node-view-detail-link-0"]/a', '/^detail nodu\s*$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="topology-router-list-node-view-detail-link-0"]/a', '/^\/topology\/node-list\?find=(\w|\W){3,}$/');
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
