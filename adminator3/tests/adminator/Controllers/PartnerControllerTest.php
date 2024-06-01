@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
-use App\Controllers\objektyController;
+use App\Controllers\partnerController;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ObjektyControllerTest extends AdminatorTestCase
+final class PartnerControllerTest extends AdminatorTestCase
 {
     protected function setUp(): void
     {
@@ -24,19 +24,19 @@ final class ObjektyControllerTest extends AdminatorTestCase
         $self = $this;
 
         $request = Request::create(
-            '/objekty/cat',
+            '/partner/cat',
             'GET',
             []
         );
         $request->overrideGlobals();
         $serverRequest = self::$psrHttpFactory->createRequest($request);
 
-        $container = self::initDIcontainer(true, false);
+        $container = self::initDIcontainer(true, false, true);
 
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        $controller = new objektyController($container, $adminatorMock);
+        $controller = new partnerController($container, $adminatorMock);
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
@@ -53,6 +53,12 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
         // TODO: add asserts for sub-categories
 
+        //     <span style="margin-left: 20px; "><a href="/partner/order" class="cat2" >Připojování nových klientů</a></span>
+
+        //     <span style="margin-left: 20px; "><a href="/partner/servis/list" class="cat2" >Servisní zásahy</a></span>
+
+        // </div>
+
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]', '/^Prosím vyberte z podkategorie výše....$/');
 
         // non-common negative asserts
@@ -66,19 +72,19 @@ final class ObjektyControllerTest extends AdminatorTestCase
         $self = $this;
 
         $request = Request::create(
-            '/objekty/cat',
+            '/partner/cat',
             'GET',
             []
         );
         $request->overrideGlobals();
         $serverRequest = self::$psrHttpFactory->createRequest($request);
 
-        $container = self::initDIcontainer(true, false);
+        $container = self::initDIcontainer(true, false, true);
 
         $adminatorMock = self::initAdminatorMockClass($container, false, 1);
         $this->assertIsObject($adminatorMock);
 
-        $controller = new objektyController($container, $adminatorMock);
+        $controller = new partnerController($container, $adminatorMock);
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
@@ -100,12 +106,8 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
     }
 
-    // TODO: add test for stb
+    // TODO: add test for orderCat
 
-    // TODO: add tests for stbAction
-
-    // TODO: add tests for objekty
-
-    // TODO: add tests for objektyAction
+    // TODO: add tests for order CRUDs
 
 }

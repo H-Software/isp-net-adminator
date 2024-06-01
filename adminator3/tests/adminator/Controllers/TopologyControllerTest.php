@@ -53,7 +53,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        adminatorAssert::assertTopologySubCat($responseContent);
+        adminatorAssert::assertTopologySubCat($response, $responseContent);
 
         AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
 
@@ -150,7 +150,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        adminatorAssert::assertTopologySubCat($responseContent);
+        adminatorAssert::assertTopologySubCat($response, $responseContent);
 
         AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
 
@@ -160,8 +160,7 @@ final class TopologyControllerTest extends AdminatorTestCase
     public function test_ctl_router_list_view_all()
     {
         $this->markTestSkipped('under construction');
-        // TODO: router-list: fix missing DB stuff
-        // PDOException: SQLSTATE[HY000]: General error: 1 no such table: kategorie
+        // TODO: router-list: switch to PDO
         $self = $this;
 
         $request = Request::create(
@@ -192,7 +191,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        adminatorAssert::assertTopologySubCat($responseContent);
+        adminatorAssert::assertTopologySubCat($response, $responseContent);
 
         AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
 

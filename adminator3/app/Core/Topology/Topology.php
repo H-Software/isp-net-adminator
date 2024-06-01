@@ -1110,7 +1110,7 @@ class Topology extends adminator
                 " LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ".
                 " LEFT JOIN router_list AS router_list2 ON router_list.parent_router = router_list2.id ";
 
-            $sql_final = $sql_base." ".$sql_where2." ORDER BY id";
+            $sql_final = $sql_base." ".$sql_where2." ORDER BY router_list.id";
 
             $dotaz_routery = $this->conn_mysql->query($sql_final);
             $dotaz_routery_radku = $dotaz_routery->num_rows;

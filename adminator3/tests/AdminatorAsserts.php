@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace App\Tests;
 
 // use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 
 final class AdminatorAssert extends AdminatorTestCase
 {
@@ -103,7 +104,7 @@ final class AdminatorAssert extends AdminatorTestCase
     {
         // board header
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/^Bulletin.*Board.*/');
-        // TODO: fix missing token
+        // TODO: BoardCommon: fix missing token
         // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=[[:alnum:]]{10,}$/'); // RSS link with token
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[3]/div[2]/div/div[6]/span/a', '/^\/board\/rss\?token=$/'); // RSS link with token
     }
@@ -121,8 +122,27 @@ final class AdminatorAssert extends AdminatorTestCase
         self::assertXpathQueryContentRegex($response, '//*[@id="board-list-pagging"]/b', '/strana\s*\|/');
     }
 
-    public static function assertTopologySubCat($content)
+    public static function assertOtherCat(ResponseInterface $response)
     {
+        // level up
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^| O úrověn výš | $/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^\/home$/');
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[2]/a', '/^Nástěnka$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[2]/a', '/^\/others\/board$/');
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^Tisk$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^\/print$/');
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[4]/a', '/^Company Web$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[4]/a', '/^\/others\/company-web$/');
+    }
+
+    public static function assertTopologySubCat($response, $content)
+    {
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a[2]', '/^přidání$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a[2]', '/^\/topology\/router\/action$/');
+
         self::assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/router-list">Routery<\/a>/i', $content);
         self::assertMatchesRegularExpression('/<a class="cat2" href="\/topology\/node-list">Výpis lokalit\/nodů<\/a>/i', $content);
         self::assertMatchesRegularExpression('/<a class="cat2" href="topology-user-list.php">Výpis objektů dle přiřazení \/ dle nodů<\/a>/i', $content);

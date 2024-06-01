@@ -51,7 +51,7 @@ final class AboutControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBase($responseContent);
 
-        // TODO: add asserts
+        // TODO: add asserts for sub-categories
 
         //     <span style="margin-left: 20px; "><a href="/home" class="odkaz-uroven-vys" >| O úrověn výš |</a></span>\n
         //     \n
@@ -61,7 +61,10 @@ final class AboutControllerTest extends AdminatorTestCase
         // \n
         // </div>\n
         // \n
-        // <div class="others-cat-body" >Prosím vyberte z podkategorie výše....</div>\n
+
+        // TODO: base: fix assert for page content
+        // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]', '/^Prosím vyberte z podkategorie výše....$/');
+
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
