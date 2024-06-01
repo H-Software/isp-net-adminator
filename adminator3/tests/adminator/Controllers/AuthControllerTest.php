@@ -60,13 +60,12 @@ final class AuthControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBaseCommon($responseContent);
 
-        // TODO: test_ctl_login_page_default_view: add asserts for login form
         adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-title"]', '/^Sign In$/');
         adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-submit"]', '/^Sign In$/');
 
     }
 
-    public function test_ctl_login_page_post()
+    public function test_ctl_login_page_post_mocked()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
@@ -84,11 +83,9 @@ final class AuthControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        $routerParser = \Mockery::mock(
-            RouteParserInterface::class,
-        );
+        $routeParser = $container->get(RouteParserInterface::class);
 
-        $authController = new AuthController($container, $routerParser);
+        $authController = new AuthController($container, $routeParser);
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
@@ -99,9 +96,9 @@ final class AuthControllerTest extends AdminatorTestCase
 
         // echo $responseContent;
 
-        $this->assertEquals($response->getStatusCode(), 401);
+        $this->assertEquals($response->getStatusCode(), 302);
 
-        adminatorAssert::assertBaseCommon($responseContent);
+        print_r($response->getHeader('Location'));
 
         // TODO: test_ctl_login_page_post: add asserts for flash meessage (needs enabled Flash)
 

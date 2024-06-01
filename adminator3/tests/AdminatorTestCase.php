@@ -108,6 +108,7 @@ abstract class AdminatorTestCase extends TestCase
 
         if($sentinelMocked) {
             require __DIR__ . '/../tests/fixtures/containers/sentinelMock.php';
+            require __DIR__ . '/../tests/fixtures/containers/routeParserMock.php';
         } else {
             require __DIR__ . '/../tests/fixtures/containers/sentinel.php';
         }
