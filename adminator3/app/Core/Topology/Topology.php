@@ -1577,16 +1577,13 @@ class Topology extends adminator
                     $iterace = 1;
 
                     foreach ($dotaz_router_parent_rs as $row => $data_router_parent) {
-
                         $uroven++;
 
                         if (($uroven > $this->list_hierarchy_max)) {
                             $this->list_hierarchy_max = $uroven;
                         }
 
-                        $id = $data_router_parent["id"];
-
-                        $this->hierarchy_vypis_router($id, $uroven);
+                        $output .= $this->hierarchy_vypis_router($data_router_parent["id"], $uroven);
 
                         $iterace++;
 
