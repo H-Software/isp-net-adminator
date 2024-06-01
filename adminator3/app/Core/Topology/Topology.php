@@ -29,6 +29,10 @@ class Topology extends adminator
 
     private $f_id_routeru;
 
+    private $list_hierarchy_level;
+
+    private $list_hierarchy_max;
+
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
@@ -1406,7 +1410,7 @@ class Topology extends adminator
 
         foreach ($dotaz_router_data as $row => $data_main) {
 
-            $uroven_max = 1;
+            $this->list_hierarchy_max = 1;
 
             $output .= "<table border=\"1\" width=\"1000px\" >\n";
             $output .= "<tr>\n";
@@ -1423,8 +1427,6 @@ class Topology extends adminator
             if(count($dotaz_router_1_rs) > 0) {
                 //prvni uroven
                 foreach ($dotaz_router_1_rs as $row => $data_router_1) {
-                    global $uroven;
-
                     $id = $data_router_1["id"];
 
                     $rs_hierarchy = $this->hierarchy_vypis_router($id, "0");
@@ -1441,15 +1443,15 @@ class Topology extends adminator
         } // konec while
 
         //neprirazene rb
-        $uroven_max = $uroven_max + 2;
+        $this->list_hierarchy_max = $this->list_hierarchy_max + 2;
 
         $output .= "<tr><td><br></td></tr>";
 
-        $output .= "<tr><td colspan=\"".$uroven_max."\" ><hr></td></tr>";
+        $output .= "<tr><td colspan=\"".$this->list_hierarchy_max."\" ><hr></td></tr>";
 
-        $output .= "<tr><td colspan=\"".$uroven_max."\" ><br></td></tr>";
+        $output .= "<tr><td colspan=\"".$this->list_hierarchy_max."\" ><br></td></tr>";
 
-        $output .= "<tr><td colspan=\"".$uroven_max."\" >Nepřiřazené routery:  </td></tr>";
+        $output .= "<tr><td colspan=\"".$this->list_hierarchy_max."\" >Nepřiřazené routery:  </td></tr>";
 
         $dotaz_routery = $this->conn_mysql->query("SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id");
         $dotaz_routery_radku = $dotaz_routery->num_rows;
@@ -1537,13 +1539,11 @@ class Topology extends adminator
 
     } //end of function filter_select_nods
 
-    function hierarchy_vypis_router($id, $uroven)
+    public function hierarchy_vypis_router($id)
     {
-        global $uroven_max;
-
         $output = "";
 
-        $dotaz_router = $conn_mysql->query("SELECT * FROM router_list WHERE id = ".intval($id) ." order by id");
+        $dotaz_router = $this->conn_mysql->query("SELECT * FROM router_list WHERE id = ".intval($id) ." order by id");
         $dotaz_router_radku = $dotaz_router->num_rows;
 
         if ($dotaz_router_radku > 0) {
@@ -1552,7 +1552,7 @@ class Topology extends adminator
 
                 $output .= "<tr>";
 
-                for ($j = 0;$j < $uroven; $j++) {
+                for ($j = 0;$j < $this->list_hierarchy_level; $j++) {
                     $output .= "<td><br></td>";
                 }
 
@@ -1570,7 +1570,7 @@ class Topology extends adminator
                 //zde rekurze
                 $parent_id = $data_router["id"];
 
-                $dotaz_router_parent = $conn_mysql->query("SELECT * FROM router_list WHERE parent_router = $id order by id");
+                $dotaz_router_parent = $this->conn_mysql->query("SELECT * FROM router_list WHERE parent_router = $id order by id");
                 $dotaz_router_parent_radku = $dotaz_router_parent->num_rows;
 
                 if ($dotaz_router_parent_radku > 0) {
@@ -1579,24 +1579,24 @@ class Topology extends adminator
 
                     while($data_router_parent = $dotaz_router_parent->fetch_array()) {
 
-                        $uroven++;
+                        $this->list_hierarchy_level++;
 
-                        if (($uroven > $uroven_max)) {
-                            $uroven_max = $uroven;
+                        if (($this->list_hierarchy_level > $this->list_hierarchy_max)) {
+                            $this->list_hierarchy_max = $this->list_hierarchy_level;
                         }
 
                         $id = $data_router_parent["id"];
 
-                        hierarchy_vypis_router($id, $uroven);
+                        $this->hierarchy_vypis_router($id);
 
                         $iterace++;
 
                         if ($iterace > 1) {
-                            $uroven--;
+                            $this->list_hierarchy_level--;
                         }
                     }
                     // else
-                    // { $uroven--; }
+                    // { $this->list_hierarchy_level--; }
 
                 }
 
