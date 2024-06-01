@@ -29,7 +29,7 @@ class Topology extends adminator
 
     private $f_id_routeru;
 
-    private $list_hierarchy_level;
+    // private $list_hierarchy_level;
 
     private $list_hierarchy_max;
 
@@ -1539,17 +1539,16 @@ class Topology extends adminator
 
     } //end of function filter_select_nods
 
-    public function hierarchy_vypis_router($id, $uroven)
+    public function hierarchy_vypis_router($id, $uroven): string|false
     {
         $output = "";
 
-        $dotaz_router = $this->conn_mysql->query("SELECT * FROM router_list WHERE id = ".intval($id) ." order by id");
-        $dotaz_router_radku = $dotaz_router->num_rows;
+        $sql_final = "SELECT * FROM router_list WHERE id = ".intval($id) ." order by id";
+        list($dotaz_router_rs, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
 
-        if ($dotaz_router_radku > 0) {
+        if (count($dotaz_router_rs) > 0) {
 
-            while($data_router = $dotaz_router->fetch_array()) {
-
+            foreach ($dotaz_router_rs as $row => $data_router) {
                 $output .= "<tr>";
 
                 for ($j = 0;$j < $uroven; $j++) {
