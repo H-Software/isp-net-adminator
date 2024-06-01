@@ -25,6 +25,10 @@ class Topology extends adminator
 
     private $requestData;
 
+    private $list_nodes;
+
+    private $f_id_routeru;
+
     public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
@@ -769,12 +773,12 @@ class Topology extends adminator
         $f_monitoring = $this->requestData->query->get('f_monitoring');
         $f_alarm = $this->requestData->query->get('f_alarm');
         $f_alarm_stav = $this->requestData->query->get('f_alarm_stav');
-        $f_id_routeru = $this->requestData->query->get('f_id_routeru');
+        $this->f_id_routeru = $this->requestData->query->get('f_id_routeru');
         $f_search = $this->requestData->query->get('f_search');
         $list = $this->requestData->query->get('list');
         $odeslano = $this->requestData->query->get('odeslano');
 
-        $list_nodes = $this->requestData->query->get('list_nodes');
+        $this->list_nodes = $this->requestData->query->get('list_nodes');
 
         $arr_sql_where = array();
 
@@ -806,8 +810,8 @@ class Topology extends adminator
             $f_alarm_stav = 99;
         }
 
-        if((strlen($f_id_routeru) > 0)) {
-            $f_id_routeru = intval($f_id_routeru);
+        if((strlen($this->f_id_routeru) > 0)) {
+            $this->f_id_routeru = intval($this->f_id_routeru);
         }
 
         if((strlen($list) > 0)) {
@@ -827,7 +831,7 @@ class Topology extends adminator
                   "&".urlencode("f_alarm_stav")."=".urlencode($f_alarm_stav).
                   "&".urlencode("odeslano")."=".urlencode($odeslano).
                   "&".urlencode("f_search")."=".urlencode($f_search).
-                  "&".urlencode("f_id_routeru")."=".urlencode($f_id_routeru).
+                  "&".urlencode("f_id_routeru")."=".$this->f_id_routeru.
               "";
 
         //priprava filtracnich podminek do pole
@@ -848,8 +852,8 @@ class Topology extends adminator
             $arr_sql_where[] = " router_list.alarm_stav = '".$f_alarm_stav."'  ";
         }
 
-        if($f_id_routeru > 0) {
-            $arr_sql_where[] = "router_list.id = '".$f_id_routeru."'";
+        if($this->f_id_routeru > 0) {
+            $arr_sql_where[] = "router_list.id = '".$this->f_id_routeru."'";
         }
 
         if(isset($f_search)) {
@@ -1021,7 +1025,7 @@ class Topology extends adminator
         $output .= "<div style=\"float: left; padding-left: 20px; \" >ID routeru: </div>\n";
 
         $output .= "<div style=\"float: left; padding-left: 20px; \" >".
-        "<input type=\"text\" name=\"f_id_routeru\" size=\"3\" value=\"".htmlspecialchars($f_id_routeru)."\" ></div>\n";
+        "<input type=\"text\" name=\"f_id_routeru\" size=\"3\" value=\"".$this->f_id_routeru."\" ></div>\n";
 
         //tlacitko
         $output .= "<div style=\"float: left; padding-left: 40px; \" >".
@@ -1036,434 +1040,451 @@ class Topology extends adminator
         $output .= "</form>\n";
 
         if($typ == 1) {
-
-            $dotaz_router_main = $this->conn_mysql->query("SELECT * FROM router_list WHERE id = 1 order by id");
-            $dotaz_router_main_radku = $dotaz_router_main->num_rows;
-
-            if($dotaz_router_main_radku <> 1) {
-                $output .= "<div style=\"font-size: 16px; font-weight: bold; color: red; \">Nelze vybrat hlavní router</div>\n";
-                exit;
-            }
-
-            while($data_main = $dotaz_router_main->fetch_array()) {
-                //pouze erik
-
-                global $uroven_max;
-
-                $uroven_max = 1;
-
-                $output .= "<table border=\"1\" width=\"1000px\" >\n";
-                $output .= "<tr>\n";
-
-                $output .= "<td> [".$data_main["id"]."] ".$data_main["nazev"];
-
-                $output .= " <span style=\"color:grey; \">( ".$data_main["ip_adresa"]." ) </span>";
-
-                $output .= "</td>\n</tr>\n";
-
-                $dotaz_router_1 = $this->conn_mysql->query("SELECT * FROM router_list WHERE parent_router = 1 order by id");
-                $dotaz_router_radku_1 = $dotaz_router_1->num_rows;
-
-                if($dotaz_router_radku_1 > 0) {
-                    //prvni uroven
-                    while($data_router_1 = $dotaz_router_1->fetch_array()) {
-                        global $uroven;
-
-                        $id = $data_router_1["id"];
-
-                        $rs_hierarchy = hierarchy_vypis_router($id, "0");
-                        if($rs_hierarchy === false) {
-                            $output .= "<div class=\"alert alert-danger\" role=\"alert\">chyba hiearcheckeho vypisu routeru (no routers found in database)</div>";
-                        } else {
-                            $output .= $rs_hierarchy;
-                        }
-                    } // while dotaz_router
-                } // konec if dotaz_router_radku > 0
-
-                // $output .= "pokracujem ...";
-
-            } // konec while
-
-            //neprirazene rb
-            $uroven_max = $uroven_max + 2;
-
-            $output .= "<tr><td><br></td></tr>";
-
-            $output .= "<tr><td colspan=\"".$uroven_max."\" ><hr></td></tr>";
-
-            $output .= "<tr><td colspan=\"".$uroven_max."\" ><br></td></tr>";
-
-            $output .= "<tr><td colspan=\"".$uroven_max."\" >Nepřiřazené routery:  </td></tr>";
-
-            $dotaz_routery = $this->conn_mysql->query("SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id");
-            $dotaz_routery_radku = $dotaz_routery->num_rows;
-
-            if ($dotaz_routery_radku < 1) {
-                $output .= "<tr><td colspan=\"5\" > Žádné routery v databázi. </td></tr>";
-            } else {
-                while($data = $dotaz_routery->fetch_array()):
-
-                    $output .= "<tr>";
-
-                    $output .= "<td>".$data["id"]."</td>";
-                    $output .= "<td>".$data["nazev"]."</td>";
-                    $output .= "<td>".$data["ip_adresa"]."</td>";
-
-                    // parent router
-                    $output .= "<td>";
-
-                    $output .=  $data["parent_router"];
-
-                    $parent_router = $data["parent_router"];
-                    $dotaz_sec = $this->conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($parent_router)."' ");
-
-                    while($data_sec = $dotaz_sec->fetch_array()) {
-                        $output .= "<span style=\"color: grey; font-weight: bold;\"> ( ".htmlspecialchars($data_sec["nazev"])." ) </span>";
-                    }
-
-                    $output .= "</td>";
-                    //konec parent router
-
-                    $output .= "<td>".$data["mac"]."</td>";
-
-                endwhile;
-
-            }
-
+            $output .= $this->routerListHierarchy();
             $output .= "</table>";
 
+            return $output;
+        }
 
-        } // konec if typ == 1
-        else {
+        //vypis routeru normal
 
-            //vypis routeru normal
+        $sql_rows = "router_list.id, router_list.nazev, router_list.ip_adresa, router_list.parent_router, ".
+            "router_list.mac, router_list.monitoring, router_list.monitoring_cat, router_list.alarm, ".
+            " router_list.alarm_stav, router_list.filtrace, router_list.warn, router_list.mail, ".
+            " kategorie.jmeno AS kategorie_jmeno, router_list2.nazev AS parent_router_nazev";
 
-            // $sql_base_old = "SELECT router_list.id, nazev, ip_adresa, parent_router, mac, monitoring, monitoring_cat, alarm, alarm_stav, filtrace, ".
-            //     "kategorie.jmeno as kategorie_jmeno FROM `router_list` LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ";
+        $sql_base = "SELECT ".$sql_rows." FROM router_list ".
+            " LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ".
+            " LEFT JOIN router_list AS router_list2 ON router_list.parent_router = router_list2.id ";
 
-            $sql_rows = "router_list.id, router_list.nazev, router_list.ip_adresa, router_list.parent_router, ".
-                "router_list.mac, router_list.monitoring, router_list.monitoring_cat, router_list.alarm, ".
-                " router_list.alarm_stav, router_list.filtrace, router_list.warn, router_list.mail, ".
-                " kategorie.jmeno AS kategorie_jmeno, router_list2.nazev AS parent_router_nazev";
+        $sql_final = $sql_base." ".$sql_where2." ORDER BY router_list.id";
 
-            $sql_base = "SELECT ".$sql_rows." FROM router_list ".
-                " LEFT JOIN kategorie ON router_list.monitoring_cat = kategorie.id ".
-                " LEFT JOIN router_list AS router_list2 ON router_list.parent_router = router_list2.id ";
+        //prvky pro listovaci odkazy
+        $paging_url = "?".$get_odkazy;
 
-            $sql_final = $sql_base." ".$sql_where2." ORDER BY router_list.id";
+        $paging = new c_listing_topology(
+            $this->pdoMysql,
+            $paging_url,
+            $this->settings['app']['core']['topology']['router']['listing_interval'],
+            $list,
+            "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
+            "</div>\n",
+            $sql_final
+        );
 
-            //prvky pro listovaci odkazy
-            $paging_url = "?".$get_odkazy;
+        $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
 
-            $paging = new c_listing_topology(
-                $this->pdoMysql,
-                $paging_url,
-                $this->settings['app']['core']['topology']['router']['listing_interval'],
-                $list,
-                "<div class=\"text-listing2\" style=\"text-align: center; padding-top: 10px; padding-bottom: 10px;\">",
-                "</div>\n",
-                $sql_final
-            );
+        $interval = $paging->interval;
 
-            $bude_chybet = ((($list == "") || ($list == "1")) ? 0 : ((($list - 1) * $paging->interval)));
+        $sql_final .= " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
 
-            $interval = $paging->interval;
+        // fetch data
+        list($rs_data, $dotaz_error) = $this->callPdoQueryAndFetch($sql_final);
 
-            //uprava sql
-            $sql_final .= " LIMIT ".$interval." OFFSET ".$bude_chybet." ";
+        if($dotaz_error != null) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_error, true));
+            $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
+            $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
+            $output .= "<div style=\"\" >".$dotaz_error."</div>";
 
-            list($rs_data, $dotaz_error) = $this->callPdoQueryAndFetch($sql_final);
+            return $output;
+        } elseif(count($rs_data) < 1) {
+            $output .= "<div style=\"margin-left: 10px; padding-left: 10px; padding-right: 10px; ".
+                "background-color: #ff8c00; height: 30px; width: 980px; \" >".
+                "<div style=\"padding-top: 5px;\" >Žádné záznamy dle hledaného kritéria.</div>".
+                "</div>";
 
-            if($dotaz_error != null) {
-                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_error, true));
-                $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
-                $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
-                $output .= "<div style=\"\" >".$dotaz_error."</div>";
-            } elseif(count($rs_data) < 1) {
-                $output .= "<div style=\"margin-left: 10px; padding-left: 10px; padding-right: 10px; ".
-                    "background-color: #ff8c00; height: 30px; width: 980px; \" >".
-                    "<div style=\"padding-top: 5px;\" >Žádné záznamy dle hledaného kritéria.</div>".
-                    "</div>";
+            /*
+                //debug radka
+                $output .= "<div style=\"padding-top: 15px; padding-bottom: 25px; color: gray; \" >\n";
+                $output .=  $sql_final;
+                $output .= "</div>\n";
+                //konec debug
+            */
 
-                /*
-                    //debug radka
-                    $output .= "<div style=\"padding-top: 15px; padding-bottom: 25px; color: gray; \" >\n";
-                    $output .=  $sql_final;
-                    $output .= "</div>\n";
-                    //konec debug
-                */
+            return $output;
+        }
+
+        /*
+            //debug radka
+            $output .= "<div style=\"padding-top: 15px; padding-bottom: 25px; color: gray; \" >\n";
+            $output .=  $sql_final;
+            $output .= "</div>\n";
+            //konec debug
+        */
+
+        $output .= $paging->listInterval();
+
+        //hlavní tabulka
+        $output .= "<table border=\"0\" style=\"width: 1000px; margin-left: 10px; \" >";
+
+        $pocet_sloupcu = "8";
+
+        $output .= "<tr>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"30px\" >id: </td>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"250px\" >název: </td>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"120px\" >IP adresa: </td>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"140px\">mac adresa: </td>\n".
+
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"60px\" >alarm: </td>\n".
+                "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"40px\" >filtrace: </td>\n".
+
+                "<td colspan=\"2\" style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"40px\" >detailní výpis</td>\n".
+
+              "</tr>\n";
+
+        //kategorie - druhy radek
+        $output .= "<tr>\n".
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"30px\" >&nbsp;</td>\n".
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"250px\" >nadřazený router: </td>\n".
+                "<td colspan=\"2\" style=\"border-bottom: 1px solid black; font-weight: bold;\" >monitorování (kategorie): </td>\n".
+
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >&nbsp;</td>\n".
+
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >soubory: </td>\n".
+
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >úprava: </td>\n".
+                "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >smazání: </td>\n".
+
+              "</tr>\n";
+
+        $output .= "<tr>\n<td colspan=\"".$pocet_sloupcu."\" >&nbsp;\n</td>\n</tr>\n";
+
+
+        // while($data = $dotaz_routery->fetch_array()):
+        $output .= $this->renderRouterListTableRow($rs_data);
+
+        $output .= "</table>\n";
+
+        //listovani
+        $output .= $paging->listInterval();
+
+        return $output;
+    }
+
+    private function renderRouterListTableRow($rs_data): string
+    {
+        $output = "";
+
+        foreach ($rs_data as $row => $data) {
+
+            $alarm = $data["alarm"];
+
+            //1.radek
+            $output .= "<tr>";
+
+            $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \" >".htmlspecialchars($data["id"])."</td>\n";
+            $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \" >".htmlspecialchars($data["nazev"])."</td>\n";
+            $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \">".htmlspecialchars($data["ip_adresa"])."</td>\n";
+            $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \">".htmlspecialchars($data["mac"])."</td>";
+
+
+            //alarm
+            $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \">";
+
+            if ($alarm == 1) {
+                $output .= "<span style=\"font-weight: bold; \">Ano</span>";
+            } elseif ($alarm == 0) {
+                $output .= "Ne";
             } else {
-                /*
-                    //debug radka
-                    $output .= "<div style=\"padding-top: 15px; padding-bottom: 25px; color: gray; \" >\n";
-                    $output .=  $sql_final;
-                    $output .= "</div>\n";
-                    //konec debug
-                */
-
-                //listovani
-                $output .= $paging->listInterval();
-
-                //hlavní tabulka
-                $output .= "<table border=\"0\" style=\"width: 1000px; margin-left: 10px; \" >";
-
-                $pocet_sloupcu = "8";
-
-                $output .= "<tr>\n".
-                        "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"30px\" >id: </td>\n".
-                        "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"250px\" >název: </td>\n".
-                        "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"120px\" >IP adresa: </td>\n".
-                        "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"140px\">mac adresa: </td>\n".
-
-                        "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"60px\" >alarm: </td>\n".
-                        "<td style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"40px\" >filtrace: </td>\n".
-
-                        "<td colspan=\"2\" style=\"border-bottom: 1px dashed gray; font-weight: bold;\" width=\"40px\" >detailní výpis</td>\n".
-
-                      "</tr>\n";
-
-                //kategorie - druhy radek
-                $output .= "<tr>\n".
-                        "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"30px\" >&nbsp;</td>\n".
-                        "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"250px\" >nadřazený router: </td>\n".
-                        "<td colspan=\"2\" style=\"border-bottom: 1px solid black; font-weight: bold;\" >monitorování (kategorie): </td>\n".
-
-                        "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >&nbsp;</td>\n".
-
-                        "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >soubory: </td>\n".
-
-                        "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >úprava: </td>\n".
-                        "<td style=\"border-bottom: 1px solid black; font-weight: bold;\" width=\"40px\" >smazání: </td>\n".
-
-                      "</tr>\n";
-
-                $output .= "<tr>\n<td colspan=\"".$pocet_sloupcu."\" >&nbsp;\n</td>\n</tr>\n";
-
-
-                // while($data = $dotaz_routery->fetch_array()):
-                foreach ($rs_data as $row => $data) {
-
-                    $alarm = $data["alarm"];
-
-                    //1.radek
-                    $output .= "<tr>";
-
-                    $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \" >".htmlspecialchars($data["id"])."</td>\n";
-                    $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \" >".htmlspecialchars($data["nazev"])."</td>\n";
-                    $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \">".htmlspecialchars($data["ip_adresa"])."</td>\n";
-                    $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \">".htmlspecialchars($data["mac"])."</td>";
-
-
-                    //alarm
-                    $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \">";
-
-                    if ($alarm == 1) {
-                        $output .= "<span style=\"font-weight: bold; \">Ano</span>";
-                    } elseif ($alarm == 0) {
-                        $output .= "Ne";
-                    } else {
-                        $output .= "N/A";
-                    }
-
-                    if ($alarm == 1) {
-                        if ($data["alarm_stav"] == 2) {
-                            $output .= "<span style=\"color: red; \"> (poplach) </span>";
-                        } elseif ($data["alarm_stav"] == 1) {
-                            $output .= "<span style=\"color: orange;\"> (warning) </span>";
-                        } elseif ($data["alarm_stav"] == 0) {
-                            $output .= "<span style=\"color: green; \"> (klid) </span>";
-                        } else {
-                            $output .= " (N/A) ";
-                        }
-                    }
-
-                    $output .= "</td>\n";
-
-                    //konec alarmu
-
-                    //filtrace
-                    $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \">\n";
-                    if ($data["filtrace"] == 1) {
-                        $output .= "<span style=\"color: green; font-weight: bold; \">Ano</span>";
-                    } else {
-                        $output .= "<span style=\"color: orange;\">Ne</span>";
-                    }
-                    $output .= "</td>\n";
-
-                    //detail vypis
-                    $output .= "<td colspan=\"2\" style=\"border-bottom: 1px dashed gray; font-size: 15px; \">\n".
-                             "<a href=\"?f_id_routeru=".intval($data["id"])."&list_nodes=yes\">vypsat vysílače/nody</a></td>\n";
-
-                    $output .= "</tr>";
-
-                    //2.radek
-                    $output .= "<tr>";
-
-                    //2.1 - id
-                    $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
-                    $output .= "<a href=\"/archiv-zmen?id_routeru=".intval($data["id"])."\" >H</a>";
-                    $output .= "</td>";
-
-                    //2.2 - parent router
-                    $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
-                    $output .=  $data["parent_router_nazev"].
-                    " <span style=\"color: grey; font-weight: bold;\">(".$data["parent_router"].")</span>\n".
-                    "</td>\n";
-
-                    //2.3-4 - monitoring
-                    $output .= "<td colspan=\"2\" style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
-
-                    if($data["monitoring"] == 1) {
-                        $output .= "<span style=\"font-weight: bold; \">";
-                        $output .= "<a href=\"https://monitoring.local.net/mon/www-generated/rb_all_".$data["ip_adresa"].".php\" target=\"_blank\" >Ano</a></span>";
-                    } elseif ($data["monitoring"] == 0) {
-                        $output .= "Ne";
-                    } else {
-                        $output .= "N/A";
-                    }
-
-                    $output .= "<span style=\"color: grey; \"> ( ";
-                    if ($data["monitoring_cat"] > 0) {
-                        $output .= "<a href=\"https://monitoring.local.net/mon/www/rb_all.php\" target=\"_blank\" >";
-                    }
-
-                    $output .=  htmlspecialchars($data["kategorie_jmeno"]." / ".$data["monitoring_cat"]);
-
-                    if ($data["monitoring_cat"] > 0) {
-                        $output .= "</a>";
-                    }
-                    $output .= " ) </span></td>";
-
-                    //2.5 - alarm, 2cast
-                    $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\">\n";
-
-                    if ($alarm == 1) {
-                        $output .= "( CW: ".$data["warn"]." CM: ".$data["mail"]." )";
-                    } else {
-                        $output .= "&nbsp;";
-                    }
-
-                    $output .= "</td>\n";
-
-                    //2.6. - soubory
-                    $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >\n".
-                            "<a href=\"topology-router-mail.php?id=".$data["id"]."\">";
-                    $output .= "<img src=\"/img2/icon_files.jpg\" border=\"0\" height=\"20px\" ></a>\n</td>\n";
-
-                    //uprava
-                    $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
-                    $output .= '<form method="POST" action="/topology/router/action">
-                                <input type="hidden" name="update_id" value="'.intval($data["id"]).'">';
-                    $output .= $this->csrf_html;
-                    $output .= '<input type="submit" value="update">
-                                </form></span>';
-                    $output .= "</td>\n";
-
-                    //smazat
-                    $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >\n";
-                    $output .=  '<form method="POST" action="topology-router-erase.php">' . "\n"
-                          . '<input type="hidden" name="erase_id" value="'.intval($data["id"]).'">
-                          <input type="submit" name="smazat" value="smazat" >
-                          </form></span>';
-                    $output .= "\n</td>\n";
-
-                    $output .= "</tr>\n";
-
-                    //pokud s kliklo na vypis subnetu
-                    if($list_nodes == "yes" and $f_id_routeru == $data["id"]) {
-
-                        $output .= "<tr><td colspan=\"11\" >\n";
-
-                        // $id_routeru = $data["id"];
-                        $colspan_stav = "1";
-
-                        list($rs_data2, $rs_error2) = $this->callPdoQueryAndFetch("SELECT * FROM nod_list WHERE router_id = '".intval($f_id_routeru)."' ");
-
-                        // TODO: add detect and display error
-
-                        if (count($rs_data2) < 1) {
-                            $output .= "<span style=\"color: teal; font-size: 16px; font-weight: bold;\">
-                                <p> Žádné aliasy/nody v databázi. </p></span>\n";
-                        } else {
-
-                            $output .= "<table border=\"0\" width=\"100%\" id=\"topology-router-list-node-view-table\" >\n";
-
-                            foreach ($rs_data2 as $row => $data_top) {
-
-                                $output .= "<tr>\n";
-
-                                $output .= "<td class=\"top-router-dolni1\" id=\"topology-router-list-node-view-name-".$row."\"><span style=\"color: #777777; \">";
-                                $output .=  $data_top["jmeno"]."</span></td>\n";
-
-                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["adresa"]."</span></td>\n";
-
-                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["ip_rozsah"]."</span></td>\n";
-
-                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".($data_top["mac"] ?? "")."</span></td>\n";
-
-                                if ($data_top["stav"] == 1) {
-                                    $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"green\" align=\"center\" >
-                                    <span style=\"color: white; font-size: 13px; \"> v pořádku </span></td>\n";
-                                } elseif ($data_top["stav"] == 2) {
-                                    $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"orange\" align=\"center\" >
-                                    <span style=\"color: white; font-size: 13px; \"> vytížen </span></td>\n";
-                                } elseif($data_top["stav"] == 3) {
-                                    $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"red\" align=\"center\" >
-                                <span style=\"color: white; font-size: 13px; \"> přetížen </span></td>\n";
-                                } else {
-                                    $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" >
-                                <span style=\"color: #666666; font-size: 13px; \">".$data_top["stav"]."</span></td>\n";
-                                }
-
-                                $typ_vysilace = $data_top["typ_vysilace"];
-
-                                if ($typ_vysilace == 1) {
-                                    $typ_vysilace2 = "Metallic";
-                                } elseif ($typ_vysilace == 2) {
-                                    $typ_vysilace2 = "ap-2,4GHz-OMNI";
-                                } elseif ($typ_vysilace == 3) {
-                                    $typ_vysilace2 = "ap-2,4Ghz-sektor";
-                                } elseif ($typ_vysilace == 4) {
-                                    $typ_vysilace2 = "ap-2.4Ghz-smerovka";
-                                } elseif ($typ_vysilace == 5) {
-                                    $typ_vysilace2 = "ap-5.8Ghz-OMNI";
-                                } elseif ($typ_vysilace == 6) {
-                                    $typ_vysilace2 = "ap-5.8Ghz-sektor";
-                                } elseif ($typ_vysilace == 7) {
-                                    $typ_vysilace2 = "ap-5.8Ghz-smerovka";
-                                } elseif ($typ_vysilace == 8) {
-                                    $typ_vysilace2 = "jiné";
-                                } else {
-                                    $typ_vysilace2 = $typ_vysilace;
-                                }
-
-                                $output .= "<td class=\"top-router-dolni1\"><span style=\"color: grey; font-size: 12px; \">".$typ_vysilace2."</span></td>\n";
-                                $output .= "<td class=\"top-router-dolni1\" id=\"topology-router-list-node-view-detail-link-".$row."\" >";
-                                $output .= "<a href=\"/topology/node-list?find=".$data_top["jmeno"]."\">detail nodu </a>";
-                                $output .= "</td>\n";
-
-                                $output .= "</tr>\n";
-                            }
-
-                            $output .= "</table>\n";
-
-                        } // konec else dotaz_top_radku < 1
-
-                        $output .= "</td></tr>\n";
-
-                    } // konec if get id == data id
-
-                }
-                // endwhile;
-
-                $output .= "</table>\n";
-
-                //listovani
-                $output .= $paging->listInterval();
-
+                $output .= "N/A";
             }
 
-        } // konec else typ == 1
+            if ($alarm == 1) {
+                if ($data["alarm_stav"] == 2) {
+                    $output .= "<span style=\"color: red; \"> (poplach) </span>";
+                } elseif ($data["alarm_stav"] == 1) {
+                    $output .= "<span style=\"color: orange;\"> (warning) </span>";
+                } elseif ($data["alarm_stav"] == 0) {
+                    $output .= "<span style=\"color: green; \"> (klid) </span>";
+                } else {
+                    $output .= " (N/A) ";
+                }
+            }
+
+            $output .= "</td>\n";
+
+            //konec alarmu
+
+            //filtrace
+            $output .= "<td style=\"border-bottom: 1px dashed gray; font-size: 15px; \">\n";
+            if ($data["filtrace"] == 1) {
+                $output .= "<span style=\"color: green; font-weight: bold; \">Ano</span>";
+            } else {
+                $output .= "<span style=\"color: orange;\">Ne</span>";
+            }
+            $output .= "</td>\n";
+
+            //detail vypis
+            $output .= "<td colspan=\"2\" style=\"border-bottom: 1px dashed gray; font-size: 15px; \">\n".
+                     "<a href=\"?f_id_routeru=".intval($data["id"])."&list_nodes=yes\">vypsat vysílače/nody</a></td>\n";
+
+            $output .= "</tr>";
+
+            //2.radek
+            $output .= "<tr>";
+
+            //2.1 - id
+            $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
+            $output .= "<a href=\"/archiv-zmen?id_routeru=".intval($data["id"])."\" >H</a>";
+            $output .= "</td>";
+
+            //2.2 - parent router
+            $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
+            $output .=  $data["parent_router_nazev"].
+            " <span style=\"color: grey; font-weight: bold;\">(".$data["parent_router"].")</span>\n".
+            "</td>\n";
+
+            //2.3-4 - monitoring
+            $output .= "<td colspan=\"2\" style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
+
+            if($data["monitoring"] == 1) {
+                $output .= "<span style=\"font-weight: bold; \">";
+                $output .= "<a href=\"https://monitoring.local.net/mon/www-generated/rb_all_".$data["ip_adresa"].".php\" target=\"_blank\" >Ano</a></span>";
+            } elseif ($data["monitoring"] == 0) {
+                $output .= "Ne";
+            } else {
+                $output .= "N/A";
+            }
+
+            $output .= "<span style=\"color: grey; \"> ( ";
+            if ($data["monitoring_cat"] > 0) {
+                $output .= "<a href=\"https://monitoring.local.net/mon/www/rb_all.php\" target=\"_blank\" >";
+            }
+
+            $output .=  htmlspecialchars($data["kategorie_jmeno"]." / ".$data["monitoring_cat"]);
+
+            if ($data["monitoring_cat"] > 0) {
+                $output .= "</a>";
+            }
+            $output .= " ) </span></td>";
+
+            //2.5 - alarm, 2cast
+            $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\">\n";
+
+            if ($alarm == 1) {
+                $output .= "( CW: ".$data["warn"]." CM: ".$data["mail"]." )";
+            } else {
+                $output .= "&nbsp;";
+            }
+
+            $output .= "</td>\n";
+
+            //2.6. - soubory
+            $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >\n".
+                    "<a href=\"topology-router-mail.php?id=".$data["id"]."\">";
+            $output .= "<img src=\"/img2/icon_files.jpg\" border=\"0\" height=\"20px\" ></a>\n</td>\n";
+
+            //uprava
+            $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
+            $output .= '<form method="POST" action="/topology/router/action">
+                            <input type="hidden" name="update_id" value="'.intval($data["id"]).'">';
+            $output .= $this->csrf_html;
+            $output .= '<input type="submit" value="update">
+                            </form></span>';
+            $output .= "</td>\n";
+
+            //smazat
+            $output .= "<td style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >\n";
+            $output .=  '<form method="POST" action="topology-router-erase.php">' . "\n"
+                  . '<input type="hidden" name="erase_id" value="'.intval($data["id"]).'">
+                      <input type="submit" name="smazat" value="smazat" >
+                      </form></span>';
+            $output .= "\n</td>\n";
+
+            $output .= "</tr>\n";
+
+            //pokud s kliklo na vypis subnetu
+            if($this->list_nodes == "yes" and $this->f_id_routeru == $data["id"]) {
+
+                $output .= "<tr><td colspan=\"11\" >\n";
+
+                // $id_routeru = $data["id"];
+                $colspan_stav = "1";
+
+                list($rs_data2, $rs_error2) = $this->callPdoQueryAndFetch("SELECT * FROM nod_list WHERE router_id = '". $this->f_id_routeru ."' ");
+
+                // TODO: add detect and display error
+
+                if (count($rs_data2) < 1) {
+                    $output .= "<span style=\"color: teal; font-size: 16px; font-weight: bold;\">
+                            <p> Žádné aliasy/nody v databázi. </p></span>\n";
+                } else {
+
+                    $output .= "<table border=\"0\" width=\"100%\" id=\"topology-router-list-node-view-table\" >\n";
+
+                    foreach ($rs_data2 as $row => $data_top) {
+
+                        $output .= "<tr>\n";
+
+                        $output .= "<td class=\"top-router-dolni1\" id=\"topology-router-list-node-view-name-".$row."\"><span style=\"color: #777777; \">";
+                        $output .=  $data_top["jmeno"]."</span></td>\n";
+
+                        $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["adresa"]."</span></td>\n";
+
+                        $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".$data_top["ip_rozsah"]."</span></td>\n";
+
+                        $output .= "<td class=\"top-router-dolni1\"><span style=\"color: #777777; \">".($data_top["mac"] ?? "")."</span></td>\n";
+
+                        if ($data_top["stav"] == 1) {
+                            $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"green\" align=\"center\" >
+                                <span style=\"color: white; font-size: 13px; \"> v pořádku </span></td>\n";
+                        } elseif ($data_top["stav"] == 2) {
+                            $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"orange\" align=\"center\" >
+                                <span style=\"color: white; font-size: 13px; \"> vytížen </span></td>\n";
+                        } elseif($data_top["stav"] == 3) {
+                            $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"red\" align=\"center\" >
+                            <span style=\"color: white; font-size: 13px; \"> přetížen </span></td>\n";
+                        } else {
+                            $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" >
+                            <span style=\"color: #666666; font-size: 13px; \">".$data_top["stav"]."</span></td>\n";
+                        }
+
+                        $typ_vysilace = $data_top["typ_vysilace"];
+
+                        if ($typ_vysilace == 1) {
+                            $typ_vysilace2 = "Metallic";
+                        } elseif ($typ_vysilace == 2) {
+                            $typ_vysilace2 = "ap-2,4GHz-OMNI";
+                        } elseif ($typ_vysilace == 3) {
+                            $typ_vysilace2 = "ap-2,4Ghz-sektor";
+                        } elseif ($typ_vysilace == 4) {
+                            $typ_vysilace2 = "ap-2.4Ghz-smerovka";
+                        } elseif ($typ_vysilace == 5) {
+                            $typ_vysilace2 = "ap-5.8Ghz-OMNI";
+                        } elseif ($typ_vysilace == 6) {
+                            $typ_vysilace2 = "ap-5.8Ghz-sektor";
+                        } elseif ($typ_vysilace == 7) {
+                            $typ_vysilace2 = "ap-5.8Ghz-smerovka";
+                        } elseif ($typ_vysilace == 8) {
+                            $typ_vysilace2 = "jiné";
+                        } else {
+                            $typ_vysilace2 = $typ_vysilace;
+                        }
+
+                        $output .= "<td class=\"top-router-dolni1\"><span style=\"color: grey; font-size: 12px; \">".$typ_vysilace2."</span></td>\n";
+                        $output .= "<td class=\"top-router-dolni1\" id=\"topology-router-list-node-view-detail-link-".$row."\" >";
+                        $output .= "<a href=\"/topology/node-list?find=".$data_top["jmeno"]."\">detail nodu </a>";
+                        $output .= "</td>\n";
+
+                        $output .= "</tr>\n";
+                    }
+
+                    $output .= "</table>\n";
+
+                } // konec else dotaz_top_radku < 1
+
+                $output .= "</td></tr>\n";
+
+            } // konec if get id == data id
+
+        }
+
+        return $output;
+
+    }
+
+    private function routerListHierarchy(): string
+    {
+        $output = "";
+
+        $sql_final = "SELECT * FROM router_list WHERE id = 1 order by id";
+        list($dotaz_router_data, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
+
+        if($dotaz_router_error != null) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_router_error, true));
+            $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
+            $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
+            $output .= "<div style=\"\" >".$dotaz_router_error."</div>";
+
+            return $output;
+        }
+        if(count($dotaz_router_data) <> 1) {
+            $output .= "<div style=\"font-size: 16px; font-weight: bold; color: red; \">Nelze vybrat hlavní router. (wrong DB num rows)</div>\n";
+            return $output;
+        }
+
+        foreach ($dotaz_router_data as $row => $data_main) {
+
+            $uroven_max = 1;
+
+            $output .= "<table border=\"1\" width=\"1000px\" >\n";
+            $output .= "<tr>\n";
+
+            $output .= "<td> [".$data_main["id"]."] ".$data_main["nazev"];
+
+            $output .= " <span style=\"color:grey; \">( ".$data_main["ip_adresa"]." ) </span>";
+
+            $output .= "</td>\n</tr>\n";
+
+            $dotaz_router_1 = $this->conn_mysql->query("SELECT * FROM router_list WHERE parent_router = 1 order by id");
+            $dotaz_router_radku_1 = $dotaz_router_1->num_rows;
+
+            if($dotaz_router_radku_1 > 0) {
+                //prvni uroven
+                while($data_router_1 = $dotaz_router_1->fetch_array()) {
+                    global $uroven;
+
+                    $id = $data_router_1["id"];
+
+                    $rs_hierarchy = hierarchy_vypis_router($id, "0");
+                    if($rs_hierarchy === false) {
+                        $output .= "<div class=\"alert alert-danger\" role=\"alert\">chyba hiearcheckeho vypisu routeru (no routers found in database)</div>";
+                    } else {
+                        $output .= $rs_hierarchy;
+                    }
+                } // while dotaz_router
+            } // konec if dotaz_router_radku > 0
+
+            // $output .= "pokracujem ...";
+
+        } // konec while
+
+        //neprirazene rb
+        $uroven_max = $uroven_max + 2;
+
+        $output .= "<tr><td><br></td></tr>";
+
+        $output .= "<tr><td colspan=\"".$uroven_max."\" ><hr></td></tr>";
+
+        $output .= "<tr><td colspan=\"".$uroven_max."\" ><br></td></tr>";
+
+        $output .= "<tr><td colspan=\"".$uroven_max."\" >Nepřiřazené routery:  </td></tr>";
+
+        $dotaz_routery = $this->conn_mysql->query("SELECT * FROM router_list WHERE ( parent_router = 0 and id != 1) order by id");
+        $dotaz_routery_radku = $dotaz_routery->num_rows;
+
+        if ($dotaz_routery_radku < 1) {
+            $output .= "<tr><td colspan=\"5\" > Žádné routery v databázi. </td></tr>";
+        } else {
+            while($data = $dotaz_routery->fetch_array()):
+
+                $output .= "<tr>";
+
+                $output .= "<td>".$data["id"]."</td>";
+                $output .= "<td>".$data["nazev"]."</td>";
+                $output .= "<td>".$data["ip_adresa"]."</td>";
+
+                // parent router
+                $output .= "<td>";
+
+                $output .=  $data["parent_router"];
+
+                $parent_router = $data["parent_router"];
+                $dotaz_sec = $this->conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($parent_router)."' ");
+
+                while($data_sec = $dotaz_sec->fetch_array()) {
+                    $output .= "<span style=\"color: grey; font-weight: bold;\"> ( ".htmlspecialchars($data_sec["nazev"])." ) </span>";
+                }
+
+                $output .= "</td>";
+                //konec parent router
+
+                $output .= "<td>".$data["mac"]."</td>";
+
+            endwhile;
+
+        }
 
         return $output;
     }
