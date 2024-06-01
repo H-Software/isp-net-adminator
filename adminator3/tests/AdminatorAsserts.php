@@ -23,24 +23,45 @@ final class AdminatorAssert extends AdminatorTestCase
     //     self::fail($message);
     // }
 
-    public static function assertBase($responseContent)
-    // protected function runBasicAsserts($responseContent)
+    public static function assertBaseCommon($responseContent)
     {
+        // common stuff for smarty and twig templates
+
         self::assertNotEmpty($responseContent);
 
         $assertKeywordsCommon = array(
             '<html lang="en">',
-            'link href="/public/css/style.css" rel="stylesheet" type="text/css" ',
             '<title>Adminator3',  // adminator head rendered
-            'bootstrap.min.css" rel="stylesheet"',  // adminator head rendered
+            'bootstrap.min.css" rel="stylesheet"',  // bootstrap
+            'bootstrap.bundle.min.js" integrity="', // bootstrap JS
+            'jquery.min.js">', // bootstrap JS requirements
+            '</body>', // rendered whole page
+            '</html>' // rendered whole page
+        );
+
+        foreach ($assertKeywordsCommon as $w) {
+
+            self::assertStringContainsString($w, $responseContent, "missing string \"" . $w . "\" in response body");
+
+            // if (!str_contains($responseContent, $w)) {
+            //     $this->assertFalse(true, "missing string \"" . $w . "\" in controller output");
+            // }
+        }
+    }
+
+    public static function assertBase($responseContent)
+    // protected function runBasicAsserts($responseContent)
+    {
+        self::assertBaseCommon($responseContent);
+
+        $assertKeywordsCommon = array(
+            'link href="/public/css/style.css" rel="stylesheet" type="text/css" ',
             'Jste přihlášeni v administračním systému', // adminator header rendered
             '<span class="intro-banner-logged"', // logged details container
             '<div id="obsah" >', // main container
             '<a class="cat" href="/vlastnici/cat" target="_top" >Zákazníci</a>', // categories - 1.line
             '<a class="cat" href="/partner/cat" target="_top" >Partner program</a>', // categories - 2.line
             '<div class="obsah-main" >', // inner container
-            '</body>', // smarty rendered whole page
-            '</html>' // smarty rendered whole page
         );
 
         foreach ($assertKeywordsCommon as $w) {

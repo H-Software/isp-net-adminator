@@ -47,13 +47,19 @@ final class AuthControllerTest extends AdminatorTestCase
 
         $authController = new AuthController($container, $routerParser);
 
-        // $response = $this->createMock(ResponseInterface::class);
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
         $response = $authController->signin($serverRequest, $response, ['flashEnabled' => false]);
 
-        // TODO: add asserts for login form
+        $responseContent = $response->getBody()->__toString();
 
+        echo $responseContent;
+
+        $this->assertEquals($response->getStatusCode(), 200);
+
+        adminatorAssert::assertBaseCommon($responseContent);
+
+        // TODO: add asserts for login form
     }
 }
