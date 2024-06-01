@@ -19,12 +19,19 @@ class TopologyRouterData extends AbstractSeed
         $data = [];
 
         for ($i = 0; $i < 6; $i++) {
+            if($i == 0) {
+                // first router has to have parent_router (id) = 0
+                $parent_router = 0;
+            } else {
+                $parent_router = $faker->numberBetween(1, 3);
+            }
+
             $data[] = [
                 'nazev'        => $this->sanitizeString(
                                         $faker->slug(3, false)
                                     ),
                 'ip_adresa'         => $faker->localIpv4(), // https://fakerphp.org/formatters/internet/#localipv4
-                'parent_router'     => 1,
+                'parent_router'     => $parent_router,
                 'mac'               => $faker->macAddress(),
                 'poznamka'          => $this->sanitizeString(
                                         $faker->text(30)

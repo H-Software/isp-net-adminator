@@ -1392,7 +1392,7 @@ class Topology extends adminator
     {
         $output = "";
 
-        $sql_final = "SELECT * FROM router_list WHERE id = 1 order by id";
+        $sql_final = "SELECT id, nazev, ip_adresa FROM router_list WHERE id = 1 order by id";
         list($dotaz_router_data, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
 
         if($dotaz_router_error != null) {
@@ -1421,7 +1421,7 @@ class Topology extends adminator
 
             $output .= "</td>\n</tr>\n";
 
-            $sql_final = "SELECT id FROM router_list WHERE parent_router = 1 order by id";
+            $sql_final = "SELECT id, parent_router FROM router_list WHERE parent_router = 1 order by id";
             list($dotaz_router_1_rs, $dotaz_router_1_error) = $this->callPdoQueryAndFetch($sql_final);
 
             if(count($dotaz_router_1_rs) > 0) {
@@ -1431,12 +1431,15 @@ class Topology extends adminator
 
                     $rs_hierarchy = $this->hierarchy_vypis_router($id, "0");
                     if($rs_hierarchy === false) {
-                        $output .= "<div class=\"alert alert-danger\" role=\"alert\">chyba hiearcheckeho vypisu routeru (no routers found in database)</div>";
+                        $output .= "<div class=\"alert alert-danger\" role=\"alert\">chyba hierarchickeho vypisu routeru (no depedent routers found in database)</div>";
                     } else {
                         $output .= $rs_hierarchy;
                     }
                 } // while dotaz_router
             } // konec if dotaz_router_radku > 0
+            else {
+                $output .= "<div class=\"alert alert-danger\" role=\"alert\">No depedent routers found in database</div>";
+            }
 
             // $output .= "pokracujem ...";
 
@@ -1543,26 +1546,29 @@ class Topology extends adminator
     {
         $output = "";
 
-        $sql_final = "SELECT id, nazev, ip_adresa FROM router_list WHERE id = '".intval($id) ."' order by id";
+        $sql_final = "SELECT id, nazev, ip_adresa, parent_router FROM router_list WHERE id = '".intval($id) ."' order by id";
         list($dotaz_router_rs, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
 
         if (count($dotaz_router_rs) > 0) {
 
             foreach ($dotaz_router_rs as $row => $data_router) {
+                // if($data_router["id"] == $data_router["parent_router"]) {
+                //     $output .= "<div class=\"alert alert-danger\" role=\"alert\">Error! Router \"" . $data_router['nazev'] . "\" has dependecy (parent router) to itself!</div>";
+                // }
+
                 $output .= "<tr>";
 
                 for ($j = 0;$j < $uroven; $j++) {
                     $output .= "<td><br></td>";
                 }
 
-                $output .= "<td align=\"center\">|------> </td>";
-                $output .= "<td>";
+                $output .= "<td align=\"center\">|------> </td>"
+                            . "<td>";
 
-                $output .= " [".$data_router["id"]."] <b>".$data_router["nazev"]."</b>";
-                $output .= " <span style=\"color:grey; \">( ".$data_router["ip_adresa"]." ) </span>";
+                $output .= " [".$data_router["id"]."] <b>".$data_router["nazev"]."</b>"
+                          ." <span style=\"color:grey; \">( ".$data_router["ip_adresa"]." ) </span>";
 
-                $output .= "</td>";
-                $output .= "</tr>";
+                $output .= "</td></tr>";
 
                 //zde rekurze
                 //
@@ -1570,7 +1576,6 @@ class Topology extends adminator
                 list($dotaz_router_parent_rs, $dotaz_router_parent_error) = $this->callPdoQueryAndFetch($sql_final);
 
                 if (count($dotaz_router_parent_rs) > 0) {
-
                     $iterace = 1;
 
                     foreach ($dotaz_router_parent_rs as $row => $data_router_parent) {
