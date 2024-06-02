@@ -17,13 +17,13 @@ class ArchivZmen
 
     public $db_table_name = 'archiv_zmen';
 
-    public function __construct(ContainerInterface $container, $smarty)
+    public function __construct(ContainerInterface $container, $smartyUnused = null)
     {
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
 
         $this->logger = $container->get('logger');
-        $this->smarty = $smarty;
+        $this->smarty = $container->get('smarty');
 
         $this->logger->info("archivZmen\__construct called");
     }
