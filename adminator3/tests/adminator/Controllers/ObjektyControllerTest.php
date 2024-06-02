@@ -119,15 +119,17 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
         // TODO: objekty_list: fix $_GET/$_POST access
 
-        // $response = self::callControllerFunction(
-        //     $serverRequest,
-        //     'App\Controllers\objektyController',
-        //     'objekty',
-        //     $container,
-        //     array(
-        //         "adminatorMock" => $adminatorMock,
-        //     )
-        // );
+        $response = self::callControllerFunction(
+            $serverRequest,
+            'App\Controllers\objektyController',
+            'objekty',
+            $container,
+            array(
+                "adminatorMock" => $adminatorMock,
+            ),
+            200,
+            ["usePDO" => true]
+        );
 
         // $responseContent = $response->getBody()->__toString();
 
