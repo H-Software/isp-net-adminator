@@ -17,7 +17,7 @@ class ArchivZmen
 
     public $db_table_name = 'archiv_zmen';
 
-    public function __construct(ContainerInterface $container, $smartyUnused = null)
+    public function __construct(ContainerInterface $container)
     {
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
