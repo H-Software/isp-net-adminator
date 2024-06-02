@@ -133,15 +133,16 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        echo $responseContent;
+        // echo $responseContent;
 
-        // // TODO: add asserts for sub-categories
+        // TODO: add asserts for sub-categories
 
-        // // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]', '/^Prosím vyberte z podkategorie výše....$/');
+        // TODO: asserts for data
+        // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]', '/^Prosím vyberte z podkategorie výše....$/');
 
-        // // non-common negative asserts
-        // $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
-        // $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
+        // non-common negative asserts
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
 
     // TODO: add test for stb

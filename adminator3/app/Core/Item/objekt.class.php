@@ -3541,6 +3541,7 @@ class objekt extends adminator
 
         if($dotaz !== false and !($this->pdoPgsql instanceof \PDO)) {
             $radku = pg_num_rows($dotaz);
+            $data_rs = pg_fetch_all($dotaz);
         } elseif (!($this->pdoPgsql instanceof \PDO)) {
             $output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($this->conn_pgsql). "</div>";
             return $output;
@@ -3566,7 +3567,8 @@ class objekt extends adminator
             return $output;
         }
 
-        while ($data = pg_fetch_array($dotaz)) {
+        foreach ($data_rs as $row => $data) {
+        // while ($data = pg_fetch_array($dotaz)) {
             // $output .= $data[sloupec1]." ".$data[sloupec2];
             // $output .= "<br />";
 
