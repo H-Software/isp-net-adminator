@@ -3567,8 +3567,8 @@ class objekt extends adminator
             return $output;
         }
 
-        foreach ($data_rs as $row => $data) {
         // while ($data = pg_fetch_array($dotaz)) {
+        foreach ($data_rs as $row => $data) {
             // $output .= $data[sloupec1]." ".$data[sloupec2];
             // $output .= "<br />";
 
