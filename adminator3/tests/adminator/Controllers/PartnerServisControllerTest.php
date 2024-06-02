@@ -51,7 +51,7 @@ final class PartnerServisControllerTest extends AdminatorTestCase
 
         // adminatorAssert::assertBase($responseContent);
 
-        // // TODO: add asserts for sub-categories
+        // adminatorAssert::assertPartnerSubCat($response);
 
         // // TODO: add asserts for items
 

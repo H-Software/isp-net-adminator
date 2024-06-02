@@ -194,9 +194,9 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         // TODO: router_list_view_all: add asserts
 
-        // AdminatorAssert::assertTopologyNodeListHeaderAndSelectors($responseContent);
+        // AdminatorAssert::assertTopologyRouterListHeaderAndSelectors($responseContent);
 
-        // AdminatorAssert::assertTopologyNodeListTableHeader($responseContent);
+        // AdminatorAssert::assertTopologyRouterListTableHeader($responseContent);
 
         // // listing asserts
         // $this->assertStringContainsString('<div class="text-listing">', $responseContent, "missing listing container");
