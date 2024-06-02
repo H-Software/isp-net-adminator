@@ -152,6 +152,27 @@ final class AdminatorAssert extends AdminatorTestCase
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[2]/a', '/^\/partner\/servis\/list$/');
     }
 
+    public static function assertPartnerOrderSubCat($response)
+    {
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^| O úrověn výš \|$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^\/partner\/cat$/');
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[2]/a', '/^Vložení žádosti$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[2]/a', '/^\/partner\/order\/add$/');
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^Výpis žádostí$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[3]/a', '/^\/partner\/order\/list$/');
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[4]/a', '/^Akceptování žádosti$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[4]/a', '/^\/partner\/order\/accept$/');
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[5]/a', '/^Změna stavu připojení$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[5]/a', '/^\/partner\/order\/change-status$/');
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[6]/a', '/^Změna poznámky$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[6]/a', '/^\/partner\/order\/change-desc$/');
+    }
+
     public static function assertOtherCat(ResponseInterface $response)
     {
         // level up
