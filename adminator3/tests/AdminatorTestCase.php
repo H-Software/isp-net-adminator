@@ -166,11 +166,15 @@ abstract class AdminatorTestCase extends TestCase
             ]
         )->makePartial();
 
-        // probably useless, we have mocked sentinel object
-        // $adminatorMock->userIdentityUsername = 'test@test';
+        $adminatorMock
+            ->shouldReceive('getServerUri')
+            ->andReturn("http://localhost:8080/home");
 
-        $adminatorMock->shouldReceive('getServerUri')->andReturn("http://localhost:8080/home");
-        $adminatorMock->shouldReceive('getUserToken')->andReturn(false);
+        $user_token = $this->getRandomStringBin2hex();
+
+        $adminatorMock
+            ->shouldReceive('getUserToken')
+            ->andReturn($user_token);
         // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
         if($mockCheckLevel) {
@@ -448,4 +452,25 @@ abstract class AdminatorTestCase extends TestCase
     * end of code originated from laminas-test
     */
 
+    /*
+    * duplicated from adminator class
+    */
+
+     /**
+     * Get bytes of using random_bytes or openssl_random_pseudo_bytes
+     * then using bin2hex to get a random string.
+     *
+     * @param int $length
+     * @return string
+     */
+    public function getRandomStringBin2hex($length = 32)
+    {
+        if (function_exists('random_bytes')) {
+            $bytes = random_bytes($length / 2);
+        } else {
+            $bytes = openssl_random_pseudo_bytes($length / 2);
+        }
+        $randomString = bin2hex($bytes);
+        return $randomString;
+    }
 }

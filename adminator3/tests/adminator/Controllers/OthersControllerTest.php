@@ -279,7 +279,7 @@ final class OthersControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBoardCommon($response, $responseContent);
 
-        // TODO: add asserts for form
+        // TODO: board_add_message_form: add asserts for form
 
         // test board mode
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[4]/div[2]/div[1]', '/^\s*->> Přidat zprávu\s*$/');
