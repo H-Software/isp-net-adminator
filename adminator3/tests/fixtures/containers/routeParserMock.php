@@ -9,7 +9,8 @@ $container->set(
             RouteParserInterface::class
         );
 
-        $rp->shouldReceive('urlFor')->andReturn("/xxx");
+        $rp->shouldReceive('urlFor')->with('home')->andReturn("/home");
+        $rp->shouldReceive('urlFor')->andReturn("/somewhere");
 
         return $rp;
     }

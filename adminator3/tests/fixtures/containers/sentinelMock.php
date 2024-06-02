@@ -17,6 +17,7 @@ $container->set('sentinel', function () use ($container) {
         Sentinel::class,
     );
     $sentinel->shouldReceive('getUser')->andReturn($userObj);
+    $sentinel->shouldReceive('authenticate')->andReturn($userObj);
 
     return $sentinel;
 });

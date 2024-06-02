@@ -108,6 +108,7 @@ abstract class AdminatorTestCase extends TestCase
 
         if($sentinelMocked) {
             require __DIR__ . '/../tests/fixtures/containers/sentinelMock.php';
+            require __DIR__ . '/../tests/fixtures/containers/routeParserMock.php';
         } else {
             require __DIR__ . '/../tests/fixtures/containers/sentinel.php';
         }
@@ -391,6 +392,17 @@ abstract class AdminatorTestCase extends TestCase
                     break;
                 }
             }
+            /** @disregard */
+            if($node->hasAttribute('action')) {
+                /** @disregard */
+                $nodeValues[] = $node->getAttribute('action');
+                /** @disregard */
+                if (preg_match($pattern, (string) $node->getAttribute('action'))) {
+                    $found = true;
+                    break;
+                }
+            }
+
         }
 
         if (! $found) {
