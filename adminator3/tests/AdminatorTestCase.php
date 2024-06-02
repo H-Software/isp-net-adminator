@@ -196,7 +196,10 @@ abstract class AdminatorTestCase extends TestCase
         $assertHttpCode = 200
     ): ResponseInterface {
         if(is_array($mockedInstance)) {
-            $controller = new $controllerClass($container, $mockedInstance['adminatorMock'], $mockedInstance['opravyMock']);
+            $adminatorInstance = array_key_exists('adminatorMock', $mockedInstance) ? $mockedInstance['adminatorMock'] : null;
+            $opravyInstance = array_key_exists('opravyMock', $mockedInstance) ? $mockedInstance['opravyMock'] : null;
+
+            $controller = new $controllerClass($container, $adminatorInstance, $opravyInstance);
         } else {
             // legacy call
             $controller = new $controllerClass($container, $mockedInstance);
