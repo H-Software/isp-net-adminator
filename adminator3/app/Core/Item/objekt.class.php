@@ -12,6 +12,8 @@ class objekt extends adminator
 
     public \PgSql\Connection|\PDO|null $conn_pgsql;
 
+    public \PDO|null $pdoPgsql;
+
     public \Monolog\Logger $logger;
 
     protected $container;
@@ -21,6 +23,8 @@ class objekt extends adminator
     protected $sentinel;
 
     public $adminator; // handler for instance of adminator class
+
+    public $request;
 
     protected $work;
 
@@ -114,12 +118,18 @@ class objekt extends adminator
 
     public $p_bs_alerts = array(); // partial -> boostrap alerts
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $usePDO = false)
     {
         $this->container = $container;
         // $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
+        if($usePDO == true) {
+            $this->pdoPgsql = $container->get('pdoPgsql');
+        } else {
+            $this->pdoPgsql = null;
+        }
+
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
 
@@ -130,6 +140,27 @@ class objekt extends adminator
         $this->work = new \App\Core\work($this->container);
     }
 
+    public function callPdoQueryAndFetch($query): array
+    {
+        $rs_error = null;
+        $rs = null;
+        try {
+            $rs = $this->pdoPgsql->query($query);
+        } catch (Exception $e) {
+            $rs_error = $e->getMessage();
+        }
+
+        if(is_object($rs)) {
+            $rs_data = $rs->fetchAll();
+
+        } else {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO result is not object");
+            $rs_data = [];
+        }
+
+        return [$rs_data, $rs_error];
+    }
+
     public function listGetOrderItems()
     {
         $output = "";
@@ -138,14 +169,14 @@ class objekt extends adminator
         $output .= '<td colspan="1">';
 
         $output .= "\n\n <input type=\"radio\" ";
-        if (($_GET["razeni"] == 1)) {
+        if (($this->razeni == 1)) {
             $output .= " checked ";
         }
         $output .= "name=\"razeni\" value=\"1\" onClick=\"form1.submit();\" > ";
         $output .= "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
 
         $output .= " | <input type=\"radio\" ";
-        if (($_GET["razeni"] == 2)) {
+        if (($this->razeni == 2)) {
             $output .= " checked ";
         }
         $output .= " name=\"razeni\" value=\"2\" onClick=\"form1.submit();\"> \n";
@@ -155,14 +186,14 @@ class objekt extends adminator
                     <td colspan="3">';
 
         $output .= "<input type=\"radio\" ";
-        if (($_GET["razeni"] == 3)) {
+        if (($this->razeni == 3)) {
             $output .= " checked ";
         }
         $output .= "name=\"razeni\" value=\"3\" onClick=\"form1.submit();\" > ";
         $output .= "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
 
         $output .= " | <input type=\"radio\" ";
-        if (($_GET["razeni"] == 4)) {
+        if (($this->razeni == 4)) {
             $output .= " checked ";
         }
         $output .= " name=\"razeni\" value=\"4\" onClick=\"form1.submit();\"> \n";
@@ -172,14 +203,14 @@ class objekt extends adminator
                     <td>';
 
         $output .= "<input type=\"radio\" ";
-        if (($_GET["razeni"] == 9)) {
+        if (($this->razeni == 9)) {
             $output .= " checked ";
         }
         $output .= "name=\"razeni\" value=\"9\" onClick=\"form1.submit();\" > ";
         $output .= "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
 
         $output .= " | <input type=\"radio\" ";
-        if (($_GET["razeni"] == 10)) {
+        if (($this->razeni == 10)) {
             $output .= " checked ";
         }
         $output .= " name=\"razeni\" value=\"10\" onClick=\"form1.submit();\"> \n";
@@ -206,7 +237,11 @@ class objekt extends adminator
 
     private function listPrepareVars()
     {
-        $mod_vypisu = $_GET["mod_vypisu"];
+        foreach ($this->request->getQueryParams() as $i => $v) {
+            if(preg_match('/^(mod_vypisu|es|razeni|list)$/', $i) and strlen($v) > 0) {
+                $$i = $this->request->getQueryParams()[$i];
+            }
+        }
 
         if(isset($mod_vypisu)) {
             if(!(preg_match('/^([[:digit:]])+$/', $mod_vypisu))) {
@@ -227,27 +262,21 @@ class objekt extends adminator
             }
         }
 
-        $es = $_GET["es"];
-
-        if((strlen($es) > 0)) {
+        if(isset($es)) {
             if(!(preg_match('/^([[:digit:]])+$/', $es))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v poli \"Sekundární hledání\". </div>";
             }
             $this->es = $es;
         }
 
-        $razeni = $_GET["razeni"];
-
-        if((strlen($razeni) > 0)) {
+        if(isset($razeni)) {
             if(!(preg_match('/^([[:digit:]])+$/', $razeni))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v promenné \"razeni\". </div>";
             }
             $this->razeni = $razeni;
         }
 
-        $list = $_GET["list"];
-
-        if((strlen($list) > 0)) {
+        if(isset($list)) {
             if(!(preg_match('/^([[:digit:]])+$/', $list))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v promenné \"list\". </div>";
             }
@@ -404,11 +433,21 @@ class objekt extends adminator
         }
         // paging
         //
-        $poradek = "es=".$this->es."&najdi=".$najdi."&odeslano=".$_GET['odeslano']."&dns_find=".$this->dns_find."&ip_find=".$this->ip_find."&razeni=".$_GET['razeni'];
-        $poradek .= "&mod_vypisu=".$this->mod_vypisu;
+        $poradek = "es=".$this->es."&dns_find=".$this->dns_find."&ip_find=".$this->ip_find . "&mod_vypisu=".$this->mod_vypisu;
 
-        //vytvoreni objektu
-        $listovani = new \c_listing_objekty("/objekty?".$poradek."&menu=1", 30, $this->list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $this->dotaz_source);
+        foreach ($this->request->getQueryParams() as $i => $v) {
+            if(preg_match('/^(odeslano|razeni)$/', $i) and strlen($v) > 0) {
+                $poradek .= "&" . $i . "=" . $this->request->getQueryParams()[$i];
+            }
+        }
+
+        if($this->pdoPgsql instanceof \PDO) {
+            $dbh = $this->pdoPgsql;
+        } else {
+            $dbh = $this->conn_pgsql;
+        }
+
+        $listovani = new \c_listing_objekty($dbh, "/objekty?".$poradek."&menu=1", 30, $this->list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $this->dotaz_source);
         $listovani->echo = false;
 
         if(($this->list == "") || ($this->list == "1")) {
@@ -3189,17 +3228,17 @@ class objekt extends adminator
         return $output;
     }
 
-    public function select($es, $razeni)
+    public function select($se_id, $razeni): array
     {
         // co - co hledat, 1- podle dns, 2-podle ip
 
-        pg_query($this->conn_pgsql, " SET DATESTYLE TO 'SQL, EUROPEAN' ");
-
-        // prvne vyresime sekundarni select
-        $se_id = $es;
-
-        //global $se;
-        global $order;
+        if($this->pdoPgsql instanceof \PDO) {
+            if($this->pdoPgsql->getAttribute(\PDO::ATTR_DRIVER_NAME) != "sqlite") {
+                $this->pdoPgsql->query(" SET DATESTYLE TO 'SQL, EUROPEAN' ");
+            }
+        } else {
+            pg_query($this->conn_pgsql, " SET DATESTYLE TO 'SQL, EUROPEAN' ");
+        }
 
         if($se_id == 1) {
             $se = '';
@@ -3243,7 +3282,12 @@ class objekt extends adminator
             $order = " order by id_komplu ASC ";
         }
 
-        $pole[] = $se;
+        if(isset($se)) {
+            $pole[] = $se;
+        } else {
+            $pole[] = "";
+        }
+
         $pole[] = $order;
 
         return $pole;
@@ -3332,7 +3376,7 @@ class objekt extends adminator
             } else {
 
                 echo "\n\n <input type=\"radio\" ";
-                if (($_GET["razeni"] == $input_value)) {
+                if (($this->razeni == $input_value)) {
                     echo " checked ";
                 }
                 echo "name=\"razeni\" value=\"".$input_value."\" onClick=\"form1.submit();\" > ";
@@ -3345,7 +3389,7 @@ class objekt extends adminator
                 echo "</td> \n\n <td>";
 
                 echo "<input type=\"radio\" ";
-                if (($_GET["razeni"] == $input_value2)) {
+                if (($this->razeni == $input_value2)) {
                     echo " checked ";
                 }
                 echo " name=\"razeni\" value=\"".$input_value2."\" onClick=\"form1.submit();\"> \n";
@@ -3434,11 +3478,6 @@ class objekt extends adminator
         $output = "";
         $tarif_sql = "";
 
-        if (!$this->conn_pgsql) {
-            echo "An error occurred. The connection with pgsql does not exist.\n";
-            exit;
-        }
-
         // wifi sit ...vypis u vlastniku (dalsi pouziti nevim)
         if ($co == 3) {
             //prvne vyberem wifi tarify...
@@ -3492,13 +3531,26 @@ class objekt extends adminator
             $dotaz = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql);
 
         } else {
-            $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
+            $dotaz = false;
+            if($this->pdoPgsql instanceof \PDO) {
+                list($dotaz_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
+            } else {
+                $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
+            }
         }
 
-        if($dotaz !== false) {
+        if($dotaz !== false and !($this->pdoPgsql instanceof \PDO)) {
             $radku = pg_num_rows($dotaz);
+        } elseif (!($this->pdoPgsql instanceof \PDO)) {
+            $output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($this->conn_pgsql). "</div>";
+            return $output;
+        }
+
+        if($dotaz_err != null) {
+            $output .= "<div style=\"color: red;\">Dotaz selhal! ". $dotaz_err. "</div>";
+            return $output;
         } else {
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($this->conn_pgsql). "</div>");
+            $radku = count($dotaz_rs);
         }
 
         if ($radku == 0) {

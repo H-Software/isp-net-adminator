@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use PDO;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -137,26 +138,43 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
+        $usePDO = false;
+        if (array_key_exists("usePDO", $args)) {
+            $usePDO = true;
+        }
+
+        $objekt = new \App\Core\objekt($this->container, $usePDO);
+        $objekt->request = $request;
+
         $assignData = [
             "page_title" => "Adminator3 :: Objekty",
         ];
 
-        $dns_find = $_GET['dns_find'];
-        $ip_find = $_GET['ip_find'];
-
-        if((strlen($dns_find) == 0)) {
-            $dns_find = "%";
+        foreach ($request->getQueryParams() as $i => $v) {
+            if(preg_match('/^(dns_find|ip_find|es|mod_vypisu)$/', $i) and strlen($v) > 0) {
+                $$i = $request->getQueryParams()[$i];
+            }
         }
 
-        $assignData["es"] = $_GET['es'];
-        $assignData["mod_vypisu"] = $_GET['mod_vypisu'];
-
-        $assignData["dns_find"] = $dns_find;
-        $assignData["ip_find"] = $ip_find;
-
-        $objekt = new \App\Core\objekt($this->container);
+        if(empty($dns_find)) {
+            $dns_find = "%";
+        }
         $objekt->dns_find = $dns_find;
-        $objekt->ip_find = $ip_find;
+        $assignData["dns_find"] = $dns_find;
+
+        if(isset($es)) {
+            $assignData["es"] = $es;
+        }
+
+        if(isset($mod_vypisu)) {
+            $assignData["mod_vypisu"] = $mod_vypisu;
+        }
+
+        if(isset($ip_find)) {
+            $objekt->ip_find = $ip_find;
+            $assignData["ip_find"] = $ip_find;
+        }
+
         $objekt->adminator = $this->adminator;
 
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);

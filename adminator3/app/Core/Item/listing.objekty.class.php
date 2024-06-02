@@ -14,6 +14,8 @@ $listing = new c_Listing_objekty("aktivni link pro strankovani", "pocet zaznamu 
 
 class c_listing_objekty
 {
+    public \PgSql\Connection|\mysqli|\PDO $dbHandler;
+
     public $url;
     public $interval;
     public $sql;
@@ -31,8 +33,10 @@ class c_listing_objekty
     // $select="./objekty.php?";
 
     //konstruktor...naplni promenne
-    public function __construct($conUrl = "./objekty.php?", $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
+    public function __construct($dbHandler, $conUrl, $conInterval = 10, $conList = 1, $conBefore = "", $conAfter = "", $conSql = "")
     {
+        $this->dbHandler = $dbHandler;
+
         $this->errName[1] = "P�i vol�n� konstruktotu nebyl zad�n SQL dotaz!<br>\n";
         $this->errName[2] = "Nelze zobrazit listov�n�, chyba datab�ze(Query)!<br>\n";
         // $this->errName[3] = "Nelze zobrazit listov�n�, chyba datab�ze(Num_Rows)!<br>\n";
@@ -54,17 +58,49 @@ class c_listing_objekty
     //vyber dat z databaze
     public function dbSelect()
     {
-        $listRecord = @pg_query($this->sql);
+        if($this->dbHandler instanceof \PgSql\Connection) {
+            try {
+                $listRecord = @pg_query($this->dbHandler, $this->sql);
+            } catch (Exception $e) {
+                $this->error(2);
+                echo $this->befError. $e->getMessage() . $this->aftError;
+                return;
+            }
+        } elseif($this->dbHandler instanceof \PDO) {
+            try {
+                $listRecord = $this->dbHandler->query($this->sql);
+            } catch (Exception $e) {
+                $this->error(2);
+                echo $this->befError. $e->getMessage() . $this->aftError;
+                return;
+            }
+        } else {
+            // unknown type
+            return;
+        }
+
         if (!$listRecord) {
             $this->error(2);
         }
 
-        if($listRecord !== false) {
-            $allRecords = @pg_num_rows($listRecord);
+        if($listRecord != false) {
+            if($this->dbHandler instanceof \PgSql\Connection) {
+                $allRecords = @pg_num_rows($listRecord);
+            } elseif($this->dbHandler instanceof \PDO) {
+                $allRecords = count($listRecord->fetchAll());
+            } else {
+                // unknown type
+                return;
+            }
         }
 
-        if (!$allRecords) {
-            $this->error(3);
+        if(!isset($allRecords)) {
+            $this->error(2);
+            return;
+        }
+
+        if ($allRecords < 1) {
+            return;
         }
 
         try {
