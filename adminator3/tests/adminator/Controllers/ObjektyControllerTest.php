@@ -101,7 +101,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
     public function test_ctl_objekty_list()
     {
-        // $this->markTestSkipped('under construction');
+        $this->markTestSkipped('under construction');
         $self = $this;
 
         $request = Request::create(
@@ -131,9 +131,9 @@ final class ObjektyControllerTest extends AdminatorTestCase
             ["usePDO" => true]
         );
 
-        // $responseContent = $response->getBody()->__toString();
+        $responseContent = $response->getBody()->__toString();
 
-        // // echo $responseContent;
+        echo $responseContent;
 
         // // TODO: add asserts for sub-categories
 
