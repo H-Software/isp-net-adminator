@@ -456,13 +456,13 @@ abstract class AdminatorTestCase extends TestCase
     * duplicated from adminator class
     */
 
-     /**
-     * Get bytes of using random_bytes or openssl_random_pseudo_bytes
-     * then using bin2hex to get a random string.
-     *
-     * @param int $length
-     * @return string
-     */
+    /**
+    * Get bytes of using random_bytes or openssl_random_pseudo_bytes
+    * then using bin2hex to get a random string.
+    *
+    * @param int $length
+    * @return string
+    */
     public function getRandomStringBin2hex($length = 32)
     {
         if (function_exists('random_bytes')) {

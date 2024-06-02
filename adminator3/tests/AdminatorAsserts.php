@@ -143,6 +143,15 @@ final class AdminatorAssert extends AdminatorTestCase
         self::assertXpathQueryContentRegex($response, '//*[@id="board-list-pagging"]/b', '/strana\s*\|/');
     }
 
+    public static function assertPartnerSubCat(ResponseInterface $response)
+    {
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^Připojování nových klientů$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[1]/a', '/^\/partner\/order$/');
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[2]/a', '/^Servisní zásahy$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[1]/span[2]/a', '/^\/partner\/servis\/list$/');
+    }
+
     public static function assertOtherCat(ResponseInterface $response)
     {
         // level up

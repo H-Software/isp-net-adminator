@@ -110,6 +110,6 @@ final class AuthControllerTest extends AdminatorTestCase
 
     // TODO: add tests for password-changes
 
-    // TODO: add tests got logout
+    // TODO: add tests for logout
 
 }
