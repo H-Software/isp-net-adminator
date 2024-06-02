@@ -9,8 +9,12 @@ $container->set(
             RouteParserInterface::class
         );
 
+        $data = [];
+        $queryParams = [];
+
+        $rp->shouldReceive('urlFor')->with('auth.signin', [], [])->andReturn("/auth/signin");
         $rp->shouldReceive('urlFor')->with('home')->andReturn("/home");
-        $rp->shouldReceive('urlFor')->andReturn("/somewhere");
+        // $rp->shouldReceive('urlFor')->andReturn("/somewhere");
 
         return $rp;
     }

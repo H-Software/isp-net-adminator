@@ -23,7 +23,7 @@ final class AuthControllerTest extends AdminatorTestCase
     {
     }
 
-    public function test_ctl_login_page_default_view()
+    public function test_ctl_login_page_default_view_mocked()
     {
         // $this->markTestSkipped('under construction');
         $self = $this;
@@ -61,11 +61,10 @@ final class AuthControllerTest extends AdminatorTestCase
         adminatorAssert::assertBaseCommon($responseContent);
 
         // assert for mocked routeParser and TwigExtension (form link)
-        adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-form"]/form', '/^\/somewhere$/');
+        adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-form"]/form', '/^\/auth\/signin$/');
         //
         adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-title"]', '/^Sign In$/');
         adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-submit"]', '/^Sign In$/');
-
     }
 
     public function test_ctl_login_page_post_mocked()
