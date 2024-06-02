@@ -101,7 +101,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
     public function test_ctl_objekty_list()
     {
-        $this->markTestSkipped('under construction');
+        // $this->markTestSkipped('under construction');
         $self = $this;
 
         $request = Request::create(
