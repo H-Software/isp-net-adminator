@@ -914,8 +914,8 @@ class Topology extends adminator
 
         $output .= "<div style=\"padding-top: 15px; padding-bottom: 25px; \" >\n";
 
-        $output .= "<span style=\" padding-left: 5px; font-size: 16px; font-weight: bold; \" >\n".
-              ".:: Výpis routerů ::. </span>\n";
+        $output .= "<span style=\" padding-left: 5px; font-size: 16px; font-weight: bold; \" >".
+              ".:: Výpis routerů ::.</span>\n";
         $output .= "<span style=\"padding-left: 25px; \" >
             <a href=\"/topology/router/action\" >přidání nového routeru</a>
               </span>\n";
@@ -931,10 +931,10 @@ class Topology extends adminator
         $output .= "</div>\n";
 
 
-        $output .= "<form method=\"GET\" >";
+        $output .= "<form method=\"GET\" >\n";
 
         //filtr - hlavni okno
-        $output .= "<div id=\"routers_filter\" style=\"display: ".$display.";\" >";
+        $output .= "<div id=\"routers_filter\" style=\"display: ".$display.";\" >\n";
 
         //Monitorováno
         $output .= "<div style=\"width: 150px; float: left;\">\n".

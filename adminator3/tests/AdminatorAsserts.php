@@ -220,4 +220,11 @@ final class AdminatorAssert extends AdminatorTestCase
         self::assertMatchesRegularExpression('/class="alert\s*alert-warning"\s*role="alert"/i', $content, "missing no-data message container");
         self::assertMatchesRegularExpression('/Žadné lokality\/nody dle hladeného výrazu \( %.*% \) v databázi neuloženy/i', $content, "missing no-data message");
     }
+
+    public static function assertTopologyRouterListHeaderAndSelectors($response)
+    {
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[1]/span[1]', '/^.:: Výpis routerů ::.$/');
+        // self::assertXpathQueryContentRegex($response, '//*[@id="routers_filter"]/div[9]/input', '/^OK$/');
+        self::assertXpathQueryContentRegex($response, '//*[@id="routers_filter"]/div[11]', '/^Hledání: $/');
+    }
 }
