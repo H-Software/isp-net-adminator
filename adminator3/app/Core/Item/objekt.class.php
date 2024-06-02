@@ -3546,10 +3546,10 @@ class objekt extends adminator
             return $output;
         }
 
-        if($dotaz_err != null) {
+        if($dotaz_err != null and $this->pdoPgsql instanceof \PDO) {
             $output .= "<div style=\"color: red;\">Dotaz selhal! ". $dotaz_err. "</div>";
             return $output;
-        } else {
+        } elseif($this->pdoPgsql instanceof \PDO) {
             $radku = count($dotaz_rs);
         }
 
