@@ -193,19 +193,22 @@ abstract class AdminatorTestCase extends TestCase
         string $controllerFunction,
         $container,
         object|array $mockedInstance,
-        $assertHttpCode = 200
+        $assertHttpCode = 200,
+        array $controllerFunctionParams = [],
     ): ResponseInterface {
         if(is_array($mockedInstance)) {
-            $controller = new $controllerClass($container, $mockedInstance['adminatorMock'], $mockedInstance['opravyMock']);
+            $adminatorInstance = array_key_exists('adminatorMock', $mockedInstance) ? $mockedInstance['adminatorMock'] : null;
+            $opravyInstance = array_key_exists('opravyMock', $mockedInstance) ? $mockedInstance['opravyMock'] : null;
+
+            $controller = new $controllerClass($container, $adminatorInstance, $opravyInstance);
         } else {
-            // legacy call
             $controller = new $controllerClass($container, $mockedInstance);
         }
 
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         $response = $responseFactory->createResponse();
 
-        $response = $controller->$controllerFunction($serverRequest, $response, []);
+        $response = $controller->$controllerFunction($serverRequest, $response, $controllerFunctionParams);
 
         $responseContent = $response->getBody()->__toString();
 

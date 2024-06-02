@@ -37,13 +37,11 @@ $container->set(
 $container->set(
     'connPgsql',
     self::$pdoPgsql
-    // function ($c) {
+);
 
-    //     $db = new PDO('sqlite::memory:');
-    //     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    //     return $db;
-    // }
+$container->set(
+    'pdoPgsql',
+    self::$pdoMysql
 );
 
 $container->set(

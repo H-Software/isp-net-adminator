@@ -192,9 +192,9 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertTopologySubCat($response, $responseContent);
 
-        // TODO: router_list_view_all: add asserts
+        AdminatorAssert::assertTopologyRouterListHeaderAndSelectors($response);
 
-        // AdminatorAssert::assertTopologyRouterListHeaderAndSelectors($responseContent);
+        // TODO: router_list_view_all: add asserts
 
         // AdminatorAssert::assertTopologyRouterListTableHeader($responseContent);
 
@@ -252,7 +252,7 @@ final class TopologyControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertTopologySubCat($response, $responseContent);
 
-        // TODO: router_list_view_with_non_exist_find_param: add assert for table header
+        AdminatorAssert::assertTopologyRouterListHeaderAndSelectors($response);
 
         self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[2]/div', '/^Žádné záznamy dle hledaného kritéria\.$/');
 
@@ -295,6 +295,8 @@ final class TopologyControllerTest extends AdminatorTestCase
         adminatorAssert::assertBase($responseContent);
 
         adminatorAssert::assertTopologySubCat($response, $responseContent);
+
+        AdminatorAssert::assertTopologyRouterListHeaderAndSelectors($response);
 
         // TODO: router_list_view_with_non_exist_find_param: add assert for table header
 
@@ -342,6 +344,8 @@ final class TopologyControllerTest extends AdminatorTestCase
         adminatorAssert::assertBase($responseContent);
 
         adminatorAssert::assertTopologySubCat($response, $responseContent);
+
+        AdminatorAssert::assertTopologyRouterListHeaderAndSelectors($response);
 
         // TODO: router_list_view_with_non_exist_find_param: add assert for table header
 
@@ -394,6 +398,8 @@ final class TopologyControllerTest extends AdminatorTestCase
         adminatorAssert::assertBase($responseContent);
 
         adminatorAssert::assertTopologySubCat($response, $responseContent);
+
+        self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]/div[1]/span[1]', '/^.:: Výpis routerů ::.$/');
 
         // assert 1. level
         self::assertXpathQueryContentRegex($response, '//*[@id="router-list-hierarchy-level-0-name"]', '/^(\w|\W|\s){5,}$/');

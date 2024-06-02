@@ -39,7 +39,24 @@ class BoardData extends AbstractSeed
         }
 
         // generate "old" posts
-        // TODO: add second loop with dates in past
+        for ($i = 0; $i < 4; $i++) {
+            $data[] = [
+                'author'        => $this->sanitizeString(
+                                        $faker->userName
+                                    ),
+                'email'         => $this->sanitizeString(
+                                        $faker->email
+                ),
+                'subject'       => $this->sanitizeString(
+                                        $faker->words(5, true)
+                                    ),
+                'body'          => $this->sanitizeString(
+                                        $faker->text(60)
+                                    ),
+                'from_date'     => date('Y-m-d', strtotime('-'. $i .' weeks')),
+                'to_date'       => date('Y-m-d', strtotime('-2 days')),
+            ];
+        }
 
         // This is a cool short-hand method
         $this->insert('board', $data);
