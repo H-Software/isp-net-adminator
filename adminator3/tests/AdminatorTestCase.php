@@ -392,6 +392,17 @@ abstract class AdminatorTestCase extends TestCase
                     break;
                 }
             }
+            /** @disregard */
+            if($node->hasAttribute('action')) {
+                /** @disregard */
+                $nodeValues[] = $node->getAttribute('action');
+                /** @disregard */
+                if (preg_match($pattern, (string) $node->getAttribute('action'))) {
+                    $found = true;
+                    break;
+                }
+            }
+
         }
 
         if (! $found) {

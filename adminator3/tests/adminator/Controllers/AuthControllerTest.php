@@ -60,6 +60,9 @@ final class AuthControllerTest extends AdminatorTestCase
 
         adminatorAssert::assertBaseCommon($responseContent);
 
+        // assert for mocked routeParser and TwigExtension (form link)
+        adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-form"]/form', '/^\/somewhere$/');
+        //
         adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-title"]', '/^Sign In$/');
         adminatorAssert::assertXpathQueryContentRegex($response, '//*[@id="adminator-signin-submit"]', '/^Sign In$/');
 
