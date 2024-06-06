@@ -20,14 +20,107 @@ class CreateObjektyTable extends App\Migration\Migration
             ->addColumn('id_cloveka', 'integer', [
                 'null' => true,
                 'signed' => false,
-                'after' => 'jmeno',
+                'after' => 'id_komplu',
             ])
             ->addColumn('dns_jmeno', 'string', [
                 'null' => false,
                 'limit' => 150,
                 'collation' => 'utf8mb3_unicode_ci',
                 'encoding' => 'utf8mb3',
+                'after' => 'id_cloveka',
             ])
+            ->addColumn('ip', 'biginteger', [
+                'null' => false,
+                'limit' => 20,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'dns_jmeno',
+            ])
+            ->addColumn('mac', 'string', [
+                'null' => false,
+                'limit' => 150,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'ip',
+            ])
+            ->addColumn('typ', 'integer', [
+                'null' => false,
+                'signed' => false,
+                'default' => '0',
+                'after' => 'mac',
+            ])
+            ->addColumn('client_ip_ap', 'biginteger', [
+                'null' => true,
+                'limit' => 20,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'typ',
+            ])
+            ->addColumn('verejna', 'integer', [
+                'null' => true,
+                'signed' => false,
+                'after' => 'client_ip_ap',
+            ])
+            ->addColumn('id_tridy', 'integer', [
+                'null' => true,
+                'signed' => false,
+                'after' => 'verejna',
+            ])
+            ->addColumn('id_nodu', 'integer', [
+                'null' => true,
+                'signed' => false,
+                'after' => 'id_tridy',
+            ])
+            ->addColumn('id_tarifu', 'integer', [
+                'null' => true,
+                'signed' => false,
+                'after' => 'id_nodu',
+            ])
+            ->addColumn('dov_net', 'string', [
+                'null' => false,
+                'limit' => 1,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'id_tarifu',
+                'default' => '1',
+            ])
+            ->addColumn('sikana_status', 'string', [
+                'null' => false,
+                'limit' => 1,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'dov_net',
+                'default' => '1',
+            ])
+            ->addColumn('sikana_text', 'string', [
+                'null' => true,
+                'limit' => 250,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'sikana_status',
+            ])
+            ->addColumn('sikana_cas', 'integer', [
+                'null' => false,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'sikana_status',
+            ])
+            ->addColumn('pridano', 'timestamp', [
+                'null' => true,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'sikana_cas',
+            ])
+
+            # TODO: add the rest of columns
+            # poznamka - char 4096, null
+            # pridal - char 50, null
+            # port_id - int
+            # another_vlad_id - int, null
+            # upravil - char 50, null
+            # tunnelling_ip - bigint (IP), null
+            # tunnel_user - char, 50, null
+            # tunnel_pass - char, 50, null
 
             ->addIndex(['id_komplu'], [
                 'name' => 'id_komplu_unique',

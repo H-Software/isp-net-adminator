@@ -117,8 +117,6 @@ final class ObjektyControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        // TODO: objekty_list: fix $_GET/$_POST access
-
         $response = self::callControllerFunction(
             $serverRequest,
             'App\Controllers\objektyController',
@@ -133,12 +131,13 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        // echo $responseContent;
+        echo $responseContent;
 
         // TODO: add asserts for sub-categories
 
+        // TODO: add asserts for form selectors and header
+
         // TODO: asserts for data
-        // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]', '/^Prosím vyberte z podkategorie výše....$/');
 
         // non-common negative asserts
         $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
