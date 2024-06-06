@@ -99,6 +99,12 @@
 - https://medium.com/@miladev95/laravel-cache-atomic-locks-3ddc10a052db
 - https://laravel.com/docs/10.x/cache#managing-locks
 
+#### IP address
+- https://github.com/cloudflarearchive/Cloudflare-Tools/blob/master/cloudflare/ip_in_range.php
+- https://www.php.net/manual/en/function.ip2long.php
+- https://www.stevekamerman.com/2006/06/storing-ip-addresses-in-mysql-with-php/
+- https://github.com/leth/PHP-IPAddress/tree/master
+
 ### apache
 - https://httpd.apache.org/docs/2.4/rewrite/remapping.html
 

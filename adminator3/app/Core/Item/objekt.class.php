@@ -3533,7 +3533,7 @@ class objekt extends adminator
         } else {
             $dotaz = false;
             if($this->pdoPgsql instanceof \PDO) {
-                list($dotaz_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
+                list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
             } else {
                 $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
             }
@@ -3551,7 +3551,7 @@ class objekt extends adminator
             $output .= "<div style=\"color: red;\">Dotaz selhal! ". $dotaz_err. "</div>";
             return $output;
         } elseif($this->pdoPgsql instanceof \PDO) {
-            $radku = count($dotaz_rs);
+            $radku = count($data_rs);
         }
 
         if ($radku == 0) {
