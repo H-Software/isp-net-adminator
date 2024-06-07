@@ -3827,7 +3827,7 @@ class objekt extends adminator
                     list($data_vlastnik_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
                 } else {
                     $vlastnik_dotaz = pg_query($this->conn_pgsql, $sql_final);
-                    $data_vlastnik_rs = pg_fetch_array($vlastnik_dotaz);
+                    $data_vlastnik_rs = pg_fetch_all($vlastnik_dotaz);
                 }
 
                 if($dotaz_err == null and $this->pdo instanceof \PDO) {
