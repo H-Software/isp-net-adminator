@@ -3815,36 +3815,40 @@ class objekt extends adminator
             // id vlastnika
             $output .= "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" >\n";
 
-            $sql_final = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($data["id_cloveka"])."'";
-            $vlastnik_dotaz = false;
-            $firma_vlastnik = null;
-            $archiv_vlastnik = null;
-
-            if($this->pdo instanceof \PDO) {
-                list($data_vlastnik_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
+            if($data["id_cloveka"] == null) {
+                $output .= "<span style=\"color: grey;\">Není</span>";
             } else {
-                $vlastnik_dotaz = pg_query($this->conn_pgsql, $sql_final);
-                $data_vlastnik_rs = pg_fetch_array($vlastnik_dotaz);
-            }
+                $sql_final = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($data["id_cloveka"])."'";
+                $vlastnik_dotaz = false;
+                $firma_vlastnik = null;
+                $archiv_vlastnik = null;
 
-            if($dotaz_err == null and $this->pdo instanceof \PDO) {
-                // TODO: add returning error(s)
-                $output .= "V: (E_1)" . $data["id_cloveka"];
-            } elseif(count($data_vlastnik_rs) != 1) {
-                // TODO: add returning error(s)
-                $output .= "V: (E_2)" . $data["id_cloveka"];
-            } else {
-                foreach ($data_vlastnik_rs as $key => $data_vlastnik) {
-                    $firma_vlastnik = $data_vlastnik["firma"];
-                    $archiv_vlastnik = $data_vlastnik["archiv"];
+                if($this->pdo instanceof \PDO) {
+                    list($data_vlastnik_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
+                } else {
+                    $vlastnik_dotaz = pg_query($this->conn_pgsql, $sql_final);
+                    $data_vlastnik_rs = pg_fetch_array($vlastnik_dotaz);
                 }
 
-                if ($archiv_vlastnik == 1) {
-                    $output .= "V: <a href=\"/vlastnici/archiv?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
-                } elseif($firma_vlastnik == 1) {
-                    $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+                if($dotaz_err == null and $this->pdo instanceof \PDO) {
+                    // TODO: add returning error(s)
+                    $output .= "V: (E_1)" . $data["id_cloveka"];
+                } elseif(count($data_vlastnik_rs) != 1) {
+                    // TODO: add returning error(s)
+                    $output .= "V: (E_2)" . $data["id_cloveka"];
                 } else {
-                    $output .= "V: <a href=\"/vlastnici?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+                    foreach ($data_vlastnik_rs as $key => $data_vlastnik) {
+                        $firma_vlastnik = $data_vlastnik["firma"];
+                        $archiv_vlastnik = $data_vlastnik["archiv"];
+                    }
+
+                    if ($archiv_vlastnik == 1) {
+                        $output .= "V: <a href=\"/vlastnici/archiv?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+                    } elseif($firma_vlastnik == 1) {
+                        $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+                    } else {
+                        $output .= "V: <a href=\"/vlastnici?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+                    }
                 }
             }
 
