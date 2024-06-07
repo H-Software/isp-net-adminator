@@ -3797,7 +3797,7 @@ class objekt extends adminator
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for node failed! " . var_export($dotaz_err, true));
             } else {
                 foreach ($data_rs as $row => $zaznam_bod) {
-                    $output .= "<span class=\"objekty-2radka objekty-odkaz\">NOD: ".
+                    $output .= "<span class=\"objekty-2radka objekty-odkaz\">".
                     "<a href=\"/topology/node-list?find=".urlencode($zaznam_bod["jmeno"])."\" >".
                     $zaznam_bod["jmeno"]."</a></span> ";
                 }
@@ -3835,7 +3835,7 @@ class objekt extends adminator
                     $output .= "V: (E_1)" . $data["id_cloveka"];
                 } elseif(count($data_vlastnik_rs) != 1) {
                     // TODO: add returning error(s)
-                    $output .= "V: (E_2)" . $data["id_cloveka"];
+                    $output .= "V: (E_2 ". var_export($data_vlastnik_rs, true) . ")" . $data["id_cloveka"];
                 } else {
                     foreach ($data_vlastnik_rs as $key => $data_vlastnik) {
                         $firma_vlastnik = $data_vlastnik["firma"];
