@@ -3835,7 +3835,7 @@ class objekt extends adminator
                     $output .= "V: (E_1)" . $data["id_cloveka"];
                 } elseif(count($data_vlastnik_rs) != 1) {
                     // TODO: add returning error(s)
-                    $output .= "V: (E_2 ". var_export($data_vlastnik_rs, true) . ")" . $data["id_cloveka"];
+                    $output .= "V: (E_2 ". var_export(count($data_vlastnik_rs), true) . ")" . $data["id_cloveka"];
                 } else {
                     foreach ($data_vlastnik_rs as $key => $data_vlastnik) {
                         $firma_vlastnik = $data_vlastnik["firma"];
