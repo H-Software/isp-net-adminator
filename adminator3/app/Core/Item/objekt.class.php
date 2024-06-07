@@ -3830,7 +3830,7 @@ class objekt extends adminator
             if($dotaz_err == null and $this->pdo instanceof \PDO) {
                 // TODO: add returning error(s)
                 $output .= "V: (E_1)" . $data["id_cloveka"];
-            } elseif($data_vlastnik_rs != 1) {
+            } elseif(count($data_vlastnik_rs) != 1) {
                 // TODO: add returning error(s)
                 $output .= "V: (E_2)" . $data["id_cloveka"];
             } else {
