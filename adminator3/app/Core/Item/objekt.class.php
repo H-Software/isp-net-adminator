@@ -3659,7 +3659,7 @@ class objekt extends adminator
             $update_mod_vypisu = null;
 
             // detect mod_vypisu for update/erase form
-            $error_msq_base = "Chyba! Pro Objekt \"" . var_export($data['dns_jmeno'],true) ."\" nelze zjistit mod_vypisu (pro update/erase button)!";
+            $error_msq_base = "Chyba! Pro Objekt \"" . var_export($data['dns_jmeno'], true) ."\" nelze zjistit mod_vypisu (pro update/erase button)!";
             $dotaz_final = "SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($data["id_tarifu"])."' ";
             list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
@@ -3830,12 +3830,10 @@ class objekt extends adminator
             if($dotaz_err == null and $this->pdo instanceof \PDO) {
                 // TODO: add returning error(s)
                 $output .= "V: (E_1)" . $data["id_cloveka"];
-            }
-            elseif($data_vlastnik_rs != 1){
+            } elseif($data_vlastnik_rs != 1) {
                 // TODO: add returning error(s)
                 $output .= "V: (E_2)" . $data["id_cloveka"];
-            }
-            else {
+            } else {
                 foreach ($data_vlastnik_rs as $key => $data_vlastnik) {
                     $firma_vlastnik = $data_vlastnik["firma"];
                     $archiv_vlastnik = $data_vlastnik["archiv"];
@@ -3892,11 +3890,10 @@ class objekt extends adminator
             // kdy se objekty pridal
             //prvne to orezem
             $orez = $pridano;
-            if(strlen($orez) > 0){
+            if(strlen($orez) > 0) {
                 $orezano = explode(':', $orez);
                 $pridano_orez = $orezano[0] . ":" . $orezano[1];
-            }
-            else {
+            } else {
                 $pridano_orez = null;
             }
 
