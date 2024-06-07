@@ -159,7 +159,7 @@ class objekt extends adminator
         }
 
         try {
-            $rs = $this->pdo->query($query);
+            $rs = $this->$handler->query($query);
         } catch (Exception $e) {
             $rs_error = $e->getMessage();
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught exception: " . var_export($rs_error, true));
