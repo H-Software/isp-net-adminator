@@ -3654,17 +3654,18 @@ class objekt extends adminator
 
             $output .= "</span></td> \n";
 
-            //oprava a mazani
-            $update_mod_vypisu = array_key_exists('mod_vypisu', $this->request->getParsedBody()) ? $this->request->getParsedBody()['mod_vypisu'] : null;
+            //uprava a mazani
 
-            $id_tarifu = $data["id_tarifu"];
+            $update_mod_vypisu = null;
 
-            $dotaz_final = "SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ";
+            // detect mod_vypisu for update/erase form
+            $error_msq_base = "Chyba! Pro Objekt \"" . var_export($data['dns_jmeno'],true) ."\" nelze zjistit mod_vypisu (pro update/erase button)!";
+            $dotaz_final = "SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($data["id_tarifu"])."' ";
             list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
             if($dotaz_err != false) {
-                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for tarif failed! " . var_export($dotaz_err, true));
-                $output .= "Chyba! Nelze specifikovat tarif! (" . var_export($dotaz_err, true) .")";
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for detection of mod_vypisu failed! " . var_export($dotaz_err, true));
+                $output .= $error_msq_base . " (" . var_export($dotaz_err, true) .")";
             } else {
                 $rs_update = count($data_rs);
 
@@ -3677,8 +3678,8 @@ class objekt extends adminator
                         }
                     }
                 } else {
-                    $output .= "Chyba! Nelze specifikovat tarif! (wrong num_rows)";
-                    $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for tarif failed! num_rows: " . var_export($rs_update, true));
+                    $output .= $error_msq_base . " (wrong num_rows)";
+                    $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for detection of mod_vypisu failed! num_rows: " . var_export($rs_update, true));
                 }
             }
 
