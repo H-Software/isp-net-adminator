@@ -18,7 +18,7 @@ class ObjektyData extends AbstractSeed
         $faker = Faker\Factory::create();
         $data = [];
 
-        for ($i = 0; $i < 6; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             $data[] = [
                 'dns_jmeno'         => $this->sanitizeString(
                                         $faker->domainName()

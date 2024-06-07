@@ -49,7 +49,7 @@ class CreateObjektyTable extends App\Migration\Migration
                 'default' => '0',
                 'after' => 'mac',
             ])
-            ->addColumn('client_ip_ap', 'biginteger', [
+            ->addColumn('client_ap_ip', 'biginteger', [
                 'null' => true,
                 'limit' => 20,
                 'collation' => 'utf8mb3_unicode_ci',
@@ -111,14 +111,44 @@ class CreateObjektyTable extends App\Migration\Migration
                 'encoding' => 'utf8mb3',
                 'after' => 'sikana_cas',
             ])
-
+            ->addColumn('vip_snat', 'integer', [
+                'null' => false,
+                'limit' => 1,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'pridano',
+                'default' => '0',
+            ])
+            ->addColumn('tunnelling_ip', 'string', [
+                'null' => true,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'vip_snat',
+            ])
+            ->addColumn('poznamka', 'string', [
+                'null' => true,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'tunnelling_ip',
+                'limit' => 4096,
+            ])
+            ->addColumn('pridal', 'string', [
+                'null' => true,
+                'limit' => 50,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'poznamka',
+            ])
+            ->addColumn('upravil', 'string', [
+                'null' => true,
+                'limit' => 50,
+                'collation' => 'utf8mb3_unicode_ci',
+                'encoding' => 'utf8mb3',
+                'after' => 'pridal',
+            ])
             # TODO: add the rest of columns
-            # poznamka - char 4096, null
-            # pridal - char 50, null
             # port_id - int
             # another_vlad_id - int, null
-            # upravil - char 50, null
-            # tunnelling_ip - bigint (IP), null
             # tunnel_user - char, 50, null
             # tunnel_pass - char, 50, null
 
