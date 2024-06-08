@@ -140,6 +140,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
         // TODO: asserts for data
 
         // non-common negative asserts
+        // TODO: !! reenable this
         // $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
         $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
