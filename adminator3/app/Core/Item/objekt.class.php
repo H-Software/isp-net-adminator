@@ -487,6 +487,7 @@ class objekt extends adminator
                                 . ", co: " . var_export($co, true)
         );
 
+        // get items
         $output .= $this->vypis($sql, $co, 0, $this->dotaz_source);
 
         $output .= $this->vypis_tab(2);
@@ -3550,7 +3551,8 @@ class objekt extends adminator
             if($this->pdo instanceof \PDO) {
                 list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
             } else {
-                $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
+                // TODO: remove XXX after test error messages
+                $dotaz = pg_query($this->conn_pgsql, $dotaz_final . " XXX ");
             }
         }
 
@@ -3558,12 +3560,12 @@ class objekt extends adminator
             $radku = pg_num_rows($dotaz);
             $data_rs = pg_fetch_all($dotaz);
         } elseif (!($this->pdo instanceof \PDO)) {
-            $output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($this->conn_pgsql). "</div>";
+            $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". pg_last_error($this->conn_pgsql)] = "danger";
             return $output;
         }
 
         if($dotaz_err != null and $this->pdo instanceof \PDO) {
-            $output .= "<div style=\"color: red;\">Dotaz selhal! ". $dotaz_err. "</div>";
+            $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "warning";
             return $output;
         } elseif($this->pdo instanceof \PDO) {
             $radku = count($data_rs);
