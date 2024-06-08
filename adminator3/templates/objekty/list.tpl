@@ -8,9 +8,10 @@
 {* hledaci a filtrovaci prvky *}
 {include file="objekty/inc.selectors.tpl"}
 
-{if $p_bs_alerts|default:'0' }
-    <div style="padding-top: 20px;">&nbsp;</div>
+{if $p_bs_alerts|default: '' }
+    <div style="padding-top: 20px;">
     {include file="partials/bootstrap-alert-with-columns-array.tpl"}
+    </div>
 {/if}
 
 {$body}

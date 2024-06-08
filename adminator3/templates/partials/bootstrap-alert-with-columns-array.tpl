@@ -5,7 +5,7 @@
         <div class="col-6">
             {if $p_bs_alerts|default:'0' }
                 {foreach $p_bs_alerts as $a}
-                    <div class="alert alert-{$a|default: ''}" role="alert" >
+                    <div class="alert alert-{$a|default: '' }" role="alert" >
                     {$a@key}
                     </div>
                 {/foreach}

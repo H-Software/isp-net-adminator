@@ -399,13 +399,13 @@ class objekt extends adminator
     /**
     * list body content
     *
-    * @return Array <string, string, string>
+    * @return Array <string, string, string> - html output, error message(s), export link
     */
     public function listGetBodyContent(): array
     {
         $output = "";
-        $exportLink = "";
         $error = "";
+        $exportLink = "";
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
 
@@ -485,12 +485,11 @@ class objekt extends adminator
             $bude_chybet = (($this->list - 1) * $listovani->interval);
         }   //jinak jich bude chybet podle závislosti na listu a intervalu
 
-        //  $interval=$listovani->interval;
-
         if(intval($listovani->interval) > 0 and intval($bude_chybet) > 0) {
             $this->dotaz_source = $this->dotaz_source . " LIMIT ". intval($listovani->interval)." OFFSET ".intval($bude_chybet)." ";
         }
 
+        // header listing
         $output .= $listovani->listInterval();
 
         $this->logger->debug(
@@ -3569,11 +3568,10 @@ class objekt extends adminator
 
         } else {
             $dotaz = false;
-            // TODO: remove XXX after test error messages
             if($this->pdo instanceof \PDO) {
-                list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final. " XXX ");
+                list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
             } else {
-                $dotaz = pg_query($this->conn_pgsql, $dotaz_final . " XXX ");
+                $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
             }
         }
 
@@ -3588,7 +3586,7 @@ class objekt extends adminator
 
         if($dotaz_err != null and $this->pdo instanceof \PDO) {
             $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "danger";
-            $this->listErrors .= "</br>XXXXX";
+            $this->listErrors .= "</br>";
             return $output;
         } elseif($this->pdo instanceof \PDO) {
             $radku = count($data_rs);
@@ -3690,6 +3688,8 @@ class objekt extends adminator
 
             if($dotaz_err != false) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for detection of mod_vypisu failed! " . var_export($dotaz_err, true));
+                // $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "danger";
+
                 $output .= $error_msq_base . " (" . var_export($dotaz_err, true) .")";
             } else {
                 $rs_update = count($data_rs);
