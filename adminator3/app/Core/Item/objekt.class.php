@@ -388,7 +388,12 @@ class objekt extends adminator
         return true;
     }
 
-    public function listGetBodyContent()
+    /**
+    * list body content
+    *
+    * @return Array <string, string, string>
+    */
+    public function listGetBodyContent(): array
     {
         $output = "";
         $exportLink = "";
@@ -418,7 +423,7 @@ class objekt extends adminator
         //
         $prepVarsRs = $this->listPrepareVars();
         if($prepVarsRs === false) {
-            return array("", $this->listErrors);
+            return array("", $this->listErrors, $exportLink);
         }
 
         // detect mode (again)
@@ -444,7 +449,7 @@ class objekt extends adminator
 
         $generateSqlRes = $this->listGenerateSql();
         if($generateSqlRes === false) {
-            return array("", '<div class="alert alert-danger" role="alert">Chyba! Nepodarilo se vygenerovat SQL dotaz.</div>');
+            return array("", '<div class="alert alert-danger" role="alert">Chyba! Nepodarilo se vygenerovat SQL dotaz.</div>', '');
         }
         // paging
         //
@@ -494,6 +499,10 @@ class objekt extends adminator
 
         // listing
         $output .= $listovani->listInterval();
+
+        if(strlen($this->listErrors) > 0) {
+            return array("", $this->listErrors, '');
+        }
 
         return array($output, $error, $exportLink);
     }
@@ -3373,7 +3382,8 @@ class objekt extends adminator
         return $output;
     } //konec funkce vypis odkaz
 
-    public static function vypis_razeni_a2()
+    // TODO: remove this function, probably unused
+    public function vypis_razeni_a2()
     {
 
         $input_value = "1";
@@ -3548,10 +3558,10 @@ class objekt extends adminator
 
         } else {
             $dotaz = false;
+            // TODO: remove XXX after test error messages
             if($this->pdo instanceof \PDO) {
-                list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
+                list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final. " XXX ");
             } else {
-                // TODO: remove XXX after test error messages
                 $dotaz = pg_query($this->conn_pgsql, $dotaz_final . " XXX ");
             }
         }
@@ -3561,11 +3571,13 @@ class objekt extends adminator
             $data_rs = pg_fetch_all($dotaz);
         } elseif (!($this->pdo instanceof \PDO)) {
             $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". pg_last_error($this->conn_pgsql)] = "danger";
+            $this->listErrors .= "</br>";
             return $output;
         }
 
         if($dotaz_err != null and $this->pdo instanceof \PDO) {
             $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "warning";
+            $this->listErrors .= "</br>";
             return $output;
         } elseif($this->pdo instanceof \PDO) {
             $radku = count($data_rs);
