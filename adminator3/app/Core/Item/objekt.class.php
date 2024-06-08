@@ -3682,7 +3682,7 @@ class objekt extends adminator
             $update_mod_vypisu = null;
 
             // detect mod_vypisu for update/erase form
-            $error_msq_base = "Pro Objekt \"" . var_export($data['dns_jmeno'], true) ."\" nelze zjistit mod_vypisu (pro update/erase button)! </br>";
+            $error_msq_base = "Pro Objekt \"" . var_export($data['dns_jmeno'], true) ."\" nelze zjistit mod_vypisu! </br> (affected only update/erase button)</br>";
             $dotaz_final = "SELECT typ_tarifu FROM tarify_int2 WHERE id_tarifu = '".intval($data["id_tarifu"])."' ";
             list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
