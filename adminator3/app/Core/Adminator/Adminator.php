@@ -45,15 +45,15 @@ class adminator
 
     protected $sentinel;
 
-     /**
-     * partial bootstrap alerts
-     *
-     * Array for bootstrap alerts, rendered with smarty.
-     *
-     * usualy used for displaying some warnings and errors
-     *
-     * @var Array <string, string> - first string in message, second string is alert role
-     */
+    /**
+    * partial bootstrap alerts
+    *
+    * Array for bootstrap alerts, rendered with smarty.
+    *
+    * usualy used for displaying some warnings and errors
+    *
+    * @var Array <string, string> - first string in message, second string is alert role
+    */
     public $p_bs_alerts = array();
 
     public function __construct(
