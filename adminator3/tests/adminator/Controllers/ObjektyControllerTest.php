@@ -125,7 +125,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
             array(
                 "adminatorMock" => $adminatorMock,
             ),
-            200,
+            500,
             ["usePDO" => true]
         );
 

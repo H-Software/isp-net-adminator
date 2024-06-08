@@ -118,7 +118,10 @@ class objekt extends adminator
 
     private $action_fail; // indication/control variable for blocker
 
-    public $p_bs_alerts = array(); // partial -> boostrap alerts
+    /**
+     * {@inheritdoc}
+     */
+    public $p_bs_alerts = array();
 
     public function __construct(ContainerInterface $container, $usePDO = false)
     {
@@ -507,7 +510,7 @@ class objekt extends adminator
         $output .= $listovani->listInterval();
 
         // with other "fatal" errors (some of p_bs_alerts),
-        // we dont want render "usual" selectors, but only error messages (and bootstrap alerts)
+        // we dont want render "usual" table header, but only error messages (and bootstrap alerts)
         if(strlen($this->listErrors) > 0) {
             return array('', $this->listErrors, '');
         }
@@ -3507,7 +3510,7 @@ class objekt extends adminator
         return $radku;
     }
 
-    public function vypis($sql, $co, $id, $dotaz_final = "")
+    public function vypis($sql, $co, $id, $dotaz_final = ""): string
     {
         $output = "";
         $tarif_sql = "";
@@ -3585,7 +3588,7 @@ class objekt extends adminator
 
         if($dotaz_err != null and $this->pdo instanceof \PDO) {
             $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "danger";
-            $this->listErrors .= "</br>";
+            $this->listErrors .= "</br>XXXXX";
             return $output;
         } elseif($this->pdo instanceof \PDO) {
             $radku = count($data_rs);
