@@ -3683,14 +3683,12 @@ class objekt extends adminator
 
             // detect mod_vypisu for update/erase form
             $error_msq_base = "Chyba! Pro Objekt \"" . var_export($data['dns_jmeno'], true) ."\" nelze zjistit mod_vypisu (pro update/erase button)!";
-            $dotaz_final = "SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($data["id_tarifu"])."' ";
+            $dotaz_final = "SELECT typ_tarifu FROM tarify_int2 WHERE id_tarifu = '".intval($data["id_tarifu"])."' ";
             list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
             if($dotaz_err != false) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for detection of mod_vypisu failed! " . var_export($dotaz_err, true));
-                // $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "danger";
-
-                $output .= $error_msq_base . " (" . var_export($dotaz_err, true) .")";
+                $this->p_bs_alerts[$error_msq_base . " (" . var_export($dotaz_err, true) .")"] = "danger";
             } else {
                 $rs_update = count($data_rs);
 

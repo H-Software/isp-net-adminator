@@ -52,7 +52,8 @@
         <div class="col-{$bs_layout_main_col_count|default:'10'}">
 
           <div id="obsah" >
-          
+<!-- start of obsah -->
+
           {*uvodni napis a obrazek, s ip a nickem .. *}
           {include file="inc.intro.banner.tpl"}
 
@@ -60,13 +61,13 @@
             {* uvodni kategorie *}
             {include file="inc.intro.category.tpl"}
           </div>
-          
+
           {*zde akce prihl. uziv. *}
           {include file="partials/logged.user.actions.tpl"}
 
           {if $show_se_cat|default: '0' eq "1"}
             <div class="cat-cara-oddelovaci" ></div>
           {/if}
-          
+
           <div class="obsah-main" >
-          {* zde ZACATEK vlastniho obsahu ... *}
+<!-- start of obsah-main -->
