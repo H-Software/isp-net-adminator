@@ -144,7 +144,12 @@ class objekt extends adminator
         $this->work = new \App\Core\work($this->container);
     }
 
-    public function callPdoQueryAndFetch($query, $handler = 'pdo'): array
+    /**
+    * call PDO query & fetchAll and catch errors
+    *
+    * @return Array <array, string>
+    */
+    public function callPdoQueryAndFetch(string $query, string $handler = 'pdo'): array
     {
         $rs_data = [];
         $rs_error = null;
@@ -495,13 +500,16 @@ class objekt extends adminator
         // get items
         $output .= $this->vypis($sql, $co, 0, $this->dotaz_source);
 
+        // render end of table
         $output .= $this->vypis_tab(2);
 
-        // listing
+        // footer listing
         $output .= $listovani->listInterval();
 
+        // with other "fatal" errors (some of p_bs_alerts),
+        // we dont want render "usual" selectors, but only error messages (and bootstrap alerts)
         if(strlen($this->listErrors) > 0) {
-            return array("", $this->listErrors, '');
+            return array('', $this->listErrors, '');
         }
 
         return array($output, $error, $exportLink);
@@ -3576,7 +3584,7 @@ class objekt extends adminator
         }
 
         if($dotaz_err != null and $this->pdo instanceof \PDO) {
-            $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "warning";
+            $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "danger";
             $this->listErrors .= "</br>";
             return $output;
         } elseif($this->pdo instanceof \PDO) {

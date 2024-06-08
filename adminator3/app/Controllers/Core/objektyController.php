@@ -138,6 +138,7 @@ class objektyController extends adminatorController
             return $this->response;
         };
 
+        $http_response_code = 200;
         $usePDO = false;
         if (array_key_exists("usePDO", $args)) {
             $usePDO = true;
@@ -184,6 +185,7 @@ class objektyController extends adminatorController
 
         if(strlen($errors) > 0) {
             $assignData["body"] = $errors;
+            $http_response_code = 500;
         } else {
             $assignData["export_link"] = $exportLink;
             $assignData["body"] = $output;
@@ -191,7 +193,7 @@ class objektyController extends adminatorController
 
         $assignData["p_bs_alerts"] = $objekt->p_bs_alerts;
 
-        return $this->renderer->template($request, $response, 'objekty/list.tpl', $assignData);
+        return $this->renderer->template($request, $response, 'objekty/list.tpl', $assignData, $http_response_code);
     }
 
     public function objektyAction(ServerRequestInterface $request, ResponseInterface $response, array $args)
