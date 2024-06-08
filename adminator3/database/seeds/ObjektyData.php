@@ -18,16 +18,36 @@ class ObjektyData extends AbstractSeed
         $faker = Faker\Factory::create();
         $data = [];
 
+        // basic, without vlastnik
         for ($i = 0; $i < 2; $i++) {
             $data[] = [
                 'dns_jmeno'         => $this->sanitizeString(
                                         $faker->domainName()
                                     ),
-                'ip'                => $faker->ipv4(),
+                'ip'                => $faker->localIpv4(),
                 'mac'               => $faker->macAddress(),
+                'typ'               => 1,
                 'sikana_cas'        => 0,
             ];
         }
+
+        // basic, with vlastnik
+        for ($i = 0; $i < 2; $i++) {
+            $data[] = [
+                'dns_jmeno'         => $this->sanitizeString(
+                                        $faker->domainName()
+                                    ),
+                'ip'                => $faker->localIpv4(),
+                'mac'               => $faker->macAddress(),
+                'typ'               => 1,
+                'sikana_cas'        => 0,
+                'id_cloveka'        => ($i + 1),
+            ];
+        }
+
+        // TODO: add APcko
+
+        // TODO: add other types (verejna_ip, ..)
 
         $this->insert('objekty', $data);
     }
