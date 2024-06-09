@@ -121,7 +121,7 @@ class objekt extends adminator
     /**
      * {@inheritdoc}
      */
-    public $p_bs_alerts = array();
+    public array $p_bs_alerts = [];
 
     public function __construct(ContainerInterface $container, $usePDO = false)
     {
@@ -150,7 +150,7 @@ class objekt extends adminator
     /**
     * call PDO query & fetchAll and catch errors
     *
-    * @return Array <array, string>
+    * @return array{0: array, 1: string|null} results, error message
     */
     public function callPdoQueryAndFetch(string $query, string $handler = 'pdo'): array
     {
@@ -399,7 +399,7 @@ class objekt extends adminator
     /**
     * list body content
     *
-    * @return Array <string, string, string> - html output, error message(s), export link
+    * @return array{0: string, 1: string, 2: string} - html output, error message(s), export link
     */
     public function listGetBodyContent(): array
     {

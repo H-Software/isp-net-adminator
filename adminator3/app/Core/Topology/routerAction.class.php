@@ -47,7 +47,7 @@ class RouterAction extends adminator
     /**
      * {@inheritdoc}
      */
-    public $p_bs_alerts = array();
+    public array $p_bs_alerts = [];
 
     public $origDataArray;
 

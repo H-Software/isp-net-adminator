@@ -131,7 +131,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        echo $responseContent;
+        // echo $responseContent;
 
         // TODO: add asserts for sub-categories
 
