@@ -52,7 +52,7 @@ class adminator
     *
     * usualy used for displaying some warnings and errors
     *
-    * @var array <string, string> - first string in message, second string is alert role
+    * @var array<string, string> first string in message, second string is alert role
     */
     public array $p_bs_alerts = [];
 
