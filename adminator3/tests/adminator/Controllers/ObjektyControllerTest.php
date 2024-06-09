@@ -101,7 +101,7 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
     public function test_ctl_objekty_list()
     {
-        $this->markTestSkipped('under construction');
+        // $this->markTestSkipped('under construction');
         $self = $this;
 
         $request = Request::create(
@@ -117,8 +117,6 @@ final class ObjektyControllerTest extends AdminatorTestCase
         $adminatorMock = self::initAdminatorMockClass($container);
         $this->assertIsObject($adminatorMock);
 
-        // TODO: objekty_list: fix $_GET/$_POST access
-
         $response = self::callControllerFunction(
             $serverRequest,
             'App\Controllers\objektyController',
@@ -133,15 +131,19 @@ final class ObjektyControllerTest extends AdminatorTestCase
 
         $responseContent = $response->getBody()->__toString();
 
-        echo $responseContent;
+        // echo $responseContent;
 
-        // // TODO: add asserts for sub-categories
+        // TODO: add asserts for sub-categories
 
-        // // self::assertXpathQueryContentRegex($response, '//*[@id="obsah"]/div[5]/div[2]', '/^Prosím vyberte z podkategorie výše....$/');
+        // TODO: add asserts for form selectors and header
 
-        // // non-common negative asserts
-        // $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
-        // $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
+        // TODO: asserts for data
+
+        // non-common negative asserts
+        // E_TARIF_1 , E_[0-9], "nelze zjistit"
+
+        $this->assertStringNotContainsStringIgnoringCase("chyba", $responseContent, "found word, which indicates error(s) or failure(s)");
+        $this->assertStringNotContainsStringIgnoringCase("nepodařil", $responseContent, " found word, which indicates error(s) or failure(s)");
     }
 
     // TODO: add test for stb

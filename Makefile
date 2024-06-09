@@ -3,8 +3,6 @@
 # ssh czhujer@192.168.1.213 "cd ~/Documents/repos/personal/h-software-isp-net-adminator; docker compose exec -ti fpm tail -f adminator3/logs/app.log"
 # ssh czhujer@192.168.1.213 "cd ~/Documents/repos/personal/h-software-isp-net-adminator; docker compose logs fpm nginx -f"
 #
-# INSERT INTO `workitems` (`id`, `number_request`, `in_progress`) VALUES (7,	2,	0);
-#
 export MYSQL_SERVER=192.168.1.213
 # export MYSQL_SERVER=127.0.0.1
 
@@ -73,7 +71,7 @@ export OTEL_LOGS_EXPORTER=none
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://192.168.1.213:4317 # 4317 for grpc, 4318 for http
 export OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3-internal,application.name=isp-adminator3-internal
 
-# .PHONY: run-a2-php-local	
+# .PHONY: run-a2-php-local
 # run-a2-php-local:
 # 	cp adminator3/include/main.function.shared.php adminator2/include/main.function.shared.php \
 # 	&& mkdir -p adminator2/smarty \
@@ -85,7 +83,7 @@ export OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3-internal,application
 # 			 -S localhost:8088 \
 # 			 index-local-router.php
 
-.PHONY: run-a3-php-local	
+.PHONY: run-a3-php-local
 run-a3-php-local:
 	cd adminator3 \
 		&& php \

@@ -104,8 +104,11 @@ $settings = [
         ],
         'phinxDev' => [
             'paths' => [
-                'migrations' => 'database/migrations',
-                'seeds'      => 'database/seeds',
+                'migrations' => [
+                    'database/migrations',
+                    'database/migrations2'
+                ],
+                'seeds' => 'database/seeds',
             ],
         ]
 ];
@@ -114,7 +117,6 @@ if ($app_mode == "development"){
     $settings['smarty'] = [
         "compile_check" => Smarty::COMPILECHECK_ON,
         "caching" =>  Smarty::CACHING_OFF,
-
     ];
 }
 else{

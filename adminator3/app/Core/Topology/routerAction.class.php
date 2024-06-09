@@ -44,7 +44,10 @@ class RouterAction extends adminator
     private $form_mac;
     private $form_poznamka;
 
-    public $p_bs_alerts = array(); // partial -> boostrap alerts
+    /**
+     * {@inheritdoc}
+     */
+    public array $p_bs_alerts = [];
 
     public $origDataArray;
 

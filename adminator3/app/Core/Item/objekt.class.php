@@ -12,6 +12,10 @@ class objekt extends adminator
 
     public \PgSql\Connection|\PDO|null $conn_pgsql;
 
+    public \PDO|null $pdoMysql;
+
+    public \PDO|null $pdo;
+
     public \Monolog\Logger $logger;
 
     protected $container;
@@ -21,6 +25,8 @@ class objekt extends adminator
     protected $sentinel;
 
     public $adminator; // handler for instance of adminator class
+
+    public $request;
 
     protected $work;
 
@@ -112,14 +118,25 @@ class objekt extends adminator
 
     private $action_fail; // indication/control variable for blocker
 
-    public $p_bs_alerts = array(); // partial -> boostrap alerts
+    /**
+     * {@inheritdoc}
+     */
+    public array $p_bs_alerts = [];
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, $usePDO = false)
     {
         $this->container = $container;
         // $this->validator = $container->get('validator');
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
+        $this->pdoMysql = $container->get('pdoMysql');
+
+        if($usePDO == true) {
+            $this->pdo = $container->get('pdoPgsql');
+        } else {
+            $this->pdo = null;
+        }
+
         $this->logger = $container->get('logger');
         $this->sentinel = $container->get('sentinel');
 
@@ -130,6 +147,43 @@ class objekt extends adminator
         $this->work = new \App\Core\work($this->container);
     }
 
+    /**
+    * call PDO query & fetchAll and catch errors
+    *
+    * @return array{0: array, 1: string|null} results, error message
+    */
+    public function callPdoQueryAndFetch(string $query, string $handler = 'pdo'): array
+    {
+        $rs_data = [];
+        $rs_error = null;
+        $rs = null;
+
+        if($this->$handler instanceof \PDO) {
+            $driver_name = $this->$handler->getAttribute(\PDO::ATTR_DRIVER_NAME);
+            $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": driver_name: " . var_export($driver_name, true));
+        } else {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": handler is not PDO type");
+            return [$rs_data, "database handler is not PDO type (" . var_export($handler, true) . ")"];
+        }
+
+        try {
+            $rs = $this->$handler->query($query);
+        } catch (Exception $e) {
+            $rs_error = $e->getMessage();
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught exception: " . var_export($rs_error, true));
+            return [$rs_data, $rs_error];
+        }
+
+        if(is_object($rs)) {
+            $rs_data = $rs->fetchAll();
+        } else {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO result is not object");
+            $rs_error = "ERROR: PDO result is not object";
+        }
+
+        return [$rs_data, $rs_error];
+    }
+
     public function listGetOrderItems()
     {
         $output = "";
@@ -138,14 +192,14 @@ class objekt extends adminator
         $output .= '<td colspan="1">';
 
         $output .= "\n\n <input type=\"radio\" ";
-        if (($_GET["razeni"] == 1)) {
+        if (($this->razeni == 1)) {
             $output .= " checked ";
         }
         $output .= "name=\"razeni\" value=\"1\" onClick=\"form1.submit();\" > ";
         $output .= "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
 
         $output .= " | <input type=\"radio\" ";
-        if (($_GET["razeni"] == 2)) {
+        if (($this->razeni == 2)) {
             $output .= " checked ";
         }
         $output .= " name=\"razeni\" value=\"2\" onClick=\"form1.submit();\"> \n";
@@ -155,14 +209,14 @@ class objekt extends adminator
                     <td colspan="3">';
 
         $output .= "<input type=\"radio\" ";
-        if (($_GET["razeni"] == 3)) {
+        if (($this->razeni == 3)) {
             $output .= " checked ";
         }
         $output .= "name=\"razeni\" value=\"3\" onClick=\"form1.submit();\" > ";
         $output .= "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
 
         $output .= " | <input type=\"radio\" ";
-        if (($_GET["razeni"] == 4)) {
+        if (($this->razeni == 4)) {
             $output .= " checked ";
         }
         $output .= " name=\"razeni\" value=\"4\" onClick=\"form1.submit();\"> \n";
@@ -172,14 +226,14 @@ class objekt extends adminator
                     <td>';
 
         $output .= "<input type=\"radio\" ";
-        if (($_GET["razeni"] == 9)) {
+        if (($this->razeni == 9)) {
             $output .= " checked ";
         }
         $output .= "name=\"razeni\" value=\"9\" onClick=\"form1.submit();\" > ";
         $output .= "<img src=\"img2/ses.png\" alt=\"ses\" width=\"15px\" height=\"10px\" >";
 
         $output .= " | <input type=\"radio\" ";
-        if (($_GET["razeni"] == 10)) {
+        if (($this->razeni == 10)) {
             $output .= " checked ";
         }
         $output .= " name=\"razeni\" value=\"10\" onClick=\"form1.submit();\"> \n";
@@ -206,7 +260,11 @@ class objekt extends adminator
 
     private function listPrepareVars()
     {
-        $mod_vypisu = $_GET["mod_vypisu"];
+        foreach ($this->request->getQueryParams() as $i => $v) {
+            if(preg_match('/^(mod_vypisu|es|razeni|list)$/', $i) and strlen($v) > 0) {
+                $$i = $this->request->getQueryParams()[$i];
+            }
+        }
 
         if(isset($mod_vypisu)) {
             if(!(preg_match('/^([[:digit:]])+$/', $mod_vypisu))) {
@@ -227,27 +285,21 @@ class objekt extends adminator
             }
         }
 
-        $es = $_GET["es"];
-
-        if((strlen($es) > 0)) {
+        if(isset($es)) {
             if(!(preg_match('/^([[:digit:]])+$/', $es))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v poli \"Sekundární hledání\". </div>";
             }
             $this->es = $es;
         }
 
-        $razeni = $_GET["razeni"];
-
-        if((strlen($razeni) > 0)) {
+        if(isset($razeni)) {
             if(!(preg_match('/^([[:digit:]])+$/', $razeni))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v promenné \"razeni\". </div>";
             }
             $this->razeni = $razeni;
         }
 
-        $list = $_GET["list"];
-
-        if((strlen($list) > 0)) {
+        if(isset($list)) {
             if(!(preg_match('/^([[:digit:]])+$/', $list))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v promenné \"list\". </div>";
             }
@@ -344,11 +396,16 @@ class objekt extends adminator
         return true;
     }
 
-    public function listGetBodyContent()
+    /**
+    * list body content
+    *
+    * @return array{0: string, 1: string, 2: string} - html output, error message(s), export link
+    */
+    public function listGetBodyContent(): array
     {
         $output = "";
-        $exportLink = "";
         $error = "";
+        $exportLink = "";
 
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": current identity: ".var_export($this->userIdentityUsername, true));
 
@@ -374,7 +431,7 @@ class objekt extends adminator
         //
         $prepVarsRs = $this->listPrepareVars();
         if($prepVarsRs === false) {
-            return array("", $this->listErrors);
+            return array("", $this->listErrors, $exportLink);
         }
 
         // detect mode (again)
@@ -400,15 +457,25 @@ class objekt extends adminator
 
         $generateSqlRes = $this->listGenerateSql();
         if($generateSqlRes === false) {
-            return array("", '<div class="alert alert-danger" role="alert">Chyba! Nepodarilo se vygenerovat SQL dotaz.</div>');
+            return array("", '<div class="alert alert-danger" role="alert">Chyba! Nepodarilo se vygenerovat SQL dotaz.</div>', '');
         }
         // paging
         //
-        $poradek = "es=".$this->es."&najdi=".$najdi."&odeslano=".$_GET['odeslano']."&dns_find=".$this->dns_find."&ip_find=".$this->ip_find."&razeni=".$_GET['razeni'];
-        $poradek .= "&mod_vypisu=".$this->mod_vypisu;
+        $poradek = "es=".$this->es."&dns_find=".$this->dns_find."&ip_find=".$this->ip_find . "&mod_vypisu=".$this->mod_vypisu;
 
-        //vytvoreni objektu
-        $listovani = new \c_listing_objekty("/objekty?".$poradek."&menu=1", 30, $this->list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $this->dotaz_source);
+        foreach ($this->request->getQueryParams() as $i => $v) {
+            if(preg_match('/^(odeslano|razeni)$/', $i) and strlen($v) > 0) {
+                $poradek .= "&" . $i . "=" . $this->request->getQueryParams()[$i];
+            }
+        }
+
+        if($this->pdo instanceof \PDO) {
+            $dbh = $this->pdo;
+        } else {
+            $dbh = $this->conn_pgsql;
+        }
+
+        $listovani = new \c_listing_objekty($dbh, "/objekty?".$poradek."&menu=1", 30, $this->list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $this->dotaz_source);
         $listovani->echo = false;
 
         if(($this->list == "") || ($this->list == "1")) {
@@ -418,12 +485,11 @@ class objekt extends adminator
             $bude_chybet = (($this->list - 1) * $listovani->interval);
         }   //jinak jich bude chybet podle závislosti na listu a intervalu
 
-        //  $interval=$listovani->interval;
-
         if(intval($listovani->interval) > 0 and intval($bude_chybet) > 0) {
             $this->dotaz_source = $this->dotaz_source . " LIMIT ". intval($listovani->interval)." OFFSET ".intval($bude_chybet)." ";
         }
 
+        // header listing
         $output .= $listovani->listInterval();
 
         $this->logger->debug(
@@ -433,12 +499,20 @@ class objekt extends adminator
                                 . ", co: " . var_export($co, true)
         );
 
+        // get items
         $output .= $this->vypis($sql, $co, 0, $this->dotaz_source);
 
+        // render end of table
         $output .= $this->vypis_tab(2);
 
-        // listing
+        // footer listing
         $output .= $listovani->listInterval();
+
+        // with other "fatal" errors (some of p_bs_alerts),
+        // we dont want render "usual" table header, but only error messages (and bootstrap alerts)
+        if(strlen($this->listErrors) > 0) {
+            return array('', $this->listErrors, '');
+        }
 
         return array($output, $error, $exportLink);
     }
@@ -3189,17 +3263,17 @@ class objekt extends adminator
         return $output;
     }
 
-    public function select($es, $razeni)
+    public function select($se_id, $razeni): array
     {
         // co - co hledat, 1- podle dns, 2-podle ip
 
-        pg_query($this->conn_pgsql, " SET DATESTYLE TO 'SQL, EUROPEAN' ");
-
-        // prvne vyresime sekundarni select
-        $se_id = $es;
-
-        //global $se;
-        global $order;
+        if($this->pdo instanceof \PDO) {
+            if($this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME) != "sqlite") {
+                $this->pdo->query(" SET DATESTYLE TO 'SQL, EUROPEAN' ");
+            }
+        } else {
+            pg_query($this->conn_pgsql, " SET DATESTYLE TO 'SQL, EUROPEAN' ");
+        }
 
         if($se_id == 1) {
             $se = '';
@@ -3243,7 +3317,12 @@ class objekt extends adminator
             $order = " order by id_komplu ASC ";
         }
 
-        $pole[] = $se;
+        if(isset($se)) {
+            $pole[] = $se;
+        } else {
+            $pole[] = "";
+        }
+
         $pole[] = $order;
 
         return $pole;
@@ -3313,7 +3392,8 @@ class objekt extends adminator
         return $output;
     } //konec funkce vypis odkaz
 
-    public static function vypis_razeni_a2()
+    // TODO: remove this function, probably unused
+    public function vypis_razeni_a2()
     {
 
         $input_value = "1";
@@ -3332,7 +3412,7 @@ class objekt extends adminator
             } else {
 
                 echo "\n\n <input type=\"radio\" ";
-                if (($_GET["razeni"] == $input_value)) {
+                if (($this->razeni == $input_value)) {
                     echo " checked ";
                 }
                 echo "name=\"razeni\" value=\"".$input_value."\" onClick=\"form1.submit();\" > ";
@@ -3345,7 +3425,7 @@ class objekt extends adminator
                 echo "</td> \n\n <td>";
 
                 echo "<input type=\"radio\" ";
-                if (($_GET["razeni"] == $input_value2)) {
+                if (($this->razeni == $input_value2)) {
                     echo " checked ";
                 }
                 echo " name=\"razeni\" value=\"".$input_value2."\" onClick=\"form1.submit();\"> \n";
@@ -3429,15 +3509,10 @@ class objekt extends adminator
         return $radku;
     }
 
-    public function vypis($sql, $co, $id, $dotaz_final = "")
+    public function vypis($sql, $co, $id, $dotaz_final = ""): string
     {
         $output = "";
         $tarif_sql = "";
-
-        if (!$this->conn_pgsql) {
-            echo "An error occurred. The connection with pgsql does not exist.\n";
-            exit;
-        }
 
         // wifi sit ...vypis u vlastniku (dalsi pouziti nevim)
         if ($co == 3) {
@@ -3492,13 +3567,29 @@ class objekt extends adminator
             $dotaz = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_cloveka='".intval($id)."' ".$tarif_sql);
 
         } else {
-            $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
+            $dotaz = false;
+            if($this->pdo instanceof \PDO) {
+                list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
+            } else {
+                $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
+            }
         }
 
-        if($dotaz !== false) {
+        if($dotaz !== false and !($this->pdo instanceof \PDO)) {
             $radku = pg_num_rows($dotaz);
-        } else {
-            echo("<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($this->conn_pgsql). "</div>");
+            $data_rs = pg_fetch_all($dotaz);
+        } elseif (!($this->pdo instanceof \PDO)) {
+            $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". pg_last_error($this->conn_pgsql)] = "danger";
+            $this->listErrors .= "</br>";
+            return $output;
+        }
+
+        if($dotaz_err != null and $this->pdo instanceof \PDO) {
+            $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "danger";
+            $this->listErrors .= "</br>";
+            return $output;
+        } elseif($this->pdo instanceof \PDO) {
+            $radku = count($data_rs);
         }
 
         if ($radku == 0) {
@@ -3514,7 +3605,8 @@ class objekt extends adminator
             return $output;
         }
 
-        while ($data = pg_fetch_array($dotaz)) {
+        // while ($data = pg_fetch_array($dotaz)) {
+        foreach ($data_rs as $row => $data) {
             // $output .= $data[sloupec1]." ".$data[sloupec2];
             // $output .= "<br />";
 
@@ -3585,23 +3677,23 @@ class objekt extends adminator
 
             $output .= "</span></td> \n";
 
-            //oprava a mazani
+            //uprava a mazani
 
-            $update_mod_vypisu = $_GET["mod_vypisu"];
+            $update_mod_vypisu = null;
 
-            $id_tarifu = $data["id_tarifu"];
+            // detect mod_vypisu for update/erase form
+            $error_msq_base = "Pro Objekt \"" . var_export($data['dns_jmeno'], true) ."\" nelze zjistit mod_vypisu! </br> (affected only update/erase button)</br>";
+            $dotaz_final = "SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($data["id_tarifu"])."' ";
+            list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
-            $dotaz_update = $this->conn_mysql->query("SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
-
-            if($dotaz_update === false) {
-                $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": dump var dotaz_update: " . var_export($dotaz_update, true));
-
-                $output .= "Chyba! Nelze specifikovat tarif! (query failed)";
+            if($dotaz_err != false) {
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for detection of mod_vypisu failed! " . var_export($dotaz_err, true));
+                $this->p_bs_alerts[$error_msq_base . " (" . var_export($dotaz_err, true) .")"] = "danger";
             } else {
-                $rs_update = $dotaz_update->num_rows;
+                $rs_update = count($data_rs);
 
                 if($rs_update == 1) {
-                    while($data_update = $dotaz_update->fetch_array()) {
+                    foreach ($data_rs as $row => $data_update) {
                         if($data_update["typ_tarifu"] == 1) {
                             $update_mod_vypisu = 2;
                         } else {
@@ -3609,8 +3701,8 @@ class objekt extends adminator
                         }
                     }
                 } else {
-                    $output .= "Chyba! Nelze specifikovat tarif! (wrong num_rows)";
-                    $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": dump var rs_update: " . var_export($rs_update, true));
+                    $this->p_bs_alerts[$error_msq_base . " (wrong num_rows)"] = "danger";
+                    $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for detection of mod_vypisu failed! num_rows: " . var_export($rs_update, true));
                 }
             }
 
@@ -3696,16 +3788,16 @@ class objekt extends adminator
                 //dodelat klikatko pro sc
                 //{ $tarif="<span class=\"tarifsc\"><a href=\"https://trinity.simelon.net/monitoring/data/cat_sc.php?ip=".$data["ip"]."\" target=\"_blank\" >sc</a></span>"; }
 
-                $tarif_f = $this->conn_mysql->query("SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ");
-                $tarif_f_r = $tarif_f->num_rows;
+                $dotaz_final = "SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ";
+                list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
-                if($tarif_f_r <> 1) {
-                    $output .= "<span style=\"font-weight: bold; color: red;\" >E</span>";
+                if(count($data_rs) <> 1) {
+                    $output .= "<span style=\"font-weight: bold; color: red;\" >E_TARIF_1</span>";
+                    $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for tarif failed! " . var_export($dotaz_err, true));
                 } else {
-                    while($data_f = $tarif_f->fetch_array()) {
+                    foreach ($data_rs as $row => $data_f) {
                         $output .= "<span style=\"color: ".$data_f["barva"]."; \" >";
                         $output .= "<a href=\"/admin/tarify?id_tarifu=".$data_f["id_tarifu"]."\" >".$data_f["zkratka_tarifu"]."</a>";
-
                         $output .= "</span>\n";
                     }
                 }
@@ -3717,56 +3809,70 @@ class objekt extends adminator
             $output .= "</tr>\n<tr>\n";
 
             // tady uz asi druhej radek :)
+
+            // pripojny nod
             $output .= "<td class=\"tab-objekty\" colspan=\"2\" >";
+            $dotaz_final = "SELECT jmeno FROM nod_list WHERE id='".intval($data["id_nodu"])."' ";
+            list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
-            $id_nodu = $data["id_nodu"];
-
-            $vysledek_bod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id='".intval($id_nodu)."' ");
-            $radku_bod = $vysledek_bod->num_rows;
-
-            if($radku_bod == 0) {
-                $output .= "<span style=\"color: gray; \">přípojný bod nelze zjistit </span>";
+            if(count($data_rs) == 0) {
+                $output .= "<span style=\"color: gray; \">přípojný bod nelze zjistit</span>";
+                $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for node failed! " . var_export($dotaz_err, true));
             } else {
-                while ($zaznam_bod = $vysledek_bod->fetch_array()) {
-                    //pouze text
-                    //$output .= "<span class=\"objekty-2radka\">NOD: ".$zaznam_bod["jmeno"]."</span> ";
-
-                    $output .= "<span class=\"objekty-2radka objekty-odkaz\">NOD: ".
+                foreach ($data_rs as $row => $zaznam_bod) {
+                    $output .= "<span class=\"objekty-2radka objekty-odkaz\">".
                     "<a href=\"/topology/node-list?find=".urlencode($zaznam_bod["jmeno"])."\" >".
                     $zaznam_bod["jmeno"]."</a></span> ";
                 }
             }
 
-            $output .= "</td>";
+            $output .= "</td>\n";
 
             // sem historii
             $output .= "<td class=\"tab-objekty\" ><span class=\"objekty-2radka\" style=\"\" > H: ";
             $output .= "<a href=\"/archiv-zmen?id=".$id."\" >".$id."</a>";
             $output .= " </span>";
 
-            $output .= "</td> \n";
+            $output .= "</td>\n";
 
             // id vlastnika
-            $output .= "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" > \n";
-            // TODO: fix using this
-            // $rs_create_link = ($data["id_cloveka"] > 0 ? $this->create_link_to_owner($data["id_cloveka"]) : "");
-            // $output .= ($rs_create_link === false ? "E_1" : "V: " . $rs_create_link);
+            $output .= "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" >\n";
 
-            $id_cloveka = $data["id_cloveka"];
-
-            $vlastnik_dotaz = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."'");
-            $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
-            while ($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
-                $firma_vlastnik = $data_vlastnik["firma"];
-                $archiv_vlastnik = $data_vlastnik["archiv"];
-            }
-
-            if ($archiv_vlastnik == 1) {
-                $output .= "V: <a href=\"/vlastnici/archiv?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
-            } elseif($firma_vlastnik == 1) {
-                $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+            if($data["id_cloveka"] == null) {
+                $output .= "<span style=\"color: grey;\">Není</span>";
             } else {
-                $output .= "V: <a href=\"/vlastnici?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+                $sql_final = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($data["id_cloveka"])."'";
+                $vlastnik_dotaz = false;
+                $firma_vlastnik = null;
+                $archiv_vlastnik = null;
+
+                if($this->pdo instanceof \PDO) {
+                    list($data_vlastnik_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
+                } else {
+                    $vlastnik_dotaz = pg_query($this->conn_pgsql, $sql_final);
+                    $data_vlastnik_rs = pg_fetch_all($vlastnik_dotaz);
+                }
+
+                if($dotaz_err == null and $this->pdo instanceof \PDO) {
+                    // TODO: add returning error(s)
+                    $output .= "V: (E_1)" . $data["id_cloveka"];
+                } elseif(count($data_vlastnik_rs) != 1) {
+                    // TODO: add returning error(s)
+                    $output .= "V: (E_2 ". var_export(count($data_vlastnik_rs), true) . ")" . $data["id_cloveka"];
+                } else {
+                    foreach ($data_vlastnik_rs as $key => $data_vlastnik) {
+                        $firma_vlastnik = $data_vlastnik["firma"];
+                        $archiv_vlastnik = $data_vlastnik["archiv"];
+                    }
+
+                    if ($archiv_vlastnik == 1) {
+                        $output .= "V: <a href=\"/vlastnici/archiv?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+                    } elseif($firma_vlastnik == 1) {
+                        $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+                    } else {
+                        $output .= "V: <a href=\"/vlastnici?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
+                    }
+                }
             }
 
             $output .= "</span> </td>\n";
@@ -3811,12 +3917,16 @@ class objekt extends adminator
             // kdy se objekty pridal
             //prvne to orezem
             $orez = $pridano;
-            $orezano = explode(':', $orez);
-            $pridano_orez = $orezano[0] . ":" . $orezano[1];
+            if(strlen($orez) > 0) {
+                $orezano = explode(':', $orez);
+                $pridano_orez = $orezano[0] . ":" . $orezano[1];
+            } else {
+                $pridano_orez = null;
+            }
 
             $output .= "<td class=\"tab-objekty\" colspan=\"3\" ><span class=\"objekty-2radka\" >".$pridano_orez."</span></td>
                         <td class=\"tab-objekty\" >
-                        <form method=\"POST\" action=\"/print/reg-form\" >";
+                        <form method=\"POST\" action=\"/print/reg-form\" >\n";
 
             if(strlen($this->csrf_html) > 0) {
                 $output .= $this->csrf_html;
@@ -3826,7 +3936,7 @@ class objekt extends adminator
 
             $output .= "<input type=\"hidden\" name=\"id_objektu\" value=\"".intval($data["id_komplu"])."\" >
                         <input type=\"submit\" name=\"odeslano_form\" value=\"R.F.\">
-                        </form>
+                        </form>\n
                         </td>\n";
 
             //sem odendat

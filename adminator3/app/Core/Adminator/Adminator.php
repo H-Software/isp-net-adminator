@@ -45,6 +45,17 @@ class adminator
 
     protected $sentinel;
 
+    /**
+    * partial bootstrap alerts
+    *
+    * Array for bootstrap alerts, rendered with smarty.
+    *
+    * usualy used for displaying some warnings and errors
+    *
+    * @var array<string, string> first string in message, second string is alert role
+    */
+    public array $p_bs_alerts = [];
+
     public function __construct(
         $conn_mysql,
         $smarty,

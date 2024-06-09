@@ -350,13 +350,13 @@ class stb extends adminator
 
         //uprava
         $output .= "<td style=\"border-bottom: 1px dashed gray;\" ><b>úprava</b></td>
-            
+
              <td style=\"border-bottom: 1px dashed gray;\" ><b>smazat</b></td>
-        
+
              <td style=\"border-bottom: 1px dashed gray;\" ><b>test</b></td>
-        
+
              <td style=\"border-bottom: 1px dashed gray;\" ><b>tarif</b></td>
-            
+
             </tr>\n\n";
 
         //2. radka
@@ -421,15 +421,15 @@ class stb extends adminator
         $output .= "</td>\n";
 
         $output .= "<td style=\"border-bottom: 1px solid black;\" ><b>id stb (historie)</b></td>
-            
+
              <td style=\"border-bottom: 1px solid black;\" ><b>id človeka</b></td>
-        
+
              <td style=\"border-bottom: 1px solid black;\" ><b>switch port</b></td>
-        
+
              <td colspan=\"2\" style=\"border-bottom: 1px solid black;\" ><b>datum vytvoření</b></td>
-        
+
              <td style=\"border-bottom: 1px solid black;\" ><b>reg. form</b></td>
-                  
+
             </tr>\n";
 
         $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\"><br></td></tr>\n";
@@ -554,7 +554,7 @@ class stb extends adminator
                 "loggedUserEmail" => $this->loggedUserEmail
             );
 
-            $az = new ArchivZmen($this->container, $this->smarty);
+            $az = new ArchivZmen($this->container);
             $azRes = $az->insertItemDiff(3, $dataOrigDb, $data, $params);
 
             if(is_object($azRes)) {
@@ -601,7 +601,7 @@ class stb extends adminator
             // pridame to do archivu zmen
 
             // TODO: refactor this to ORM way
-            // $az = new ArchivZmen($this->container, $this->smarty);
+            // $az = new ArchivZmen($this->container);
             // $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
 
             $pole = "<b> akce: pridani stb objektu ; </b><br>";
@@ -630,7 +630,7 @@ class stb extends adminator
 
         $this->logger->info("stb\\stbAction called");
 
-        $a = new \App\Core\adminator($this->conn_mysql, $this->smarty, $this->logger);
+        $a = new \App\Core\adminator($this->conn_mysql, $this->container->get('smarty'), $this->logger);
 
         $this->action_form = $this->formInit();
 
@@ -717,13 +717,13 @@ class stb extends adminator
         <b>Popis objektu</b>: " . $data['popis'] . "<br>
         <b>IP adresa</b>: " . $data['ip'] . "<br>
         <b>MAC adresa</b>: " . $data['mac'] . "<br><br>
-        
+
         <b>Puk</b>: " . $data['puk'] . "<br>
         <b>Pin1</b>: " . $data['pin1'] . "<br>
         <b>Pin2</b>: " . $data['pin2'] . "<br>
 
         <b>Číslo portu switche</b>: " . $data['$port_id'] . "<br>
-        
+
         <b>Přípojný bod</b>: ";
 
         $vysledek3 = $this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");

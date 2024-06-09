@@ -10,6 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class archivZmenController extends adminatorController
 {
     public \mysqli|\PDO $conn_mysql;
+
     public \Smarty $smarty;
 
     public \Monolog\Logger $logger;
@@ -63,7 +64,7 @@ class archivZmenController extends adminatorController
             return $this->response;
         };
 
-        $az = new ArchivZmen($this->container, $this->smarty);
+        $az = new ArchivZmen($this->container);
         $body = $az->archivZmenWork();
 
         $assignData = array(
@@ -85,7 +86,7 @@ class archivZmenController extends adminatorController
             return $this->response;
         }
 
-        $az = new ArchivZmen($this->container, $this->smarty);
+        $az = new ArchivZmen($this->container);
         $body = $az->archivZmenList();
 
         $assignData = array(

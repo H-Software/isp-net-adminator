@@ -247,7 +247,7 @@ class fakturacniSkupiny extends adminator
                     "loggedUserEmail" => $this->loggedUserEmail
                 );
 
-                $az = new ArchivZmen($this->container, $this->smarty);
+                $az = new ArchivZmen($this->container);
                 $azRes = $az->insertItemDiff(2, $pole_puvodni_data, $form_data, $params);
 
                 if(is_object($azRes)) {
@@ -275,7 +275,7 @@ class fakturacniSkupiny extends adminator
                 }
 
                 // pridame to do archivu zmen
-                $az = new ArchivZmen($this->container, $this->smarty);
+                $az = new ArchivZmen($this->container);
 
                 $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
 
@@ -318,10 +318,10 @@ class fakturacniSkupiny extends adminator
             $output .= '<div style="">
                 <a href="/vlastnici2/fakturacni-skupiny" >Zpět na "Fakturační skupiny"</a>
             </div>
-            
+
             <br>
             zadané údaje:<br><br>
-            
+
             <b>Název skupiny</b>: ' . $form_data['nazev'] . "<br><br>";
 
             $output .= '<b>Typ</b>: ';
@@ -401,28 +401,28 @@ class fakturacniSkupiny extends adminator
         $output .= $this->csrf_html[0];
 
         $output .= '<input type="hidden" name="update_id" value="' . $this->form_update_id . '" >
-        
+
         <table border="0" width="" cellspacing="5" >
            <tr>
                 <td colspan="" >&nbsp;</td>
             </tr>
-        
+
                 <tr>
                  <td  width="50px" >Název skupiny: </td>
                  <td><input type="text" name="nazev" size="30" ' . "value=\"" . $data['nazev'] . "\"></td>" .
 
              '<td width="50px" >&nbsp;</td>
-             
+
              <td width="200px" rowspan="5" valign="top" >
              <div style="padding-bottom: 10px; " >Fakturační text:</div>
-             
+
              <textarea name="fakturacni_text" cols="35" rows="5" >' . $data['fakturacni_text'] . '</textarea>
-             
+
              </td>
             </tr>
-        
+
                 <tr><td colspan="2" ><br></td></tr>
-        
+
                 <tr>
                  <td  width="250px" >Typ: </td>
                   <td>
@@ -438,9 +438,9 @@ class fakturacniSkupiny extends adminator
                     </select>
                  </td>
                 </tr>
-        
+
                 <tr><td colspan="2" ><br></td></tr>
-        
+
                 <tr>
                  <td  width="250px" >Typ služby:</td>
                   <td>
@@ -456,15 +456,15 @@ class fakturacniSkupiny extends adminator
                     </select>
                  </td>
                 </tr>
-        
+
                 <tr><td colspan="2" ><br></td></tr>
-            
+
             <tr>';
         /* sluzba internet */
         $output .= '<td>
                 <span style="" ><b>Služba "Internet":</b></span>
               </td>
-              <td>    
+              <td>
                 <select name="sluzba_int" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0" ';
         if($data['sluzba_int'] == 0 or $data['sluzba_int'] == "") {
@@ -479,7 +479,7 @@ class fakturacniSkupiny extends adminator
                 </select>
               </td>
             </tr>
-            
+
             <tr>
               <td>
                 <span style="" >Služba Internet :: Vyberte tarif:</span>
@@ -514,15 +514,15 @@ class fakturacniSkupiny extends adminator
         $output .= '
               </td>
             </tr>
-        
+
             <tr><td colspan="2" ><br></td></tr>
-            
+
             <tr>';
         /* sluzba iptv */
         $output .= '<td>
                 <span style="" ><b>Služba "IPTV" (televize):</b></span>
               </td>
-              <td>    
+              <td>
                 <select name="sluzba_iptv" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0" ';
         if(intval($data['sluzba_iptv']) == 0) {
@@ -537,7 +537,7 @@ class fakturacniSkupiny extends adminator
                 </select>
               </td>
             </tr>
-            
+
             <tr>
               <td>
                 <span style="" >Služba IPTV :: Vyberte tarif:</span>
@@ -574,16 +574,16 @@ class fakturacniSkupiny extends adminator
         $output .= '
               </td>
             </tr>
-            
+
             <tr><td colspan="2" ><br></td></tr>
-            
+
             <tr>';
         /* sluzba voip */
         $output .= '
               <td>
                 <span style="" ><b>Služba "VoIP":</b></span>
               </td>
-              <td>    
+              <td>
                 <select name="sluzba_voip" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0" ';
         if($data['sluzba_voip'] == 0 or !isset($data['sluzba_voip'])) {
@@ -612,13 +612,13 @@ class fakturacniSkupiny extends adminator
         </tr>';
 
         $output .= '<tr><td colspan="2" ><br></td></tr>
-            
+
            <tr><td colspan="4" ><br></td></tr>
-                     
+
          <tr><td colspan="4" align="center" >
           <input type="submit" value="OK / Odeslat / Uložit .... " name="odeslano" style="width: 400px; background-color: green; color: white; " >
          </td></tr>
-            
+
         </table>
         </form>';
 

@@ -11,6 +11,13 @@ parameters:
 		- app/Core/shared/ros_api_qos.php
 		- app/Core/shared/ros_api_restriction.php
 	ignoreErrors:
+    # for phpunit
+	-
+		message: "#^Variable \\$.* in (empty|isset)\\(\\) is never defined\\.$#"
+		path: app/Core/Item/*
+	-
+		message: "#^Variable \\$.* in (empty|isset)\\(\\) is never defined\\.$#"
+		path: app/Controllers/Core/*
 	# common known issues
 	-
 		message: '#Undefined variable: \$.*#'
