@@ -11,6 +11,8 @@
 - https://gist.github.com/jwage/b1614c96ea22ccaf68b7
 
 ### devcontainers
+- https://code.visualstudio.com/docs/devcontainers/create-dev-container#_extend-your-docker-compose-file-for-development
+- https://github.com/devcontainers/templates/tree/main/src/php-mariadb/.devcontainer
 - https://github.com/microsoft/vscode-remote-try-php
 - https://docs.dapr.io/developing-applications/local-development/ides/vscode/vscode-remote-dev-containers/
 

@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+# fix perms for volumes
+chown www-data:www-data \
+    adminator2/cache \
+    adminator3/cache \
+    adminator2/log \
+    adminator3/logs \
+    adminator3/print/temp \
+    adminator3/temp \
+    adminator3/export \
+    adminator2/templates_c \
+    adminator3/templates_c \
+    /var/log/php
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then
+        set -- php-fpm "$@"
+fi
+
+exec "$@"

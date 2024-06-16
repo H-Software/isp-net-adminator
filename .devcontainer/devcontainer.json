@@ -1,25 +1,74 @@
 {
-  "name": "isp-net-adminator",
-  // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-//  "image": "opencodeco/phpctl:php83-devcontainer",
-  "image" : "php:5.6-apache",
-  "postCreateCommand": "composer install",
-  "features": {
-    // Install the Dapr CLI
-//    "ghcr.io/dapr/cli/dapr-cli:0": {},
-    "ghcr.io/devcontainers/features/sshd:1": {},
-    // Enable Docker (via Docker-in-Docker)
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
-  }
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
+	"$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.base.schema.json",
 
-  // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "sudo chmod a+x \"$(pwd)\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)\" /var/www/html"
+	// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+	// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+	
+	"name": "isp-net-adminator",
 
-  // Configure tool-specific properties.
-  // "customizations": {},
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	// "image": "mcr.microsoft.com/devcontainers/base:jammy",
 
-  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-  // "remoteUser": "root"
+    "dockerComposeFile": [
+		"../docker-compose.yml",
+		"docker-compose.extend.yml"
+	],
+
+    "service": "fpm",
+
+    "workspaceFolder": "/srv/www",
+
+    "shutdownAction": "stopCompose",
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "bash scripts/devcontainers-post-commands.sh",
+
+	// Configure tool-specific properties.
+    "customizations": {
+        "vscode": {
+            "extensions": [
+				// "ms-azuretools.vscode-docker"
+                // ,"mads-hartmann.bash-ide-vscode"
+                // ,
+				// "EditorConfig.EditorConfig"
+            ]
+        }
+    },
+
+	// Uncomment to connect as root instead.
+	// More info: https://aka.ms/dev-containers-non-root.
+	// Docs: https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user
+	"remoteUser": "vscode"
+
+	// podman specific
+	// https://code.visualstudio.com/remote/advancedcontainers/docker-options#_podman
+    // ,
+	// "runArgs": [
+	// 	// run container as current user
+	// 	// "--userns=keep-id"
+	// 	// ,
+	// 	// // mount user home directory for things like git, ssh, and other configs
+	// 	// "--volume=${env:HOME}:${env:HOME}",
+	// 	// // ensure project directory is mounted incase it exists outside the home directory
+	// 	// "--volume=${localWorkspaceFolder}:${localWorkspaceFolder}",
+	// 	// isolate the .vscode-server folder so you don't overwrite settings from remote ssh vscode
+	// 	//"--volume=${localWorkspaceFolder}/.cache/vscode-server:${env:HOME}/.vscode-server"
+	// ]
+	,
+	"containerEnv": {
+		// ensure users home directory is the same inside the container as it is outside
+		"HOME": "/home/vscode"
+
+	}
+	// podman workaround for "mkdir: cannot create directory '/root': Permission denied"
+	// https://blog.lifeishao.com/post/vscode-replace-docker-with-podman/
+	// ,
+	//  "containerUser": "vscode" // the value needs to match the value of "remoteUser"
 }
