@@ -48,8 +48,8 @@ RUN apt-get update \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN export MAKEFLAGS="-j $(nproc)" \
-        && pecl install sqlsrv-5.11.1 \
-        && pecl install pdo_sqlsrv-5.11.1
+        && pecl install sqlsrv-5.12.0 \
+        && pecl install pdo_sqlsrv-5.12.0
 
 # Install APCu and APC backward compatibility
 RUN export MAKEFLAGS="-j $(nproc)" \
