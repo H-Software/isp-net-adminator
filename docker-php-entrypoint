@@ -1,5 +1,5 @@
-#!/bin/sh
-set -e
+#!/bin/bash
+set -euo pipefail
 
 # fix perms for volumes
 chown www-data:www-data \
@@ -8,11 +8,18 @@ chown www-data:www-data \
     adminator2/log \
     adminator3/logs \
     adminator3/print/temp \
+    adminator2/temp \
     adminator3/temp \
     adminator3/export \
     adminator2/templates_c \
     adminator3/templates_c \
     /var/log/php
+
+cp -a adminator3/templates/inc.intro.category-ext.tpl \
+    /srv/www/adminator2/templates/inc.intro.category-ext.tpl
+    
+cp -a adminator3/include/main.function.shared.php \
+    /srv/www/adminator2/include/main.function.shared.php
 
 # first arg is `-f` or `--some-option`
 if [ "${1#-}" != "$1" ]; then

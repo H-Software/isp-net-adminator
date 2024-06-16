@@ -402,7 +402,7 @@ WORKDIR /srv/www
 
 RUN mkdir -p /srv/www/adminator2/ \
         && cd /srv/www/adminator2 \
-        && mkdir temp log \
+        && mkdir temp log templates \
         && chown www-data:www-data temp log
 
 RUN mkdir -p /srv/www/adminator3/ \
@@ -413,10 +413,10 @@ RUN mkdir -p /srv/www/adminator3/ \
 COPY adminator2/composer.json /srv/www/adminator2/
 COPY adminator3/composer.json /srv/www/adminator3/
 
-RUN cd adminator2 \
+RUN cd /srv/www/adminator2 \
      && composer install
 
-RUN cd adminator3 \
+RUN cd /srv/www/adminator3 \
     && composer install
 
 # fpm conf
