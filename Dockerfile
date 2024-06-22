@@ -48,8 +48,8 @@ RUN apt-get update \
         && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN export MAKEFLAGS="-j $(nproc)" \
-        && pecl install sqlsrv-5.11.1 \
-        && pecl install pdo_sqlsrv-5.11.1
+        && pecl install sqlsrv-5.12.0 \
+        && pecl install pdo_sqlsrv-5.12.0
 
 # Install APCu and APC backward compatibility
 RUN export MAKEFLAGS="-j $(nproc)" \
@@ -110,7 +110,7 @@ RUN apt-get update \
     && apt-get install -y \
         libzip4 \
         libpng16-16 \
-        msodbcsql17 \
+        msodbcsql18 \
         libpq5 \
         libgrpc29 \
         diffutils
@@ -145,8 +145,8 @@ RUN mkdir -p /srv/www/adminator2/ \
 
 RUN mkdir -p /srv/www/adminator3/ \
         && cd /srv/www/adminator3 \
-        && mkdir temp log logs export \
-        && chown www-data:www-data temp log logs export
+        && mkdir temp logs export \
+        && chown www-data:www-data temp logs export
 
 COPY adminator2/composer.json /srv/www/adminator2/
 COPY adminator3/composer.json /srv/www/adminator3/
@@ -159,20 +159,20 @@ RUN cd adminator3 \
 
 # clean-up
 RUN apt-get purge -y --allow-remove-essential \
-libgcc-12-dev \
-libstdc++-12-dev \
-linux-libc-dev \
-curl \
-gnupg \
-make \
-m4 \
-re2c \
-pkg-config \
-file \
-unzip \
-&& apt autoremove -y \
-&& apt-get clean \
-&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    libgcc-12-dev \
+    libstdc++-12-dev \
+    linux-libc-dev \
+    curl \
+    gnupg \
+    make \
+    m4 \
+    re2c \
+    pkg-config \
+    file \
+    unzip \
+    && apt autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # app code
 COPY adminator2/ /srv/www/adminator2/
@@ -185,6 +185,8 @@ COPY adminator3/include/main.function.shared.php /srv/www//adminator2/include/ma
 RUN chmod 1777 /tmp \
     && cd adminator3 \
     && chown www-data:www-data export \
+    && mkdir -p logs \
+    && chown www-data:www-data logs \
     && cd print \
     && mkdir -p temp \
     && chown www-data:www-data temp
@@ -203,14 +205,12 @@ COPY ./configs/php-fpm-healthcheck /usr/local/bin/php-fpm-healthcheck
 
 RUN chmod +x /usr/local/bin/php-fpm-healthcheck
 
-# fix logging
-# RUN mkdir -p /var/log/php \
-#     && chown -R www-data:www-data /var/log/php
-    #  \
-    # && echo '' > /var/log/php/error.log
-
 # # dont run as root
 # USER www-data:www-data
+
+COPY docker-php-entrypoint /usr/local/bin/docker-php-entrypoint
+
+RUN chmod 0775 /usr/local/bin/docker-php-entrypoint
 
 # workaround for squash
 #
@@ -226,10 +226,7 @@ RUN rm -rf /usr/bin/composer
 #
 ENV PHP_INI_DIR /usr/local/etc/php
 
-ENTRYPOINT [ \
-        "chown www-data:www-data adminator3/export", \
-        "chown www-data:www-data adminator3/print/temp", \
-        "docker-php-entrypoint"]
+ENTRYPOINT ["docker-php-entrypoint"]
 
 WORKDIR /srv/www
 

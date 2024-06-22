@@ -27,55 +27,30 @@ services:
     build:
       context: ./
       dockerfile: ./configs/nginx/Dockerfile
-    develop:
-      watch: 
-        - path: ./
-          action: rebuild
     ports:
-      - 80:80
-      - 443:443
+      - 8080:80
+      - 10443:443
     # depends_on:
     #   fpm:
     #     condition: service_healthy
     #     restart: true
 
   fpm:
-    image: h-software/isp-net-adminator-fpm:latest
+    # image: h-software/isp-net-adminator-fpm:latest
     # image: ghcr.io/h-software/isp-net-adminator:pr-137
     build:
       context: ./
-      target: main
-      args:
-        progress: plain
+    #   target: main
+    #   args:
+    #     progress: plain
     # user: "www-data:www-data"
-    # https://github.com/compose-spec/compose-spec/blob/master/develop.md
-    develop:
-      watch: 
-        - path: ./
-          action: rebuild
-          ignore:
-            - adminator2/log/
-            - adminator3/logs/
-            - adminator3/templates_c/
-            - adminator3/print/temp
-            - adminator3/tests
-            - adminator3/vendor
-            - adminator3/database
-            - configs/flagd
-            - configs/php*
-            - configs/otel*
-            - docker-compose.yml
-            - "*.sql"
-            - .github/
-            - .vscode/
-            - .git/
     environment:
       # DB conn
-      - MYSQL_SERVER=192.168.1.213
+      - MYSQL_SERVER=mysql
       - MYSQL_USER=root
       - MYSQL_PASSWD=isp-net-passwd
       # DB conn 2
-      - POSTGRES_SERVER=192.168.1.213
+      - POSTGRES_SERVER=postgres
       - POSTGRES_USER=adminator
       - POSTGRES_PASSWD=isp-net-passwd
       - POSTGRES_DB=adminator.new
@@ -89,34 +64,34 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
       - OTEL_RESOURCE_ATTRIBUTES=service.name=isp-adminator3,application.name=isp-adminator3
     volumes:
-      - adminator-php-log:/var/log/php:uid=33,gid=33
-      - adminator-export:/srv/www/adminator3/export:uid=33,gid=33
-      - adminator-print-temp:/srv/www/adminator3/print/temp:uid=33,gid=33
+      - adminator-php-log:/var/log/php
+      - adminator-export:/srv/www/adminator3/export
+      - adminator-print-temp:/srv/www/adminator3/print/temp
       - adminator-tmp:/tmp:/tmp
     tmpfs:
       # for smarty
-      - /srv/www/adminator2/cache:uid=33,gid=33
-      - /srv/www/adminator3/cache:uid=33,gid=33
-      - /srv/www/adminator2/templates_c:uid=33,gid=33
-      - /srv/www/adminator3/templates_c:uid=33,gid=33
+      - /srv/www/adminator2/cache
+      - /srv/www/adminator3/cache
+      - /srv/www/adminator2/templates_c
+      - /srv/www/adminator3/templates_c
       # for nette loader
-      - /srv/www/adminator2/temp:uid=33,gid=33
-      - /srv/www/adminator3/temp:uid=33,gid=33
+      - /srv/www/adminator2/temp
+      - /srv/www/adminator3/temp
       # monolog + some scripts log files
-      - /srv/www/adminator3/logs:uid=33,gid=33
-      - /srv/www/adminator2/log:uid=33,gid=33
+      - /srv/www/adminator3/logs
+      - /srv/www/adminator2/log
     ports:
       - "9001:9001"
       - "9002:9002"
     # https://docs.docker.com/compose/compose-file/05-services/#healthcheck
     # https://docs.docker.com/reference/dockerfile/#healthcheck
-    healthcheck:
-      test: "(FCGI_CONNECT=localhost:9001 php-fpm-healthcheck && FCGI_CONNECT=localhost:9002 php-fpm-healthcheck --accepted-conn=100)"
-      interval: 1m
-      timeout: 2s
-      retries: 3
-      start_period: 10s
-      start_interval: 1s
+    # healthcheck:
+    #   test: "(FCGI_CONNECT=localhost:9001 php-fpm-healthcheck && FCGI_CONNECT=localhost:9002 php-fpm-healthcheck --accepted-conn=100)"
+    #   interval: 1m
+    #   timeout: 2s
+    #   retries: 3
+    #   start_period: 10s
+    #   start_interval: 1s
 
   mysql:
     image: mysql:8.0
@@ -148,7 +123,7 @@ services:
       - MYSQL_ROOT_PASSWORD=isp-net-passwd
     depends_on:
       - mysql
-  
+
   postgres:
     image: postgres:12-alpine
     ports:
@@ -159,26 +134,26 @@ services:
       - POSTGRES_PASSWORD=isp-net-passwd
       - POSTGRES_USER=adminator
       - POSTGRES_DB=adminator.new
-    healthcheck:
-      test: "(pg_isready -U postgres || exit 1)"
-      interval: 1m
-      timeout: 5s
-      retries: 3
-      start_period: 30s
-      start_interval: 5s
+    # healthcheck:
+    #   test: "(pg_isready -U postgres || exit 1)"
+    #   interval: 1m
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 30s
+    #   start_interval: 5s
 
   # fix permissions: echo "host all all all $POSTGRES_HOST_AUTH_METHOD" >> pg_hba.conf
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4
-    restart: always
-    ports:
-      - "8082:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
-      PGADMIN_DEFAULT_PASSWORD: strong-password
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin4
+  #   restart: always
+  #   ports:
+  #     - "8082:80"
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+  #     PGADMIN_DEFAULT_PASSWORD: strong-password
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
 
   mssql:
     image: mcr.microsoft.com/mssql/server:2019-latest
@@ -191,19 +166,19 @@ services:
     volumes:
       - mssql-data:/var/opt/mssql
 
-  routeros-6-48:
-    image: evilfreelancer/docker-routeros:6.48.3
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun
-      - /dev/kvm
-    ports:
-      - "12222:22"
-      - "12223:23"
-      - "18728:8728"
-      - "18729:8729"
+  # routeros-6-48:
+  #   image: evilfreelancer/docker-routeros:6.48.3
+  #   restart: unless-stopped
+  #   cap_add:
+  #     - NET_ADMIN
+  #   devices:
+  #     - /dev/net/tun
+  #     - /dev/kvm
+  #   ports:
+  #     - "12222:22"
+  #     - "12223:23"
+  #     - "18728:8728"
+  #     - "18729:8729"
 
   otel-collector:
     deploy:
@@ -228,7 +203,7 @@ services:
       - GRAFANA_CLOUD_KEY=${GRAFANA_CLOUD_KEY}
     volumes:
       - /:/hostfs
-      - "/var/run/docker.sock.raw:/var/run/docker.sock"
+      # - "/var/run/docker.sock.raw:/var/run/docker.sock"
 
   flagd:
     image: ghcr.io/open-feature/flagd:latest

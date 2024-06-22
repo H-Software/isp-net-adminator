@@ -49,13 +49,15 @@ if($mssql_db_ok == 1)
 							"Database" => $mssql_db,
 							"UID" => $mssql_user,
 							"PWD" => $mssql_pass,
-							"LoginTimeout" => 5
+							"LoginTimeout" => 5,
+							"Encrypt" => "No"
 							);
 
 	// https://www.php.net/manual/en/ref.pdo-sqlsrv.connection.php#refsect1-ref.pdo-sqlsrv.connection-examples
 	$mssqlDSN = "sqlsrv:"
 				. "Server=" . $mssql_host . ";"
 				. "Database=" . $mssql_db . ";"
+				. "Encrypt=No" . ";"
 				;
 
 	// first we try PDO, because there is working error printing
