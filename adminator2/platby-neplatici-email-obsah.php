@@ -103,8 +103,8 @@ style='font-size:10.0pt;font-family:Arial'>V případě jakýchkoliv nejasností
 kontaktujte sekretářku na<o:p></o:p></span></font></p>
 
 <p class=MsoNormal style='text-indent:35.4pt'><font size=2 face=Arial><span
-style='font-size:10.0pt;font-family:Arial'>tel: +420 391 009 400 nebo
-e-mail: <a href=\"mailto:lucie.myslikova@simelon.net\">lucie.myslikova@simelon.net</a>
+style='font-size:10.0pt;font-family:Arial'>tel:  nebo
+e-mail: <a href=\"mailto:info@adminator.net\">info@adminator.net</a>
 <o:p></o:p></span></font></p>
 
 <p class=MsoNormal style='text-indent:35.4pt'><font size=2 face=Arial><span

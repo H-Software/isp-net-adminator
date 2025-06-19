@@ -17,7 +17,7 @@ CREATE TABLE `archiv_zmen` (
   `provedeno_kym` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `vysledek` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysledek`) VALUES
 (1,	'<b> akce: pridani stb objektu ; </b><br>[id_stb]=> 5, [mac_adresa]=> 43:22:33:44:55:66, [ip_adresa]=> 10.10.10.4, [puk]=> , [popis]=> stb4, [id_nodu]=> 2, [sw_port]=> 4 [pozn]=> pozn 4, [id_tarifu]=> 1',	'2024-04-12 09:34:49',	'admin',	1),
@@ -202,7 +202,11 @@ INSERT INTO `archiv_zmen` (`id`, `akce`, `provedeno_kdy`, `provedeno_kym`, `vysl
 (200,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 8  <b>[dns_jmeno]</b> => xx , <b>[ip]</b> => 10.10.10.14 , <b>tarif</b> => small city , <b>[dov_net]</b> => a , <b>Typ</b> => poc (platici) , <b>Veřejná IP</b> => Ne , <b>[pridal]</b> => admin@admin , <b>přípojný bod</b> => druhy nod , <b>[sikana_status]</b> => n , <b>[sikana_cas]</b> => 0 ,',	'2024-05-29 14:21:41',	'admin@admin',	1),
 (201,	'<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => 14, [<b>item_name</b>] => ',	'2024-05-29 14:21:41',	'admin@admin',	1),
 (202,	'<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => 13, [<b>item_name</b>] => ',	'2024-05-29 14:21:41',	'admin@admin',	1),
-(203,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 11  <b>[dns_jmeno]</b> => test-wifi-333 , <b>[ip]</b> => 10.10.10.125 , <b>tarif</b> => small city , <b>[dov_net]</b> => a , <b>Typ</b> => poc (platici) , <b>Veřejná IP</b> => Ne , <b>[pridal]</b> => admin@admin , <b>přípojný bod</b> => druhy nod , <b>[sikana_status]</b> => n , <b>[sikana_cas]</b> => 0 ,',	'2024-05-29 15:05:26',	'admin@admin',	1);
+(203,	'<b> akce: pridani objektu ; </b><br>[id_komplu]=> 11  <b>[dns_jmeno]</b> => test-wifi-333 , <b>[ip]</b> => 10.10.10.125 , <b>tarif</b> => small city , <b>[dov_net]</b> => a , <b>Typ</b> => poc (platici) , <b>Veřejná IP</b> => Ne , <b>[pridal]</b> => admin@admin , <b>přípojný bod</b> => druhy nod , <b>[sikana_status]</b> => n , <b>[sikana_cas]</b> => 0 ,',	'2024-05-29 15:05:26',	'admin@admin',	1),
+(204,	'<b>akce: pridani nodu ; </b><br>[nazev]=> x, [adresa]=> x, [poznamka]=> x, [ip_rozsah]=> x, [typ_vysilace]=> 0, [stav]=> 0, [router_id]=> 444,  [typ_nodu]=> 1, [filter_router_id]=> 2',	'2024-05-31 18:35:23',	'admin@admin',	1),
+(205,	'<b>akce: pridani nodu ; </b><br>[nazev]=> test 1, [adresa]=> adresa 1, [poznamka]=> pozn 1, [ip_rozsah]=> 10.22.22.0, [typ_vysilace]=> 1, [stav]=> 2, [router_id]=> 444,  [typ_nodu]=> 1, [filter_router_id]=> 444',	'2024-05-31 18:42:37',	'admin@admin',	1),
+(206,	'<b>akce: uprava nodu;</b><br>[id_nodu] => 371 diferencialni data: změna pole: <b>jmeno</b> z: <span class=\"az-s1\" >x2</span> na: <span class=\"az-s2\">test-3</span>, změna pole: <b>adresa</b> z: <span class=\"az-s1\" >x2</span> na: <span class=\"az-s2\">adresa 3</span>, změna <b>Stavu</b> z: <span class=\"az-s1\">Není zvoleno</span> na: <span class=\"az-s2\">v pořádku </span>, změna <b>Poznámky</b> z: <span class=\"az-s1\">x2</span> na: <span class=\"az-s2\">pozn 3</span>, ',	'2024-05-31 20:25:20',	'admin@admin',	1),
+(207,	'<b>akce: uprava routeru;</b><br> [id_routeru] => <a href=\"/topology/router-list?odeslano=OK&f_id_routeru=449\">449</a> diferencialni data: změna <b>Nadřazený router</b> z: <span class=\"az-s1\">reinhard-wifi (1)</span> na: <span class=\"az-s2\">router-test-3 (445)</span>, ',	'2024-06-01 12:46:25',	'admin@admin',	1);
 
 DROP TABLE IF EXISTS `archiv_zmen_work`;
 CREATE TABLE `archiv_zmen_work` (
@@ -259,7 +263,7 @@ CREATE TABLE `board` (
   `subject` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `body` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `board` (`id`, `author`, `email`, `from_date`, `to_date`, `subject`, `body`) VALUES
 (5,	'admin',	'test',	'2024-04-08',	'2024-04-19',	'subject',	'text'),
@@ -274,7 +278,19 @@ INSERT INTO `board` (`id`, `author`, `email`, `from_date`, `to_date`, `subject`,
 (14,	'admin@admin',	'',	'2024-05-03',	'2024-06-01',	't3',	''),
 (15,	'admin@admin',	'',	'2024-05-04',	'2024-05-04',	't4',	''),
 (16,	'admin@admin',	'',	'2024-05-04',	'2024-05-04',	't5',	''),
-(17,	'admin@admin',	'',	'2024-05-03',	'2024-05-10',	't4',	'');
+(17,	'admin@admin',	'',	'2024-05-03',	'2024-05-10',	't4',	''),
+(18,	'admin@admin',	'',	'2024-05-31',	'2024-06-07',	'testovaci 1',	''),
+(19,	'admin@admin',	'',	'2024-05-31',	'2024-06-07',	'21',	''),
+(20,	'admin@admin',	'',	'2024-05-31',	'2024-06-07',	'testovaci text 3',	''),
+(21,	'admin@admin',	'',	'2024-05-31',	'2024-06-28',	'testovaci text 4',	''),
+(22,	'admin@admin',	'',	'2024-05-31',	'2024-06-28',	'testovaci text 5',	''),
+(23,	'admin@admin',	'',	'2024-05-31',	'2024-06-07',	'testovaci text 6',	''),
+(24,	'admin@admin',	'',	'2024-05-31',	'2024-06-14',	'testovaci text 6',	''),
+(25,	'admin@admin',	'',	'2024-05-31',	'2024-06-14',	'testovaci text 7',	'testovaci text 7'),
+(26,	'admin@admin',	'',	'2024-05-31',	'2024-06-07',	'testovaci 8',	'testovaci text 8'),
+(27,	'admin@admin',	'',	'2024-05-31',	'2024-06-07',	'test 9',	'test 9xxx'),
+(28,	'admin@admin',	'',	'2024-05-31',	'2024-06-07',	'test 10',	'test 10xxx'),
+(29,	'admin@admin',	'',	'2024-05-31',	'2024-06-07',	'test 111',	'test 111');
 
 DROP TABLE IF EXISTS `cache_locks`;
 CREATE TABLE `cache_locks` (
@@ -360,12 +376,13 @@ DROP TABLE IF EXISTS `kategorie`;
 CREATE TABLE `kategorie` (
   `id` int NOT NULL AUTO_INCREMENT,
   `jmeno` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `sablona` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+  `sablona` int unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_kategorie_unique` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci ROW_FORMAT=DYNAMIC;
 
 INSERT INTO `kategorie` (`id`, `jmeno`, `sablona`) VALUES
-(1,	'kategorie 1',	'4');
+(1,	'kategorie 1',	4);
 
 DROP TABLE IF EXISTS `leveling`;
 CREATE TABLE `leveling` (
@@ -518,15 +535,19 @@ CREATE TABLE `nod_list` (
   `stav` int unsigned NOT NULL DEFAULT '0',
   `router_id` int unsigned NOT NULL DEFAULT '0',
   `vlan_id` int unsigned NOT NULL DEFAULT '0',
+  `filter_router_id` int unsigned NOT NULL DEFAULT '0',
+  `device_type_id` int unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=371 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=373 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci ROW_FORMAT=DYNAMIC;
 
-INSERT INTO `nod_list` (`id`, `jmeno`, `adresa`, `pozn`, `ip_rozsah`, `typ_nodu`, `typ_vysilace`, `stav`, `router_id`, `vlan_id`) VALUES
-(1,	'prvni nod',	'u me doma',	'test pozn',	'10.10.10.0/24',	1,	0,	0,	1,	0),
-(2,	'opticky nod 1',	'',	'',	'10.10.100.0/24',	2,	0,	0,	0,	0),
-(3,	'opticky nod 2',	'kdesi 2',	'',	'10.10.200.0/24',	2,	0,	0,	0,	0),
-(4,	'druhy nod',	'',	'',	'10.20.20.20/24',	1,	0,	0,	3,	0),
-(370,	'optika - neco special',	'',	'',	'',	2,	0,	0,	0,	0);
+INSERT INTO `nod_list` (`id`, `jmeno`, `adresa`, `pozn`, `ip_rozsah`, `typ_nodu`, `typ_vysilace`, `stav`, `router_id`, `vlan_id`, `filter_router_id`, `device_type_id`) VALUES
+(1,	'prvni nod',	'u me doma',	'test pozn',	'10.10.10.0/24',	1,	0,	0,	1,	0,	0,	0),
+(2,	'opticky nod 1',	'',	'',	'10.10.100.0/24',	2,	0,	0,	0,	0,	0,	0),
+(3,	'opticky nod 2',	'kdesi 2',	'',	'10.10.200.0/24',	2,	0,	0,	0,	0,	0,	0),
+(4,	'druhy nod',	'',	'',	'10.20.20.20/24',	1,	0,	0,	3,	0,	0,	0),
+(370,	'optika - neco special',	'',	'',	'',	2,	0,	0,	0,	0,	0,	0),
+(371,	'test-3',	'adresa 3',	'pozn 3',	'10.55.44.0',	1,	0,	1,	444,	0,	2,	0),
+(372,	'test 1',	'adresa 1',	'pozn 1',	'10.22.22.0',	1,	1,	2,	444,	0,	444,	0);
 
 DROP TABLE IF EXISTS `objekty_stb`;
 CREATE TABLE `objekty_stb` (
@@ -622,11 +643,12 @@ CREATE TABLE `partner_klienti_servis` (
   `akceptovano_pozn` varchar(4096) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `datum_vlozeni` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `partner_klienti_servis` (`id`, `tel`, `jmeno`, `adresa`, `email`, `poznamky`, `prio`, `vlozil`, `akceptovano`, `akceptovano_kym`, `akceptovano_pozn`, `datum_vlozeni`) VALUES
 (1,	'112233222',	'xx,  V:0',	'kdesi 2',	'hu@hu.hu',	'nic',	2,	'admin',	1,	'admin@admin',	'vse OK 2',	'2024-05-02 00:50:11'),
-(2,	'800888888',	'Petr 2,  V:2',	'Hrad 2',	'pavel@hrad.gov.cz',	'pripojit',	2,	'admin@admin',	1,	'admin@admin',	'a',	'2024-05-03 08:24:26');
+(2,	'800888888',	'Petr 2,  V:2',	'Hrad 2',	'pavel@hrad.gov.cz',	'pripojit',	2,	'admin@admin',	1,	'admin@admin',	'a',	'2024-05-03 08:24:26'),
+(3,	'800888882',	'Petr Pavel,  V:8',	'Hrad 1',	'pavel@hrad.gov.cz',	'nic nejde, jako vzdy\\r\\n',	1,	'',	1,	'admin@admin',	'yes baby updated',	'2024-05-30 15:08:06');
 
 DROP TABLE IF EXISTS `partner_login`;
 CREATE TABLE `partner_login` (
@@ -658,7 +680,9 @@ INSERT INTO `phinxlog` (`version`, `migration_name`, `start_time`, `end_time`, `
 (20240510191400,	'AddColumnTokenToUsersTable',	'2024-05-10 17:20:07',	'2024-05-10 17:20:08',	0),
 (20240525110430,	'CreateCacheLocksTable',	'2024-05-25 09:29:57',	'2024-05-25 09:29:57',	0),
 (20240528174606,	'CreateNodListTable',	'2024-05-28 18:03:28',	'2024-05-28 18:03:28',	0),
-(20240528184558,	'CreateLevelingTable',	'2024-05-28 18:54:07',	'2024-05-28 18:54:08',	0);
+(20240528184558,	'CreateLevelingTable',	'2024-05-28 18:54:07',	'2024-05-28 18:54:08',	0),
+(20240529153851,	'CreateRouterListTable',	'2024-05-29 15:43:31',	'2024-05-29 15:43:31',	0),
+(20240601004201,	'CreateKategorieTable',	'2024-05-31 22:49:24',	'2024-05-31 22:49:24',	0);
 
 DROP TABLE IF EXISTS `router_list`;
 CREATE TABLE `router_list` (
@@ -677,21 +701,21 @@ CREATE TABLE `router_list` (
   `warn` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `mail` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=452 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+  UNIQUE KEY `id_unique` (`id`),
+  UNIQUE KEY `nazev` (`nazev`),
+  UNIQUE KEY `ip_adresa` (`ip_adresa`)
+) ENGINE=InnoDB AUTO_INCREMENT=452 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci ROW_FORMAT=DYNAMIC;
 
 INSERT INTO `router_list` (`id`, `nazev`, `ip_adresa`, `parent_router`, `mac`, `monitoring`, `monitoring_cat`, `alarm`, `alarm_stav`, `filtrace`, `id_nodu`, `poznamka`, `warn`, `mail`) VALUES
 (1,	'reinhard-wifi',	'10.10.10.10',	0,	'',	0,	0,	0,	0,	0,	NULL,	NULL,	'',	''),
 (2,	'router 2',	'192.168.1.213',	1,	'22:33:22:33:44:44',	0,	0,	1,	0,	0,	0,	'test 2',	'',	''),
-(3,	'child of router 2',	'10.20.10.10',	2,	'',	0,	0,	0,	0,	0,	NULL,	NULL,	'',	''),
+(3,	'child of router 2',	'10.20.10.10',	0,	'',	0,	0,	0,	0,	0,	NULL,	NULL,	'',	''),
 (444,	'reinhard-fiber',	'10.128.0.1',	1,	'',	0,	0,	0,	0,	0,	NULL,	NULL,	'',	''),
 (445,	'router-test-3',	'10.12.1.10',	1,	'11:11:8a:8a:22:33',	0,	0,	0,	0,	0,	NULL,	NULL,	'',	''),
 (446,	'router-test-4',	'10.14.14.14',	445,	'00:00:00:00:00:00',	1,	0,	0,	0,	0,	0,	'test 4',	NULL,	NULL),
-(447,	'test-router-x1',	'10.18.18.0',	1,	'00:00:00:00:00:00',	0,	0,	0,	0,	0,	0,	'',	NULL,	NULL),
-(448,	'test-router-x1',	'10.22.18.1',	445,	'a2:b2:33:44:55:6f',	0,	0,	0,	0,	1,	0,	'test x',	NULL,	NULL),
-(449,	'test-router-x2',	'10.18.19.2',	1,	'11:2b:33:44:55:66',	0,	0,	0,	0,	1,	0,	'222',	NULL,	NULL),
-(450,	'test-router-x3',	'10.18.19.2',	444,	'11:2b:33:44:55:66',	0,	0,	0,	0,	1,	0,	'',	NULL,	NULL),
-(451,	'test-router-x4',	'10.18.29.1',	3,	'22:00:00:00:00:33',	0,	0,	0,	0,	0,	0,	'xxx2x',	NULL,	NULL);
+(448,	'test-router-x1',	'10.22.18.1',	451,	'a2:b2:33:44:55:6f',	0,	0,	0,	0,	1,	0,	'test x',	NULL,	NULL),
+(449,	'test-router-x2',	'10.18.19.2',	445,	'11:2b:33:44:55:66',	0,	0,	0,	0,	1,	0,	'222',	NULL,	NULL),
+(451,	'test-router-x4',	'10.18.29.1',	449,	'22:00:00:00:00:33',	0,	0,	0,	0,	0,	0,	'xxx2x',	NULL,	NULL);
 
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
@@ -766,7 +790,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `level`, `created_at`, `updated_at`, `first_name`, `last_name`, `token`) VALUES
-(1,	'Administrator',	'admin@admin',	'$2y$10$uZ7ZBCl/Shp9sW.QRy10CuFxkO/Vg7Yr1kbVJzhSACNQoohChkxaW',	NULL,	'2024-05-29 08:31:45',	101,	'2024-05-01 12:29:13',	'2024-05-29 08:31:45',	NULL,	NULL,	'564e18654c5853bb19e2145866298914'),
+(1,	'Administrator',	'admin@admin',	'$2y$10$uZ7ZBCl/Shp9sW.QRy10CuFxkO/Vg7Yr1kbVJzhSACNQoohChkxaW',	NULL,	'2024-06-07 20:02:54',	101,	'2024-05-01 12:29:13',	'2024-06-07 20:02:54',	NULL,	NULL,	'564e18654c5853bb19e2145866298914'),
 (2,	'admin2',	'admin2@admin',	'$2y$10$H1razrcagxKIoRQWbPmnLu5kUfOo0qeCVic2/J4kNliB8wmTX.6Vi',	NULL,	'2024-05-26 00:57:25',	99,	'2024-05-04 07:50:34',	'2024-05-26 00:57:25',	NULL,	NULL,	NULL);
 
 DROP TABLE IF EXISTS `users_old`;
@@ -801,11 +825,11 @@ CREATE TABLE `users_persistences` (
   UNIQUE KEY `users_persistences_code_unique` (`code`),
   KEY `users_persistences_user_id_foreign` (`user_id`),
   CONSTRAINT `users_persistences_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=291 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=322 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 INSERT INTO `users_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
 (263,	2,	'irc8HcXfXwnCPhwTXfNO8fmlnTvPF11C',	'2024-05-26 00:57:25',	'2024-05-26 00:57:25'),
-(290,	1,	'KZeYO5zniwnSt0fVqsLVMvajqOTDO4hI',	'2024-05-29 08:31:45',	'2024-05-29 08:31:45');
+(321,	1,	'qRPq2hZmunpyrwStWSOYc5YyZxGvawkJ',	'2024-06-07 20:02:54',	'2024-06-07 20:02:54');
 
 DROP TABLE IF EXISTS `vypovedi`;
 CREATE TABLE `vypovedi` (
@@ -858,4 +882,4 @@ CREATE TABLE `workzamek` (
 INSERT INTO `workzamek` (`id`, `zamek`) VALUES
 (1,	'ne');
 
--- 2024-05-29 15:42:00
+-- 2024-06-14 21:57:16

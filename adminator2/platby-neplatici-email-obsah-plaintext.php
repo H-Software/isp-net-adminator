@@ -18,18 +18,10 @@ Variabilní symbol: ".$vs."
 Jméno: ".$jmeno."
 
 V případě jakýchkoliv nejasností kontaktujte sekretářku na
-tel: +420 391 009 400 nebo e-mail: lucie.myslikova@simelon.net
+tel: nebo e-mail: info@adminator.isp
  
-Martin Lopušný
-Simelon.NET
-obchodní oddělení
+ISP Adminator
 
-e-mail: info@simelon.net
-
-adresa provozovny:
-
-Žižkova třída 247
-397 01 Písek
  
 ";
 
