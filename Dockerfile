@@ -135,7 +135,8 @@ RUN docker-php-ext-enable \
         sodium \
         sqlsrv \
         zip \
-        grpc
+        grpc \
+        redis
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
