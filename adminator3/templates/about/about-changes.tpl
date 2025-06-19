@@ -10,7 +10,7 @@
   Změny v systému: </div>
 
   <div style="height: 30px; vertical-align: center;" >
-    16.3.2010 <span class="changes-add">- přidána: </span>sekce (Ostatní -) Stránku pro Informace z webu www.simelon.net</div>
+    16.3.2010 <span class="changes-add">- přidána: </span>sekce (Ostatní -) Stránku pro Informace z webu www.adminator.net</div>
 
  <div style="height: 50px; vertical-align: center;" >
     10.2.2010 <span class="changes-repaid">- opraveno: </span>sekce (Neuhrazení faktury -) <b>Kontrola omezení obj. vůči neuhr. fakturám</b>,

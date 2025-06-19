@@ -5,7 +5,7 @@
 // !
 // ! 2011/2/15
 // ! 
-// ! created by Patrik "hujer" Majer (hujer@simelon.net)
+// ! created by Patrik "hujer" Majer
 // !
 // ! 2011/03/01 - v1.0a - alpha version - deployment operation
 // !

@@ -436,7 +436,7 @@ elseif( isset($vybrano) )
 	    $mail->FromName = "Upozornění od společnosti Simelon, s.r.o."; // jméno odesílatele skriptu
 
 	    $mail->AddAddress($email);  // přidáme příjemce
-	    //$mail->AddBCC("hujer@simelon.net");  // přidáme příjemce
+	    //$mail->AddBCC("bcc@adminator.net");  // přidáme příjemce
 
 	    $mail->Subject = $predmet; // nastavíme předmět e-mailu
 

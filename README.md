@@ -28,15 +28,22 @@ sudo -E bash docker-php-entrypoint php-fpm
 - brew (on MAC OS X)
 
 ### on MAC OS X
+- install libs and deps
+```bash
+brew install pcre2
+ln -s /opt/homebrew/opt/pcre2/include/pcre2.h /opt/homebrew/opt/php@8.2/include/php/ext/pcre/
+```
+
 - install PHP from from https://github.com/shivammathur/homebrew-php
 ```bash
 brew tap shivammathur/php
 brew install shivammathur/php/php@8.2
 brew link --overwrite --force shivammathur/php/php@8.2
 ```
-- create folder for extension (some workaround)
+- fix folder for extension (some workaround)
 ```bash
-mkdir -p /usr/local/lib/php/pecl
+sudo mkdir -p /usr/local/lib/php
+sudo ln -s /usr/local/lib/php/pecl /opt/homebrew/lib/php
 ```
 - install extensions
 ```bash
@@ -44,6 +51,9 @@ pecl install apcu
 pecl install protobuf
 pecl install opentelemetry
 ```
+- install composer
+  - https://getcomposer.org/download/
+
 - run local server
 ```bash
 make run-a3-php-local

@@ -127,6 +127,7 @@
   - originally used class
 
 ### Opentelemetry
+- https://github.com/open-telemetry/opentelemetry-php/blob/main/examples/enabling_internal_metrics.php
 - https://packagist.org/packages/open-telemetry/opentelemetry-auto-slim
 - https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Instrumentation/Slim
 - https://github.com/open-telemetry/opentelemetry-php-contrib/tree/main/src/Logs/Monolog

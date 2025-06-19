@@ -5,7 +5,7 @@
 // !
 // ! 2010/2/15
 // ! 
-// ! created by Patrik "hujer" Majer (hujer@simelon.net)
+// ! created by Patrik "hujer" Majer
 // !
 // !
 
