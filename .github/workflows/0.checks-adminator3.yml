@@ -39,7 +39,8 @@ jobs:
           php -v \
           && php --ri opentelemetry \
           && php --ri grpc \
-          && php --ri protobuf
+          && php --ri protobuf \
+          && php --ri redis
 
       # - name: Cache Composer dependencies
       #   uses: actions/cache@v3
