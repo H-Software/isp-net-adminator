@@ -67,7 +67,8 @@ RUN git clone --depth 1 -b v1.63.0 https://github.com/grpc/grpc /tmp/grpc && \
 RUN export MAKEFLAGS="-j $(nproc)" \
         && pecl install \
             opentelemetry \
-            protobuf
+            protobuf \
+            redis 
             # grpc
 
 FROM php:8.2-fpm AS main
@@ -94,6 +95,7 @@ COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sock
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sodium.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sodium.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/sqlsrv.so
 COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/zip.so
+COPY --from=php-ext /usr/local/lib/php/extensions/no-debug-non-zts-20220829/redis.so /usr/local/lib/php/extensions/no-debug-non-zts-20220829/redis.so
 
 # packages required for php extensions and composer
 #   MSSQL

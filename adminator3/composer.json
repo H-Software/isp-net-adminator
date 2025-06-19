@@ -6,7 +6,8 @@
     "config": {
         "allow-plugins": {
             "kylekatarnls/update-helper": true,
-            "php-http/discovery": false
+            "php-http/discovery": false,
+            "tbachert/spi": true
         }
     },
     "require": {
@@ -23,10 +24,11 @@
         "monolog/monolog": "^3.6.0",
         "respect/validation": "^2.2",
         "formr/formr": "^1.5",
-        "illuminate/database": "^10.48.10",
-        "illuminate/events": "^v10.48.10",
-        "illuminate/cache": "^10.48.10",
-        "illuminate/pagination": "^10.48.10",
+        "illuminate/database": "^10.48.28",
+        "illuminate/events": "^v10.48.28",
+        "illuminate/cache": "^10.48.28",
+        "illuminate/pagination": "^10.48.28",
+        "illuminate/redis": "^10.48.28",
         "cartalyst/sentinel": "^v7.0",
         "nyholm/psr7": "^1.4.1",
         "nyholm/psr7-server": "^1.0.2",
@@ -47,7 +49,9 @@
         "phpoffice/phpspreadsheet": "^2.1",
         "open-feature/sdk": "^2.0.6",
         "open-feature/flagd-provider": "0.7",
-        "odan/phinx-migrations-generator": "^6.0"
+        "odan/phinx-migrations-generator": "^6.0",
+        "predis/predis": "^2.2",
+        "ramsey/uuid": "^4.7"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",

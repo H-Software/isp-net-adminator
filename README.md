@@ -50,6 +50,7 @@ sudo ln -s /usr/local/lib/php/pecl /opt/homebrew/lib/php
 pecl install apcu
 pecl install protobuf
 pecl install opentelemetry
+pecl install redis
 ```
 - install composer
   - https://getcomposer.org/download/
