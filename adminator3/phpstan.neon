@@ -37,7 +37,10 @@ parameters:
 	-
 		message: "#^Call to an undefined static method App\\\\Models\\\\.*$#"
 		path: app/*
-
+	-
+		message: "#^Parameter \\#1 \\$app of class Illuminate\\\\Cache\\\\CacheManager constructor expects Illuminate\\\\Contracts\\\\Foundation\\\\Application, Illuminate\\\\Container\\\\Container given\\.$#"
+		count: 1
+		path: boostrap/containerAfter.php
 	# auth stuff
 	-
 		message: "#^Access to an undefined property Cartalyst\\\\Sentinel\\\\Users\\\\UserInterface\\:\\:\\$email\\.$#"
