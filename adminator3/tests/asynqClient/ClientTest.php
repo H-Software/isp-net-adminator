@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 
-class AsynqClientTest extends \PHPUnit\Framework\TestCase
-{
-    // TODO: enable this
+// TODO: enable this
+// class AsynqClientTest extends \PHPUnit\Framework\TestCase
+// {
     // public function testEnqueue()
     // {
     //     $app = new Container();
@@ -40,4 +40,4 @@ class AsynqClientTest extends \PHPUnit\Framework\TestCase
     //     ]);
     //     $this->assertTrue($res);
     // }
-}
+// }
