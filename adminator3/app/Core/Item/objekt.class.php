@@ -1424,7 +1424,9 @@ class objekt extends adminator
                 $this->origDataArray = $pole_puvodni_data;
                 $this->updatedDataArray = $obj_upd;
                 // require("objekty-add-inc-archiv-fiber.php");
-                $this->actionArchivZmenFiberDiff($vysledek_write);
+                list($az_output) = $this->actionArchivZmenFiberDiff($vysledek_write);
+
+                $output .= $az_output;
 
                 $updated = "true";
             } else {
@@ -1460,7 +1462,9 @@ class objekt extends adminator
 
                 // pridame to do archivu zmen
                 $this->addedDataArray = $obj_add;
-                $this->actionArchivZmenFiberAdd($vysledek_write);
+                list($work_output) = $this->actionArchivZmenFiberAdd($vysledek_write);
+
+                $output .= $work_output;
 
                 $writed = "true";
                 // konec else - rezim pridani
@@ -2931,8 +2935,10 @@ class objekt extends adminator
         return array($output);
     }
 
-    private function actionArchivZmenFiberDiff($vysledek_write)
+    private function actionArchivZmenFiberDiff($vysledek_write): array
     {
+        $output = "";
+
         $pole3 = "<b>akce: uprava objektu; </b><br>";
         $pole3 .= "[id_komplu]=> ".$this->update_id.",";
         $pole3 .= " diferencialni data: ";
@@ -3037,85 +3043,24 @@ class objekt extends adminator
             $this->conn_mysql->real_escape_string($vysledek_write)."') "
         );
 
-        // if($add) {
-        //     $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
-        // } else {
-        //     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
-        // }
+        if ($add) {
+            $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        } else {
+            $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        }
 
-        // TODO: fix automatic restarts
-        //zmena sikany nebo IP adresy
-        // if( ereg(".*změna.*Šikana.*z.*", $pole3) )
-        // {
-        // Aglobal::work_handler("3"); //reinhard-fiber - sikana/net-n
-        // }
+        //pro osvezovani
+        //
+        list($work_output) = $this->work->workActionObjektyFiberDiff($pole3, $this->origDataArray, $this->update_id);
+        $output .= $work_output;
 
-        // //zmena NetN nebo IP adresy
-        // if( ereg(".*změna.*Povolen.*Inet.*z.*", $pole3) )
-        // {
-        // Aglobal::work_handler("3"); //reinhard-fiber - sikana/net-n
-        // }
-
-        // //zmena IP adresy pokud je aktivni Sikana ci NetN
-        // if( (
-        //     ereg(".*změna.*IP.*adresy.*z.*", $pole3)
-        //     and
-        //     (
-        //     ($pole_puvodni_data["sikana_status"] == "a")
-        //     or
-        //     ($pole_puvodni_data["dov_net"] == "n")
-        //     )
-        //     )
-        // )
-        // {
-        //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-
-        //     Aglobal::work_handler("3"); //reinhard-fiber - sikana/net-n
-
-        //     Aglobal::work_handler("4"); //reinhard-fiber - radius
-        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-
-        //     Aglobal::work_handler("6"); //(reinhard-fiber) - mikrotik.dhcp.leases.erase
-
-        //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
-
-        // }
-        // elseif(ereg(".*změna.*IP.*adresy.*z.*", $pole3)){
-
-        //     Aglobal::work_handler("4"); //reinhard-fiber - radius
-
-        //     Aglobal::work_handler("6"); //(reinhard-fiber) - mikrotik.dhcp.leases.erase
-
-        //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
-        // }
-
-        // if(ereg(".*změna.*MAC.*adresy.*", $pole3)){
-
-        //     Aglobal::work_handler("4"); //reinhard-fiber - radius
-        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-
-        //     Aglobal::work_handler("6"); //(reinhard-fiber) - mikrotik.dhcp.leases.erase
-        //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
-
-        // }
-
-        // //zmena pripojneho bodu
-
-        // //zmena tarifu
-
-        // //zmena cisla portu
-        // if(ereg(".*Číslo sw. portu.*", $pole3)){
-        //     Aglobal::work_handler("4"); //reinhard-fiber - radius
-        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-
-        //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
-
-        // }
+        return array($output);
     }
 
-    private function actionArchivZmenFiberAdd($vysledek_write)
+    private function actionArchivZmenFiberAdd($vysledek_write): array
     {
+        $output = "";
+
         $pole = "<b> akce: pridani objektu ; </b><br>";
 
         $pole .= "[id_komplu]=> ".intval($this->insertedId)." ";
@@ -3183,22 +3128,18 @@ class objekt extends adminator
             $this->conn_mysql->real_escape_string($vysledek_write)."') "
         );
 
-        // if($add) {
-        //     $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
-        // } else {
-        //     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
-        // }
+        if ($add) {
+            $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        } else {
+            $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        }
 
-        //ted automaticky pridavani restartu
+        //automaticke osvezovani/restarty
+        //
+        list($work_output) = $this->work->workActionObjektyFiber($pole, $this->insertedId);
+        $output .= $work_output;
 
-        //asi vše :-)
-        // \Aglobal::work_handler("3"); //rh-fiber - iptables
-        // \Aglobal::work_handler("4"); //rh-fiber - radius
-        // \Aglobal::work_handler("5"); //rh-fiber - shaper
-        // \Aglobal::work_handler("6"); //reinhard-fiber - mikrotik.dhcp.leases.erase
-        // \Aglobal::work_handler("7"); //trinity - sw.h3c.vlan.set.pl update
-
-        // \Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        return array($output);
     }
 
     public function vypis_tab($par)
@@ -3785,7 +3726,7 @@ class objekt extends adminator
                 $id_tarifu = $data["id_tarifu"];
 
                 //dodelat klikatko pro sc
-                //{ $tarif="<span class=\"tarifsc\"><a href=\"https://trinity.simelon.net/monitoring/data/cat_sc.php?ip=".$data["ip"]."\" target=\"_blank\" >sc</a></span>"; }
+                //{ $tarif="<span class=\"tarifsc\"><a href=\"https://trinity.adminator.net/monitoring/data/cat_sc.php?ip=".$data["ip"]."\" target=\"_blank\" >sc</a></span>"; }
 
                 $dotaz_final = "SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ";
                 list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
