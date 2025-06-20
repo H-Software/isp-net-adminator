@@ -62,7 +62,7 @@ class work
         return $res;
     }
 
-    public function work_handler(int $item_id): array
+    public function work_handler($item_id): array
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -127,7 +127,7 @@ class work
 
     } //end of function work_handler
 
-    public function workActionObjektyWifiDiff($changes, $itemId)
+    public function workActionObjektyWifiDiff(string $changes, array $origData, $itemId)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -143,64 +143,46 @@ class work
             preg_match("/.*změna.*Povolen.*Inet.*z.*/", $changes)
         ) {
             if ($reinhard_id == 177) {
-                $work_output[1] = $this->work_handler("1");
+                $work_output[] = $this->work_handler("1");
             } //reinhard-3 (ros) - restrictions (net-n/sikana)
             elseif ($reinhard_id == 1) {
-                $work_output[2] = $this->work_handler("2");
+                $work_output[] = $this->work_handler("2");
             } //reinhard-wifi (ros) - restrictions (net-n/sikana)
             elseif ($reinhard_id == 236) {
-                $work_output[24] = $this->work_handler("24");
+                $work_output[] = $this->work_handler("24");
             } //reinhard-5 (ros) - restrictions (net-n/sikana)
             else {
                 //nenalezet pozadovany reinhard, takze osvezime vsechny
 
+                $work_output[] = $this->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+            }
+        }
+
+        //zmena IP adresy
+        if (preg_match("/.*změna.*IP.*adresy.*z.*/", $changes)) {
+            //pokud: zmena IP adresy bez aktivovaného omezení, tak staci items nize:
+            $work_output[] = $this->work_handler("5"); //reinhard-fiber - shaper
+            $work_output[] = $this->work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+            $work_output[] = $this->work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+            $work_output[] = $this->work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+
+            $work_output[] = $this->work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+
+            // pokud je aktivni omezeni -> radsi vynutit restart net-n/sikany u vseho, resp i zbytku
+            if (($origData["sikana_status"] == "a")
+                or
+                ($origData["dov_net"] == "n")) {
+
                 $work_output[1] = $this->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
                 $work_output[2] = $this->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                $work_output[3] = $this->work_handler("3"); //reinhard-fiber (linux) - iptables (net-n/sikana)
                 $work_output[24] = $this->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
             }
         }
 
         // TODO: fix the rest of actions for objektyWifiDiff
-
-        // //zmena IP adresy pokud je aktivni Sikana ci NetN
-        // if( (
-        //     ereg(".*změna.*IP.*adresy.*z.*", $changes)
-        //     and
-        //     (
-        //     ($this->origDataArray["sikana_status"] == "a")
-        // or
-        // ($this->origDataArray["dov_net"] == "n")
-        //     )
-        //     )
-        // )
-        // {
-        //     //radsi vynutit restart net-n/sikany u vseho
-
-        //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("3"); //reinhard-fiber (linux) - iptables (net-n/sikana)
-        //     Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-
-        //     Aglobal::work_handler("5");  //reinhard-fiber - shaper
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-
-        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        // }
-
-        // //zmena IP adresy bez aktivovaného omezení
-        // elseif( ereg(".*změna.*IP.*adresy.*z.*", $changes) )
-        // {
-        //     Aglobal::work_handler("5");  //reinhard-fiber - shaper
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-
-        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        // }
 
         // //zmena linky -- shaper / filtrace
         // if( ereg(".*změna.*pole.*id_tarifu.*", $changes)

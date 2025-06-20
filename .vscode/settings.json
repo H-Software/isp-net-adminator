@@ -23,5 +23,6 @@
             "username": "root",
             "password": "isp-net-passwd"
         }
-    ]
+    ],
+    "makefile.configureOnOpen": false
 }
