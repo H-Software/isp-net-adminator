@@ -41,7 +41,7 @@ class work
         $this->logger->info(message: __CLASS__ . "\\" . __FUNCTION__ . " called");
     }
 
-    public function asynqClient(int $item_id): bool|int
+    public function taskEnqueue(int $item_id): bool|int
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -62,20 +62,22 @@ class work
         return $res;
     }
 
-    public function work_handler($item_id)
+    public function work_handler(int $item_id): array
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $output = "";
+        // prep vars
 
         //item_id - cislo ktery odpovida vzdy nejaky akci :)
-
         //seznam cisel a akcí
         // 1 - osvezeni net-n/sikany na reinhard-3
         // zbytek viz databáze
 
         $item_id = intval($item_id);
 
+        $output = "";
+
+        // load workitem's name from database
         $rs_item_name = $this->conn_mysql->query("SELECT name FROM workitems_names WHERE id = '$item_id' ");
 
         $rs_item_name->data_seek(0);
@@ -83,11 +85,8 @@ class work
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": parsed item_name: " . var_export($item_name, true));
 
-        // old
-        // $add = $this->conn_mysql->query("INSERT INTO workitems (number_request) VALUES ('".$item_id."') ");
-
         // asynqClient part
-        $rs_queue = $this->asynqClient($item_id);
+        $rs_queue = $this->taskEnqueue($item_id);
         $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": rs_queue: " . var_export($rs_queue, true));
 
         if ($rs_queue) {
@@ -105,6 +104,7 @@ class work
 
         $add_az = $this->conn_mysql->query($sql_az);
 
+        // generate output view
         $output .= "<div style=\"\">Požadavek na restart <b>\"".$item_name."\"</b> (No. ".$item_id.")";
 
         if ($rs_queue) {
