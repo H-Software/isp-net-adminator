@@ -210,6 +210,30 @@ class work
         return array($output);
     }
 
+    public function workActionObjektyFiber(string $changes, int $itemId): array
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $output = "";
+        $work_output = [];
+
+        $work_output[] = $this->work_handler("3"); //rh-fiber - iptables
+        $work_output[] = $this->work_handler("4"); //rh-fiber - radius
+        $work_output[] = $this->work_handler("5"); //rh-fiber - shaper
+        $work_output[] = $this->work_handler("6"); //reinhard-fiber - mikrotik.dhcp.leases.erase
+        $work_output[] = $this->work_handler("7"); //trinity - sw.h3c.vlan.set.pl update
+
+        $work_output[] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
+
+        // $output .= var_export($work_output, true);
+
+        foreach ($work_output as $id => $item) {
+            $output .= $item[0];
+        }
+
+        return array($output);
+    }
+
     public function workActionObjektyWifiDiff(string $changes, array $origData, $itemId)
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
@@ -218,7 +242,7 @@ class work
         $work_output = [];
 
         // //zjistit, krz kterého reinharda jde objekt
-        $reinhard_id = adminator::find_reinhard(id: $itemId, $this->conn_mysql, $this->conn_pgsql);
+        $reinhard_id = adminator::find_reinhard($itemId, $this->conn_mysql, $this->conn_pgsql);
 
         // "zmena sikany" or "zmena NetN"
         if (preg_match("/.*změna.*Šikana.*z.*/", $changes)

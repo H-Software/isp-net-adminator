@@ -1462,7 +1462,9 @@ class objekt extends adminator
 
                 // pridame to do archivu zmen
                 $this->addedDataArray = $obj_add;
-                $this->actionArchivZmenFiberAdd($vysledek_write);
+                list($work_output) = $this->actionArchivZmenFiberAdd($vysledek_write);
+
+                $output .= $work_output;
 
                 $writed = "true";
                 // konec else - rezim pridani
@@ -3055,8 +3057,10 @@ class objekt extends adminator
         return array($output);
     }
 
-    private function actionArchivZmenFiberAdd($vysledek_write)
+    private function actionArchivZmenFiberAdd($vysledek_write): array
     {
+        $output = "";
+
         $pole = "<b> akce: pridani objektu ; </b><br>";
 
         $pole .= "[id_komplu]=> ".intval($this->insertedId)." ";
@@ -3124,22 +3128,18 @@ class objekt extends adminator
             $this->conn_mysql->real_escape_string($vysledek_write)."') "
         );
 
-        // if($add) {
-        //     $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
-        // } else {
-        //     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
-        // }
+        if ($add) {
+            $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
+        } else {
+            $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
+        }
 
-        //ted automaticky pridavani restartu
+        //automaticke osvezovani/restarty
+        //
+        list($work_output) = $this->work->workActionObjektyFiber($pole, $this->insertedId);
+        $output .= $work_output;
 
-        //asi vše :-)
-        // \Aglobal::work_handler("3"); //rh-fiber - iptables
-        // \Aglobal::work_handler("4"); //rh-fiber - radius
-        // \Aglobal::work_handler("5"); //rh-fiber - shaper
-        // \Aglobal::work_handler("6"); //reinhard-fiber - mikrotik.dhcp.leases.erase
-        // \Aglobal::work_handler("7"); //trinity - sw.h3c.vlan.set.pl update
-
-        // \Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        return array($output);
     }
 
     public function vypis_tab($par)
