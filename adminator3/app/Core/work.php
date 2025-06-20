@@ -4,6 +4,8 @@ namespace App\Core;
 
 use Psr\Container\ContainerInterface;
 use SebastianBergmann\Type\VoidType;
+use Illuminate\Support\Facades\Redis;
+use HyssaDev\HibikenAsynqClient\Client;
 
 class work
 {
@@ -15,6 +17,8 @@ class work
     protected \PgSql\Connection|\PDO|null $conn_pgsql;
 
     protected $sentinel;
+
+    protected Redis $redis;
 
     // protected $container;
 
@@ -29,9 +33,33 @@ class work
 
         $this->sentinel = $container->get('sentinel');
 
+        // needed for activating facade
+        $this->redis = $container->get('redis');
+
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
 
+        $this->logger->info(message: __CLASS__ . "\\" . __FUNCTION__ . " called");
+    }
+
+    public function asynqClient(int $item_id): bool|int
+    {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        $asynq_client = new Client($this->redis);
+        $res = $asynq_client->Enqueue([
+            'typename' => "adminator3:workitem:$item_id",
+            'payload' => [
+                'item_id' => $item_id,
+            ],
+            'opts' => [
+                'timeout' => 0,
+            ]
+        ], [
+            'queue' => "adminator3:workitem",
+            'group' => $item_id,
+        ]);
+
+        return $res;
     }
 
     public function work_handler($item_id)
@@ -48,10 +76,6 @@ class work
 
         $item_id = intval($item_id);
 
-        $rs_count = $this->conn_mysql->query("SELECT id FROM workitems WHERE (number_request = '$item_id' AND in_progress = '0') ");
-
-        $count = $rs_count->num_rows;
-
         $rs_item_name = $this->conn_mysql->query("SELECT name FROM workitems_names WHERE id = '$item_id' ");
 
         $rs_item_name->data_seek(0);
@@ -59,50 +83,45 @@ class work
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": parsed item_name: " . var_export($item_name, true));
 
-        if ($count > 1) {
-            $output .= "<div> WARNING: Požadavek na restart \"".$item_name."\" (No. ".$item_id.") nalezen vícekrát. </div>\n";
-        }
+        // old
+        // $add = $this->conn_mysql->query("INSERT INTO workitems (number_request) VALUES ('".$item_id."') ");
 
-        if ($count == 1) {
-            $output .= "<div> <span style=\"color: #1e90ff; \">INFO: </span>".
-            "Požadavak na restart <b>\"".$item_name."\"</b> (No. ".$item_id.") ".
-            "<span style=\"color: #1e90ff;\">není potřeba přidávat, již se nachází ve frontě restart. subsystému. </div>\n";
+        // asynqClient part
+        $rs_queue = $this->asynqClient($item_id);
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": rs_queue: " . var_export($rs_queue, true));
+
+        if ($rs_queue) {
+            $rs_write = 1;
         } else {
-            //polozka na seznamu restart. subsystému není, tj. pridame
-
-            $add = $this->conn_mysql->query("INSERT INTO workitems (number_request) VALUES ('".intval($item_id)."') ");
-
-            if ($add) {
-                $rs_write = 1;
-            } else {
-                $rs_write = 0;
-            }
-
-            $akce_az = "<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => ".$item_id;
-            $akce_az .= ", [<b>item_name</b>] => ".$item_name;
-
-            $sql_az = "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
-               "('".$this->conn_mysql->real_escape_string($akce_az)."','" .$this->loggedUserEmail . "','".$rs_write."')";
-
-            $add_az = $this->conn_mysql->query($sql_az);
-
-            $output .= "<div style=\"\">Požadavek na restart <b>\"".$item_name."\"</b> (No. ".$item_id.") - ";
-
-            if ($add) {
-                $output .= "<span style=\"color: green;\"> úspěšně přidán do fronty</span>";
-            } else {
-                $output .= "<span style=\"color: red;\"> chyba při přidání požadavku do fronty</span>";
-            }
-
-            if ($add_az) {
-                $output .= " - <span style=\"color: green;\"> úspěšně přidán do archivu změn.</span>";
-            } else {
-                $output .= " - <span style=\"color: red;\"> chyba při přidání požadavku do archivu změn.</span>";
-                $output .= "</div><div> sql: ".$sql_az."\n";
-            }
-
-            $output .= "</div>";
+            $rs_write = 0;
         }
+
+        // save it into Archive of changes/Archiv Zmen
+        $akce_az = "<b>akce:</b> požadavek na restart;<br>[<b>item_id</b>] => ".$item_id;
+        $akce_az .= ", [<b>item_name</b>] => ".$item_name;
+
+        $sql_az = "INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ".
+            "('".$this->conn_mysql->real_escape_string($akce_az)."','" .$this->loggedUserEmail . "','".$rs_write."')";
+
+        $add_az = $this->conn_mysql->query($sql_az);
+
+        $output .= "<div style=\"\">Požadavek na restart <b>\"".$item_name."\"</b> (No. ".$item_id.")";
+
+        if ($rs_queue) {
+            $output .= "<div> - <span style=\"color: green;\"> úspěšně přidán do fronty</span></div>";
+        } else {
+            $output .= "<div> - <span style=\"color: red;\"> chyba při přidání požadavku do fronty</span></div>";
+        }
+
+        if ($add_az) {
+            $output .= "<div> - <span style=\"color: green;\"> úspěšně přidán do archivu změn.</span></div>";
+        } else {
+            $output .= "<div> - <span style=\"color: red;\"> chyba při přidání požadavku do archivu změn.</span></div>";
+            $output .= "</div><div> sql: ".$sql_az."\n";
+        }
+
+        $output .= "</div>";
+
 
         return array($output);
 
@@ -118,8 +137,11 @@ class work
         // //zjistit, krz kterého reinharda jde objekt
         $reinhard_id = adminator::find_reinhard($itemId, $this->conn_mysql, $this->conn_pgsql);
 
-        // //zmena sikany
-        if (preg_match("/.*změna.*Šikana.*z.*/", $changes)) {
+        // "zmena sikany" or "zmena NetN"
+        if (preg_match("/.*změna.*Šikana.*z.*/", $changes)
+            or
+            preg_match("/.*změna.*Povolen.*Inet.*z.*/", $changes)
+        ) {
             if ($reinhard_id == 177) {
                 $work_output[1] = $this->work_handler("1");
             } //reinhard-3 (ros) - restrictions (net-n/sikana)
@@ -139,23 +161,6 @@ class work
         }
 
         // TODO: fix the rest of actions for objektyWifiDiff
-
-        // //zmena NetN
-        // if( ereg(".*změna.*Povolen.*Inet.*z.*", $changes) )
-        // {
-        // if($reinhard_id == 177){ Aglobal::work_handler("1"); } //reinhard-3 (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 1){ Aglobal::work_handler("2"); } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        // elseif($reinhard_id == 236){ Aglobal::work_handler("24"); } //reinhard-5 (ros) - restrictions (net-n/sikana)
-        // else{
-
-        //     //nenalezet pozadovany reinhard, takze osvezime vsechny
-
-        //     Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-        //     Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
-
-        // }
-        // }
 
         // //zmena IP adresy pokud je aktivni Sikana ci NetN
         // if( (
@@ -184,6 +189,7 @@ class work
         //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
 
         // }
+
         // //zmena IP adresy bez aktivovaného omezení
         // elseif( ereg(".*změna.*IP.*adresy.*z.*", $changes) )
         // {

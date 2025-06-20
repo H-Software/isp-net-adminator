@@ -13,6 +13,8 @@ $loaderOrig = require dirname(__DIR__) . '/vendor/autoload.php';
 // TODO: test better loading files or WTF is this
 // $loaderOrig = findFile();
 
+class_alias(\Illuminate\Support\Facades\Redis::class, 'Redis');
+
 require __DIR__ . '/bootstrap/netteLoader.php';
 
 require __DIR__ . '/../config/settings-tests.php';

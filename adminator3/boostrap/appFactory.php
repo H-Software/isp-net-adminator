@@ -2,6 +2,8 @@
 
 use Slim\Factory\AppFactory;
 
+class_alias(\Illuminate\Support\Facades\Redis::class, 'Redis');
+
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 
