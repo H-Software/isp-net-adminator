@@ -110,7 +110,7 @@ echo "<table border=\"0\" width=\"1000px\">
 
 echo "<select size=\"1\" name=\"spec_prip_mista\" onChange=\"self.document.forms.form1.submit()\"  >";
 echo "<option value=\"1\" ";
-if(($spec_prip_mista == 1) or (!isset($spec_prip_mista))) {
+if (($spec_prip_mista == 1) or (!isset($spec_prip_mista))) {
     echo " selected ";
 }
 echo ">Přípojné místo stejné jako jako trvalé bydliště Zákazníka</option>";
@@ -134,7 +134,7 @@ echo "      </td>
 	";
 
 
-if($spec_prip_mista == 2) {
+if ($spec_prip_mista == 2) {
     echo "<tr>
                 <td align=\"center\" class=\"label-font\" ><label>Adresa připojeného místa: </label></td>
                 <td><input type=\"text\" name=\"prip_misto_adresa\" class=\"input-size-big\" size=\"25\" value=\"".$prip_misto_adresa."\"></td>
@@ -162,11 +162,11 @@ if($spec_prip_mista == 2) {
 		     <select name=\"adr_prip_jako_kor\" size=\"1\" >
 		     
 		        <option value=\"1\" ";
-    if($adr_prip_jako_kor == 1 or !isset($adr_prip_jako_kor)) {
+    if ($adr_prip_jako_kor == 1 or !isset($adr_prip_jako_kor)) {
         echo " select ";
     } echo " >Ne</option>	
 			<option value=\"2\" ";
-    if($adr_prip_jako_kor == 2) {
+    if ($adr_prip_jako_kor == 2) {
         echo " selected ";
     } echo " >Ano</option>
 			
@@ -193,13 +193,13 @@ echo "<tr>
 		    <span style=\"margin-left: 10px; \" >Optiká síť</span>
 		    |
 		    <input type=\"radio\" name=\"prip_tech\" value=\"2\" onChange=\"self.document.forms.form1.submit()\" ";
-if($prip_tech == 2) {
+if ($prip_tech == 2) {
     echo " checked=\"checked\" ";
 } echo " >
 		    <span style=\"margin-left: 10px; \" >Metalický okruh</span>
 		    |
 		    <input type=\"radio\" name=\"prip_tech\" value=\"3\" onChange=\"self.document.forms.form1.submit()\" ";
-if($prip_tech == 3) {
+if ($prip_tech == 3) {
     echo " checked=\"checked\" ";
 } echo " >
 		    <span style=\"margin-left: 10px; \" >Bezdrátová síť</span>
@@ -223,12 +223,12 @@ echo "<tr><td class=\"label-font\" align=\"center\" style=\"font-weight: bold; \
 		    <select name=\"internet_sluzba\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >
 			
 			<option value=\"0\" ";
-if($internet_sluzba == 0 or !isset($internet_sluzba)) {
+if ($internet_sluzba == 0 or !isset($internet_sluzba)) {
     echo " selected ";
 }
 echo " >Ne</option>
 			<option value=\"1\" ";
-if($internet_sluzba == 1) {
+if ($internet_sluzba == 1) {
     echo " selected ";
 } echo " >Ano</option>
 			
@@ -237,15 +237,15 @@ if($internet_sluzba == 1) {
 
 echo "<td>&nbsp;</td>";
 
-if($internet_sluzba == 1) {
+if ($internet_sluzba == 1) {
 
     echo "
 		    <td class=\"label-font\" align=\"center\" >Vyberte tarif:</td>
 		    <td colspan=\"4\">";
 
-    if($prip_tech == 1) {
+    if ($prip_tech == 1) {
         $sql_int = " WHERE typ_tarifu = '1' ";
-    } elseif($prip_tech == 2 or $prip_tech == 3) {
+    } elseif ($prip_tech == 2 or $prip_tech == 3) {
         $sql_int = " WHERE typ_tarifu = '0' ";
     } else {
         $sql_int = "";
@@ -255,10 +255,10 @@ if($internet_sluzba == 1) {
 
     echo "<select size=\"1\" name=\"int_tarify_id_tarifu\" onChange=\"self.document.forms.form1.submit()\" >";
 
-    while($data_int = $dotaz_int_tarify->fetch_array()) {
+    while ($data_int = $dotaz_int_tarify->fetch_array()) {
         echo "<option value=\"".$data_int["id_tarifu"]."\" ";
 
-        if($int_tarify_id_tarifu == $data_int["id_tarifu"]) {
+        if ($int_tarify_id_tarifu == $data_int["id_tarifu"]) {
             echo " selected ";
         }
 
@@ -275,11 +275,11 @@ if($internet_sluzba == 1) {
 
 echo "</tr>";
 
-if($internet_sluzba == 1) {
+if ($internet_sluzba == 1) {
 
     $int_se = $this->conn_mysql->query("SELECT * FROM tarify_int WHERE id_tarifu = '$int_tarify_id_tarifu' ");
 
-    while($data_int_se = $int_se->fetch_array()) {
+    while ($data_int_se = $int_se->fetch_array()) {
         $int_sluzba_tarif_text_db = $data_int_se["jmeno_tarifu"];
         $typ_tarifu_db = $data_int_se["typ_tarifu"];
         $garant_db = $data_int_se["garant"];
@@ -293,15 +293,15 @@ if($internet_sluzba == 1) {
 
     }
 
-    if(strlen($int_sluzba_tarif_cena) < 1) {
+    if (strlen($int_sluzba_tarif_cena) < 1) {
         $int_sluzba_tarif_cena = $int_sluzba_tarif_cena_db;
     }
 
-    if(strlen($int_sluzba_tarif_cena_s_dph) < 1) {
+    if (strlen($int_sluzba_tarif_cena_s_dph) < 1) {
         $int_sluzba_tarif_cena_s_dph = $int_sluzba_tarif_cena_s_dph_db;
     }
 
-    if(strlen($int_sluzba_tarif_agr) < 1) {  //detailni agregaci dodelat
+    if (strlen($int_sluzba_tarif_agr) < 1) {  //detailni agregaci dodelat
         $int_sluzba_tarif_agr = $int_sluzba_tarif_agr_db;
     }
 
@@ -309,7 +309,7 @@ if($internet_sluzba == 1) {
 		    <td class=\"label-font\" align=\"center\" >Internet - tarif / Max. agregace:</td>
 		    <td>";
 
-    if($int_tarify_id_tarifu >= 0 and (strlen($int_sluzba_tarif_text) < 1)) {
+    if ($int_tarify_id_tarifu >= 0 and (strlen($int_sluzba_tarif_text) < 1)) {
         $int_sluzba_tarif_text = $int_sluzba_tarif_text_db;
     }
 
@@ -335,7 +335,7 @@ if($internet_sluzba == 1) {
     echo "<tr>
 		    <td class=\"label-font\" align=\"center\">Max. rychlost (Mb/s):</td>";
 
-    if((strlen($int_sluzba_rychlost) < 1)) {
+    if ((strlen($int_sluzba_rychlost) < 1)) {
         $int_sluzba_rychlost = round($speed_dwn_db / 1024);
     }
 
@@ -352,12 +352,12 @@ echo "<tr>
 		<td colspan=\"\">
 		    <select name=\"int_verejna_ip\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >
 			<option value=\"0\" ";
-if($int_verejna_ip == 0 or !isset($int_verejna_ip)) {
+if ($int_verejna_ip == 0 or !isset($int_verejna_ip)) {
     echo " selected ";
 }
 echo " >Ne</option>
 			<option value=\"1\" ";
-if($int_verejna_ip == 1) {
+if ($int_verejna_ip == 1) {
     echo " selected ";
 } echo " >Ano</option>    
 		    </select>
@@ -367,7 +367,7 @@ echo "<td>&nbsp;</td>";
 
 
 
-if($int_verejna_ip == 1) {
+if ($int_verejna_ip == 1) {
     echo "<td class=\"label-font\" align=\"center\" >CENA, bez DPH / s DPH:</td>
 		  <td>
 		    <input type=\"text\" name=\"int_verejna_ip_cena\" value=\"".$int_verejna_ip_cena."\" size=\"5\" >,-
@@ -394,30 +394,30 @@ echo "<tr><td class=\"label-font\" align=\"center\" style=\"font-weight: bold; \
 	        <td>
 		    <select name=\"iptv_sluzba\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >
 			<option value=\"0\" ";
-if($iptv_sluzba == 0 or !isset($iptv_sluzba)) {
+if ($iptv_sluzba == 0 or !isset($iptv_sluzba)) {
     echo " selected ";
 }
 echo " >Ne</option>
 			<option value=\"1\" ";
-if($iptv_sluzba == 1) {
+if ($iptv_sluzba == 1) {
     echo " selected ";
 } echo " >Ano</option>
 		    </select>
 		</td>";
 
-if($iptv_sluzba == 1) {
+if ($iptv_sluzba == 1) {
     $iptv_se = $this->conn_mysql->query("SELECT * FROM tarify_iptv WHERE id_tarifu = '$iptv_sluzba_id_tarifu' ");
 
-    while($data_iptv_se = $iptv_se->fetch_array()) {
+    while ($data_iptv_se = $iptv_se->fetch_array()) {
         $iptv_sluzba_cena_bez_dph_db = $data_iptv_se["cena_bez_dph"];
         $iptv_sluzba_cena_s_dph_db = $data_iptv_se["cena_s_dph"];
     }
 
-    if((strlen($iptv_sluzba_cena) < 1)) {
+    if ((strlen($iptv_sluzba_cena) < 1)) {
         $iptv_sluzba_cena = $iptv_sluzba_cena_bez_dph_db;
     }
 
-    if((strlen($iptv_sluzba_cena_s_dph) < 1)) {
+    if ((strlen($iptv_sluzba_cena_s_dph) < 1)) {
         $iptv_sluzba_cena_s_dph = $iptv_sluzba_cena_s_dph_db;
     }
 
@@ -430,9 +430,9 @@ if($iptv_sluzba == 1) {
 
     $iptv_se = $this->conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY zkratka_tarifu ");
 
-    while($data_iptv_se = $iptv_se->fetch_array()) {
+    while ($data_iptv_se = $iptv_se->fetch_array()) {
         echo "<option value=\"".$data_iptv_se["id_tarifu"]."\" ";
-        if($iptv_sluzba_id_tarifu == $data_iptv_se["id_tarifu"]) {
+        if ($iptv_sluzba_id_tarifu == $data_iptv_se["id_tarifu"]) {
             echo " selected ";
         }
 
@@ -464,17 +464,17 @@ if($iptv_sluzba == 1) {
 		    <td>
 			<select size=\"1\" name=\"pocet_tb\" onChange=\"self.document.forms.form1.submit()\" >
 			  <option value=\"0\" style=\"color: gray; \" ";
-    if($pocet_tb == 0 or !isset($pocet_tb)) {
+    if ($pocet_tb == 0 or !isset($pocet_tb)) {
         echo " selected ";
     }
     echo " >0 (žádný)</option>
 			 
 			  <option value=\"1\" ";
-    if($pocet_tb == 1) {
+    if ($pocet_tb == 1) {
         echo " selected ";
     } echo " >1</option>
 			  <option value=\"2\" ";
-    if($pocet_tb == 2) {
+    if ($pocet_tb == 2) {
         echo " selected ";
     } echo " >2</option>
 			</select>
@@ -483,7 +483,7 @@ if($iptv_sluzba == 1) {
 		    <td colspan=\"2\" >&nbsp;</td>
 		  </tr>";
 
-    for($i = 1; $i <= $pocet_tb; $i++) {
+    for ($i = 1; $i <= $pocet_tb; $i++) {
 
         $tb = "tb".$i;
 
@@ -527,12 +527,12 @@ echo "<tr>
 	        <td>
 		    <select name=\"voip_sluzba\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >	
 			<option value=\"0\" ";
-if($voip_sluzba == 0 or !isset($voip_sluzba)) {
+if ($voip_sluzba == 0 or !isset($voip_sluzba)) {
     echo " selected ";
 }
 echo " >Ne</option>
 			<option value=\"1\" ";
-if($voip_sluzba == 1) {
+if ($voip_sluzba == 1) {
     echo " selected ";
 } echo " >Ano</option>
 		    </select>
@@ -541,7 +541,7 @@ if($voip_sluzba == 1) {
 		<td colspan=\"3\" ><br></td>
 	       </tr>";
 
-if($voip_sluzba == 1) {
+if ($voip_sluzba == 1) {
     echo "<tr>
 		<td class=\"label-font\" align=\"center\" >Telefonní číslo:</td>
 		<td><input type=\"text\" name=\"voip_cislo\" value=\"".$voip_cislo."\" ></td>
@@ -551,7 +551,7 @@ if($voip_sluzba == 1) {
 		  <span style=\"margin-left: 20px;\" ></span>
 		  
 		  <input type=\"radio\" name=\"voip_typ\" value=\"1\" ";
-    if($voip_typ == 1 or !isset($voip_typ)) {
+    if ($voip_typ == 1 or !isset($voip_typ)) {
         echo " checked=\"checked\" ";
     } echo " >
 		  <span style=\"margin-left: 20px;\" >
@@ -560,7 +560,7 @@ if($voip_sluzba == 1) {
 		  <span style=\"margin-left: 10px; margin-right: 10px;\" >|</span>
 		  
 		  <input type=\"radio\" name=\"voip_typ\" value=\"2\" ";
-    if($voip_typ == 2) {
+    if ($voip_typ == 2) {
         echo " checked=\"checked\" ";
     }
     echo " >
@@ -582,18 +582,18 @@ echo "<tr>
 		  <div style=\"float: left; \" >
 		    <select size=\"1\" name=\"sleva_select\" onChange=\"self.document.forms.form1.submit()\" >
 			<option value=\"0\" ";
-if($sleva_select == 0 or !isset($sleva_select)) {
+if ($sleva_select == 0 or !isset($sleva_select)) {
     echo " selected ";
 }
 echo " >Ne</option>
 			<option value=\"1\" ";
-if($sleva_select == 1) {
+if ($sleva_select == 1) {
     echo " selected ";
 } echo " >Ano</option>
 		    </select>
 		  </div>";
 
-if($sleva_doporucena == 1) {
+if ($sleva_doporucena == 1) {
     echo "<div style=\"text-align: right; padding-right: 5px; font-weight: bold;\" >sleva doporučena</div>";
 } else {
     echo "<div style=\"text-align: right; padding-right: 5px;\" >sleva nedoporučena</div>";
@@ -602,7 +602,7 @@ if($sleva_doporucena == 1) {
 echo " </td>
 	       <td>&nbsp;</td>";
 
-if($sleva_select == 1) {
+if ($sleva_select == 1) {
     echo "<td class=\"label-font\" align=\"center\" >Součet před slevou: (netiskne se)</td>";
     echo "<td style=\"font-weight: bold; font-style: italic; \" >".$soucet_bez_dph.",-
 		    <span style=\"padding-left: 20px;\"></span>"
@@ -616,7 +616,7 @@ if($sleva_select == 1) {
 
 }
 
-if($sleva_select == 1) {
+if ($sleva_select == 1) {
     echo "<tr>
 		 <td class=\"label-font\" align=\"center\" >výše slevy: </td>
 		 <td>
@@ -644,7 +644,7 @@ echo "<tr>
 	        <td colspan=\"2\" >
 		    <span style=\"padding-left: 10px; \" ></span>
 		    <input type=\"radio\" name=\"zpusob_placeni\" value=\"1\" ";
-if($zpusob_placeni == 1 or !isset($zpusob_placeni)) {
+if ($zpusob_placeni == 1 or !isset($zpusob_placeni)) {
     echo " checked=\"checked\" ";
 }
 echo " >";
@@ -677,14 +677,14 @@ echo "<tr>
 		<td>";
 
 echo "<input type=\"radio\" name=\"platba\" value=\"1\" ";
-if(($platba == 1) or !isset($platba)) {
+if (($platba == 1) or !isset($platba)) {
     echo " checked=\"checked\" ";
 } echo " >
 		<span style=\"padding-left: 3px;\" >Měsíčně</span>
 	        <span style=\"padding-left: 5px; padding-right: 5px; \" >|</span>";
 
 echo "<input type=\"radio\" name=\"platba\" value=\"2\" ";
-if($platba == 2) {
+if ($platba == 2) {
     echo " checked=\"checked\" ";
 } echo " >
 		<span style=\"padding-left: 3px;\" >Čtvrtletně</span>
@@ -720,12 +720,12 @@ echo "<tr>
 		<td>
 		  <select size=\"1\" name=\"min_plneni\" onChange=\"self.document.forms.form1.submit()\" >
 		    <option value=\"1\" ";
-if($min_plneni == 1 or !isset($min_plneni)) {
+if ($min_plneni == 1 or !isset($min_plneni)) {
     echo " selected ";
 }
 echo " >Ne</option>
 		    <option value=\"2\" ";
-if($min_plneni == 2) {
+if ($min_plneni == 2) {
     echo " selected ";
 }
 echo " >Ano</option>
@@ -733,7 +733,7 @@ echo " >Ano</option>
 		</td>
 		<td>&nbsp;</td>";
 
-if($min_plneni == 2) {
+if ($min_plneni == 2) {
     echo "<td>Doba min. plnění(v měsících): </td>
 	    	    <td class=\"label-font\" >
 			<input type=\"text\" size=\"6\" name=\"min_plneni_doba\" value=\"".$min_plneni_doba."\" >

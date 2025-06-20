@@ -81,7 +81,7 @@ class passwordHelper
 
         $valRes = $this->validatePassword();
 
-        if($valRes === false) {
+        if ($valRes === false) {
             return false;
         }
 
@@ -91,7 +91,7 @@ class passwordHelper
         $affRows = User::where('email', $this->loggedUserData['email'])
                 ->update(['password' => $pwHash]);
 
-        if($affRows <> 1) {
+        if ($affRows <> 1) {
             $this->errorMessage = 'Update password failed! Database error.' . "(affected rows: " . $affRows . ")";
             return false;
         } else {

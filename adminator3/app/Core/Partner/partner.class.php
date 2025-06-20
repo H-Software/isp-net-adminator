@@ -72,23 +72,23 @@ class partner extends adminator
         $filtr_akceptovano = intval($_GET["filtr_akceptovano"]);
         $filtr_pripojeno = intval($_GET["filtr_pripojeno"]);
 
-        if($filtr_akceptovano == 1 or $mode == "updateDesc") {
+        if ($filtr_akceptovano == 1 or $mode == "updateDesc") {
             $this->listItems = $this->listItems->where('akceptovano', "Ano");
-        } elseif($filtr_akceptovano == 2 or $mode == "accept") {
+        } elseif ($filtr_akceptovano == 2 or $mode == "accept") {
             $this->listItems = $this->listItems->where('akceptovano', "Ne");
         }
 
-        if($filtr_pripojeno == 1) {
+        if ($filtr_pripojeno == 1) {
             $this->listItems = $this->listItems->where('pripojeno', 1);
-        } elseif($filtr_pripojeno == 2) {
+        } elseif ($filtr_pripojeno == 2) {
             $this->listItems = $this->listItems->where('pripojeno', 0);
         }
 
-        if(isset($_GET['user'])) {
+        if (isset($_GET['user'])) {
             $this->listItems = $this->listItems->where('vlozil', $_GET['user']);
         }
 
-        if($mode == "accept" or $mode == "updateDesc") {
+        if ($mode == "accept" or $mode == "updateDesc") {
             $this->listItems = $this->listItems->select(
                 [
                     'jmeno',
@@ -104,7 +104,7 @@ class partner extends adminator
             );
         }
 
-        if($mode == "accept" or $mode == "updateDesc") {
+        if ($mode == "accept" or $mode == "updateDesc") {
             $this->listItems = $this->listItems->transform(
                 function ($item, $key) use ($mode) {
                     list($a, $b) = preg_split('/(?=[A-Z])/', $mode);
@@ -162,7 +162,7 @@ class partner extends adminator
             $linkNextPage
         ) = $this->getItems($mode);
 
-        if(count($data) == 0) {
+        if (count($data) == 0) {
             $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
             return array($output);
         }
@@ -280,12 +280,12 @@ class partner extends adminator
 
         $this->addPrepareVars();
 
-        if((isset($this->form_odeslat) and ($this->form_fail == false))) {
+        if ((isset($this->form_odeslat) and ($this->form_fail == false))) {
             // mod ukladani
 
             list($insertRs, $insertedData) = $this->addSaveData();
 
-            if(is_object($insertRs)) {
+            if (is_object($insertRs)) {
                 $this->smarty->assign("alert_type", "success");
                 $this->smarty->assign("alert_content", "Data byla úspěšně uložena.");
 
@@ -309,7 +309,7 @@ class partner extends adminator
         } else {
             // zobrazime formular
             //
-            if(isset($this->form_odeslat)) {
+            if (isset($this->form_odeslat)) {
                 $this->smarty->assign("form_error_message", $this->form_error);
             }
 
@@ -337,7 +337,7 @@ class partner extends adminator
                 $linkNextPage
             ) = $this->getItems("accept");
 
-            if(count($data) == 0) {
+            if (count($data) == 0) {
                 $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
                 $this->smarty->assign("body", $output[0]);
                 $this->rendererTemplateName = 'partner/order-accept.tpl';
@@ -388,7 +388,7 @@ class partner extends adminator
                 <input type=\"hidden\" name=\"id\" value=\"".intval($_GET["id"])."\" >";
             $output .=  "</form>";
 
-        } elseif($_GET["accept"] == 1 and intval($_GET['id']) > 0) {
+        } elseif ($_GET["accept"] == 1 and intval($_GET['id']) > 0) {
             // update item in DB
             $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
             $id = intval($_GET["id"]);
@@ -437,7 +437,7 @@ class partner extends adminator
                 $linkNextPage
             ) = $this->getItems("updateDesc");
 
-            if(count($data) == 0) {
+            if (count($data) == 0) {
                 $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi (num_rows: " . count($data) . ")</div>";
                 $this->smarty->assign("body", $output[0]);
                 $this->rendererTemplateName = 'partner/order-update-desc.tpl';
@@ -492,7 +492,7 @@ class partner extends adminator
 
             . "</form>";
 
-        } elseif($_GET["edit"] == 1 and intval($_GET['id']) > 0) {
+        } elseif ($_GET["edit"] == 1 and intval($_GET['id']) > 0) {
             // update in DB
 
             $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
@@ -532,7 +532,7 @@ class partner extends adminator
         $pripojeno = intval($_GET["pripojeno"]);
         $akt_tarif = intval($_GET["akt_tarif"]);
 
-        if(
+        if (
             $_GET["odeslat"] == "OK"
             and (
                 $id_zadosti == 0
@@ -575,7 +575,7 @@ class partner extends adminator
 
             $dotaz_zadosti = $this->conn_mysql->query("SELECT * FROM partner_klienti ORDER BY id DESC");
 
-            while($data = $dotaz_zadosti->fetch_array()) {
+            while ($data = $dotaz_zadosti->fetch_array()) {
                 $output .= "<option value=\"".$data["id"]."\" ";
                 if ($id_zadosti == $data["id"]) {
                     $output .= " selected ";

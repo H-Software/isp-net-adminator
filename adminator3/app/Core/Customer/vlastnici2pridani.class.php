@@ -136,7 +136,7 @@ class vlastnici2pridani extends adminator
         $this->cache = $container->get('cache');
 
         $this->adminator = $adminator;
-        if(!isset($this->adminator->userIdentityUsername) or $this->adminator->userIdentityUsername == null) {
+        if (!isset($this->adminator->userIdentityUsername) or $this->adminator->userIdentityUsername == null) {
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity!");
         }
     }
@@ -170,70 +170,70 @@ class vlastnici2pridani extends adminator
         }
 
         //kontrola promených
-        if(isset($this->form_send)) {
-            if((strlen($this->form_nick) > 0)) {
+        if (isset($this->form_send)) {
+            if ((strlen($this->form_nick) > 0)) {
                 vlastnici2pridani::checknick($this->form_nick);
             }
 
-            if((strlen($this->form_vs) > 0)) {
+            if ((strlen($this->form_vs) > 0)) {
                 vlastnici2pridani::checkvs($this->form_vs);
             }
 
-            if((strlen($this->form_k_platbe) > 0)) {
+            if ((strlen($this->form_k_platbe) > 0)) {
                 vlastnici2pridani::check_k_platbe($this->form_k_platbe);
             }
 
-            if((strlen($this->form_splatnost) > 0)) {
+            if ((strlen($this->form_splatnost) > 0)) {
                 vlastnici2pridani::check_splatnost($this->form_splatnost);
             }
 
-            if((strlen($this->form_icq) > 0)) {
+            if ((strlen($this->form_icq) > 0)) {
                 vlastnici2pridani::check_icq($this->form_icq);
             }
 
-            if((strlen($this->form_email) > 0)) {
+            if ((strlen($this->form_email) > 0)) {
                 vlastnici2pridani::check_email($this->form_email);
             }
 
-            if((strlen($this->form_ucetni_index) > 0)) {
+            if ((strlen($this->form_ucetni_index) > 0)) {
                 vlastnici2pridani::check_uc_index($this->form_ucetni_index);
             }
 
-            if((strlen($this->form_tel) > 0)) {
+            if ((strlen($this->form_tel) > 0)) {
                 vlastnici2pridani::check_tel($this->form_tel);
             }
 
-            if((strlen($this->form_datum_podpisu) > 0)) {
+            if ((strlen($this->form_datum_podpisu) > 0)) {
                 vlastnici2pridani::check_datum($this->form_datum_podpisu, "Datum podpisu");
             }
 
-            if($this->form_typ_smlouvy == 2) {
+            if ($this->form_typ_smlouvy == 2) {
                 vlastnici2pridani::check_datum($this->form_trvani_do, "Trvání do");
-            } elseif((strlen($this->form_trvani_do) > 0)) {
+            } elseif ((strlen($this->form_trvani_do) > 0)) {
                 vlastnici2pridani::check_datum($this->form_trvani_do, "Trvání do");
             }
 
-            if($this->form_billing_suspend_status == 1) {
+            if ($this->form_billing_suspend_status == 1) {
 
                 vlastnici2pridani::check_datum($this->form_billing_suspend_start, "Poz. fakturace - od kdy");
                 vlastnici2pridani::check_datum($this->form_billing_suspend_stop, "Poz. fakturace - do kdy");
 
             }
 
-            if((strlen($this->form_billing_suspend_reason) > 0) and ($this->form_billing_suspend_status == 1)) {
+            if ((strlen($this->form_billing_suspend_reason) > 0) and ($this->form_billing_suspend_status == 1)) {
                 vlastnici2pridani::check_b_reason($this->form_billing_suspend_reason);
             }
 
         }
 
-        if(($this->form_update_id > 0 and !(isset($this->form_send)))) {
+        if (($this->form_update_id > 0 and !(isset($this->form_send)))) {
             // $this->form_trvani_do = "";
-            if((strlen($this->form_trvani_do) > 0)) {
+            if ((strlen($this->form_trvani_do) > 0)) {
                 list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("\-", $this->form_trvani_do);
                 $this->form_trvani_do = $trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
             }
 
-            if((strlen($this->form_datum_podpisu) > 0)) {
+            if ((strlen($this->form_datum_podpisu) > 0)) {
                 list($datum_podpisu_rok, $datum_podpisu_mesic, $datum_podpisu_den) = explode("\-", $this->form_datum_podpisu);
                 $this->form_datum_podpisu = $datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
             }
@@ -251,10 +251,10 @@ class vlastnici2pridani extends adminator
             $this->error .= $this->smarty->fetch('partials/bootstrap-alert-with-columns.tpl');
 
             $this->smarty->clearAssign(array('alert_type', 'alert_content'));
-        } elseif(($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
+        } elseif (($this->form_nick != "") and ($this->form_vs != "") and ($this->form_k_platbe != "") and (($this->form_fakt_skupina > 0) or ($this->firma <> 1) or ($this->form_archiv == 1))) {
             // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
 
-            if($this->form_update_id < 1) {
+            if ($this->form_update_id < 1) {
                 //zjisti jestli neni duplicitni : nick, vs
                 $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$this->form_nick' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
@@ -264,7 +264,7 @@ class vlastnici2pridani extends adminator
             }
 
             // check v modu uprava
-            if(($this->form_update_id > 0 and (isset($this->form_odeslano)))) {
+            if (($this->form_update_id > 0 and (isset($this->form_odeslano)))) {
                 //zjisti jestli neni duplicitni : nick, vs
                 $MSQ_NICK = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE nick LIKE '$this->form_nick' and id_cloveka <> '$this->form_update_id' ");
                 if (pg_num_rows($MSQ_NICK) > 0) {
@@ -302,7 +302,7 @@ class vlastnici2pridani extends adminator
             $this->error = "<h4>Chybí povinné údaje !!! ( aktuálně jsou povinné:  nick, vs, k platbě, Fakturační skupina ) </H4>";
         }
 
-        if($this->form_update_id > 0 and $this->locked !== true) {
+        if ($this->form_update_id > 0 and $this->locked !== true) {
             // we dont have lock, do nothing
             $output .= $this->error;
             return $output;
@@ -337,16 +337,16 @@ class vlastnici2pridani extends adminator
         //     $update_status = 1;
         // }
 
-        if(($this->form_update_id > 0 and !(isset($this->form_send)))) { //rezim upravy
+        if (($this->form_update_id > 0 and !(isset($this->form_send)))) { //rezim upravy
 
             $dotaz_upd = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka='".intval($this->form_update_id)."' ");
             $radku_upd = pg_num_rows($dotaz_upd);
 
-            if($radku_upd == 0) {
+            if ($radku_upd == 0) {
                 $output .= "<div>Chyba! Požadovaná data nelze načíst!</div>";
             } else {
 
-                while($data = pg_fetch_array($dotaz_upd)):
+                while ($data = pg_fetch_array($dotaz_upd)):
 
                     // primy promenny
                     $this->form_nick = trim($data["nick"]);
@@ -450,13 +450,13 @@ class vlastnici2pridani extends adminator
             //systémove
             $this->form_send = $_POST["send"];
 
-            if($this->form_firma_add == 2) {
+            if ($this->form_firma_add == 2) {
                 $this->firma = "";
             } elseif ($this->form_firma_add == 1) {
                 $this->firma = "1";
             }
 
-            if((strlen($this->form_splatnost) < 1)) {
+            if ((strlen($this->form_splatnost) < 1)) {
                 $this->form_splatnost = "15";
             }
         }
@@ -472,7 +472,7 @@ class vlastnici2pridani extends adminator
         $back = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE nick = '" . $this->form_nick. "' ");
         $back_radku = pg_num_rows($back);
 
-        if($back_radku == 0) {
+        if ($back_radku == 0) {
             $this->p_bs_alerts["Nelze načíst data pro vytvoření odkazu na vlastníka."] = "warning";
 
             $output_return_link_vlastnik = '<span style="padding-left: 10px; padding-right: 10px">N/A</span>';
@@ -541,7 +541,7 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>firma</b>: ';
 
-        if($this->firma == 1) {
+        if ($this->firma == 1) {
             $output .= "Vlastníci2 - Company, s.r.o.";
         } else {
             $output .= "Vlastníci - FO";
@@ -550,7 +550,7 @@ class vlastnici2pridani extends adminator
         $output .= "<br>";
         $output .= "<b>Archivovat: </b>";
 
-        if($this->form_archiv == 1) {
+        if ($this->form_archiv == 1) {
             $output .= " Ano ";
         } else {
             $output .= " Ne ";
@@ -560,11 +560,11 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>Typ smlouvy:</b> ';
 
-        if($this->form_typ_smlouvy == 0) {
+        if ($this->form_typ_smlouvy == 0) {
             $output .= "[nezvoleno]";
-        } elseif($this->form_typ_smlouvy == 1) {
+        } elseif ($this->form_typ_smlouvy == 1) {
             $output .= "[na dobu neurčitou]";
-        } elseif($this->form_typ_smlouvy == 2) {
+        } elseif ($this->form_typ_smlouvy == 2) {
             $output .= "[na dobu určitou]";
             $output .= " ( doba trvání do: ";
 
@@ -580,7 +580,7 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>Datum podpisu</b>: ';
 
-        if((strlen($this->form_datum_podpisu) > 0)) {
+        if ((strlen($this->form_datum_podpisu) > 0)) {
             list($datum_podpisu_rok, $datum_podpisu_mesic, $datum_podpisu_den) = explode("-", $this->form_datum_podpisu);
             $this->form_datum_podpisu = $datum_podpisu_den.".".$datum_podpisu_mesic.".".$datum_podpisu_rok;
         }
@@ -591,9 +591,9 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>Služba Internet:</b>';
 
-        if($this->form_sluzba_int == 0) {
+        if ($this->form_sluzba_int == 0) {
             $output .= "Ne";
-        } elseif($this->form_sluzba_int == 1) {
+        } elseif ($this->form_sluzba_int == 1) {
             $output .= "Ano";
         } else {
             $output .= "Nelze zjistit - hodnota: ".$this->form_sluzba_int;
@@ -602,9 +602,9 @@ class vlastnici2pridani extends adminator
         $output .= '<br>'
             . '<b>Služba IPTV:</b>';
 
-        if($this->form_sluzba_iptv == 0) {
+        if ($this->form_sluzba_iptv == 0) {
             $output .= "Ne";
-        } elseif($this->form_sluzba_iptv == 1) {
+        } elseif ($this->form_sluzba_iptv == 1) {
             $output .= "Ano";
         } else {
             $output .= "Nelze zjistit - hodnota: ".$this->form_sluzba_iptv;
@@ -613,9 +613,9 @@ class vlastnici2pridani extends adminator
         $output .= '<br>'
             . '<b>Služba VoIP:</b>';
 
-        if($this->form_sluzba_voip == 0) {
+        if ($this->form_sluzba_voip == 0) {
             $output .= "Ne";
-        } elseif($this->form_sluzba_voip == 1) {
+        } elseif ($this->form_sluzba_voip == 1) {
             $output .= "Ano";
         } else {
             $output .= "Nelze zjistit - hodnota: ".$this->form_sluzba_voip;
@@ -625,7 +625,7 @@ class vlastnici2pridani extends adminator
 
         $output .= '<b>Pozastavené fakturace:</b> ';
 
-        if($this->form_billing_suspend_status == 1) {
+        if ($this->form_billing_suspend_status == 1) {
             $output .= "Ano";
         } else {
             $output .= "Ne";
@@ -633,7 +633,7 @@ class vlastnici2pridani extends adminator
 
         $output .= "<br>";
 
-        if($this->form_billing_suspend_status == 1) {
+        if ($this->form_billing_suspend_status == 1) {
             list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $this->form_billing_suspend_start);
             $this->form_billing_suspend_start = $b_s_s_den.".".$b_s_s_mesic.".".$b_s_s_rok;
 
@@ -714,7 +714,7 @@ class vlastnici2pridani extends adminator
                 <td colspan="1" ><input type="text" name="ulice" size="35" maxlength="" value="'.$this->form_ulice.'" ></td>'
                 . '<td>Fakturační skupina: ';
 
-        if($this->firma == 1) {
+        if ($this->firma == 1) {
 
             $output .= '<span style="padding-left: 10px;" >'
 
@@ -739,17 +739,17 @@ class vlastnici2pridani extends adminator
                 $output .= "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2>";
             }
 
-            if($dotaz_fakt_skup_radku > 0) {
-                while($data_fakt_skup = $dotaz_fakt_skup->fetch_array()) {
+            if ($dotaz_fakt_skup_radku > 0) {
+                while ($data_fakt_skup = $dotaz_fakt_skup->fetch_array()) {
                     $output .= "\t\t<option value=\"".$data_fakt_skup["id"]."\" ";
                     if ($this->form_fakt_skupina == $data_fakt_skup["id"]) {
                         $output .= " selected ";
                     }
                     $output .= " > ".$data_fakt_skup["nazev"];
 
-                    if($data_fakt_skup["typ"] == 1) {
+                    if ($data_fakt_skup["typ"] == 1) {
                         $output .= " (DÚ) ";
-                    } elseif($data_fakt_skup["typ"] == 2) {
+                    } elseif ($data_fakt_skup["typ"] == 2) {
                         $output .= " (FÚ) ";
                     } else {
                         $output .= $data_fakt_skup["typ"];
@@ -853,20 +853,20 @@ class vlastnici2pridani extends adminator
                 <td colspan="" >Smlouva na dobu: </td>
                 <td colspan="" >';
 
-        if($this->firma == 1) {
+        if ($this->firma == 1) {
             $output .= '<select name="typ_smlouvy" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0"';
-            if(($this->form_typ_smlouvy == 0) or (!isset($this->form_typ_smlouvy))) {
+            if (($this->form_typ_smlouvy == 0) or (!isset($this->form_typ_smlouvy))) {
                 $output .= " selected ";
             }
 
             $output .= 'class="vlastnici-nezvoleno" >Nevybráno</option>
                 <option value="1"';
-            if($this->form_typ_smlouvy == 1) {
+            if ($this->form_typ_smlouvy == 1) {
                 $output .= " selected ";
             } $output .= ' >Neurčitou</option>
                 <option value="2"';
-            if($this->form_typ_smlouvy == 2) {
+            if ($this->form_typ_smlouvy == 2) {
                 $output .= " selected ";
             } $output .= ' >Určitou</option>
                 </select>';
@@ -888,24 +888,24 @@ class vlastnici2pridani extends adminator
 
         $output .= "<td colspan=\"\" >";
 
-        if((($this->form_typ_smlouvy == 2) and ($this->firma == 1))) {
+        if ((($this->form_typ_smlouvy == 2) and ($this->firma == 1))) {
             $output .= "<input type=\"text\" name=\"trvani_do\" value=\"".$this->form_trvani_do."\" >";
             $output .= "<span style=\"padding-left: 15px; \" >formát: ( dd.mm.rrrr )</span>";
         } else {
             $output .= "<span style=\"color: grey; \">Není dostupné</span>";
         }
 
-        if($this->firma == 1) {
+        if ($this->firma == 1) {
             //sluzba internet
             $output .= "<td><span style=\"padding-right: 40px; \" ><b>Internet:</b></span>";
 
             $output .= "<select name=\"sluzba_int\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
             $output .= "<option value=\"0\" ";
-            if($this->form_sluzba_int == 0 or !isset($this->form_sluzba_int)) {
+            if ($this->form_sluzba_int == 0 or !isset($this->form_sluzba_int)) {
                 $output .= " selected ";
             } $output .= " >Ne</option>";
             $output .= "<option value=\"1\" ";
-            if($this->form_sluzba_int == 1) {
+            if ($this->form_sluzba_int == 1) {
                 $output .= " selected ";
             } $output .= " >Ano</option>";
 
@@ -919,7 +919,7 @@ class vlastnici2pridani extends adminator
 
         $output .= '</tr>';
 
-        if($this->form_sluzba_int == 1) {
+        if ($this->form_sluzba_int == 1) {
             $output .= "<tr>
                 <td colspan=\"2\" >&nbsp;</td>";
             $output .= "<td><span style=\"padding-right: 17px; \" >Vyberte tarif: </span>";
@@ -928,7 +928,7 @@ class vlastnici2pridani extends adminator
             $output .= "<select name=\"sluzba_int_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
 
             $output .= "<option value=\"999\" ";
-            if($this->form_sluzba_int_id_tarifu == 999 or !isset($this->form_sluzba_int_id_tarifu)) {
+            if ($this->form_sluzba_int_id_tarifu == 999 or !isset($this->form_sluzba_int_id_tarifu)) {
                 $output .= " selected ";
             }
             $output .= " style=\"color: gray; \">Nevybráno</option>";
@@ -939,9 +939,9 @@ class vlastnici2pridani extends adminator
                 $output .= "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2>";
             }
 
-            while($data_tarify = $dotaz_tarify_id_tarifu->fetch_array()) {
+            while ($data_tarify = $dotaz_tarify_id_tarifu->fetch_array()) {
                 $output .= "<option value=\"".$data_tarify["id_tarifu"]."\" ";
-                if($this->form_sluzba_int_id_tarifu == $data_tarify["id_tarifu"]) {
+                if ($this->form_sluzba_int_id_tarifu == $data_tarify["id_tarifu"]) {
                     $output .= " selected ";
                 }
                 $output .= " >".$data_tarify["jmeno_tarifu"]." (".$data_tarify["zkratka_tarifu"].")</option>";
@@ -966,18 +966,18 @@ class vlastnici2pridani extends adminator
 
         $output .= "</td>";
 
-        if($this->firma == 1) {
+        if ($this->firma == 1) {
             //sluzba iptv
             $output .= "<td><span style=\"padding-right: 5px; \" ><b>IPTV</b> (televize): </span>";
 
             $output .= "<select name=\"sluzba_iptv\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
             $output .= "<option value=\"0\" ";
-            if($this->form_sluzba_iptv == 0 or !isset($this->form_sluzba_iptv)) {
+            if ($this->form_sluzba_iptv == 0 or !isset($this->form_sluzba_iptv)) {
                 $output .= " selected ";
             }
             $output .= ">Ne</option>";
             $output .= "<option value=\"1\" ";
-            if($this->form_sluzba_iptv == 1) {
+            if ($this->form_sluzba_iptv == 1) {
                 $output .= " selected ";
             }
             $output .= ">Ano</option>";
@@ -991,7 +991,7 @@ class vlastnici2pridani extends adminator
 
         $output .= "</tr>";
 
-        if($this->form_sluzba_iptv == 1) {
+        if ($this->form_sluzba_iptv == 1) {
             $output .= "<tr>
                 <td colspan=\"2\" >&nbsp;</td>";
             $output .= "<td><span style=\"padding-right: 17px; \" >Vyberte tarif: </span>";
@@ -1000,7 +1000,7 @@ class vlastnici2pridani extends adminator
             $output .= "<select name=\"sluzba_iptv_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
 
             $output .= "<option value=\"999\" ";
-            if($this->form_sluzba_iptv_id_tarifu == 999 or !isset($this->form_sluzba_iptv_id_tarifu)) {
+            if ($this->form_sluzba_iptv_id_tarifu == 999 or !isset($this->form_sluzba_iptv_id_tarifu)) {
                 $output .= " selected ";
             }
             $output .= " style=\"color: gray; \">Nevybráno</option>";
@@ -1011,9 +1011,9 @@ class vlastnici2pridani extends adminator
                 $output .= "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2>";
             }
 
-            while($data_iptv = $dotaz_iptv_id_tarifu->fetch_array()) {
+            while ($data_iptv = $dotaz_iptv_id_tarifu->fetch_array()) {
                 $output .= "<option value=\"".$data_iptv["id_tarifu"]."\" ";
-                if($this->form_sluzba_iptv_id_tarifu == $data_iptv["id_tarifu"]) {
+                if ($this->form_sluzba_iptv_id_tarifu == $data_iptv["id_tarifu"]) {
                     $output .= " selected ";
                 }
                 $output .= " >".$data_iptv["jmeno_tarifu"]." (".$data_iptv["zkratka_tarifu"].")</option>";
@@ -1031,16 +1031,16 @@ class vlastnici2pridani extends adminator
         $output .= "<tr>";
         $output .= "<td>Frekvence fakturování:</td>";
 
-        if($this->firma == 1) {
+        if ($this->firma == 1) {
             $output .= "<td>".
             "<select size=\"1\" name=\"billing_freq\">";
 
             $output .= "<option value=\"0\" ";
-            if($this->form_billing_freq == 0 or empty($this->form_billing_freq)) {
+            if ($this->form_billing_freq == 0 or empty($this->form_billing_freq)) {
                 $output .= "selected";
             } $output .= " >Měsíční</option>";
             $output .= "<option value=\"1\" ";
-            if($this->form_billing_freq == 1) {
+            if ($this->form_billing_freq == 1) {
                 $output .= "selected";
             } $output .= " >Čtvrtletní</option>";
 
@@ -1050,18 +1050,18 @@ class vlastnici2pridani extends adminator
             $output .= "<td><span style=\"color: grey; \">Není dostupné</span></td>";
         }
 
-        if($this->firma == 1) {
+        if ($this->firma == 1) {
             //sluzba VoIP
             $output .= "<td><span style=\"padding-right: 10px; \" ><b>VoIP</b> (telefon): </span>";
 
             $output .= "<select name=\"sluzba_voip\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
             $output .= "<option value=\"0\" ";
-            if($this->form_sluzba_voip == 0 or !isset($this->form_sluzba_voip)) {
+            if ($this->form_sluzba_voip == 0 or !isset($this->form_sluzba_voip)) {
                 $output .= " selected ";
             }
             $output .= " >Ne</option>";
             $output .= "<option value=\"1\" ";
-            if($this->form_sluzba_voip == 1) {
+            if ($this->form_sluzba_voip == 1) {
                 $output .= " selected ";
             }
             $output .= ">Ano</option>";
@@ -1082,11 +1082,11 @@ class vlastnici2pridani extends adminator
         $output .= "<select size=\"1\" name=\"billing_suspend_status\" onChange=\"self.document.forms.form1.submit()\">";
 
         $output .= "<option value=\"0\" ";
-        if(($this->form_billing_suspend_status == 0) or (!isset($this->form_billing_suspend_status))) {
+        if (($this->form_billing_suspend_status == 0) or (!isset($this->form_billing_suspend_status))) {
             $output .= " selected ";
         } $output .= ">Ne</option>";
         $output .= "<option value=\"1\" ";
-        if($this->form_billing_suspend_status == 1) {
+        if ($this->form_billing_suspend_status == 1) {
             $output .= " selected ";
         } $output .= ">Ano</option>";
 
@@ -1100,7 +1100,7 @@ class vlastnici2pridani extends adminator
             <td colspan="2" ><br></td>';
 
 
-        if($this->form_billing_suspend_status == 1) {
+        if ($this->form_billing_suspend_status == 1) {
             $output .= "<td rowspan=\"3\">
                 <textarea type=\"text\" name=\"billing_suspend_reason\" cols=\"40\" rows=\"4\" >".htmlspecialchars($this->form_billing_suspend_reason)."</textarea>
                 </td>";
@@ -1114,7 +1114,7 @@ class vlastnici2pridani extends adminator
                     <td>Poz. fakturace - od kdy:</td>
                 <td>';
 
-        if($this->form_billing_suspend_status == 1) {
+        if ($this->form_billing_suspend_status == 1) {
             $output .= "<input type=\"text\" name=\"billing_suspend_start\" size=\"10\" class=\"tcal\" value=\"".
                 htmlspecialchars($this->form_billing_suspend_start)."\" > datum (formát: dd.mm.yyyy)";
         } else {
@@ -1131,7 +1131,7 @@ class vlastnici2pridani extends adminator
             <td>Poz. fakturace - do kdy:</td>
             <td>';
 
-        if($this->form_billing_suspend_status == 1) {
+        if ($this->form_billing_suspend_status == 1) {
             $output .= "<input type=\"text\" name=\"billing_suspend_stop\" size=\"10\" value=\"".
             htmlspecialchars($this->form_billing_suspend_stop)."\" class=\"tcal\"> datum (formát: dd.mm.yyyy)";
         } else {
@@ -1168,20 +1168,20 @@ class vlastnici2pridani extends adminator
         $this->action_az_pole2 .= " diferencialni data: ";
 
         //novy zpusob archivovani dat
-        foreach($this->pole_puvodni_data as $key => $val) {
+        foreach ($this->pole_puvodni_data as $key => $val) {
             if (!($this->vlast_upd[$key] == $val)) {
                 if (!($key == "id_cloveka")) {
-                    if($key == "vs") {
+                    if ($key == "vs") {
                         $this->action_az_pole3 .= "změna <b>Variabilního symbolu</b> z: ";
                         $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
                         $this->action_az_pole3 .= ", ";
                     } //konec key == vs
-                    elseif($key == "archiv") {
+                    elseif ($key == "archiv") {
                         $this->action_az_pole3 .= "změna <b>Archivu</b> z: ";
 
-                        if($val == "0" and $this->vlast_upd[$key] == "1") {
+                        if ($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
+                        } elseif ($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
@@ -1189,12 +1189,12 @@ class vlastnici2pridani extends adminator
 
                         $this->action_az_pole3 .= ", ";
                     } //konec key == archiv
-                    elseif($key == "sluzba_int") {
+                    elseif ($key == "sluzba_int") {
                         $this->action_az_pole3 .= "změna <b>Služba Internet</b> z: ";
 
-                        if($val == "0" and $this->vlast_upd[$key] == "1") {
+                        if ($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
+                        } elseif ($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
@@ -1202,12 +1202,12 @@ class vlastnici2pridani extends adminator
 
                         $this->action_az_pole3 .= ", ";
                     } //konec key == sluzba_int
-                    elseif($key == "sluzba_iptv") {
+                    elseif ($key == "sluzba_iptv") {
                         $this->action_az_pole3 .= "změna <b>Služba IPTV</b> z: ";
 
-                        if($val == "0" and $this->vlast_upd[$key] == "1") {
+                        if ($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
+                        } elseif ($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
@@ -1215,12 +1215,12 @@ class vlastnici2pridani extends adminator
 
                         $this->action_az_pole3 .= ", ";
                     } //konec key == sluzba_iptv
-                    elseif($key == "sluzba_voip") {
+                    elseif ($key == "sluzba_voip") {
                         $this->action_az_pole3 .= "změna <b>Služba VoIP</b> z: ";
 
-                        if($val == "0" and $this->vlast_upd[$key] == "1") {
+                        if ($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
+                        } elseif ($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
@@ -1228,12 +1228,12 @@ class vlastnici2pridani extends adminator
 
                         $this->action_az_pole3 .= ", ";
                     } //konec key == sluzba_voip
-                    elseif($key == "billing_freq") {
+                    elseif ($key == "billing_freq") {
                         $this->action_az_pole3 .= "změna <b>Frekvence fakturování</b> z: ";
 
-                        if($val == "0" and $this->vlast_upd[$key] == "1") {
+                        if ($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Měsíční</span> na: <span class=\"az-s2\">Čtvrtletní</span>";
-                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
+                        } elseif ($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Čtvrtletní</span> na: <span class=\"az-s2\">Měsíční</span>";
                         } else {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
@@ -1268,12 +1268,12 @@ class vlastnici2pridani extends adminator
                     //   $this->action_az_pole3 .= ", ";
 
                     // } //end of elseif fakturacni_skupina_id
-                    elseif($key == "billing_suspend_status") {
+                    elseif ($key == "billing_suspend_status") {
                         $this->action_az_pole3 .= "změna <b>Pozastavené fakturace</b> z: ";
 
-                        if($val == "0" and $this->vlast_upd[$key] == "1") {
+                        if ($val == "0" and $this->vlast_upd[$key] == "1") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
-                        } elseif($val == "1" and $this->vlast_upd[$key] == "0") {
+                        } elseif ($val == "1" and $this->vlast_upd[$key] == "0") {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
                         } else {
                             $this->action_az_pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>";
@@ -1281,11 +1281,11 @@ class vlastnici2pridani extends adminator
 
                         $this->action_az_pole3 .= ", ";
 
-                    } elseif($key == "billing_suspend_reason") {
+                    } elseif ($key == "billing_suspend_reason") {
                         $this->action_az_pole3 .= "změna <b>Důvod pozastavení</b> z: ";
                         $this->action_az_pole3 .= "<span class=\"az-s1\" >".$val."</span> ";
                         $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$this->vlast_upd[$key]."</span>, ";
-                    } elseif($key == "billing_suspend_start") {
+                    } elseif ($key == "billing_suspend_start") {
                         $this->action_az_pole3 .= "změna <b>Poz. fakturace - od kdy</b> z: ";
 
                         list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $val);
@@ -1298,7 +1298,7 @@ class vlastnici2pridani extends adminator
 
                         $this->action_az_pole3 .= "na: <span class=\"az-s2\">".$val_cz_2."</span>, ";
 
-                    } elseif($key == "billing_suspend_stop") {
+                    } elseif ($key == "billing_suspend_stop") {
                         $this->action_az_pole3 .= "změna <b>Poz. fakturace - do kdy</b> z: ";
 
                         list($b_s_s_rok, $b_s_s_mesic, $b_s_s_den) = explode("-", $val);
@@ -1341,7 +1341,7 @@ class vlastnici2pridani extends adminator
                             'provedeno_kym' => $this->adminator->userIdentityUsername
                         ]);
 
-        if($id > 0) {
+        if ($id > 0) {
             $this->p_bs_alerts["Změna byla úspěšně zaznamenána do archivu změn."] = "success";
         } else {
             $this->p_bs_alerts["Chyba! Změnu do archivu změn se nepodařilo přidat."] = "danger";
@@ -1352,12 +1352,12 @@ class vlastnici2pridani extends adminator
     {
         $output = "";
 
-        if((strlen($this->form_trvani_do) > 0)) {
+        if ((strlen($this->form_trvani_do) > 0)) {
             list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = preg_split("/\./", $this->form_trvani_do);
             $this->form_trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
         }
 
-        if((strlen($this->form_datum_podpisu) > 0)) {
+        if ((strlen($this->form_datum_podpisu) > 0)) {
             list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = preg_split("/\./", $this->form_datum_podpisu);
             $this->form_datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
         }
@@ -1400,14 +1400,14 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["fakturacni_skupina_id"] = null;
         }
 
-        if($this->form_sluzba_int == 1) {
+        if ($this->form_sluzba_int == 1) {
             $vlast_add["sluzba_int_id_tarifu"] = $this->form_sluzba_int_id_tarifu;
         }
-        if($this->form_sluzba_iptv == 1) {
+        if ($this->form_sluzba_iptv == 1) {
             $vlast_add["sluzba_iptv_id_tarifu"] = $this->form_sluzba_iptv_id_tarifu;
         }
 
-        if($this->form_billing_suspend_status == 1) {
+        if ($this->form_billing_suspend_status == 1) {
             $vlastnik_add["billing_suspend_status"] = intval($this->form_billing_suspend_status);
             $vlastnik_add["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($this->form_billing_suspend_reason);
 
@@ -1423,7 +1423,7 @@ class vlastnici2pridani extends adminator
 
         $res = pg_insert($this->conn_pgsql, 'vlastnici', $vlastnik_add);
 
-        if($res) {
+        if ($res) {
             $this->alert_type = "success";
             $this->alert_content = "Data úspěšně uloženy do databáze vlastníků.";
         } else {
@@ -1437,7 +1437,7 @@ class vlastnici2pridani extends adminator
         // pridame to do archivu zmen
         $pole = "<b>akce: pridani vlastnika ; </b><br>";
 
-        foreach($vlastnik_add as $key => $val) {
+        foreach ($vlastnik_add as $key => $val) {
             $pole = $pole." [".$key."] => ".$val."\n";
         }
 
@@ -1454,7 +1454,7 @@ class vlastnici2pridani extends adminator
                     'provedeno_kym' => $this->adminator->userIdentityUsername
                 ]);
 
-        if($id > 0) {
+        if ($id > 0) {
             $this->p_bs_alerts["Změna byla úspěšně zaznamenána do archivu změn."] = "success";
         } else {
             $this->p_bs_alerts["Chyba! Změnu do archivu změn se nepodařilo přidat."] = "danger";
@@ -1475,7 +1475,7 @@ class vlastnici2pridani extends adminator
         $this->action_az_pole2 = "<b>akce: uprava vlastnika; </b><br>";
 
         $vysl4 = pg_query($this->conn_pgsql, "select * from vlastnici WHERE id_cloveka='".intval($this->form_update_id)."' ");
-        if((pg_num_rows($vysl4) <> 1)) {
+        if ((pg_num_rows($vysl4) <> 1)) {
             $output .= "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>";
         } else {
             while ($data4 = pg_fetch_array($vysl4)):
@@ -1517,11 +1517,11 @@ class vlastnici2pridani extends adminator
                 $this->pole_puvodni_data["billing_suspend_start"]  = $data4["billing_suspend_start"];
                 $this->pole_puvodni_data["billing_suspend_stop"]   = $data4["billing_suspend_stop"];
 
-                if($this->form_sluzba_int == 1) {
+                if ($this->form_sluzba_int == 1) {
                     $this->pole_puvodni_data["sluzba_int_id_tarifu"] = $data4["sluzba_int_id_tarifu"];
                 }
 
-                if($this->form_sluzba_iptv == 1) {
+                if ($this->form_sluzba_iptv == 1) {
                     $this->pole_puvodni_data["sluzba_iptv_id_tarifu"] = $data4["sluzba_iptv_id_tarifu"];
                 }
 
@@ -1530,17 +1530,17 @@ class vlastnici2pridani extends adminator
             endwhile;
         }
 
-        if((strlen($this->form_trvani_do) > 0)) {
+        if ((strlen($this->form_trvani_do) > 0)) {
             list($trvani_do_den, $trvani_do_mesic, $trvani_do_rok) = explode("\.", $this->form_trvani_do);
             $this->form_trvani_do = $trvani_do_rok."-".$trvani_do_mesic."-".$trvani_do_den;
         }
 
-        if((strlen($this->form_datum_podpisu) > 0)) {
+        if ((strlen($this->form_datum_podpisu) > 0)) {
             list($datum_podpisu_den, $datum_podpisu_mesic, $datum_podpisu_rok) = explode("\.", $this->form_datum_podpisu);
             $this->form_datum_podpisu = $datum_podpisu_rok."-".$datum_podpisu_mesic."-".$datum_podpisu_den;
         }
 
-        if((strlen($this->form_billing_freq) <> 1)) {
+        if ((strlen($this->form_billing_freq) <> 1)) {
             $this->form_billing_freq = 0;
         }
 
@@ -1599,15 +1599,15 @@ class vlastnici2pridani extends adminator
             $this->vlast_upd["fakturacni_skupina_id"] = null;
         }
 
-        if($this->form_sluzba_int == 1) {
+        if ($this->form_sluzba_int == 1) {
             $this->vlast_upd["sluzba_int_id_tarifu"] = $this->form_sluzba_int_id_tarifu;
         }
 
-        if($this->form_sluzba_iptv == 1) {
+        if ($this->form_sluzba_iptv == 1) {
             $this->vlast_upd["sluzba_iptv_id_tarifu"] = $this->form_sluzba_iptv_id_tarifu;
         }
 
-        if($this->form_billing_suspend_status == 1) {
+        if ($this->form_billing_suspend_status == 1) {
             $this->vlast_upd["billing_suspend_status"] = intval($this->form_billing_suspend_status);
             $this->vlast_upd["billing_suspend_reason"] = $this->conn_mysql->real_escape_string($this->form_billing_suspend_reason);
 
@@ -1639,7 +1639,7 @@ class vlastnici2pridani extends adminator
             $error_nr = $e->getMessage();
         }
 
-        if($this->action_affected == 1) {
+        if ($this->action_affected == 1) {
             $this->alert_type = "success";
             $this->alert_content = "Data v databázi úspěšně změněny. (affected:" . $this->action_affected . ")\n";
         } else {
@@ -1662,12 +1662,12 @@ class vlastnici2pridani extends adminator
     private function checknick($nick)
     {
         $nick_check = preg_match('/^([[:alnum:]]|_|-)+$/', $nick);
-        if(!($nick_check)) {
+        if (!($nick_check)) {
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick.") není ve správnem formátu!!! (Povoleno alfanumerické znaky, dolní podtržítko, pomlčka)</H4></div>";
         }
 
-        if((strlen($nick) > 20)) {
+        if ((strlen($nick) > 20)) {
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Nick (".$nick.") je moc dlouhý! (Maximální délka je 20 znaků)</H4></div>";
         }
@@ -1677,7 +1677,7 @@ class vlastnici2pridani extends adminator
     private function checkvs($input)
     {
         $input_check = preg_match('/^([[:digit:]]+)$/', $input);
-        if(!($input_check)) {
+        if (!($input_check)) {
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Variabilní symbol ( ".$input." ) není ve správnem formátu!!! (Pouze čísla)</H4></div>";
         }
@@ -1698,14 +1698,14 @@ class vlastnici2pridani extends adminator
     {
         $ui_check = preg_match('/^([[:digit:]]|\.)+$/', $input);
 
-        if(!($ui_check)) {
+        if (!($ui_check)) {
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$input." ) není ve správnem formátu (Povoleny pouze čísla)!!! </H4></div>";
         }
 
         $ui_check2 = strlen($input);
 
-        if($ui_check2 > 5) {
+        if ($ui_check2 > 5) {
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Účetní index ( ".$input." ) překračuje povolenou délku (5 znaků) !!! </H4></div>";
         }
@@ -1741,12 +1741,12 @@ class vlastnici2pridani extends adminator
 
     private function check_tel($number)
     {
-        if(!(preg_match('/^([[:digit:]])+$/', $number))) {
+        if (!(preg_match('/^([[:digit:]])+$/', $number))) {
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Telefon (".$number.") není ve správnem formátu! (pouze číslice)</H4></div>";
         }
 
-        if(strlen($number) <> 9) {
+        if (strlen($number) <> 9) {
 
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Pole Telefon (".$number.") musí obsahovat 9 číslic!</H4></div>";
@@ -1761,7 +1761,7 @@ class vlastnici2pridani extends adminator
         $month = intval($a_date["1"]);
         $year =  intval($a_date["2"]);
 
-        if(!checkdate($month, $day, $year)) {
+        if (!checkdate($month, $day, $year)) {
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Datum ".$desc." (".$date.") není ve správném formátu! (dd.mm.rrrr)</H4></div>";
         }
@@ -1770,7 +1770,7 @@ class vlastnici2pridani extends adminator
 
     private function check_b_reason($reason)
     {
-        if((strlen($reason) > 30)) {
+        if ((strlen($reason) > 30)) {
             $this->fail = "true";
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Pole \"Důvod pozastavení\" je moc dlouhé! Maximální počet je 30 znaků.</H4></div>";
         }

@@ -135,7 +135,7 @@ class GuardMiddleware implements MiddlewareInterface
 
         $feature = $this->container->get('openfeature');
 
-        if($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true) === false) {
+        if ($feature->getBooleanValue("adminator3SlimMiddlewareCsrf", true) === false) {
             $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ':  slim\csrf\guard middleware disabled over openFeature');
             return $handler->handle($request);
         }

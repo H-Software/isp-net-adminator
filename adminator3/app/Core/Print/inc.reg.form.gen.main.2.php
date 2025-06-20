@@ -171,7 +171,7 @@ $pdf->MultiCell(175, 7, $poznamka2, 0, 1);
 
 $datum_nz = date('Y-m-d-H-i-s');
 
-if($id_cloveka > 0) {
+if ($id_cloveka > 0) {
     $nazev_souboru = "print/temp/reg-form-pdf-id-".$id_cloveka."-".$datum_nz.".pdf";
 } else {
     $nazev_souboru = "print/temp/reg-form-pdf-ec-".$ec."-".$datum_nz.".pdf";

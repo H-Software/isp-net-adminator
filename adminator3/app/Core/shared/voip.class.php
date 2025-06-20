@@ -55,7 +55,7 @@ class voip
 
         $pocet_sloupcu = "7";
 
-        if($mod == 1) {
+        if ($mod == 1) {
             $styl_1_radka = " style=\"border-bottom: 1px solid black; \" ";
             echo "
      <tr ".$styl_1_radka." >
@@ -75,7 +75,7 @@ class voip
      <tr><td colspan=\"".$pocet_sloupcu."\"><br></td></tr>";
         }
 
-        while($data = mysql_fetch_array($this->dotaz_rs)) {
+        while ($data = mysql_fetch_array($this->dotaz_rs)) {
             echo "<tr>";
 
             echo "<td class=\"voip-vypis-radek\" >";
@@ -97,7 +97,7 @@ class voip
 
             $id_vlastnika = $data["id_vlastnika"];
 
-            if($mod == 1) {
+            if ($mod == 1) {
                 $this->zjisteni_vlastnika($id_vlastnika);
             } else {
                 echo $id_vlastnika;
@@ -111,9 +111,9 @@ class voip
             }
             if ($data["typ_systemu"] == 1) {
                 echo "Net4Net";
-            } elseif($data["typ_systemu"] == 2) {
+            } elseif ($data["typ_systemu"] == 2) {
                 echo "Dialtelecom";
-            } elseif($data["typ_systemu"] == 0) {
+            } elseif ($data["typ_systemu"] == 0) {
                 echo "nevybráno";
             } else {
                 echo $data["typ_systemu"];

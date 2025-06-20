@@ -59,7 +59,7 @@ class adminatorController extends Controller
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         // for using mocked instance in tests
-        if(isset($adminatorInstance)) {
+        if (isset($adminatorInstance)) {
             $this->adminator = $adminatorInstance;
         } else {
             $this->adminator = new \App\Core\adminator(
@@ -77,10 +77,10 @@ class adminatorController extends Controller
         //
 
         // moved this into constructor for using identity across whole application
-        if(strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
+        if (strlen($this->adminator->userIdentityUsername) < 1 or $this->adminator->userIdentityUsername == null) {
             // check if user exists (for testing purposes)
-            if($this->sentinel->getUser()) {
-                if($this->sentinel->getUser()->email == null) {
+            if ($this->sentinel->getUser()) {
+                if ($this->sentinel->getUser()->email == null) {
                     $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": getUser from sentinel failed");
                     throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot get user identity! (getUser from sentinel)");
                 } else {
@@ -108,7 +108,7 @@ class adminatorController extends Controller
 
         $status = intval($status);
         $_response = ['code' => $status, 'data' => null, 'msg' => ''];
-        if(200 == $status or 418 == $status) {
+        if (200 == $status or 418 == $status) {
             $_response['data'] = $data;
         } else {
             $_response['msg'] = $msg;
@@ -156,7 +156,7 @@ class adminatorController extends Controller
         }
 
         // "double" check for some backwards compatibility shit
-        if(!is_object($this->adminator)) {
+        if (!is_object($this->adminator)) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": instance of Adminator class not exists");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: cannot verify user login.");
         }
@@ -170,7 +170,7 @@ class adminatorController extends Controller
         $checkLevel = $this->adminator->checkLevel();
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": checkLevel result: ".var_export($checkLevel, true));
 
-        if($checkLevel === false) {
+        if ($checkLevel === false) {
             $this->createNoLoginResponse();
             return false;
         }
@@ -200,7 +200,7 @@ class adminatorController extends Controller
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
 
-        if(is_object($request) and is_object($response)) {
+        if (is_object($request) and is_object($response)) {
             list($csrf_html) = $this->generateCsrfToken($request, $response, true);
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             $this->smarty->assign("kat_csrf_html", $csrf_html);
@@ -212,7 +212,7 @@ class adminatorController extends Controller
         $this->smarty->assign("show_se_cat_output", array("Nezobr. odkazy","Zobrazit odkazy"));
 
         $show_se_cat = 0;
-        if($request != null) {
+        if ($request != null) {
             if ($request->getMethod() == "POST") {
                 $show_se_cat = $request->getParsedBody()['show_se_cat'];
                 $this->logger->debug("adminatorController\\header: parsed show_se_cat with: ".var_export($show_se_cat, true));

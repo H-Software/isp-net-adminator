@@ -55,7 +55,7 @@ class admin
 
         $output  = "";
 
-        if($_POST['search']) {
+        if ($_POST['search']) {
             $search_string = $this->conn_mysql->real_escape_string($_POST['search']);
             $this->logger->info("admin\LevelList search string: " . var_export($search_string, true));
         }
@@ -133,7 +133,7 @@ class admin
 
             $id_new = intval($_POST["new_id"]);
 
-            if($id_new > 0) {
+            if ($id_new > 0) {
                 // update
                 $sql = "UPDATE leveling SET popis='$popis', level='$level' where id=".$id_new;
             } else {
@@ -159,7 +159,7 @@ class admin
             //nejdrive nacteme predchozi data
             $update_id = intval($_POST["update_id"]);
 
-            if($update_id > 0) {
+            if ($update_id > 0) {
                 try {
                     $vysledek = $this->conn_mysql->query("select * from leveling where id = $update_id ");
                 } catch (Exception $e) {
@@ -186,7 +186,7 @@ class admin
 				<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">
 				';
 
-            if($update_id > 0) {
+            if ($update_id > 0) {
                 $output .= "<input type=\"hidden\" name=\"new_id\" value=\" " .$id . "\">";
             }
 
@@ -227,14 +227,14 @@ class admin
         $output = "";
 
         $sql_where = "";
-        if((preg_match('/^([[:digit:]]+)$/', $_GET["id_tarifu"]))) {
+        if ((preg_match('/^([[:digit:]]+)$/', $_GET["id_tarifu"]))) {
             $sql_where = "WHERE id_tarifu = '".intval($_GET["id_tarifu"])."' ";
         }
 
         $dotaz_tarify = $this->conn_mysql->query(" SELECT * FROM tarify_int " . $sql_where . " ORDER BY id_tarifu");
         $dotaz_tarify_radku = $dotaz_tarify->num_rows;
 
-        if($dotaz_tarify_radku == 0) {
+        if ($dotaz_tarify_radku == 0) {
             $output .= "<div class=\"alert alert-warning\" role=\"alert\" style=\"padding-top: 5px; padding-bottom: 5px;\">Žádné záznamy v databázi</div>";
             return array($output);
         }
@@ -260,7 +260,7 @@ class admin
 
         $i = 0;
         foreach ($data as $id => $a) {
-            if($i == 0) {
+            if ($i == 0) {
                 // second header row
                 $dataView[$i] = array(
                     $headers[0] => "H",
@@ -340,20 +340,20 @@ class admin
         $erase_id = $_GET["erase_id"];
 
         //kontrola promennych zde ...
-        if(isset($update_id)) {
-            if(!(preg_match('/^([[:digit:]])+$/', $update_id))) {
+        if (isset($update_id)) {
+            if (!(preg_match('/^([[:digit:]])+$/', $update_id))) {
                 $error .= "<div>Chyba! Update id není ve správném formátu. </div>";
             }
         }
 
-        if(isset($erase_id)) {
-            if(!(preg_match('/^([[:digit:]])+$/', $erase_id))) {
+        if (isset($erase_id)) {
+            if (!(preg_match('/^([[:digit:]])+$/', $erase_id))) {
                 $error .= "<div>Chyba! Erase id není ve správném formátu. </div>";
             }
         }
 
-        if(isset($update_id)) {
-            if(isset($send)) {
+        if (isset($update_id)) {
+            if (isset($send)) {
                 //budeme ukladat ..
                 $output .= "budeme ukladat ... T.B.A.";
 
@@ -364,8 +364,8 @@ class admin
             }
 
         } //konec if isset update_id
-        elseif(isset($erase_id)) {
-            if(isset($send)) {
+        elseif (isset($erase_id)) {
+            if (isset($send)) {
                 //budeme ukladat ..
                 $output .= "budeme mazat ...";
 

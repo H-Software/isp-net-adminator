@@ -46,7 +46,7 @@ class HomeController extends adminatorController
 
         parent::__construct($container, $adminatorInstance);
 
-        if(isset($opravyInstance)) {
+        if (isset($opravyInstance)) {
             $this->opravyInstance = $opravyInstance;
         } else {
             $this->opravyInstance = new \opravy($this->container);
@@ -60,7 +60,7 @@ class HomeController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(38)) {
+        if (!$this->checkLevel(38)) {
             return $this->response;
         };
 
@@ -121,7 +121,7 @@ class HomeController extends adminatorController
             $nastenka = new \board($this->container);
 
             $rss_token = $this->adminator->getUserToken();
-            if($rss_token !== false) {
+            if ($rss_token !== false) {
                 $this->smarty->assign("token", $rss_token);
             } else {
                 $this->logger->error("othersController\board: getUserToken failed");
@@ -136,7 +136,7 @@ class HomeController extends adminatorController
             $zpravy = $nastenka->show_messages();
             // $this->logger->debug("homeController\board: show_messages result: " . var_export($zpravy, true));
 
-            if(isset($nastenka->query_error)) {
+            if (isset($nastenka->query_error)) {
                 $this->smarty->assign("query_error", $nastenka->query_error);
             }
 

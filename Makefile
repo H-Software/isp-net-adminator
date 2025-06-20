@@ -23,6 +23,8 @@ run-composer-local:
 run-a3-phpstan:
 	cd adminator3 \
 		&& php \
+			vendor/phpstan/phpstan/phpstan.phar --version \
+		&& php \
 			vendor/phpstan/phpstan/phpstan.phar \
 			analyse \
 				app \

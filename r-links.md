@@ -141,6 +141,15 @@
   - not compatible with java-junit
 - https://github.com/EnricoMi/publish-unit-test-result-action
 
+## Redis
+- https://github.com/phpredis/phpredis
+- https://hub.docker.com/_/redis
+- https://laravel.com/docs/10.x/redis#interacting-with-redis
+- https://github.com/PromPHP/prometheus_client_php/issues/115#issuecomment-1850351507
+- https://gist.github.com/h-collector/626c1035a0ddffef28fce4b3bc247e70
+- https://github.com/hyssa-dev/hibiken-asynq-client
+- https://protobuf.dev/reference/php/php-generated/
+
 ## Author
 Patrik Majer
 

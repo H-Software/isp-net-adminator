@@ -48,10 +48,10 @@ class fakturacni
         if ($dotaz_radku == 0) {
             $output .= "<tr><td> CHYBA! Fakturacni udaje nenalezeny. debug: id=$id_f </td></tr>";
         } else {
-            while($data = pg_fetch_array($dotaz)):
+            while ($data = pg_fetch_array($dotaz)):
                 $output .= "<tr>";
 
-                if($this->firma == 1) {
+                if ($this->firma == 1) {
                     $output .= "<td></td>";
                 }
 

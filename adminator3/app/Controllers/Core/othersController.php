@@ -41,7 +41,7 @@ class othersController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(95)) {
+        if (!$this->checkLevel(95)) {
             return $this->response;
         };
 
@@ -60,7 +60,7 @@ class othersController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(151)) {
+        if (!$this->checkLevel(151)) {
             return $this->response;
         };
 
@@ -98,7 +98,7 @@ class othersController extends adminatorController
 
         $pole_q = array();
 
-        while($data_q = $dotaz_q->fetch_array()) {
+        while ($data_q = $dotaz_q->fetch_array()) {
             $pole_q[] = array(
                 "id_question" => $data_q["id_question"], "jmeno" => $data_q["jmeno"],
                 "prijmeni" => $data_q["prijmeni"], "telefon" => $data_q["telefon"],
@@ -130,7 +130,7 @@ class othersController extends adminatorController
 
         $pole_o = array();
 
-        while($data_o = $dotaz_o->fetch_array()) {
+        while ($data_o = $dotaz_o->fetch_array()) {
             $pole_o[] = array(
                 "id_order" => $data_o["id_order"], "jmeno" => $data_o["jmeno"],
                 "prijmeni" => $data_o["prijmeni"], "adresa" => $data_o["adresa"],
@@ -171,7 +171,7 @@ class othersController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(87)) {
+        if (!$this->checkLevel(87)) {
             return $this->response;
         };
 
@@ -182,7 +182,7 @@ class othersController extends adminatorController
         $nastenka = new \board($this->container);
 
         $rss_token = $this->adminator->getUserToken();
-        if($rss_token !== false) {
+        if ($rss_token !== false) {
             $assignData["token"] = $rss_token;
         } else {
             $this->logger->error("othersController\board: getUserToken failed");
@@ -192,10 +192,10 @@ class othersController extends adminatorController
         $nastenka->load_vars($request);
         $nastenka->prepare_vars();
 
-        if($nastenka->action == "view") {
+        if ($nastenka->action == "view") {
             $assignData["mod"] = 1;
 
-            if($nastenka->what == "new") {
+            if ($nastenka->what == "new") {
                 $assignData["mod_hlaska"] = "->> Aktuální zprávy";
             } else {
                 $assignData["mod_hlaska"] = "->> Staré zprávy";
@@ -211,18 +211,18 @@ class othersController extends adminatorController
 
             $nastenka->write = false; //prvne předpokládáme zobr. formuláře
 
-            if(isset($nastenka->sent)) {
+            if (isset($nastenka->sent)) {
                 $nastenka->check_vars();
             }
 
-            if($nastenka->write) { //ulozeni dat
+            if ($nastenka->write) { //ulozeni dat
                 $assignData["mod"] = 3; //vysledny formular ulozeni
 
                 $nastenka->convert_vars();
                 $rs = $nastenka->insert_into_db();
 
                 $assignData["mod_hlaska"] = "->> Přidat zprávu";
-                if($rs == false) {
+                if ($rs == false) {
                     $assignData["rs"] = $rs;
                     $assignData["body"] = $nastenka->error;
                 } else {
@@ -262,7 +262,7 @@ class othersController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(309)) {
+        if (!$this->checkLevel(309)) {
             return $this->response;
         };
 
@@ -270,7 +270,7 @@ class othersController extends adminatorController
 
         $rs_check_login = $this->adminator->verifyUserToken($request);
 
-        if($rs_check_login == false) {
+        if ($rs_check_login == false) {
             $data = "";
 
             $row = new \stdClass();
@@ -288,7 +288,7 @@ class othersController extends adminatorController
         } else {
             $rs = $rss->exportRSS();
 
-            if($rs === false) {
+            if ($rs === false) {
                 $newResponse = $response
                                 ->withStatus(500)
                                 ->withHeader('Content-type', 'text/xml');

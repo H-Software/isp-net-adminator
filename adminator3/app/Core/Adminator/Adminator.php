@@ -4,13 +4,11 @@ namespace App\Core;
 
 use App\Models\User;
 use App\Models\PageLevel;
-
 use Psr\Http\Message\ServerRequestInterface;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Exception;
-
 use RouterOS\Config;
 use RouterOS\Client;
 use RouterOS\Query;
@@ -75,11 +73,11 @@ class adminator
         $this->smarty = $smarty;
         $this->settings = $settings;
 
-        if($sentinel != null) {
+        if ($sentinel != null) {
             $this->sentinel = $sentinel;
         }
 
-        if($userIPAddress == null) {
+        if ($userIPAddress == null) {
             $this->userIPAddress = $_SERVER['REMOTE_ADDR'];
         }
     }
@@ -120,8 +118,8 @@ class adminator
 
     public function fillEmptyVarsInArray(array $a, array $exclude = [])
     {
-        foreach($a as $key => $val) {
-            if(empty($val) and !in_array($key, $exclude)) {
+        foreach ($a as $key => $val) {
+            if (empty($val) and !in_array($key, $exclude)) {
                 $a[$key] = 0;
             }
         }
@@ -144,7 +142,7 @@ class adminator
             isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
         )->first(['level']);
 
-        if(is_object($rs)) {
+        if (is_object($rs)) {
             // $this->logger->info("adminator\getUserLevel dump db: " . var_export($rs, true));
             $a = $rs->toArray();
             $level = $a['level'];
@@ -152,7 +150,7 @@ class adminator
             // throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: DB result is null");
         }
 
-        if($level > 0) {
+        if ($level > 0) {
             return $level;
         } else {
             return false;
@@ -166,7 +164,7 @@ class adminator
             isset($this->userIdentityUsername) ? $this->userIdentityUsername : 0
         )->first(['token']);
 
-        if(is_object($rs)) {
+        if (is_object($rs)) {
             $a = $rs->toArray();
             $token = $a['token'];
         } else {
@@ -174,9 +172,9 @@ class adminator
             return false;
         }
 
-        if($token == null or $token == 0 or strlen($token) < 2) {
+        if ($token == null or $token == 0 or strlen($token) < 2) {
             $rs = $this->setuserToken();
-            if($rs === false) {
+            if ($rs === false) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": setuserToken failed.");
                 return false;
             } else {
@@ -197,7 +195,7 @@ class adminator
         )
         ->update(['token' => $token]);
 
-        if($affRows <> 1) {
+        if ($affRows <> 1) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": update data in database failed (affRows ". var_export($affRows, true) .")");
             return false;
         } else {
@@ -222,7 +220,7 @@ class adminator
         )->where('token', $token)
         ->first(['id']);
 
-        if(is_object($rs)) {
+        if (is_object($rs)) {
             $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": verifyUserToken: \"OK\" for " . var_export($this->userIdentityUsername, true));
             return true;
         } else {
@@ -241,12 +239,12 @@ class adminator
         // porovnat level uzivatele s prislusnym levelem
         // stranky podle jejiho id
 
-        if(strlen($this->userIdentityUsername) < 1 or $this->userIdentityUsername == null) {
+        if (strlen($this->userIdentityUsername) < 1 or $this->userIdentityUsername == null) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": empty userIdentityUsername");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: empty userIdentityUsername");
         }
 
-        if($this->userIdentityLevel == false) {
+        if ($this->userIdentityLevel == false) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": userIdentityLevel is not set");
             throw new Exception("Call " . __CLASS__ . "\\" . __FUNCTION__ . " failed: userIdentityLevel is not set");
         }
@@ -260,16 +258,16 @@ class adminator
             . "]"
         );
 
-        if(intval($page_level_id_custom) > 0) {
+        if (intval($page_level_id_custom) > 0) {
             $pl = $page_level_id_custom;
         } else {
             $pl = $this->page_level_id;
         }
 
         $page_level_rs = $this->find_page_level($this->logger, $pl);
-        if($page_level_rs === false or !is_int($page_level_rs)) {
+        if ($page_level_rs === false or !is_int($page_level_rs)) {
             $rs = false;
-        } elseif($this->userIdentityLevel >= $page_level_rs) {
+        } elseif ($this->userIdentityLevel >= $page_level_rs) {
             $rs = true;
         } else {
             $rs = false;
@@ -278,7 +276,7 @@ class adminator
         $this->logger->info("adminator\check_level: find_page_level: pl_id: " . $pl . ", level: " . var_export($page_level_rs, true));
         $this->logger->info("adminator\check_level: result: " . var_export($rs, true));
 
-        if($rs === false) {
+        if ($rs === false) {
             // user nema potrebny level
             return false;
         } else {
@@ -292,14 +290,14 @@ class adminator
         $page_level = 0;
 
         $rs = PageLevel::find(isset($page_id) ? $page_id : 0, ['level']);
-        if(is_object($rs)) {
+        if (is_object($rs)) {
             $a = $rs->toArray();
             $page_level = $a['level'];
         }
 
         $this->logger->info("adminator\\find_page_level: find result: " . var_export($page_level, true));
 
-        if($page_level > 0) {
+        if ($page_level > 0) {
             return $page_level;
         } else {
             return false;
@@ -334,7 +332,7 @@ class adminator
 
         $this->logger->info("adminator\getTarifIptvListForForm called");
 
-        if($show_zero_value === true) {
+        if ($show_zero_value === true) {
             $tarifs[0] = "Není vybráno";
         }
 
@@ -342,12 +340,12 @@ class adminator
 
         $num_rows = $q->num_rows;
 
-        if($num_rows < 1) {
+        if ($num_rows < 1) {
             $tarifs[0] =  "nelze zjistit / žádný tarif nenalezen";
             return $tarifs;
         }
 
-        while($data = $q->fetch_array()) {
+        while ($data = $q->fetch_array()) {
             $tarifs[$data['id_tarifu']] = $data["jmeno_tarifu"];
         }
 
@@ -363,7 +361,7 @@ class adminator
         }
 
         $rs_nums = pg_num_rows($rs);
-        if($rs_nums <> 1) {
+        if ($rs_nums <> 1) {
             return [false, "no rows in database"];
         }
 
@@ -374,7 +372,7 @@ class adminator
 
         if ($archiv_vlastnik == 1) {
             $link = "/vlastnici/archiv?find_id=".$id_cloveka;
-        } elseif($firma_vlastnik == 1) {
+        } elseif ($firma_vlastnik == 1) {
             $link = "/vlastnici2?find_id=".$id_cloveka;
         } else {
             $link = "/vlastnici?find_id=".$id_cloveka;
@@ -400,13 +398,13 @@ class adminator
         $dotaz_fn = "";
 
         for ($i = 0; $i < 4; $i++) {
-            if($i == 0) {
+            if ($i == 0) {
                 $sql = "SELECT * FROM faktury_neuhrazene";
-            } elseif($i == 1) {
+            } elseif ($i == 1) {
                 $sql = "SELECT * FROM faktury_neuhrazene WHERE ( ignorovat = '1' ) order by id";
-            } elseif($i == 2) {
+            } elseif ($i == 2) {
                 $sql = "SELECT * FROM faktury_neuhrazene WHERE par_id_vlastnika = '0' ";
-            } elseif($i == 3) {
+            } elseif ($i == 3) {
                 // $sql = "SELECT datum,DATE_FORMAT(datum, '%d.%m.%Y %H:%i:%s') as datum FROM fn_import_log order by id";
                 $sql = "SELECT datum, " . $this->getSqlDateFormat('datum'). " as datum FROM fn_import_log order by id";
             }
@@ -423,12 +421,12 @@ class adminator
                 $ret[$i] = 0;
             }
 
-            if($i == 3 and is_object($dotaz_fn)) {
+            if ($i == 3 and is_object($dotaz_fn)) {
                 $data3 = $dotaz_fn->fetchAll();
 
                 $datum_fn3 = (isset($data3[0])) ? $data3[0]["datum"] : "";
 
-                if(strlen($datum_fn3) > 0) {
+                if (strlen($datum_fn3) > 0) {
                     $ret[3] = $datum_fn3;
                 } else {
                     $ret[3] = "Unknown";
@@ -466,7 +464,7 @@ class adminator
             $this->smarty->assign("logged_users_error_message", $error_message);
         }
 
-        if(is_object($rs)) {
+        if (is_object($rs)) {
             $data = $rs->fetchAll();
         }
 
@@ -488,7 +486,7 @@ class adminator
         $limit = "10";
 
         foreach ($request->getQueryParams() as $i => $v) {
-            if(preg_match('/^(v_reseni_filtr|vyreseno_filtr|limit)$/', $i) and strlen($v) > 0) {
+            if (preg_match('/^(v_reseni_filtr|vyreseno_filtr|limit)$/', $i) and strlen($v) > 0) {
                 $$i = $request->getQueryParams()[$i];
             }
         }
@@ -507,12 +505,12 @@ class adminator
         $rs_vypis = $opravy->vypis_opravy($request, $pocet_bunek);
         // $this->logger->debug("homeController\opravy_a_zavady list: result: " . var_export($rs_vypis, true));
 
-        if($rs_vypis) {
+        if ($rs_vypis) {
             if (strlen($rs_vypis[0]) > 0) {
                 // no records in DB
                 $this->logger->info("homeController\opravy_a_zavady list: no records found in database.");
                 $content_opravy_a_zavady = $rs_vypis[0];
-            } elseif(strlen($rs_vypis[1]) > 0) {
+            } elseif (strlen($rs_vypis[1]) > 0) {
                 // raw html
                 $content_opravy_a_zavady = $rs_vypis[1];
             } else {
@@ -585,13 +583,13 @@ class adminator
     {
         $output = "<div align=\"center\" style=\"font-size: 0.8rem; padding-top: 5px; padding-bottom: 5px;\">";
 
-        if($linkPreviousPage != null) {
+        if ($linkPreviousPage != null) {
             $output .= "<span><a href=\"".$linkPreviousPage."\" >previous</a></span> | ";
         }
-        if($linkCurrentPage != null) {
+        if ($linkCurrentPage != null) {
             $output .= "<span style=\"margin-left: 10px: margin-right: 10px;\">" . $linkCurrentPage . "</span>";
         }
-        if($linkNextPage != null) {
+        if ($linkNextPage != null) {
             $output .= " | <span><a href=\"".$linkNextPage."\" >next</a></span>";
         }
 
@@ -606,7 +604,7 @@ class adminator
 
         $sql = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".$owner_id."' ";
 
-        if($this->conn_pgsql != null) {
+        if ($this->conn_pgsql != null) {
             $vlastnik_dotaz = pg_query($this->conn_pgsql, $sql);
         } else {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": missing pgsql handler");
@@ -614,12 +612,12 @@ class adminator
         }
 
         $vlastnik_radku = pg_num_rows($vlastnik_dotaz);
-        if($vlastnik_radku <= 0) {
+        if ($vlastnik_radku <= 0) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": missing database data");
             return false;
         }
 
-        while($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
+        while ($data_vlastnik = pg_fetch_array($vlastnik_dotaz)) {
             $firma_vlastnik = $data_vlastnik["firma"];
             $archiv_vlastnik = $data_vlastnik["archiv"];
         }
@@ -641,8 +639,8 @@ class adminator
 
         $rs_objekt = pg_query($conn_pgsql, "SELECT id_nodu FROM objekty WHERE id_komplu = '$id' ");
 
-        if((pg_num_rows($rs_objekt) == 1)) {
-            while($data = pg_fetch_array($rs_objekt)) {
+        if ((pg_num_rows($rs_objekt) == 1)) {
+            while ($data = pg_fetch_array($rs_objekt)) {
                 $id_nodu = $data["id_nodu"];
             }
         } else {
@@ -651,7 +649,7 @@ class adminator
 
         $rs_nod = $conn_mysql->query("SELECT router_id FROM nod_list WHERE id = '$id_nodu' ");
 
-        while($data2 = $rs_nod->fetch_array()) {
+        while ($data2 = $rs_nod->fetch_array()) {
             $router_id = $data2["router_id"];
         }
 
@@ -667,8 +665,8 @@ class adminator
 
         $rs_router = $conn_mysql->query("SELECT nazev, parent_router FROM router_list WHERE id = '$router_id' ");
 
-        if($rs_router->num_rows == 1) {
-            while($data = $rs_router->fetch_array()) {
+        if ($rs_router->num_rows == 1) {
+            while ($data = $rs_router->fetch_array()) {
                 $r_nazev = $data["nazev"];
                 $r_parent = $data["parent_router"];
             }
@@ -676,11 +674,11 @@ class adminator
             return 0; /* chyba :) */
         }
 
-        if(preg_match("/^reinhard*/", $r_nazev)) {
+        if (preg_match("/^reinhard*/", $r_nazev)) {
             //mame reinharda... vracime jeho ID
             return $router_id;
         } else {
-            if($r_parent == 0) {
+            if ($r_parent == 0) {
                 return 1;
             } else {
                 $rs = adminator::find_parent_reinhard($r_parent, $conn_mysql);
@@ -718,12 +716,12 @@ class adminator
 
         exec("scripts/ping.sh ".$router_ip, $ping_output, $ping_ret);
 
-        if(empty($ping_output)) {
+        if (empty($ping_output)) {
             // ping failed
             return [false, "Chyba! Příkaz Ping se nepodařilo provést."];
         }
 
-        if(!($ping_output[0] > 0)) {
+        if (!($ping_output[0] > 0)) {
             //  NENI ODEZVA NA PING
 
             $ret_array[0] = false;
@@ -775,7 +773,7 @@ class adminator
 
         $rs_snmp_f = adminator::test_snmp_function();
 
-        if($rs_snmp_f[0] === false) {
+        if ($rs_snmp_f[0] === false) {
 
             $ret_array[0] = false;
             $ret_array[1] = "Chyba! ".$rs_snmp_f[1]."\n";
@@ -785,7 +783,7 @@ class adminator
 
         $rs_snmp = snmpget($router_ip, "public", ".1.3.6.1.2.1.25.3.3.1.2.1", 300000);
 
-        if($rs_snmp === false) {
+        if ($rs_snmp === false) {
 
             $ret_array[0] = false;
             $ret_array[1] = "Chyba! Router korektne neodpovídá na SNMP GET dotaz. (".$rs_snmp.") \n";
@@ -822,14 +820,14 @@ class adminator
 
         $ret_array[0] = true;
 
-        if(!(function_exists('snmpget'))) {
+        if (!(function_exists('snmpget'))) {
 
             $ret_array[0] = false;
             $ret_array[1] = "Chyba! Neexistuje funkce \"snmpget\"!";
 
         }
 
-        if(!(function_exists('snmpwalk'))) {
+        if (!(function_exists('snmpwalk'))) {
 
             $ret_array[0] = false;
             $ret_array[1] = "Chyba! Neexistuje funkce \"snmpwalk\"!";

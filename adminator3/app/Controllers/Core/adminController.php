@@ -37,7 +37,7 @@ class adminController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(91)) {
+        if (!$this->checkLevel(91)) {
             return $this->response;
         };
 
@@ -56,7 +56,7 @@ class adminController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(17)) {
+        if (!$this->checkLevel(17)) {
             return $this->response;
         };
 
@@ -75,7 +75,7 @@ class adminController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(21)) {
+        if (!$this->checkLevel(21)) {
             return $this->response;
         };
 
@@ -99,7 +99,7 @@ class adminController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(21)) {
+        if (!$this->checkLevel(21)) {
             return $this->response;
         };
 
@@ -118,7 +118,7 @@ class adminController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(23)) {
+        if (!$this->checkLevel(23)) {
             return $this->response;
         };
 
@@ -134,7 +134,7 @@ class adminController extends adminatorController
         );
 
         $code = 200;
-        if($error) {
+        if ($error) {
             $code = 500;
         }
 
@@ -148,7 +148,7 @@ class adminController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(131)) {
+        if (!$this->checkLevel(131)) {
             return $this->response;
         };
 
@@ -169,7 +169,7 @@ class adminController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(303)) {
+        if (!$this->checkLevel(303)) {
             return $this->response;
         };
 

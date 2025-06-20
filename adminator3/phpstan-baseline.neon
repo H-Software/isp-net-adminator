@@ -65,6 +65,16 @@ parameters:
 			count: 1
 			path: app/Core/Partner/partner.class.php
 
+		-
+			message: "#^Variable \\$filtr_akceptovano in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.servis.class.php
+
+		-
+			message: "#^Variable \\$filtr_prio in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: app/Core/Partner/partner.servis.class.php
+
 		# -
 		# 	message: "#^Parameter \\#1 \\$string of function htmlspecialchars expects string, int given\\.$#"
 		# 	count: 1

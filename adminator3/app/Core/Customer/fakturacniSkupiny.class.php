@@ -71,7 +71,7 @@ class fakturacniSkupiny extends adminator
     {
         $nazev_check = preg_match('/^([[:alnum:]]|_|-)+$/', $nazev);
 
-        if($nazev_check === false) {
+        if ($nazev_check === false) {
             $this->fail = "true";
 
             $this->error .= "<div class=\"vlasnici-add-fail-nick\"><H4>Název ( ".$nazev." ) obsahuje nepovolené znaky! (Povolené: čísla, písmena a-Z,_ ,- )</H4></div>";
@@ -86,7 +86,7 @@ class fakturacniSkupiny extends adminator
         $this->action_form = $this->formInit();
 
         $update_id = $_GET["update_id"];
-        if((strlen($update_id) < 1)) {
+        if ((strlen($update_id) < 1)) {
             $update_id = $_POST["update_id"];
         }
 
@@ -94,7 +94,7 @@ class fakturacniSkupiny extends adminator
         //hidden prvek, kvuli testovani promenych ..
         $send = $_POST["send"];
 
-        if((!(preg_match('/^([[:digit:]])+$/', $update_id)) and ($update_id > 0))) {
+        if ((!(preg_match('/^([[:digit:]])+$/', $update_id)) and ($update_id > 0))) {
             $output .= "<div class=\"vlasnici-add-fail-nick\" style=\"padding-top: 10px; color: red; \">
             <H4>ID fakturační skupiny ( ".$update_id." ) není ve správnem formátu !!! (Povolené: Čísla v desítkové soustavě.)</H4></div>";
             exit;
@@ -102,7 +102,7 @@ class fakturacniSkupiny extends adminator
             $this->form_update_id = $update_id;
         }
 
-        if(($this->form_update_id > 0)) {
+        if (($this->form_update_id > 0)) {
             // run this code in update mode
             $update_status = 1;
             $this->logger->info("fakturacniSkupiny\Action: update mode set");
@@ -113,12 +113,12 @@ class fakturacniSkupiny extends adminator
             }
         }
 
-        if(($update_status == 1 and !(isset($send)))) {
+        if (($update_status == 1 and !(isset($send)))) {
             //rezim upravy - nacitani predchozich hodnot
             $dotaz_upd = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '". intval($this->form_update_id) . "' ");
             $radku_upd = $dotaz_upd->num_rows;
 
-            if($radku_upd == 0) {
+            if ($radku_upd == 0) {
                 $output .= "<div style=\"color: red; \" >Chyba! Požadovaná data nelze načíst! </div>";
             } else {
                 $this->logger->info("fakturacniSkupiny\Action: form_data from DB loaded");
@@ -148,40 +148,40 @@ class fakturacniSkupiny extends adminator
         }
 
         //kontrola vlozenych udaju ( kontrolujou se i vygenerovana data ... )
-        if((strlen($form_data['nazev']) > 0)) {
+        if ((strlen($form_data['nazev']) > 0)) {
             $this->checkNazev($form_data['nazev']);
         }
 
         // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
-        if((($form_data['nazev'] != "") and ($form_data['typ'] != "") and ($form_data['typ_sluzby'] >= 0))) :
+        if ((($form_data['nazev'] != "") and ($form_data['typ'] != "") and ($form_data['typ_sluzby'] >= 0))) :
 
             // check duplicit v modu pridani ...
-            if(($update_status != 1)) {
+            if (($update_status != 1)) {
                 $MSQ_NAZEV = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '" . $form_data['nazev'] . "' AND typ = '" . $form_data['typ'] . "' ) ");
                 $MSQ_FT = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '" . $form_data['fakturacni_text'] . "' AND typ = '" . $form_data['typ'] . "' ) ");
 
-                if($MSQ_NAZEV->num_rows > 0) {
+                if ($MSQ_NAZEV->num_rows > 0) {
                     $this->error .= "<div style=\"color: #CC0066; \" ><h4>Název (".$form_data['nazev'].") již existuje!</h4></div>";
                     $this->fail = "true";
                 }
-                if($MSQ_FT->num_rows > 0) {
+                if ($MSQ_FT->num_rows > 0) {
                     $this->error .= "<div style=\"color: #CC0066; \" ><h4>Fakturační text (".$form_data['fakturacni_text'].") již existuje!</h4></div>";
                     $this->fail = "true";
                 }
             }
 
             // check duplicit v modu uprava
-            if(($update_status == 1 and (isset($odeslano)))) {
+            if (($update_status == 1 and (isset($odeslano)))) {
                 //zjisti jestli neni duplicitni dns, ip
                 $MSQ_NAZEV = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( nazev LIKE '" . $form_data['nazev'] . "' AND typ = '" . $form_data['typ'] . "' AND id != '$this->form_update_id' ) ");
                 $MSQ_FT = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE ( fakturacni_text LIKE '" . $form_data['fakturacni_text'] . "' AND typ = '" . $form_data['typ'] . "' AND id != '$this->form_update_id' ) ");
 
-                if($MSQ_NAZEV->num_rows > 0) {
+                if ($MSQ_NAZEV->num_rows > 0) {
                     $this->error .= "<div style=\"color: #CC0066;\" ><h4>Název (".$form_data['nazev'].") již existuje!!!</h4></div>";
                     $this->fail = "true";
                 }
 
-                if($MSQ_FT->num_rows > 0) {
+                if ($MSQ_FT->num_rows > 0) {
                     $this->error .= "<div style=\"color: #CC0066;\" ><h4>Fakturační text (".$form_data['fakturacni_text'].") již existuje!!!</h4></div>";
                     $this->fail = "true";
                 }
@@ -189,7 +189,7 @@ class fakturacniSkupiny extends adminator
             }
 
             //checkem jestli se macklo na tlacitko "OK" :)
-            if(preg_match("/OK/", $odeslano)) {
+            if (preg_match("/OK/", $odeslano)) {
                 $output .= "";
             } else {
                 $this->fail = "true";
@@ -198,18 +198,18 @@ class fakturacniSkupiny extends adminator
             }
 
         //ulozeni
-        if(!(isset($this->fail))) {
+        if (!(isset($this->fail))) {
             // priprava / konverze promennych pred ulozenim ...
             //if ( $dov_net == 2 ) { $dov_net_w ="a"; } else { $dov_net_w="n"; }
 
-            if($update_status == "1") {
+            if ($update_status == "1") {
 
                 // rezim upravy
 
                 //prvne stavajici data docasne ulozime
                 $vysl4 = $this->conn_mysql->query("SELECT * FROM fakturacni_skupiny WHERE id = '". intval($this->form_update_id). "' ");
 
-                if(($vysl4->num_rows <> 1)) {
+                if (($vysl4->num_rows <> 1)) {
                     $output .= "<div style=\"color: red; padding-top: 5px; padding-bottom: 5px; \" >";
                     $output .= "Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
                 } else {
@@ -222,11 +222,11 @@ class fakturacniSkupiny extends adminator
                         ->where('id', $this->form_update_id)
                         ->update($form_data);
 
-                if($affected == 1) {
+                if ($affected == 1) {
                     $res = true;
                 }
 
-                if($res) {
+                if ($res) {
                     $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n";
                 } else {
                     $output .= "<br><H3><div style=\"color: red; \" >Chyba! Data v databázi nelze změnit.</div></h3>\n";
@@ -250,7 +250,7 @@ class fakturacniSkupiny extends adminator
                 $az = new ArchivZmen($this->container);
                 $azRes = $az->insertItemDiff(2, $pole_puvodni_data, $form_data, $params);
 
-                if(is_object($azRes)) {
+                if (is_object($azRes)) {
                     $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
                 } else {
                     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
@@ -264,13 +264,13 @@ class fakturacniSkupiny extends adminator
 
                 $res = DB::table($this->db_table_name)->insert($form_data);
 
-                if($res) {
+                if ($res) {
                     $output .= "<br><H3><div style=\"color: green;\" >Fakturační skupina úspěšně přidána do databáze.</div></H3>\n";
                 } else {
                     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Fakturační skupinu nelze přidat.</div></H3>\n";
                 }
 
-                if($res === true) {
+                if ($res === true) {
                     $vysledek_write = 1;
                 }
 
@@ -279,7 +279,7 @@ class fakturacniSkupiny extends adminator
 
                 $azRes = $az->insertItem(1, $form_data, $vysledek_write, $this->loggedUserEmail);
 
-                if(is_object($azRes)) {
+                if (is_object($azRes)) {
                     $output .= "<br><H3><div style=\"color: green;\" >Změna byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
                 } else {
                     $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu do archivu změn se nepodařilo přidat.</div></H3>\n";
@@ -298,7 +298,7 @@ class fakturacniSkupiny extends adminator
                         "(debug: " . $form_data['nazev'] . ", " . $form_data['typ'] . "," . $form_data['typ_sluzby'] . ")</div>";
         endif;
 
-        if($update_status == 1) {
+        if ($update_status == 1) {
             $output .= '<h3 align="center" style="padding-top: 15px; " >Úprava fakturační skupiny</h3>';
         } else {
             $output .= '<h3 align="center" style="padding-top: 15px; " >Přidání fakturační skupiny</h3>';
@@ -312,7 +312,6 @@ class fakturacniSkupiny extends adminator
 
             // vlozeni vlastniho formu
             $output .= $this->actionForm($form_data);
-
         elseif ((isset($writed) or isset($updated))) :
 
             $output .= '<div style="">
@@ -326,9 +325,9 @@ class fakturacniSkupiny extends adminator
 
             $output .= '<b>Typ</b>: ';
 
-            if($form_data['typ'] == 1) {
+            if ($form_data['typ'] == 1) {
                 $output .= "DÚ - domácí uživatel";
-            } elseif($form_data['typ'] == 2) {
+            } elseif ($form_data['typ'] == 2) {
                 $output .= "FÚ - firemní uživatel";
             } else {
                 $output .= "Typ nelze zjistit";
@@ -337,9 +336,9 @@ class fakturacniSkupiny extends adminator
 
         $output .= '<b>Typ služby</b>: ';
 
-        if($form_data['typ_sluzby'] == 0) {
+        if ($form_data['typ_sluzby'] == 0) {
             $output .= "wifi";
-        } elseif($form_data['typ_sluzby'] == 1) {
+        } elseif ($form_data['typ_sluzby'] == 1) {
             $output .= "optika";
         } else {
             $output .= "nelze zjistit";
@@ -349,9 +348,9 @@ class fakturacniSkupiny extends adminator
 
         $output .= '<b>Služba "Internet"</b>: ';
 
-        if($form_data['sluzba_int'] == 0) {
+        if ($form_data['sluzba_int'] == 0) {
             $output .= "Ne";
-        } elseif($form_data['sluzba_int'] == 1) {
+        } elseif ($form_data['sluzba_int'] == 1) {
             $output .= "Ano";
         } else {
             $output .= "Nelze zjistit";
@@ -363,9 +362,9 @@ class fakturacniSkupiny extends adminator
 
         $output .= '<b>Služba "IPTV"</b>: ';
 
-        if($form_data['sluzba_iptv'] == 0) {
+        if ($form_data['sluzba_iptv'] == 0) {
             $output .= "Ne";
-        } elseif($form_data['sluzba_iptv'] == 1) {
+        } elseif ($form_data['sluzba_iptv'] == 1) {
             $output .= "Ano";
         } else {
             $output .= "Nelze zjistit";
@@ -378,9 +377,9 @@ class fakturacniSkupiny extends adminator
 
         $output .= '<b>Služba "VoIP"</b>: ';
 
-        if($form_data['sluzba_voip'] == 0) {
+        if ($form_data['sluzba_voip'] == 0) {
             $output .= "Ne";
-        } elseif($form_data['sluzba_voip'] == 1) {
+        } elseif ($form_data['sluzba_voip'] == 1) {
             $output .= "Ano";
         } else {
             $output .= "Nelze zjistit";
@@ -428,11 +427,11 @@ class fakturacniSkupiny extends adminator
                   <td>
                     <select name="typ" size="1" >
                         <option value="1" ';
-        if($data['typ'] == 1 or intval($data['typ']) < 1) {
+        if ($data['typ'] == 1 or intval($data['typ']) < 1) {
             $output .= " selected ";
         } $output .= ' >DÚ - domácí uživatel</option>
                         <option value="2" ';
-        if($data['typ'] == 2) {
+        if ($data['typ'] == 2) {
             $output .= " selected ";
         } $output .= ' >FÚ - firemní uživatel</option>
                     </select>
@@ -446,11 +445,11 @@ class fakturacniSkupiny extends adminator
                   <td>
                     <select name="typ_sluzby" size="1" >
                         <option value="0" ';
-        if(intval($data['typ_sluzby']) == 0) {
+        if (intval($data['typ_sluzby']) == 0) {
             $output .= " selected ";
         } $output .= ' >wifi</option>
                         <option value="1" ';
-        if($data['typ_sluzby'] == 1) {
+        if ($data['typ_sluzby'] == 1) {
             $output .= " selected ";
         } $output .= ' >optika</option>
                     </select>
@@ -467,12 +466,12 @@ class fakturacniSkupiny extends adminator
               <td>
                 <select name="sluzba_int" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0" ';
-        if($data['sluzba_int'] == 0 or $data['sluzba_int'] == "") {
+        if ($data['sluzba_int'] == 0 or $data['sluzba_int'] == "") {
             $output .= " selected ";
         }
         $output .= ' >Ne</option>
                 <option value="1" ';
-        if($data['sluzba_int'] == 1) {
+        if ($data['sluzba_int'] == 1) {
             $output .= " selected ";
         }
         $output .= ' >Ano</option>
@@ -486,7 +485,7 @@ class fakturacniSkupiny extends adminator
               </td>
               <td>';
 
-        if($data['sluzba_int'] != 1) {
+        if ($data['sluzba_int'] != 1) {
             $output .= "<span style=\"color: gray; \" >Není dostupné</span>";
             $output .= "<input type=\"hidden\" name=\"sluzba_int_id_tarifu\" value=\"0\" >";
         } else {
@@ -494,16 +493,16 @@ class fakturacniSkupiny extends adminator
             $output .= "<select name=\"sluzba_int_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
 
             $output .= "<option value=\"0\" ";
-            if(intval($data['sluzba_int_id_tarifu']) == 0) {
+            if (intval($data['sluzba_int_id_tarifu']) == 0) {
                 $output .= " selected ";
             }
             $output .= " style=\"color: gray; \">Nevybráno</option>";
 
             $dotaz_tarify_id_tarifu = $this->conn_mysql->query("SELECT * FROM tarify_int ORDER BY id_tarifu ");
 
-            while($data_tarify = $dotaz_tarify_id_tarifu->fetch_array()) {
+            while ($data_tarify = $dotaz_tarify_id_tarifu->fetch_array()) {
                 $output .= "<option value=\"".$data_tarify["id_tarifu"]."\" ";
-                if($data['sluzba_int_id_tarifu'] == $data_tarify["id_tarifu"]) {
+                if ($data['sluzba_int_id_tarifu'] == $data_tarify["id_tarifu"]) {
                     $output .= " selected ";
                 }
                 $output .= " >".$data_tarify["jmeno_tarifu"]." (".$data_tarify["zkratka_tarifu"].")</option>";
@@ -525,12 +524,12 @@ class fakturacniSkupiny extends adminator
               <td>
                 <select name="sluzba_iptv" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0" ';
-        if(intval($data['sluzba_iptv']) == 0) {
+        if (intval($data['sluzba_iptv']) == 0) {
             $output .= " selected ";
         }
         $output .=    ' >Ne</option>
                 <option value="1" ';
-        if($data['sluzba_iptv'] == 1) {
+        if ($data['sluzba_iptv'] == 1) {
             $output .= " selected ";
         }
         $output .= ' >Ano</option>
@@ -544,7 +543,7 @@ class fakturacniSkupiny extends adminator
               </td>
               <td>';
 
-        if($data['sluzba_iptv'] != 1) {
+        if ($data['sluzba_iptv'] != 1) {
             $output .= "<span style=\"color: gray; \" >Není dostupné</span>";
             $output .= "<input type=\"hidden\" name=\"sluzba_iptv_id_tarifu\" value=\"0\" >";
         } else {
@@ -552,16 +551,16 @@ class fakturacniSkupiny extends adminator
             $output .= "<select name=\"sluzba_iptv_id_tarifu\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >";
 
             $output .= "<option value=\"0\" ";
-            if(intval($data['sluzba_iptv_id_tarifu']) == 0) {
+            if (intval($data['sluzba_iptv_id_tarifu']) == 0) {
                 $output .= " selected ";
             }
             $output .= " style=\"color: gray; \">Nevybráno</option>";
 
             $dotaz_iptv_id_tarifu = $this->conn_mysql->query("SELECT * FROM tarify_iptv ORDER BY id_tarifu ");
 
-            while($data_iptv = $dotaz_iptv_id_tarifu->fetch_array()) {
+            while ($data_iptv = $dotaz_iptv_id_tarifu->fetch_array()) {
                 $output .= "<option value=\"".$data_iptv["id_tarifu"]."\" ";
-                if($data['sluzba_iptv_id_tarifu'] == $data_iptv["id_tarifu"]) {
+                if ($data['sluzba_iptv_id_tarifu'] == $data_iptv["id_tarifu"]) {
                     $output .= " selected ";
                 }
                 $output .= " >".$data_iptv["jmeno_tarifu"]." (".$data_iptv["zkratka_tarifu"].")</option>";
@@ -586,12 +585,12 @@ class fakturacniSkupiny extends adminator
               <td>
                 <select name="sluzba_voip" size="1" onChange="self.document.forms.form1.submit()" >
                 <option value="0" ';
-        if($data['sluzba_voip'] == 0 or !isset($data['sluzba_voip'])) {
+        if ($data['sluzba_voip'] == 0 or !isset($data['sluzba_voip'])) {
             $output .= " selected ";
         }
         $output .= ' >Ne</option>
                 <option value="1" ';
-        if($data['sluzba_voip'] == 1) {
+        if ($data['sluzba_voip'] == 1) {
             $output .= " selected ";
         }
         $output .= ' >Ano</option>
@@ -633,16 +632,16 @@ class fakturacniSkupiny extends adminator
         $fu_sql_base = " SELECT * FROM fakturacni_skupiny ";
         $fu_sql_select = "";
 
-        if($fu_select == 2) {
+        if ($fu_select == 2) {
             $fu_sql_select .= " WHERE typ = '2' ";
         } //Pouze FU
-        if($fu_select == 3) {
+        if ($fu_select == 3) {
             $fu_sql_select .= " WHERE typ = '1' ";
         } //pouze DU
 
         $dotaz_fakt_skup = $this->conn_mysql->query($fu_sql_base." ".$fu_sql_select." ORDER BY nazev DESC");
 
-        while($data_fs = $dotaz_fakt_skup->fetch_array()) {
+        while ($data_fs = $dotaz_fakt_skup->fetch_array()) {
             $fs[] = array( "id" => $data_fs["id"], "nazev" => $data_fs["nazev"], "typ" => $data_fs["typ"] );
         }
 

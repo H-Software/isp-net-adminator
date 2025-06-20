@@ -3,19 +3,14 @@
 use Slim\Views\Twig;
 use Twig\TwigFilter;
 use Nyholm\Psr7\Factory\Psr17Factory;
-
 use App\Renderer\Renderer;
-
 use App\View\CsrfExtension;
 use App\Middleware\FlashOldFormDataMiddleware;
 use App\Middleware\GuardMiddleware;
-
 use OpenFeature\OpenFeatureAPI;
 use OpenFeature\Providers\Flagd\FlagdProvider;
-
 use Cartalyst\Sentinel\Native\SentinelBootstrapper;
 use Cartalyst\Sentinel\Native\Facades\Sentinel;
-
 use Illuminate\Cache\CacheManager;
 use Illuminate\Container\Container;
 

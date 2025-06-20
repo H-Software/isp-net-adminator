@@ -254,7 +254,7 @@ function createsheet($typ, $cislo_sheetu, $nazev_sheetu, $pole_id_klientu)
 
     $$worksheet->freeze_panes(2, 0); // zmrazeni prvnich 2 radek
 
-    if($typ == 1) {
+    if ($typ == 1) {
         //tvorime dle sablony DU
 
         // nastavení sirek sloupcu
@@ -308,14 +308,14 @@ function createsheet($typ, $cislo_sheetu, $nazev_sheetu, $pole_id_klientu)
             $dotaz_radku_du = pg_num_rows($dotaz_du);
 
             // vlastni data
-            while($data = pg_fetch_array($dotaz_du)) {
+            while ($data = pg_fetch_array($dotaz_du)) {
 
                 //jednotlive promenne
                 $id_cloveka = $data["id_cloveka"];
 
                 $billing_freq = $data["billing_freq"];
 
-                if(($billing_freq == 1)) { //ctvrtletni fakturace
+                if (($billing_freq == 1)) { //ctvrtletni fakturace
 
                     $border4 = $bordercenter2;
                     $borderleft4 = $borderleftcolor;
@@ -324,7 +324,7 @@ function createsheet($typ, $cislo_sheetu, $nazev_sheetu, $pole_id_klientu)
 
                     $du_fs_wifi_s = $du_fs_wifi_color;
 
-                    if($data["ucetni_index"] > 0) {
+                    if ($data["ucetni_index"] > 0) {
                         $ucetni_index = "99".sprintf("%05d", $data["ucetni_index"]);
                     } else {
                         $ucetni_index = "";
@@ -384,7 +384,7 @@ function createsheet($typ, $cislo_sheetu, $nazev_sheetu, $pole_id_klientu)
 
                 $$worksheet->write($i, 0, $id_cloveka, $text_color1);
 
-                if((strlen($data["mail"]) > 6)) {
+                if ((strlen($data["mail"]) > 6)) {
                     $email = $data["mail"];
                 } else {
                     $email = "";
@@ -512,7 +512,7 @@ function createsheet($typ, $cislo_sheetu, $nazev_sheetu, $pole_id_klientu)
                   ");
 
             // vlastni data
-            while($data2 = pg_fetch_array($dotaz_fu)):
+            while ($data2 = pg_fetch_array($dotaz_fu)):
 
                 //jednotlive promenne
                 $id_cloveka = $data2["id_cloveka"];
@@ -526,13 +526,13 @@ function createsheet($typ, $cislo_sheetu, $nazev_sheetu, $pole_id_klientu)
 
                 $billing_freq = $data2["billing_freq"];
 
-                if($billing_freq == 1) { //ctvrtletni fakturace
+                if ($billing_freq == 1) { //ctvrtletni fakturace
 
                     $border3 = $bordercenter2;
                     $borderleft2 = $borderleftcolor;
                     $center_bold_vyber = $center_bold2;
 
-                    if($data2["ucetni_index"] > 0) {
+                    if ($data2["ucetni_index"] > 0) {
                         $ucetni_index = "99".sprintf("%05d", $data2["ucetni_index"]);
                     } else {
                         $ucetni_index = "";
@@ -614,13 +614,13 @@ function zjisti_fa_text_a_castku($fakturacni_skupina_id, $platit)
     $vracena_data = array();
 
     //vypis fakturacniho textu .. pro wifi i optiku ...
-    if($fakturacni_skupina_id > 0 and $fakturacni_skupina_id != 6 and $fakturacni_skupina_id != 8) {
+    if ($fakturacni_skupina_id > 0 and $fakturacni_skupina_id != 6 and $fakturacni_skupina_id != 8) {
         //je zadana fak. skupina (ale ne pozast. FA), cili vypis textu z DB
 
         $dotaz_fs = mysql_query("SELECT * FROM fakturacni_skupiny WHERE id = '$fakturacni_skupina_id' ");
 
-        if((mysql_num_rows($dotaz_fs) == 1)) {
-            while($data_fs = mysql_fetch_array($dotaz_fs)) {
+        if ((mysql_num_rows($dotaz_fs) == 1)) {
+            while ($data_fs = mysql_fetch_array($dotaz_fs)) {
                 $polozka = $data_fs["fakturacni_text"];
                 $typ_sluzby = $data_fs["typ_sluzby"];
             }
@@ -630,27 +630,27 @@ function zjisti_fa_text_a_castku($fakturacni_skupina_id, $platit)
     } else {
         //neni fakt. skupina, takze mod hadaní ... (jen wifi ) ..
 
-        if($platit == 250 or $platit == "248") {
+        if ($platit == 250 or $platit == "248") {
             $polozka = " Internet - tarif SMALL CITY ";
             $polozka2 = "";
             $cena_dph = "297,5";
-        } elseif($platit == 420 or $platit == "416.5") {
+        } elseif ($platit == 420 or $platit == "416.5") {
             $polozka = " Internet - tarif METROPOLITNI ";
             $polozka2 = "";
             $cena_dph = "500";
-        } elseif($platit == 350) {
+        } elseif ($platit == 350) {
             $polozka = "Internet - tarif SMALL CITY";
             $polozka2 = "Verejna IP adresa";
             $cena_dph = "416,50";
-        } elseif($platit == 500) {
+        } elseif ($platit == 500) {
             $polozka = " Internet - tarif SMALL CITY ";
             $polozka2 = " 2x ";
             $cena_dph = "595";
-        } elseif($platit == 520 or $platit == 516) {
+        } elseif ($platit == 520 or $platit == 516) {
             $polozka = " Internet - tarif METROPOLITNI ";
             $polozka2 = " Verejna IP adresa ";
             $cena_dph = "619";
-        } elseif($platit > 0) {
+        } elseif ($platit > 0) {
             $polozka = " nelze zjistit ";
             $polozka2 = "";
             $cena_dph = $platit * 1.19;
@@ -667,10 +667,10 @@ function zjisti_fa_text_a_castku($fakturacni_skupina_id, $platit)
     $vracena_data[7] = "";
 
     // vypis FS pro wifi ...
-    if($fakturacni_skupina_id > 0 and $typ_sluzby == 0) {
-        if($platit == "250" or $platit == "248") {
+    if ($fakturacni_skupina_id > 0 and $typ_sluzby == 0) {
+        if ($platit == "250" or $platit == "248") {
             $vracena_data[5] = "FS-".$fakturacni_skupina_id;
-        } elseif($platit == "420" or $platit == "416.5") {
+        } elseif ($platit == "420" or $platit == "416.5") {
             $vracena_data[6] = "FS-".$fakturacni_skupina_id;
         } else {
             $vracena_data[7] = "FS-".$fakturacni_skupina_id;
@@ -678,19 +678,19 @@ function zjisti_fa_text_a_castku($fakturacni_skupina_id, $platit)
     }
 
     //vyplneni FA SK. pro optiku ..
-    if($fakturacni_skupina_id > 0 and $fakturacni_skupina_id != 6 and $fakturacni_skupina_id != 8 and $typ_sluzby == 1) {
+    if ($fakturacni_skupina_id > 0 and $fakturacni_skupina_id != 6 and $fakturacni_skupina_id != 8 and $typ_sluzby == 1) {
         $vracena_data[10] = "FS-".$fakturacni_skupina_id;
     } else {
         $vracena_data[10] = "";
     }
 
     //vyplneni castky do prisl. sloupce, pro wifi
-    if(($fakturacni_skupina_id > 0 or $fakturacni_skupina_id == 6 or $fakturacni_skupina_id == 8)) {
+    if (($fakturacni_skupina_id > 0 or $fakturacni_skupina_id == 6 or $fakturacni_skupina_id == 8)) {
         //jestli je zvolena FS typu WIFI ...
-        if($typ_sluzby == 0) {
+        if ($typ_sluzby == 0) {
             if ($platit == "250" or $platit == "248") {
                 $vracena_data[11] = $platit;
-            } elseif($platit == "420" or $platit == "416.5") {
+            } elseif ($platit == "420" or $platit == "416.5") {
                 $vracena_data[12] = $platit;
             } else {
                 $vracena_data[13] = $platit;
@@ -704,7 +704,7 @@ function zjisti_fa_text_a_castku($fakturacni_skupina_id, $platit)
 
         if ($platit == "250" or $platit == "248") {
             $vracena_data[11] = $platit;
-        } elseif($platit == "420" or $platit == "416.5") {
+        } elseif ($platit == "420" or $platit == "416.5") {
             $vracena_data[12] = $platit;
         } else {
             $vracena_data[13] = $platit;
@@ -713,7 +713,7 @@ function zjisti_fa_text_a_castku($fakturacni_skupina_id, $platit)
     }
 
     //vyplneni castky do prisl sloupce, pro optiku ...
-    if($fakturacni_skupina_id > 0 and $fakturacni_skupina_id != 6 and $fakturacni_skupina_id != 8 and $typ_sluzby == 1) {
+    if ($fakturacni_skupina_id > 0 and $fakturacni_skupina_id != 6 and $fakturacni_skupina_id != 8 and $typ_sluzby == 1) {
         $vracena_data[14] = $platit;
     } else {
         $vracena_data[14] = "";
@@ -767,7 +767,7 @@ function gen_router_vypis_router($id)
         $mac = "E";
 
     } else {
-        while($data = $dotaz_router->fetch_array()) {
+        while ($data = $dotaz_router->fetch_array()) {
             $parent_router = $data["parent_router"];
 
             if ($parent_router == 0) {
@@ -805,22 +805,22 @@ function generate_fully_fin_index($id_vlastnika)
                                WHERE id_cloveka = '$id_vlastnika' ");
     $dotaz_vlastnik_radku = pg_num_rows($dotaz_vlastnik);
 
-    if($dotaz_vlastnik_radku <> 1) {
+    if ($dotaz_vlastnik_radku <> 1) {
         echo "Chyba! Nelze zjistit informace o vlastnikovi! (".$dotaz_vlastnik_radku.")<br> E: ".
         pg_last_error();
 
         return false;
     } else {
-        while($data = pg_fetch_array($dotaz_vlastnik)) {
+        while ($data = pg_fetch_array($dotaz_vlastnik)) {
             $uc_index = $data["ucetni_index"];
 
-            if($data["archiv"] == "1") { //archivacni
+            if ($data["archiv"] == "1") { //archivacni
                 $ui_full  = "27VYŘ".sprintf("%04d", $uc_index);
-            } elseif((($data["billing_freq"] == 1) and ($data["fakturacni"] > 0))) { // ctvrtletní fakturacni
+            } elseif ((($data["billing_freq"] == 1) and ($data["fakturacni"] > 0))) { // ctvrtletní fakturacni
                 $ui_full  = "37".sprintf("%05d", $uc_index);
-            } elseif($data["billing_freq"] == 1) { //ctvrtletni fakturace domaci
+            } elseif ($data["billing_freq"] == 1) { //ctvrtletni fakturace domaci
                 $ui_full = "47".sprintf("%05d", $uc_index);
-            } elseif(($data["fakturacni"] > 0)) { //faturacni
+            } elseif (($data["fakturacni"] > 0)) { //faturacni
                 $ui_full  = "27".sprintf("%05d", $uc_index);
             } else {  //domaci uzivatel
                 $ui_full  = "27DM".sprintf("%05d", $uc_index);
@@ -848,8 +848,8 @@ function execute_request($cmd, $mess_ok, $mess_er)
     //print_r($output);
     $output_main .= "\n".implode("\n ", $output)."\n";
 
-    if($rs == "0") {
-        if($html_tags == 1) {
+    if ($rs == "0") {
+        if ($html_tags == 1) {
             $hlaska = "  <span class=\"work-ok\">".$mess_ok." (message: ".$rs.")</span>\n";
         } else {
             $hlaska = "  ".$mess_ok." (message: ".$rs.")\n";
@@ -858,7 +858,7 @@ function execute_request($cmd, $mess_ok, $mess_er)
         echo $hlaska;
         $output_main .= $hlaska;
     } else {
-        if($html_tags == 1) {
+        if ($html_tags == 1) {
             $hlaska = "  <span class=\"work-error\">".$mess_er." (message: ".$rs.")</span>\n";
         } else {
             $hlaska = "  ".$mess_er." (message: ".$rs.")\n";
@@ -873,7 +873,7 @@ function execute_action($number_request, $id)
 {
     global $output_main, $conn_mysql, $conn_pgsql;
 
-    if($number_request == 1) { //reinhard-3 - restriction (net-n/sikana)
+    if ($number_request == 1) { //reinhard-3 - restriction (net-n/sikana)
 
         $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.3\" ";
 
@@ -883,7 +883,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 2) { //reinhard-wifi (1) - restrictions (net-n/sikana)
+    } elseif ($number_request == 2) { //reinhard-wifi (1) - restrictions (net-n/sikana)
 
         //$cmd = "/root/bin/reinhard-wifi.remote.exec2.sh \"/etc/init.d/iptables restart\" ";
         $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.2\" ";
@@ -894,7 +894,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 3) { //reinhard-fiber (2) - iptables (net-n/sikana)
+    } elseif ($number_request == 3) { //reinhard-fiber (2) - iptables (net-n/sikana)
 
         $cmd = "/root/bin/reinhard-fiber.remote.exec2.sh \"/etc/init.d/iptables-simelon restart\" ";
 
@@ -904,7 +904,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 4) { //reinhard-fiber - radius
+    } elseif ($number_request == 4) { //reinhard-fiber - radius
         $cmd = "/root/bin/reinhard-fiber.remote.exec2.sh \"/root/bin/radius.restart.sh\"";
 
         $mess_ok = "reinhard-fiber.radius ok ";
@@ -913,7 +913,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 5) {
+    } elseif ($number_request == 5) {
         $cmd = "/root/bin/reinhard-fiber.remote.exec2.sh \"/etc/init.d/shaper restart\" ";
 
         $mess_ok = "reinhard-fiber.shaper ok ";
@@ -922,7 +922,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 6) {
+    } elseif ($number_request == 6) {
         $cmd = "/root/bin/trinity.local.exec2.sh \"/root/bin/mikrotik.dhcp.leases.erase.sh\" ";
 
         $mess_ok = "(trinity) mikrotik.dhcp.leases.erase ok ";
@@ -931,7 +931,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 7) {
+    } elseif ($number_request == 7) {
         $cmd = "/root/bin/trinity.local.exec2.sh \"/root/bin/scripts_fiber/sw.h3c.vlan.set.pl update\" ";
 
         $mess_ok = "trinity.sw.h3c.vlan.set ok ";
@@ -940,9 +940,9 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 8) { //nic
+    } elseif ($number_request == 8) { //nic
 
-    } elseif($number_request == 9) {
+    } elseif ($number_request == 9) {
         $cmd = "/root/bin/erik.remote.exec.sh \"/root/bin/dns.restart.sh\" ";
 
         $mess_ok = "erik-dns.restart ok ";
@@ -951,7 +951,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 10) {
+    } elseif ($number_request == 10) {
         $cmd = "/root/bin/trinity.local.exec2.sh \"/root/bin/dns.restart.sh\" ";
 
         $mess_ok = "trinity-dns-restart ok ";
@@ -960,7 +960,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 11) {
+    } elseif ($number_request == 11) {
         $cmd = "/root/bin/artemis.remote.exec2.sh \"/root/bin/dns.restart.sh\" ";
 
         $mess_ok = "artemis-dns-server-restart ok ";
@@ -969,7 +969,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 12) {
+    } elseif ($number_request == 12) {
         $cmd = "/root/bin/c.ns.remote.exec2.sh \"/root/bin/dns.restart.sh\" ";
 
         $mess_ok = "c.ns.simelon.net-dns-server-restart ok ";
@@ -978,7 +978,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 13) { // reinhard-wifi (ros) - shaper (client's tariffs)
+    } elseif ($number_request == 13) { // reinhard-wifi (ros) - shaper (client's tariffs)
 
         $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_qos_handler.php 10.128.0.2\" ";
 
@@ -988,7 +988,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 14) {
+    } elseif ($number_request == 14) {
         $cmd = "/root/bin/trinity.local.exec2.sh \"/root/bin/scripts_wifi_network/rb.filter_v2.pl\" ";
 
         //obsolete
@@ -1000,7 +1000,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 15) { //trinity - Monitoring I - Footer-restart (alarms)
+    } elseif ($number_request == 15) { //trinity - Monitoring I - Footer-restart (alarms)
 
         $cmd = "/root/bin/monitoring.remote.exec2.sh \"/var/www/cgi-bin/mon1-footer.pl\" ";
 
@@ -1010,7 +1010,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 16) {
+    } elseif ($number_request == 16) {
         $cmd = "/root/bin/trinity.local.exec2.sh \"/var/www/cgi-bin/cgi-mon/footer_php.pl\" ";
 
         $mess_ok = "trinity-monitoring-I-Footer-PHP-restart ok ";
@@ -1019,7 +1019,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 17) {
+    } elseif ($number_request == 17) {
         $cmd = "/root/bin/trinity.local.exec2.sh \"/var/www/cgi-bin/cgi-mon/footer_cat.pl\" ";
 
         $mess_ok = "trinity-monitoring-I-Footer-cat-restart ok ";
@@ -1028,7 +1028,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 18) {
+    } elseif ($number_request == 18) {
         $cmd = "/root/bin/monitoring.remote.exec2.sh \"/var/www/cgi-bin/mon2-feeder.pl\" ";
 
         $mess_ok = "monitoring - Monitoring II - Feeder-restart ok ";
@@ -1037,7 +1037,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 19) {
+    } elseif ($number_request == 19) {
         $output_main .= synchro_router_list($conn_pgsql);
 
         $mess_ok = "trinity - adminator - synchro_router_list - restart ";
@@ -1048,7 +1048,7 @@ function execute_action($number_request, $id)
         $output_main .= $hlaska;
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 20) {
+    } elseif ($number_request == 20) {
         $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_qos_handler.php 10.128.0.3\" ";
 
         $mess_ok = "reinhard-3 (ros) - shaper (client's tariffs) - restart ok ";
@@ -1057,7 +1057,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 21) {
+    } elseif ($number_request == 21) {
         $cmd = "/root/bin/artemis.remote.exec2.sh \"/root/bin/radius.restart.sh\" ";
 
         $mess_ok = "artemis-radius-restart ok ";
@@ -1066,7 +1066,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 22) {
+    } elseif ($number_request == 22) {
         $cmd = "/root/bin/monitoring.remote.exec2.sh \"/var/www/cgi-bin/mon2-checker.pl\" ";
 
         $mess_ok = "monitoring - Monitoring II - Feeder-restart ok ";
@@ -1075,7 +1075,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 23) {
+    } elseif ($number_request == 23) {
         //$cmd = "";
         $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_qos_handler.php 10.128.0.15\" ";
 
@@ -1085,7 +1085,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == 24) {
+    } elseif ($number_request == 24) {
         $cmd = "/root/bin/trinity.local.exec2.sh \"php /var/www/html/htdocs.ssl/adminator2/mk_control/mk_rh_restriction.php 10.128.0.15\" ";
 
         $mess_ok = "reinhard-5-iptables-restart ok ";
@@ -1094,7 +1094,7 @@ function execute_action($number_request, $id)
         execute_request($cmd, $mess_ok, $mess_er);
 
         $rs_delete = $conn_mysql->query("DELETE FROM workitems WHERE id = '$id' LIMIT 1");
-    } elseif($number_request == "templ") {
+    } elseif ($number_request == "templ") {
         $cmd = "";
 
         $mess_ok = "";
@@ -1126,7 +1126,7 @@ function synchro_router_list(\PgSql\Connection $conn_pgsql)
 
     //konverze z pole do jedné promenne
     foreach ($mysql_export as $key => $val) {
-        if(preg_match("/^INSERT./", $val)) {
+        if (preg_match("/^INSERT./", $val)) {
             $mysql_export_all .= $val;
         }
     }
@@ -1135,7 +1135,7 @@ function synchro_router_list(\PgSql\Connection $conn_pgsql)
 
     $pg_drop = pg_query($conn_pgsql, "DELETE FROM router_list");
 
-    if($pg_drop) {
+    if ($pg_drop) {
         $output .= "  postgre - tabulka router_list úspěšně vymazána.\n";
     } else {
         $output .= "  postgre - chyba pri vymazani router_list. ".pg_last_error()."\n";
@@ -1143,7 +1143,7 @@ function synchro_router_list(\PgSql\Connection $conn_pgsql)
 
     $pg_import = pg_query($conn_pgsql, $mysql_export_all);
 
-    if($pg_import) {
+    if ($pg_import) {
         $output .= "  postgre - data router_list importována. \n";
     } else {
         $output .= "  postgre - chyba pri importu router_list. ".pg_last_error()."\n";

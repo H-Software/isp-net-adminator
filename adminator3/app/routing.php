@@ -4,7 +4,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Routing\RouteCollectorProxy;
-
 use App\Middleware\RedirectIfNotAuthenticated;
 use App\Controllers\HomeController;
 use App\Controllers\Auth\AuthController;

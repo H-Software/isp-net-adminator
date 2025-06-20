@@ -59,11 +59,11 @@ class work
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": parsed item_name: " . var_export($item_name, true));
 
-        if($count > 1) {
+        if ($count > 1) {
             $output .= "<div> WARNING: Požadavek na restart \"".$item_name."\" (No. ".$item_id.") nalezen vícekrát. </div>\n";
         }
 
-        if($count == 1) {
+        if ($count == 1) {
             $output .= "<div> <span style=\"color: #1e90ff; \">INFO: </span>".
             "Požadavak na restart <b>\"".$item_name."\"</b> (No. ".$item_id.") ".
             "<span style=\"color: #1e90ff;\">není potřeba přidávat, již se nachází ve frontě restart. subsystému. </div>\n";
@@ -72,7 +72,7 @@ class work
 
             $add = $this->conn_mysql->query("INSERT INTO workitems (number_request) VALUES ('".intval($item_id)."') ");
 
-            if($add) {
+            if ($add) {
                 $rs_write = 1;
             } else {
                 $rs_write = 0;
@@ -88,13 +88,13 @@ class work
 
             $output .= "<div style=\"\">Požadavek na restart <b>\"".$item_name."\"</b> (No. ".$item_id.") - ";
 
-            if($add) {
+            if ($add) {
                 $output .= "<span style=\"color: green;\"> úspěšně přidán do fronty</span>";
             } else {
                 $output .= "<span style=\"color: red;\"> chyba při přidání požadavku do fronty</span>";
             }
 
-            if($add_az) {
+            if ($add_az) {
                 $output .= " - <span style=\"color: green;\"> úspěšně přidán do archivu změn.</span>";
             } else {
                 $output .= " - <span style=\"color: red;\"> chyba při přidání požadavku do archivu změn.</span>";
@@ -119,14 +119,14 @@ class work
         $reinhard_id = adminator::find_reinhard($itemId, $this->conn_mysql, $this->conn_pgsql);
 
         // //zmena sikany
-        if(preg_match("/.*změna.*Šikana.*z.*/", $changes)) {
-            if($reinhard_id == 177) {
+        if (preg_match("/.*změna.*Šikana.*z.*/", $changes)) {
+            if ($reinhard_id == 177) {
                 $work_output[1] = $this->work_handler("1");
             } //reinhard-3 (ros) - restrictions (net-n/sikana)
-            elseif($reinhard_id == 1) {
+            elseif ($reinhard_id == 1) {
                 $work_output[2] = $this->work_handler("2");
             } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-            elseif($reinhard_id == 236) {
+            elseif ($reinhard_id == 236) {
                 $work_output[24] = $this->work_handler("24");
             } //reinhard-5 (ros) - restrictions (net-n/sikana)
             else {
@@ -277,7 +277,7 @@ class work
 
         $reinhard_id = adminator::find_reinhard($itemId, $this->conn_mysql, $this->conn_pgsql);
 
-        if($args['form_typ_ip'] == 4) {
+        if ($args['form_typ_ip'] == 4) {
             //L2TP verejka
             $work_output[] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
         }
@@ -285,16 +285,16 @@ class work
         $work_output[] = $this->work_handler("14"); // (trinity) filtrace-IP-on-Mtik's-restart
 
         //zde dodat if zda-li je NetN ci SikanaA
-        if((preg_match("/.*<b>\[dov_net\]<\/b> => n.*/", $changes) == 1)
+        if ((preg_match("/.*<b>\[dov_net\]<\/b> => n.*/", $changes) == 1)
                 or (preg_match("/.*<b>\[sikana_status\]<\/b> => a.*/", $changes) == 1)) {
 
-            if($reinhard_id == 177) {
+            if ($reinhard_id == 177) {
                 $work_output[] = $this->work_handler("1");
             } //reinhard-3 (ros) - restrictions (net-n/sikana)
-            elseif($reinhard_id == 1) {
+            elseif ($reinhard_id == 1) {
                 $work_output[] = $this->work_handler("2");
             } //reinhard-wifi (ros) - restrictions (net-n/sikana)
-            elseif($reinhard_id == 236) {
+            elseif ($reinhard_id == 236) {
                 $work_output[] = $this->work_handler("24");
             } //reinhard-5 (ros) - restrictions (net-n/sikana)
             else {
@@ -307,13 +307,13 @@ class work
             } //end of else - if reinhard_id
         }
 
-        if($reinhard_id == 177) {
+        if ($reinhard_id == 177) {
             $work_output[] = $this->work_handler("20");
         } //reinhard-3 (ros) - shaper (client's tariffs)
-        elseif($reinhard_id == 1) {
+        elseif ($reinhard_id == 1) {
             $work_output[] = $this->work_handler("13");
         } //reinhard-wifi (ros) - shaper (client's tariffs)
-        elseif($reinhard_id == 236) {
+        elseif ($reinhard_id == 236) {
             $work_output[] = $this->work_handler("23");
         } //reinhard-5 (ros) - shaper (client's tariffs)
         else {

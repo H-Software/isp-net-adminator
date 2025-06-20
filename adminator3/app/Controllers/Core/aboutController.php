@@ -31,7 +31,7 @@ class aboutController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(142)) {
+        if (!$this->checkLevel(142)) {
             return $this->response;
         };
 
@@ -50,7 +50,7 @@ class aboutController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(144)) {
+        if (!$this->checkLevel(144)) {
             return $this->response;
         };
 
@@ -69,7 +69,7 @@ class aboutController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(145)) {
+        if (!$this->checkLevel(145)) {
             return $this->response;
         };
 

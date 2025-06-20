@@ -36,11 +36,11 @@ class c_listing_stb
 
         $this->list = $conList;
 
-        if((strlen($conBefore) > 0)) {
+        if ((strlen($conBefore) > 0)) {
             $this->before = $conBefore;
         }
 
-        if((strlen($conBefore) > 0)) {
+        if ((strlen($conBefore) > 0)) {
             $this->after = $conAfter;
         }
 
@@ -54,9 +54,9 @@ class c_listing_stb
     //vyber dat z databaze
     public function dbSelect()
     {
-        if($this->db_type == "mysql") {
+        if ($this->db_type == "mysql") {
             $listRecord = $this->conn_mysql->query($this->sql);
-        } elseif($this->db_type == "pgsql") {
+        } elseif ($this->db_type == "pgsql") {
             $listRecord = pg_query($this->sql);
         } else {
         }
@@ -65,9 +65,9 @@ class c_listing_stb
             $this->error(2);
         }
 
-        if($this->db_type == "mysql") {
+        if ($this->db_type == "mysql") {
             $allRecords = $listRecord->num_rows;
-        } elseif($this->db_type == "pgsql") {
+        } elseif ($this->db_type == "pgsql") {
             $allRecords = pg_num_rows($listRecord);
         } else {
 

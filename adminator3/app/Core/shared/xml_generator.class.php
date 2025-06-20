@@ -88,16 +88,16 @@ class c_xml_generator
 
         $level++;
         $node = &$this->data[$id];
-        switch($node['type']) {
+        switch ($node['type']) {
             case 'node':
                 $ret = '<'.$node['name'];
-                foreach($node['params'] as $param_name => $param_value) {
+                foreach ($node['params'] as $param_name => $param_value) {
                     $ret .= ' '.$this->_encode_param_name($param_name).
                     '="'.$this->_encode_param_value($param_value).'"';
                 };
                 $childs = '';
                 $complete_tag = true;
-                foreach($this->data as $node_id => $node_data) {
+                foreach ($this->data as $node_id => $node_data) {
                     if ($node_data['parent'] == $id) {
                         $complete_tag = false;
                         $childs .= $this->_create_xml_node($node_id);
@@ -107,7 +107,7 @@ class c_xml_generator
                     $ret .= ' />';
                 } else {
 
-                    if(preg_match("/<|>/", $childs) == 0) {
+                    if (preg_match("/<|>/", $childs) == 0) {
                         $ret .= '>'.$childs.'</'.$node['name'].'>';
                     } else {
                         $ret .= '>'.$this->append_after_element.$childs.str_repeat($this->auto_indent, $level - 1).'</'.$node['name'].'>';
@@ -117,7 +117,7 @@ class c_xml_generator
                 break;
             case 'node_cdata':
                 $ret = '<'.$node['name'];
-                foreach($node['params'] as $param_name => $param_value) {
+                foreach ($node['params'] as $param_name => $param_value) {
                     $ret .= ' '.$this->_encode_param_name($param_name).
                     '="'.$this->_encode_param_value($param_value).'"';
                 };
@@ -137,7 +137,7 @@ class c_xml_generator
                 ($this->xml_version ? ' version="'.$this->xml_version.'"' : '').
                 ($this->xml_encoding ? ' encoding="'.$this->xml_encoding.'"' : '').
                 '?'.">\n";
-                foreach($this->data as $node_id => $node_data) {
+                foreach ($this->data as $node_id => $node_data) {
                     if ($node_data['parent'] == 0) {
                         $complete_tag = false;
                         $ret .= $this->_create_xml_node($node_id);
@@ -147,7 +147,7 @@ class c_xml_generator
         };
         $level--;
 
-        if($node['type'] == "cdata") {
+        if ($node['type'] == "cdata") {
 
         } else {
 

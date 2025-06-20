@@ -250,7 +250,7 @@ $pdf->Cell(10, 3, $aut_prodlouzeni, 0, 1);
 
 $datum_nz = date('Y-m-d-H-i-s');
 
-if($id_cloveka > 0) {
+if ($id_cloveka > 0) {
     $nazev_souboru = "print/temp/smlouva-v3-pdf-id-".$id_cloveka."-".$datum_nz.".pdf";
 } else {
     $nazev_souboru = "print/temp/smlouva-v3-pdf-ec-".$ec."-".$datum_nz.".pdf";

@@ -50,9 +50,9 @@ class c_listing_topology
             $this->error(2);
         }
 
-        if($this->conn_mysql instanceof \mysqli) {
+        if ($this->conn_mysql instanceof \mysqli) {
             $allRecords = $listRecord->num_rows;
-        } elseif($this->conn_mysql instanceof \PDO) {
+        } elseif ($this->conn_mysql instanceof \PDO) {
             $allRecords = count($listRecord->fetchAll());
         } else {
             // unknown type
@@ -68,7 +68,7 @@ class c_listing_topology
 
         try {
             $allLists = ceil($allRecords / $this->interval);
-        } catch(DivisionByZeroError $e) {
+        } catch (DivisionByZeroError $e) {
         }
 
         $this->numLists = $allLists;

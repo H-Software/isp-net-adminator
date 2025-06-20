@@ -352,7 +352,8 @@ RUN git clone --depth 1 -b v1.63.0 https://github.com/grpc/grpc /tmp/grpc && \
 RUN export MAKEFLAGS="-j $(nproc)" \
         && pecl install \
             opentelemetry \
-            protobuf
+            protobuf \
+			redis
             # grpc
 
 # packages required for php extensions and composer
@@ -393,7 +394,8 @@ RUN docker-php-ext-enable \
         sodium \
         sqlsrv \
         zip \
-        grpc
+        grpc \
+		redis
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

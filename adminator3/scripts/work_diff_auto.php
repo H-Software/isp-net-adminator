@@ -42,7 +42,7 @@ if ($num_rows == 0) {
     echo " INFO: no requests on the system \n";
     $output_main .= " INFO: no requests on the system \n";
 } else {
-    while($data = $rs->fetch_array()) {
+    while ($data = $rs->fetch_array()) {
         $id = $data["id"];
         $number_request = $data["number_request"];
 
@@ -56,7 +56,7 @@ if ($num_rows == 0) {
 echo "work-diff.php stop [".strftime("%d/%m/%Y %H:%M:%S", time())."] \n";
 $output_main .= "work-diff.php stop [".strftime("%d/%m/%Y %H:%M:%S", time())."] \n";
 
-if(preg_match("/.*<span.*>.*/", $output_main)) {
+if (preg_match("/.*<span.*>.*/", $output_main)) {
     $soubor = fopen(__DIR__ . "/../logs/reinhard.remote.log", "w");
 } else {
     $output_main = "- - - - - - - - - - - - - -\n".$output_main;

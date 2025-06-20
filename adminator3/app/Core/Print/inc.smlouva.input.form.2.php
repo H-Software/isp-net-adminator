@@ -125,17 +125,17 @@ echo "<tr>
 		    <select name=\"internet_sluzba\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >
 			
 			<option value=\"0\" ";
-if($internet_sluzba == 0 or !isset($internet_sluzba)) {
+if ($internet_sluzba == 0 or !isset($internet_sluzba)) {
     echo " selected ";
 }
 echo " >Ne</option>
 			<option value=\"1\" ";
-if($internet_sluzba == 1) {
+if ($internet_sluzba == 1) {
     echo " selected ";
 } echo " >Ano - jeden tarif</option>
 			
 			<option value=\"2\" ";
-if($internet_sluzba == 2) {
+if ($internet_sluzba == 2) {
     echo " selected ";
 } echo " >Ano - dva tarify</option>
 			
@@ -148,7 +148,7 @@ echo "<td colspan=\"2\">&nbsp;</td>\n";
 
 echo "</tr>\n";
 
-if($internet_sluzba > 0) {
+if ($internet_sluzba > 0) {
 
     echo "<tr>
 		    <td colspan=\"5\" style=\"padding-top: 15px;\" >";
@@ -181,7 +181,7 @@ if($internet_sluzba > 0) {
 
 }
 
-if($internet_sluzba >= 1) {
+if ($internet_sluzba >= 1) {
 
     echo "<tr>
 		    
@@ -190,18 +190,18 @@ if($internet_sluzba >= 1) {
 
     $dotaz_int_1 = $this->conn_mysql->query("SELECT zkratka_tarifu, id_tarifu, jmeno_tarifu, cena_bez_dph, cena_s_dph FROM tarify_int ORDER BY id_tarifu");
 
-    if($dotaz_int_1) {
+    if ($dotaz_int_1) {
         $dotaz_int_1_radku = $dotaz_int_1->num_rows;
     } else {
         $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": pq_query failed (select tarify_int)! Error: " . var_export(pg_last_error(), true));
     }
 
-    if($dotaz_int_1_radku > 0) {
+    if ($dotaz_int_1_radku > 0) {
         echo "<option value=\"0\" >není vybráno</option>";
 
-        while($data1 = $dotaz_int_1->fetch_array()) {
+        while ($data1 = $dotaz_int_1->fetch_array()) {
             echo "<option value=\"".$data1["id_tarifu"]."\" ";
-            if($int_select_1 == $data1["id_tarifu"]) {
+            if ($int_select_1 == $data1["id_tarifu"]) {
                 echo " selected ";
             }
             echo " >".$data1["zkratka_tarifu"]." - ".$data1["jmeno_tarifu"]."</option>\n";
@@ -210,23 +210,23 @@ if($internet_sluzba >= 1) {
 
     echo "</select>\n";
 
-    if($int_select_1 > 0) {
+    if ($int_select_1 > 0) {
         try {
             $dotaz_int_11 = $this->conn_mysql->query("SELECT jmeno_tarifu, cena_s_dph, speed_dwn FROM tarify_int WHERE id_tarifu = '".intval($int_select_1)."' ");
         } catch (Exception $e) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": pq_query failed (select tarify_int)! Error: " . var_export($e->getMessage(), true));
         }
 
-        while($data_int_11 = $dotaz_int_11->fetch_array()) {
-            if(strlen($int_1_nazev) == 0) {
+        while ($data_int_11 = $dotaz_int_11->fetch_array()) {
+            if (strlen($int_1_nazev) == 0) {
                 $int_1_nazev = $data_int_11["jmeno_tarifu"];
             }
 
-            if(strlen($int_1_rychlost) == 0) {
+            if (strlen($int_1_rychlost) == 0) {
                 $int_1_rychlost = $data_int_11["speed_dwn"];
             }
 
-            if(strlen($int_1_cena_1) == 0) {
+            if (strlen($int_1_cena_1) == 0) {
                 $int_1_cena_1 = $data_int_11["cena_s_dph"];
             }
 
@@ -256,7 +256,7 @@ if($internet_sluzba >= 1) {
 }
 
 //2. tarif
-if($internet_sluzba == 2) {
+if ($internet_sluzba == 2) {
 
     echo "<tr>
 		    <td class=\"label-font\" style=\"width: 50px;\" >
@@ -265,12 +265,12 @@ if($internet_sluzba == 2) {
     $dotaz_int_1 = $this->conn_mysql->query("SELECT zkratka_tarifu, id_tarifu, jmeno_tarifu, cena_bez_dph, cena_s_dph FROM tarify_int_prodej ORDER BY id_tarifu");
     $dotaz_int_1_radku = $dotaz_int_1->mysql_num_rows;
 
-    if($dotaz_int_1_radku > 0) {
+    if ($dotaz_int_1_radku > 0) {
         echo "<option value=\"0\">není vybráno</option>";
 
-        while($data1 = $dotaz_int_1->fetch_array()) {
+        while ($data1 = $dotaz_int_1->fetch_array()) {
             echo "<option value=\"".$data1["id_tarifu"]."\" ";
-            if($int_select_2 == $data1["id_tarifu"]) {
+            if ($int_select_2 == $data1["id_tarifu"]) {
                 echo " selected ";
             }
 
@@ -281,19 +281,19 @@ if($internet_sluzba == 2) {
     echo "</select>\n";
 
 
-    if($int_select_2 > 0) {
+    if ($int_select_2 > 0) {
         $dotaz_int_22 = $this->conn_mysql->query("SELECT jmeno_tarifu, cena_s_dph, speed FROM tarify_int_prodej WHERE id_tarifu = '".intval($int_select_2)."' ");
 
-        while($data_int_22 = $dotaz_int_22->fetch_array()) {
-            if(strlen($int_2_nazev) == 0) {
+        while ($data_int_22 = $dotaz_int_22->fetch_array()) {
+            if (strlen($int_2_nazev) == 0) {
                 $int_2_nazev = $data_int_22["jmeno_tarifu"];
             }
 
-            if(strlen($int_2_rychlost) == 0) {
+            if (strlen($int_2_rychlost) == 0) {
                 $int_2_rychlost = $data_int_22["speed"];
             }
 
-            if(strlen($int_2_cena_1) == 0) {
+            if (strlen($int_2_cena_1) == 0) {
                 $int_2_cena_1 = $data_int_22["cena_s_dph"];
             }
 
@@ -322,7 +322,7 @@ if($internet_sluzba == 2) {
 
 
 //konec vnitri tabulky a bunky
-if($internet_sluzba > 0) {
+if ($internet_sluzba > 0) {
     echo "</table>\n";
 
     echo "</td>
@@ -342,18 +342,18 @@ echo "<tr>\n".
 	        <td>
 		    <select name=\"iptv_sluzba\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >
 			<option value=\"0\" ";
-if($iptv_sluzba == 0 or !isset($iptv_sluzba)) {
+if ($iptv_sluzba == 0 or !isset($iptv_sluzba)) {
     echo " selected ";
 }
 echo " >Ne</option>
 			<option value=\"1\" ";
-if($iptv_sluzba == 1) {
+if ($iptv_sluzba == 1) {
     echo " selected ";
 } echo " >Ano</option>
 		    </select>
 		</td>\n";
 
-if($iptv_sluzba == 1) {
+if ($iptv_sluzba == 1) {
 
     echo "<td>&nbsp;</td>\n";
     echo "<td class=\"label-font\" align=\"center\" >Vyberte tarif:</td>\n";
@@ -365,9 +365,9 @@ if($iptv_sluzba == 1) {
 
     echo "<option value=\"0\" >Není vybráno</option>\n";
 
-    while($data_iptv_se = $iptv_se->fetch_array()) {
+    while ($data_iptv_se = $iptv_se->fetch_array()) {
         echo "<option value=\"".$data_iptv_se["id_tarifu"]."\" ";
-        if($iptv_sluzba_id_tarifu == $data_iptv_se["id_tarifu"]) {
+        if ($iptv_sluzba_id_tarifu == $data_iptv_se["id_tarifu"]) {
             echo " selected ";
         }
 
@@ -466,16 +466,16 @@ echo "<tr>
 	        <td>
 		    <select name=\"voip_sluzba\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >	
 			<option value=\"0\" ";
-if($voip_sluzba == 0 or !isset($voip_sluzba)) {
+if ($voip_sluzba == 0 or !isset($voip_sluzba)) {
     echo " selected ";
 }
 echo " >Ne</option>
 			<option value=\"1\" ";
-if($voip_sluzba == 1) {
+if ($voip_sluzba == 1) {
     echo " selected ";
 } echo " >Ano - jedno číslo</option>
 			<option value=\"2\" ";
-if($voip_sluzba == 2) {
+if ($voip_sluzba == 2) {
     echo " selected ";
 } echo " >Ano - dvě čísla</option>
 		    </select>
@@ -484,7 +484,7 @@ if($voip_sluzba == 2) {
 		<td colspan=\"3\" ><br></td>
 	       </tr>";
 
-if($voip_sluzba >= 1) {
+if ($voip_sluzba >= 1) {
 
     echo "<tr>
 		<td class=\"label-font\" align=\"center\" >Číslo 1.:</td>
@@ -495,7 +495,7 @@ if($voip_sluzba >= 1) {
 		  <span style=\"margin-left: 20px;\" ></span>
 		  
 		  <input type=\"radio\" name=\"voip_1_typ\" value=\"1\" ";
-    if($voip_1_typ == 1 or !isset($voip_1_typ)) {
+    if ($voip_1_typ == 1 or !isset($voip_1_typ)) {
         echo " checked=\"checked\" ";
     } echo " >
 		  <span style=\"margin-left: 20px;\" >
@@ -504,7 +504,7 @@ if($voip_sluzba >= 1) {
 		  <span style=\"margin-left: 10px; margin-right: 10px;\" >|</span>
 		  
 		  <input type=\"radio\" name=\"voip_1_typ\" value=\"2\" ";
-    if($voip_1_typ == 2) {
+    if ($voip_1_typ == 2) {
         echo " checked=\"checked\" ";
     }
     echo " >
@@ -514,7 +514,7 @@ if($voip_sluzba >= 1) {
 
 }
 
-if($voip_sluzba == 2) {
+if ($voip_sluzba == 2) {
 
     echo "<tr>
 		<td class=\"label-font\" align=\"center\" >Číslo 2.:</td>
@@ -525,7 +525,7 @@ if($voip_sluzba == 2) {
 		  <span style=\"margin-left: 20px;\" ></span>
 		  
 		  <input type=\"radio\" name=\"voip_2_typ\" value=\"1\" ";
-    if($voip_2_typ == 1 or !isset($voip_2_typ)) {
+    if ($voip_2_typ == 1 or !isset($voip_2_typ)) {
         echo " checked=\"checked\" ";
     } echo " >
 		  <span style=\"margin-left: 20px;\" >
@@ -534,7 +534,7 @@ if($voip_sluzba == 2) {
 		  <span style=\"margin-left: 10px; margin-right: 10px;\" >|</span>
 		  
 		  <input type=\"radio\" name=\"voip_2_typ\" value=\"2\" ";
-    if($voip_2_typ == 2) {
+    if ($voip_2_typ == 2) {
         echo " checked=\"checked\" ";
     }
     echo " >
@@ -556,12 +556,12 @@ echo "<tr>
 		  <div style=\"float: left; \" >
 		    <select size=\"1\" name=\"sleva_select\" onChange=\"self.document.forms.form1.submit()\" >
 			<option value=\"0\" ";
-if($sleva_select == 0 or !isset($sleva_select)) {
+if ($sleva_select == 0 or !isset($sleva_select)) {
     echo " selected ";
 }
 echo " >Ne</option>
 			<option value=\"1\" ";
-if($sleva_select == 1) {
+if ($sleva_select == 1) {
     echo " selected ";
 } echo " >Ano</option>
 		    </select>
@@ -575,19 +575,19 @@ echo " <td colspan=\"2\" >&nbsp;</td>
 
 echo "<tr><td colspan=\"5\"><br></td></tr>";
 
-if($sleva_select == 1) {
+if ($sleva_select == 1) {
 
     echo "<tr>
     		    <td style=\"text-align: center; \" >Zákazník</td>
     		    <td colspan=\"5\" >
 			<select name=\"bonus_select_1\" size=\"1\" style=\"margin-left: 30px; margin-right: 30px;\" >
 			    <option value=\"0\" ";
-    if($bonus_select_1 == 0 or !isset($bonus_select_1)) {
+    if ($bonus_select_1 == 0 or !isset($bonus_select_1)) {
         echo " selected ";
     }
     echo " >nemá</option>
 			    <option value=\"1\" ";
-    if($bonus_select_1 == 1) {
+    if ($bonus_select_1 == 1) {
         echo " selected ";
     } echo ">má</option>
 			</select>
@@ -689,7 +689,7 @@ echo "<tr>
 	        <td colspan=\"2\" >
 		    <span style=\"padding-left: 10px; \" ></span>
 		    <input type=\"radio\" name=\"zpusob_placeni\" value=\"1\" ";
-if($zpusob_placeni == 1 or !isset($zpusob_placeni)) {
+if ($zpusob_placeni == 1 or !isset($zpusob_placeni)) {
     echo " checked=\"checked\" ";
 }
 echo " >";
@@ -722,14 +722,14 @@ echo "<tr>
 		<td>";
 
 echo "<input type=\"radio\" name=\"platba\" value=\"1\" ";
-if(($platba == 1) or !isset($platba)) {
+if (($platba == 1) or !isset($platba)) {
     echo " checked=\"checked\" ";
 } echo " >
 		<span style=\"padding-left: 3px;\" >Měsíčně</span>
 	        <span style=\"padding-left: 5px; padding-right: 5px; \" >|</span>";
 
 echo "<input type=\"radio\" name=\"platba\" value=\"2\" ";
-if($platba == 2) {
+if ($platba == 2) {
     echo " checked=\"checked\" ";
 } echo " >
 		<span style=\"padding-left: 3px;\" >Čtvrtletně</span>
@@ -764,12 +764,12 @@ echo "<tr>
 		<td>
 		  <select size=\"1\" name=\"min_plneni\" onChange=\"self.document.forms.form1.submit()\" >
 		    <option value=\"1\" ";
-if($min_plneni == 1 or !isset($min_plneni)) {
+if ($min_plneni == 1 or !isset($min_plneni)) {
     echo " selected ";
 }
 echo " >Ne</option>
 		    <option value=\"2\" ";
-if($min_plneni == 2) {
+if ($min_plneni == 2) {
     echo " selected ";
 }
 echo " >Ano</option>
@@ -782,7 +782,7 @@ echo "<td colspan=\"2\" >&nbsp;</td>";
 echo "</tr>";
 
 
-if($min_plneni == 2) {
+if ($min_plneni == 2) {
 
     echo "<tr>";
 

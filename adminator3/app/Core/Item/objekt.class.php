@@ -131,7 +131,7 @@ class objekt extends adminator
         $this->conn_pgsql = $container->get('connPgsql');
         $this->pdoMysql = $container->get('pdoMysql');
 
-        if($usePDO == true) {
+        if ($usePDO == true) {
             $this->pdo = $container->get('pdoPgsql');
         } else {
             $this->pdo = null;
@@ -158,7 +158,7 @@ class objekt extends adminator
         $rs_error = null;
         $rs = null;
 
-        if($this->$handler instanceof \PDO) {
+        if ($this->$handler instanceof \PDO) {
             $driver_name = $this->$handler->getAttribute(\PDO::ATTR_DRIVER_NAME);
             $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": driver_name: " . var_export($driver_name, true));
         } else {
@@ -174,7 +174,7 @@ class objekt extends adminator
             return [$rs_data, $rs_error];
         }
 
-        if(is_object($rs)) {
+        if (is_object($rs)) {
             $rs_data = $rs->fetchAll();
         } else {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO result is not object");
@@ -261,52 +261,52 @@ class objekt extends adminator
     private function listPrepareVars()
     {
         foreach ($this->request->getQueryParams() as $i => $v) {
-            if(preg_match('/^(mod_vypisu|es|razeni|list)$/', $i) and strlen($v) > 0) {
+            if (preg_match('/^(mod_vypisu|es|razeni|list)$/', $i) and strlen($v) > 0) {
                 $$i = $this->request->getQueryParams()[$i];
             }
         }
 
-        if(isset($mod_vypisu)) {
-            if(!(preg_match('/^([[:digit:]])+$/', $mod_vypisu))) {
+        if (isset($mod_vypisu)) {
+            if (!(preg_match('/^([[:digit:]])+$/', $mod_vypisu))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Chyba! Nesouhlasi vstupni data. (mod vypisu) </div>";
             }
             $this->mod_vypisu = $mod_vypisu;
         }
 
-        if((strlen($this->dns_find) > 0)) {
-            if(!(preg_match('/^([[:alnum:]]|_|-|\.|\%)+$/', $this->dns_find))) {
+        if ((strlen($this->dns_find) > 0)) {
+            if (!(preg_match('/^([[:alnum:]]|_|-|\.|\%)+$/', $this->dns_find))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v poli \"Hledání dle dns\". (Povolené: a-z,A-Z,0-9,-, _,. )</div>";
             }
         }
 
-        if((strlen($this->ip_find) > 0)) {
-            if(!(preg_match('/^([[:digit:]]|\.|/)+$/', $this->ip_find))) {
+        if ((strlen($this->ip_find) > 0)) {
+            if (!(preg_match('/^([[:digit:]]|\.|/)+$/', $this->ip_find))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v poli \"Hledání dle ip adresy\". (Povolené: a-z,A-Z,0-9,-, _,. )</div>";
             }
         }
 
-        if(isset($es)) {
-            if(!(preg_match('/^([[:digit:]])+$/', $es))) {
+        if (isset($es)) {
+            if (!(preg_match('/^([[:digit:]])+$/', $es))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v poli \"Sekundární hledání\". </div>";
             }
             $this->es = $es;
         }
 
-        if(isset($razeni)) {
-            if(!(preg_match('/^([[:digit:]])+$/', $razeni))) {
+        if (isset($razeni)) {
+            if (!(preg_match('/^([[:digit:]])+$/', $razeni))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v promenné \"razeni\". </div>";
             }
             $this->razeni = $razeni;
         }
 
-        if(isset($list)) {
-            if(!(preg_match('/^([[:digit:]])+$/', $list))) {
+        if (isset($list)) {
+            if (!(preg_match('/^([[:digit:]])+$/', $list))) {
                 $this->listErrors .= "<div style=\"color: red; font-weight: bold; \" >Nepovolené znaky v promenné \"list\". </div>";
             }
             $this->list = $list;
         }
 
-        if(strlen($this->listErrors) > 0) {
+        if (strlen($this->listErrors) > 0) {
             return false;
         }
 
@@ -331,16 +331,16 @@ class objekt extends adminator
 
         $tarif_sql = "";
 
-        if($this->mod_vypisu == 1) {
+        if ($this->mod_vypisu == 1) {
             $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
 
             $i = 0;
 
-            while($data_f = $dotaz_f->fetch_array()) {
-                if($i == 0) {
+            while ($data_f = $dotaz_f->fetch_array()) {
+                if ($i == 0) {
                     $tarif_sql .= "AND ( ";
                 }
-                if($i > 0) {
+                if ($i > 0) {
                     $tarif_sql .= " OR ";
                 }
 
@@ -349,20 +349,20 @@ class objekt extends adminator
                 $i++;
             }
 
-            if($i > 0) {
+            if ($i > 0) {
                 $tarif_sql .= " ) ";
             }
 
-        } elseif($this->mod_vypisu == 2) {
+        } elseif ($this->mod_vypisu == 2) {
             $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
 
             $i = 0;
 
-            while($data_f = $dotaz_f->fetch_array()) {
-                if($i == 0) {
+            while ($data_f = $dotaz_f->fetch_array()) {
+                if ($i == 0) {
                     $tarif_sql .= "AND ( ";
                 }
-                if($i > 0) {
+                if ($i > 0) {
                     $tarif_sql .= " OR ";
                 }
 
@@ -371,20 +371,20 @@ class objekt extends adminator
                 $i++;
             }
 
-            if($i > 0) {
+            if ($i > 0) {
                 $tarif_sql .= " ) ";
             }
 
         }
         // $output .= "dotaz_tarif: ".$tarif_sql." /";
 
-        if($co == 1) {
+        if ($co == 1) {
             $sql = "%".$sql."%";
 
             $dotaz_source = "SELECT * FROM objekty WHERE dns_jmeno LIKE '$sql' ".$se.$tarif_sql.$order;
-        } elseif($co == 2) {
+        } elseif ($co == 2) {
             $dotaz_source = "SELECT * FROM objekty WHERE ip <<= '$sql' ".$se.$tarif_sql.$order;
-        } elseif($co == 3) {
+        } elseif ($co == 3) {
             $dotaz_source = "SELECT * FROM objekty WHERE id_cloveka=".$id;
         } else {
             // $output .= "";
@@ -430,7 +430,7 @@ class objekt extends adminator
         // prepare vars
         //
         $prepVarsRs = $this->listPrepareVars();
-        if($prepVarsRs === false) {
+        if ($prepVarsRs === false) {
             return array("", $this->listErrors, $exportLink);
         }
 
@@ -456,7 +456,7 @@ class objekt extends adminator
         $output .=  "</form>";
 
         $generateSqlRes = $this->listGenerateSql();
-        if($generateSqlRes === false) {
+        if ($generateSqlRes === false) {
             return array("", '<div class="alert alert-danger" role="alert">Chyba! Nepodarilo se vygenerovat SQL dotaz.</div>', '');
         }
         // paging
@@ -464,12 +464,12 @@ class objekt extends adminator
         $poradek = "es=".$this->es."&dns_find=".$this->dns_find."&ip_find=".$this->ip_find . "&mod_vypisu=".$this->mod_vypisu;
 
         foreach ($this->request->getQueryParams() as $i => $v) {
-            if(preg_match('/^(odeslano|razeni)$/', $i) and strlen($v) > 0) {
+            if (preg_match('/^(odeslano|razeni)$/', $i) and strlen($v) > 0) {
                 $poradek .= "&" . $i . "=" . $this->request->getQueryParams()[$i];
             }
         }
 
-        if($this->pdo instanceof \PDO) {
+        if ($this->pdo instanceof \PDO) {
             $dbh = $this->pdo;
         } else {
             $dbh = $this->conn_pgsql;
@@ -478,14 +478,14 @@ class objekt extends adminator
         $listovani = new \c_listing_objekty($dbh, "/objekty?".$poradek."&menu=1", 30, $this->list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $this->dotaz_source);
         $listovani->echo = false;
 
-        if(($this->list == "") || ($this->list == "1")) {
+        if (($this->list == "") || ($this->list == "1")) {
             $bude_chybet = 0;
         } //pokud není list zadán nebo je první bude ve výběru sql dotazem chybet 0 záznamů
         else {
             $bude_chybet = (($this->list - 1) * $listovani->interval);
         }   //jinak jich bude chybet podle závislosti na listu a intervalu
 
-        if(intval($listovani->interval) > 0 and intval($bude_chybet) > 0) {
+        if (intval($listovani->interval) > 0 and intval($bude_chybet) > 0) {
             $this->dotaz_source = $this->dotaz_source . " LIMIT ". intval($listovani->interval)." OFFSET ".intval($bude_chybet)." ";
         }
 
@@ -510,7 +510,7 @@ class objekt extends adminator
 
         // with other "fatal" errors (some of p_bs_alerts),
         // we dont want render "usual" table header, but only error messages (and bootstrap alerts)
-        if(strlen($this->listErrors) > 0) {
+        if (strlen($this->listErrors) > 0) {
             return array('', $this->listErrors, '');
         }
 
@@ -521,12 +521,12 @@ class objekt extends adminator
     {
         $nod_find = $_POST["nod_find"];
 
-        if((strlen($nod_find) < 1)) {
+        if ((strlen($nod_find) < 1)) {
             $nod_find = "%";
         } else {
             // TODO: add validation of nod_find
 
-            if(!(preg_match("/^%.*%$/", $nod_find))) {
+            if (!(preg_match("/^%.*%$/", $nod_find))) {
                 $nod_find = "%".$nod_find."%";
             }
         }
@@ -551,7 +551,7 @@ class objekt extends adminator
         }
 
         // TODO: add check others reload stuff
-        if(($update_status == 1 and !(isset($this->send)))) {
+        if (($update_status == 1 and !(isset($this->send)))) {
             //rezim upravy
             $dotaz_upd = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
             $radku_upd = pg_num_rows($dotaz_upd);
@@ -559,7 +559,7 @@ class objekt extends adminator
             if ($radku_upd == 0) {
                 $output .= "Chyba! Požadovaná data nelze načíst! ";
             } else {
-                while($data = pg_fetch_array($dotaz_upd)) {
+                while ($data = pg_fetch_array($dotaz_upd)) {
                     // primy promenny
                     $this->form_dns = $data["dns_jmeno"];
                     $this->form_ip = $data["ip"];
@@ -576,7 +576,7 @@ class objekt extends adminator
                     // neprimy :) -> musi se zkonvertovat
 
                     $dov_net_l = $data["dov_net"];
-                    if($dov_net_l == "a") {
+                    if ($dov_net_l == "a") {
                         $this->form_dov_net = 2;
                     } else {
                         $this->form_dov_net = 1;
@@ -584,13 +584,13 @@ class objekt extends adminator
 
                     $verejna_l = $data["verejna"];
 
-                    if($data["tunnelling_ip"] == "1") { //tunelovaná verejka
+                    if ($data["tunnelling_ip"] == "1") { //tunelovaná verejka
                         $this->form_typ_ip = "4";
 
                         $tunnel_user = $data["tunnel_user"];
                         $tunnel_pass = $data["tunnel_pass"];
 
-                    } elseif($verejna_l == "99") {
+                    } elseif ($verejna_l == "99") {
                         $this->form_typ_ip = "1";
                     } else {
                         $this->form_typ_ip = "2";
@@ -598,13 +598,13 @@ class objekt extends adminator
                     }
 
                     $sikana_status_l = $data["sikana_status"];
-                    if(preg_match("/a/", $sikana_status_l)) {
+                    if (preg_match("/a/", $sikana_status_l)) {
                         $this->form_sikana_status = 2;
                     } else {
                         $this->form_sikana_status = 1;
                     }
                     $sikana_cas_l = $data["sikana_cas"];
-                    if(strlen($sikana_cas_l) > 0) {
+                    if (strlen($sikana_cas_l) > 0) {
                         $this->form_sikana_cas = $sikana_cas_l;
                     }
 
@@ -647,46 +647,46 @@ class objekt extends adminator
 
         $this->generujdata();
 
-        if((strlen($this->form_ip) > 0)) {
+        if ((strlen($this->form_ip) > 0)) {
             $this->checkip($this->form_ip);
         }
 
-        if((strlen($this->form_dns) > 0)) {
+        if ((strlen($this->form_dns) > 0)) {
             $this->checkdns($this->form_dns);
         }
-        if((strlen($this->form_mac) > 0)) {
+        if ((strlen($this->form_mac) > 0)) {
             $this->checkmac($this->form_mac);
         }
-        if((strlen($this->form_sikana_cas) > 0)) {
+        if ((strlen($this->form_sikana_cas) > 0)) {
             $this->checkcislo($this->form_sikana_cas);
         }
-        if((strlen($this->form_selected_nod) > 0)) {
+        if ((strlen($this->form_selected_nod) > 0)) {
             $this->checkcislo($this->form_selected_nod);
         }
 
-        if((strlen($this->form_client_ap_ip) > 0)) {
+        if ((strlen($this->form_client_ap_ip) > 0)) {
             $this->checkip($this->form_client_ap_ip);
         }
 
-        if($this->form_sikana_status == 2) {
+        if ($this->form_sikana_status == 2) {
             $this->checkSikanaCas($this->form_sikana_cas);
 
             $this->checkSikanaText($this->form_sikana_text);
         }
 
-        if($this->form_typ_ip == 4) {
-            if((strlen($tunnel_user) > 0)) {
+        if ($this->form_typ_ip == 4) {
+            if ((strlen($tunnel_user) > 0)) {
                 $this->check_l2tp_cr($tunnel_user);
             }
-            if((strlen($tunnel_pass) > 0)) {
+            if ((strlen($tunnel_pass) > 0)) {
                 $this->check_l2tp_cr($tunnel_pass);
             }
         }
 
         // checkne se jestli jsou vsechny udaje
-        if((($this->form_dns != "") and ($this->form_ip != "")) and ($this->form_selected_nod > 0) and (($this->form_id_tarifu >= 0))) :
+        if ((($this->form_dns != "") and ($this->form_ip != "")) and ($this->form_selected_nod > 0) and (($this->form_id_tarifu >= 0))) :
 
-            if($update_status != 1 and isset($this->odeslano)) {
+            if ($update_status != 1 and isset($this->odeslano)) {
                 $this->ip_find = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
@@ -703,15 +703,15 @@ class objekt extends adminator
                 }
 
                 //duplicitni tunnel_pass/user
-                if($this->form_typ_ip == 4) {
+                if ($this->form_typ_ip == 4) {
                     $MSQ_TUNNEL_USER = pg_query($this->conn_pgsql, "SELECT tunnel_user FROM objekty WHERE tunnel_user = '$tunnel_user' ");
                     $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE tunnel_pass = '$tunnel_pass' ");
 
-                    if(pg_num_rows($MSQ_TUNNEL_USER) <> 0) {
+                    if (pg_num_rows($MSQ_TUNNEL_USER) <> 0) {
                         $this->action_error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
                         $this->action_fail = "true";
                     }
-                    if(pg_num_rows($MSQ_TUNNEL_PASS) <> 0) {
+                    if (pg_num_rows($MSQ_TUNNEL_PASS) <> 0) {
                         $this->action_error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>";
                         $this->action_fail = "true";
                     }
@@ -727,25 +727,25 @@ class objekt extends adminator
                 $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno = '$this->form_dns' AND id_komplu != '".intval($this->update_id)."' ) ");
                 $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$this->ip_find' AND id_komplu != '".intval($this->update_id)."' ) ");
 
-                if(pg_num_rows($MSQ_DNS2) <> 0) {
+                if (pg_num_rows($MSQ_DNS2) <> 0) {
                     $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
-                if(pg_num_rows($MSQ_IP2) <> 0) {
+                if (pg_num_rows($MSQ_IP2) <> 0) {
                     $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
 
                 //duplicitni tunnel_pass/user
-                if($this->form_typ_ip == 4) {
+                if ($this->form_typ_ip == 4) {
                     $MSQ_TUNNEL_USER = pg_query($this->conn_pgsql, "SELECT tunnel_user FROM objekty WHERE ( tunnel_user = '$tunnel_user' AND id_komplu != '".intval($this->update_id)."' ) ");
                     $MSQ_TUNNEL_PASS = pg_query($this->conn_pgsql, "SELECT tunnel_pass FROM objekty WHERE ( tunnel_pass = '$tunnel_pass' AND id_komplu != '".intval($this->update_id)."' ) ");
 
-                    if(pg_num_rows($MSQ_TUNNEL_USER) > 0) {
+                    if (pg_num_rows($MSQ_TUNNEL_USER) > 0) {
                         $this->action_error .= "<h4>Login k tunelovacímu serveru (".$tunnel_user.") již existuje!!!</h4>";
                         $this->action_fail = "true";
                     }
-                    if(pg_num_rows($MSQ_TUNNEL_PASS) > 0) {
+                    if (pg_num_rows($MSQ_TUNNEL_PASS) > 0) {
                         $this->action_error .= "<h4>Heslo k tunelovacímu serveru (".$tunnel_pass.") již existuje!!!</h4>";
                         $this->action_fail = "true";
                     }
@@ -794,11 +794,11 @@ class objekt extends adminator
 
             // $output .= "debug: id_fakturacni_skupiny: ".$pozastavene_fakturace_id." id_cloveka: $id_cloveka ,dov_net-puvodni: $dov_net_puvodni , povolen inet: $dov_net";
 
-            if($billing_suspend_status == 1) {
+            if ($billing_suspend_status == 1) {
                 // budeme zli
                 // prvne zjisteni predchoziho stavu
 
-                if((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
+                if ((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
                     $this->action_fail = "true";
                     $this->action_error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka pole \"Pozastavené fakturace\". </div>";
                 }
@@ -807,7 +807,7 @@ class objekt extends adminator
         } // konec if jestli id_cloveka > 1 and update == 1
 
         //checkem jestli se macklo na tlacitko "OK" :)
-        if(!preg_match("/^OK$/", $this->odeslano) and !isset($this->action_fail)) {
+        if (!preg_match("/^OK$/", $this->odeslano) and !isset($this->action_fail)) {
             $this->action_fail = "true";
             $this->action_error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
         }
@@ -828,10 +828,10 @@ class objekt extends adminator
 
             if ($this->form_typ_ip == 1) {
                 $verejna_w = "99";
-            } elseif($this->form_typ_ip == 3) {
+            } elseif ($this->form_typ_ip == 3) {
                 $verejna_w = $vip_rozsah;
                 //$vip_snat="1";
-            } elseif($this->form_typ_ip == 4) {
+            } elseif ($this->form_typ_ip == 4) {
                 //tunelovane ip adresy
                 $tunnelling_ip = 1; //flag pro selekci tunelovanych ip
                 $verejna_w = $vip_rozsah; //flag ze je jedna o verejnou (asi jen pro DNS)
@@ -845,7 +845,7 @@ class objekt extends adminator
                 $tunnelling_ip = "0";
             }
 
-            if($this->form_sikana_status == "2") {
+            if ($this->form_sikana_status == "2") {
                 $sikana_status_w = 'a';
             } else {
                 $sikana_status_w = 'n';
@@ -853,7 +853,7 @@ class objekt extends adminator
 
             $this->form_sikana_cas = intval($this->form_sikana_cas);
 
-            if($update_status == 1) {
+            if ($update_status == 1) {
                 // rezim upravy
 
                 if ($this->adminator->checkLevel(29) === false) {
@@ -868,13 +868,13 @@ class objekt extends adminator
 
                 $vysl4 = pg_query($this->conn_pgsql, "SELECT ".$sql_rows." FROM objekty WHERE id_komplu='".intval($this->update_id)."' ");
 
-                if(!$vysl4) {
+                if (!$vysl4) {
                     $output .= "<div class=\"alert alert-danger\" role=\"alert\" style=\"padding: 10px; \">Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
                     $output .= "<div>pg_query failed! detail chyby: " . pg_last_error($this->conn_pgsql) . "</div>";
                     return $output;
                 }
 
-                if((pg_num_rows($vysl4) <> 1)) {
+                if ((pg_num_rows($vysl4) <> 1)) {
                     $output .= "<div class=\"alert alert-danger\" role=\"alert\" style=\"padding: 10px; \">Chyba! Nelze zjistit puvodni data pro ulozeni do archivu zmen</div>";
                     $output .= "<div>detail chyby: num_rows: " . pg_num_rows($vysl4) . "</div>";
                     return $output;
@@ -911,7 +911,7 @@ class objekt extends adminator
                     "mac" => $this->form_mac, "upravil" => $this->loggedUserEmail, "sikana_status" => $sikana_status_w,
                     "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text, "id_nodu" => $this->form_selected_nod );
 
-                if($this->form_typ_ip == 4) {
+                if ($this->form_typ_ip == 4) {
                     $obj_upd["tunnelling_ip"] = $tunnelling_ip;
 
                     $obj_upd["tunnel_user"] = $tunnel_user_w;
@@ -925,7 +925,7 @@ class objekt extends adminator
                     ->where('id_komplu', $this->update_id)
                     ->update($obj_upd);
 
-                if($affected > 0) {
+                if ($affected > 0) {
                     $vysledek_write = 1;
                     $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n";
                 } else {
@@ -954,7 +954,7 @@ class objekt extends adminator
                     "typ" => $this->form_typ, "poznamka" => $this->form_pozn, "verejna" => $verejna_w, "pridal" => $this->loggedUserEmail, "id_nodu" => $this->form_selected_nod,
                     "sikana_status" => $sikana_status_w, "sikana_cas" => $this->form_sikana_cas, "sikana_text" => $this->form_sikana_text );
 
-                if($this->form_typ_ip == 4) {
+                if ($this->form_typ_ip == 4) {
                     $obj_add["tunnelling_ip"] = $tunnelling_ip;
 
                     $obj_add["tunnel_user"] = $tunnel_user_w;
@@ -962,11 +962,11 @@ class objekt extends adminator
 
                 }
 
-                if((strlen($this->form_client_ap_ip) > 0)) {
+                if ((strlen($this->form_client_ap_ip) > 0)) {
                     $obj_add["client_ap_ip"] = $this->form_client_ap_ip;
                 }
 
-                if((strlen($this->form_mac) > 0)) {
+                if ((strlen($this->form_mac) > 0)) {
                     $obj_add["mac"] = $this->form_mac;
                 }
 
@@ -974,7 +974,7 @@ class objekt extends adminator
                     ->table('objekty')
                     ->insertGetId($obj_add, "id_komplu");
 
-                if($this->insertedId > 0) {
+                if ($this->insertedId > 0) {
                     $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n";
                     $vysledek_write = 1;
                 } else {
@@ -1000,7 +1000,7 @@ class objekt extends adminator
         } else {
         } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
-        elseif(isset($this->send)) :
+        elseif (isset($this->send)) :
             $this->action_fail = "true";
             $this->p_bs_alerts["Chybí povinné údaje! </br>(aktuálně jsou povinné: dns, ip adresa, přípojný bod, tarif)"] = "danger";
         endif;
@@ -1012,7 +1012,7 @@ class objekt extends adminator
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if((isset($this->action_fail)) or (!isset($this->send))) :
+        if ((isset($this->action_fail)) or (!isset($this->send))) :
             $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": rendering form");
 
             $output .= $this->action_error;
@@ -1053,10 +1053,10 @@ class objekt extends adminator
         $vysledek4 = $this->conn_mysql->query("SELECT jmeno_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu='".intval($this->form_id_tarifu)."' ");
         $radku4 = $vysledek4->num_rows;
 
-        if($radku4 == 0) {
+        if ($radku4 == 0) {
             $output .= "Nelze zjistit tarif";
         } else {
-            while($zaznam4 = $vysledek4->fetch_array()) {
+            while ($zaznam4 = $vysledek4->fetch_array()) {
                 $output .= $zaznam4["jmeno_tarifu"]." (".$zaznam4["zkratka_tarifu"].") ";
             }
         }
@@ -1078,7 +1078,7 @@ class objekt extends adminator
         $vysledek3 = $this->conn_mysql->query("SELECT jmeno,id FROM nod_list WHERE id='".intval($this->form_selected_nod)."'");
         $radku3 = $vysledek3->num_rows;
 
-        if($radku3 == 0) {
+        if ($radku3 == 0) {
             $output .= "Nelze zjistit ";
         } else {
             while ($zaznam3 = $vysledek3->fetch_array()) {
@@ -1087,12 +1087,12 @@ class objekt extends adminator
         }
 
         $output .= "<br><br><b>Šikana: </b>";
-        if($this->form_sikana_status == 2) {
+        if ($this->form_sikana_status == 2) {
             $output .= "Ano";
 
             $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
             $output .= "<br><b>Šikana - text: </b>".$this->form_sikana_text;
-        } elseif($this->form_sikana_status == 1) {
+        } elseif ($this->form_sikana_status == 1) {
             $output .= "Ne";
         } else {
             $output .= "Nelze zjistit";
@@ -1163,7 +1163,7 @@ class objekt extends adminator
 
                     $verejna_l = $data["verejna"];
 
-                    if($verejna_l == "99") {
+                    if ($verejna_l == "99") {
                         $this->form_typ_ip = "1";
                     } else {
                         $this->form_typ_ip = "2";
@@ -1207,24 +1207,24 @@ class objekt extends adminator
         $this->generujDataFiber();
 
         //kontrola vlozenych promennych ..
-        if((strlen($this->form_ip) > 0)) {
+        if ((strlen($this->form_ip) > 0)) {
             $this->checkip($this->form_ip);
         }
 
-        if((strlen($this->form_dns) > 0)) {
+        if ((strlen($this->form_dns) > 0)) {
             $this->checkdns($this->form_dns);
         }
-        if((strlen($this->form_mac) > 0)) {
+        if ((strlen($this->form_mac) > 0)) {
             $this->checkmac($this->form_mac);
         }
 
-        if((strlen($this->form_sikana_cas) > 0)) {
+        if ((strlen($this->form_sikana_cas) > 0)) {
             $this->checkcislo($this->form_sikana_cas);
         }
         //if( (strlen($this->form_selected_nod) > 0 ) ){ $this->checkcislo($this->form_selected_nod); }
 
         // checkne se jestli jsou vsechny udaje
-        if((($this->form_dns != "") and ($this->form_ip != "")) and ($this->form_selected_nod > 0) and (($this->form_id_tarifu >= 0)) and ($this->form_mac != "")) :
+        if ((($this->form_dns != "") and ($this->form_ip != "")) and ($this->form_selected_nod > 0) and (($this->form_id_tarifu >= 0)) and ($this->form_mac != "")) :
 
             //kontrola dulplicitnich udaju
             if ($update_status != 1 and isset($this->odeslano)) {
@@ -1245,18 +1245,18 @@ class objekt extends adminator
             }
 
             // check v modu uprava
-            if(($update_status == 1 and (isset($this->odeslano)))) {
+            if (($update_status == 1 and (isset($this->odeslano)))) {
                 $ip = $this->form_ip."/32";
 
                 //zjisti jestli neni duplicitni dns, ip
                 $MSQ_DNS2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( dns_jmeno = '$this->form_dns' AND id_komplu != '$this->update_id' ) ");
                 $MSQ_IP2 = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ( ip <<= '$ip' AND id_komplu != '$this->update_id' ) ");
 
-                if(pg_num_rows($MSQ_DNS2) <> 0) {
+                if (pg_num_rows($MSQ_DNS2) <> 0) {
                     $this->action_error .= "<h4>Dns záznam ( ".$this->form_dns." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
-                if(pg_num_rows($MSQ_IP2) <> 0) {
+                if (pg_num_rows($MSQ_IP2) <> 0) {
                     $this->action_error .= "<h4>IP adresa ( ".$this->form_ip." ) již existuje!!!</h4>";
                     $this->action_fail = "true";
                 }
@@ -1284,7 +1284,7 @@ class objekt extends adminator
         $poz_fakt_clovek = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '$this->update_id' ");
         $poz_fakt_clovek_radku = pg_num_rows($poz_fakt_clovek);
 
-        while($data_poz_f_clovek = pg_fetch_array($poz_fakt_clovek)) {
+        while ($data_poz_f_clovek = pg_fetch_array($poz_fakt_clovek)) {
             $id_cloveka = $data_poz_f_clovek["id_cloveka"];
             $dov_net_puvodni = $data_poz_f_clovek["dov_net"];
         }
@@ -1295,7 +1295,7 @@ class objekt extends adminator
             $pozastavene_fakt_radku = pg_num_rows($pozastavene_fakt);
 
 
-            if($pozastavene_fakt_radku == 1) {
+            if ($pozastavene_fakt_radku == 1) {
                 while ($data_poz_fakt = pg_fetch_array($pozastavene_fakt)) {
                     $billing_suspend_status = intval($data_poz_fakt["billing_suspend_status"]);
                 }
@@ -1303,11 +1303,11 @@ class objekt extends adminator
                 $output .= "Chyba! nelze vybrat vlastníka.";
             }
 
-            if($billing_suspend_status == 1) {
+            if ($billing_suspend_status == 1) {
                 // budeme zli
                 // prvne zjisteni predchoziho stavu
 
-                if((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
+                if ((($dov_net_puvodni == "n") and ($this->form_dov_net == 2))) {
                     $this->action_fail = "true";
                     $this->action_error .= "<div class=\"objekty-add-mac\" >Klient má pozastavené fakturace. Před povolením internetu je potřeba změnit u vlastníka fakturační skupinu. </div>";
                 }
@@ -1317,21 +1317,21 @@ class objekt extends adminator
         } // konec if jestli id_cloveka > 1 and update == 1
 
         //checkem jestli se macklo na tlacitko "OK" :)
-        if(!preg_match("/^OK*/", $this->odeslano) and !isset($this->action_fail)) {
+        if (!preg_match("/^OK*/", $this->odeslano) and !isset($this->action_fail)) {
             $this->action_fail = "true";
             $this->action_error .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
         }
 
         //ukladani udaju ...
-        if(!(isset($this->action_fail))) {
+        if (!(isset($this->action_fail))) {
             // priprava promennych
 
-            if($this->form_dov_net == 2) {
+            if ($this->form_dov_net == 2) {
                 $dov_net_w = "a";
             } else {
                 $dov_net_w = "n";
             }
-            if($this->form_sikana_status == "2") {
+            if ($this->form_sikana_status == "2") {
                 $sikana_status_w = 'a';
             } else {
                 $sikana_status_w = 'n';
@@ -1345,11 +1345,11 @@ class objekt extends adminator
                 //$vip_snat="0";
             }
 
-            if($this->form_another_vlan_id == 0) {
+            if ($this->form_another_vlan_id == 0) {
                 $this->form_another_vlan_id = null;
             }
 
-            if($update_status == 1) {
+            if ($update_status == 1) {
 
                 if ($this->adminator->checkLevel(29) === false) {
                     $output .= "<br><div style=\"color: red; font-size: 18px; \" >Objekty nelze upravovat, není dostatečné oprávnění. </div><br>";
@@ -1361,7 +1361,7 @@ class objekt extends adminator
                 //prvne stavajici data docasne ulozime
                 $vysl4 = pg_query($this->conn_pgsql, "select * from objekty WHERE id_komplu='$this->update_id' ");
 
-                if((pg_num_rows($vysl4) <> 1)) {
+                if ((pg_num_rows($vysl4) <> 1)) {
                     $output .= "<p>Chyba! Nelze zjistit puvodni data pro ulozeni do archivu </p>";
                 } else {
                     while ($data4 = pg_fetch_array($vysl4)):
@@ -1389,7 +1389,7 @@ class objekt extends adminator
 
                         $pole_puvodni_data["another_vlan_id"] = $data4["another_vlan_id"];
 
-                        if($data4["verejna"] == 99) {
+                        if ($data4["verejna"] == 99) {
                             $pole_puvodni_data["typ_ip"] = "1";
                         } else {
                             $pole_puvodni_data["typ_ip"] = "2";
@@ -1408,7 +1408,7 @@ class objekt extends adminator
                 $obj_id = array( "id_komplu" => $this->update_id );
                 $res = pg_update($this->conn_pgsql, 'objekty', $obj_upd, $obj_id);
 
-                if($res) {
+                if ($res) {
                     $vysledek_write = 1;
                     $output .= "<br><H3><div style=\"color: green; \" >Data v databázi úspěšně změněny.</div></H3>\n";
                 } else {
@@ -1469,7 +1469,7 @@ class objekt extends adminator
         } else {
         } // konec else ( !(isset(fail) ), muji tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
-        elseif(isset($this->send)) :
+        elseif (isset($this->send)) :
             $this->action_fail = "true";
             $this->p_bs_alerts["Chybí povinné údaje! </br>(aktuálně jsou povinné: dns, ip adresa, mac adresa, přípojný bod, tarif)"] = "danger";
         endif;
@@ -1481,7 +1481,7 @@ class objekt extends adminator
         }
 
         // jestli byli zadany duplicitni udaje, popr. se jeste form neodesilal, zobrazime form
-        if((isset($this->action_fail)) or (!isset($this->send))) :
+        if ((isset($this->action_fail)) or (!isset($this->send))) :
             $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": rendering form");
 
             $output .= $this->action_error;
@@ -1492,7 +1492,6 @@ class objekt extends adminator
             $output .= $this->actionFormFiber();
 
             $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": formFiber rendered");
-
         elseif ((isset($writed) or isset($updated))) :
 
             $output .= '<table border="0" width="50%" >
@@ -1552,7 +1551,7 @@ class objekt extends adminator
 
         $vysledek3 = $this->conn_mysql->query("select * from nod_list WHERE id=".intval($this->form_selected_nod));
         $radku3 = $vysledek3->num_rows;
-        if($radku3 == 0) {
+        if ($radku3 == 0) {
             $output .= "Nelze zjistit ";
         } else {
             while ($zaznam3 = $vysledek3->fetch_array()) {
@@ -1563,12 +1562,12 @@ class objekt extends adminator
         // $output .= "data nejak upravena";
 
         $output .= "<br><br><b>Šikana: </b>";
-        if($this->form_sikana_status == 2) {
+        if ($this->form_sikana_status == 2) {
             $output .= "Ano";
 
             $output .= "<br><b>Šikana - počet dní: </b>".$this->form_sikana_cas;
             $output .= "<br><b>Šikana - text: </b>".$this->form_sikana_text;
-        } elseif($this->form_sikana_status == 1) {
+        } elseif ($this->form_sikana_status == 1) {
             $output .= "Ne";
         } else {
             $output .= "Nelze zjistit";
@@ -1577,16 +1576,16 @@ class objekt extends adminator
         $output .= "<br><b>Číslo portu (ve switchi)</b>: ".$this->form_port_id."<br>";
 
         $output .= "<br><b>Typ IP adresy</b>: ";
-        if($this->form_typ_ip == "2") {
+        if ($this->form_typ_ip == "2") {
             $output .= "Veřejná";
-        } elseif($this->form_typ_ip == "1") {
+        } elseif ($this->form_typ_ip == "1") {
             $output .= "Neveřejná";
         } else {
             $output .= "Nelze zjistit";
         }
 
         $output .= "<br><b>Přílušnost MAC k jiné vlaně (ve domov. switchi)</b>: ";
-        if(($this->form_another_vlan_id == null) or ($this->form_another_vlan_id == "")) {
+        if (($this->form_another_vlan_id == null) or ($this->form_another_vlan_id == "")) {
             $output .= "Vypnuto";
         } else {
             $output .= "vlan id: ".$this->form_another_vlan_id;
@@ -1616,11 +1615,11 @@ class objekt extends adminator
             <td >
             <select size="1" name="mod_objektu" onChange="self.document.forms.form1.submit()" >
                 <option value="1" style="color: #CC0033;" ';
-        if($this->mod_objektu == 1) {
+        if ($this->mod_objektu == 1) {
             $output .= " selected ";
         } $output .= ' >Bezdrátová síť</option>
                 <option value="2" style="color: #e37d2b; font-weight: bold;" ';
-        if($this->mod_objektu == 2) {
+        if ($this->mod_objektu == 2) {
             $output .= " selected ";
         } $output .= ' >Optická síť</option>
             </select>
@@ -1665,17 +1664,17 @@ class objekt extends adminator
                 <td>
                 <select size="1" name="typ_ip" onchange="self.document.forms.form1.submit()" >';
         $output .= '<option value="1" class="select-nevybrano" ';
-        if($this->form_typ_ip == 1) {
+        if ($this->form_typ_ip == 1) {
             $output .= " selected ";
         } $output .= ' >vyberte typ</option>
                 <option value="2" ';
-        if($this->form_typ_ip == 2) {
+        if ($this->form_typ_ip == 2) {
             $output .= " selected ";
         } $output .= ' >default - routovaná</option>';
 
-        if(($this->update_id > 0) and ($this->form_typ_ip == 3)) {
+        if (($this->update_id > 0) and ($this->form_typ_ip == 3)) {
             $output .= "<option value=\"3\"";
-            if($this->form_typ_ip == 3) {
+            if ($this->form_typ_ip == 3) {
                 $output .= " selected ";
             }
             $output .= " >překládaná - snat/dnat</option> ";
@@ -1683,7 +1682,7 @@ class objekt extends adminator
 
         $output .= '
                 <option value="4" ';
-        if($this->form_typ_ip == 4) {
+        if ($this->form_typ_ip == 4) {
             $output .= " selected ";
         } $output .= ' >tunelovaná - l2tp tunel</option>
                 </select>
@@ -1707,13 +1706,13 @@ class objekt extends adminator
 
         $output .= '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
 
-        if($this->form_typ_ip == 4) {
+        if ($this->form_typ_ip == 4) {
             $output .= "<option value=\"572\" selected > verejne_ip_tunelovane ( 212.80.82.160 ) </option>";
-        } elseif(($radku == 0)) {
+        } elseif (($radku == 0)) {
             $output .= "<option value=\"0\" style=\"color: gray; \" selected >nelze zjistit / žádný nod nenalezen </option>";
         } else {
             $output .= '<option value="0" style="color: gray; font-style: bold; " ';
-            if(($_POST["selected"] == 0) or ((!isset($this->form_selected_nod)))) {
+            if (($_POST["selected"] == 0) or ((!isset($this->form_selected_nod)))) {
                 $output .= "selected ";
             }
             $output .= ' > Není vybráno</option>';
@@ -1739,7 +1738,7 @@ class objekt extends adminator
             <tr>
                 <td>ip adresa:</td>
                 <td><input type="Text" name="ip" size="30" maxlength="20" value="'.$this->form_ip.'" >';
-        if($this->form_ip_error == 1) {
+        if ($this->form_ip_error == 1) {
             $output .= "<img title=\"error\" width=\"20px\" src=\"img2/warning.gif\" align=\"middle\" ";
             $output .= "onclick=\" window.open('objekty-vypis-ip.php?id_rozsah=".$ip_rozsah."'); "."\">";
         }
@@ -1747,9 +1746,9 @@ class objekt extends adminator
         $output .= '</td>
                 <td>';
 
-        if($this->form_typ_ip == 3) {
+        if ($this->form_typ_ip == 3) {
             $output .= "<label> Lokální adresa k veřejné: </label>";
-        } elseif($this->form_typ_ip == 4) {
+        } elseif ($this->form_typ_ip == 4) {
             $output .= "Přihlašovací údaje
                         <span style=\"font-size: 11px;\">(k tunelovacímu serveru): </span>";
         } else {
@@ -1788,7 +1787,7 @@ class objekt extends adminator
         else
         */
 
-        if($this->form_typ_ip == 4) {
+        if ($this->form_typ_ip == 4) {
             $output .= "<span style=\"padding-right: 10px; padding-left: 5px;\">login:</span>".
                 "<input type=\"text\" name=\"tunnel_user\" size=\"6\" maxlength=\"4\" value=\"".$tunnel_user."\" >".
 
@@ -1810,7 +1809,7 @@ class objekt extends adminator
                 <td>mac adresa: <div style="font-size: 12px;">(prouze pro DHCP server/y)</div></td>
                 <td>';
 
-        if($this->form_typ_ip == 4) {
+        if ($this->form_typ_ip == 4) {
             $output .= "<span style=\"color: gray; \" >Není dostupné </span>";
         } else {
             $output .= "<input type=\"text\" name=\"mac\" maxlength=\"17\" value=\"".$this->form_mac."\">";
@@ -1828,7 +1827,7 @@ class objekt extends adminator
             <tr>
             <td>ip klientského zařízení: </td>
             <td>';
-        if(($this->form_typ_ip <> 3) and ($this->form_typ_ip != 4)) {
+        if (($this->form_typ_ip <> 3) and ($this->form_typ_ip != 4)) {
             $output .= "<input type=\"text\" name=\"client_ap_ip\" value=\"".$this->form_client_ap_ip."\" > ";
         } else {
             $output .= "<span style=\"color: gray; \">není dostupné</span>";
@@ -1838,8 +1837,8 @@ class objekt extends adminator
                 <td>Povolen NET:</td>
                 <td>';
 
-        if(($this->form_typ == 3) or ($this->form_typ_ip == 3)) {
-            if($this->form_typ_ip == 3) {
+        if (($this->form_typ == 3) or ($this->form_typ_ip == 3)) {
+            if ($this->form_typ_ip == 3) {
                 $output .= "<input type=\"hidden\" name=\"dov_net\" value=\"2\" >";
             }
             $output .= "<div class=\"objekty-not-allow\">není dostupné</div>";
@@ -1911,17 +1910,17 @@ class objekt extends adminator
                 <td style="" >Tarif:</td>
                 <td>';
 
-        if(!isset($this->form_id_tarifu)) {
-            if($this->form_typ == 3) {
+        if (!isset($this->form_id_tarifu)) {
+            if ($this->form_typ == 3) {
                 $find_tarif = "2";
             } //ap-cko ...
-            elseif($this->form_typ_ip == 3) { //snat/dnat verejka ...
+            elseif ($this->form_typ_ip == 3) { //snat/dnat verejka ...
                 $find_tarif = "2";
-            } elseif($garant == 2) { //garant linka ...
+            } elseif ($garant == 2) { //garant linka ...
             } //.
-            elseif($tarif == 1) {  // asi SmallCity
+            elseif ($tarif == 1) {  // asi SmallCity
                 $find_tarif = "1";
-            } elseif($tarif == 2) {  // Mp linka
+            } elseif ($tarif == 2) {  // Mp linka
                 $find_tarif = "0";
             } else {
                 $find_tarif = "0";
@@ -1933,15 +1932,15 @@ class objekt extends adminator
         //$output .= "<option value=\"\" class=\"select-nevybrano\" >Nevybráno</option>";
         $dotaz_t2 = $this->conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '0' ORDER BY zkratka_tarifu ");
 
-        while($data_t2 = $dotaz_t2->fetch_array()) {
+        while ($data_t2 = $dotaz_t2->fetch_array()) {
             $output .= "<option value=\"".$data_t2["id_tarifu"]."\" ";
 
-            if(isset($find_tarif)) {
-                if(($find_tarif == $data_t2["id_tarifu"])) {
+            if (isset($find_tarif)) {
+                if (($find_tarif == $data_t2["id_tarifu"])) {
                     $output .= " SELECTED ";
                 }
             } else {
-                if($this->form_id_tarifu == $data_t2["id_tarifu"]) {
+                if ($this->form_id_tarifu == $data_t2["id_tarifu"]) {
                     $output .= " SELECTED ";
                 }
             }
@@ -1957,7 +1956,7 @@ class objekt extends adminator
         $output .= "<td>Šikana - počet dní: </td>
                 <td>";
 
-        if(($this->form_typ == 3 or ($this->form_sikana_status != 2))) {
+        if (($this->form_typ == 3 or ($this->form_sikana_status != 2))) {
             $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>";
             $output .= "<input type=\"hidden\" name=\"sikana_cas\" value=\"".$this->form_sikana_cas."\">";
         } else {
@@ -1979,7 +1978,7 @@ class objekt extends adminator
                     <td><label>Šikana - text: </label></td>
                     <td>';
 
-        if(($this->form_typ == 3 or ($this->form_sikana_status != 2))) {
+        if (($this->form_typ == 3 or ($this->form_sikana_status != 2))) {
             $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>";
             $output .= "<input type=\"hidden\" name=\"sikana_text\" value=\"".$this->form_sikana_text."\" >";
         } else {
@@ -2026,11 +2025,11 @@ class objekt extends adminator
                 <td >
                 <select size="1" name="mod_objektu" onChange="self.document.forms.form1.submit()" >
                     <option value="1" style="color: #CC0033;" ';
-        if($this->mod_objektu == 1) {
+        if ($this->mod_objektu == 1) {
             $output .= " selected ";
         } $output .= ' >Bezdrátová síť</option>
                     <option value="2" style="color: #e37d2b; font-weight: bold;" ';
-        if($this->mod_objektu == 2) {
+        if ($this->mod_objektu == 2) {
             $output .= " selected ";
         } $output .= ' >Optická síť</option>
                 </select>
@@ -2078,11 +2077,11 @@ class objekt extends adminator
 
         $output .= '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
 
-        if(($radku == 0)) {
+        if (($radku == 0)) {
             $output .= "<option value=\"0\" style=\"color: gray; \" selected >nelze zjistit / žádný nod nenalezen </option>";
         } else {
             $output .= '<option value="0" style="color: gray; font-style: bold; "';
-            if((!isset($this->form_selected_nod))) {
+            if ((!isset($this->form_selected_nod))) {
                 $output .= "selected";
             }
             $output .= ' > Není vybráno</option>';
@@ -2119,7 +2118,7 @@ class objekt extends adminator
 
                     <td>';
 
-        if(!isset($this->form_id_tarifu)) {
+        if (!isset($this->form_id_tarifu)) {
             $this->form_id_tarifu = "0";
         }
 
@@ -2129,15 +2128,15 @@ class objekt extends adminator
 
         $dotaz_t2 = $this->conn_mysql->query("SELECT * FROM tarify_int WHERE typ_tarifu = '1' ORDER BY gen_poradi ");
 
-        while($data_t2 = $dotaz_t2->fetch_array()) {
+        while ($data_t2 = $dotaz_t2->fetch_array()) {
             $output .= "<option value=\"".$data_t2["id_tarifu"]."\" ";
 
-            if(isset($find_tarif)) {
-                if(($find_tarif == $data_t2["id_tarifu"])) {
+            if (isset($find_tarif)) {
+                if (($find_tarif == $data_t2["id_tarifu"])) {
                     $output .= " SELECTED ";
                 }
             } else {
-                if($this->form_id_tarifu == $data_t2["id_tarifu"]) {
+                if ($this->form_id_tarifu == $data_t2["id_tarifu"]) {
                     $output .= " SELECTED ";
                 }
             }
@@ -2187,8 +2186,8 @@ class objekt extends adminator
                 <td>Povolen NET:</td>
                 <td>';
 
-        if(($this->form_typ == 3) or ($this->form_typ_ip == 3)) {
-            if($this->form_typ_ip == 3) {
+        if (($this->form_typ == 3) or ($this->form_typ_ip == 3)) {
+            if ($this->form_typ_ip == 3) {
                 $output .= "<input type=\"hidden\" name=\"dov_net\" value=\"2\" >";
             }
             $output .= "<div class=\"objekty-not-allow\">není dostupné</div>";
@@ -2222,10 +2221,10 @@ class objekt extends adminator
 
         $pocet_portu = 24;
 
-        for($i = 1;$i <= $pocet_portu;$i++) {
+        for ($i = 1;$i <= $pocet_portu;$i++) {
             $output .= "<option value=\"".$i."\" ";
 
-            if($this->form_port_id == $i) {
+            if ($this->form_port_id == $i) {
                 $output .= " selected ";
             }
 
@@ -2268,7 +2267,7 @@ class objekt extends adminator
 
         $output .= "<td>Šikana - počet dní: </td><td>";
 
-        if(($this->form_typ == 3 or ($this->form_sikana_status != 2))) {
+        if (($this->form_typ == 3 or ($this->form_sikana_status != 2))) {
             $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>";
             $output .= "<input type=\"hidden\" name=\"sikana_cas\" value=\"".$this->form_sikana_cas."\">";
         } else {
@@ -2290,7 +2289,7 @@ class objekt extends adminator
                 <td><label>Šikana - text: </label></td>
                 <td>';
 
-        if(($this->form_typ == 3 or ($this->form_sikana_status != 2))) {
+        if (($this->form_typ == 3 or ($this->form_sikana_status != 2))) {
             $output .= "<div class=\"objekty-not-allow\" >není dostupné</div>";
             $output .= "<input type=\"hidden\" name=\"sikana_text\" value=\"".$this->form_sikana_text."\" >";
         } else {
@@ -2312,10 +2311,10 @@ class objekt extends adminator
 
         $dotaz_a_vlan = $this->conn_mysql->query("SELECT jmeno, vlan_id FROM nod_list WHERE typ_nodu = '2' ORDER BY vlan_id ");
 
-        while($data_vlan = $dotaz_a_vlan->fetch_array()) {
+        while ($data_vlan = $dotaz_a_vlan->fetch_array()) {
             $output .= "<option value=\"".$data_vlan["vlan_id"]."\" ";
 
-            if($this->form_another_vlan_id == $data_vlan["vlan_id"]) {
+            if ($this->form_another_vlan_id == $data_vlan["vlan_id"]) {
                 $output .= " SELECTED ";
             }
 
@@ -2365,7 +2364,7 @@ class objekt extends adminator
     private function generujDataFiber(): bool
     {
 
-        if($this->form_selected_nod < 1) {
+        if ($this->form_selected_nod < 1) {
             echo "";
             return false;
         }
@@ -2377,13 +2376,13 @@ class objekt extends adminator
         } catch (Exception $e) {
         }
 
-        if($radku_nod <> 1) {
-            if((strlen($this->form_ip) < 1)) {
+        if ($radku_nod <> 1) {
+            if ((strlen($this->form_ip) < 1)) {
                 $this->form_ip = "E_1";
             }
             return false;
         } else {
-            while($data_nod = $vysl_nod->fetch_array()):
+            while ($data_nod = $vysl_nod->fetch_array()):
                 $ip_rozsah = $data_nod["ip_rozsah"];
             endwhile;
         }
@@ -2391,18 +2390,18 @@ class objekt extends adminator
         $vysl_tarif = $this->conn_mysql->query("SELECT gen_poradi FROM tarify_int WHERE id_tarifu = '".intval($this->form_id_tarifu)."' ");
         $radku_tarif = $vysl_tarif->num_rows;
 
-        if($radku_tarif <> 1) {
-            if((strlen($this->form_ip) < 1)) {
+        if ($radku_tarif <> 1) {
+            if ((strlen($this->form_ip) < 1)) {
                 $this->form_ip = "E_2";
             }
             return false;
         } else {
-            while($data_tarif = $vysl_tarif->fetch_array()):
+            while ($data_tarif = $vysl_tarif->fetch_array()):
                 $gen_poradi = $data_tarif["gen_poradi"];
             endwhile;
         }
 
-        if(!($gen_poradi > 0)) {
+        if (!($gen_poradi > 0)) {
             //znama chyba, nechame prazdne...
             //if( ( strlen($this->form_ip) < 1 ) ){ $ip = "E_3"; }
             return false;
@@ -2410,29 +2409,29 @@ class objekt extends adminator
 
         list($r_a, $r_b, $r_c, $r_d) = preg_split("/[.]/", $ip_rozsah);
 
-        if($gen_poradi == 1) {
+        if ($gen_poradi == 1) {
             $r_d = $r_d + "0";
-        } elseif($gen_poradi == 2) {
+        } elseif ($gen_poradi == 2) {
             $r_d = $r_d + "128";
-        } elseif($gen_poradi == 3) {
+        } elseif ($gen_poradi == 3) {
             $r_c = $r_c + "1";
-        } elseif($gen_poradi == 4) {
+        } elseif ($gen_poradi == 4) {
             $r_c = $r_c + "1";
             $r_d = $r_d + "128";
-        } elseif($gen_poradi == 5) {
+        } elseif ($gen_poradi == 5) {
             $r_c = $r_c + "2";
             $r_d = $r_d + "0";
-        } elseif($gen_poradi == 6) {
+        } elseif ($gen_poradi == 6) {
             $r_c = $r_c + "2";
             $r_d = $r_d + "128";
-        } elseif($gen_poradi == 7) {
+        } elseif ($gen_poradi == 7) {
             $r_c = $r_c + "3";
             $r_d = $r_d + "0";
-        } elseif($gen_poradi == 8) {
+        } elseif ($gen_poradi == 8) {
             $r_c = $r_c + "3";
             $r_d = $r_d + "128";
         } else {
-            if((strlen($this->form_ip) < 1)) {
+            if ((strlen($this->form_ip) < 1)) {
                 $this->form_ip = "E_4";
             }
             return false;
@@ -2453,28 +2452,28 @@ class objekt extends adminator
 
         //echo "subrozsah: ".$sub_rozsah." xxx";
 
-        if($check_ip_radku == 0) { // v rozsahu zadna ip, takze generujem prvni..
+        if ($check_ip_radku == 0) { // v rozsahu zadna ip, takze generujem prvni..
             $gen_ip = $r_a.".".$r_b.".".$r_c.".".$r_d;
         } else { //v db je vice ip adres ...
             //nacteni predchozi ip adresy ..
-            while($data_check_ip = pg_fetch_array($check_ip)) {
+            while ($data_check_ip = pg_fetch_array($check_ip)) {
                 $gen_ip2 = $data_check_ip["ip"];
             }
 
             list($g_a, $g_b, $g_c, $g_d) = preg_split("/[.]/", $gen_ip2);
 
-            if($sub_rozsah_d == "0") {
+            if ($sub_rozsah_d == "0") {
                 $limit = 120;
-            } elseif($sub_rozsah_d == "128") {
+            } elseif ($sub_rozsah_d == "128") {
                 $limit = 250;
             } else {
-                if((strlen($this->form_ip) < 1)) {
+                if ((strlen($this->form_ip) < 1)) {
                     $this->form_ip = "E_5";
                 }
                 return false;
             }
 
-            if(($g_d >= $limit)) {
+            if (($g_d >= $limit)) {
                 $gen_ip = $ip_rozsah;
                 $this->form_ip_error = 1;
             } else {
@@ -2484,8 +2483,8 @@ class objekt extends adminator
                 //zpetna kontrola jeslti to neni lichy..
                 $rs = $g_d % 2;
 
-                if($rs == 1) { //je to lichy, chyba ...
-                    if((strlen($this->form_ip) < 1)) {
+                if ($rs == 1) { //je to lichy, chyba ...
+                    if ((strlen($this->form_ip) < 1)) {
                         $this->form_ip = "E_5";
                     }
                     return false;
@@ -2498,7 +2497,7 @@ class objekt extends adminator
 
 
         //tady asi cosi neni-li zadana ip, tak gen_ip = ip;
-        if((strlen($this->form_ip) < 1)) {
+        if ((strlen($this->form_ip) < 1)) {
             $this->form_ip = $gen_ip;
         }
 
@@ -2515,12 +2514,12 @@ class objekt extends adminator
         } catch (Exception $e) {
         }
 
-        if($radku_ip == 1) {
+        if ($radku_ip == 1) {
             while ($data_ip = $vysl_ip->fetch_array()) {
                 $ip_rs = preg_split("/[\.]/", $data_ip["ip_rozsah"]);
             }
 
-            if($ip_rs == false) {
+            if ($ip_rs == false) {
                 $gen_ip = "E4"; // split failed
                 return false;
             } else {
@@ -2539,7 +2538,7 @@ class objekt extends adminator
             }
             */
 
-            if($c == 0) {
+            if ($c == 0) {
                 // b-ckova ip
                 $gen_ip_find = $a.".".$b.".".$c.".".$d."/16";
 
@@ -2556,7 +2555,7 @@ class objekt extends adminator
                     }
 
                     $ip_rs = preg_split("/[\.]/", $gen_ip);
-                    if($ip_rs == false) {
+                    if ($ip_rs == false) {
                         $gen_ip = "E4"; // split failed
                         return false;
                     } else {
@@ -2566,10 +2565,10 @@ class objekt extends adminator
 
                     $limit = 250;
 
-                    if(($a == "212") and ($b == "80")) {
+                    if (($a == "212") and ($b == "80")) {
                         $gen_ip = $ip_rozsah;
                         $this->form_ip_error = 1;
-                    } elseif(($c >= $limit)) {
+                    } elseif (($c >= $limit)) {
                         $gen_ip = $ip_rozsah;
                         $this->form_ip_error = 1;
                     } elseif ($c == 0) {
@@ -2585,18 +2584,18 @@ class objekt extends adminator
                 } //konec else msq_check_ip_radku == 0
 
             } //konec if c == 0
-            elseif(($a == "212") and ($b == "80")) { //verejny, 2 -- rout. prima, 4 -- tunelovana
+            elseif (($a == "212") and ($b == "80")) { //verejny, 2 -- rout. prima, 4 -- tunelovana
 
                 $sql_src = "SELECT INET_NTOA(ip_address) AS ip_address FROM public_ip_to_use ";
 
-                if($this->form_typ_ip == 2) {
+                if ($this->form_typ_ip == 2) {
                     $sql_src .= " WHERE mode = '1' ";
-                } elseif($this->form_typ_ip == 4) {
+                } elseif ($this->form_typ_ip == 4) {
                     $sql_src .= " WHERE mode = '0' ";
                 } else {
                     $gen_ip = $ip_rozsah;
 
-                    if((strlen($this->form_ip) <= 0)) {
+                    if ((strlen($this->form_ip) <= 0)) {
                         $this->form_ip = $gen_ip;
                     }
                     return false;
@@ -2611,16 +2610,16 @@ class objekt extends adminator
                     $radku = 0;
                 }
 
-                if($radku == 0) {
+                if ($radku == 0) {
                     $gen_ip = "E3";
 
-                    if((strlen($this->form_ip) <= 0)) {
+                    if ((strlen($this->form_ip) <= 0)) {
                         $this->form_ip = $gen_ip;
                     }
                     return false;
                 }
 
-                while($data = $dotaz->fetch_array()) {
+                while ($data = $dotaz->fetch_array()) {
                     $ip_address = $data["ip_address"];
 
                     //kontrola :-)
@@ -2629,17 +2628,17 @@ class objekt extends adminator
                     $dotaz_check = pg_query($this->conn_pgsql, "SELECT ip FROM objekty WHERE ip <<= '$ip_address' ");
                     $dotaz_check_radku = pg_num_rows($dotaz_check);
 
-                    if(($dotaz_check_radku > 1)) { //chyba, vice adres vyhovelo vyberu
+                    if (($dotaz_check_radku > 1)) { //chyba, vice adres vyhovelo vyberu
                         $gen_ip = "E_4";
 
-                        if((strlen($this->form_ip) <= 0)) {
+                        if ((strlen($this->form_ip) <= 0)) {
                             $this->form_ip = $gen_ip;
                         }
                         return false;
-                    } elseif($dotaz_check_radku == 0) { //ip v DB není, OK
+                    } elseif ($dotaz_check_radku == 0) { //ip v DB není, OK
                         $gen_ip = $ip_address;
 
-                        if((strlen($this->form_ip) <= 0)) {
+                        if ((strlen($this->form_ip) <= 0)) {
                             $this->form_ip = $gen_ip;
                         }
                         break;
@@ -2655,17 +2654,17 @@ class objekt extends adminator
                 $msq_check_ip = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE ip <<= '$gen_ip_find' order by ip asc");
                 $msq_check_ip_radku = pg_num_rows($msq_check_ip);
 
-                if($msq_check_ip_radku == 0) {
+                if ($msq_check_ip_radku == 0) {
                     $d = 10;
                     $gen_ip = $a.".".$b.".".$c.".".$d;
                 } else {
-                    while($data_check_ip = pg_fetch_array($msq_check_ip)) {
+                    while ($data_check_ip = pg_fetch_array($msq_check_ip)) {
                         $gen_ip = $data_check_ip["ip"];
                     }
 
                     list($a, $b, $c, $d) = preg_split("/[\.]/", $gen_ip);
 
-                    if($d >= "254") {
+                    if ($d >= "254") {
                         $gen_ip = $a.".".$b.".".$c.".0";
                         $this->form_ip_error = 1;
                         $ip_rozsah = $gen_ip;
@@ -2681,7 +2680,7 @@ class objekt extends adminator
             }
 
             // vysledek predame
-            if((strlen($this->form_ip) <= 0)) {
+            if ((strlen($this->form_ip) <= 0)) {
                 $this->form_ip = $gen_ip;
             }
 
@@ -2690,7 +2689,7 @@ class objekt extends adminator
         else {
 
             // vysledek predame
-            if((strlen($this->form_ip) <= 0)) {
+            if ((strlen($this->form_ip) <= 0)) {
                 $gen_ip = "E2"; //asi neprosel SQL dotaz
             }
 
@@ -2698,8 +2697,8 @@ class objekt extends adminator
         }
 
         //zde generovani dalsich velicin
-        if($this->form_typ_ip == 4) {
-            if(((strlen($this->form_dns) <= 0) and (strlen($tunnel_user) <= 0) and (strlen($tunnel_pass) <= 0))) {
+        if ($this->form_typ_ip == 4) {
+            if (((strlen($this->form_dns) <= 0) and (strlen($tunnel_user) <= 0) and (strlen($tunnel_pass) <= 0))) {
                 $gen_user = "E_DNS";
                 $gen_pass = "E_DNS";
             } else {
@@ -2711,10 +2710,10 @@ class objekt extends adminator
                 $gen_pass = $dns_trim2;
             }
 
-            if((strlen($tunnel_user) <= 0)) {
+            if ((strlen($tunnel_user) <= 0)) {
                 $tunnel_user = $gen_user;
             }
-            if((strlen($tunnel_pass) <= 0)) {
+            if ((strlen($tunnel_pass) <= 0)) {
                 $tunnel_pass = $gen_pass;
             }
 
@@ -2738,22 +2737,22 @@ class objekt extends adminator
         foreach ($this->origDataArray as $key => $val) {
             if (!($obj_upd[$key] == $val)) {
                 if (!($key == "id_komplu")) {
-                    if($key == "ip") {
+                    if ($key == "ip") {
                         $pole3 .= "změna <b>IP adresy</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
                         $pole3 .= ", ";
                     } //konec key == ip
-                    elseif($key == "mac") {
+                    elseif ($key == "mac") {
                         $pole3 .= "změna <b>MAC adresy</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
                         $pole3 .= ", ";
                     } //konec key == mac
-                    elseif($key == "dov_net") {
+                    elseif ($key == "dov_net") {
                         $pole3 .= "změna <b>Povolen Inet</b> z: ";
 
-                        if($val == "a") {
+                        if ($val == "a") {
                             $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
-                        } elseif($val == "n") {
+                        } elseif ($val == "n") {
                             $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } else {
                             $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
@@ -2762,7 +2761,7 @@ class objekt extends adminator
                         $pole3 .= ", ";
 
                     } //konec key == dov_net
-                    elseif($key == "id_nodu") {
+                    elseif ($key == "id_nodu") {
                         $pole3 .= "změna <b>Připojného bodu</b> z: ";
 
                         $vysl_t1 = $this->conn_mysql->query("select jmeno from nod_list WHERE id = '$val'");
@@ -2781,12 +2780,12 @@ class objekt extends adminator
 
                         $pole3 .= ", ";
                     } // konec key == id_nodu
-                    elseif($key == "sikana_status") {
+                    elseif ($key == "sikana_status") {
                         $pole3 .= "změna <b>Šikana</b> z: ";
 
-                        if($val == "a") {
+                        if ($val == "a") {
                             $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
-                        } elseif($val == "n") {
+                        } elseif ($val == "n") {
                             $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } else {
                             $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
@@ -2796,7 +2795,7 @@ class objekt extends adminator
 
 
                     } //konec sikana_status
-                    elseif($key == "id_tarifu") {
+                    elseif ($key == "id_tarifu") {
 
                         $rs_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
                         $rs_tarif->data_seek(0);
@@ -2828,7 +2827,7 @@ class objekt extends adminator
                                         . "VALUES ('" . $pole3 . "','" . $this->loggedUserEmail . "','" . $vysledek_write . "')"
         );
 
-        if($add) {
+        if ($add) {
             $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
         } else {
             $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
@@ -2851,28 +2850,28 @@ class objekt extends adminator
 
         foreach ($this->addedDataArray as $key => $val) {
 
-            if((strlen($val) > 0)) {
+            if ((strlen($val) > 0)) {
                 //pokud v promenne neco, tak teprve resime vlozeni do Archivu zmen
 
                 //nahrazovani na citelné hodnoty
-                if($key == "id_tarifu") {
+                if ($key == "id_tarifu") {
 
                     $rs_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
                     $rs_tarif->data_seek(0);
                     list($tarif) = $rs_tarif->fetch_row();
                     $pole .= " <b>tarif</b> => ".$tarif." ,";
-                } elseif($key == "id_nodu") {
+                } elseif ($key == "id_nodu") {
                     $rs_nod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
                     $rs_nod->data_seek(0);
                     list($nod) = $rs_nod->fetch_row();
                     $pole .= " <b>přípojný bod</b> => ".$nod." ,";
-                } elseif($key == "typ") {
+                } elseif ($key == "typ") {
 
-                    if($val == 1) {
+                    if ($val == 1) {
                         $typ = "poc (platici)";
-                    } elseif($val == 2) {
+                    } elseif ($val == 2) {
                         $typ = "poc (free)";
-                    } elseif($val == 3) {
+                    } elseif ($val == 3) {
                         $typ = "AP";
                     } else {
                         $typ = $val;
@@ -2880,23 +2879,23 @@ class objekt extends adminator
 
                     $pole .= " <b>Typ</b> => ".$typ." ,";
 
-                } elseif($key == "verejna") {
+                } elseif ($key == "verejna") {
 
-                    if($val == "99") {
+                    if ($val == "99") {
                         $vip = "Ne";
-                    } elseif($val == "1") {
+                    } elseif ($val == "1") {
                         $vip = "Ano";
                     } else {
                         $vip = $val;
                     }
                     //dalsi moznosti pripadne dodat
 
-                    if(($val == "1") and (array_key_exists("tunnelling_ip", $this->addedDataArray) === true)) {
+                    if (($val == "1") and (array_key_exists("tunnelling_ip", $this->addedDataArray) === true)) {
                         $vip = "Ano - tunelovaná";
                     }
 
                     $pole .= " <b>Veřejná IP</b> => ".$vip." ,";
-                } elseif($key == "tunnelling_ip") {
+                } elseif ($key == "tunnelling_ip") {
 
                     //nic, resime v predchozim
                 } else {
@@ -2914,7 +2913,7 @@ class objekt extends adminator
             "'".$vysledek_write."')"
         );
 
-        if($add) {
+        if ($add) {
             $output .= "<br><H3><div style=\"color: green;\" >Změna objektu byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
         } else {
             $output .= "<br><H3><div style=\"color: red;\" >Chyba! Změnu objektu do archivu změn se nepodařilo přidat.</div></H3>\n";
@@ -2944,27 +2943,27 @@ class objekt extends adminator
         foreach ($this->origDataArray as $key => $val) {
             if (!($obj_upd[$key] == $val)) {
                 if (!($key == "id_komplu")) {
-                    if($key == "ip") {
+                    if ($key == "ip") {
                         $pole3 .= "změna <b>IP adresy</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
                         $pole3 .= ", ";
                     } //konec key == ip
-                    elseif($key == "mac") {
+                    elseif ($key == "mac") {
                         $pole3 .= "změna <b>MAC adresy</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
                         $pole3 .= ", ";
                     } //konec key == mac
-                    elseif($key == "port_id") {
+                    elseif ($key == "port_id") {
                         $pole3 .= "změna <b>Číslo sw. portu</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
                         $pole3 .= ", ";
                     } //konec key == vezeni
-                    elseif($key == "dov_net") {
+                    elseif ($key == "dov_net") {
                         $pole3 .= "změna <b>Povolen Inet</b> z: ";
 
-                        if($val == "a") {
+                        if ($val == "a") {
                             $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
-                        } elseif($val == "n") {
+                        } elseif ($val == "n") {
                             $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } else {
                             $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
@@ -2972,15 +2971,15 @@ class objekt extends adminator
 
                         $pole3 .= ", ";
                     } //konec key == dov_net
-                    elseif($key == "verejna") {
+                    elseif ($key == "verejna") {
 
                     } // konec key == verejna
-                    elseif($key == "typ_ip") {
+                    elseif ($key == "typ_ip") {
                         $pole3 .= "změna <b>Typ IP adresy</b> z: ";
 
-                        if($val == "1") {
+                        if ($val == "1") {
                             $pole3 .= "<span class=\"az-s1\">Neveřejná</span> na: <span class=\"az-s2\">Veřejná</span>";
-                        } elseif($val == "2") {
+                        } elseif ($val == "2") {
                             $pole3 .= "<span class=\"az-s1\">Veřejná</span> na: <span class=\"az-s2\">Neveřejná</span>";
                         } else {
                             $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
@@ -2989,7 +2988,7 @@ class objekt extends adminator
                         $pole3 .= ", ";
 
                     } // konec key == typ_ip
-                    elseif($key == "id_nodu") {
+                    elseif ($key == "id_nodu") {
                         $pole3 .= "změna <b>Připojného bodu</b> z: ";
 
                         $vysl_t1 = $this->conn_mysql->query("select * from nod_list WHERE id = '$val'");
@@ -3008,12 +3007,12 @@ class objekt extends adminator
 
                         $pole3 .= ", ";
                     } // konec key == id_nodu
-                    elseif($key == "sikana_status") {
+                    elseif ($key == "sikana_status") {
                         $pole3 .= "změna <b>Šikana</b> z: ";
 
-                        if($val == "a") {
+                        if ($val == "a") {
                             $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
-                        } elseif($val == "n") {
+                        } elseif ($val == "n") {
                             $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } else {
                             $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$obj_upd[$key]."</span>";
@@ -3125,11 +3124,11 @@ class objekt extends adminator
 
         foreach ($obj_add as $key => $val) {
 
-            if((strlen($val) > 0)) {
+            if ((strlen($val) > 0)) {
                 //pokud v promenne neco, tak teprve resime vlozeni do Archivu zmen
 
                 //nahrazovani na citelné hodnoty
-                if($key == "id_tarifu") {
+                if ($key == "id_tarifu") {
 
                     $rs_tarif = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_int WHERE id_tarifu = '".intval($val)."' ");
 
@@ -3137,20 +3136,20 @@ class objekt extends adminator
                     list($tarif) = $rs_tarif->fetch_row();
 
                     $pole .= " <b>tarif</b> => ".$tarif." ,";
-                } elseif($key == "id_nodu") {
+                } elseif ($key == "id_nodu") {
                     $rs_nod = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."' ");
 
                     $rs_nod->data_seek(0);
                     list($nod) = $rs_nod->fetch_row();
 
                     $pole .= " <b>přípojný bod</b> => ".$nod." ,";
-                } elseif($key == "typ") {
+                } elseif ($key == "typ") {
 
-                    if($val == 1) {
+                    if ($val == 1) {
                         $this->form_typ = "poc (platici)";
-                    } elseif($val == 2) {
+                    } elseif ($val == 2) {
                         $this->form_typ = "poc (free)";
-                    } elseif($val == 3) {
+                    } elseif ($val == 3) {
                         $this->form_typ = "AP";
                     } else {
                         $this->form_typ = $val;
@@ -3158,11 +3157,11 @@ class objekt extends adminator
 
                     $pole .= " <b>Typ</b> => ".$this->form_typ." ,";
 
-                } elseif($key == "verejna") {
+                } elseif ($key == "verejna") {
 
-                    if($val == "99") {
+                    if ($val == "99") {
                         $vip = "Ne";
-                    } elseif($val == "1") {
+                    } elseif ($val == "1") {
                         $vip = "Ano";
                     } else {
                         $vip = $val;
@@ -3205,7 +3204,7 @@ class objekt extends adminator
     public function vypis_tab($par)
     {
         $output = "";
-        if($par == 1) {
+        if ($par == 1) {
             $output .= "<table border=\"0\" width=\"100%\" class=\"objekty-table\" >\n";
         } elseif ($par == 2) {
             $output .= "\n".'</table>'."\n";
@@ -3227,7 +3226,7 @@ class objekt extends adminator
                     <td><b>typ </b></td>';
 
 
-        if($mod_vypisu == 2) {
+        if ($mod_vypisu == 2) {
             $output .= "<td align=\"center\" ><b>Číslo portu:</b></td>";
         } else {
             $output .= "<td><b>client ap </b></td>";
@@ -3267,31 +3266,31 @@ class objekt extends adminator
     {
         // co - co hledat, 1- podle dns, 2-podle ip
 
-        if($this->pdo instanceof \PDO) {
-            if($this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME) != "sqlite") {
+        if ($this->pdo instanceof \PDO) {
+            if ($this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME) != "sqlite") {
                 $this->pdo->query(" SET DATESTYLE TO 'SQL, EUROPEAN' ");
             }
         } else {
             pg_query($this->conn_pgsql, " SET DATESTYLE TO 'SQL, EUROPEAN' ");
         }
 
-        if($se_id == 1) {
+        if ($se_id == 1) {
             $se = '';
-        } elseif($se_id == 2) {
+        } elseif ($se_id == 2) {
             $se = " AND typ LIKE '1' ";
-        } elseif($se_id == 3) {
+        } elseif ($se_id == 3) {
             $se = " AND typ LIKE '2' ";
-        } elseif($se_id == 4) {
+        } elseif ($se_id == 4) {
             $se = " AND typ LIKE '3' ";
-        } elseif($se_id == 5) {
+        } elseif ($se_id == 5) {
             $se = " AND id_tridy > 0 ";
-        } elseif($se_id == 6) {
+        } elseif ($se_id == 6) {
             $se = " AND verejna !=99 ";
-        } elseif($se_id == 7) {
+        } elseif ($se_id == 7) {
             $se = " AND id_cloveka is null ";
-        } elseif($se_id == 8) {
+        } elseif ($se_id == 8) {
             $se = " AND dov_net LIKE 'n' ";
-        } elseif($se_id == 9) {
+        } elseif ($se_id == 9) {
             $se = " AND sikana_status LIKE 'a' ";
         }
 
@@ -3317,7 +3316,7 @@ class objekt extends adminator
             $order = " order by id_komplu ASC ";
         }
 
-        if(isset($se)) {
+        if (isset($se)) {
             $pole[] = $se;
         } else {
             $pole[] = "";
@@ -3407,7 +3406,7 @@ class objekt extends adminator
             //vnitrni tab
             echo "\n <table border=\"0\"><tr><td>";
 
-            if($i == "3" or $i == "4") {
+            if ($i == "3" or $i == "4") {
                 echo "";
             } else {
 
@@ -3456,16 +3455,16 @@ class objekt extends adminator
             //prvne vyberem wifi tarify...
             $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '0' ");
 
-            if($dotaz_f->num_rows < 1) {
+            if ($dotaz_f->num_rows < 1) {
                 return 0;
             }
 
             $i = 0;
-            while($data_f = $dotaz_f->fetch_array()) {
-                if($i == 0) {
+            while ($data_f = $dotaz_f->fetch_array()) {
+                if ($i == 0) {
                     $tarif_sql .= " AND ( ";
                 }
-                if($i > 0) {
+                if ($i > 0) {
                     $tarif_sql .= " OR ";
                 }
 
@@ -3474,22 +3473,22 @@ class objekt extends adminator
                 $i++;
             }
 
-            if($i > 0) {
+            if ($i > 0) {
                 $tarif_sql .= " ) ";
             }
         } elseif ($mod == 2) { //fiber sit ...
             $dotaz_f = $this->conn_mysql->query("SELECT id_tarifu FROM tarify_int WHERE typ_tarifu = '1' ");
 
-            if($dotaz_f->num_rows < 1) {
+            if ($dotaz_f->num_rows < 1) {
                 return 0;
             }
 
             $i = 0;
-            while($data_f = $dotaz_f->fetch_array()) {
-                if($i == 0) {
+            while ($data_f = $dotaz_f->fetch_array()) {
+                if ($i == 0) {
                     $tarif_sql .= " AND ( ";
                 }
-                if($i > 0) {
+                if ($i > 0) {
                     $tarif_sql .= " OR ";
                 }
 
@@ -3498,7 +3497,7 @@ class objekt extends adminator
                 $i++;
             }
 
-            if($i > 0) {
+            if ($i > 0) {
                 $tarif_sql .= " ) ";
             }
         }
@@ -3521,11 +3520,11 @@ class objekt extends adminator
 
             $i = 0;
 
-            while($data_f = $dotaz_f->fetch_array()) {
-                if($i == 0) {
+            while ($data_f = $dotaz_f->fetch_array()) {
+                if ($i == 0) {
                     $tarif_sql .= "AND ( ";
                 }
-                if($i > 0) {
+                if ($i > 0) {
                     $tarif_sql .= " OR ";
                 }
 
@@ -3534,7 +3533,7 @@ class objekt extends adminator
                 $i++;
             }
 
-            if($i > 0) {
+            if ($i > 0) {
                 $tarif_sql .= " ) ";
             }
 
@@ -3547,11 +3546,11 @@ class objekt extends adminator
 
             $i = 0;
 
-            while($data_f = $dotaz_f->fetch_array()) {
-                if($i == 0) {
+            while ($data_f = $dotaz_f->fetch_array()) {
+                if ($i == 0) {
                     $tarif_sql .= "AND ( ";
                 }
-                if($i > 0) {
+                if ($i > 0) {
                     $tarif_sql .= " OR ";
                 }
 
@@ -3560,7 +3559,7 @@ class objekt extends adminator
                 $i++;
             }
 
-            if($i > 0) {
+            if ($i > 0) {
                 $tarif_sql .= " ) ";
             }
 
@@ -3568,14 +3567,14 @@ class objekt extends adminator
 
         } else {
             $dotaz = false;
-            if($this->pdo instanceof \PDO) {
+            if ($this->pdo instanceof \PDO) {
                 list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
             } else {
                 $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
             }
         }
 
-        if($dotaz !== false and !($this->pdo instanceof \PDO)) {
+        if ($dotaz !== false and !($this->pdo instanceof \PDO)) {
             $radku = pg_num_rows($dotaz);
             $data_rs = pg_fetch_all($dotaz);
         } elseif (!($this->pdo instanceof \PDO)) {
@@ -3584,16 +3583,16 @@ class objekt extends adminator
             return $output;
         }
 
-        if($dotaz_err != null and $this->pdo instanceof \PDO) {
+        if ($dotaz_err != null and $this->pdo instanceof \PDO) {
             $this->p_bs_alerts["Dotaz pro výpis objektů selhal! </br>". $dotaz_err] = "danger";
             $this->listErrors .= "</br>";
             return $output;
-        } elseif($this->pdo instanceof \PDO) {
+        } elseif ($this->pdo instanceof \PDO) {
             $radku = count($data_rs);
         }
 
         if ($radku == 0) {
-            if($co == 3 or $co == 4) {
+            if ($co == 3 or $co == 4) {
                 $output .= "<tr><td colspan=\"9\" >";
                 $output .= "<span style=\"color: #555555; \">Žádný objekt není přiřazen. </span></td></tr>";
             } else {
@@ -3611,7 +3610,7 @@ class objekt extends adminator
             // $output .= "<br />";
 
             //    if( $data["id_tridy"] > 0 ){ $garant=1; }
-            if($data["verejna"] <> 99) {
+            if ($data["verejna"] <> 99) {
                 $verejna = 1;
             }
 
@@ -3635,7 +3634,7 @@ class objekt extends adminator
             if ($verejna == 1) {
                 if ($data["vip_snat"] == 1) {
                     $output .= "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"orange\" >".$data["ip"]." </td> \n";
-                } elseif($data["tunnelling_ip"] == 1) {
+                } elseif ($data["tunnelling_ip"] == 1) {
                     $output .= "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"#00CC33\" >".$data["ip"]." </td> \n";
                 } else {
                     $output .= "<td colspan=\"2\" class=\"tab-objekty2\" bgcolor=\"#FFFF99\" >".$data["ip"]." </td> \n";
@@ -3665,10 +3664,10 @@ class objekt extends adminator
             // rra - client ip -- CISLO portu
             $output .= "<td class=\"tab-objekty2\" align=\"center\" ><span style=\"\"> ";
 
-            if($this->mod_vypisu == 2) {
+            if ($this->mod_vypisu == 2) {
                 $output .= "".$data["port_id"]."";
             } else {
-                if(strlen($data["client_ap_ip"]) < 1) {
+                if (strlen($data["client_ap_ip"]) < 1) {
                     $output .= "&nbsp;";
                 } else {
                     $output .= $data["client_ap_ip"];
@@ -3686,15 +3685,15 @@ class objekt extends adminator
             $dotaz_final = "SELECT typ_tarifu FROM tarify_int WHERE id_tarifu = '".intval($data["id_tarifu"])."' ";
             list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
-            if($dotaz_err != false) {
+            if ($dotaz_err != false) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for detection of mod_vypisu failed! " . var_export($dotaz_err, true));
                 $this->p_bs_alerts[$error_msq_base . " (" . var_export($dotaz_err, true) .")"] = "danger";
             } else {
                 $rs_update = count($data_rs);
 
-                if($rs_update == 1) {
+                if ($rs_update == 1) {
                     foreach ($data_rs as $row => $data_update) {
-                        if($data_update["typ_tarifu"] == 1) {
+                        if ($data_update["typ_tarifu"] == 1) {
                             $update_mod_vypisu = 2;
                         } else {
                             $update_mod_vypisu = 1;
@@ -3713,7 +3712,7 @@ class objekt extends adminator
                 $output .= "<td class=\"tab-objekty2\" > <form method=\"POST\" action=\"/objekty/action\" >";
                 $output .= "<input type=\"hidden\" name=\"update_id\" value=\"".$data["id_komplu"]."\" >";
 
-                if(strlen($this->csrf_html) > 0) {
+                if (strlen($this->csrf_html) > 0) {
                     $output .= $this->csrf_html;
                 }
 
@@ -3742,20 +3741,20 @@ class objekt extends adminator
             global $garant_akce;
 
             // generovani tridy
-            if($data["typ"] == 3) {
+            if ($data["typ"] == 3) {
                 $output .= "";
             } else {
                 $output .= "<td class=\"tab-objekty2\"><font color=\"red\">"." peasant "."</font></td> \n";
             }
 
             // prirava promennych pro tresty a odmeny
-            if($data["dov_net"] == "a") {
+            if ($data["dov_net"] == "a") {
                 $dov_net = "<font color=\"green\">NetA</font>";
             } else {
                 $dov_net = "<font color=\"orange\">NetN</font> \n";
             }
 
-            if(preg_match("/a/", $data["sikana_status"])) {
+            if (preg_match("/a/", $data["sikana_status"])) {
                 $sikana_status_s = "<span class=\"obj-link-sikana\" >".
                 "<a href=\"http://damokles.adminator.net:8009/index.php".
                 "?sc=".intval($data["sikana_cas"])."&st=".urlencode($data["sikana_text"])."\" target=\"_new\" >".
@@ -3766,7 +3765,7 @@ class objekt extends adminator
             }
 
             //tresty a odmeny - 6 bunek
-            if($data["typ"] == 3) {
+            if ($data["typ"] == 3) {
                 $output .= "<td class=\"tab-objekty2\" colspan=\"5\" bgcolor=\"yellow\" align=\"center\"> ap-čko jaxvine </td> \n";
             } else {
                 $output .= "<td class=\"tab-objekty2\" >".$dov_net."</td>";
@@ -3774,7 +3773,7 @@ class objekt extends adminator
                 //test objetktu
                 $output .= "<td class=\"tab-objekty2\" >";
 
-                if($update_mod_vypisu == 2) {
+                if ($update_mod_vypisu == 2) {
                     $output .= "<a href=\"objekty-test.php?id_objektu=".$data["id_komplu"]."\" >test</a>";
                 } else {
                     $output .= "<br>";
@@ -3791,7 +3790,7 @@ class objekt extends adminator
                 $dotaz_final = "SELECT barva, id_tarifu, zkratka_tarifu FROM tarify_int WHERE id_tarifu = '".intval($id_tarifu)."' ";
                 list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
-                if(count($data_rs) <> 1) {
+                if (count($data_rs) <> 1) {
                     $output .= "<span style=\"font-weight: bold; color: red;\" >E_TARIF_1</span>";
                     $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for tarif failed! " . var_export($dotaz_err, true));
                 } else {
@@ -3815,7 +3814,7 @@ class objekt extends adminator
             $dotaz_final = "SELECT jmeno FROM nod_list WHERE id='".intval($data["id_nodu"])."' ";
             list($data_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final, 'pdoMysql');
 
-            if(count($data_rs) == 0) {
+            if (count($data_rs) == 0) {
                 $output .= "<span style=\"color: gray; \">přípojný bod nelze zjistit</span>";
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": db query for node failed! " . var_export($dotaz_err, true));
             } else {
@@ -3838,7 +3837,7 @@ class objekt extends adminator
             // id vlastnika
             $output .= "<td class=\"tab-objekty\" align=\"center\" ><span class=\"objekty-2radka\" >\n";
 
-            if($data["id_cloveka"] == null) {
+            if ($data["id_cloveka"] == null) {
                 $output .= "<span style=\"color: grey;\">Není</span>";
             } else {
                 $sql_final = "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($data["id_cloveka"])."'";
@@ -3846,17 +3845,17 @@ class objekt extends adminator
                 $firma_vlastnik = null;
                 $archiv_vlastnik = null;
 
-                if($this->pdo instanceof \PDO) {
+                if ($this->pdo instanceof \PDO) {
                     list($data_vlastnik_rs, $dotaz_err) = $this->callPdoQueryAndFetch($dotaz_final);
                 } else {
                     $vlastnik_dotaz = pg_query($this->conn_pgsql, $sql_final);
                     $data_vlastnik_rs = pg_fetch_all($vlastnik_dotaz);
                 }
 
-                if($dotaz_err == null and $this->pdo instanceof \PDO) {
+                if ($dotaz_err == null and $this->pdo instanceof \PDO) {
                     // TODO: add returning error(s)
                     $output .= "V: (E_1)" . $data["id_cloveka"];
-                } elseif(count($data_vlastnik_rs) != 1) {
+                } elseif (count($data_vlastnik_rs) != 1) {
                     // TODO: add returning error(s)
                     $output .= "V: (E_2 ". var_export(count($data_vlastnik_rs), true) . ")" . $data["id_cloveka"];
                 } else {
@@ -3867,7 +3866,7 @@ class objekt extends adminator
 
                     if ($archiv_vlastnik == 1) {
                         $output .= "V: <a href=\"/vlastnici/archiv?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
-                    } elseif($firma_vlastnik == 1) {
+                    } elseif ($firma_vlastnik == 1) {
                         $output .= "V: <a href=\"/vlastnici2?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
                     } else {
                         $output .= "V: <a href=\"/vlastnici?find_id=".$data["id_cloveka"]."\" >".$data["id_cloveka"]."</a>";
@@ -3877,7 +3876,7 @@ class objekt extends adminator
 
             $output .= "</span> </td>\n";
 
-            if($update_mod_vypisu == 2) {
+            if ($update_mod_vypisu == 2) {
                 $output .= "<td class=\"tab-objekty\" colspan=\"3\" > <br></td>";
             } else {
                 if (!($co == 3)) {
@@ -3897,7 +3896,7 @@ class objekt extends adminator
 
             // kdo pridal a kdo naposledy upravil
             $output .= "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
-            if((strlen($data["pridal"]) > 0)) {
+            if ((strlen($data["pridal"]) > 0)) {
                 $output .= $data["pridal"];
             } else {
                 $output .= "<span style=\"color: #CC3366;\" >nezadáno</span>";
@@ -3905,7 +3904,7 @@ class objekt extends adminator
             $output .= "</span></td> \n";
 
             $output .= "<td class=\"tab-objekty\" colspan=\"1\" align=\"center\" ><span class=\"objekty-2radka\" >";
-            if((strlen($data["upravil"]) > 0)) {
+            if ((strlen($data["upravil"]) > 0)) {
                 $output .= $data["upravil"];
             } else {
                 $output .= "<span style=\"color: #CC3366;\" >nezadáno</span>";
@@ -3917,7 +3916,7 @@ class objekt extends adminator
             // kdy se objekty pridal
             //prvne to orezem
             $orez = $pridano;
-            if(strlen($orez) > 0) {
+            if (strlen($orez) > 0) {
                 $orezano = explode(':', $orez);
                 $pridano_orez = $orezano[0] . ":" . $orezano[1];
             } else {
@@ -3928,7 +3927,7 @@ class objekt extends adminator
                         <td class=\"tab-objekty\" >
                         <form method=\"POST\" action=\"/print/reg-form\" >\n";
 
-            if(strlen($this->csrf_html) > 0) {
+            if (strlen($this->csrf_html) > 0) {
                 $output .= $this->csrf_html;
             } else {
                 $this->logger->warning(__CLASS__ . "\\" . __FUNCTION__ . ": missing csrf_html");
@@ -3951,7 +3950,7 @@ class objekt extends adminator
 
             }
             //opticky rezim
-            elseif($co == 4) {
+            elseif ($co == 4) {
 
                 if ($this->allowedUnassignFromVlastnik === true) {
                     $output .= "<td colspan=\"\" ><a href=\"vlastnici2-obj-erase.php?id_komplu=".$data["id_komplu"]."\">Odendat</a> </td> \n";
@@ -3987,7 +3986,7 @@ class objekt extends adminator
     {
         $sikanacas = intval($sikanacas);
 
-        if(($sikanacas > 9) or ($sikanacas < 1)) {
+        if (($sikanacas > 9) or ($sikanacas < 1)) {
             $this->action_fail = "true";
             $this->p_bs_alerts["Do pole \"Šikana - počet dní\" je třeba vyplnit číslo 1 až 9."] = "danger";
         }
@@ -3995,7 +3994,7 @@ class objekt extends adminator
 
     private function checkSikanaText($sikanatext)
     {
-        if((strlen($sikanatext) > 150)) {
+        if ((strlen($sikanatext) > 150)) {
             $this->action_fail = "true";
             $this->p_bs_alerts["Do pole \"Šikana - text\" je možno zadat max. 150 znaků. (aktuálně: ".strlen($sikanatext).")"] = "danger";
         }
@@ -4032,12 +4031,12 @@ class objekt extends adminator
     {
         $cr_check = preg_match('/^([[:alnum:]])+$/', $cr);
 
-        if(!($cr_check)) {
+        if (!($cr_check)) {
             $this->action_fail = "true";
             $this->p_bs_alerts["Tunel. login/heslo ( ".$cr." ) není ve správnem formátu!"] = "danger";
         }
 
-        if((strlen($cr) <> 4)) {
+        if ((strlen($cr) <> 4)) {
             $this->action_fail = "true";
             $this->p_bs_alerts["Tunel. login/heslo ( ".$cr." ) musí mít 4 znaky!"] = "danger";
         }

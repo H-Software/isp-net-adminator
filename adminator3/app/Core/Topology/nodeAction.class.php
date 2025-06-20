@@ -47,18 +47,18 @@ class nodeAction extends adminator
         $output = "";
 
         foreach ($request->getParsedBody() as $i => $v) {
-            if(preg_match('/^(odeslano|jmeno|adresa|pozn|ip_rozsah|typ_vysilace|stav|router_id|typ_nodu|filter_router_id)$/', $i) and strlen($v) > 0) {
+            if (preg_match('/^(odeslano|jmeno|adresa|pozn|ip_rozsah|typ_vysilace|stav|router_id|typ_nodu|filter_router_id)$/', $i) and strlen($v) > 0) {
                 $$i = $request->getParsedBody()[$i];
             }
         }
 
         //kontrola platnych udaju
-        if(isset($odeslano)) { /* @phpstan-ignore isset.variable */
-            if(preg_match("/\//", $ip_rozsah)) {
+        if (isset($odeslano)) { /* @phpstan-ignore isset.variable */
+            if (preg_match("/\//", $ip_rozsah)) {
                 $this->error .= "<div style=\"color: red; \" ><H4>Pole \"IP rozsah\" obsahuje nepovolený znak \"/\" !</H4></div>";
             }
 
-            if(preg_match("/\.254$/", $ip_rozsah)) {
+            if (preg_match("/\.254$/", $ip_rozsah)) {
                 $this->error .= "<div style=\"color: red; \" ><H4>Pole \"IP rozsah\" nemůže končit .254, neplatný subnet!</H4></div>";
             }
 
@@ -77,7 +77,7 @@ class nodeAction extends adminator
 
         $output .= "<div style=\"padding-bottom: 10px; padding-top: 10px; font-size: 18px; \">Přidání lokality/nodu</div>";
 
-        if((isset($_POST["jmeno"]) and !isset($this->error))) {
+        if ((isset($_POST["jmeno"]) and !isset($this->error))) {
 
             //budeme ukladat
             $output .= "<b>Zadáno do formuláře : </b><br><br>";
@@ -101,7 +101,7 @@ class nodeAction extends adminator
             $add = $this->conn_mysql->query("INSERT INTO nod_list (jmeno, adresa, pozn, ip_rozsah,typ_vysilace,stav,router_id,typ_nodu, filter_router_id)
                   VALUES ('$jmeno','$adresa','$pozn','$ip_rozsah','$typ_vysilace','$stav','$router_id','$typ_nodu', '$filter_router_id') ");
 
-            if($add) {
+            if ($add) {
                 $output .= "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně vložen.</span><br><br>";
             } else {
                 $output .= "<span style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </span>";
@@ -164,35 +164,35 @@ class nodeAction extends adminator
 
             $output .= "<option value=\"0\" "." class=\"select-nevybrano\" > Není zvoleno </option> \n";
             $output .= "<option value=\"1\" ";
-            if($typ_vysilace == 1) {
+            if ($typ_vysilace == 1) {
                 $output .= " selected ";
             } $output .= "> Metallic </option>\n";
             $output .= "<option value=\"2\" ";
-            if($typ_vysilace == 2) {
+            if ($typ_vysilace == 2) {
                 $output .= " selected ";
             } $output .= "> ap-2,4GHz-OMNI </option>\n";
             $output .= "<option value=\"3\" ";
-            if($typ_vysilace == 3) {
+            if ($typ_vysilace == 3) {
                 $output .= " selected ";
             } $output .= "> ap-2,4Ghz-sektor </option>\n";
             $output .= "<option value=\"4\" ";
-            if($typ_vysilace == 4) {
+            if ($typ_vysilace == 4) {
                 $output .= " selected ";
             } $output .= "> ap-2.4Ghz-smerovka </option>\n";
             $output .= "<option value=\"5\" ";
-            if($typ_vysilace == 5) {
+            if ($typ_vysilace == 5) {
                 $output .= " selected ";
             } $output .= "> ap-5.8Ghz-OMNI </option>\n";
             $output .= "<option value=\"6\" ";
-            if($typ_vysilace == 6) {
+            if ($typ_vysilace == 6) {
                 $output .= " selected ";
             } $output .= "> ap-5.8Ghz-sektor</option>\n";
             $output .= "<option value=\"7\" ";
-            if($typ_vysilace == 7) {
+            if ($typ_vysilace == 7) {
                 $output .= " selected ";
             } $output .= "> ap-5.8Ghz-smerovka </option>\n";
             $output .= "<option value=\"8\" ";
-            if($typ_vysilace == 8) {
+            if ($typ_vysilace == 8) {
                 $output .= " selected ";
             } $output .= "> jiné </option>\n";
 
@@ -235,7 +235,7 @@ class nodeAction extends adminator
             $output .= "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
 
             $dotaz_parent = $this->conn_mysql->query("SELECT id, nazev, ip_adresa FROM router_list ORDER BY nazev");
-            while($data_parent = $dotaz_parent->fetch_array()) {
+            while ($data_parent = $dotaz_parent->fetch_array()) {
                 $output .= "\t\t\t<option value=\"".intval($data_parent["id"])."\" ";
                 if ($data_parent["id"] == $router_id) {
                     $output .= " selected ";
@@ -255,13 +255,13 @@ class nodeAction extends adminator
             $output .= "<select size=\"1\" name=\"typ_nodu\" >\n";
 
             $output .= "\t\t\t<option value=\"0\" style=\"color: gray; \" ";
-            if($typ_nodu == 0) {
+            if ($typ_nodu == 0) {
                 $output .= " selected ";
             }
             $output .= " >Nezvoleno</option>\n";
 
             $output .= "\t\t\t<option value=\"1\" style=\"color: #CC0033; \" ";
-            if($typ_nodu == 1) {
+            if ($typ_nodu == 1) {
                 $output .= " selected ";
             }
             $output .= " >Bezdrátová síť</option>\n";
@@ -285,10 +285,10 @@ class nodeAction extends adminator
             $dotaz_parent = $this->conn_mysql->query("SELECT id,nazev,ip_adresa FROM router_list ORDER BY nazev");
             $output .= "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
 
-            while($data_parent = $dotaz_parent->fetch_array()) {
+            while ($data_parent = $dotaz_parent->fetch_array()) {
                 $output .= "\t\t\t<option value=\"".intval($data_parent["id"])."\" ";
 
-                if($data_parent["id"] == $filter_router_id) {
+                if ($data_parent["id"] == $filter_router_id) {
                     $output .= " selected ";
                 }
                 $output .= "> ".htmlspecialchars($data_parent["nazev"])." ( ".htmlspecialchars($data_parent["ip_adresa"])." ) </option>\n";
@@ -332,10 +332,10 @@ class nodeAction extends adminator
         $output .= "<div style=\"padding-bottom: 10px; padding-top: 10px; font-size: 18px; font-weight: bold; \">";
         $output .= "Úprava lokality/nodu</div>";
 
-        if($_POST["jmeno_new"]) {
+        if ($_POST["jmeno_new"]) {
             //budeme updatovat
             foreach ($request->getParsedBody() as $i => $v) {
-                if(preg_match('/^(typ_vysilace|stav|router_id|typ_nodu|vlan_id|filter_router_id|device_type_id|rid_recom)$/', $i) and strlen($v) > 0) {
+                if (preg_match('/^(typ_vysilace|stav|router_id|typ_nodu|vlan_id|filter_router_id|device_type_id|rid_recom)$/', $i) and strlen($v) > 0) {
                     $$i = $request->getParsedBody()[$i];
                 }
             }
@@ -355,10 +355,10 @@ class nodeAction extends adminator
             $device_type_id = intval($device_type_id);
         }
 
-        if(($_POST["B1"] == "OK")) {
+        if (($_POST["B1"] == "OK")) {
             $dotaz_router = $this->conn_mysql->query("SELECT nazev FROM router_list WHERE id = '$router_id'");
-            if(($dotaz_router->num_rows == 1)) {
-                while($data_parent = $dotaz_router->fetch_array()) {
+            if (($dotaz_router->num_rows == 1)) {
+                while ($data_parent = $dotaz_router->fetch_array()) {
                     $nazev_routeru = $data_parent["nazev"]." (".$router_id.")";
                 }
             } else {
@@ -372,23 +372,23 @@ class nodeAction extends adminator
             $output .= "<b>IP rozsah</b>: ".$ip_rozsah."<br>";
             $output .= "<b>Typ vysílače</b>: ";
 
-            if($typ_vysilace == 0) {
+            if ($typ_vysilace == 0) {
                 $output .= "Nezvoleno";
-            } elseif($typ_vysilace == 1) {
+            } elseif ($typ_vysilace == 1) {
                 $output .= "Metallic";
-            } elseif($typ_vysilace == 2) {
+            } elseif ($typ_vysilace == 2) {
                 $output .= "ap-2,4GHz-OMNI";
-            } elseif($typ_vysilace == 3) {
+            } elseif ($typ_vysilace == 3) {
                 $output .= "ap-2,4Ghz-sektor";
-            } elseif($typ_vysilace == 4) {
+            } elseif ($typ_vysilace == 4) {
                 $output .= "ap-2.4Ghz-smerovka";
-            } elseif($typ_vysilace == 5) {
+            } elseif ($typ_vysilace == 5) {
                 $output .= "ap-5.8Ghz-OMNI";
-            } elseif($typ_vysilace == 6) {
+            } elseif ($typ_vysilace == 6) {
                 $output .= "ap-5.8Ghz-sektor";
-            } elseif($typ_vysilace == 7) {
+            } elseif ($typ_vysilace == 7) {
                 $output .= "ap-5.8Ghz-smerovka";
-            } elseif($typ_vysilace == 8) {
+            } elseif ($typ_vysilace == 8) {
                 $output .= "jiné";
             } else {
                 $output .= $typ_vysilace;
@@ -397,13 +397,13 @@ class nodeAction extends adminator
             $output .= "<br>";
             $output .= "<b>stav vysílače</b>: ";
 
-            if($stav == 0) {
+            if ($stav == 0) {
                 $output .= "Není zvoleno";
-            } elseif($stav == 1) {
+            } elseif ($stav == 1) {
                 $output .= "v pořádku ";
-            } elseif($stav == 2) {
+            } elseif ($stav == 2) {
                 $output .= "vytížen";
-            } elseif($stav == 3) {
+            } elseif ($stav == 3) {
                 $output .= "přetížen";
             } else {
                 $output .= $stav;
@@ -451,7 +451,7 @@ class nodeAction extends adminator
                     typ_nodu = '$typ_nodu', vlan_id = '$vlan_id', filter_router_id = '$filter_router_id',
                     device_type_id = '$device_type_id' WHERE id=".$id_new." Limit 1 ");
 
-            if($uprava) {
+            if ($uprava) {
                 $output .= "<br><span style=\"color: green; font-size: 18px; \">Záznam úspěšně upraven.</span><br><br>";
             } else {
                 $output .= "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Chyba! Záznam nelze upravit. </div>";
@@ -480,21 +480,21 @@ class nodeAction extends adminator
             $pole3 .= " diferencialni data: ";
 
             //novy zpusob archivovani dat
-            foreach($pole_puvodni_data as $key => $val) {
-                if(!($nod_upd[$key] == $val)) {
-                    if($key == "pozn") {
+            foreach ($pole_puvodni_data as $key => $val) {
+                if (!($nod_upd[$key] == $val)) {
+                    if ($key == "pozn") {
                         $pole3 .= "změna <b>Poznámky</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$nod_upd[$key]."</span>";
                         $pole3 .= ", ";
                     } //konec key == pozn
-                    elseif($key == "typ_nodu") {
+                    elseif ($key == "typ_nodu") {
                         $pole3 .= "změna <b>Módu</b> z: "."<span class=\"az-s1\">";
 
-                        if($val == 0) {
+                        if ($val == 0) {
                             $pole3 .= "Nezvoleno";
-                        } elseif($val == 1) {
+                        } elseif ($val == 1) {
                             $pole3 .= "bezdrátová síť";
-                        } elseif($val == 2) {
+                        } elseif ($val == 2) {
                             $pole3 .= "optická síť";
                         } else {
                             $pole3 .= $val;
@@ -503,11 +503,11 @@ class nodeAction extends adminator
                         $pole3 .= "</span>";
                         $pole3 .= " na: <span class=\"az-s2\">";
 
-                        if($nod_upd[$key] == 0) {
+                        if ($nod_upd[$key] == 0) {
                             $pole3 .= "Nezvoleno";
-                        } elseif($nod_upd[$key] == 1) {
+                        } elseif ($nod_upd[$key] == 1) {
                             $pole3 .= "bezdrátová síť";
-                        } elseif($nod_upd[$key] == 2) {
+                        } elseif ($nod_upd[$key] == 2) {
                             $pole3 .= "optická síť";
                         } else {
                             $pole3 .= $nod_upd[$key];
@@ -516,26 +516,26 @@ class nodeAction extends adminator
                         $pole3 .= "</span>";
                         $pole3 .= ", ";
                     } //konec key == typ_nodu
-                    elseif($key == "typ_vysilace") {
+                    elseif ($key == "typ_vysilace") {
                         $pole3 .= "změna <b>Typu vysílače</b> z: ";
 
-                        if($val == 0) {
+                        if ($val == 0) {
                             $pole3 .= "<span class=\"az-s1\">Nezvoleno</span>";
-                        } elseif($val == 1) {
+                        } elseif ($val == 1) {
                             $pole3 .= "<span class=\"az-s1\">Metallic</span>";
-                        } elseif($val == 2) {
+                        } elseif ($val == 2) {
                             $pole3 .= "<span class=\"az-s1\">ap-2,4GHz-OMNI</span>";
-                        } elseif($val == 3) {
+                        } elseif ($val == 3) {
                             $pole3 .= "<span class=\"az-s1\">ap-2,4Ghz-sektor</span>";
-                        } elseif($val == 4) {
+                        } elseif ($val == 4) {
                             $pole3 .= "<span class=\"az-s1\">ap-2.4Ghz-smerovka</span>";
-                        } elseif($val == 5) {
+                        } elseif ($val == 5) {
                             $pole3 .= "<span class=\"az-s1\">ap-5.8Ghz-OMNI</span>";
-                        } elseif($val == 6) {
+                        } elseif ($val == 6) {
                             $pole3 .= "<span class=\"az-s1\">ap-5.8Ghz-sektor</span>";
-                        } elseif($val == 7) {
+                        } elseif ($val == 7) {
                             $pole3 .= "<span class=\"az-s1\">ap-5.8Ghz-smerovka</span>";
-                        } elseif($val == 8) {
+                        } elseif ($val == 8) {
                             $pole3 .= "<span class=\"az-s1\">jiné</span>";
                         } else {
                             $pole3 .= "<span class=\"az-s1\">".$val."</span>";
@@ -543,23 +543,23 @@ class nodeAction extends adminator
 
                         $pole3 .= " na: <span class=\"az-s2\">";
 
-                        if($nod_upd[$key] == 0) {
+                        if ($nod_upd[$key] == 0) {
                             $pole3 .= "Nezvoleno";
-                        } elseif($nod_upd[$key] == 1) {
+                        } elseif ($nod_upd[$key] == 1) {
                             $pole3 .= "Metallic";
-                        } elseif($nod_upd[$key] == 2) {
+                        } elseif ($nod_upd[$key] == 2) {
                             $pole3 .= "ap-2,4GHz-OMNI";
-                        } elseif($nod_upd[$key] == 3) {
+                        } elseif ($nod_upd[$key] == 3) {
                             $pole3 .= "ap-2,4Ghz-sektor";
-                        } elseif($nod_upd[$key] == 4) {
+                        } elseif ($nod_upd[$key] == 4) {
                             $pole3 .= "ap-2.4Ghz-smerovka";
-                        } elseif($nod_upd[$key] == 5) {
+                        } elseif ($nod_upd[$key] == 5) {
                             $pole3 .= "ap-5.8Ghz-OMNI";
-                        } elseif($nod_upd[$key] == 6) {
+                        } elseif ($nod_upd[$key] == 6) {
                             $pole3 .= "ap-5.8Ghz-sektor";
-                        } elseif($nod_upd[$key] == 7) {
+                        } elseif ($nod_upd[$key] == 7) {
                             $pole3 .= "ap-5.8Ghz-smerovka";
-                        } elseif($nod_upd[$key] == 8) {
+                        } elseif ($nod_upd[$key] == 8) {
                             $pole3 .= "jiné";
                         } else {
                             $pole3 .= $nod_upd[$key];
@@ -568,17 +568,17 @@ class nodeAction extends adminator
                         $pole3 .= "</span>";
                         $pole3 .= ", ";
                     } //konec key == typ_vysilace
-                    elseif($key == "stav") {
+                    elseif ($key == "stav") {
                         $pole3 .= "změna <b>Stavu</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">";
 
-                        if($val == 0) {
+                        if ($val == 0) {
                             $pole3 .= "Není zvoleno";
-                        } elseif($val == 1) {
+                        } elseif ($val == 1) {
                             $pole3 .= "v pořádku ";
-                        } elseif($val == 2) {
+                        } elseif ($val == 2) {
                             $pole3 .= "vytížen";
-                        } elseif($val == 3) {
+                        } elseif ($val == 3) {
                             $pole3 .= "přetížen";
                         } else {
                             echo $val;
@@ -586,13 +586,13 @@ class nodeAction extends adminator
 
                         $pole3 .= "</span> na: <span class=\"az-s2\">";
 
-                        if($nod_upd[$key] == 0) {
+                        if ($nod_upd[$key] == 0) {
                             $pole3 .= "Není zvoleno";
-                        } elseif($nod_upd[$key] == 1) {
+                        } elseif ($nod_upd[$key] == 1) {
                             $pole3 .= "v pořádku ";
-                        } elseif($nod_upd[$key] == 2) {
+                        } elseif ($nod_upd[$key] == 2) {
                             $pole3 .= "vytížen";
-                        } elseif($nod_upd[$key] == 3) {
+                        } elseif ($nod_upd[$key] == 3) {
                             $pole3 .= "přetížen";
                         } else {
                             echo $nod_upd[$key];
@@ -601,13 +601,13 @@ class nodeAction extends adminator
                         $pole3 .= "</span>";
                         $pole3 .= ", ";
                     } //konec key == stav
-                    elseif($key == "router_id") {
+                    elseif ($key == "router_id") {
                         $pole3 .= "změna <b>Routeru</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">";
 
                         $dotaz_router1 = $this->conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($val)."'");
-                        if(($dotaz_router1->num_rows == 1)) {
-                            while($data = $dotaz_router1->fetch_array()) {
+                        if (($dotaz_router1->num_rows == 1)) {
+                            while ($data = $dotaz_router1->fetch_array()) {
                                 $pole3 .= $data["nazev"]." (".$val.")";
                             }
                         } else {
@@ -618,8 +618,8 @@ class nodeAction extends adminator
 
                         $nod_zmena = $nod_upd[$key];
                         $dotaz_router2 = $this->conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($nod_zmena)."'");
-                        if(($dotaz_router2->num_rows == 1)) {
-                            while($data = $dotaz_router2->fetch_array()) {
+                        if (($dotaz_router2->num_rows == 1)) {
+                            while ($data = $dotaz_router2->fetch_array()) {
                                 $pole3 .= $data["nazev"]." (".$nod_zmena.")";
                             }
                         } else {
@@ -629,14 +629,14 @@ class nodeAction extends adminator
                         $pole3 .= "</span>";
                         $pole3 .= ", ";
                     } //konec key == router_id
-                    elseif($key == "filter_router_id") {
+                    elseif ($key == "filter_router_id") {
 
                         $pole3 .= "změna <b>Routeru, kde se provádí filtrace</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">";
 
                         $dotaz_router1 = $this->conn_mysql->query("SELECT nazev FROM router_list WHERE id = '".intval($val)."'");
-                        if(($dotaz_router1->num_rows == 1)) {
-                            while($data = $dotaz_router1->fetch_array()) {
+                        if (($dotaz_router1->num_rows == 1)) {
+                            while ($data = $dotaz_router1->fetch_array()) {
                                 $pole3 .= $data["nazev"]." (".$val.")";
                             }
                         } else {
@@ -647,8 +647,8 @@ class nodeAction extends adminator
 
                         $nod_zmena = $nod_upd[$key];
                         $dotaz_router2 = $this->conn_mysql->query("SELECT nazev FROM router_list WHERE id = '".intval($nod_zmena)."'");
-                        if(($dotaz_router2->num_rows == 1)) {
-                            while($data = $dotaz_router2->fetch_array()) {
+                        if (($dotaz_router2->num_rows == 1)) {
+                            while ($data = $dotaz_router2->fetch_array()) {
                                 $pole3 .= $data["nazev"]." (".$nod_zmena.")";
                             }
                         } else {
@@ -742,7 +742,7 @@ class nodeAction extends adminator
             $vysledek = $this->conn_mysql->query("select * from nod_list where id=".intval($id)."");
             $radku = $vysledek->num_rows;
 
-            if($radku == 0) {
+            if ($radku == 0) {
                 $output .= "<div style=\"padding: 5px; color: red; font-weight: bold; \">";
                 $output .= "Chyba! Nelze zjistit původní hodnoty!</div>";
             } else {
@@ -771,7 +771,7 @@ class nodeAction extends adminator
             }
 
             //checkem jestli se macklo na tlacitko "OK" :)
-            if(preg_match("/^OK$/", $_POST["B1"])) {
+            if (preg_match("/^OK$/", $_POST["B1"])) {
                 $output .= "";
             } else {
                 $output .= "<div class=\"objekty-add-no-click-ok\"><h4>Data neuloženy, nebylo použito ".
@@ -880,7 +880,7 @@ class nodeAction extends adminator
             $dotaz_parent = $this->conn_mysql->query("SELECT * FROM router_list order by nazev");
             $output .= "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>";
 
-            while($data_parent = $dotaz_parent->fetch_array()) {
+            while ($data_parent = $dotaz_parent->fetch_array()) {
                 $output .= "<option value=\"".$data_parent["id"]."\" ";
                 if ($data_parent["id"] == $router_id) {
                     $output .= " selected ";
@@ -904,19 +904,19 @@ class nodeAction extends adminator
             $output .= "<select size=\"1\" name=\"typ_nodu\" >";
 
             $output .= "<option value=\"0\" style=\"color: gray; \" ";
-            if($typ_nodu == 0) {
+            if ($typ_nodu == 0) {
                 $output .= " selected ";
             }
             $output .= " >Nezvoleno</option>";
 
             $output .= "<option value=\"1\" style=\"color: #CC0033; \" ";
-            if($typ_nodu == 1) {
+            if ($typ_nodu == 1) {
                 $output .= " selected ";
             }
             $output .= " >Bezdrátová síť</option>";
 
             $output .= "<option value=\"2\" style=\"color: #e37d2b; font-weight: bold;\" ";
-            if($typ_nodu == 2) {
+            if ($typ_nodu == 2) {
                 $output .= " selected ";
             }
             $output .= " >Optická síť</option>";
@@ -936,7 +936,7 @@ class nodeAction extends adminator
              <td><input type=\"text\" name=\"vlan_id\" size=\"10\" value=\"".$vlan_id."\" ></td>
             </tr>\n";
 
-            if($typ_nodu == 1) {
+            if ($typ_nodu == 1) {
 
                 $output .= '<tr>
               <td><br></td>
@@ -949,7 +949,7 @@ class nodeAction extends adminator
 
                 $output .= "<select name=\"filter_router_id\" size=\"1\" >";
 
-                if($rid_recom == "yes") {
+                if ($rid_recom == "yes") {
                     $sql_filtr = "SELECT id,nazev,ip_adresa FROM router_list WHERE (filtrace = 1) ORDER BY nazev";
                 } else {
                     $sql_filtr = "SELECT id,nazev,ip_adresa FROM router_list ORDER BY nazev";
@@ -958,9 +958,9 @@ class nodeAction extends adminator
                 $dotaz_parent = $this->conn_mysql->query($sql_filtr);
                 $output .= "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>\n";
 
-                while($data_parent = $dotaz_parent->fetch_array()) {
+                while ($data_parent = $dotaz_parent->fetch_array()) {
                     $output .= "<option value=\"".$data_parent["id"]."\" ";
-                    if($data_parent["id"] == $filter_router_id) {
+                    if ($data_parent["id"] == $filter_router_id) {
                         $output .= " selected ";
                     }
                     $output .= "> ".$data_parent["nazev"]." ( ".$data_parent["ip_adresa"]." ) </option>\n";
@@ -969,7 +969,7 @@ class nodeAction extends adminator
 
                 $output .= "<span style=\"padding-left: 40px;\">Pouze doporučené:
                <input type=\"checkbox\" name=\"rid_recom\" value=\"yes\" onclick=\"this.form.submit();\" ";
-                if($rid_recom == "yes") {
+                if ($rid_recom == "yes") {
                     $output .= " checked ";
                 } $output .= " ></span>";
 
@@ -985,7 +985,7 @@ class nodeAction extends adminator
              <td></td>
            </tr>';
 
-            if($typ_nodu == 2) {
+            if ($typ_nodu == 2) {
                 $output .= ' <tr>
                <td><label>Typ(model) koncového zařízení (switche): </label></td>
                <td>';
@@ -993,13 +993,13 @@ class nodeAction extends adminator
                 $output .= "<select name=\"device_type_id\" size=\"1\" >";
                 $output .= "<option value=\"0\" >default :: AT-8000S/24</option>\n";
                 $output .= "<option value=\"1\" ";
-                if($device_type_id == 1) {
+                if ($device_type_id == 1) {
                     $output .= " selected ";
                 }
                 $output .= " >h3c s3100 (26tp-ei) - with mac-vlan</option>\n";
 
                 $output .= "<option value=\"2\" ";
-                if($device_type_id == 2) {
+                if ($device_type_id == 2) {
                     $output .= " selected ";
                 }
                 $output .= " >h3c s3100 (26tp-ei) - with DVA</option>\n";

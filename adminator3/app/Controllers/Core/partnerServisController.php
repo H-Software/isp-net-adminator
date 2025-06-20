@@ -43,7 +43,7 @@ class partnerServisController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(305)) {
+        if (!$this->checkLevel(305)) {
             return $this->response;
         };
 
@@ -57,10 +57,10 @@ class partnerServisController extends adminatorController
 
         //priprava dotazu
 
-        if($filtr_akceptovano > 0) {
+        if ($filtr_akceptovano > 0) {
             $filtr .= " AND akceptovano = ".$filtr_akceptovano." ";
         }
-        if($filtr_prio > 0) {
+        if ($filtr_prio > 0) {
             $filtr .= " AND prio = ".$filtr_prio." ";
         }
 
@@ -116,7 +116,7 @@ class partnerServisController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(304)) {
+        if (!$this->checkLevel(304)) {
             return $this->response;
         };
 
@@ -129,7 +129,7 @@ class partnerServisController extends adminatorController
 
         $this->psi->fill_form = $this->conn_mysql->real_escape_string($_POST["fill_form"]);
 
-        if((strlen($this->psi->fill_form) > 4)) {
+        if ((strlen($this->psi->fill_form) > 4)) {
             $this->psi->form_copy_values();
         } else {
             $this->psi->jmeno_klienta = $this->conn_mysql->real_escape_string($_POST["jmeno_klienta"]);
@@ -146,13 +146,13 @@ class partnerServisController extends adminatorController
         //kontrola promennych
         $this->psi->check_insert_value();
 
-        if((($this->psi->odeslat == "ULOŽIT") and ($this->psi->fail == false))) { // mod ukladani
+        if ((($this->psi->odeslat == "ULOŽIT") and ($this->psi->fail == false))) { // mod ukladani
             $bodyContent .= $this->psi->save_form();
         } else { // zobrazime formular
             $bodyContent .= "<form action=\"\" method=\"post\" class=\"form-partner-servis-insert\" >";
             $bodyContent .= $csrf_html;
 
-            if(isset($this->psi->odeslat) and isset($this->psi->error)) {
+            if (isset($this->psi->odeslat) and isset($this->psi->error)) {
                 $bodyContent .= $this->psi->error;
             }
 
@@ -176,7 +176,7 @@ class partnerServisController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(306)) {
+        if (!$this->checkLevel(306)) {
             return $this->response;
         };
 
@@ -188,7 +188,7 @@ class partnerServisController extends adminatorController
 
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
 
-        if($_GET["accept"] <> 1) {
+        if ($_GET["accept"] <> 1) {
             $filtr = "";
 
             // $list = intval($_GET["list"]);
@@ -202,7 +202,7 @@ class partnerServisController extends adminatorController
                 $filtr .= " AND akceptovano = ".$filtr_akceptovano." ";
             }
 
-            if($filtr_prio > 0) {
+            if ($filtr_prio > 0) {
                 $filtr .= " AND prio = ".$filtr_prio." ";
             }
 
@@ -254,14 +254,14 @@ class partnerServisController extends adminatorController
                     <span style=\"border-bottom: 1px solid grey; \" >Akceptování žádosti o servis</span>
              </div>";
 
-            if(preg_match('/^([[:digit:]])+$/', $_GET["id"]) == false) {
+            if (preg_match('/^([[:digit:]])+$/', $_GET["id"]) == false) {
                 $bodyContent .= "<div style=\"color: red; font-weight: bold; padding-left: 20px; padding-bottom: 20px; \">
                     Chyba! Zákazníka nelze akceptovat! Vstupní data jsou ve špatném formátu! </div> ";
                 $assignData["body"] = $bodyContent;
                 return $this->renderer->template($request, $response, 'partner/servis-accept.tpl', $assignData, 500);
             }
 
-            if($_GET["odeslat"] == "OK") {
+            if ($_GET["odeslat"] == "OK") {
                 //budem ukladat
 
                 $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
@@ -320,7 +320,7 @@ class partnerServisController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(307)) {
+        if (!$this->checkLevel(307)) {
             return $this->response;
         };
 
@@ -332,7 +332,7 @@ class partnerServisController extends adminatorController
 
         list($csrf_html) = $this->generateCsrfToken($request, $response, true);
 
-        if($_GET["edit"] <> 1) {
+        if ($_GET["edit"] <> 1) {
             $filtr = "";
 
             //  $list = intval($_GET["list"]);
@@ -344,7 +344,7 @@ class partnerServisController extends adminatorController
             {
                 $filtr .= " AND akceptovano = ".$filtr_akceptovano." ";
             }
-            if($filtr_prio > 0) {
+            if ($filtr_prio > 0) {
                 $filtr .= " AND prio = ".$filtr_prio." ";
             }
 
@@ -402,7 +402,7 @@ class partnerServisController extends adminatorController
                 return $this->renderer->template($request, $response, 'partner/servis-accept.tpl', $assignData, 500);
             }
 
-            if($_GET["odeslat"] == "OK") {
+            if ($_GET["odeslat"] == "OK") {
                 //budem ukladat
 
                 $pozn = $this->conn_mysql->real_escape_string($_GET["pozn"]);
@@ -410,7 +410,7 @@ class partnerServisController extends adminatorController
 
                 $uprava = $this->conn_mysql->query("UPDATE partner_klienti_servis SET akceptovano_pozn = '".$pozn."' WHERE id=".$id." Limit 1 ");
 
-                if($uprava) {
+                if ($uprava) {
                     $bodyContent .= "<br><H3><div style=\"color: green; padding-left: 20px;\" >Poznámka u zákazníka úspěšně aktualizována.</div></H3><br>\n";
                 } else {
                     $bodyContent .= "<div style=\"color: red; \">Chyba! Poznámku nelze upravit.</div><br>\n";
@@ -424,7 +424,7 @@ class partnerServisController extends adminatorController
                 //nacteme predchozi data
                 $dotaz = $this->conn_mysql->query("SELECT id, akceptovano_pozn FROM partner_klienti_servis WHERE id = '$id' ");
 
-                while($data = $dotaz->fetch_array()) {
+                while ($data = $dotaz->fetch_array()) {
                     $pozn = $data["akceptovano_pozn"];
                 }
 

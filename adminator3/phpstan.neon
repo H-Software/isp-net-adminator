@@ -26,6 +26,12 @@ parameters:
 		message: "#^Variable \\$.* might not be defined\\.$#"
 		path: *
 	-
+		message: "#^Variable .* in isset\\(\\) always exists and is not nullable\\.$#"
+		path: app/Core/Print/inc.smlouva.*
+	-
+		message: "#^Variable .* in isset\\(\\) always exists and is not nullable\\.$#"
+		path: app/Core/Print/inc.reg.form.input.*
+	-
 		message: "#^Function mysql_.* not found\\.$#"
 		path: include/main.function.shared.php
 	-

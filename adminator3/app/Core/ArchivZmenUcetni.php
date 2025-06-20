@@ -50,8 +50,8 @@ class zmeny_ucetni
             // die (init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
-        while($rs = $qu->fetch_assoc()) {
-            if(($rs["zu_vlozeno_kym"] == $this->loggedUserEmail) and ($rs["zu_akceptovano"] == 0)) {
+        while ($rs = $qu->fetch_assoc()) {
+            if (($rs["zu_vlozeno_kym"] == $this->loggedUserEmail) and ($rs["zu_akceptovano"] == 0)) {
                 $uprava = "<a href=\"".$_SERVER["php_self"]."?action=update";
                 $uprava .= "&id=".$rs["zu_id"]."\" >upravit</a>";
 
@@ -78,7 +78,7 @@ class zmeny_ucetni
             die(init_helper_base_html("adminator3") . "<h2 style=\"color: red; \">Error: Database query failed! Caught exception: " . $e->getMessage() . "\n" . "</h2></body></html>\n");
         }
 
-        while($rs = $qu->fetch_assoc()) {
+        while ($rs = $qu->fetch_assoc()) {
             $rs_main[] = $rs;
         }
 
@@ -88,7 +88,7 @@ class zmeny_ucetni
 
     public function check_inserted_vars()
     {
-        if(!(preg_match('/^([[:digit:]]+)$/', $this->typ))) {
+        if (!(preg_match('/^([[:digit:]]+)$/', $this->typ))) {
             $this->fail = true;
             $this->error .= "<div class=\"form-add-fail\" ><H4>Zadaný typ (".$this->typ." ) není ve  správném formátu!!!</H4></div>";
         }
@@ -125,7 +125,7 @@ class zmeny_ucetni
 
         $this->writed = "true";
 
-        if($add) {
+        if ($add) {
             return true;
         } else {
             return false;

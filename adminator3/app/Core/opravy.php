@@ -40,7 +40,7 @@ class opravy
         // $limit = $_GET["limit"];
 
         foreach ($request->getQueryParams() as $i => $v) {
-            if(preg_match('/^(v_reseni_filtr|vyreseno_filtr|limit)$/', $i) and strlen($v) > 0) {
+            if (preg_match('/^(v_reseni_filtr|vyreseno_filtr|limit)$/', $i) and strlen($v) > 0) {
                 $$i = $request->getQueryParams()[$i];
             }
         }
@@ -75,9 +75,9 @@ class opravy
 
         $zobrazeno_limit = "0";
 
-        while($data = $dotaz->fetch_array()) {
+        while ($data = $dotaz->fetch_array()) {
 
-            if($zobrazeno_limit >= $limit) {
+            if ($zobrazeno_limit >= $limit) {
                 // prozatimni reseni limitu
 
                 $exit = "ano";
@@ -102,9 +102,9 @@ class opravy
             $this->logger->info("opravy\\vypis_opravy: mysql query dotaz_S1: num_rows: " . var_export($dotaz_radku_S1, true));
 
             // zde zjistit jestli uz se zobrazilo
-            if(!empty($zobrazene_polozky)) {
+            if (!empty($zobrazene_polozky)) {
                 for ($p = 0; $p < count($zobrazene_polozky); ++$p) {
-                    if($zobrazene_polozky[$p] == $id_opravy) {
+                    if ($zobrazene_polozky[$p] == $id_opravy) {
                         $zobrazeno = "ano";
                     } else {
                         $zobrazeno = "ne";
@@ -112,11 +112,11 @@ class opravy
                 }
             }
 
-            if($v_reseni_filtr == 1) {
+            if ($v_reseni_filtr == 1) {
                 if ((($data["v_reseni"] == 1) and ($dotaz_radku_S1 == 0))) {
                     $zobrazovat = "ano";
                 } elseif ($dotaz_radku_S1 > 0) {
-                    while($data_S1 = $dotaz_S1->fetch_array()) {
+                    while ($data_S1 = $dotaz_S1->fetch_array()) {
                         if ($data_S1["v_reseni"] == 1) {
                             $zobrazovat = "ano";
                             $sekundarni_show = "ano";
@@ -124,11 +124,11 @@ class opravy
                     }
                 }
             } // konec if v_reseni_filtr == 1
-            elseif($v_reseni_filtr == 0) {
-                if((($data["v_reseni"] == 0) and ($dotaz_radku_S1 == 0))) {
+            elseif ($v_reseni_filtr == 0) {
+                if ((($data["v_reseni"] == 0) and ($dotaz_radku_S1 == 0))) {
                     $zobrazovat = "ano";
                 } elseif ($dotaz_radku_S1 > 0) {
-                    while($data_S1 = $dotaz_S1->fetch_array()) {
+                    while ($data_S1 = $dotaz_S1->fetch_array()) {
                         if ($data_S1["v_reseni"] == 0) {
                             $zobrazovat = "ano";
                             $sekundarni_show = "ano";
@@ -144,12 +144,12 @@ class opravy
             } // konec elseif v_reseni_filtr == 0
 
 
-            if($vyreseno_filtr == 1) {
+            if ($vyreseno_filtr == 1) {
                 // prvne zjistime jestli jde o singl prispevek bo jestli je jich vic
                 if ((($data["vyreseno"] == 1) and ($dotaz_radku_S1 == 0))) {
                     $zobrazovat = "ano";
-                } elseif($dotaz_radku_S1 > 0) {
-                    while($data_S1 = $dotaz_S1->fetch_array()) {
+                } elseif ($dotaz_radku_S1 > 0) {
+                    while ($data_S1 = $dotaz_S1->fetch_array()) {
                         if ($data_S1["vyreseno"] == 1) {
                             $zobrazovat = "ano";
                             $sekundarni_show = "ano";
@@ -165,8 +165,8 @@ class opravy
                 // prvne zjistime jestli jde o singl prispevek bo jestli je jich vic
                 if ((($data["vyreseno"] == 0) and ($dotaz_radku_S1 == 0))) {
                     $zobrazovat = "ano";
-                } elseif($dotaz_radku_S1 > 0) {
-                    while($data_S1 = $dotaz_S1->fetch_array()) {
+                } elseif ($dotaz_radku_S1 > 0) {
+                    while ($data_S1 = $dotaz_S1->fetch_array()) {
                         if ($data_S1["vyreseno"] == 1) {
                             $zobrazovat = "ne";
                             $sekundarni_show = "ne";
@@ -188,7 +188,7 @@ class opravy
                 $zobrazovat = "ano";
             }
 
-            if(($zobrazovat == "ano" and $zobrazeno == "ne" and $exit != "ano")) {
+            if (($zobrazovat == "ano" and $zobrazeno == "ne" and $exit != "ano")) {
 
                 $zobrazene_polozky[] = $data["id_opravy"];
 
@@ -197,7 +197,7 @@ class opravy
                 $class = "opravy-tab-line4";
 
                 // zde zjistit jestli uz se vyresilo
-                if($dotaz_radku_S1 == 0) { // rezim singl problemu
+                if ($dotaz_radku_S1 == 0) { // rezim singl problemu
                     if ($data["vyreseno"] == 1) {
                         $barva = "green";
                     } elseif ($data["v_reseni"] == 1) {
@@ -208,10 +208,10 @@ class opravy
 
                 } // if dotaz_radku_S1 == 0
                 else {
-                    while($data_S1 = $dotaz_S1->fetch_array()) {
-                        if($data_S1["vyreseno"] == 1) {
+                    while ($data_S1 = $dotaz_S1->fetch_array()) {
+                        if ($data_S1["vyreseno"] == 1) {
                             $barva = "green";
-                        } elseif($data_S1["v_reseni"] == 1) {
+                        } elseif ($data_S1["v_reseni"] == 1) {
                             $barva = "orange";
                         } else {
                             $barva = "red";
@@ -301,7 +301,7 @@ class opravy
                 $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"".
                                                        fix_link_to_another_adminator("/opravy-index.php?typ=1&id_vlastnika=".$data["id_vlastnika"]);
 
-                if($data["id_predchozi_opravy"] == 0) {
+                if ($data["id_predchozi_opravy"] == 0) {
                     $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data["id_opravy"];
                 } else {
                     $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data["id_predchozi_opravy"];
@@ -315,7 +315,7 @@ class opravy
 
             } // konec if zobrazovat == ano
 
-            if(($sekundarni_show == "ano" and $zobrazeno == "ne")) {
+            if (($sekundarni_show == "ano" and $zobrazeno == "ne")) {
 
                 // $zobrazene_polozky[]=$id_opravy;
                 try {
@@ -326,11 +326,11 @@ class opravy
 
                 $this->logger->info("opravy\\vypis_opravy: mysql query dotaz_S2: num_rows: " . var_export($dotaz_S2->num_rows, true));
 
-                while($data_S2 = $dotaz_S2->fetch_array()) {
+                while ($data_S2 = $dotaz_S2->fetch_array()) {
 
                     // zde zjistit jestli uz se zobrazilo
                     for ($p = 0; $p < count($zobrazene_polozky); ++$p) {
-                        if($zobrazene_polozky[$p] == $id_opravy) {
+                        if ($zobrazene_polozky[$p] == $id_opravy) {
                             $zobrazeno = "ano";
                         } else {
                             $zobrazeno = "ne";
@@ -353,7 +353,7 @@ class opravy
                     // neni jiste jestli barveni ma bejt zde
 
                     // zde zjistit jestli uz se vyresilo
-                    if($dotaz_radku_S3 == 0) { // rezim singl problemu
+                    if ($dotaz_radku_S3 == 0) { // rezim singl problemu
                         if ($data_S2["vyreseno"] == 1) {
                             $barva = "green";
                         } elseif ($data_S2["v_reseni"] == 1) {
@@ -364,10 +364,10 @@ class opravy
 
                     } // if dotaz_radku_S1 == 0
                     else {
-                        while($data_S3 = $dotaz_S3->fetch_array()) {
-                            if($data_S3["vyreseno"] == 1) {
+                        while ($data_S3 = $dotaz_S3->fetch_array()) {
+                            if ($data_S3["vyreseno"] == 1) {
                                 $barva = "green";
-                            } elseif($data_S3["v_reseni"] == 1) {
+                            } elseif ($data_S3["v_reseni"] == 1) {
                                 $barva = "orange";
                             } else {
                                 $barva = "red";
@@ -458,7 +458,7 @@ class opravy
                         $this->vypis_opravy_content_html .= "<td class=\"".$class."\" style=\" color: ".$barva."; \" ><a href=\"" .
                                                           fix_link_to_another_adminator("/opravy-index.php?typ=1&id_vlastnika=".$data_S2["id_vlastnika"]);
 
-                        if($data_S2["id_predchozi_opravy"] == 0) {
+                        if ($data_S2["id_predchozi_opravy"] == 0) {
                             $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data_S2["id_opravy"];
                         } else {
                             $this->vypis_opravy_content_html .= "&id_predchozi_opravy=".$data_S2["id_predchozi_opravy"];

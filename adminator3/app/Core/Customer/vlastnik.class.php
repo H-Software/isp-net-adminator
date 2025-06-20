@@ -34,7 +34,7 @@ class vlastnik
             $output .= "chybny vyber";
         }
 
-        if($this->echo) {
+        if ($this->echo) {
             echo $output;
         } else {
             return $output;
@@ -56,7 +56,7 @@ class vlastnik
         // co - co hledat, 1- podle dns, 2-podle ip , 3 - dle id_vlastnika
         $dotaz = pg_query($this->conn_pgsql, $dotaz_source);
 
-        if($dotaz !== false) {
+        if ($dotaz !== false) {
             $radku = pg_num_rows($dotaz);
         } else {
             $output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($this->conn_pgsql). "</div>";
@@ -66,7 +66,7 @@ class vlastnik
             $output .= "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
         } else {
 
-            while($data = pg_fetch_array($dotaz)) {
+            while ($data = pg_fetch_array($dotaz)) {
 
                 $output .= "<tr><td colspan=\"14\"> <br> </td> </tr>
                     <tr> <td class=\"vlastnici-td-black\" colspan=\"2\" >[".$data["id_cloveka"]."] ".$data["nick"]."</td>
@@ -77,7 +77,7 @@ class vlastnik
                 $output .= "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
 
                 // sem mazani
-                if($this->vlastnici_erase_povolen === false) {
+                if ($this->vlastnici_erase_povolen === false) {
                     $output .= "<span style=\"\" > smazat </span> ";
                 } else {
                     $output .= "<form method=\"POST\" action=\"" . fix_link_to_another_adminator("/vlastnici2-erase.php") . "\" >";
@@ -134,7 +134,7 @@ class vlastnik
 
                 $pocet_fiber_obj = $objekt->zjistipocet(2, $id);
 
-                if($pocet_wifi_obj > 0 or $pocet_fiber_obj == 0) {
+                if ($pocet_wifi_obj > 0 or $pocet_fiber_obj == 0) {
                     //objekty wifi
                     $co = "3";
 
@@ -148,7 +148,7 @@ class vlastnik
                     $output .= "</td></tr>";
                 }
 
-                if($pocet_fiber_obj > 0) {
+                if ($pocet_fiber_obj > 0) {
 
                     //objekty fiber
                     $co = "4";
@@ -325,7 +325,7 @@ class vlastnik
             }
         }
 
-        if($this->echo) {
+        if ($this->echo) {
             echo $output;
         } else {
             return $output;

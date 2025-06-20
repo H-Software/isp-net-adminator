@@ -43,11 +43,11 @@ $sql = "SELECT workitems.id, workitems_names.name, workitems.number_request, wor
 $rs = $conn_mysql->query($sql);
 $num_rows = $rs->num_rows;
 
-if($num_rows == 0) {
+if ($num_rows == 0) {
     echo " INFO: no requests on the system \n";
     $output_main .= " INFO: no requests on the system \n";
 } else {
-    while($data = $rs->fetch_array()) {
+    while ($data = $rs->fetch_array()) {
         $id = $data["id"];
         $number_request = $data["number_request"];
 
@@ -61,7 +61,7 @@ if($num_rows == 0) {
 echo "work-diff.php stop [".strftime("%d/%m/%Y %H:%M:%S", time())."] \n";
 $output_main .= "work-diff.php stop [".strftime("%d/%m/%Y %H:%M:%S", time())."] \n";
 
-if(preg_match("/.*<span.*>.*/", $output_main)) {
+if (preg_match("/.*<span.*>.*/", $output_main)) {
     $soubor = fopen(__DIR__ . "/../logs/reinhard.remote.log", "w");
 } else {
     $output_main = "- - - - - - - - - - - - - -\n".$output_main;
@@ -73,7 +73,7 @@ fclose($soubor);
 
 //vlozit vysledek do DB
 
-if((strlen($output_main) > 150)) {
+if ((strlen($output_main) > 150)) {
     $set = array();
     $set["akce"] = "'" . $conn_mysql->real_escape_string($output_main) . "'";
     //$set["provedeno_kym"] = "'" . $conn_mysql->real_escape_string(\Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email) . "'";

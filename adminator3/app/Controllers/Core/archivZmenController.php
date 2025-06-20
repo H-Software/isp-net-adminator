@@ -41,7 +41,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(30)) {
+        if (!$this->checkLevel(30)) {
             return $this->response;
         };
 
@@ -60,7 +60,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(30)) {
+        if (!$this->checkLevel(30)) {
             return $this->response;
         };
 
@@ -82,7 +82,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(30)) {
+        if (!$this->checkLevel(30)) {
             return $this->response;
         }
 
@@ -105,7 +105,7 @@ class archivZmenController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(147)) {
+        if (!$this->checkLevel(147)) {
             return $this->response;
         };
 
@@ -113,8 +113,8 @@ class archivZmenController extends adminatorController
         $action = $_GET["action"];
         $zmena = new \zmeny_ucetni($this->container);
 
-        if($action == "add") { //rezim pridani
-            if(!$this->checkLevel(148)) {
+        if ($action == "add") { //rezim pridani
+            if (!$this->checkLevel(148)) {
                 return $this->response;
             };
 
@@ -123,7 +123,7 @@ class archivZmenController extends adminatorController
 
             $update_id = $_POST['update_id'];
 
-            if($update_id > 0) {
+            if ($update_id > 0) {
                 $update_status = 1;
             } else {
                 $update_status = 0;
@@ -133,7 +133,7 @@ class archivZmenController extends adminatorController
             $zmena->odeslano = $_POST["odeslano"];
 
             //nacitani promennych
-            if($update_status == 1 and strlen($zmena->send) < 1) { //rezim upravy
+            if ($update_status == 1 and strlen($zmena->send) < 1) { //rezim upravy
 
             } else { //rezim pridani
                 $zmena->typ = $_POST["typ"];
@@ -144,25 +144,25 @@ class archivZmenController extends adminatorController
             $zmena->check_inserted_vars();
 
             // jestli uz se odeslalo , checkne se jestli jsou vsechny udaje
-            if((($zmena->typ != "") and ($zmena->text != ""))) {
+            if ((($zmena->typ != "") and ($zmena->text != ""))) {
                 //zde check duplicitnich hodnot ( uprava i pridani )
 
                 //checkem jestli se macklo na tlacitko "OK" :)
-                if(preg_match("/OK/", $zmena->odeslano)) { /* zde nic */
+                if (preg_match("/OK/", $zmena->odeslano)) { /* zde nic */
                 } else {
                     $zmena->fail = "true";
                     $zmena->error .= "<div class=\"form-add-no-click-ok\"><h4>Data neuloženy, nebylo použito tlačítko \"OK\", pro uložení klepněte na tlačítko \"OK\" v dolní části obrazovky!!!</h4></div>";
                 }
 
                 if (!(isset($zmena->fail))) { //ulozeni
-                    if($update_status == 1) { //rezim upravy
+                    if ($update_status == 1) { //rezim upravy
 
                         //zde kontrola levelu pro update
 
                     } else { //rezim pridani
                         $rs = $zmena->save_vars_to_db();
 
-                        if($rs == true) {
+                        if ($rs == true) {
                             $db_result = "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n";
                         } else {
                             $db_result = "<br><H3><div style=\"color: red; \">Chyba! Data do databáze nelze uložit. </div></H3>\n";
@@ -174,11 +174,11 @@ class archivZmenController extends adminatorController
                 else {
                 } // konec else ( !(isset(fail) ), musi tu musi bejt, pac jinak nefunguje nadrazeny if-elseif
 
-            } elseif(isset($zmena->send)) {
+            } elseif (isset($zmena->send)) {
                 $zmena->error = "<h4 style=\"color: red;\" >Chybí povinné údaje !!! (aktuálně jsou povinné: typ, text)</H4>";
             }
 
-            if((isset($zmena->error)) or (!isset($zmena->send))) { //zobrazeni formu
+            if ((isset($zmena->error)) or (!isset($zmena->send))) { //zobrazeni formu
 
                 $this->smarty->assign("action", "?action=add");
                 $this->smarty->assign("csrf_html", $csrf[0]);
@@ -193,14 +193,14 @@ class archivZmenController extends adminatorController
                 $this->smarty->assign("text", $zmena->text);
 
                 $template = "az-ucetni-add-form.tpl";
-            } elseif((isset($zmena->writed) or isset($updated))) { //vypis vlozenych udaju
+            } elseif ((isset($zmena->writed) or isset($updated))) { //vypis vlozenych udaju
                 $template = "az-ucetni-add-list.tpl";
             }
 
         } //konec if action == add
-        elseif($action == "accept") { //rezim akceptovani
+        elseif ($action == "accept") { //rezim akceptovani
 
-        } elseif($action == "update") { //rezim úpravy
+        } elseif ($action == "update") { //rezim úpravy
 
 
         } else {
