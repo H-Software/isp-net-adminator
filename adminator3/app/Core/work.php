@@ -59,11 +59,11 @@ class work
 
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": parsed item_name: " . var_export($item_name, true));
 
-        if($count > 1) {
+        if ($count > 1) {
             $output .= "<div> WARNING: Požadavek na restart \"".$item_name."\" (No. ".$item_id.") nalezen vícekrát. </div>\n";
         }
 
-        if($count == 1) {
+        if ($count == 1) {
             $output .= "<div> <span style=\"color: #1e90ff; \">INFO: </span>".
             "Požadavak na restart <b>\"".$item_name."\"</b> (No. ".$item_id.") ".
             "<span style=\"color: #1e90ff;\">není potřeba přidávat, již se nachází ve frontě restart. subsystému. </div>\n";
@@ -72,7 +72,7 @@ class work
 
             $add = $this->conn_mysql->query("INSERT INTO workitems (number_request) VALUES ('".intval($item_id)."') ");
 
-            if($add) {
+            if ($add) {
                 $rs_write = 1;
             } else {
                 $rs_write = 0;
@@ -88,13 +88,13 @@ class work
 
             $output .= "<div style=\"\">Požadavek na restart <b>\"".$item_name."\"</b> (No. ".$item_id.") - ";
 
-            if($add) {
+            if ($add) {
                 $output .= "<span style=\"color: green;\"> úspěšně přidán do fronty</span>";
             } else {
                 $output .= "<span style=\"color: red;\"> chyba při přidání požadavku do fronty</span>";
             }
 
-            if($add_az) {
+            if ($add_az) {
                 $output .= " - <span style=\"color: green;\"> úspěšně přidán do archivu změn.</span>";
             } else {
                 $output .= " - <span style=\"color: red;\"> chyba při přidání požadavku do archivu změn.</span>";
