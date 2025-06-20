@@ -52,7 +52,7 @@ class work
                 'item_id' => $item_id,
             ],
             'opts' => [
-                'timeout' => 0,
+                'timeout' => 0, // TODO: change to 24h
             ]
         ], [
             'queue' => "adminator3:workitem",
@@ -175,77 +175,66 @@ class work
                 or
                 ($origData["dov_net"] == "n")) {
 
-                $work_output[1] = $this->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-                $work_output[2] = $this->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-                $work_output[3] = $this->work_handler("3"); //reinhard-fiber (linux) - iptables (net-n/sikana)
-                $work_output[24] = $this->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+                $work_output[] = $this->work_handler("3"); //reinhard-fiber (linux) - iptables (net-n/sikana)
+                $work_output[] = $this->work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana)
             }
         }
 
-        // TODO: fix the rest of actions for objektyWifiDiff
+        //zmena linky -- shaper / filtrace
+        if (preg_match("/.*změna.*pole.*id_tarifu.*/", $changes)
+            or
+            preg_match("/.*změna.*Tarifu.*/", $changes)
+            or
+            preg_match("/.*změna.*pole.*client_ap_ip.*/", $changes)
+        ) {
+            if (preg_match("/.*změna.*pole.*client_ap_ip.*/", $changes)) {
+                $work_output[] = $this->work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+            }
 
-        // //zmena linky -- shaper / filtrace
-        // if( ereg(".*změna.*pole.*id_tarifu.*", $changes)
-        //     or
-        //     ereg(".*změna.*Tarifu.*", $changes)
-        // )
-        // {
-        //     if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
-        //     else
-        //     {
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-        //     }
+            if ($reinhard_id == 177) {
+                $work_output[] = $this->work_handler("20");
+            } //reinhard-3 (ros) - shaper (client's tariffs)
+            elseif ($reinhard_id == 1) {
+                $work_output[] = $this->work_handler("13");
+            } //reinhard-wifi (ros) - shaper (client's tariffs)
+            elseif ($reinhard_id == 236) {
+                $work_output[] = $this->work_handler("23");
+            } //reinhard-5 (ros) - shaper (client's tariffs)
+            else {
+                $work_output[] = $this->work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
+                $work_output[] = $this->work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
+                $work_output[] = $this->work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
+            }
 
-        //     // filtrace asi neni treba
-        //     // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+            // filtrace asi neni treba
+            // Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+        }
 
-        // }
-
-        // //zmena tunneling_ip ci tunel záznamů
-        // // --> radius artemis
-        // // zde dodelat zmenu IP adresy, pokud tunelovana verejka
-        // if(
-        // ereg(".*změna.*pole.*tunnelling_ip.*", $changes)
-        // or
-        // ereg(".*změna.*pole.*tunnel_user.*", $changes)
-        // or
-        // ereg(".*změna.*pole.*tunnel_pass.*", $changes)
-        // )
-        // {
-        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
-        // }
+        //zmena tunneling_ip ci tunel záznamů
+        // --> radius artemis
+        // zde dodelat zmenu IP adresy, pokud tunelovana verejka
+        if (
+            preg_match("/.*změna.*pole.*tunnelling_ip.*/", $changes)
+            or
+            preg_match("/.*změna.*pole.*tunnel_user.*/", $changes)
+            or
+            preg_match("/.*změna.*pole.*tunnel_pass.*/", $changes)
+        ) {
+            $work_output[] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        }
 
         // //zmena MAC adresy .. zatim se nepouziva u wifi
 
-        // //zmena DNS záznamu, asi jen u veřejných IP adresa
-        // // --> restart DNS auth. serveru
-        // if( ereg(".*změna.*pole.*dns_jmeno.*", $changes) )
-        // {
-        //     Aglobal::work_handler("9"); //erik - dns-restart
-        //     Aglobal::work_handler("10"); //trinity - dns restart
-        //     Aglobal::work_handler("11"); //artemis - dns restart
-        //     Aglobal::work_handler("12"); //c.ns.simelon.net - dns.restart
-        // }
-
-        // if( ereg(".*změna.*pole.*client_ap_ip.*", $changes) ){
-
-        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
-
-        //     if($reinhard_id == 177){ Aglobal::work_handler("20"); } //reinhard-3 (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 1){ Aglobal::work_handler("13"); } //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     elseif($reinhard_id == 236){ Aglobal::work_handler("23"); } //reinhard-5 (ros) - shaper (client's tariffs)
-        //     else
-        //     {
-        //     Aglobal::work_handler("13"); //reinhard-wifi (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("20"); //reinhard-3 (ros) - shaper (client's tariffs)
-        //     Aglobal::work_handler("23"); //reinhard-5 (ros) - shaper (client's tariffs)
-        //     }
-        // }
-
+        //zmena DNS záznamu, asi jen u veřejných IP adresa
+        // --> restart DNS auth. serveru
+        if (preg_match("/.*změna.*pole.*dns_jmeno.*/", $changes)) {
+            $work_output[] = $this->work_handler("9"); //erik - dns-restart
+            $work_output[] = $this->work_handler("10"); //trinity - dns restart
+            $work_output[] = $this->work_handler("11"); //artemis - dns restart
+            $work_output[] = $this->work_handler("12"); //c.ns.adminator.net - dns.restart
+        }
 
         // $output .= var_export($work_output, true);
 
