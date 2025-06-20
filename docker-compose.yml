@@ -161,7 +161,7 @@ services:
       retries: 5
     command: ["redis-server"]
     ports:
-      - 6379:6379
+      - 16379:6379
 
   # fix permissions: echo "host all all all $POSTGRES_HOST_AUTH_METHOD" >> pg_hba.conf
   # pgadmin:

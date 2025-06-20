@@ -45,19 +45,25 @@ class work
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        $asynq_client = new Client($this->redis);
-        $res = $asynq_client->Enqueue([
-            'typename' => "adminator3:workitem:$item_id",
-            'payload' => [
-                'item_id' => $item_id,
-            ],
-            'opts' => [
-                'timeout' => 0, // TODO: change to 24h
-            ]
-        ], [
-            'queue' => "adminator3:workitem",
-            'group' => $item_id,
-        ]);
+        try {
+            $asynq_client = new Client($this->redis);
+            $res = $asynq_client->Enqueue([
+                'typename' => "adminator3:workitem:$item_id",
+                'payload' => [
+                    'item_id' => $item_id,
+                ],
+                'opts' => [
+                    'timeout' => 0, // TODO: change to 24h
+                ]
+            ], [
+                'queue' => "adminator3:workitem",
+                'group' => $item_id,
+            ]);
+        } catch (\RedisException $ex) {
+            $m = $ex->getMessage();
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Redis error: $m");
+            return false;
+        }
 
         return $res;
     }
