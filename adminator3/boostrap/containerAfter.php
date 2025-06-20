@@ -158,36 +158,44 @@ $container->set(
         $logger = $container->get('logger');
         $logger->debug('DI\redis: called');
 
+        $settings = $container->get('settings');
+        $r_settings = $settings['redis'];
+
         /**
         * Setup a new app instance container
         *
         * @var Illuminate\Container\Container
         */
         $app = new Container();
-        $app->singleton('app', 'Illuminate\Container\Container');
+
+        $app->singleton('redis', function () use ($app, $r_settings) {
+            return new \Illuminate\Redis\RedisManager($app, $r_settings['driver'], [
+                'cluster' => false,
+                'default' => [
+                    'host'     => $r_settings['host'],
+                    'port'     => $r_settings['port'],
+                    'database' => 0,
+                    'timeout'  => 2,
+                ],
+            ]);
+        });
 
         /**
         * Set $app as FacadeApplication handler
         */
         Facade::setFacadeApplication($app);
 
-        $redis = new Redis($app, 'phpredis', [
-            'cluster' => false,
-            'default' => [
-                'host'     => '127.0.0.1',
-                'port'     => 6379,
-                'database' => 0,
-            ],
-        ]);
+        $redis = new Redis();
 
         if (!is_object($redis)) {
             $logger->error('DI\redis: return value (redis) is not object');
         }
 
-        $logger->info("DI\\redis: Attempting to connect to Redis");
+        $logger->info("DI\\redis: Attempting to connect to Redis (settings: " . $r_settings['host'] . ":" . $r_settings['port'] . ")");
 
         try {
             Redis::ping();
+            $logger->info("DI\\redis: connected! getHost() & getPort(): ". var_export(Redis::getHost() . ":". Redis::getPort(), true));
         } catch (\Exception $ex) {
             $m = $ex->getMessage();
             $logger->error("DI\\redis: Redis error: $m");

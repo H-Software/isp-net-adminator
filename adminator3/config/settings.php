@@ -86,6 +86,11 @@ $settings = [
                 // 'lock_connection' => null,
             ],
         ],
+        'redis' => [
+            'host' => getenv("REDIS_HOST") ? getenv("REDIS_HOST") : "localhost",
+            'port' => getenv("REDIS_PORT") ? getenv("REDIS_PORT") : "16379",
+            'driver' => getenv("REDIS_DRIVER") ? getenv("REDIS_DRIVER") : "phpredis",
+        ],
         'phinx' => [
             'paths' => [
                 'migrations' => 'database/migrations',
