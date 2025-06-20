@@ -722,22 +722,7 @@ class ArchivZmen
                     //nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole
                 } elseif (preg_match("/pridani objektu do \"nove\" garant. tridy/", $akce)) {
                     //nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole
-
-                }
-                /*
-                elseif( ereg('pridani objektu', $akce) == true )
-                {
-                    $pomocne = explode(" ", $akce);
-
-                    //$output .= "i".$pomocne[8]."/i";
-
-                    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$pomocne[8];
-                    $id_komplu_pomocne_rs .= "\" >".$pomocne[8]."</a>";
-
-                    $akce = ereg_replace($pomocne[8], $id_komplu_pomocne_rs, $akce);
-
-                }
-                */ elseif (preg_match("/odrazeni objektu/", $akce)) {
+                } elseif (preg_match("/odrazeni objektu/", $akce)) {
 
                     $pomocne = explode("[id_komplu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
@@ -813,22 +798,32 @@ class ArchivZmen
 
                     $akce = preg_replace("/\[id_cloveka\] => ".$id_cloveka_pomocne."/", "[id_cloveka] => " . $id_cloveka_res, $akce);
 
-                } elseif (preg_match("/uprava objektu/", $akce)) {
+                } elseif (
+                    preg_match("/uprava objektu/", $akce)
+                    or
+                    preg_match("/pridani objektu/", $akce)) {
 
                     $pomocne = explode("[id_komplu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
-                    $id_komplu_pomocne = preg_replace("/,/", "", $pomocne2[1]);
 
-                    $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
-
-                    while ($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
-                        $data_kompl_dns = $data_kompl["dns_jmeno"];
+                    if (preg_match("/pridani objektu/", $akce)) {
+                        $id_komplu_pomocne = $pomocne2[1];
+                    } else {
+                        $id_komplu_pomocne = preg_replace("/,/", "", $pomocne2[1]);
                     }
 
-                    $id_komplu_pomocne_rs = "<a href=\"objekty.php?dns_find=".$data_kompl_dns;
-                    $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+                    $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": add/change objekt: parsed id_komplu_pomocne: " . var_export($id_komplu_pomocne, true));
 
-                    $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);
+                    $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT dns_jmeno FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+
+                    list($data_kompl_dns) = pg_fetch_row($dotaz_id_komplu, 0);
+
+                    $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": add/change objekt: fetched dns_jmeno: " . var_export($data_kompl_dns, true));
+
+                    if ($data_kompl_dns !== null) {
+                        $id_komplu_pomocne_rs = "<a href=\"objekty?dns_find=" . $data_kompl_dns . "\" >".$id_komplu_pomocne."</a>";
+                        $akce = preg_replace("/(\[id_komplu\].{0,5})(".$id_komplu_pomocne.")/", "$1". $id_komplu_pomocne_rs, $akce);
+                    }
                 } elseif (preg_match("/zakazani netu z duvodu sikany/", $akce)) {
                     $pomocne = explode("[id_komplu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
@@ -846,26 +841,28 @@ class ArchivZmen
 
                         $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);
                     }
-                } elseif (preg_match("/pridani objektu/", $akce)) {
-                    $pomocne = explode("[id_komplu]", $akce);
-                    $pomocne2 = explode(" ", $pomocne[1]);
-                    $id_komplu_pomocne = $pomocne2[1];
+                }
+                // elseif (preg_match("/pridani objektu/", $akce)) {
+                //     $pomocne = explode("[id_komplu]", $akce);
+                //     $pomocne2 = explode(" ", $pomocne[1]);
+                //     $id_komplu_pomocne = $pomocne2[1];
 
-                    //$id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
+                //     //$id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
 
-                    if (is_numeric($id_komplu_pomocne)) {
-                        $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
+                //     if (is_numeric($id_komplu_pomocne)) {
+                //         $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
-                        while ($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
-                            $data_kompl_dns = $data_kompl["dns_jmeno"];
-                        }
+                //         while ($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
+                //             $data_kompl_dns = $data_kompl["dns_jmeno"];
+                //         }
 
-                        $id_komplu_pomocne_rs = "<a href=\"/objekty?dns_find=".$data_kompl_dns;
-                        $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
+                //         $id_komplu_pomocne_rs = "<a href=\"/objekty?dns_find=".$data_kompl_dns;
+                //         $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
 
-                        $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);
-                    }
-                } elseif (preg_match("/uprava nodu/", $akce)) {
+                //         $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);
+                //     }
+                // }
+                elseif (preg_match("/uprava nodu/", $akce)) {
                     $pomocne = explode("[id_nodu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
                     $id_nodu_pomocne = $pomocne2[2];
