@@ -2,6 +2,7 @@
 
 $loader = new Nette\Loaders\RobotLoader();
 
+$loader->addDirectory(__DIR__ . '/../app/AsynqClient');
 $loader->addDirectory(__DIR__ . '/../app/Auth');
 $loader->addDirectory(__DIR__ . '/../app/Core');
 $loader->addDirectory(__DIR__ . '/../app/Controllers');
