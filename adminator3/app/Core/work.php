@@ -83,7 +83,12 @@ class work
         $rs_item_name->data_seek(0);
         list($item_name) = $rs_item_name->fetch_row();
 
-        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . ": parsed item_name: " . var_export($item_name, true));
+        if (is_null($item_name)) {
+            //TODO: add warning over bootstrap.JS
+            $this->logger->warning(message: __CLASS__ . "\\" . __FUNCTION__ . ": parsing item_name failed (item_id $item_id)");
+        } else {
+            $this->logger->info(message: __CLASS__ . "\\" . __FUNCTION__ . ": parsed item_name: " . var_export($item_name, true));
+        }
 
         // asynqClient part
         $rs_queue = $this->taskEnqueue($item_id);
