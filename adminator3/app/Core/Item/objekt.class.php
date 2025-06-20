@@ -104,7 +104,7 @@ class objekt extends adminator
 
     public $form_another_vlan_id;
 
-    public $origDataArray;
+    public array $origDataArray;
 
     public $updatedDataArray;
 
@@ -2835,7 +2835,7 @@ class objekt extends adminator
 
         //pro osvezovani
         //
-        list($work_output) = $this->work->workActionObjektyWifiDiff($pole3, $this->update_id);
+        list($work_output) = $this->work->workActionObjektyWifiDiff($pole3, $this->origDataArray, $this->update_id);
         $output .= $work_output;
 
         return array($output);

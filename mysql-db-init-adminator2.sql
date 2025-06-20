@@ -870,6 +870,21 @@ CREATE TABLE `workitems_names` (
 INSERT INTO `workitems_names` (`id`, `name`, `priority`) VALUES
 (1,	'reinhard-3 (ros) - restrictions (net-n/sikana)',	0),
 (2,	'reinhard-wifi (ros) - restrictions (net-n/sikana)',	0),
+(3,	'reinhard-fiber (linux) - iptables (net-n/sikana)',	0),
+(5,	'reinhard-fiber - shaper',	0),
+(9,	'erik - dns-restart',	0),
+(10,	'trinity - dns restart',	0),
+(11,	'artemis - dns restart',	0),
+(12,	'c.ns.adminator.net - dns.restart',	0),
+(13,	'reinhard-wifi (ros) - shaper (client\'s tariffs)',	0),
+(14,	'(trinity) filtrace-IP-on-Mtik\'s-restart',	0),
+(15,	'trinity - Monitoring I - Footer-restart',	0),
+(18,	'monitoring - Monitoring II - Feeder-restart',	0),
+(19,	'trinity - adminator - synchro_router_list',	0),
+(20,	'reinhard-3 (ros) - shaper (client\'s tariffs)',	0),
+(21,	'artemis - radius (tunel. verejky, optika)',	0),
+(22,	'monitoring - Monitoring II - checker-restart',	0),
+(23,	'reinhard-5 (ros) - shaper (client\'s tariffs)',	0),
 (24,	'reinhard-5 (ros) - restrictions (net-n/sikana)',	0);
 
 DROP TABLE IF EXISTS `workzamek`;

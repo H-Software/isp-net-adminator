@@ -10,7 +10,6 @@ parameters:
 		- app/Core/shared/voip.class.php
 		- app/Core/shared/ros_api_qos.php
 		- app/Core/shared/ros_api_restriction.php
-		- app/AsynqClient
 	ignoreErrors:
     # for phpunit
 	-
@@ -42,6 +41,19 @@ parameters:
 		message: "#^Parameter \\#1 \\$app of class Illuminate\\\\Cache\\\\CacheManager constructor expects Illuminate\\\\Contracts\\\\Foundation\\\\Application, Illuminate\\\\Container\\\\Container given\\.$#"
 		count: 1
 		path: boostrap/containerAfter.php
+	# redis
+	-
+		message: "#^Class Illuminate\\\\Support\\\\Facades\\\\Redis does not have a constructor and must be instantiated without any parameters\\.$#"
+		count: 1
+		path: boostrap/containerAfter.php
+	-
+		message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Redis.*$#"
+		count: 3
+		path: boostrap/containerAfter.php
+	-
+		message: "#^Parameter \\#1 \\$app of static method Illuminate\\\\Support\\\\Facades\\\\Facade\\:\\:setFacadeApplication\\(\\) expects Illuminate\\\\Contracts\\\\Foundation\\\\Application\\|null, Illuminate\\\\Container\\\\Container given\\.$#"
+		count: 1
+		path: boostrap/containerAfter.php
 	# auth stuff
 	-
 		message: "#^Access to an undefined property Cartalyst\\\\Sentinel\\\\Users\\\\UserInterface\\:\\:\\$email\\.$#"
@@ -66,3 +78,17 @@ parameters:
 		message: "#^Call to an undefined static method Cartalyst\\\\Sentinel\\\\Native\\\\Facades\\\\Sentinel\\:\\:guest\\(\\)\\.$#"
 		count: 1
 		path: include/main.function.shared.php
+	# AsynqClient
+	-
+		message: "#^Method HyssaDev\\\\HibikenAsynqClient\\\\Rdb\\:\\:UniqueKey\\(\\) invoked with 4 parameters, 3 required\\.$#"
+		count: 1
+		path: app/AsynqClient/Client.php
+	-	
+		message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Redis.*\\.$#"
+		path: app/AsynqClient/Rdb.php
+	-	
+		message: "#^Binary operation \"\\+\" between string and string results in an error\\.$#"
+		path: app/AsynqClient/Rdb.php
+	-	
+		message: "#^Parameter \\#2 \\$num2 of function bcmul expects string, float given\\.$#"
+		path: app/AsynqClient/Rdb.php
