@@ -65,6 +65,21 @@ parameters:
 			path: app/Core/Item/stb.class.php
 
 		-
+			message: "#^Cannot unset offset \\'ip_adresa\\' on array\\{ip\\: mixed\\}\\.$#"
+			count: 1
+			path: app/Core/Item/stb.class.php
+
+		-
+			message: "#^Offset \\'sw_port\\' does not exist on array\\{ip\\: mixed\\}\\.$#"
+			count: 1
+			path: app/Core/Item/stb.class.php
+
+		-
+			message: "#^Cannot unset offset \\'sw_port\\' on array\\{ip\\: mixed, port_id\\: mixed}\\.$#"
+			count: 1
+			path: app/Core/Item/stb.class.php
+
+		-
 			message: "#^Deprecated in PHP 8\\.0\\: Required parameter \\$conAfter follows optional parameter \\$conList\\.$#"
 			count: 1
 			path: app/Core/Item/listing.stb.class.php

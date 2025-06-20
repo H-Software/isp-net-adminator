@@ -26,6 +26,12 @@ parameters:
 		message: "#^Variable \\$.* might not be defined\\.$#"
 		path: *
 	-
+		message: "#^Variable .* in isset\\(\\) always exists and is not nullable\\.$#"
+		path: app/Core/Print/inc.smlouva.*
+	-
+		message: "#^Variable .* in isset\\(\\) always exists and is not nullable\\.$#"
+		path: app/Core/Print/inc.reg.form.input.*
+	-
 		message: "#^Function mysql_.* not found\\.$#"
 		path: include/main.function.shared.php
 	-
@@ -33,6 +39,18 @@ parameters:
 		path: app/*
 	-
 		message: "#^Parameter \\#1 \\$app of class Illuminate\\\\Cache\\\\CacheManager constructor expects Illuminate\\\\Contracts\\\\Foundation\\\\Application, Illuminate\\\\Container\\\\Container given\\.$#"
+		count: 1
+		path: boostrap/containerAfter.php
+	-
+		message: "#^Class Illuminate\\\\Support\\\\Facades\\\\Redis does not have a constructor and must be instantiated without any parameters\\.$#"
+		count: 1
+		path: boostrap/containerAfter.php
+	-
+		message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Redis.*$#"
+		count: 3
+		path: boostrap/containerAfter.php
+	-
+		message: "#^Parameter \\#1 \\$app of static method Illuminate\\\\Support\\\\Facades\\\\Facade\\:\\:setFacadeApplication\\(\\) expects Illuminate\\\\Contracts\\\\Foundation\\\\Application\\|null, Illuminate\\\\Container\\\\Container given\\.$#"
 		count: 1
 		path: boostrap/containerAfter.php
 	# auth stuff
