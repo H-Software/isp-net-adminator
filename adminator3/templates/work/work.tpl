@@ -31,16 +31,6 @@
  
  <div class="work-main-window" id='restart-stav' ><div id='work-vyberte-akci' >Vyberte požadovanou akci:</div></div>
  
- <div class="work-result" id='odpoved1' ></div>
-
- <pre>
-   <div id='odpoved-file' >{$odpoved_file}</div>
- </pre>
- 
- <pre>
-   <div id='odpoved2' ></div>
- </pre>
- 
 </div>
 
 {include file="base-end.tpl"}
