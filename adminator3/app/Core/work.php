@@ -424,9 +424,6 @@ class work
         //     Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
         //     Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart
         // }
-
-        // //radsi vzdy (resp. zatim)
-        // Aglobal::work_handler("19"); //trinity - adminator - synchro_router_list
     }
 
     public function workActionTopologyRouterDiff(): void
@@ -469,12 +466,6 @@ class work
         // {
         //      Aglobal::work_handler("14");	//(trinity) filtrace-IP-on-Mtik's-restart
         // }
-
-        // if( ereg(".*změna.*", $pole3) )
-        // {
-        //   //radsi vzdy (resp. zatim)
-        //   Aglobal::work_handler("19"); 		//trinity - adminator - synchro_router_list
-        //       }
     }
 
 }
