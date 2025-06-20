@@ -151,58 +151,6 @@ $container->set(
 );
 
 $container->set(
-    'redis',
-    function () use ($container): Redis {
-        $logger = $container->get('logger');
-        $logger->debug('DI\redis: called');
-
-        /**
-        * Setup a new app instance container
-        *
-        * @var Illuminate\Container\Container
-        */
-        $app = new Container();
-        $app->singleton('app', 'Illuminate\Container\Container');
-
-        /**
-        * Set $app as FacadeApplication handler
-        */
-        Facade::setFacadeApplication($app);
-
-        $redis = new Redis($app, 'phpredis', [
-            'cluster' => false,
-            'default' => [
-                'host'     => '127.0.0.1',
-                'port'     => 6379,
-                'database' => 0,
-            ],
-        ]);
-
-        if (!is_object($redis)) {
-            $logger->error('DI\redis: return value (redis) is not object');
-        }
-
-        $logger->info("DI\\redis: Attempting to connect to Redis");
-
-        try {
-            Redis::ping();
-        } catch (\Exception $ex) {
-            $m = $ex->getMessage();
-            $logger->error("DI\\redis: Redis error: $m");
-            return $redis;
-        }
-
-        if (Redis::isConnected()) {
-            $logger->info("DI\\redis: Redis server PING -> " . Redis::ping());
-        } else {
-            $logger->error("DI\\redis: Redis server not connected, can't send PING!");
-        }
-
-        return $redis;
-    }
-);
-
-$container->set(
     'validator',
     function ($container) {
         return new App\Validation\Validator();
