@@ -48,46 +48,12 @@ class workController extends adminatorController
             return $this->response;
         };
 
-        // TODO: fix this
-        $this->smarty->assign("enable_work", 1); //slozeni JS skriptu pro stranku
         $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
-
-        $data_s = "../a3-logs/server.remote.log";
-
-        /*
-        $akce = $_POST["akce"];
-        $iptables = $_POST["iptables"];
-        $dns = $_POST["dns"];
-        $optika = $_POST["optika"];
-
-
-         if( $iptables == 1 ){ $prvni=$iptables; $pocet+20; }else{ $prvni = 0; }
-         if( $dns == 1 ){ $druha=$dns; $pocet+20; }else{ $druha = 0; }
-         if( $optika == 1 ){ $treti=$optika; $pocet+20; }else{ $treti = 0; }
-         if( ( $iptables==0 and $dns==0 and $optika == 0 ) ){ $akce=""; }
-        */
-
-        // uložení odpovědi v případě vypnutého JavaScriptu
-        if (isset($_GET["akce"])) { // nelze pouzi JS/ajax
-            echo "neumim AJAX ";
-            //mysql_query("UPDATE anketa SET pocet = pocet + 1 WHERE id = " . intval($_GET["anketa"]));
-        }
-
-        if ((file_exists($data_s))) {
-            $fp = fopen($data_s, "r");
-            $odpoved_file = fread($fp, filesize($data_s));
-            //echo $data;
-            fclose($fp);
-        } else {
-            $odpoved_file = "\n log soubor neexistuje \n";
-        }
 
         $assignData = [
             "page_title" => "Adminator3 :: Work",
-            "odpoved_file" => $odpoved_file, // log ze souboru
         ];
 
         return $this->renderer->template($request, $response, 'work/work.tpl', $assignData);
     }
-
 }
