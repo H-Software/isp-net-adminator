@@ -7,7 +7,6 @@ namespace App\Migration;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Builder;
 use Phinx\Migration\AbstractMigration;
-
 use App\Models;
 
 /**

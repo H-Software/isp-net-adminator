@@ -44,7 +44,7 @@ class workController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(16)) {
+        if (!$this->checkLevel(16)) {
             return $this->response;
         };
 
@@ -68,12 +68,12 @@ class workController extends adminatorController
         */
 
         // uložení odpovědi v případě vypnutého JavaScriptu
-        if(isset($_GET["akce"])) { // nelze pouzi JS/ajax
+        if (isset($_GET["akce"])) { // nelze pouzi JS/ajax
             echo "neumim AJAX ";
             //mysql_query("UPDATE anketa SET pocet = pocet + 1 WHERE id = " . intval($_GET["anketa"]));
         }
 
-        if((file_exists($data_s))) {
+        if ((file_exists($data_s))) {
             $fp = fopen($data_s, "r");
             $odpoved_file = fread($fp, filesize($data_s));
             //echo $data;

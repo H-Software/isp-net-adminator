@@ -146,7 +146,7 @@ class c_listing_vlastnici2
             }
         }
         $output .= $this->after;
-        if($this->echo) {
+        if ($this->echo) {
             echo $output;
         } else {
             return $output;
@@ -179,7 +179,7 @@ class c_listing_vlastnici2
         $output .= $forward.$from."-".$to.$backward;
         $output .= $this->after;
 
-        if($echo === true) {
+        if ($echo === true) {
             echo $output;
         } else {
             return $output;

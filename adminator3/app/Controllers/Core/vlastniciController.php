@@ -46,7 +46,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(90)) {
+        if (!$this->checkLevel(90)) {
             return $this->response;
         };
 
@@ -65,7 +65,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(302)) {
+        if (!$this->checkLevel(302)) {
             return $this->response;
         };
 
@@ -78,7 +78,7 @@ class vlastniciController extends adminatorController
 
         $rs = $vlastnik2->crossCheckVars();
 
-        if($rs == false) {
+        if ($rs == false) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": crossCheckVars failed.");
 
             $assignData["alert_type"] = $vlastnik2->alert_type;
@@ -102,7 +102,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(102)) {
+        if (!$this->checkLevel(102)) {
             return $this->response;
         };
 
@@ -136,7 +136,7 @@ class vlastniciController extends adminatorController
         $assignData["form_razeni"] = $form_razeni;
         $assignData["form_razeni2"] = $form_razeni2;
 
-        if(empty($_GET["find"])) {
+        if (empty($_GET["find"])) {
             $assignData["bodyNoData"] = "Zadejte výraz k vyhledání.... <br>";
 
             return $this->renderer->template($request, $response, 'vlastnici/hledani.tpl', $assignData);
@@ -240,7 +240,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(13)) {
+        if (!$this->checkLevel(13)) {
             return $this->response;
         };
 
@@ -270,7 +270,7 @@ class vlastniciController extends adminatorController
         $form_razeni = intval($_GET["razeni"]);
         $form_razeni2 = intval($_GET["razeni2"]);
 
-        if((strlen($find_id) > 0)) {
+        if ((strlen($find_id) > 0)) {
             $co = 3;
             /* hledani podle id_cloveka */
             $sql = intval($find_id);
@@ -425,7 +425,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(38)) {
+        if (!$this->checkLevel(38)) {
             return $this->response;
         };
 
@@ -443,10 +443,10 @@ class vlastniciController extends adminatorController
 
         $select = $_GET["select"];
 
-        if($select == 2) {
+        if ($select == 2) {
             $fu_select = "2";
         } //Pouze FU
-        if($select == 3) {
+        if ($select == 3) {
             $fu_select = "1";
         } //pouze DU
 
@@ -467,7 +467,7 @@ class vlastniciController extends adminatorController
             $assignData["vlastnici2_pridani_povoleno"] = "true";
         }
 
-        if(empty($_GET["find"])) {
+        if (empty($_GET["find"])) {
             $vlastnik2->form_find = "%";
         } else {
             $vlastnik2->form_find = $this->conn_mysql->real_escape_string($_GET["find"]);
@@ -492,7 +492,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(40)) {
+        if (!$this->checkLevel(40)) {
             return $this->response;
         };
 
@@ -518,7 +518,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(82)) {
+        if (!$this->checkLevel(82)) {
             return $this->response;
         };
 
@@ -704,7 +704,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(99)) {
+        if (!$this->checkLevel(99)) {
             return $this->response;
         };
 
@@ -717,7 +717,7 @@ class vlastniciController extends adminatorController
         $fs = new \App\Customer\fakturacniSkupiny($this->container);
         $fs_items = $fs->getItems();
 
-        if(empty($fs_items)) {
+        if (empty($fs_items)) {
             $assignData["message_no_items"] = "Nebyly nalezeny žádné fakturační skupiny";
             return $this->renderer->template($request, $response, 'vlastnici/fakturacni-skupiny.tpl', $assignData);
         }
@@ -734,7 +734,7 @@ class vlastniciController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(301)) {
+        if (!$this->checkLevel(301)) {
             return $this->response;
         };
 

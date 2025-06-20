@@ -43,21 +43,21 @@ class mk_net_n_sikana
     {
         $rs = $this->conn_mysql->query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$id_routeru'");
 
-        while($d = $rs->fetch_array()) {
+        while ($d = $rs->fetch_array()) {
             $parent_router = $d["parent_router"];
         }
 
         $rs2 = $this->conn_mysql->query("SELECT parent_router, ip_adresa FROM router_list WHERE id = '$parent_router'");
 
-        while($d2 = $rs2->fetch_array()) {
+        while ($d2 = $rs2->fetch_array()) {
             $ip_adresa_2 = $d2["ip_adresa"];
         }
 
-        if($ip_adresa_2 == $ip_adresa_routeru) { //dosahlo se reinhard-fiber, tj. zaznam CHCEME
+        if ($ip_adresa_2 == $ip_adresa_routeru) { //dosahlo se reinhard-fiber, tj. zaznam CHCEME
             return true;
-        } elseif($parent_router == "0") { //dosahlo se reinhard-wifi, takze zaznam nechceme
+        } elseif ($parent_router == "0") { //dosahlo se reinhard-wifi, takze zaznam nechceme
         } else { //ani jedno predchozi, rekurze .. :)
-            if($this->find_root_router($parent_router, $ip_adresa_routeru) == true) {
+            if ($this->find_root_router($parent_router, $ip_adresa_routeru) == true) {
                 return true;
             }
         }
@@ -72,14 +72,14 @@ class mk_net_n_sikana
         $rs_routers = $this->conn_mysql->query("SELECT id, parent_router, nazev FROM router_list ORDER BY id");
         $num_rs_routers = $rs_routers->num_rows;
 
-        if($num_rs_routers < 1) {
+        if ($num_rs_routers < 1) {
             echo "mk_net_n_sikana\\find_obj: query failed: no router found! <br>\n";
             return false;
         }
 
-        while($data_routers = $rs_routers->fetch_array()) {
+        while ($data_routers = $rs_routers->fetch_array()) {
             $id_routeru = $data_routers["id"];
-            if($this->find_root_router($id_routeru, $ip) === true) {
+            if ($this->find_root_router($id_routeru, $ip) === true) {
                 $routers[] = $id_routeru;
             }
         }
@@ -96,7 +96,7 @@ class mk_net_n_sikana
         foreach ($routers as $key => $id_routeru) {
 
             //print "router: ".$id_routeru.", \t\t  selected \n";
-            if($i == 0) {
+            if ($i == 0) {
                 $sql_where .= "'$id_routeru'";
             } else {
                 $sql_where .= ",'$id_routeru'";
@@ -109,21 +109,21 @@ class mk_net_n_sikana
         //print $sql."\n";
 
         $rs_nods = $this->conn_mysql->query($sql);
-        if($rs_nods === false) {
+        if ($rs_nods === false) {
             echo "mk_net_n_sikana\\find_obj: Error: nod_list query failed! <br>\n";
             printf("Error message: %s <br>\n", $this->conn_mysql->error);
             return false;
         }
 
         $num_rs_nods = $rs_nods->num_rows;
-        if($rs_nods < 1) {
+        if ($rs_nods < 1) {
             echo "mk_net_n_sikana\\find_obj: Error: No nodes found! (for routers: " . $sql_where. ")<br>\n";
             return false;
         } else {
             echo "mk_net_n_sikana\\find_obj: Info: Found " . $num_rs_nods . " nodes(s)! (for routers: " . $sql_where. ")<br>\n";
         }
 
-        while($data_nods = $rs_nods->fetch_array()) {
+        while ($data_nods = $rs_nods->fetch_array()) {
             $nods[] = $data_nods["id"];
         }
 
@@ -133,7 +133,7 @@ class mk_net_n_sikana
         foreach ($nods as $key => $id_nodu) {
             //print "nods: ".$id_nodu." \n";
 
-            if($i == 0) {
+            if ($i == 0) {
                 $sql_obj_where .= "'$id_nodu'";
             } else {
                 $sql_obj_where .= ",'$id_nodu'";
@@ -157,7 +157,7 @@ class mk_net_n_sikana
         //print $sql_obj."\n";
 
         $this->rs_objects = pg_query($sql_obj);
-        if($this->rs_objects === false) {
+        if ($this->rs_objects === false) {
             echo "mk_net_n_sikana\\find_obj: Error: Pg_query failed! <br>\n";
             echo pg_last_error() . "<br>\n";
             return false;
@@ -165,11 +165,11 @@ class mk_net_n_sikana
 
         $num_rs_objects = pg_num_rows($this->rs_objects);
 
-        while($data = pg_fetch_array($this->rs_objects)) {
+        while ($data = pg_fetch_array($this->rs_objects)) {
 
-            if($data["dov_net"] == "n") {
+            if ($data["dov_net"] == "n") {
                 $this->objects_net_n[] = $data["ip"];
-            } elseif($data["sikana_status"] == "a") {
+            } elseif ($data["sikana_status"] == "a") {
                 $this->objects_sikana[] = $data["ip"];
             } else {
                 echo "  ERROR: wrong item selected (IP: ".$data["ip"].") \n";
@@ -177,7 +177,7 @@ class mk_net_n_sikana
         }
 
         print " number of restricted IP addresses: ".$num_rs_objects;
-        if($this->debug == 1) {
+        if ($this->debug == 1) {
             echo ", array objects counts: ".count($this->objects_net_n)." ".count($this->objects_sikana);
         }
 
@@ -194,13 +194,13 @@ class mk_net_n_sikana
 
         $del = $this->conn->remove("/ip/firewall/address-list", $wrong_items);
 
-        if($del == "1") {
-            if($this->debug > 0) {
+        if ($del == "1") {
+            if ($this->debug > 0) {
                 echo "    Wrong Item(s) successfully deleted (".count($wrong_items).")\n";
             }
             $item_del_ok = count($wrong_items);
         } else {
-            if($this->debug > 0) {
+            if ($this->debug > 0) {
                 echo "    ERROR: ".print_r($del)."\n";
             }
             $item_del_err++;
@@ -212,7 +212,7 @@ class mk_net_n_sikana
 
     public function detect_diff_and_repaid($mod)
     {
-        if(!(($mod == "sikana") or ($mod == "net-n"))) {
+        if (!(($mod == "sikana") or ($mod == "net-n"))) {
             echo "ERROR: wrong mode in function \"detect_diff\" \n";
             exit;
         }
@@ -223,7 +223,7 @@ class mk_net_n_sikana
         $this->arr_diff_exc = array();
         $this->arr_diff_mis = array();
 
-        if($mod == "net-n") {
+        if ($mod == "net-n") {
             $system_items = $this->objects_net_n;
         } else {
             $system_items = $this->objects_sikana;
@@ -236,10 +236,10 @@ class mk_net_n_sikana
 
         foreach ($responseFwAddrList as $key => $value) {
 
-            if($this->getall["$key"]["list"] == "$mod") {
+            if ($this->getall["$key"]["list"] == "$mod") {
                 $id = $this->getall["$key"][".id"];
 
-                if($this->getall["$key"]["disabled"] == "true") {
+                if ($this->getall["$key"]["disabled"] == "true") {
                     $this->wrong_items[] = $id;
                 } else {
                     $this->device_items[$id] = $this->getall["$key"]["address"];
@@ -259,21 +259,21 @@ class mk_net_n_sikana
         //print_r($this->arr_diff_exc);
         //print_r($system_items);
 
-        if(((count($this->arr_diff_exc) == 0) and (count($this->arr_diff_mis) == 0) and (count($this->wrong_items) == 0))) {
+        if (((count($this->arr_diff_exc) == 0) and (count($this->arr_diff_mis) == 0) and (count($this->wrong_items) == 0))) {
             echo "  $mod: records OK <br>\n";
         } else {
-            foreach($this->arr_diff_exc as $key => $value) {
+            foreach ($this->arr_diff_exc as $key => $value) {
                 $this->wrong_items[] = $key;
             }
 
             echo "  $mod: number of records : excess: ".count($this->wrong_items).", missing: ".count($this->arr_diff_mis)."\n";
 
             //print_r($this->wrong_items);
-            if((count($this->wrong_items) > 0)) {
+            if ((count($this->wrong_items) > 0)) {
                 $this->remove_wrong_items($this->wrong_items);
             }
 
-            if((count($this->arr_diff_mis) > 0)) {
+            if ((count($this->arr_diff_mis) > 0)) {
                 $this->add_items($mod);
             }
         }
@@ -283,7 +283,7 @@ class mk_net_n_sikana
 
     public function add_items($mod)
     {
-        if(!(($mod == "sikana") or ($mod == "net-n"))) {
+        if (!(($mod == "sikana") or ($mod == "net-n"))) {
             echo "ERROR: wrong mode in function \"add_items\" \n";
             exit;
         }
@@ -291,18 +291,18 @@ class mk_net_n_sikana
         $item_err_added = 0;
         $item_suc_added = 0;
 
-        foreach($this->arr_diff_mis as $key => $ip) {
+        foreach ($this->arr_diff_mis as $key => $ip) {
 
             $add_data = array("address" => $ip, "list" => $mod);
             $add_item = $this->conn->add("/ip/firewall/address-list", $add_data);
 
-            if(ereg('^\*([[:xdigit:]])*$', $add_item)) {
-                if($this->debug > 0) {
+            if (ereg('^\*([[:xdigit:]])*$', $add_item)) {
+                if ($this->debug > 0) {
                     echo "    Item ".$add_item." successfully added \n";
                 }
                 $item_suc_added++;
             } else {
-                if($this->debug > 0) {
+                if ($this->debug > 0) {
                     echo "    ERROR: ".print_r($add_item)."\n";
                 }
                 $item_err_added++;
@@ -330,11 +330,11 @@ class mk_net_n_sikana
     {
         $rs = $this->conn_mysql->query("SELECT zamek FROM workzamek WHERE id = 1");
 
-        while($data = $rs->fetch_array()) {
+        while ($data = $rs->fetch_array()) {
             $zamek_status = $data["zamek"];
         }
 
-        if($zamek_status == "ano") {
+        if ($zamek_status == "ano") {
             print "  Nelze provést AKCI, jiz se nejaka provadi (LOCKED). Ukončuji skript. \n";
             exit;
         }

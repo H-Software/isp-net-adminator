@@ -101,7 +101,7 @@ final class Renderer
         $this->smarty->assign("kategorie", $kategorie);
         $this->smarty->assign("kat_2radka", $kat_2radka);
 
-        if(is_object($request) and is_object($response)) {
+        if (is_object($request) and is_object($response)) {
             list($csrf_html) = $this->generateCsrfToken($request, $response, true, $this->container->get('csrf'));
             // $this->logger->info("adminController\header: csrf generated: ".var_export($csrf, true));
             $this->smarty->assign("kat_csrf_html", $csrf_html);
@@ -111,9 +111,9 @@ final class Renderer
 
         // logic for showing extra line of stuff (SEcondary CATegories)
         $show_se_cat = 0;
-        if($request != null) {
+        if ($request != null) {
             if ($request->getMethod() == "POST") {
-                if(array_key_exists('show_se_cat', $request->getParsedBody())) {
+                if (array_key_exists('show_se_cat', $request->getParsedBody())) {
                     $show_se_cat = $request->getParsedBody()['show_se_cat'];
                     $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": parsed show_se_cat with: ".var_export($show_se_cat, true));
                 }
@@ -157,13 +157,13 @@ final class Renderer
 
         $kategorie[0] = array( "nazev" => "Zákazníci", "url" => "/vlastnici/cat", "align" => "center", "width" => "18%" );
 
-        if(preg_match("/^\/vlastnici.*/", $uri) or preg_match("/^\/vypovedi.*/", $uri)) {
+        if (preg_match("/^\/vlastnici.*/", $uri) or preg_match("/^\/vypovedi.*/", $uri)) {
             $kategorie[0]["barva"] = "silver";
         }
 
         $kategorie[1] = array( "nazev" => "Služby", "url" => "/objekty/cat", "align" => "center", "width" => "18%" );
 
-        if(preg_match("/^\/objekty.*/", $uri)) {
+        if (preg_match("/^\/objekty.*/", $uri)) {
             $kategorie[1]["barva"] = "silver";
         }
 
@@ -229,7 +229,7 @@ final class Renderer
         $csrf_name = $request->getAttribute($csrf_nameKey);
         $csrf_value = $request->getAttribute($csrf_valueKey);
 
-        if($return_form_html === true) {
+        if ($return_form_html === true) {
             $ret[0] = '<input type="hidden" name="'.$csrf_nameKey.'" value="'.$csrf_name.'">'
                        . '<input type="hidden" name="'.$csrf_valueKey.'" value="'.$csrf_value.'">';
         } else {

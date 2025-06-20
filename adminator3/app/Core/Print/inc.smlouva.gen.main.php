@@ -201,7 +201,7 @@ $pdf->Cell(5, 5, $min_plneni_doba, 0, 1);
 
 $datum_nz = date('Y-m-d-H-i-s');
 
-if($id_cloveka > 0) {
+if ($id_cloveka > 0) {
     $nazev_souboru = "print/temp/smlouva-fiber-pdf-id-".$id_cloveka."-".$datum_nz.".pdf";
 } else {
     $nazev_souboru = "print/temp/smlouva-fiber-pdf-ec-".$ec."-".$datum_nz.".pdf";

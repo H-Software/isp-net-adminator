@@ -51,19 +51,19 @@ echo "<tr>
                     <span style=\"margin-left: 10px; \" ></span>
 
                     <input type=\"radio\" name=\"prip_tech\" value=\"1\" onChange=\"self.document.forms.form1.submit()\" ";
-if($prip_tech == 1) {
+if ($prip_tech == 1) {
     echo " checked=\"checked\" ";
 } echo " >
                     <span style=\"margin-left: 10px; \" >Optiká síť</span>
                     |
                     <input type=\"radio\" name=\"prip_tech\" value=\"2\" onChange=\"self.document.forms.form1.submit()\" ";
-if($prip_tech == 2) {
+if ($prip_tech == 2) {
     echo " checked=\"checked\" ";
 } echo " >
                     <span style=\"margin-left: 10px; \" >Metalický okruh</span>
                     |
                     <input type=\"radio\" name=\"prip_tech\" value=\"3\" onChange=\"self.document.forms.form1.submit()\" ";
-if($prip_tech == 3 or !isset($prip_tech)) {
+if ($prip_tech == 3 or !isset($prip_tech)) {
     echo " checked=\"checked\" ";
 } echo " >
                     <span style=\"margin-left: 10px; \" >Bezdrátová síť</span>
@@ -105,20 +105,20 @@ echo "<tr>
 echo   "<div style=\"float: left; padding-right: 15px;\"><label>Instalované zařízení - počet: </label></div>
 			<select name=\"int_pocet_zarizeni\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >
 			    <option value=\"0\" style=\"color: gray;\" ";
-if(!isset($int_pocet_zarizeni)) {
+if (!isset($int_pocet_zarizeni)) {
     echo "selected ";
 } echo" >Žádné</option>
 			    
 			    <option value=\"1\" ";
-if($int_pocet_zarizeni == 1) {
+if ($int_pocet_zarizeni == 1) {
     echo "selected ";
 } echo " >1</option>
 			    <option value=\"2\" ";
-if($int_pocet_zarizeni == 2) {
+if ($int_pocet_zarizeni == 2) {
     echo "selected ";
 } echo " >2</option>
 			    <option value=\"3\" ";
-if($int_pocet_zarizeni == 3) {
+if ($int_pocet_zarizeni == 3) {
     echo "selected ";
 } echo " >3</option>
 			    
@@ -128,9 +128,9 @@ echo "<div style=\"height: 5px;\"></div>";
 
 //instalovani zarizeni
 
-for($i = 1; $i <= $int_pocet_zarizeni; $i++) {
+for ($i = 1; $i <= $int_pocet_zarizeni; $i++) {
 
-    if($i == 1) {
+    if ($i == 1) {
         echo "<div style=\"padding-bottom: 15px; padding-top: 10px; \">
 				
 				<div style=\"width: 297px; float: left; padding-top: 20px; margin-right: 20px; border-bottom: 1px solid gray; \" >INSTALOVANÉ ZAŘÍZENÍ</div>
@@ -142,7 +142,7 @@ for($i = 1; $i <= $int_pocet_zarizeni; $i++) {
 			      </div>\n";
     }
 
-    if($i > 1) {
+    if ($i > 1) {
         echo "\t\t<div style=\"clear: both; height: 5px;\" ></div>\n\n";
     }
 
@@ -169,7 +169,7 @@ for($i = 1; $i <= $int_pocet_zarizeni; $i++) {
 
     echo "\t\t<div style=\"float: left; padding-left: 50px;\" >".
         "<input type=\"checkbox\" name=\"int_zarizeni_".$i."_vlastnik\" value=\"1\" ";
-    if($$value == 1) {
+    if ($$value == 1) {
         echo " checked ";
     }
     echo " >".
@@ -184,7 +184,7 @@ echo "<div style=\"float: left; padding-right: 20px; font-size: 16px; font-weigh
     "WAN IP (adresa)</div>";
 
 echo "<div style=\"float: left;\"><input type=\"checkbox\" name=\"ip_dhcp\" value=\"1\" ";
-if($ip_dhcp == 1) {
+if ($ip_dhcp == 1) {
     echo " checked ";
 }
 echo " > DHCP</div>";
@@ -232,20 +232,20 @@ echo "<tr>
 echo   "<div style=\"float: left; padding-right: 15px;\"><label>Instalované zařízení - počet: </label></div>
 			<select name=\"iptv_pocet_zarizeni\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >
 			    <option value=\"0\" style=\"color: gray;\" ";
-if(!isset($iptv_pocet_zarizeni)) {
+if (!isset($iptv_pocet_zarizeni)) {
     echo "selected ";
 } echo" >Žádné</option>
 			    
 			    <option value=\"1\" ";
-if($iptv_pocet_zarizeni == 1) {
+if ($iptv_pocet_zarizeni == 1) {
     echo "selected ";
 } echo " >1</option>
 			    <option value=\"2\" ";
-if($iptv_pocet_zarizeni == 2) {
+if ($iptv_pocet_zarizeni == 2) {
     echo "selected ";
 } echo " >2</option>
 			    <option value=\"3\" ";
-if($iptv_pocet_zarizeni == 3) {
+if ($iptv_pocet_zarizeni == 3) {
     echo "selected ";
 } echo " >3</option>
 			    
@@ -255,9 +255,9 @@ echo "<div style=\"height: 5px;\"></div>";
 
 //instalovani zarizeni
 
-for($i = 1; $i <= $iptv_pocet_zarizeni; $i++) {
+for ($i = 1; $i <= $iptv_pocet_zarizeni; $i++) {
 
-    if($i == 1) {
+    if ($i == 1) {
         echo "<div style=\"padding-bottom: 15px; padding-top: 10px; \">
 				
 				<div style=\"width: 297px; float: left; padding-top: 20px; margin-right: 20px; border-bottom: 1px solid gray; \" >INSTALOVANÉ ZAŘÍZENÍ</div>
@@ -269,7 +269,7 @@ for($i = 1; $i <= $iptv_pocet_zarizeni; $i++) {
 			      </div>\n";
     }
 
-    if($i > 1) {
+    if ($i > 1) {
         echo "\t\t<div style=\"clear: both; height: 5px;\" ></div>\n\n";
     }
 
@@ -296,7 +296,7 @@ for($i = 1; $i <= $iptv_pocet_zarizeni; $i++) {
 
     echo "\t\t<div style=\"float: left; padding-left: 50px;\" >".
         "<input type=\"checkbox\" name=\"iptv_zarizeni_".$i."_vlastnik\" value=\"1\" ";
-    if($$value == 1) {
+    if ($$value == 1) {
         echo " checked ";
     }
     echo " >".
@@ -321,16 +321,16 @@ echo "<tr>
 echo   "<div style=\"float: left; padding-right: 15px;\"><label>Instalované zařízení - počet: </label></div>
 			<select name=\"voip_pocet_zarizeni\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >
 			    <option value=\"0\" style=\"color: gray;\" ";
-if(!isset($voip_pocet_zarizeni)) {
+if (!isset($voip_pocet_zarizeni)) {
     echo "selected ";
 } echo" >Žádné</option>
 			    
 			    <option value=\"1\" ";
-if($voip_pocet_zarizeni == 1) {
+if ($voip_pocet_zarizeni == 1) {
     echo "selected ";
 } echo " >1</option>
 			    <option value=\"2\" ";
-if($voip_pocet_zarizeni == 2) {
+if ($voip_pocet_zarizeni == 2) {
     echo "selected ";
 } echo " >2</option>
 			    
@@ -340,9 +340,9 @@ echo "<div style=\"height: 5px;\"></div>";
 
 //instalovani zarizeni
 
-for($i = 1; $i <= $voip_pocet_zarizeni; $i++) {
+for ($i = 1; $i <= $voip_pocet_zarizeni; $i++) {
 
-    if($i == 1) {
+    if ($i == 1) {
         echo "<div style=\"padding-bottom: 15px; padding-top: 10px; \">
 				
 				<div style=\"width: 297px; float: left; padding-top: 20px; margin-right: 20px; border-bottom: 1px solid gray; \" >INSTALOVANÉ ZAŘÍZENÍ</div>
@@ -354,7 +354,7 @@ for($i = 1; $i <= $voip_pocet_zarizeni; $i++) {
 			      </div>\n";
     }
 
-    if($i > 1) {
+    if ($i > 1) {
         echo "\t\t<div style=\"clear: both; height: 5px;\" ></div>\n\n";
     }
 
@@ -381,7 +381,7 @@ for($i = 1; $i <= $voip_pocet_zarizeni; $i++) {
 
     echo "\t\t<div style=\"float: left; padding-left: 50px;\" >".
         "<input type=\"checkbox\" name=\"voip_zarizeni_".$i."_vlastnik\" value=\"1\" ";
-    if($$value == 1) {
+    if ($$value == 1) {
         echo " checked ";
     }
     echo " >".
@@ -407,19 +407,19 @@ echo   "<div style=\"float: left; padding-right: 15px;\"><label>počet položek:
 			<select name=\"mat_pocet\" size=\"1\" onChange=\"self.document.forms.form1.submit()\" >
 			    
 			    <option value=\"0\" ";
-if(($mat_pocet == 0) or (!isset($mat_pocet))) {
+if (($mat_pocet == 0) or (!isset($mat_pocet))) {
     echo "selected ";
 } echo " >Žádné</option>
 			    <option value=\"1\" ";
-if($mat_pocet == 1) {
+if ($mat_pocet == 1) {
     echo "selected ";
 } echo " >1</option>
 			    <option value=\"2\" ";
-if($mat_pocet == 2) {
+if ($mat_pocet == 2) {
     echo "selected ";
 } echo " >2</option>
 			    <option value=\"3\" ";
-if($mat_pocet == 3) {
+if ($mat_pocet == 3) {
     echo "selected ";
 } echo " >3</option>
 			    
@@ -427,7 +427,7 @@ if($mat_pocet == 3) {
 
 echo "<div style=\"height: 5px;\"></div>";
 
-for($i = 1; $i <= $mat_pocet; $i++) {
+for ($i = 1; $i <= $mat_pocet; $i++) {
 
     echo "\t\t<div style=\"clear: both; float: left; \">záznam č.".$i."</div>\n";
 

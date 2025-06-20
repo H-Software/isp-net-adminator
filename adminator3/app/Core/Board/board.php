@@ -60,13 +60,13 @@ class board
     public function load_vars(ServerRequestInterface $request)
     {
         foreach ($request->getQueryParams() as $i => $v) {
-            if(preg_match('/^(what|action|page|send)$/', $i) and strlen($v) > 0) {
+            if (preg_match('/^(what|action|page|send)$/', $i) and strlen($v) > 0) {
                 $this->$i = $request->getQueryParams()[$i];
             }
         }
 
         foreach ($request->getParsedBody() as $i => $v) {
-            if(preg_match('/^(sent|author|email|to_date|from_date|subject|body)$/', $i) and strlen($v) > 0) {
+            if (preg_match('/^(sent|author|email|to_date|from_date|subject|body)$/', $i) and strlen($v) > 0) {
                 $this->$i = $request->getParsedBody()[$i];
             }
         }
@@ -74,8 +74,8 @@ class board
 
     public function prepare_vars()
     {
-        if(!isset($this->author)) {
-            if(is_object($this->sentinel)) {
+        if (!isset($this->author)) {
+            if (is_object($this->sentinel)) {
                 $this->author = $this->sentinel->getUser()->email;
             }
         }
@@ -97,7 +97,7 @@ class board
     {
         $zpravy = array();
 
-        if($this->what == "new") {
+        if ($this->what == "new") {
             $this->sql = $this->settings['db']['driver'] === 'sqlite' ?
                 " from_date <= date('now') AND to_date >= date('now') " :
                 " from_date <= NOW() AND to_date >= NOW() ";
@@ -127,7 +127,7 @@ class board
             $message = $this->pdoMysql->query($sql);
             // $this->query_error = "Board messages debug: <br>SQL DUMP: " . var_export($sql, true);
 
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error("board\show_messages: db query failed! (Error: " . var_export($e->getMessage(), true) . ")");
             $this->query_error = "Board messages listing error! <br>db query failed: " . var_export($e->getMessage(), true);
 
@@ -155,7 +155,7 @@ class board
 
         $page_count = ceil($count_num_rows / $this->view_number); //počet stran, na kterých se zprávy zobrazí
 
-        for($i = 0;$i < $page_count;$i++) {
+        for ($i = 0;$i < $page_count;$i++) {
             $stranek[] = array("what" => $this->what, "i" => $i, "i2" => ($i + 1), "i_akt" => $this->page);
         }
 
@@ -164,10 +164,10 @@ class board
 
     public function check_vars()
     {
-        if(strlen($this->from_date) > 0) {
+        if (strlen($this->from_date) > 0) {
             // TODO: check date format
             list($from_day, $from_month, $from_year) = explode("-", $this->from_date);
-            if(mktime(0, 0, 0, $from_month, $from_day, $from_year) < mktime(0, 0, 0, date("m"), date("d"), date("Y"))) {
+            if (mktime(0, 0, 0, $from_month, $from_day, $from_year) < mktime(0, 0, 0, date("m"), date("d"), date("Y"))) {
                 $this->error .= 'Datum OD nesmí být menší než dnešní datum.';
             }
         } else {
@@ -175,10 +175,10 @@ class board
             $this->from_date = date("d-m-Y", $d);
         }
 
-        if(strlen($this->to_date) > 0) {
+        if (strlen($this->to_date) > 0) {
             // TODO: check date format
             list($to_day, $to_month, $to_year) = explode("-", $this->to_date);
-            if(mktime(0, 0, 0, $from_month, $from_day, $from_year) > mktime(0, 0, 0, $to_month, $to_day, $to_year)) { //zkontrolujeme data od-do
+            if (mktime(0, 0, 0, $from_month, $from_day, $from_year) > mktime(0, 0, 0, $to_month, $to_day, $to_year)) { //zkontrolujeme data od-do
                 $this->error .= 'Datum OD nesmí být větší než datum DO.';
             }
         } else {
@@ -186,11 +186,11 @@ class board
             $this->to_date = date("d-m-Y", $d);
         }
 
-        if($this->author == "" || $this->subject == "" || $this->body == "") {  //byly vyplněny všechny povinné údaje?
+        if ($this->author == "" || $this->subject == "" || $this->body == "") {  //byly vyplněny všechny povinné údaje?
             $this->error .= 'Musíte vyplnit všechny povinné údaje - označeny tučným písmem.';
         }
 
-        if(strlen($this->error) < 1) {
+        if (strlen($this->error) < 1) {
             $this->write = true; //provedeme zápis
         }
     }
@@ -219,7 +219,7 @@ class board
         //povolíme tyto tagy - <b> <u> <i>, možnost přidat další
         $tag = array("b", "u", "i");
 
-        for($y = 0;$y < count($tag);$y++):
+        for ($y = 0;$y < count($tag);$y++):
             // TODO: fix zero-ing body variable
             // $this->body = preg_replace("/&lt;/i" . $tag[$y] . "&gt;", "<" . $tag[$y] . ">", $this->body);
             // $this->body = preg_replace("/&lt;\//i" . $tag[$y] . "&gt;", "</" . $tag[$y] . ">", $this->body);

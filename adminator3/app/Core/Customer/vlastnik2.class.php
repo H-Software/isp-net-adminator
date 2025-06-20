@@ -112,19 +112,19 @@ class vlastnik2 extends adminator
         $find    = $this->form_find;
 
         // $delka_find_id=strlen($find_id);
-        if((strlen($find_id) > 0)) {
+        if ((strlen($find_id) > 0)) {
             $this->listMode = 3;
             /* hledani podle id_cloveka */
             $sql = intval($find_id);
-        } elseif((strlen($find) > 0)) {
+        } elseif ((strlen($find) > 0)) {
             $this->listMode = 1;
             /* hledani podle cehokoli */
             $sql = $find;
         } else { /* cokoli dalsiho */
         }
 
-        if($this->listMode == 1) {
-            if($sql != "%") {
+        if ($this->listMode == 1) {
+            if ($sql != "%") {
                 $sql = "%".$sql."%";
             }
 
@@ -201,7 +201,7 @@ class vlastnik2 extends adminator
             $this->dotaz_source = " SELECT *, to_char(billing_suspend_start,'FMDD. FMMM. YYYY') as billing_suspend_start_f,
 							to_char(billing_suspend_stop,'FMDD. FMMM. YYYY') as billing_suspend_stop_f
 						 FROM vlastnici ".$select1.$select2.$select3.$select6.$select4;
-        } elseif($this->listMode == 3) {
+        } elseif ($this->listMode == 3) {
 
             $this->dotaz_source = "SELECT *, to_char(billing_suspend_start,'FMDD. FMMM. YYYY') as billing_suspend_start_f, ".
             " to_char(billing_suspend_stop,'FMDD. FMMM. YYYY') as billing_suspend_stop_f ".
@@ -221,12 +221,12 @@ class vlastnik2 extends adminator
         $this->listPrepareVars();
 
         // generovani exportu
-        if($this->export_povolen) {
+        if ($this->export_povolen) {
             $this->export();
         }
 
         // without find search we dont do anything
-        if(strlen($this->listItemsContent) > 0) {
+        if (strlen($this->listItemsContent) > 0) {
             return $this->listItemsContent;
         }
 
@@ -236,13 +236,13 @@ class vlastnik2 extends adminator
         $poradek = "find=".$this->listSql."&find_id=".$this->listFindId."&najdi=".$_GET["najdi"]."&select=".$_GET["select"]."&razeni=".
                     $_GET["razeni"]."&razeni2=".$_GET["razeni2"]."&fakt_skupina=".$_GET["fakt_skupina"];
 
-        if(strlen($_GET["list"]) > 0) {
+        if (strlen($_GET["list"]) > 0) {
             $list = intval($_GET["list"]);
         }
 
         $listovani = new c_listing_vlastnici2("/vlastnici2?".$poradek."&menu=1", 30, $list, "<center><div class=\"text-listing2\">\n", "</div></center>\n", $this->dotaz_source);
 
-        if(($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
+        if (($list == "") || ($list == "1")) {    //pokud není list zadán nebo je první
             $bude_chybet = 0;                  //bude ve výběru sql dotazem chybet 0 záznamů
         } else {
             $bude_chybet = (($list - 1) * $listovani->interval);    //jinak jich bude chybet podle závislosti na listu a intervalu
@@ -250,7 +250,7 @@ class vlastnik2 extends adminator
 
         $interval = $listovani->interval;
 
-        if(intval($interval) > 0 and intval($bude_chybet) > 0) {
+        if (intval($interval) > 0 and intval($bude_chybet) > 0) {
             $dotaz_final = $this->dotaz_source . " LIMIT " . intval($interval) . " OFFSET " . intval($bude_chybet) . " ";
         } else {
             $dotaz_final = $this->dotaz_source;
@@ -276,13 +276,13 @@ class vlastnik2 extends adminator
         $akce = $_GET["akce"];
         $id_cloveka = $_GET["id_cloveka"];
 
-        if(!(preg_match('/^([[:digit:]]+)$/', $id_cloveka))) {
+        if (!(preg_match('/^([[:digit:]]+)$/', $id_cloveka))) {
             $this->alert_type = "danger";
             $this->alert_content = "Chyba! Nesouhlasi vstupni data. (id cloveka) ";
             return false;
         }
 
-        if(!(preg_match('/^([[:digit:]]+)$/', $akce))) {
+        if (!(preg_match('/^([[:digit:]]+)$/', $akce))) {
             $this->alert_type = "danger";
             $this->alert_content = "Chyba! Nesouhlasi vstupni data. (akce) ";
             return false;
@@ -308,17 +308,17 @@ class vlastnik2 extends adminator
                 </head>
                 <body>";
 
-        if($akce == 0) {
+        if ($akce == 0) {
             $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
 
-            while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
+            while ($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
                 $firma_vlastnik = $data_vlastnik_pom["firma"];
                 $archiv_vlastnik = $data_vlastnik_pom["archiv"];
             }
 
-            if($archiv_vlastnik == 1) {
+            if ($archiv_vlastnik == 1) {
                 $id_cloveka_res = "/vlastnici/archiv";
-            } elseif($firma_vlastnik == 1) {
+            } elseif ($firma_vlastnik == 1) {
                 $id_cloveka_res = "/vlastnici2";
             } else {
                 $id_cloveka_res = "/vlastnici";
@@ -327,31 +327,31 @@ class vlastnik2 extends adminator
             $id_cloveka_res .= "?find_id=".$id_cloveka;
 
             $stranka = $id_cloveka_res;
-        } elseif($akce == 1) {
+        } elseif ($akce == 1) {
             $stranka = fix_link_to_another_adminator("/vlastnici2-add-obj.php?id_vlastnika=".$id_cloveka);
-        } elseif($akce == 2) {
+        } elseif ($akce == 2) {
             $stranka = fix_link_to_another_adminator("/vlastnici2-add-fakt.php?id_vlastnika=".$id_cloveka);
-        } elseif($akce == 3) {
+        } elseif ($akce == 3) {
             $rs_vl = pg_query($this->conn_pgsql, "SELECT fakturacni FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
 
-            while($data_vl = pg_fetch_array($rs_vl)) {
+            while ($data_vl = pg_fetch_array($rs_vl)) {
                 $fakturacni_id = $data_vl["fakturacni"];
             }
 
             $stranka = fix_link_to_another_adminator("/vlastnici2-erase-f.php?id=".$fakturacni_id);
-        } elseif($akce == 4) {
+        } elseif ($akce == 4) {
             $rs_vl = pg_query($this->conn_pgsql, "SELECT fakturacni FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
 
-            while($data_vl = pg_fetch_array($rs_vl)) {
+            while ($data_vl = pg_fetch_array($rs_vl)) {
                 $fakturacni_id = $data_vl["fakturacni"];
             }
 
             $stranka = fix_link_to_another_adminator("/vlastnici2-change-fakt.php?update_id=".$fakturacni_id);
-        } elseif($akce == 5) {
+        } elseif ($akce == 5) {
             $stranka = fix_link_to_another_adminator("/opravy-index.php?typ=1&id_vlastnika=".$id_cloveka);
-        } elseif($akce == 6) {
+        } elseif ($akce == 6) {
             $stranka = fix_link_to_another_adminator("/opravy-vlastnik.php?typ=2&id_vlastnika=".$id_cloveka."&ok=OK");
-        } elseif($akce == 7) { //tisk smlouvy
+        } elseif ($akce == 7) { //tisk smlouvy
             $output .= $html_init;
 
             $url = "/print/smlouva-2012-05";
@@ -361,12 +361,12 @@ class vlastnik2 extends adminator
 
             $rs_vl1 = pg_query($this->conn_pgsql, "SELECT fakturacni_skupina_id FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka)."' ");
 
-            while($data = pg_fetch_array($rs_vl1)) {
+            while ($data = pg_fetch_array($rs_vl1)) {
                 $fakturacni_skupina_id = $data["fakturacni_skupina_id"];
             }
 
             $rs_fs = $this->conn_mysql->query("SELECT typ_sluzby FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
-            while($data = $rs_fs->fetch_array()) {
+            while ($data = $rs_fs->fetch_array()) {
                 $fakturacni_skupina_typ = $data["typ_sluzby"];
             }
 
@@ -381,7 +381,7 @@ class vlastnik2 extends adminator
 
             $rs_vl = pg_query($this->conn_pgsql, $sql);
 
-            while($data_vl = pg_fetch_array($rs_vl)) {
+            while ($data_vl = pg_fetch_array($rs_vl)) {
 
                 $vs = intval($data_vl["vs"]);
                 $ec = ($vs == 0) ? '' : $vs;
@@ -415,7 +415,7 @@ class vlastnik2 extends adminator
                 */
 
                 //firemní údaje
-                if($data_vl["fakturacni"] > 0) {
+                if ($data_vl["fakturacni"] > 0) {
 
                     $output .= "<input type=\"hidden\" name=\"nazev_spol\" value=\"".$data_vl["ftitle"]."\" >\n\n";
 
@@ -435,28 +435,28 @@ class vlastnik2 extends adminator
                                 FROM fakturacni_skupiny
                                 WHERE id = '".intval($data_vl["fakturacni_skupina_id"])."'");
 
-                if($rs_fs->num_rows == 1) {
+                if ($rs_fs->num_rows == 1) {
                     //sluzba INTERNET
 
                     // TODO: check if its right replacement for mysql_seek
                     $rs_fs->data_seek(0);
                     $rs_fs_r = $rs_fs->fetch_row();
 
-                    if($rs_fs_r[1] == 1) {  //sluzba internet - ANO
+                    if ($rs_fs_r[1] == 1) {  //sluzba internet - ANO
 
                         //zjisteni poctu objektu
                         $rs_obj = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_cloveka = '".intval($id_cloveka)."' ");
                         $rs_obj_num = pg_num_rows($rs_obj);
 
-                        if($rs_obj_num == 1) {
+                        if ($rs_obj_num == 1) {
                             $output .= "<input type=\"hidden\" name=\"internet_sluzba\" value=\"1\" >\n";
-                        } elseif($rs_obj_num == 2) {
+                        } elseif ($rs_obj_num == 2) {
                             $output .= "<input type=\"hidden\" name=\"internet_sluzba\" value=\"2\" >\n";
                         }
                     }
 
                     //sluzba IPTV
-                    if($rs_fs_r[4] == 1) {
+                    if ($rs_fs_r[4] == 1) {
                         //sluzba IPTV - ANO
                         $output .= "<input type=\"hidden\" name=\"iptv_sluzba\" value=\"1\" >\n";
                         //tarif
@@ -465,7 +465,7 @@ class vlastnik2 extends adminator
                     }
 
                     //VOIP
-                    if($rs_fs_r[6] == 1) {
+                    if ($rs_fs_r[6] == 1) {
                         $output .= "<input type=\"hidden\" name=\"voip_sluzba\" value=\"1\" >\n";
                     }
                 } //konec if( mysql_num_rows rs_fs == 1 )
@@ -480,7 +480,7 @@ class vlastnik2 extends adminator
             $output .= "</body>\n</html>\n";
             return [$output, $http_status_code];
 
-        } elseif($akce == 8) { //vlozeni vypovedi
+        } elseif ($akce == 8) { //vlozeni vypovedi
             $output .= $html_init;
 
             $url = fix_link_to_another_adminator("/vypovedi-vlozeni.php");
@@ -496,7 +496,7 @@ class vlastnik2 extends adminator
             $output .= "</body></html>";
             return [$output, $http_status_code];
 
-        } elseif($akce == 9) { //vlozIT hot. platbu
+        } elseif ($akce == 9) { //vlozIT hot. platbu
             $output .= $html_init;
 
             $url = fix_link_to_another_adminator("/platby-akce2.php");
@@ -512,19 +512,19 @@ class vlastnik2 extends adminator
             $output .= "</body></html>";
             return [$output, $http_status_code];
 
-        } elseif($akce == 10) { //vypis plateb
+        } elseif ($akce == 10) { //vypis plateb
             $stranka = fix_link_to_another_adminator("/platby-vypis.php?id_vlastnika=".$id_cloveka."&ok=OK");
-        } elseif($akce == 11) { //vypis neuhr. faktur
+        } elseif ($akce == 11) { //vypis neuhr. faktur
             $stranka = fix_link_to_another_adminator("/faktury/fn-index.php?id_cloveka=".$id_cloveka."&filtr_stav_emailu=99");
-        } elseif($akce == 12) { //online xml faktury
+        } elseif ($akce == 12) { //online xml faktury
             $stranka = fix_link_to_another_adminator("/platby-vypis-xml.php?id_vlastnika=".$id_cloveka);
-        } elseif($akce == 13) { //historie
+        } elseif ($akce == 13) { //historie
             $stranka = "archiv-zmen?id_cloveka=".$id_cloveka;
-        } elseif($akce == 14) { // online faktury - voip
+        } elseif ($akce == 14) { // online faktury - voip
             $stranka = fix_link_to_another_adminator("/platby-vypis-xml-voip.php?id_vlastnika=".$id_cloveka);
-        } elseif($akce == 15) { // priradit objekt stb
+        } elseif ($akce == 15) { // priradit objekt stb
             $stranka = fix_link_to_another_adminator("/vlastnici2-add-obj-stb.php?id_vlastnika=".$id_cloveka);
-        } elseif($akce == 16) { // vypis faktur - pohoda SQL
+        } elseif ($akce == 16) { // vypis faktur - pohoda SQL
             $stranka = fix_link_to_another_adminator("/pohoda_sql/phd_list_fa.php?id_vlastnika=".$id_cloveka);
         }
 
@@ -586,17 +586,17 @@ class vlastnik2 extends adminator
 
         $dotaz = pg_query($this->conn_pgsql, $dotaz_final);
 
-        if($dotaz !== false) {
+        if ($dotaz !== false) {
             $radku = pg_num_rows($dotaz);
         } else {
             $output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error($this->conn_pgsql). "</div>";
         }
 
-        if($radku == 0) {
+        if ($radku == 0) {
             $output .= "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
         } else {
 
-            while($data = pg_fetch_array($dotaz)) {
+            while ($data = pg_fetch_array($dotaz)) {
                 $output .= "<tr><td colspan=\"16\"> <br> </td> </tr>
                             <tr>
                             <td class=\"vlastnici-td-black\"><br></td>
@@ -606,13 +606,13 @@ class vlastnik2 extends adminator
 
                                     ", Účetní index: [";
 
-                if($data["archiv"] == 1) {
+                if ($data["archiv"] == 1) {
                     $output .= "27VYŘ";
-                } elseif((($data["billing_freq"] == 1) and ($data["fakturacni"] > 0))) {
+                } elseif ((($data["billing_freq"] == 1) and ($data["fakturacni"] > 0))) {
                     $output .= "37";
-                } elseif($data["billing_freq"] == 1) { //ctvrtletni fakturace
+                } elseif ($data["billing_freq"] == 1) { //ctvrtletni fakturace
                     $output .= "47";
-                } elseif(($data["fakturacni"] > 0)) { //faturacni
+                } elseif (($data["fakturacni"] > 0)) { //faturacni
                     $output .= "27";
                 } else {  //domaci uzivatel
                     $output .= "27DM";
@@ -630,7 +630,7 @@ class vlastnik2 extends adminator
                 $output .= "<table border=\"0\" width=\"70%\" > <tr> <td class=\"vlastnici-td-black\" width=\"\" >";
 
                 // sem mazani
-                if($this->vlastnici_erase_povolen === false) {
+                if ($this->vlastnici_erase_povolen === false) {
                     $output .= "<span style=\"\" > smazat </span> ";
                 } else {
                     $output .= "<form method=\"POST\" action=\"vlastnici2-erase.php\" >";
@@ -642,7 +642,7 @@ class vlastnik2 extends adminator
                             <td class=\"vlastnici-td-black\" >";
 
                 // 6-ta update
-                if($this->vlastnici_update_povolen === false) {
+                if ($this->vlastnici_update_povolen === false) {
                     $output .= "<span style=\"\" >  upravit  </span> \n";
                 } else {
                     $output .= " <form method=\"POST\" action=\"/vlastnici2/change\" >";
@@ -667,9 +667,9 @@ class vlastnik2 extends adminator
                 $output .= "</td>";
 
                 $output .= "<td class=\"vlastnici-td-black\" colspan=\"1\">Četnost Fa: ";
-                if($data["billing_freq"] == 0) {
+                if ($data["billing_freq"] == 0) {
                     $output .= "měsíční";
-                } elseif($data["billing_freq"] == 1) {
+                } elseif ($data["billing_freq"] == 1) {
                     $output .= "čtvrtletní";
                 } else {
                     $output .= "N/A";
@@ -684,10 +684,10 @@ class vlastnik2 extends adminator
                 $dotaz_fakt_skup = $this->conn_mysql->query("SELECT nazev, typ FROM fakturacni_skupiny WHERE id = '".intval($fakturacni_skupina_id)."' ");
                 $dotaz_fakt_skup_radku = $dotaz_fakt_skup->num_rows;
 
-                if(($dotaz_fakt_skup_radku < 1)) {
+                if (($dotaz_fakt_skup_radku < 1)) {
                     $output .= " [žádná fakt. skupina] ";
                 } else {
-                    while($data_fakt_skup = $dotaz_fakt_skup->fetch_array()) {
+                    while ($data_fakt_skup = $dotaz_fakt_skup->fetch_array()) {
                         $nazev_fakt_skup = $data_fakt_skup["nazev"];
                         $typ_fakt_skup = $data_fakt_skup["typ"];
                     }
@@ -707,11 +707,11 @@ class vlastnik2 extends adminator
 
                 $output .= "Smlouva: ";
 
-                if($data["typ_smlouvy"] == 0) {
+                if ($data["typ_smlouvy"] == 0) {
                     $output .= "[nezvoleno]";
-                } elseif($data["typ_smlouvy"] == 1) {
+                } elseif ($data["typ_smlouvy"] == 1) {
                     $output .= "[na dobu neurčitou]";
-                } elseif($data["typ_smlouvy"] == 2) {
+                } elseif ($data["typ_smlouvy"] == 2) {
                     $output .= "[s min. dobou plnění]"." ( do: ";
                     list($trvani_do_rok, $trvani_do_mesic, $trvani_do_den) = explode("-", $data["trvani_do"]);
                     $trvani_do = $trvani_do_den.".".$trvani_do_mesic.".".$trvani_do_rok;
@@ -732,20 +732,20 @@ class vlastnik2 extends adminator
 
                 $output .= "<div style=\"text-align: right; padding-right: 20px;\">";
 
-                if($data["billing_suspend_status"] == 1) {
+                if ($data["billing_suspend_status"] == 1) {
                     $output .= "Ano";
-                } elseif($data["billing_suspend_status"] == 0) {
+                } elseif ($data["billing_suspend_status"] == 0) {
                     $output .= "Ne";
                 }
 
                 $output .= "</div>";
                 $output .= "</td>";
 
-                if($data["billing_suspend_status"] == 1) {
+                if ($data["billing_suspend_status"] == 1) {
                     //dalsi info o pozast. fakturacich
 
                     $output .= "<td class=\"vlastnici-td-black\">od kdy: <span style=\"padding-left: 20px;\">";
-                    if((strlen($data["billing_suspend_start"]) > 0) or ($data["billing_suspend_start"] != null)) {
+                    if ((strlen($data["billing_suspend_start"]) > 0) or ($data["billing_suspend_start"] != null)) {
                         $output .= htmlspecialchars($data["billing_suspend_start_f"]);
                     } else {
                         $output .= "není zadáno";
@@ -756,7 +756,7 @@ class vlastnik2 extends adminator
                     //doba
                     $output .= "<td class=\"vlastnici-td-black\" colspan=\"3\">do kdy: <span style=\"padding-left: 20px;\">";
 
-                    if((strlen($data["billing_suspend_stop"]) > 0) or ($data["billing_suspend_stop"] != null)) {
+                    if ((strlen($data["billing_suspend_stop"]) > 0) or ($data["billing_suspend_stop"] != null)) {
                         $output .= htmlspecialchars($data["billing_suspend_stop_f"]);
                     } else {
                         $output .= " není zadáno ";
@@ -767,7 +767,7 @@ class vlastnik2 extends adminator
                     //důvod
                     $output .= "<td class=\"vlastnici-td-black\" colspan=\"5\">důvod: <span style=\"padding-left: 20px;\">";
 
-                    if(strlen($data["billing_suspend_reason"]) == 0) {
+                    if (strlen($data["billing_suspend_reason"]) == 0) {
                         $output .= "není zadáno";
                     } else {
                         $output .= htmlspecialchars($data["billing_suspend_reason"]);
@@ -800,9 +800,9 @@ class vlastnik2 extends adminator
                 //treti sloupec - sluzby
                 $output .= "<td colspan=\"\" valign=\"top\" >";
 
-                if($data["sluzba_int"] == 1) {
+                if ($data["sluzba_int"] == 1) {
                     $output .= "<div style=\"\" ><span style=\"font-weight: bold; \"><span style=\"color: #ff6600; \" >Služba Internet</span> - aktivní </span>";
-                    if($data["sluzba_int_id_tarifu"] == 999) {
+                    if ($data["sluzba_int_id_tarifu"] == 999) {
                         $output .= "<span style=\"color: gray; \" >- tarif nezvolen</span></div>";
                     } else {
                         $output .= " (<a href=\"/admin/tarify?id_tarifu=".$data["sluzba_int_id_tarifu"]."\" >tarif)</a></div>";
@@ -813,11 +813,11 @@ class vlastnik2 extends adminator
                     $sluzba_int_aktivni = "0";
                 }
 
-                if($data["sluzba_iptv"] == 1) {
+                if ($data["sluzba_iptv"] == 1) {
                     $output .= "<div style=\"float: left;\" >".
                     "<span style=\"font-weight: bold; \"><span style=\"color: #00cbfc; \" >Služba IPTV</span> - aktivní </span>";
 
-                    if($data["sluzba_iptv_id_tarifu"] == 999) {
+                    if ($data["sluzba_iptv_id_tarifu"] == 999) {
                         $output .= "<span style=\"color: gray; \" >- tarif nezvolen</span></div>";
                     } else {
                         $output .= " (<a href=\"admin-tarify-iptv.php?id_tarifu=".$data["sluzba_iptv_id_tarifu"]."\" >tarif)</a></div>";
@@ -844,7 +844,7 @@ class vlastnik2 extends adminator
                     $sluzba_iptv_aktivni = "0";
                 }
 
-                if($data["sluzba_voip"] == 1) {
+                if ($data["sluzba_voip"] == 1) {
                     $output .= "<div><span style=\"font-weight: bold;\" ><span style=\"color: #e42222; \" >Služba VoIP</span> - aktivní </span>";
 
                     /*if( $data["sluzba_iptv_id_tarifu"] == 999 )
@@ -858,7 +858,7 @@ class vlastnik2 extends adminator
                     $sluzba_voip_aktivni = "0";
                 }
 
-                if(($sluzba_int_aktivni != 1) and ($sluzba_iptv_aktivni != 1) and ($sluzba_voip_aktivni != 1)) {
+                if (($sluzba_int_aktivni != 1) and ($sluzba_iptv_aktivni != 1) and ($sluzba_voip_aktivni != 1)) {
                     $output .= "<div style=\"color: Navy; font-weight: bold; \" >Žádná služba není aktivovaná</div>";
                 } else {
                 }
@@ -866,22 +866,22 @@ class vlastnik2 extends adminator
                 //$output .= "<hr class=\"cara3\" />";
                 $output .= "<div style=\"border-bottom: 1px solid gray; width: 220px; \" ></div>";
 
-                if(($sluzba_int_aktivni != 1) and ($sluzba_iptv_aktivni != 1) and ($sluzba_voip_aktivni != 1)) {
+                if (($sluzba_int_aktivni != 1) and ($sluzba_iptv_aktivni != 1) and ($sluzba_voip_aktivni != 1)) {
                     $output .= "<div style=\"color: #555555; \" >Všechny služby dostupné</div>";
                 } else {
-                    if($sluzba_int_aktivni != 1) {
+                    if ($sluzba_int_aktivni != 1) {
                         $output .= "<div style=\"\" ><span style=\"color: #ff6600; \" >Služba Internet</span>";
                         $output .= "<span style=\"color: #555555; \"> - dostupné </span></div>";
                     } else {
                     }
 
-                    if($sluzba_iptv_aktivni != 1) {
+                    if ($sluzba_iptv_aktivni != 1) {
                         $output .= "<div style=\"\" ><span style=\"color: #27b0db; \" >Služba IPTV</span>";
                         $output .= "<span style=\"color: #555555; \"> - dostupné </span></div>";
                     } else {
                     }
 
-                    if($sluzba_voip_aktivni != 1) {
+                    if ($sluzba_voip_aktivni != 1) {
                         $output .= "<div style=\"\" ><span style=\"color: #e42222; \" >Služba VoIP</span>";
                         $output .= "<span style=\"color: #555555; \"> - dostupné </span></div>";
                     } else {
@@ -898,7 +898,7 @@ class vlastnik2 extends adminator
                 $id_f = $data["fakturacni"];
 
                 // tady asi bude generovani fakturacnich udaju
-                if(($id_f > 0)) {
+                if (($id_f > 0)) {
                     $fakturacni = new \App\Customer\fakturacni($this->container);
 
                     $fakturacni->firma = $data['firma'];
@@ -910,7 +910,7 @@ class vlastnik2 extends adminator
 
                 $pocet_fiber_obj = $objekt->zjistipocet(2, $id);
 
-                if($pocet_wifi_obj > 0) {
+                if ($pocet_wifi_obj > 0) {
                     //objekty wifi
                     $co = "3";
 
@@ -925,7 +925,7 @@ class vlastnik2 extends adminator
                     $output .= "</td></tr>";
                 }
 
-                if($pocet_fiber_obj > 0) {
+                if ($pocet_fiber_obj > 0) {
                     //objekty fiber
                     $co = "4";
 
@@ -950,7 +950,7 @@ class vlastnik2 extends adminator
 
                 $pocet_stb = $stb->zjistipocetobj($id);
 
-                if($pocet_stb > 0) {
+                if ($pocet_stb > 0) {
                     $output .= "<tr>";
                     $output .= "<td colspan=\"1\" bgcolor=\"#c1feff\" align=\"center\" >S</td>\n";
                     $output .= "<td colspan=\"10\" bgcolor=\"#c1feff\" valign=\"center\" >\n";
@@ -1008,7 +1008,7 @@ class vlastnik2 extends adminator
 
                 $output .= "<td colspan=\"1\">";
 
-                if($this->cross_url != null) {
+                if ($this->cross_url != null) {
                     $output .= "<form action=\"" . $this->cross_url . "\" method=\"get\" >";
 
                 } else {
@@ -1022,11 +1022,11 @@ class vlastnik2 extends adminator
 
                 $output .= "<optgroup label=\"objekty\">";
                 $output .= "<option value=\"1\" ";
-                if($_GET["akce"] == 1) {
+                if ($_GET["akce"] == 1) {
                     $output .= " selected ";
                 } $output .= " > přiřadit objekt </option>";
                 $output .= "<option value=\"15\" ";
-                if($_GET["akce"] == 15) {
+                if ($_GET["akce"] == 15) {
                     $output .= " selected ";
                 } $output .= " > přiřadit objekt STB</option>";
 
@@ -1034,37 +1034,37 @@ class vlastnik2 extends adminator
 
                 $output .= "<optgroup label=\"fakturacni adresa\">";
                 $output .= "<option value=\"2\" ";
-                if($_GET["akce"] == 2) {
+                if ($_GET["akce"] == 2) {
                     $output .= " selected ";
                 } $output .= " >přidání fakturační adresy </option>";
                 $output .= "<option value=\"3\" ";
-                if($_GET["akce"] == 3) {
+                if ($_GET["akce"] == 3) {
                     $output .= " selected ";
                 } $output .= " >smazání fakturační adresy </option>";
                 $output .= "<option value=\"4\" ";
-                if($_GET["akce"] == 4) {
+                if ($_GET["akce"] == 4) {
                     $output .= " selected ";
                 } $output .= " >úprava fakturační adresy </option>";
                 $output .= "</optgroup>";
 
                 $output .= "<optgroup label=\"Závady/opravy\" >";
                 $output .= "<option value=\"5\" ";
-                if($_GET["akce"] == 5) {
+                if ($_GET["akce"] == 5) {
                     $output .= " selected ";
                 } $output .= " >Vložit závadu/opravu</option>";
                 $output .= "<option value=\"6\" ";
-                if($_GET["akce"] == 6) {
+                if ($_GET["akce"] == 6) {
                     $output .= " selected ";
                 } $output .= " >zobrazit závady/opravy</option>";
                 $output .= "</optgroup>";
 
                 $output .= "<optgroup label=\"Smlouvy/výpovědi\" >";
                 $output .= "<option value=\"7\" ";
-                if($_GET["akce"] == 7) {
+                if ($_GET["akce"] == 7) {
                     $output .= " selected ";
                 } $output .= " >Tisk smlouvy</option>";
                 $output .= "<option value=\"8\" ";
-                if($_GET["akce"] == 8) {
+                if ($_GET["akce"] == 8) {
                     $output .= " selected ";
                 } $output .= " >Vložit zádost o výpověď</option>";
                 $output .= "</optgroup>";
@@ -1072,17 +1072,17 @@ class vlastnik2 extends adminator
                 $output .= "<optgroup label=\"Platby/faktury\" >";
                 //    $output .= "<option value=\"9\" "; if( $_GET["akce"] == 9) $output .= " selected "; $output .= " >Vložit hotovostní platbu</option>";
                 $output .= "<option value=\"10\" ";
-                if($_GET["akce"] == 10) {
+                if ($_GET["akce"] == 10) {
                     $output .= " selected ";
                 } $output .= " >Výpis plateb za internet</option>";
                 $output .= "<option value=\"11\" ";
-                if($_GET["akce"] == 11) {
+                if ($_GET["akce"] == 11) {
                     $output .= " selected ";
                 } $output .= " >Výpis všech neuhrazených faktur</option>";
                 //    $output .= "<option value=\"12\" "; if( $_GET["akce"] == 12) $output .= " selected "; $output .= " >online faktury (XML) - Internet</option>";
                 //    $output .= "<option value=\"14\" "; if( $_GET["akce"] == 14) $output .= " selected "; $output .= " >online faktury (XML) - VoIP (hlas)</option>";
                 $output .= "<option value=\"16\" ";
-                if($_GET["akce"] == 16) {
+                if ($_GET["akce"] == 16) {
                     $output .= " selected ";
                 } $output .= " >Výpis faktur/Plateb (Pohoda SQL)</option>";
 
@@ -1090,7 +1090,7 @@ class vlastnik2 extends adminator
 
                 $output .= "<optgroup label=\"Historie\" >";
                 $output .= "<option value=\"13\" ";
-                if($_GET["akce"] == 13) {
+                if ($_GET["akce"] == 13) {
                     $output .= " selected ";
                 } $output .= " >Zobrazení historie</option>";
                 $output .= "</optgroup>";
@@ -1133,12 +1133,12 @@ class vlastnik2 extends adminator
     public function export()
     {
         // tafy generovani exportu
-        if($this->export_povolen === true) {
+        if ($this->export_povolen === true) {
 
             // $fp = fopen("export/vlastnici-sro.xls", "w");   // Otevřeme soubor tabulka.xls, pokud existuje, bude smazán, jinak se vytvoří nový sobor
 
             $fp = false;
-            if($fp === false) {
+            if ($fp === false) {
                 // echo "<div style=\"color: red; font-weight: bold; \">Chyba: Soubor pro export nelze otevřít </div>\n";
                 // @phpstan-ignore-next-line
             } else {

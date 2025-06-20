@@ -6,7 +6,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Respect\Validation\Validator as v;
-
 use App\Core\Topology\Topology;
 use App\Models\Stb as Model;
 
@@ -82,11 +81,11 @@ class stb extends adminator
         $search = $_GET["search"];
         $order = intval($_GET["order"]);
 
-        if((strlen($_GET["list"]) > 0)) {
+        if ((strlen($_GET["list"]) > 0)) {
             $list = intval($_GET["list"]);
         }
 
-        if((strlen($_GET["id_stb"]) > 0)) {
+        if ((strlen($_GET["id_stb"]) > 0)) {
             $id_stb = intval($_GET["id_stb"]);
         }
 
@@ -97,23 +96,23 @@ class stb extends adminator
                 "".urlencode("&odeslano")."=".urlencode($odeslano).
                 "".urlencode("&id_stb")."=".urlencode($id_stb);
 
-        if($order > 0) {
+        if ($order > 0) {
             $this->order = $order;
         }
 
-        if($id_nodu > 0) {
+        if ($id_nodu > 0) {
             $this->find_id_nodu = $id_nodu;
         }
 
-        if($par_vlastnik > 0) {
+        if ($par_vlastnik > 0) {
             $this->find_par_vlastnik = $par_vlastnik;
         }
 
-        if((strlen($search) > 0)) {
+        if ((strlen($search) > 0)) {
             $this->find_search_string = $search;
         }
 
-        if($id_stb > 0) {
+        if ($id_stb > 0) {
             $this->id_stb = $id_stb;
         }
 
@@ -125,7 +124,7 @@ class stb extends adminator
 
         $rs_select_nod = $topologyClass->filter_select_nods();
 
-        if(isset($rs_select_nod["error"])) {
+        if (isset($rs_select_nod["error"])) {
 
             $output .= "<div style=\"padding: 10px; color: red; font-size: 14px;\">".
                 "Chyba! Funkce \"filter_select_nod\" hlásí chybu: ";
@@ -137,7 +136,7 @@ class stb extends adminator
             $output .= "</div>\n";
         }
 
-        if(!is_array($rs_select_nod["data"])) {
+        if (!is_array($rs_select_nod["data"])) {
 
             $output .= "<div style=\"padding: 10px; color: red; font-size: 14px;\">".
                 "Chyba! Funkce \"filter_select_nod\" nevrací žádné relevatní data</div>\n";
@@ -146,7 +145,7 @@ class stb extends adminator
         $output .= "<form method=\"GET\" action=\"" . $_SERVER['SCRIPT_URL']. "\" >";
 
         //filtr - hlavni okno
-        if($_GET["odeslano"] == "OK") {
+        if ($_GET["odeslano"] == "OK") {
             $display = "visible";
         } else {
             $display = "none";
@@ -176,11 +175,11 @@ class stb extends adminator
                 "<select size=\"1\" name=\"par_vlastnik\" style=\"width: 70px;\" >".
                 "<option value=\"0\" style=\"color: gray;\" >obojí</option>".
                 "<option value=\"1\" ";
-        if($par_vlastnik == 1) {
+        if ($par_vlastnik == 1) {
             $output .= " selected ";
         } $output .= ">Ano (spárované)</option>".
         "<option value=\"2\" ";
-        if($par_vlastnik == 2) {
+        if ($par_vlastnik == 2) {
             $output .= " selected ";
         } $output .= ">Ne (nespárované)</option>".
         "</select>".
@@ -197,7 +196,7 @@ class stb extends adminator
         foreach ($rs_select_nod["data"] as $nod_id => $nod_name) {
             $output .= "<option value=\"".$nod_id."\" ";
 
-            if($nod_id == $id_nodu) {
+            if ($nod_id == $id_nodu) {
                 $output .= " selected ";
             }
 
@@ -263,7 +262,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 55%; \">".
             "<a href=\"?".urlencode("order")."=1".$get_odkazy."\">";
 
-        if($order == 1) {
+        if ($order == 1) {
             $output .= "<img src=\"//img2/sorting_a-z_hot.jpg\" width=\"20px\" alt=\"sorting_a-z-hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_a-z_normal.jpg\" width=\"20px\" alt=\"sorting_a-z-normal\" >";
@@ -274,7 +273,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
             "<a href=\"?".urlencode("order")."=2".$get_odkazy."\">";
 
-        if($order == 2) {
+        if ($order == 2) {
             $output .= "<img src=\"/img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";
@@ -292,7 +291,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 20%; \">".
             "<a href=\"?".urlencode("order")."=3".$get_odkazy."\">";
 
-        if($order == 3) {
+        if ($order == 3) {
             $output .= "<img src=\"/img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";
@@ -304,7 +303,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
              "<a href=\"?".urlencode("order")."=4".$get_odkazy."\">";
 
-        if($order == 4) {
+        if ($order == 4) {
             $output .= "<img src=\"/img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
@@ -325,7 +324,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 20%; \">".
             "<a href=\"?".urlencode("order")."=5".$get_odkazy."\">";
 
-        if($order == 5) {
+        if ($order == 5) {
             $output .= "<img src=\"/img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";
@@ -337,7 +336,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
             "<a href=\"?".urlencode("order")."=6".$get_odkazy."\">";
 
-        if($order == 6) {
+        if ($order == 6) {
             $output .= "<img src=\"/img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
@@ -367,7 +366,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 32%; \">".
             "<a href=\"?".urlencode("order")."=9".$get_odkazy."\">";
 
-        if($order == 9) {
+        if ($order == 9) {
             $output .= "<img src=\"/img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";
@@ -379,7 +378,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
             "<a href=\"?".urlencode("order")."=10".$get_odkazy."\">";
 
-        if($order == 10) {
+        if ($order == 10) {
             $output .= "<img src=\"/img2/sorting_z-a_hot.jpg\" width=\"20px\" alt=\"sorting_z-a_hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_z-a_normal.jpg\" width=\"20px\" alt=\"sorting_z-a_normal\" >";
@@ -397,7 +396,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 43%; \">".
             "<a href=\"?".urlencode("order")."=7".$get_odkazy."\" >";
 
-        if($order == 7) {
+        if ($order == 7) {
             $output .= "<img src=\"/img2/sorting_1-9_hot.jpg\" width=\"20px\" alt=\"sorting_1-9_hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_1-9_normal.jpg\" width=\"20px\" alt=\"sorting_1-9_normal\" >";
@@ -409,7 +408,7 @@ class stb extends adminator
         $output .= "\t<div style=\"float: left; padding-left: 5px; padding-right: 2px; \">".
              "<a href=\"?".urlencode("order")."=8".$get_odkazy."\" >";
 
-        if($order == 8) {
+        if ($order == 8) {
             $output .= "<img src=\"/img2/sorting_9-1_hot.jpg\" width=\"20px\" alt=\"sorting_9-1_hot\" >";
         } else {
             $output .= "<img src=\"/img2/sorting_9-1_normal.jpg\" width=\"20px\" alt=\"sorting_9-1_normal\" >";
@@ -478,7 +477,7 @@ class stb extends adminator
 
         $sql_base = "SELECT * FROM objekty_stb ";
         $sql_where_update_id = "";
-        if(intval($input_data['update_id']) > 0) {
+        if (intval($input_data['update_id']) > 0) {
             $sql_where_update_id = " AND id_stb <> " . $input_data['update_id'] ." ";
         }
 
@@ -488,17 +487,17 @@ class stb extends adminator
         $MSQ_IP    = $this->conn_mysql->query($sql_base . " WHERE (ip_adresa LIKE '" . $input_data['ip'] . "' " . $sql_where_update_id .")");
         $MSQ_MAC   = $this->conn_mysql->query($sql_base . " WHERE (mac_adresa LIKE '" . $input_data['mac'] . "' " . $sql_where_update_id .")");
 
-        if($MSQ_POPIS->num_rows > 0) {
+        if ($MSQ_POPIS->num_rows > 0) {
             $this->action_form_validation_errors .= "<div class=\"alert alert-danger\" role=\"alert\">Popis (".$input_data['popis']." ) již existuje!!!</div>";
         }
-        if($MSQ_IP->num_rows > 0) {
+        if ($MSQ_IP->num_rows > 0) {
             $this->action_form_validation_errors .= "<div class=\"alert alert-danger\" role=\"alert\">IP adresa ( ".$input_data['ip']." ) již existuje!!!</div>";
         }
-        if($MSQ_MAC->num_rows > 0) {
+        if ($MSQ_MAC->num_rows > 0) {
             $this->action_form_validation_errors .= "<div class=\"alert alert-danger\" role=\"alert\">MAC adresa ( ".$input_data['mac']." ) již existuje!!!</div>";
         }
 
-        if(empty($this->action_form_validation_errors)) {
+        if (empty($this->action_form_validation_errors)) {
             return true;
         } else {
             // $this->logger->info("stb\\stbActionValidateFormData: data validation failed. dump action_form_validation_errors: ".var_export($this->action_form_validation_errors, true));
@@ -511,7 +510,7 @@ class stb extends adminator
     {
         $output = "";
 
-        if($data['update_id']) {
+        if ($data['update_id']) {
 
             $update_id = $data['update_id'];
 
@@ -537,11 +536,11 @@ class stb extends adminator
             $affected = Model::where('id_stb', $update_id)
                         ->update($data);
 
-            if($affected == 1) {
+            if ($affected == 1) {
                 $res = true;
             }
 
-            if($res) {
+            if ($res) {
                 $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n";
             } else {
                 $output .= "<H3><div style=\"color: red;\" >Chyba! Data do databáze nelze uložit ci úprava selhala.</div></H3>\n";
@@ -557,7 +556,7 @@ class stb extends adminator
             $az = new ArchivZmen($this->container);
             $azRes = $az->insertItemDiff(3, $dataOrigDb, $data, $params);
 
-            if(is_object($azRes)) {
+            if (is_object($azRes)) {
                 $output .= "<br><H3><div style=\"color: green;\" >Akce byla úspěšně zaznamenána do archivu změn.</div></H3>\n";
             } else {
                 $output .= "<br><H3><div style=\"color: red;\" >Chyba! Akci se nepodařilo přidat do archivu změn.</div></H3>\n";
@@ -589,7 +588,7 @@ class stb extends adminator
 
             $id_stb = $this->conn_mysql->insert_id;
 
-            if($res) {
+            if ($res) {
                 $output .= "<H3><div style=\"color: green;\" >Data úspěšně uloženy.</div></H3>\n";
                 $vysledek_write = 1;
             } else {
@@ -640,13 +639,13 @@ class stb extends adminator
         // required intentionaly setted after validate, because in first render we dont see error "card"
         $this->action_form->required = 'popis,ip,mac,id_nodu,port_id,id_tarifu';
 
-        if(!empty($this->action_form->post('odeslano'))) {
+        if (!empty($this->action_form->post('odeslano'))) {
             // go for final, but validate data first
             $valRes = $this->stbActionValidateFormData($data);
             // $this->logger->info("stb\\stbAction validateFromData result: " . var_export($valRes, true));
 
             // if form is OK, go to saving data, otherwise "continue" rendering form (not saving)
-            if($this->action_form->ok() and empty($this->action_form_validation_errors)) {
+            if ($this->action_form->ok() and empty($this->action_form_validation_errors)) {
                 // go for save into databze
                 //
                 $rs .= $this->stbActionSaveIntoDatabase($data);
@@ -666,7 +665,7 @@ class stb extends adminator
 
         // prepare data for form
         //
-        if(isset($_POST['update_id']) and empty($this->action_form->post('odeslano'))) {
+        if (isset($_POST['update_id']) and empty($this->action_form->post('odeslano'))) {
             // update mode
             $this->id_stb = intval($_POST['update_id']);
             $this->generate_sql_query();
@@ -729,10 +728,10 @@ class stb extends adminator
         $vysledek3 = $this->conn_mysql->query("select jmeno, id from nod_list WHERE id='".intval($data['id_nodu'])."' ");
         $radku3 = $vysledek3->num_rows;
 
-        if($radku3 == 0) {
+        if ($radku3 == 0) {
             $rs .= " Nelze zjistit ";
         } else {
-            while($zaznam3 = $vysledek3->fetch_array()) {
+            while ($zaznam3 = $vysledek3->fetch_array()) {
                 $rs .= $zaznam3["jmeno"]." (id: ".$zaznam3["id"].") ".'';
             }
         }
@@ -766,7 +765,7 @@ class stb extends adminator
 
         $form_id = "stb-action-add";
 
-        if(intval($data['update_id']) > 0) {
+        if (intval($data['update_id']) > 0) {
             $form_data['f_input_update_id'] = $this->action_form->hidden('update_id', $data['update_id']);
         }
 
@@ -826,7 +825,7 @@ class stb extends adminator
         $vysl_nod = $this->conn_mysql->query("SELECT * FROM nod_list WHERE id = '370' ");
         $radku_nod = $vysl_nod->num_rows;
 
-        if($radku_nod <> 1) {
+        if ($radku_nod <> 1) {
             $gen_ip = "E1"; //echo "chybnej vyber nodu";
         } else {
 
@@ -842,17 +841,17 @@ class stb extends adminator
             $msq_check_ip = $this->conn_mysql->query("SELECT * FROM objekty_stb ORDER BY ip_adresa ASC");
             $msq_check_ip_radku = $msq_check_ip->num_rows;
 
-            if($msq_check_ip_radku == 0) { //nic v db, takze prvni adresa ...
+            if ($msq_check_ip_radku == 0) { //nic v db, takze prvni adresa ...
                 $d = 16;
                 $gen_ip = $a.".".$b.".".$c.".".$d;
             } else {
-                while($data_check_ip = $msq_check_ip->fetch_array()) {
+                while ($data_check_ip = $msq_check_ip->fetch_array()) {
                     $gen_ip = $data_check_ip["ip_adresa"];
                 }
 
                 list($a, $b, $c, $d) = preg_split("/[.]/", $gen_ip);
 
-                if($d >= "250") { //jsme u stropu, vracime rozsah ...
+                if ($d >= "250") { //jsme u stropu, vracime rozsah ...
                     $gen_ip = $a.".".$b.".".$c.".0";
                 } else {
                     $d = $d + 2;
@@ -862,7 +861,7 @@ class stb extends adminator
 
 
             // vysledek predame
-            if((strlen($ip) <= 0)) {
+            if ((strlen($ip) <= 0)) {
                 $ip = $gen_ip;
             }
 
@@ -904,9 +903,9 @@ class stb extends adminator
                ", DATE_FORMAT(datum_vytvoreni, '%d.%m.%Y %H:%i:%s') as datum_vytvoreni_f, nod_list.jmeno AS nod_jmeno ".
                ", jmeno_tarifu ";
 
-        if(is_object($this->action_form)) {
+        if (is_object($this->action_form)) {
             $this->sql_query = "SELECT ".$sql_rows_extra." FROM objekty_stb WHERE id_stb = '".intval($this->id_stb)."'";
-        } elseif($this->listing_mod == 1) {
+        } elseif ($this->listing_mod == 1) {
 
             $this->sql_query = "SELECT ".$sql_rows." FROM objekty_stb, nod_list, tarify_iptv ".
                         " WHERE ( (objekty_stb.id_nodu = nod_list.id) ".
@@ -918,15 +917,15 @@ class stb extends adminator
 
             $sql_where = "";
 
-            if($this->find_id_nodu > 0) {
+            if ($this->find_id_nodu > 0) {
                 $sql_where .= " AND (id_nodu = '".intval($this->find_id_nodu)."') ";
             }
 
-            if(isset($this->find_par_vlastnik)) {
+            if (isset($this->find_par_vlastnik)) {
 
-                if($this->find_par_vlastnik == 1) {
+                if ($this->find_par_vlastnik == 1) {
                     $sql_where .= " AND (id_cloveka > 0) ";
-                } elseif($this->find_par_vlastnik == 2) {
+                } elseif ($this->find_par_vlastnik == 2) {
                     $sql_where .= " AND (id_cloveka is NULL) ";
                 } else {
                     //chyba :)
@@ -934,11 +933,11 @@ class stb extends adminator
 
             }
 
-            if((strlen($this->find_search_string) > 0)) {
+            if ((strlen($this->find_search_string) > 0)) {
 
                 $sql_where .= " AND (  ";
 
-                if(preg_match("/^[0-9]+$/", $this->find_search_string)) {
+                if (preg_match("/^[0-9]+$/", $this->find_search_string)) {
                     $this->logger->debug("stb\GenerateSqlQuery: search_string is numeric");
 
                     $find_search_string = "".$this->conn_mysql->real_escape_string($this->find_search_string)."";
@@ -963,30 +962,30 @@ class stb extends adminator
                         " ) ";
             }
 
-            if(isset($this->id_stb)) {
+            if (isset($this->id_stb)) {
 
                 $sql_where .= " AND (id_stb = '".intval($this->id_stb)."') ";
             }
 
-            if($this->order == 1) {
+            if ($this->order == 1) {
                 $sql_order = " ORDER BY popis ASC ";
-            } elseif($this->order == 2) {
+            } elseif ($this->order == 2) {
                 $sql_order = " ORDER BY popis DESC ";
-            } elseif($this->order == 3) {
+            } elseif ($this->order == 3) {
                 $sql_order = " ORDER BY ip_adresa ASC ";
-            } elseif($this->order == 4) {
+            } elseif ($this->order == 4) {
                 $sql_order = " ORDER BY ip_adresa DESC ";
-            } elseif($this->order == 5) {
+            } elseif ($this->order == 5) {
                 $sql_order = " ORDER BY mac_adresa ASC ";
-            } elseif($this->order == 6) {
+            } elseif ($this->order == 6) {
                 $sql_order = " ORDER BY mac_adresa DESC ";
-            } elseif($this->order == 7) {
+            } elseif ($this->order == 7) {
                 $sql_order = " ORDER BY puk ASC ";
-            } elseif($this->order == 8) {
+            } elseif ($this->order == 8) {
                 $sql_order = " ORDER BY puk DESC ";
-            } elseif($this->order == 9) {
+            } elseif ($this->order == 9) {
                 $sql_order = " ORDER BY nod_list.jmeno ASC ";
-            } elseif($this->order == 10) {
+            } elseif ($this->order == 10) {
                 $sql_order = " ORDER BY nod_list.jmeno DESC ";
             }
 
@@ -1009,7 +1008,7 @@ class stb extends adminator
         $this->listing_mod = $mod;
         $this->id_cloveka  = $id_cloveka;
 
-        if(empty($this->sql_query)) {
+        if (empty($this->sql_query)) {
             $this->generate_sql_query();
         }
 
@@ -1018,7 +1017,7 @@ class stb extends adminator
         $dotaz_vypis = $this->conn_mysql->query($this->sql_query);
         $dotaz_vypis_radku = $dotaz_vypis->num_rows;
 
-        if($this->debug == 1) {
+        if ($this->debug == 1) {
 
             $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
                     <div style=\"color: red; font-weight: bold; \" >debug sql: ".$this->sql_query.
@@ -1031,7 +1030,7 @@ class stb extends adminator
 
         }
 
-        if(!$dotaz_vypis) {
+        if (!$dotaz_vypis) {
 
             $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
                     <div style=\"color: red; font-weight: bold; \" >error in function \"vypis\": mysql: "
@@ -1043,7 +1042,7 @@ class stb extends adminator
 
         }
 
-        if(($dotaz_vypis_radku == 0) and ($mod != 1)) {
+        if (($dotaz_vypis_radku == 0) and ($mod != 1)) {
 
             $output .= "<tr><td colspan=\"".$this->vypis_pocet_sloupcu."\" >
                     <div style=\"color: red; font-weight: bold; \" >Žádný set-top-box nenalezen.</div>
@@ -1054,7 +1053,7 @@ class stb extends adminator
             $class_stb_liche = "border-bottom: 1px dashed gray; font-size: 15px; ";
             $class_stb_sude = "border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px; ";
 
-            while($data_vypis = $dotaz_vypis->fetch_array()) {
+            while ($data_vypis = $dotaz_vypis->fetch_array()) {
                 $output .= "
                         <tr>
                         <td style=\"".$class_stb_liche."\" >".$data_vypis["popis"]."&nbsp;</td>
@@ -1087,7 +1086,7 @@ class stb extends adminator
                 //uprava
                 $output .= "<td style=\"".$class_stb_liche."\" >";
 
-                if($this->enable_modify_action === true) {
+                if ($this->enable_modify_action === true) {
                     $output .=
                     "<form method=\"POST\" action=\"/objekty/stb/action\" >\n"
                     . "<input type=\"hidden\" name=\"update_id\" value=\"".intval($data_vypis["id_stb"])."\" >\n"
@@ -1103,7 +1102,7 @@ class stb extends adminator
                 //smazani
                 $output .= "<td style=\"".$class_stb_liche."\" >\n";
 
-                if($this->enable_delete_action === true) {
+                if ($this->enable_delete_action === true) {
                     $output .= "<div style=\"\" ><a href=\"" . fix_link_to_another_adminator(
                         "/objekty-stb-erase.php?".
                         urlencode("id_stb")."=".intval($data_vypis["id_stb"])
@@ -1162,15 +1161,15 @@ class stb extends adminator
                 $output .= "</td>";
 
                 //generovani Reg. Formu
-                if((intval($data_vypis["id_cloveka"]) > 0)) {
+                if ((intval($data_vypis["id_cloveka"]) > 0)) {
 
                     $rs_rf = pg_query($this->conn_pgsql, "SELECT id_komplu FROM objekty WHERE id_cloveka = '".intval($data_vypis["id_cloveka"])."'");
 
-                    while($data_rf = pg_fetch_array($rs_rf)) {
+                    while ($data_rf = pg_fetch_array($rs_rf)) {
                         $id_komplu = $data_rf["id_komplu"];
                     }
 
-                    if((intval($id_komplu) > 0)) {
+                    if ((intval($id_komplu) > 0)) {
 
                         $output .= "<td style=\"".$class_stb_sude."\" >".
                         "<a href=\"/print/reg-form?".urlencode("id_vlastnika")."=".intval($id_komplu)."\">R.F.</a>".
@@ -1187,8 +1186,8 @@ class stb extends adminator
                 }
 
                 //zbytek
-                if($mod == 1) {
-                    if($this->enable_unpair_action === true) {
+                if ($mod == 1) {
+                    if ($this->enable_unpair_action === true) {
                         $output .= "<td style=\"".$class_stb_sude."\" ><a href=\"objekty-stb-unpairing.php?id=".intval($data_vypis["id_stb"])."\" >odendat</a></td>";
                     } else {
                         $output .= "<td style=\"".$class_stb_sude."\" ><div style=\"color: gray; \" >odendat</div></td>";

@@ -30,7 +30,7 @@ class Validator
 
         foreach ($rules as $field => $rule) {
 
-            if(preg_match("/#/", $field)) {
+            if (preg_match("/#/", $field)) {
                 [$field_name, $field_key] = explode("#", $field);
             } else {
                 $field_name = $field_key = $field;

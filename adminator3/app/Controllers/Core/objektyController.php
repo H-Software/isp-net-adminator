@@ -43,7 +43,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(93)) {
+        if (!$this->checkLevel(93)) {
             return $this->response;
         };
 
@@ -62,7 +62,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(135)) {
+        if (!$this->checkLevel(135)) {
             return $this->response;
         };
 
@@ -100,7 +100,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(136)) {
+        if (!$this->checkLevel(136)) {
             return $this->response;
         };
 
@@ -134,7 +134,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(1)) {
+        if (!$this->checkLevel(1)) {
             return $this->response;
         };
 
@@ -152,26 +152,26 @@ class objektyController extends adminatorController
         ];
 
         foreach ($request->getQueryParams() as $i => $v) {
-            if(preg_match('/^(dns_find|ip_find|es|mod_vypisu)$/', $i) and strlen($v) > 0) {
+            if (preg_match('/^(dns_find|ip_find|es|mod_vypisu)$/', $i) and strlen($v) > 0) {
                 $$i = $request->getQueryParams()[$i];
             }
         }
 
-        if(empty($dns_find)) {
+        if (empty($dns_find)) {
             $dns_find = "%";
         }
         $objekt->dns_find = $dns_find;
         $assignData["dns_find"] = $dns_find;
 
-        if(isset($es)) {
+        if (isset($es)) {
             $assignData["es"] = $es;
         }
 
-        if(isset($mod_vypisu)) {
+        if (isset($mod_vypisu)) {
             $assignData["mod_vypisu"] = $mod_vypisu;
         }
 
-        if(isset($ip_find)) {
+        if (isset($ip_find)) {
             $objekt->ip_find = $ip_find;
             $assignData["ip_find"] = $ip_find;
         }
@@ -183,7 +183,7 @@ class objektyController extends adminatorController
 
         list($output, $errors, $exportLink) = $objekt->listGetBodyContent();
 
-        if(strlen($errors) > 0) {
+        if (strlen($errors) > 0) {
             $assignData["body"] = $errors;
             $http_response_code = 500;
         } else {
@@ -203,7 +203,7 @@ class objektyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(2)) {
+        if (!$this->checkLevel(2)) {
             return $this->response;
         };
 
@@ -222,7 +222,7 @@ class objektyController extends adminatorController
 
         $objekt->actionPrepareVars();
 
-        if($objekt->mod_objektu == 2) {
+        if ($objekt->mod_objektu == 2) {
             $output = $objekt->actionFiber();
         } else {
             $output = $objekt->actionWifi();

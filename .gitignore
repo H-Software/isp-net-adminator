@@ -60,3 +60,5 @@ adminator3/print/temp
 .env
 test
 adminator3/.twig-cs-fixer.cache
+
+adminator3/app/AsynqClient

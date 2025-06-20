@@ -41,7 +41,7 @@ if ($filePath && is_file($filePath)) {
         echo "404 Not Found";
     }
 } else {
-    if((preg_match("/^.+(\.php|\.js)$/", $scriptName) == 1)
+    if ((preg_match("/^.+(\.php|\.js)$/", $scriptName) == 1)
             or ($scriptName == "favicon.ico")
     ) {
         header("HTTP/1.1 404 Not Found");

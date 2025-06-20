@@ -109,7 +109,7 @@ class AuthController extends Controller
 
         if (isset($this->flash->getMessages()["oldNow"][0]['slimUsername'])) {
             $username = $this->flash->getMessages()["oldNow"][0]['slimUsername'];
-        } elseif(isset($this->flash->getMessages()["old"][0]['slimUsername'])) {
+        } elseif (isset($this->flash->getMessages()["old"][0]['slimUsername'])) {
             $username = $this->flash->getMessages()["old"][0]['slimUsername'];
         } else {
             $username = null;

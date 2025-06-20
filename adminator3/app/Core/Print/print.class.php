@@ -42,7 +42,7 @@ class printClass extends adminator
         // strip "print/temp" path and check "unallowed" chars
         $check = preg_match("/[\w|\-]+\.pdf/", $fileName, $checkRs);
 
-        if($check != 1) {
+        if ($check != 1) {
             $this->logger->error(
                 __CLASS__ . "\\" . __FUNCTION__ . ": Error! Wrong format of file name. ",
                 [
@@ -58,7 +58,7 @@ class printClass extends adminator
         $fullName = __DIR__ . "/../../../print/temp/" . $fileName;
 
         $fh = fopen($fullName, "r");
-        if($fh === false) {
+        if ($fh === false) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to open file (" . var_export($fullName, true) . ")");
             return false;
         } else {
@@ -66,7 +66,7 @@ class printClass extends adminator
             fclose($fh);
         }
 
-        if($content === false) {
+        if ($content === false) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Error! Unable to read file (" . var_export($fullName, true) . ")");
             return false;
         } else {
@@ -148,7 +148,7 @@ class printClass extends adminator
         //
         $internet_sluzba = $_POST["internet_sluzba"];
 
-        if($internet_sluzba > 0) {
+        if ($internet_sluzba > 0) {
             $int_select_1 = $_POST["int_select_1"];
 
             //1. tarif
@@ -182,23 +182,23 @@ class printClass extends adminator
 
         $iptv_sluzba_id_tarifu = $_POST["iptv_sluzba_id_tarifu"];
 
-        if($iptv_sluzba == 1) {
+        if ($iptv_sluzba == 1) {
 
             $iptv_tarif_nazev  = $_POST["iptv_tarif_nazev"];
             $iptv_tarif_kanaly = $_POST["iptv_tarif_kanaly"];
             $iptv_tarif_cena   = $_POST["iptv_tarif_cena"];
 
-            if($iptv_sluzba_id_tarifu > 0) {
+            if ($iptv_sluzba_id_tarifu > 0) {
 
                 $rs_iptv = $this->conn_mysql->query("SELECT id_tarifu, jmeno_tarifu, cena_s_dph FROM tarify_iptv WHERE id_tarifu = '".intval($iptv_sluzba_id_tarifu)."' ");
 
-                while($data_iptv = $rs_iptv->fetch_array()) {
+                while ($data_iptv = $rs_iptv->fetch_array()) {
 
-                    if((strlen($iptv_tarif_nazev) == 0)) {
+                    if ((strlen($iptv_tarif_nazev) == 0)) {
                         $iptv_tarif_nazev = $data_iptv["jmeno_tarifu"];
                     }
 
-                    if((strlen($iptv_tarif_cena) == 0)) {
+                    if ((strlen($iptv_tarif_cena) == 0)) {
                         $iptv_tarif_cena = $data_iptv["cena_s_dph"];
                     }
                 }
@@ -220,17 +220,17 @@ class printClass extends adminator
         //sluzba voip
         $voip_sluzba = $_POST["voip_sluzba"];
 
-        if($voip_sluzba > 0) {
+        if ($voip_sluzba > 0) {
             $voip_1_cislo = $_POST["voip_1_cislo"];
             $voip_1_typ = $_POST["voip_1_typ"];
 
             $voip_2_cislo = $_POST["voip_2_cislo"];
             $voip_2_typ = $_POST["voip_2_typ"];
 
-            if($voip_1_typ == 1) {
+            if ($voip_1_typ == 1) {
                 $voip_1_pre = "X";
                 $voip_1_post = "";
-            } elseif($voip_1_typ == 2) {
+            } elseif ($voip_1_typ == 2) {
                 $voip_1_pre = "";
                 $voip_1_post = "X";
             } else {
@@ -238,10 +238,10 @@ class printClass extends adminator
                 $voip_1_post = "";
             }
 
-            if($voip_2_typ == 1) {
+            if ($voip_2_typ == 1) {
                 $voip_2_pre = "X";
                 $voip_2_post = "";
-            } elseif($voip_2_typ == 2) {
+            } elseif ($voip_2_typ == 2) {
                 $voip_2_pre = "";
                 $voip_2_post = "X";
             } else {
@@ -258,7 +258,7 @@ class printClass extends adminator
 
         $sleva_select = $_POST["sleva_select"];
 
-        if($sleva_select == 1) {
+        if ($sleva_select == 1) {
             $bonus_select_1 = $_POST["bonus_select_1"];
         }
 
@@ -309,7 +309,7 @@ class printClass extends adminator
         #	zacatek stranky pro zobrazeni formu
         #
 
-        if(((strlen($jmeno) < 2) or (!isset($odeslano)))) {
+        if (((strlen($jmeno) < 2) or (!isset($odeslano)))) {
 
             echo '
                 <html>
@@ -474,20 +474,20 @@ class printClass extends adminator
         $odeslano = $_POST["odeslano"];
 
         //
-        if((strlen($_GET["id_vlastnika"]) > 0)) {
+        if ((strlen($_GET["id_vlastnika"]) > 0)) {
             $id_objektu = $_GET["id_vlastnika"];
         } else {
             $id_objektu = intval($_POST["id_objektu"]);
         }
 
-        if($id_objektu > 0) {
+        if ($id_objektu > 0) {
 
             echo "<div style=\"color: blue;\">INFO: generování údajů z adminátora ...</div>";
 
             //prvni check jestli nejde o tunel verejku, ta sama byt nemuze
             $rs_tun = pg_query($this->conn_pgsql, "SELECT tunnelling_ip FROM objekty WHERE id_komplu = '$id_objektu' ");
 
-            if(pg_fetch_result($rs_tun, 0, 0) == 1) {
+            if (pg_fetch_result($rs_tun, 0, 0) == 1) {
 
                 echo "<div style=\"font-weight: bold; color: red;\" >".
                     "Chyba! Nelze vygenerovat formulář, byla zvolena tunelovaná veřejná IP adresa</div>";
@@ -500,14 +500,14 @@ class printClass extends adminator
 
                 $rs_obj_num = pg_num_rows($rs_obj);
 
-                if($rs_obj_num <> 1) {
+                if ($rs_obj_num <> 1) {
 
                     echo "<div style=\"font-weight: bold; color: red;\" >".
                     "Chyba! Nelze načíst údaje z databáze pro id_objektu ".$id_objektu."</div>";
                 } else {
 
 
-                    while($data_obj = pg_fetch_array($rs_obj)) {
+                    while ($data_obj = pg_fetch_array($rs_obj)) {
 
                         $id_cloveka 	= $data_obj["id_cloveka"];
                         $id_tarifu 	= $data_obj["id_tarifu"];
@@ -523,14 +523,14 @@ class printClass extends adminator
                     } //end od while
 
                     //zjistovani EC (z vlastniku)
-                    if($id_cloveka > 0) {
+                    if ($id_cloveka > 0) {
 
                         $rs_vl = pg_query($this->conn_pgsql, "SELECT vs FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
                         $rs_vl_num = pg_num_rows($rs_vl);
 
-                        if($rs_vl_num == 1) {
+                        if ($rs_vl_num == 1) {
 
-                            while($data_vl = pg_fetch_array($rs_vl)) {
+                            while ($data_vl = pg_fetch_array($rs_vl)) {
                                 $ec = $data_vl["vs"];
                             }
                         } else {
@@ -552,7 +552,7 @@ class printClass extends adminator
                     $rs_tarif->data_seek(0);
                     list($typ_tarifu) = $rs_tarif->fetch_row();
 
-                    if($typ_tarifu == 0) {
+                    if ($typ_tarifu == 0) {
                         $prip_tech = 3;
                     } else {
                         //optika
@@ -566,11 +566,11 @@ class printClass extends adminator
                     $rs_nod = $this->conn_mysql->query("SELECT jmeno, ip_rozsah FROM nod_list WHERE id = '".intval($id_nodu)."' ");
                     $rs_nod_num = $rs_nod->num_rows;
 
-                    if($rs_nod_num <> 1) {
+                    if ($rs_nod_num <> 1) {
                         echo "<div style=\"font-weight: bold; color: red;\" >".
                             "Chyba! Nelze načíst údaje z databáze lokalit pro id_nodu ".intval($id_nodu).". (rows: ".$rs_nod_num.")</div>";
                     } else {
-                        while($data_nod = $rs_nod->fetch_array()) {
+                        while ($data_nod = $rs_nod->fetch_array()) {
                             // $poznamka = " NOD: ".mysql_result($rs_nod, 0, 0);
                             // $ip_rozsah = mysql_result($rs_nod, 0, 1);
                             $poznamka = " NOD: ". $data_nod['jmeno'];
@@ -579,7 +579,7 @@ class printClass extends adminator
                     }
 
                     //typ ip adresy (dhcp or not)
-                    if($typ_tarifu == 1) {
+                    if ($typ_tarifu == 1) {
                         $ip_dhcp = 1;
                     }
 
@@ -588,14 +588,14 @@ class printClass extends adminator
 
                     $ip_arr = explode(".", $ip);
 
-                    if($ip_arr[0] == "10") {
+                    if ($ip_arr[0] == "10") {
                         //lokálky
 
-                        if(($ip_arr[1] < 50) or ($ip_arr[1] == 88)) {
+                        if (($ip_arr[1] < 50) or ($ip_arr[1] == 88)) {
 
                             $ip_maska = "255.255.0.0";
                             $ip_brana = $ip_arr[0].".".$ip_arr[1].".1.1";
-                        } elseif($ip_arr[1] < 100) {
+                        } elseif ($ip_arr[1] < 100) {
 
                             //wifi - C rozsah
                             $ip_maska = "255.255.255.0";
@@ -608,13 +608,13 @@ class printClass extends adminator
 
                             $ip_brana = "10.136.".$ip_roz_arr[2].".1";
                         }
-                    } elseif($ip_arr[0] == "212") {
+                    } elseif ($ip_arr[0] == "212") {
                         //verejky - wifi - obecně
 
                         $ip_maska = "255.255.255.252";
                         $d = intval($ip_arr[3]);
                         $ip_brana = $ip_arr[0].".".$ip_arr[1].".".$ip_arr[2].".".($d + 1);
-                    } elseif($ip_arr[0] == "82") {
+                    } elseif ($ip_arr[0] == "82") {
                         //verejky optika
                         $ip_maska = "255.255.255.224";
                         $ip_brana = $ip_arr[0].".".$ip_arr[1].".".$ip_arr[2].".1";
@@ -631,7 +631,7 @@ class printClass extends adminator
                     //INET zarizeni
 
                     //wimax
-                    if($ip_arr[1] == 88) {
+                    if ($ip_arr[1] == 88) {
 
                         $int_pocet_zarizeni = 2;
                         $int_zarizeni_1 = "Alvarion BreezeMAX  3,5G SU - wimax";
@@ -641,7 +641,7 @@ class printClass extends adminator
                     }
 
                     //optika
-                    if($typ_tarifu == 1) {
+                    if ($typ_tarifu == 1) {
 
                         $int_pocet_zarizeni = 1;
 
@@ -650,9 +650,9 @@ class printClass extends adminator
                     }
 
                     //bezdrat
-                    if($typ_tarifu == 0) {
+                    if ($typ_tarifu == 0) {
 
-                        if((strlen($client_ap_ip) > 5)) {
+                        if ((strlen($client_ap_ip) > 5)) {
 
                             $int_pocet_zarizeni = 2;
 
@@ -662,7 +662,7 @@ class printClass extends adminator
 
                     }
 
-                    if((!isset($int_pocet_zarizeni))) {
+                    if ((!isset($int_pocet_zarizeni))) {
                         $int_pocet_zarizeni = 1;
                     }
 
@@ -677,9 +677,9 @@ class printClass extends adminator
 
                     $rs_tunel_num = pg_num_rows($rs_tunel);
 
-                    if($rs_tunel_num == 1) {
+                    if ($rs_tunel_num == 1) {
 
-                        while($data_tunel = pg_fetch_array($rs_tunel)) {
+                        while ($data_tunel = pg_fetch_array($rs_tunel)) {
 
                             $tunnel_user = $data_tunel["tunnel_user"];
                             $tunnel_pass = $data_tunel["tunnel_pass"];
@@ -714,10 +714,10 @@ class printClass extends adminator
 
         $id_stb = intval($_GET["id_stb"]);
 
-        if(($id_stb > 0) or ($id_cloveka > 0)) {
+        if (($id_stb > 0) or ($id_cloveka > 0)) {
 
 
-            if($id_stb > 0) {
+            if ($id_stb > 0) {
 
                 echo "<div style=\"color: blue;\">INFO: generování údajů z adminátora ...</div>";
 
@@ -766,12 +766,12 @@ class printClass extends adminator
             $rs_stb = $this->conn_mysql->query("SELECT ip_adresa, mac_adresa, puk, popis FROM objekty_stb WHERE ".$sql_where);
             $rs_stb_num = $rs_stb->num_rows;
 
-            if($rs_stb_num > 3) {
+            if ($rs_stb_num > 3) {
 
                 $iptv_pocet_zarizeni = 1;
                 $iptv_zarizeni_1 = "více set-top-boxů";
 
-            } elseif($rs_stb_num == 0) {
+            } elseif ($rs_stb_num == 0) {
 
                 //$iptv_pocet_zarizeni = 3;
             } else {
@@ -781,7 +781,7 @@ class printClass extends adminator
 
                 $i = 1;
 
-                while($data_stb = $rs_stb->fetch_array()) {
+                while ($data_stb = $rs_stb->fetch_array()) {
 
                     $iptv_zarizeni = "iptv_zarizeni_".$i;
                     $iptv_zarizeni_ip = "iptv_zarizeni_".$i."_ip";
@@ -812,7 +812,7 @@ class printClass extends adminator
         #       zacatek stranky pro zobrazeni formu
         #
 
-        if(!isset($odeslano)) {
+        if (!isset($odeslano)) {
 
             echo '<html>
 
@@ -847,7 +847,7 @@ class printClass extends adminator
 
         <body>';
 
-            if($send != "OK") {
+            if ($send != "OK") {
                 echo "<p><span style=\"color: blue; font-weight: bold; \"> Pro odeslání formuláře použijte tlačítko OK. </span></p>";
             }
 
@@ -939,12 +939,12 @@ class printClass extends adminator
         $int_verejna_ip_cena = $_POST["int_verejna_ip_cena"];
         $int_verejna_ip_cena_s_dph = $_POST["int_verejna_ip_cena_s_dph"];
 
-        if($int_verejna_ip == 1) {
-            if(!isset($int_verejna_ip_cena)) {
+        if ($int_verejna_ip == 1) {
+            if (!isset($int_verejna_ip_cena)) {
                 $int_verejna_ip_cena = "99.2";
             }
 
-            if(!isset($int_verejna_ip_cena_s_dph)) {
+            if (!isset($int_verejna_ip_cena_s_dph)) {
                 $int_verejna_ip_cena_s_dph = "119";
             }
         }
@@ -954,7 +954,7 @@ class printClass extends adminator
         //
         $iptv_sluzba = $_POST["iptv_sluzba"];
 
-        if($iptv_sluzba == 1) {
+        if ($iptv_sluzba == 1) {
             $iptv_sluzba_id_tarifu = $_POST["iptv_sluzba_id_tarifu"];
 
             $iptv_sluzba_cena = $_POST["iptv_sluzba_cena"];
@@ -962,7 +962,7 @@ class printClass extends adminator
 
             $pocet_tb = $_POST["pocet_tb"];
 
-            for($i = 1; $i <= $pocet_tb; $i++) {
+            for ($i = 1; $i <= $pocet_tb; $i++) {
                 $tb = "tb".$i;
                 $$tb = $_POST[$tb];
 
@@ -985,7 +985,7 @@ class printClass extends adminator
         $soucet_bez_dph_pole = array($int_sluzba_tarif_cena,$int_verejna_ip_cena,$iptv_sluzba_cena);
         $soucet_s_dph_pole = array($int_sluzba_tarif_cena_s_dph,$int_verejna_ip_cena_s_dph,$iptv_sluzba_cena_s_dph);
 
-        for($i = 1; $i <= $pocet_tb; $i++) {
+        for ($i = 1; $i <= $pocet_tb; $i++) {
             $tb = "tb".$i;
 
             $tb_cena = "tb_cena_".$i;
@@ -1001,14 +1001,14 @@ class printClass extends adminator
         //sleva a dal
 
         // prepinac jestli doporucit slevu
-        if(($internet_sluzba == 1) and ($iptv_sluzba == 1)) {
-            if($soucet_s_dph > 900) {
+        if (($internet_sluzba == 1) and ($iptv_sluzba == 1)) {
+            if ($soucet_s_dph > 900) {
                 $sleva_doporucena = "1";
                 $sleva_hodnota_dop = "15";
-            } elseif($soucet_s_dph > 700) {
+            } elseif ($soucet_s_dph > 700) {
                 $sleva_doporucena = "1";
                 $sleva_hodnota_dop = "10";
-            } elseif($soucet_s_dph > 500) {
+            } elseif ($soucet_s_dph > 500) {
                 $sleva_doporucena = "1";
                 $sleva_hodnota_dop = "5";
             }
@@ -1016,14 +1016,14 @@ class printClass extends adminator
 
         $sleva_select = $_POST["sleva_select"];
 
-        if($sleva_select == 1) {
+        if ($sleva_select == 1) {
             $sleva_hodnota = $_POST["sleva_hodnota"];
 
-            if((strlen($sleva_hodnota) < 1)) {
+            if ((strlen($sleva_hodnota) < 1)) {
                 $sleva_hodnota = $sleva_hodnota_dop;
             }
 
-            if((strlen($sleva_hodnota) < 1)) {
+            if ((strlen($sleva_hodnota) < 1)) {
                 $sleva_hodnota = "0";
             }
 
@@ -1035,8 +1035,8 @@ class printClass extends adminator
         $zpusob_placeni = $_POST["zpusob_placeni"];
         $vs = $_POST["vs"];
 
-        if((strlen($vs) < 1)) {
-            if((strlen($ico_dic) > 1)) {
+        if ((strlen($vs) < 1)) {
+            if ((strlen($ico_dic) > 1)) {
                 $vs = "dle faktury";
             } else {
                 $vs = $ec;
@@ -1045,7 +1045,7 @@ class printClass extends adminator
 
         $splatnost_ke_dni = $_POST["splatnost_ke_dni"];
 
-        if((strlen($splatnost_ke_dni) < 1)) {
+        if ((strlen($splatnost_ke_dni) < 1)) {
             $splatnost_ke_dni = "15.";
         }
 
@@ -1053,20 +1053,20 @@ class printClass extends adminator
         $celk_cena_s_dph = $_POST["celk_cena_s_dph"];
 
 
-        if($sleva_select == 1) {
-            if((strlen($celk_cena) < 1)) {
+        if ($sleva_select == 1) {
+            if ((strlen($celk_cena) < 1)) {
                 $celk_cena = $celk_cena_po_sleve;
             }
 
-            if((strlen($celk_cena_s_dph) < 1)) {
+            if ((strlen($celk_cena_s_dph) < 1)) {
                 $celk_cena_s_dph = round($celk_cena_po_sleve * 1.20);
             }
         } else {
-            if((strlen($celk_cena) < 1)) {
+            if ((strlen($celk_cena) < 1)) {
                 $celk_cena = $soucet_bez_dph;
             }
 
-            if((strlen($celk_cena_s_dph) < 1)) {
+            if ((strlen($celk_cena_s_dph) < 1)) {
                 $celk_cena_s_dph = $soucet_s_dph;
             }
         }
@@ -1087,7 +1087,7 @@ class printClass extends adminator
         #	zacatek stranky pro zobrazeni formu
         #
 
-        if(((strlen($jmeno) < 2) or (!isset($odeslano)))) {
+        if (((strlen($jmeno) < 2) or (!isset($odeslano)))) {
 
             echo '<html>
 
@@ -1173,7 +1173,7 @@ class printClass extends adminator
         //internet
         $int_pocet_zarizeni = intval($_POST["int_pocet_zarizeni"]);
 
-        for($i = 1; $i <= $int_pocet_zarizeni; $i++) {
+        for ($i = 1; $i <= $int_pocet_zarizeni; $i++) {
             //internet
             $int_zarizeni = "int_zarizeni_".$i;
             $$int_zarizeni = $_POST[$int_zarizeni];
@@ -1202,7 +1202,7 @@ class printClass extends adminator
 
         $iptv_pocet_zarizeni = $_POST["iptv_pocet_zarizeni"];
 
-        for($i = 1; $i <= $iptv_pocet_zarizeni; $i++) {
+        for ($i = 1; $i <= $iptv_pocet_zarizeni; $i++) {
             //
             $iptv_zarizeni = "iptv_zarizeni_".$i;
             $$iptv_zarizeni = $_POST[$iptv_zarizeni];
@@ -1222,7 +1222,7 @@ class printClass extends adminator
 
         $voip_pocet_zarizeni = $_POST["voip_pocet_zarizeni"];
 
-        for($i = 1; $i <= $voip_pocet_zarizeni; $i++) {
+        for ($i = 1; $i <= $voip_pocet_zarizeni; $i++) {
             //
             $voip_zarizeni = "voip_zarizeni_".$i;
             $$voip_zarizeni = $_POST[$voip_zarizeni];
@@ -1242,7 +1242,7 @@ class printClass extends adminator
 
         $mat_pocet = $_POST["mat_pocet"];
 
-        for($i = 1; $i <= $mat_pocet; $i++) {
+        for ($i = 1; $i <= $mat_pocet; $i++) {
             $mat = "mat_".$i;
             $$mat = $_POST[$mat];
         }
@@ -1254,20 +1254,20 @@ class printClass extends adminator
         $odeslano = $_POST["odeslano"];
 
         //
-        if((strlen($_GET["id_vlastnika"]) > 0)) {
+        if ((strlen($_GET["id_vlastnika"]) > 0)) {
             $id_objektu = $_GET["id_vlastnika"];
         } else {
             $id_objektu = intval($_POST["id_objektu"]);
         }
 
-        if($id_objektu > 0) {
+        if ($id_objektu > 0) {
 
             echo "<div style=\"color: blue;\">INFO: generování údajů z adminátora ...</div>";
 
             //prvni check jestli nejde o tunel verejku, ta sama byt nemuze
             $rs_tun = pg_query($this->conn_pgsql, "SELECT tunnelling_ip FROM objekty WHERE id_komplu = '$id_objektu' ");
 
-            if(pg_fetch_result($rs_tun, 0, 0) == 1) {
+            if (pg_fetch_result($rs_tun, 0, 0) == 1) {
 
                 echo "<div style=\"font-weight: bold; color: red;\" >".
                     "Chyba! Nelze vygenerovat formulář, byla zvolena tunelovaná veřejná IP adresa</div>";
@@ -1280,14 +1280,14 @@ class printClass extends adminator
 
                 $rs_obj_num = pg_num_rows($rs_obj);
 
-                if($rs_obj_num <> 1) {
+                if ($rs_obj_num <> 1) {
 
                     echo "<div style=\"font-weight: bold; color: red;\" >".
                     "Chyba! Nelze načíst údaje z databáze pro id_objektu ".$id_objektu."</div>";
                 } else {
 
 
-                    while($data_obj = pg_fetch_array($rs_obj)) {
+                    while ($data_obj = pg_fetch_array($rs_obj)) {
 
                         $id_cloveka 	= $data_obj["id_cloveka"];
                         $id_tarifu 	= $data_obj["id_tarifu"];
@@ -1303,14 +1303,14 @@ class printClass extends adminator
                     } //end od while
 
                     //zjistovani EC (z vlastniku)
-                    if($id_cloveka > 0) {
+                    if ($id_cloveka > 0) {
 
                         $rs_vl = pg_query($this->conn_pgsql, "SELECT vs FROM vlastnici WHERE id_cloveka = '$id_cloveka' ");
                         $rs_vl_num = pg_num_rows($rs_vl);
 
-                        if($rs_vl_num == 1) {
+                        if ($rs_vl_num == 1) {
 
-                            while($data_vl = pg_fetch_array($rs_vl)) {
+                            while ($data_vl = pg_fetch_array($rs_vl)) {
                                 $ec = $data_vl["vs"];
                             }
                         } else {
@@ -1332,7 +1332,7 @@ class printClass extends adminator
                     $rs_tarif->data_seek(0);
                     list($typ_tarifu) = $rs_tarif->fetch_row();
 
-                    if($typ_tarifu == 0) {
+                    if ($typ_tarifu == 0) {
                         $prip_tech = 3;
                     } else {
                         //optika
@@ -1346,12 +1346,12 @@ class printClass extends adminator
                     $rs_nod = $this->conn_mysql->query("SELECT jmeno, ip_rozsah FROM nod_list WHERE id = '".intval($id_nodu)."' ");
                     $rs_nod_num = $rs_nod->num_rows;
 
-                    if($rs_nod_num <> 1) {
+                    if ($rs_nod_num <> 1) {
                         echo "<div style=\"font-weight: bold; color: red;\" >".
                             "Chyba! Nelze načíst údaje z databáze lokalit pro id_nodu ".intval($id_nodu).". (rows: ".$rs_nod_num.")</div>";
                     } else {
 
-                        while($data_nod = $rs_nod->fetch_array()) {
+                        while ($data_nod = $rs_nod->fetch_array()) {
 
                             $poznamka = " NOD: ".$data_nod['jmeno'];
                             $ip_rozsah = $data_nod['ip_rozsah'];
@@ -1359,7 +1359,7 @@ class printClass extends adminator
                     }
 
                     //typ ip adresy (dhcp or not)
-                    if($typ_tarifu == 1) {
+                    if ($typ_tarifu == 1) {
                         $ip_dhcp = 1;
                     }
 
@@ -1368,14 +1368,14 @@ class printClass extends adminator
 
                     $ip_arr = explode(".", $ip);
 
-                    if($ip_arr[0] == "10") {
+                    if ($ip_arr[0] == "10") {
                         //lokálky
 
-                        if(($ip_arr[1] < 50) or ($ip_arr[1] == 88)) {
+                        if (($ip_arr[1] < 50) or ($ip_arr[1] == 88)) {
 
                             $ip_maska = "255.255.0.0";
                             $ip_brana = $ip_arr[0].".".$ip_arr[1].".1.1";
-                        } elseif($ip_arr[1] < 100) {
+                        } elseif ($ip_arr[1] < 100) {
 
                             //wifi - C rozsah
                             $ip_maska = "255.255.255.0";
@@ -1388,12 +1388,12 @@ class printClass extends adminator
 
                             $ip_brana = "10.136.".$ip_roz_arr[2].".1";
                         }
-                    } elseif($ip_arr[0] == "212") {
+                    } elseif ($ip_arr[0] == "212") {
                         //verejky - wifi - obecně
 
                         $ip_maska = "255.255.255.252";
                         $ip_brana = $ip_arr[0].".".$ip_arr[1].".".$ip_arr[2].".".(intval($ip_arr[3]) + 1);
-                    } elseif($ip_arr[0] == "82") {
+                    } elseif ($ip_arr[0] == "82") {
                         //verejky optika
                         $ip_maska = "255.255.255.224";
                         $ip_brana = $ip_arr[0].".".$ip_arr[1].".".$ip_arr[2].".1";
@@ -1410,7 +1410,7 @@ class printClass extends adminator
                     //INET zarizeni
 
                     //wimax
-                    if($ip_arr[1] == 88) {
+                    if ($ip_arr[1] == 88) {
 
                         $int_pocet_zarizeni = 2;
                         $int_zarizeni_1 = "Alvarion BreezeMAX  3,5G SU - wimax";
@@ -1420,7 +1420,7 @@ class printClass extends adminator
                     }
 
                     //optika
-                    if($typ_tarifu == 1) {
+                    if ($typ_tarifu == 1) {
 
                         $int_pocet_zarizeni = 1;
 
@@ -1429,9 +1429,9 @@ class printClass extends adminator
                     }
 
                     //bezdrat
-                    if($typ_tarifu == 0) {
+                    if ($typ_tarifu == 0) {
 
-                        if((strlen($client_ap_ip) > 5)) {
+                        if ((strlen($client_ap_ip) > 5)) {
 
                             $int_pocet_zarizeni = 2;
 
@@ -1441,7 +1441,7 @@ class printClass extends adminator
 
                     }
 
-                    if($int_pocet_zarizeni == 0) {
+                    if ($int_pocet_zarizeni == 0) {
                         $int_pocet_zarizeni = 1;
                     }
 
@@ -1455,16 +1455,16 @@ class printClass extends adminator
                                                 "	    AND ".
                                                 "	(tunnelling_ip = 1) ) ");
 
-                        if($rs_tunel) {
+                        if ($rs_tunel) {
                             $rs_tunel_num = pg_num_rows($rs_tunel);
                         }
                     } catch (Exception $e) {
                         $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . " pg_query for tunel. verejka failed! Caught error: " . pg_last_error($this->conn_pgsql));
                     }
 
-                    if($rs_tunel_num == 1) {
+                    if ($rs_tunel_num == 1) {
 
-                        while($data_tunel = pg_fetch_array($rs_tunel)) {
+                        while ($data_tunel = pg_fetch_array($rs_tunel)) {
 
                             $tunnel_user = $data_tunel["tunnel_user"];
                             $tunnel_pass = $data_tunel["tunnel_pass"];
@@ -1497,10 +1497,10 @@ class printClass extends adminator
 
         $id_stb = intval($_GET["id_stb"]);
 
-        if(($id_stb > 0) or ($id_cloveka > 0)) {
+        if (($id_stb > 0) or ($id_cloveka > 0)) {
 
 
-            if($id_stb > 0) {
+            if ($id_stb > 0) {
 
                 // TODO: send this to smarty template/vars
                 echo "<div style=\"color: blue;\">INFO: generování údajů z adminátora ...</div>";
@@ -1550,12 +1550,12 @@ class printClass extends adminator
             $rs_stb = $this->conn_mysql->query("SELECT ip_adresa, mac_adresa, puk, popis FROM objekty_stb WHERE ".$sql_where);
             $rs_stb_num = $rs_stb->num_rows;
 
-            if($rs_stb_num > 3) {
+            if ($rs_stb_num > 3) {
 
                 $iptv_pocet_zarizeni = 1;
                 $iptv_zarizeni_1 = "více set-top-boxů";
 
-            } elseif($rs_stb_num == 0) {
+            } elseif ($rs_stb_num == 0) {
 
                 //$iptv_pocet_zarizeni = 3;
             } else {
@@ -1565,7 +1565,7 @@ class printClass extends adminator
 
                 $i = 1;
 
-                while($data_stb = $rs_stb->fetch_array()) {
+                while ($data_stb = $rs_stb->fetch_array()) {
 
                     $iptv_zarizeni = "iptv_zarizeni_".$i;
                     $iptv_zarizeni_ip = "iptv_zarizeni_".$i."_ip";
@@ -1596,7 +1596,7 @@ class printClass extends adminator
         #       zacatek stranky pro zobrazeni formu
         #
 
-        if(!isset($odeslano)) {
+        if (!isset($odeslano)) {
 
             echo '<html>
 

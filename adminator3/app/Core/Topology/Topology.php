@@ -56,7 +56,7 @@ class Topology extends adminator
             $rs_error = $e->getMessage();
         }
 
-        if(is_object($rs)) {
+        if (is_object($rs)) {
             $rs_data = $rs->fetchAll();
 
         } else {
@@ -71,7 +71,7 @@ class Topology extends adminator
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
-        if($show_zero_value === true) {
+        if ($show_zero_value === true) {
             $nodes[0] = "Není vybráno";
         }
 
@@ -84,7 +84,7 @@ class Topology extends adminator
         $rs = $this->conn_mysql->query($sql);
         $num_rows = $rs->num_rows;
 
-        if($num_rows < 1) {
+        if ($num_rows < 1) {
             $nodes[0] = "nelze zjistit / žádný nod nenalezen";
             return $nodes;
         } else {
@@ -114,15 +114,15 @@ class Topology extends adminator
 
         // $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": query param typ_nodu: " . var_export($typ_nodu, true));
 
-        if(is_null($typ_nodu) or $typ_nodu < 0) {
+        if (is_null($typ_nodu) or $typ_nodu < 0) {
             $typ_nodu = 0;
         }
 
-        if((strlen($find) < 1)) {
+        if ((strlen($find) < 1)) {
             $find = "%";
             $find_orez = "";
         } else {
-            if(!(preg_match("/%.*%/", $find))) {
+            if (!(preg_match("/%.*%/", $find))) {
                 $find = "%".$find."%";
             }
             $find_orez = str_replace("%", "", $find);
@@ -138,7 +138,7 @@ class Topology extends adminator
             <span style=\"padding-left: 80px; \" >
             Výpis lokalit/nodů s latencemi ";
 
-        if($ping == 1) {
+        if ($ping == 1) {
             $output .= "<a href=\"/topology/node-list?razeni=".$razeni."&ping=&find=".$find_orez;
             $output .= "&list=".$list."&typ_nodu=".$typ_nodu."\">vypnout</a>";
         } else {
@@ -172,36 +172,36 @@ class Topology extends adminator
                 <select name=\"typ_vysilace\" size=\"1\">
                 <option value=\"0\" class=\"select-nevybrano\" >Nevybráno</option>
                 <option value=\"1\" ";
-        if($typ_vysilace == 1) {
+        if ($typ_vysilace == 1) {
             $output .= " selected ";
         } $output .= ">Metallic</option>
 
                 <option value=\"2\" ";
-        if($typ_vysilace == 2) {
+        if ($typ_vysilace == 2) {
             $output .= " selected ";
         } $output .= ">ap-2,4GHz-OMNI</option>
                     <option value=\"3\" ";
-        if($typ_vysilace == 3) {
+        if ($typ_vysilace == 3) {
             $output .= " selected ";
         } $output .= ">ap-2,4GHz-sektor</option>
                     <option value=\"4\" ";
-        if($typ_vysilace == 4) {
+        if ($typ_vysilace == 4) {
             $output .= " selected ";
         } $output .= ">ap-2.4GHz-smerovka</option>
                     <option value=\"5\" ";
-        if($typ_vysilace == 5) {
+        if ($typ_vysilace == 5) {
             $output .= " selected ";
         } $output .= ">ap-5.8Ghz-OMNI</option>
                     <option value=\"6\" ";
-        if($typ_vysilace == 6) {
+        if ($typ_vysilace == 6) {
             $output .= " selected ";
         } $output .= ">ap-5.8Ghz-sektor</option>
                     <option value=\"7\" ";
-        if($typ_vysilace == 7) {
+        if ($typ_vysilace == 7) {
             $output .= " selected ";
         } $output .= ">ap-5.8Ghz-smerovka</option>
                 <option value=\"8\" ";
-        if($typ_vysilace == 8) {
+        if ($typ_vysilace == 8) {
             $output .= " selected ";
         } $output .= ">jiné</option>
 
@@ -214,15 +214,15 @@ class Topology extends adminator
                 <select name=\"stav\" size=\"1\" >
                 <option value=\"0\" class=\"select-nevybrano\">Nevybráno</option>
                 <option value=\"1\" ";
-        if($stav == 1) {
+        if ($stav == 1) {
             $output .= " selected ";
         } $output .= ">V pořádku</option>
                 <option value=\"2\" ";
-        if($stav == 2) {
+        if ($stav == 2) {
             $output .= " selected ";
         } $output .= ">Vytížen</option>
                 <option value=\"3\" ";
-        if($stav == 3) {
+        if ($stav == 3) {
             $output .= " selected ";
         } $output .= ">Přetížen</option>
                 </select>
@@ -232,13 +232,13 @@ class Topology extends adminator
                 <select name=\"typ_nodu\" size=\"1\" >
                 <option value=\"0\" class=\"select-nevybrano\">Nevybráno</option>
                 <option value=\"1\" style=\"color: #CC0033; \" ";
-        if($typ_nodu == 1) {
+        if ($typ_nodu == 1) {
             $output .= " selected ";
         }
         $output .= ">bezdrátová síť</option>
 
                 <option value=\"2\" style=\"color: #e37d2b; font-weight: bold;\" ";
-        if($typ_nodu == 2) {
+        if ($typ_nodu == 2) {
             $output .= " selected ";
         }
         $output .= ">optická síť</option>
@@ -293,15 +293,15 @@ class Topology extends adminator
         $where = " WHERE ( id = '$find' OR jmeno LIKE '$find' OR adresa LIKE '$find' ";
         $where .= "OR pozn LIKE '$find' OR ip_rozsah LIKE '$find' ) ";
 
-        if($typ_vysilace > 0) {
+        if ($typ_vysilace > 0) {
             $where .= "AND ( typ_vysilace = '$typ_vysilace' ) ";
         }
 
-        if($stav > 0) {
+        if ($stav > 0) {
             $where .= "AND ( stav = '$stav' ) ";
         }
 
-        if($typ_nodu > 0) {
+        if ($typ_nodu > 0) {
             $where .= " AND ( typ_nodu = '$typ_nodu' ) ";
         }
 
@@ -605,11 +605,11 @@ class Topology extends adminator
 
                 $output .= "<td colspan=\"".$colspan_rozsah_ip."\" ><span style=\"font-size: 13px; \">".$zaznam["ip_rozsah"]."</span></td>\n";
                 $output .= "<td colspan=\"".$colspan_typ_nodu."\" ><span style=\"font-size: 13px; \">";
-                if($zaznam["typ_nodu"] == 0) {
+                if ($zaznam["typ_nodu"] == 0) {
                     $output .= "Nezvoleno";
-                } elseif($zaznam["typ_nodu"] == 1) {
+                } elseif ($zaznam["typ_nodu"] == 1) {
                     $output .= "<span style=\"color: #CC0033; \">bezdrátová síť</span>";
-                } elseif($zaznam["typ_nodu"] == 2) {
+                } elseif ($zaznam["typ_nodu"] == 2) {
                     $output .= "<span style=\"color: #e37d2b; font-weight: bold; \" >optická síť</span>";
                 }
 
@@ -713,7 +713,7 @@ class Topology extends adminator
                 } elseif ($zaznam["stav"] == 2) {
                     $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"orange\" align=\"center\" >
                         <span style=\"color: white; font-size: 13px; \"> vytížen </span></td>";
-                } elseif($zaznam["stav"] == 3) {
+                } elseif ($zaznam["stav"] == 3) {
                     $output .= "<td class=\"tab-topology\" colspan=\"".$colspan_stav."\" bgcolor=\"red\" align=\"center\" >
                         <span style=\"color: white; font-size: 13px; \"> přetížen </span></td>";
                 } else {
@@ -786,43 +786,43 @@ class Topology extends adminator
 
         $arr_sql_where = array();
 
-        if((strlen($filtrace) > 0)) {
+        if ((strlen($filtrace) > 0)) {
             $filtrace = intval($filtrace);
         } else {
             $filtrace = 99;
         }
 
-        if((strlen($f_monitoring) > 0)) {
+        if ((strlen($f_monitoring) > 0)) {
             $f_monitoring = intval($f_monitoring);
         } else {
             $f_monitoring = 99;
         }
 
-        if((strlen($f_alarm) > 0)) {
+        if ((strlen($f_alarm) > 0)) {
             $f_alarm = intval($f_alarm);
         } else {
             $f_alarm = 99;
         }
 
-        if((strlen($f_alarm_stav) > 0)) {
+        if ((strlen($f_alarm_stav) > 0)) {
             $f_alarm_stav = intval($f_alarm_stav);
 
-            if($f_alarm_stav == 0 or $f_alarm_stav == 1 or $f_alarm_stav == 2) {
+            if ($f_alarm_stav == 0 or $f_alarm_stav == 1 or $f_alarm_stav == 2) {
                 $f_alarm = 1;
             }
         } else {
             $f_alarm_stav = 99;
         }
 
-        if((strlen($this->f_id_routeru) > 0)) {
+        if ((strlen($this->f_id_routeru) > 0)) {
             $this->f_id_routeru = intval($this->f_id_routeru);
         }
 
-        if((strlen($list) > 0)) {
+        if ((strlen($list) > 0)) {
             $list = intval($list);
         }
 
-        if($odeslano == "OK") {
+        if ($odeslano == "OK") {
             $display = "visible";
         } else {
             $display = "none";
@@ -840,28 +840,28 @@ class Topology extends adminator
 
         //priprava filtracnich podminek do pole
 
-        if($filtrace == 0 or $filtrace == 1) {
+        if ($filtrace == 0 or $filtrace == 1) {
             $arr_sql_where[] = "router_list.filtrace = '".$filtrace."'";
         }
 
-        if($f_monitoring == 0 or $f_monitoring == 1) {
+        if ($f_monitoring == 0 or $f_monitoring == 1) {
             $arr_sql_where[] = "router_list.monitoring = '".$f_monitoring."'";
         }
 
-        if($f_alarm == 0 or $f_alarm == 1) {
+        if ($f_alarm == 0 or $f_alarm == 1) {
             $arr_sql_where[] = "router_list.alarm = '".$f_alarm."'";
         }
 
-        if($f_alarm_stav == 0 or $f_alarm_stav == 1 or $f_alarm_stav == 2) {
+        if ($f_alarm_stav == 0 or $f_alarm_stav == 1 or $f_alarm_stav == 2) {
             $arr_sql_where[] = " router_list.alarm_stav = '".$f_alarm_stav."'  ";
         }
 
-        if($this->f_id_routeru > 0) {
+        if ($this->f_id_routeru > 0) {
             $arr_sql_where[] = "router_list.id = '".$this->f_id_routeru."'";
         }
 
-        if(isset($f_search)) {
-            if(preg_match('/^(%)(.*)(%)$/', $f_search)) {
+        if (isset($f_search)) {
+            if (preg_match('/^(%)(.*)(%)$/', $f_search)) {
                 $f_search_prep = $f_search;
             } else {
                 $f_search_prep = "%" . $f_search . "%";
@@ -869,7 +869,7 @@ class Topology extends adminator
 
             $rs_q = $this->pdoMysql->quote($f_search_prep);
 
-            if($rs_q == false) {
+            if ($rs_q == false) {
                 $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO has not implemented quote");
                 throw new Exception("PDO has not implemented quote");
 
@@ -886,12 +886,12 @@ class Topology extends adminator
         }
 
         $sql_where2 = "";
-        if((count($arr_sql_where) == 1)) {
+        if ((count($arr_sql_where) == 1)) {
 
             foreach ($arr_sql_where as $key => $val) {
                 $sql_where2 = " WHERE ( ".$val." ) ";
             }
-        } elseif((count($arr_sql_where) > 1)) {
+        } elseif ((count($arr_sql_where) > 1)) {
 
             $sql_where2 = " WHERE ( ";
 
@@ -899,7 +899,7 @@ class Topology extends adminator
 
             foreach ($arr_sql_where as $key => $val) {
 
-                if($i == 0) {
+                if ($i == 0) {
                     $sql_where2 .= $val;
                 } else {
                     $sql_where2 .= " AND ".$val." ";
@@ -944,11 +944,11 @@ class Topology extends adminator
                 "<select size=\"1\" name=\"f_monitoring\" >\n".
                     "<option value=\"99\" style=\"color: gray;\" >Nevybráno</option>\n".
                     "<option value=\"0\" ";
-        if($f_monitoring == 0) {
+        if ($f_monitoring == 0) {
             $output .= " selected ";
         } $output .= ">Ne</option>\n".
         "<option value=\"1\" ";
-        if($f_monitoring == 1) {
+        if ($f_monitoring == 1) {
             $output .= " selected ";
         } $output .= ">Ano</option>\n".
                 "</select>\n".
@@ -962,11 +962,11 @@ class Topology extends adminator
                 "<select size=\"1\" name=\"filtrace\" >\n".
                     "<option value=\"99\" style=\"color: gray;\" >nevybráno</option>\n".
                     "<option value=\"0\" ";
-        if($filtrace == 0) {
+        if ($filtrace == 0) {
             $output .= " selected ";
         } $output .= " >Ne</option>\n".
         "<option value=\"1\" ";
-        if($filtrace == 1) {
+        if ($filtrace == 1) {
             $output .= " selected ";
         } $output .= " >Ano</option>\n";
         $output .= "</select>\n".
@@ -980,11 +980,11 @@ class Topology extends adminator
                 "<select size=\"1\" name=\"f_alarm\" >\n".
                     "<option value=\"99\" style=\"color: gray;\" >nevybráno</option>\n".
                     "<option value=\"0\" ";
-        if($f_alarm == 0) {
+        if ($f_alarm == 0) {
             $output .= " selected ";
         } $output .= " >Ne</option>\n".
         "<option value=\"1\" ";
-        if($f_alarm == 1) {
+        if ($f_alarm == 1) {
             $output .= " selected ";
         } $output .= " >Ano</option>\n";
         $output .= "</select>\n".
@@ -998,15 +998,15 @@ class Topology extends adminator
                 "<select size=\"1\" name=\"f_alarm_stav\" >\n".
                     "<option value=\"99\" style=\"color: gray;\" >nevybráno</option>\n".
                     "<option value=\"0\" ";
-        if($f_alarm_stav == 0) {
+        if ($f_alarm_stav == 0) {
             $output .= " selected ";
         } $output .= " >klid</option>\n".
         "<option value=\"1\" ";
-        if($f_alarm_stav == 1) {
+        if ($f_alarm_stav == 1) {
             $output .= " selected ";
         } $output .= " >warning</option>\n".
         "<option value=\"2\" ";
-        if($f_alarm_stav == 2) {
+        if ($f_alarm_stav == 2) {
             $output .= " selected ";
         } $output .= " >poplach</option>\n".
         "";
@@ -1043,7 +1043,7 @@ class Topology extends adminator
 
         $output .= "</form>\n";
 
-        if($typ == 1) {
+        if ($typ == 1) {
             $output .= $this->routerListHierarchy();
             $output .= "</table>";
 
@@ -1085,14 +1085,14 @@ class Topology extends adminator
         // fetch data
         list($rs_data, $dotaz_error) = $this->callPdoQueryAndFetch($sql_final);
 
-        if($dotaz_error != null) {
+        if ($dotaz_error != null) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_error, true));
             $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
             $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
             $output .= "<div style=\"\" >".$dotaz_error."</div>";
 
             return $output;
-        } elseif(count($rs_data) < 1) {
+        } elseif (count($rs_data) < 1) {
             $output .= "<div style=\"margin-left: 10px; padding-left: 10px; padding-right: 10px; ".
                 "background-color: #ff8c00; height: 30px; width: 980px; \" >".
                 "<div style=\"padding-top: 5px;\" >Žádné záznamy dle hledaného kritéria.</div>".
@@ -1242,7 +1242,7 @@ class Topology extends adminator
             //2.3-4 - monitoring
             $output .= "<td colspan=\"2\" style=\"border-bottom: 1px solid black; color: gray; font-size: 14px; padding-bottom: 3px;\" >";
 
-            if($data["monitoring"] == 1) {
+            if ($data["monitoring"] == 1) {
                 $output .= "<span style=\"font-weight: bold; \">";
                 $output .= "<a href=\"https://monitoring.local.net/mon/www-generated/rb_all_".$data["ip_adresa"].".php\" target=\"_blank\" >Ano</a></span>";
             } elseif ($data["monitoring"] == 0) {
@@ -1299,7 +1299,7 @@ class Topology extends adminator
             $output .= "</tr>\n";
 
             //pokud s kliklo na vypis subnetu
-            if($this->list_nodes == "yes" and $this->f_id_routeru == $data["id"]) {
+            if ($this->list_nodes == "yes" and $this->f_id_routeru == $data["id"]) {
 
                 $output .= "<tr><td colspan=\"11\" >\n";
 
@@ -1336,7 +1336,7 @@ class Topology extends adminator
                         } elseif ($data_top["stav"] == 2) {
                             $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"orange\" align=\"center\" >
                                 <span style=\"color: white; font-size: 13px; \"> vytížen </span></td>\n";
-                        } elseif($data_top["stav"] == 3) {
+                        } elseif ($data_top["stav"] == 3) {
                             $output .= "<td class=\"top-router-dolni1\" colspan=\"".$colspan_stav."\" bgcolor=\"red\" align=\"center\" >
                             <span style=\"color: white; font-size: 13px; \"> přetížen </span></td>\n";
                         } else {
@@ -1395,7 +1395,7 @@ class Topology extends adminator
         $sql_final = "SELECT id, nazev, ip_adresa FROM router_list WHERE id = 1 order by id";
         list($dotaz_router_data, $dotaz_router_error) = $this->callPdoQueryAndFetch($sql_final);
 
-        if($dotaz_router_error != null) {
+        if ($dotaz_router_error != null) {
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_router_error, true));
             $output .= "<div style=\"font-weight: bold; color: red; \" >Chyba SQL příkazu.</div>";
             $output .= "<div style=\"padding: 5px; color: gray; \" >SQL DEBUG: ".$sql_final."</div>";
@@ -1403,7 +1403,7 @@ class Topology extends adminator
 
             return $output;
         }
-        if(count($dotaz_router_data) <> 1) {
+        if (count($dotaz_router_data) <> 1) {
             $output .= "<div style=\"font-size: 16px; font-weight: bold; color: red; \">Nelze vybrat hlavní router. (wrong DB num rows)</div>\n";
             return $output;
         }
@@ -1425,13 +1425,13 @@ class Topology extends adminator
             $sql_final = "SELECT id, parent_router FROM router_list WHERE parent_router = 1 order by id";
             list($dotaz_router_1_rs, $dotaz_router_1_error) = $this->callPdoQueryAndFetch($sql_final);
 
-            if(count($dotaz_router_1_rs) > 0) {
+            if (count($dotaz_router_1_rs) > 0) {
                 //prvni uroven
                 foreach ($dotaz_router_1_rs as $row => $data_router_1) {
                     $id = $data_router_1["id"];
 
                     $rs_hierarchy = $this->hierarchy_vypis_router($id, "0");
-                    if($rs_hierarchy === false) {
+                    if ($rs_hierarchy === false) {
                         $output .= "<div class=\"alert alert-danger\" role=\"alert\">chyba hierarchickeho vypisu routeru (no depedent routers found in database)</div>";
                     } else {
                         $output .= $rs_hierarchy;
@@ -1478,7 +1478,7 @@ class Topology extends adminator
                 $parent_router = $data["parent_router"];
                 $dotaz_sec = $this->conn_mysql->query("SELECT * FROM router_list WHERE id = '".intval($parent_router)."' ");
 
-                while($data_sec = $dotaz_sec->fetch_array()) {
+                while ($data_sec = $dotaz_sec->fetch_array()) {
                     $output .= "<span style=\"color: grey; font-weight: bold;\"> ( ".htmlspecialchars($data_sec["nazev"])." ) </span>";
                 }
 
@@ -1498,7 +1498,7 @@ class Topology extends adminator
     {
         $ret = array();
 
-        if(empty($typ_nodu)) {
+        if (empty($typ_nodu)) {
             $sql_filter_nod = " typ_nodu = 2 ";
         } else {
             $sql_filter_nod = " typ_nodu = ".intval($typ_nodu)." ";
@@ -1514,14 +1514,14 @@ class Topology extends adminator
             $text = htmlspecialchars("Error message: ". $e->getMessage());
         }
 
-        if(!$rs) {
+        if (!$rs) {
             $ret["error"] = array("2" => $text);
             return $ret;
         }
 
         $rs_num = $rs->num_rows;
 
-        if($rs_num == 0) {
+        if ($rs_num == 0) {
 
             $text = htmlspecialchars("Žádné nody nenalezeny");
             $ret["error"] = array("1" => $text);
@@ -1529,7 +1529,7 @@ class Topology extends adminator
             return $ret;
         }
 
-        while($data = $rs->fetch_array()) {
+        while ($data = $rs->fetch_array()) {
 
             $id = intval($data["id"]);
             $val = htmlspecialchars($data["jmeno"]);

@@ -23,7 +23,7 @@ class vlastnikfind
             $output .= "chybny vyber";
         }
 
-        if($this->echo) {
+        if ($this->echo) {
             echo $output;
         } else {
             return $output;
@@ -59,14 +59,14 @@ class vlastnikfind
 
         $radku = pg_num_rows($dotaz);
 
-        if($radku == 0) {
+        if ($radku == 0) {
             $output .= "<tr><td colspan=\"9\" ><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle ";
             $output .= "hledaného \"".$sql."\".</span></td></tr>";
-        } elseif($radku > 25) {
+        } elseif ($radku > 25) {
             $output .= "<tr><td><span style=\"color: red; \" >Nalezeno více záznamů než je limit, specifikujte hledaný výraz. </span></td></tr>";
         } else {
 
-            while($data = pg_fetch_array($dotaz)) {
+            while ($data = pg_fetch_array($dotaz)) {
 
                 $output .= "<tr><td colspan=\"14\"> <br> </td> </tr>
 
@@ -150,7 +150,7 @@ class vlastnikfind
             }
         }
 
-        if($this->echo) {
+        if ($this->echo) {
             echo $output;
         } else {
             return $output;

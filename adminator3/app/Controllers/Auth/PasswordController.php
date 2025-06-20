@@ -57,7 +57,7 @@ class PasswordController extends Controller
         $passwordHelper = new \App\Auth\passwordHelper($this->container, $requestData);
         $rs = $passwordHelper->changePassword();
 
-        if($rs === false) {
+        if ($rs === false) {
             $this->flash->addMessage('error', $passwordHelper->errorMessage);
             return $response->withStatus(302)
                 ->withHeader('Location', $this->routeParser->urlFor('auth.password.change'));

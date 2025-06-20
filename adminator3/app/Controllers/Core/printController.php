@@ -46,7 +46,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146)) {
+        if (!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -69,7 +69,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(308)) {
+        if (!$this->checkLevel(308)) {
             return $this->response;
         };
 
@@ -83,7 +83,7 @@ class printController extends adminatorController
 
             $fileData = $this->printInstance->getFileContent($param_soubory);
 
-            if($fileData === false) {
+            if ($fileData === false) {
                 $this->smarty->assign("alert_type", "danger");
                 $this->smarty->assign("alert_content", "Error! Unable to get file (" . var_export($param_soubory, true) . ")");
                 $this->smarty->display('print/redirect.tpl');
@@ -122,7 +122,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146)) {
+        if (!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -134,7 +134,7 @@ class printController extends adminatorController
 
         $button_send = $_POST["send"];
 
-        if(isset($button_send)) {
+        if (isset($button_send)) {
 
             //check a processing form
             $rf->load_input_vars();
@@ -173,7 +173,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146)) {
+        if (!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -197,7 +197,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146)) {
+        if (!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -220,7 +220,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146)) {
+        if (!$this->checkLevel(146)) {
             return $this->response;
         };
 
@@ -243,7 +243,7 @@ class printController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(146)) {
+        if (!$this->checkLevel(146)) {
             return $this->response;
         };
 

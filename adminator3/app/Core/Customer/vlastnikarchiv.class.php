@@ -36,7 +36,7 @@ class vlastnikarchiv
             $output .= "chybny vyber";
         }
 
-        if($this->echo) {
+        if ($this->echo) {
             echo $output;
         } else {
             return $output;
@@ -50,7 +50,7 @@ class vlastnikarchiv
 
         $dotaz = pg_query($dotaz_final);
 
-        if($dotaz !== false) {
+        if ($dotaz !== false) {
             $radku = pg_num_rows($dotaz);
         } else {
             $output .= "<div style=\"color: red;\">Dotaz selhal! ". pg_last_error(). "</div>";
@@ -60,7 +60,7 @@ class vlastnikarchiv
             $output .= "<tr><td><span style=\"color: red; \" >Nenalezeny žádné odpovídající výrazy dle hledaného \"".$sql."\". </span></td></tr>";
         } else {
 
-            while($data = pg_fetch_array($dotaz)) {
+            while ($data = pg_fetch_array($dotaz)) {
                 $output .= "<tr><td colspan=\"14\"> <br> </td> </tr>
                             <tr> <td class=\"vlastnici-td-black\" colspan=\"2\" width=\"\" >id: [".$data["id_cloveka"]."] 
                             nick: [".$data["nick"]."] účetní-index: [".sprintf("%05d", $data["ucetni_index"])."] </td>
@@ -249,7 +249,7 @@ class vlastnikarchiv
                 $output .= "<input type=\"hidden\" name=\"telefon\" value=\"".$data["telefon"]."\" >";
                 $output .= "<input type=\"hidden\" name=\"email\" value=\"".$data["mail"]."\" >";
 
-                if(($data["fakturacni"] > 0)) {
+                if (($data["fakturacni"] > 0)) {
                     $output .= "<input type=\"hidden\" name=\"fakturace\" value=\"2\" >";
                     //$output .= "<input type=\"hidden\" name=\"jmeno\" value=\"".$data["jmeno"]." ".$data["prijmeni"]."\" >";
                     //$output .= "<input type=\"hidden\" name=\"ulice\" value=\"".$data["ulice"]."\" >";
@@ -257,7 +257,7 @@ class vlastnikarchiv
                 }
                 if ($data["k_platbe"] == "250") {
                     $output .= "<input type=\"hidden\" name=\"tarif\" value=\"1\" >";
-                } elseif($data["k_platbe"] == "420") {
+                } elseif ($data["k_platbe"] == "420") {
                     $output .= "<input type=\"hidden\" name=\"tarif\" value=\"2\" >";
                 } else {
                     $output .= "<input type=\"hidden\" name=\"tarif\" value=\"3\" >";
@@ -280,7 +280,7 @@ class vlastnikarchiv
             }
         }
 
-        if($this->echo) {
+        if ($this->echo) {
             echo $output;
         } else {
             return $output;

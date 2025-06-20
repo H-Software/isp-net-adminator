@@ -32,26 +32,26 @@ class ArchivZmen
     {
         $pole3 = "";
 
-        foreach($dataOrig as $key => $val) {
+        foreach ($dataOrig as $key => $val) {
 
-            if(!($dataUpdated[$key] == $val)) {
-                if(!($key == "id_stb")) {
-                    if($key == "ip_adresa") {
+            if (!($dataUpdated[$key] == $val)) {
+                if (!($key == "id_stb")) {
+                    if ($key == "ip_adresa") {
                         $pole3 .= "změna <b>IP adresy</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
                         $pole3 .= ", ";
                     } //konec key == ip
-                    elseif($key == "mac_adresa") {
+                    elseif ($key == "mac_adresa") {
                         $pole3 .= "změna <b>MAC adresy</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
                         $pole3 .= ", ";
                     } //konec key == mac
-                    elseif($key == "sw_port") {
+                    elseif ($key == "sw_port") {
                         $pole3 .= "změna <b>Čísla portu (ve switchi)</b> z: ";
 
-                        if($val == "a") {
+                        if ($val == "a") {
                             $pole3 .= "<span class=\"az-s1\">Ano</span> na: <span class=\"az-s2\">Ne</span>";
-                        } elseif($val == "n") {
+                        } elseif ($val == "n") {
                             $pole3 .= "<span class=\"az-s1\">Ne</span> na: <span class=\"az-s2\">Ano</span>";
                         } else {
                             $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
@@ -59,7 +59,7 @@ class ArchivZmen
 
                         $pole3 .= ", ";
                     } //konec key == sw_port
-                    elseif($key == "id_nodu") {
+                    elseif ($key == "id_nodu") {
                         $pole3 .= "změna <b>Přípojného bodu</b> z: ";
 
                         $vysl_t1 = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($val)."'");
@@ -78,7 +78,7 @@ class ArchivZmen
 
                         $pole3 .= ", ";
                     } // konec key == id_nodu
-                    elseif($key == "id_tarifu") {
+                    elseif ($key == "id_tarifu") {
                         $pole3 .= "změna <b>Tarifu</b> z: ";
 
                         $vysl_t1 = $this->conn_mysql->query("SELECT jmeno_tarifu FROM tarify_iptv WHERE id_tarifu = '".intval($val)."'");
@@ -98,7 +98,7 @@ class ArchivZmen
                         $pole3 .= ", ";
 
                     } //konec key == id_tarifu
-                    elseif($key == "pozn") {
+                    elseif ($key == "pozn") {
                         $pole3 .= "změna <b>Poznámky</b> z: ";
                         $pole3 .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
                         $pole3 .= ", ";
@@ -118,15 +118,15 @@ class ArchivZmen
     public function getActionType($actionType, $itemId = null)
     {
         $r = "";
-        if($actionType == 1) {
+        if ($actionType == 1) {
             return "<b> akce: pridani fakt. skupiny; </b><br>";
-        } elseif($actionType == 2) {
+        } elseif ($actionType == 2) {
             $r .= "<b>akce: uprava fakturacni skupiny; </b><br>";
             $r .= "[id_fs] => " . $itemId;
             $r .= " diferencialni data: ";
 
             return $r;
-        } elseif($actionType == 3) {
+        } elseif ($actionType == 3) {
             $r .= "[id_stb]=> " . $itemId . ",";
             $r .= " diferencialni data: ";
 
@@ -164,12 +164,12 @@ class ArchivZmen
 
         $actionBody = $this->getActionType($actionType, $args[0]['itemId']);
 
-        if($actionType == 3) {
+        if ($actionType == 3) {
             $actionBody .= $this->mutateStbParams($dataOrig, $dataUpdated);
         } else {
-            foreach($dataOrig as $key => $val) {
-                if(!($dataUpdated[$key] == $val)) {
-                    if($key == "pozn") {
+            foreach ($dataOrig as $key => $val) {
+                if (!($dataUpdated[$key] == $val)) {
+                    if ($key == "pozn") {
                         $actionBody .= "změna <b>Poznámky</b> z: ";
                         $actionBody .= "<span class=\"az-s1\">".$val."</span> na: <span class=\"az-s2\">".$dataUpdated[$key]."</span>";
                         $actionBody .= ", ";
@@ -201,23 +201,23 @@ class ArchivZmen
 
         $pocet = intval($_GET["pocet"]);
 
-        if(strlen($_GET["id"]) > 0) {
+        if (strlen($_GET["id"]) > 0) {
             $id = intval($_GET["id"]);
         }
 
-        if(strlen($_GET["id_nodu"]) > 0) {
+        if (strlen($_GET["id_nodu"]) > 0) {
             $id_nodu = intval($_GET["id_nodu"]);
         }
 
-        if(strlen($_GET["id_stb"]) > 0) {
+        if (strlen($_GET["id_stb"]) > 0) {
             $id_stb = intval($_GET["id_stb"]);
         }
 
-        if(strlen($_GET["id_cloveka"]) > 0) {
+        if (strlen($_GET["id_cloveka"]) > 0) {
             $id_cloveka = intval($_GET["id_cloveka"]);
         }
 
-        if(strlen($_GET["id_routeru"]) > 0) {
+        if (strlen($_GET["id_routeru"]) > 0) {
             $id_routeru = intval($_GET["id_routeru"]);
         }
 
@@ -242,22 +242,22 @@ class ArchivZmen
             $output .= " selected ";
         } $output .= " >50</option>
                         <option value=\"100\" ";
-        if($pocet == "100") {
+        if ($pocet == "100") {
             $output .= " selected ";
         } $output .= " >100</option>
                         <option value=\"150\"";
-        if($pocet == "150") {
+        if ($pocet == "150") {
             $output .= " selected ";
         } $output .= " >150</option>
 
                         <option value=\"1000\"";
-        if($pocet == "500") {
+        if ($pocet == "500") {
             $output .= " selected ";
         } $output .= " >500</option>
 
                     </select>\n";
 
-        if(!isset($id_nodu) and !isset($id) and !isset($id_stb) and !isset($id_cloveka) and !isset($id_routeru)) {
+        if (!isset($id_nodu) and !isset($id) and !isset($id_stb) and !isset($id_cloveka) and !isset($id_routeru)) {
 
             $output .= "<span style=\"margin-right: 20px; margin-left: 20px; \">Typ záznamů:</span>\n";
 
@@ -270,52 +270,52 @@ class ArchivZmen
             <optgroup label=\"objekty\" >
 
             <option value=\"1\" ";
-            if($typ == "1") {
+            if ($typ == "1") {
                 $output .= " selected ";
             } $output .= " >akce: úprava objektu</option>
             <option value=\"2\"";
-            if($typ == "2") {
+            if ($typ == "2") {
                 $output .= " selected ";
             } $output .= " >akce: přidání objektu</option>
             <option value=\"3\"";
-            if($typ == "3") {
+            if ($typ == "3") {
                 $output .= " selected ";
             } $output .= " >akce: smazáni objektu</option>
 
             <option value=\"4\"";
-            if($typ == "4") {
+            if ($typ == "4") {
                 $output .= " selected ";
             } $output .= " >akce: úprava stb objektu</option>
             <option value=\"5\"";
-            if($typ == "5") {
+            if ($typ == "5") {
                 $output .= " selected ";
             } $output .= " >akce: přidání stb objektu</option>
             <option value=\"6\"";
-            if($typ == "6") {
+            if ($typ == "6") {
                 $output .= " selected ";
             } $output .= " >akce: smazaní stb objektu</option>
 
             <optgroup label=\"vlastníci\" >
 
             <option value=\"7\"";
-            if($typ == "7") {
+            if ($typ == "7") {
                 $output .= " selected ";
             } $output .= " >akce: úprava vlastníka</option>
             <option value=\"8\"";
-            if($typ == "8") {
+            if ($typ == "8") {
                 $output .= " selected ";
             } $output .= " >akce: přidáni vlastníka</option>
 
             <option value=\"9\"";
-            if($typ == "9") {
+            if ($typ == "9") {
                 $output .= " selected ";
             } $output .= " >akce: přidáni fakturační adresy</option>
             <option value=\"10\"";
-            if($typ == "10") {
+            if ($typ == "10") {
                 $output .= " selected ";
             } $output .= " >akce: úprava fakturační adresy</option>
             <option value=\"11\"";
-            if($typ == "11") {
+            if ($typ == "11") {
                 $output .= " selected ";
             } $output .= " >akce: smazání fakturační adresy</option>
 
@@ -326,25 +326,25 @@ class ArchivZmen
             <optgroup label=\"obojí (objekty i vlastníci)\" >
 
             <option value=\"12\"";
-            if($typ == "12") {
+            if ($typ == "12") {
                 $output .= " selected ";
             } $output .= " >akce: přiřazení objektu k vlastníkovi</option>
             <option value=\"13\"";
-            if($typ == "13") {
+            if ($typ == "13") {
                 $output .= " selected ";
             } $output .= " >akce: prirazeni objektu typu STB k vlastnikovi</option>
 
             <option value=\"14\"";
-            if($typ == "14") {
+            if ($typ == "14") {
                 $output .= " selected ";
             } $output .= " >akce: odrazeni objektu (od vlastníka)</option>
             <option value=\"15\"";
-            if($typ == "15") {
+            if ($typ == "15") {
                 $output .= " selected ";
             } $output .= " >akce: odparovani stb objektu (od vlastníka)</option>
 
             <option value=\"25\"";
-            if($typ == "25") {
+            if ($typ == "25") {
                 $output .= " selected ";
             } $output .= " >akce: zakazani netu z duvodu sikany</option>
 
@@ -353,54 +353,54 @@ class ArchivZmen
             <optgroup label=\"topologie - routery \" >
 
             <option value=\"17\"";
-            if($typ == "17") {
+            if ($typ == "17") {
                 $output .= " selected ";
             } $output .= " >akce: přidání routeru</option>
             <option value=\"18\"";
-            if($typ == "18") {
+            if ($typ == "18") {
                 $output .= " selected ";
             } $output .= " >akce: úprava routeru</option>
             <option value=\"19\"";
-            if($typ == "19") {
+            if ($typ == "19") {
                 $output .= " selected ";
             } $output .= " >akce: smazání routeru</option>
 
             <optgroup label=\"topologie - nody/lokality \" >
 
             <option value=\"20\"";
-            if($typ == "20") {
+            if ($typ == "20") {
                 $output .= " selected ";
             } $output .= " >akce: přidání nodu</option>
             <option value=\"21\"";
-            if($typ == "21") {
+            if ($typ == "21") {
                 $output .= " selected ";
             } $output .= " >akce: úprava nodu</option>
             <option value=\"22\"";
-            if($typ == "22") {
+            if ($typ == "22") {
                 $output .= " selected ";
             } $output .= " >akce: smazání nodu</option>
 
             <optgroup label=\"monitoring - grafy \" >
 
             <option value=\"23\"";
-            if($typ == "23") {
+            if ($typ == "23") {
                 $output .= " selected ";
             } $output .= " >akce: přidání/změna grafu</option>
             <option value=\"24\"";
-            if($typ == "24") {
+            if ($typ == "24") {
                 $output .= " selected ";
             } $output .= " >akce: smazání grafu</option>
 
             <optgroup label=\"ostatní (prostě zbytek)\" >
 
             <option value=\"16\"";
-            if($typ == "16") {
+            if ($typ == "16") {
                 $output .= " selected ";
             } $output .= " >akce: požadavek na restart</option>
 
     <!--
             <option value=\"\"";
-            if($typ == "") {
+            if ($typ == "") {
                 $output .= " selected ";
             } $output .= " >akce: pridani hotovostni platby</option>
 
@@ -424,93 +424,93 @@ class ArchivZmen
 
         $zaklad_sql = "select *,DATE_FORMAT(provedeno_kdy, '%d.%m.%Y %H:%i:%s') as provedeno_kdy2 from archiv_zmen ";
 
-        if($typ > 0) {
+        if ($typ > 0) {
 
-            if($typ == 0) {
+            if ($typ == 0) {
                 $type_select = "";
-            } elseif($typ == 1) {
+            } elseif ($typ == 1) {
                 $type_select = "WHERE (akce LIKE '<b>akce: uprava objektu; </b>%') ";
-            } elseif($typ == 2) {
+            } elseif ($typ == 2) {
                 $type_select = "WHERE (akce LIKE '<b> akce: pridani objektu ; </b>%') ";
-            } elseif($typ == 3) {
+            } elseif ($typ == 3) {
                 $type_select = "WHERE (akce LIKE '<b>akce: smazani objektu;</b>%') ";
-            } elseif($typ == 4) {
+            } elseif ($typ == 4) {
                 $type_select = "WHERE (akce LIKE '<b>akce: uprava stb objektu; </b>%') ";
-            } elseif($typ == 5) {
+            } elseif ($typ == 5) {
                 $type_select = "WHERE (akce like '<b> akce: pridani stb objektu ; </b>%') ";
-            } elseif($typ == 6) {
+            } elseif ($typ == 6) {
                 $type_select = "WHERE (akce LIKE '<b> akce: smazani stb objektu ; </b>%') ";
-            } elseif($typ == 7) {
+            } elseif ($typ == 7) {
                 $type_select = "WHERE (akce LIKE '<b>akce: uprava vlastnika; </b>%') ";
-            } elseif($typ == 8) {
+            } elseif ($typ == 8) {
                 $type_select = "WHERE (akce LIKE '<b>akce: pridani vlastnika ; </b>%') ";
-            } elseif($typ == 9) {
+            } elseif ($typ == 9) {
                 $type_select = "WHERE (akce LIKE '<b>akce: pridani fakturacni adresy;</b>%') ";
-            } elseif($typ == 10) {
+            } elseif ($typ == 10) {
                 $type_select = "WHERE ( ".
                         "akce LIKE '<b>akce</b>: uprava fakturacni adresy%' ".
                         " OR ".
                         "akce LIKE ' akce: uprava fakturacni adresy%' ".
                         ")";
-            } elseif($typ == 11) {
+            } elseif ($typ == 11) {
                 $type_select = "WHERE ( ".
                         "akce LIKE ' akce: smazani fakturacni adresy ;%' ".
                         ")";
-            } elseif($typ == 12) {
+            } elseif ($typ == 12) {
                 $type_select = "WHERE ( ".
                         "akce LIKE ' prirazeni objektu%' ".
                         " OR ".
                         "akce LIKE '<b>akce: prirazeni objektu k vlastnikovi; </b>%' ".
                         ")";
-            } elseif($typ == 13) {
+            } elseif ($typ == 13) {
                 $type_select = "WHERE akce LIKE '<b>akce: prirazeni objektu typu STB k vlastnikovi; </b>%' ";
-            } elseif($typ == 14) {
+            } elseif ($typ == 14) {
                 $type_select = "WHERE ( ".
                             "akce LIKE ' odrazeni objektu%' ".
                             " OR ".
                             "akce LIKE '<b>akce: odrazeni objektu; </b>%' ".
                         ")";
-            } elseif($typ == 15) {
+            } elseif ($typ == 15) {
                 $type_select = "WHERE (akce LIKE '<b> akce: odparovani stb objektu ; </b>%') ";
-            } elseif($typ == 16) {
+            } elseif ($typ == 16) {
                 $type_select = "WHERE ( ".
                             "akce LIKE '<b>akce: požadavek na restart;</b>%' ".
                             " OR ".
                             "akce LIKE '<b>akce:</b> požadavek na restart;<br>%' ".
                         " ) ";
-            } elseif($typ == 17) {
+            } elseif ($typ == 17) {
                 $type_select = "WHERE ( ".
                             "akce LIKE '<b>akce: pridani routeru;</b>%' ".
                             " OR ".
                             "akce LIKE ' akce: pridani routeru ;%' ".
                         " ) ";
-            } elseif($typ == 18) {
+            } elseif ($typ == 18) {
                 $type_select = "WHERE ( ".
                             "akce LIKE ' akce: uprava routeru ;%' ".
                             " OR ".
                             "akce LIKE '<b>akce: uprava routeru;</b>%' ".
                         " ) ";
-            } elseif($typ == 19) {
+            } elseif ($typ == 19) {
                 $type_select = "WHERE akce LIKE '<b>akce: smazání routeru;</b>%' ";
-            } elseif($typ == 20) {
+            } elseif ($typ == 20) {
                 $type_select = "WHERE akce LIKE '<b>akce: pridani nodu ; </b>%' ";
-            } elseif($typ == 21) {
+            } elseif ($typ == 21) {
                 $type_select = "WHERE akce LIKE '<b>akce: uprava nodu;</b>%' ";
-            } elseif($typ == 22) {
+            } elseif ($typ == 22) {
                 $type_select = "WHERE akce LIKE '<b>akce: smazání lokality / nodu; </b>%' ";
-            } elseif($typ == 23) {
+            } elseif ($typ == 23) {
                 $type_select = "WHERE ( ".
                             "akce LIKE ' pridani/zmena  grafu%' ".
                             " OR ".
                             "akce LIKE '<b>akce: pridani/zmena  grafu;</b>%' ".
                         " ) ";
-            } elseif($typ == 24) {
+            } elseif ($typ == 24) {
                 $type_select = "WHERE ( ".
                             "akce LIKE ' akce: smazani grafu ;%'".
                             " OR ".
                             "akce LIKE '<b>akce: smazani grafu;</b>%' ".
                         " ) ";
-            } elseif($typ == 25) {
+            } elseif ($typ == 25) {
                 $type_select = "WHERE ( ".
                             "akce LIKE 'akce: zakazani netu z duvodu sikany %' ".
                             " OR ".
@@ -520,13 +520,13 @@ class ArchivZmen
 
             $sql_result = $zaklad_sql." ".$type_select." ORDER BY id DESC ";
 
-        } elseif($id > 0) {
+        } elseif ($id > 0) {
             $sql_result = $zaklad_sql." WHERE ( ".
                             " akce LIKE '%[id_komplu]=> ".$id."%' ".
                             // " OR ".
                             // " akce LIKE '%[id_komplu]=> ".$id." ,%' ".
                             " ) ORDER BY id DESC ";
-        } elseif($id_cloveka > 0) {
+        } elseif ($id_cloveka > 0) {
 
             $id_cloveka_sql = " where ( ( akce LIKE '%[id_cloveka]=> ".$id_cloveka." ,%' AND akce NOT LIKE '%[id_komplu]%' ) ";
             $id_cloveka_sql .= " OR ( akce LIKE '%[id_cloveka] => ".$id_cloveka." ,%' ) OR ( akce LIKE ";
@@ -536,7 +536,7 @@ class ArchivZmen
 
             $sql_result = $zaklad_sql.$id_cloveka_sql." ORDER BY id DESC ";
 
-        } elseif($id_stb > 0) {
+        } elseif ($id_stb > 0) {
 
             $sql_stb = " WHERE ( ".
 
@@ -550,7 +550,7 @@ class ArchivZmen
                     ") ORDER BY id DESC ";
 
             $sql_result = $zaklad_sql.$sql_stb;
-        } elseif($id_nodu > 0) {
+        } elseif ($id_nodu > 0) {
 
             $idnodu_select = " WHERE ( ".
                         " akce LIKE '% uprava nodu;%[id_nodu] => ".$id_nodu." %' ".
@@ -560,7 +560,7 @@ class ArchivZmen
 
             $sql_result = $zaklad_sql.$idnodu_select;
 
-        } elseif($id_routeru > 0) {
+        } elseif ($id_routeru > 0) {
 
             $idrouteru_select = " WHERE ( ".
                         "akce LIKE '<b>akce: uprava routeru;</b><br> [id_routeru] => <a href=\"topology-router-list.php\">".$id_routeru."</a>%' ".
@@ -575,7 +575,7 @@ class ArchivZmen
             $sql_result = $zaklad_sql." order by id DESC ";
         }
 
-        if($pocet > 0) {
+        if ($pocet > 0) {
             $sql_result = $sql_result." LIMIT ".$pocet;
         } else {
             $sql_result = $sql_result." LIMIT 50";
@@ -591,7 +591,7 @@ class ArchivZmen
         $radku = $vysl->num_rows;
 
         //ted zjistime jeslti je archiv
-        if(isset($id)) {
+        if (isset($id)) {
             $output .= "<div style=\"padding-left: 5px; \">";
 
             $output .= "<div style=\"padding-top: 10px; padding-bottom: 10px; font-weight: bold; font-size: 18px; \">";
@@ -599,8 +599,8 @@ class ArchivZmen
 
             $dotaz_objekty = pg_query($this->conn_pgsql, "SELECT dns_jmeno, ip, mac FROM objekty WHERE id_komplu = '".intval($id_objektu)."' ");
 
-            if((pg_num_rows($dotaz_objekty) == 1)) {
-                while($data_objekty = pg_fetch_array($dotaz_objekty)) {
+            if ((pg_num_rows($dotaz_objekty) == 1)) {
+                while ($data_objekty = pg_fetch_array($dotaz_objekty)) {
                     $output .= "<div >dns jméno: <span style=\"color: grey;\">".$data_objekty["dns_jmeno"]."</span></div>";
                     $output .= "<div >ip adresa: <span style=\"color: grey;\">".$data_objekty["ip"]."</span></div>";
                     $output .= "<div >mac adresa: <span style=\"color: grey;\">".$data_objekty["mac"]."</span></div>";
@@ -609,13 +609,13 @@ class ArchivZmen
                 }
 
                 $dotaz_vlastnik = pg_query($this->conn_pgsql, "SELECT archiv, firma FROM vlastnici WHERE id_cloveka = '".intval($id_vlastnika)."' ");
-                while($data_vlastnik = pg_fetch_array($dotaz_vlastnik)) {
+                while ($data_vlastnik = pg_fetch_array($dotaz_vlastnik)) {
                     $firma_vlastnik = $data_vlastnik["firma"];
                     $archiv_vlastnik = $data_vlastnik["archiv"];
 
                     $output .= "<div style=\"padding-top: 5px; \" >Detail vlastníka: ";
 
-                    if($archiv_vlastnik == 1) {
+                    if ($archiv_vlastnik == 1) {
                         $output .= "<a href=\"/vlastnici/archiv?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n";
                     } else { //if( $firma_vlastnik == 1 )
                         $output .= "<a href=\"/vlastnici2?find_id=".$data_vlastnik["id_cloveka"]."\" >".$data_vlastnik["id_cloveka"]."</a> \n";
@@ -655,11 +655,11 @@ class ArchivZmen
                 $id_cloveka_res = "";
                 $akce = $data["akce"];
 
-                if(preg_match("/id_stb/", $akce)) {
+                if (preg_match("/id_stb/", $akce)) {
 
                     $pm = preg_match("/<b>\[id_stb\]<\/b>/", $akce);
 
-                    if(($pm == 1)) {
+                    if (($pm == 1)) {
                         $stb_string = "<b>[id_stb]</b> =>";
                     } else {
                         $stb_string = "[id_stb]=>";
@@ -681,18 +681,18 @@ class ArchivZmen
 
                 }
 
-                if(preg_match("/prirazeni objektu k vlastnikovi/", $akce)) {
+                if (preg_match("/prirazeni objektu k vlastnikovi/", $akce)) {
                     $pomocne = explode(" ", $akce);
                     $id_komplu_pomocne = preg_replace("/,/", "", $pomocne[7]);
 
                     $id_cloveka_pomocne = $pomocne[10];
 
-                    if(!($id_cloveka_pomocne > 0)) {
+                    if (!($id_cloveka_pomocne > 0)) {
                         $id_cloveka_pomocne = $pomocne[10];
                     }
 
                     $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."'");
-                    while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
+                    while ($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                         $data_kompl_dns = $data_kompl["dns_jmeno"];
                     }
                     $id_komplu_pomocne_rs = "<a href=\"" . fix_link_to_another_adminator("/objekty.php")."?dns_find=". $data_kompl_dns;
@@ -701,14 +701,14 @@ class ArchivZmen
                     $akce = preg_replace("/\[id_komplu\]=> (".$id_komplu_pomocne.")/", "id_komplu]=> ".$id_komplu_pomocne_rs, $akce);
 
                     $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
-                    while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
+                    while ($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
                         $firma_vlastnik = $data_vlastnik_pom["firma"];
                         $archiv_vlastnik = $data_vlastnik_pom["archiv"];
                     }
 
-                    if($archiv_vlastnik == 1) {
+                    if ($archiv_vlastnik == 1) {
                         $id_cloveka_res .= "<a href=\"/vlastnici/archiv";
-                    } elseif($firma_vlastnik == 1) {
+                    } elseif ($firma_vlastnik == 1) {
                         $id_cloveka_res .= "<a href=\"/vlastnici2";
                     } else {
                         $id_cloveka_res .= "<a href=\"/vlastnici";
@@ -718,9 +718,9 @@ class ArchivZmen
 
                     $akce = preg_replace("/\[id_vlastnika\] => (".$id_cloveka_pomocne.")/", "[id_vlastnika] => ".$id_cloveka_res, $akce);
 
-                } elseif(preg_match("/smazani objektu/", $akce)) {
+                } elseif (preg_match("/smazani objektu/", $akce)) {
                     //nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole
-                } elseif(preg_match("/pridani objektu do \"nove\" garant. tridy/", $akce)) {
+                } elseif (preg_match("/pridani objektu do \"nove\" garant. tridy/", $akce)) {
                     //nic no, ale musi to tu bejt, jinak se vyhodnocujou blbe ty porovnani dole
 
                 }
@@ -737,8 +737,7 @@ class ArchivZmen
                     $akce = ereg_replace($pomocne[8], $id_komplu_pomocne_rs, $akce);
 
                 }
-                */
-                elseif(preg_match("/odrazeni objektu/", $akce)) {
+                */ elseif (preg_match("/odrazeni objektu/", $akce)) {
 
                     $pomocne = explode("[id_komplu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
@@ -747,7 +746,7 @@ class ArchivZmen
 
                     $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT dns_jmeno FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
-                    while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
+                    while ($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                         $data_kompl_dns = $data_kompl["dns_jmeno"];
                     }
 
@@ -756,25 +755,25 @@ class ArchivZmen
 
                     $akce = preg_replace("/\[id_komplu\]=> ".$id_komplu_pomocne."/", "[id_komplu]=> ".$id_komplu_pomocne_rs."", $akce);
 
-                } elseif(preg_match("/\[id_vlastnika\]/", $akce)) {
+                } elseif (preg_match("/\[id_vlastnika\]/", $akce)) {
                     $pomocne = explode("[id_vlastnika]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
                     $id_cloveka_pomocne = trim($pomocne2[2]);
 
-                    if(!($id_cloveka_pomocne > 0)) {
+                    if (!($id_cloveka_pomocne > 0)) {
                         $id_cloveka_pomocne = $pomocne2[1];
                     }
 
                     $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT * FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
 
-                    while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
+                    while ($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
                         $firma_vlastnik = $data_vlastnik_pom["firma"];
                         $archiv_vlastnik = $data_vlastnik_pom["archiv"];
                     }
 
-                    if($archiv_vlastnik == 1) {
+                    if ($archiv_vlastnik == 1) {
                         $id_cloveka_res .= "<a href=\"/vlastnici/archiv";
-                    } elseif($firma_vlastnik == 1) {
+                    } elseif ($firma_vlastnik == 1) {
                         $id_cloveka_res .= "<a href=\"/vlastnici2";
                     } else {
                         $id_cloveka_res .= "<a href=\"/vlastnici";
@@ -784,12 +783,12 @@ class ArchivZmen
 
                     $akce = preg_replace("/".$id_cloveka_pomocne."/", $id_cloveka_res, $akce);
 
-                } elseif(preg_match("/\[id_cloveka\]/", $akce)) {
+                } elseif (preg_match("/\[id_cloveka\]/", $akce)) {
                     $pomocne = explode("[id_cloveka]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
                     $id_cloveka_pomocne = trim($pomocne2[2]);
 
-                    if(!($id_cloveka_pomocne > 0)) {
+                    if (!($id_cloveka_pomocne > 0)) {
                         $id_cloveka_pomocne = $pomocne2[1];
                     }
 
@@ -797,14 +796,14 @@ class ArchivZmen
 
                     $dotaz_vlastnik_pom = pg_query($this->conn_pgsql, "SELECT firma, archiv FROM vlastnici WHERE id_cloveka = '".intval($id_cloveka_pomocne)."' ");
 
-                    while($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
+                    while ($data_vlastnik_pom = pg_fetch_array($dotaz_vlastnik_pom)) {
                         $firma_vlastnik = $data_vlastnik_pom["firma"];
                         $archiv_vlastnik = $data_vlastnik_pom["archiv"];
                     }
 
-                    if($archiv_vlastnik == 1) {
+                    if ($archiv_vlastnik == 1) {
                         $id_cloveka_res .= "<a href=\"/vlastnici/archiv";
-                    } elseif($firma_vlastnik == 1) {
+                    } elseif ($firma_vlastnik == 1) {
                         $id_cloveka_res .= "<a href=\"/vlastnici2";
                     } else {
                         $id_cloveka_res .= "<a href=\"/vlastnici";
@@ -814,7 +813,7 @@ class ArchivZmen
 
                     $akce = preg_replace("/\[id_cloveka\] => ".$id_cloveka_pomocne."/", "[id_cloveka] => " . $id_cloveka_res, $akce);
 
-                } elseif(preg_match("/uprava objektu/", $akce)) {
+                } elseif (preg_match("/uprava objektu/", $akce)) {
 
                     $pomocne = explode("[id_komplu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
@@ -822,7 +821,7 @@ class ArchivZmen
 
                     $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
-                    while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
+                    while ($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                         $data_kompl_dns = $data_kompl["dns_jmeno"];
                     }
 
@@ -830,15 +829,15 @@ class ArchivZmen
                     $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
 
                     $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);
-                } elseif(preg_match("/zakazani netu z duvodu sikany/", $akce)) {
+                } elseif (preg_match("/zakazani netu z duvodu sikany/", $akce)) {
                     $pomocne = explode("[id_komplu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
                     $id_komplu_pomocne = preg_replace("/,/", "", $pomocne2[1]);
 
-                    if(is_numeric($id_komplu_pomocne)) {
+                    if (is_numeric($id_komplu_pomocne)) {
                         $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
-                        while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
+                        while ($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                             $data_kompl_dns = $data_kompl["dns_jmeno"];
                         }
 
@@ -847,17 +846,17 @@ class ArchivZmen
 
                         $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);
                     }
-                } elseif(preg_match("/pridani objektu/", $akce)) {
+                } elseif (preg_match("/pridani objektu/", $akce)) {
                     $pomocne = explode("[id_komplu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
                     $id_komplu_pomocne = $pomocne2[1];
 
                     //$id_komplu_pomocne = ereg_replace(",", "", $pomocne2[1]);
 
-                    if(is_numeric($id_komplu_pomocne)) {
+                    if (is_numeric($id_komplu_pomocne)) {
                         $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
-                        while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
+                        while ($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                             $data_kompl_dns = $data_kompl["dns_jmeno"];
                         }
 
@@ -866,15 +865,15 @@ class ArchivZmen
 
                         $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);
                     }
-                } elseif(preg_match("/uprava nodu/", $akce)) {
+                } elseif (preg_match("/uprava nodu/", $akce)) {
                     $pomocne = explode("[id_nodu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
                     $id_nodu_pomocne = $pomocne2[2];
 
-                    if(preg_match('/^([[:digit:]]+)$/', $id_nodu_pomocne)) {
+                    if (preg_match('/^([[:digit:]]+)$/', $id_nodu_pomocne)) {
                         $dotaz_id_nodu = $this->conn_mysql->query("SELECT jmeno FROM nod_list WHERE id = '".intval($id_nodu_pomocne)."' ");
 
-                        while($data_nod = $dotaz_id_nodu->fetch_array()) {
+                        while ($data_nod = $dotaz_id_nodu->fetch_array()) {
                             $nazev_nodu = $data_nod["jmeno"];
                         }
 
@@ -884,7 +883,7 @@ class ArchivZmen
                         //$id_nodu_pomocne2 = "[id_nodu] => ".$id_nodu_pomocne;
                         $akce = preg_replace("/ ".$id_nodu_pomocne." /", " ".$id_nodu_rs." ", $akce);
                     }
-                } elseif(preg_match("/automaticke nastaveni sikany/", $akce)) {
+                } elseif (preg_match("/automaticke nastaveni sikany/", $akce)) {
                     $pomocne = explode("[id_komplu]", $akce);
                     $pomocne2 = explode(" ", $pomocne[1]);
                     $pomocne3 = explode("<br>", $pomocne2[1]);
@@ -892,7 +891,7 @@ class ArchivZmen
 
                     $dotaz_id_komplu = pg_query($this->conn_pgsql, "SELECT * FROM objekty WHERE id_komplu = '".intval($id_komplu_pomocne)."' ");
 
-                    while($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
+                    while ($data_kompl = pg_fetch_array($dotaz_id_komplu)) {
                         $data_kompl_dns = $data_kompl["dns_jmeno"];
                     }
 
@@ -900,7 +899,7 @@ class ArchivZmen
                     $id_komplu_pomocne_rs .= "\" >".$id_komplu_pomocne."</a>";
 
                     $akce = preg_replace("/".$id_komplu_pomocne."/", "".$id_komplu_pomocne_rs."", $akce);
-                } elseif(preg_match("/uprava routeru/", $akce)) {
+                } elseif (preg_match("/uprava routeru/", $akce)) {
 
                     $pomocne = explode("[id_routeru]", $akce);
                     $pomocne2 = explode(">", $pomocne[1]);
@@ -967,11 +966,11 @@ class ArchivZmen
             $output .= " selected ";
         } $output .= " >1</option>
                         <option value=\"3\" ";
-        if($pocet == "3") {
+        if ($pocet == "3") {
             $output .= " selected ";
         } $output .= " >3</option>
                         <option value=\"5\"";
-        if($pocet == "5") {
+        if ($pocet == "5") {
             $output .= " selected ";
         } $output .= " >5</option>
                     </select>";
@@ -992,7 +991,7 @@ class ArchivZmen
 
         $zaklad_sql = "select *,DATE_FORMAT(provedeno_kdy, '%d.%m.%Y %H:%i:%s') as provedeno_kdy2 from archiv_zmen_work ";
 
-        if(($pocet_check)) {
+        if (($pocet_check)) {
             if ((strlen($pocet) > 0)) {
                 $sql = $zaklad_sql." order by id DESC LIMIT $pocet ";
             } else {

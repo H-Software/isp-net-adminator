@@ -106,21 +106,21 @@ abstract class AdminatorTestCase extends TestCase
 
         require __DIR__ . '/../tests/fixtures/bootstrapContainerAfter.php';
 
-        if($sentinelMocked) {
+        if ($sentinelMocked) {
             require __DIR__ . '/../tests/fixtures/containers/sentinelMock.php';
             require __DIR__ . '/../tests/fixtures/containers/routeParserMock.php';
         } else {
             require __DIR__ . '/../tests/fixtures/containers/sentinel.php';
         }
 
-        if($viewEnabled === true) {
+        if ($viewEnabled === true) {
             require __DIR__ . '/../tests/fixtures/containers/routeParserMock.php';
             require __DIR__ . '/../tests/fixtures/containers/uriMock.php';
             require __DIR__ . '/../tests/fixtures/containers/view-twig.php';
         }
 
-        if($validatorEnabled == true) {
-            if($validatorMocked == true) {
+        if ($validatorEnabled == true) {
+            if ($validatorMocked == true) {
                 require __DIR__ . '/../tests/fixtures/containers/validatorMock.php';
             }
         }
@@ -177,7 +177,7 @@ abstract class AdminatorTestCase extends TestCase
             ->andReturn($user_token);
         // $adminatorMock->shouldReceive('show_stats_faktury_neuhr')->andReturn([0, 0, 0, 0]);
 
-        if($mockCheckLevel) {
+        if ($mockCheckLevel) {
             $adminatorMock->shouldReceive('checkLevel')->andReturn(true);
         } else {
             // mock this, because we dont have data in database (probably)
@@ -196,7 +196,7 @@ abstract class AdminatorTestCase extends TestCase
         $assertHttpCode = 200,
         array $controllerFunctionParams = [],
     ): ResponseInterface {
-        if(is_array($mockedInstance)) {
+        if (is_array($mockedInstance)) {
             $adminatorInstance = array_key_exists('adminatorMock', $mockedInstance) ? $mockedInstance['adminatorMock'] : null;
             $opravyInstance = array_key_exists('opravyMock', $mockedInstance) ? $mockedInstance['opravyMock'] : null;
 
@@ -390,7 +390,7 @@ abstract class AdminatorTestCase extends TestCase
                 break;
             }
             /** @disregard */
-            if($node->hasAttribute('href')) {
+            if ($node->hasAttribute('href')) {
                 /** @disregard */
                 $nodeValues[] = $node->getAttribute('href');
                 /** @disregard */
@@ -400,7 +400,7 @@ abstract class AdminatorTestCase extends TestCase
                 }
             }
             /** @disregard */
-            if($node->hasAttribute('action')) {
+            if ($node->hasAttribute('action')) {
                 /** @disregard */
                 $nodeValues[] = $node->getAttribute('action');
                 /** @disregard */

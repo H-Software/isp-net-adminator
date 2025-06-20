@@ -58,7 +58,7 @@ class c_listing_objekty
     //vyber dat z databaze
     public function dbSelect()
     {
-        if($this->dbHandler instanceof \PgSql\Connection) {
+        if ($this->dbHandler instanceof \PgSql\Connection) {
             try {
                 $listRecord = @pg_query($this->dbHandler, $this->sql);
             } catch (Exception $e) {
@@ -66,7 +66,7 @@ class c_listing_objekty
                 echo $this->befError. $e->getMessage() . $this->aftError;
                 return;
             }
-        } elseif($this->dbHandler instanceof \PDO) {
+        } elseif ($this->dbHandler instanceof \PDO) {
             try {
                 $listRecord = $this->dbHandler->query($this->sql);
             } catch (Exception $e) {
@@ -83,10 +83,10 @@ class c_listing_objekty
             $this->error(2);
         }
 
-        if($listRecord != false) {
-            if($this->dbHandler instanceof \PgSql\Connection) {
+        if ($listRecord != false) {
+            if ($this->dbHandler instanceof \PgSql\Connection) {
                 $allRecords = @pg_num_rows($listRecord);
-            } elseif($this->dbHandler instanceof \PDO) {
+            } elseif ($this->dbHandler instanceof \PDO) {
                 $allRecords = count($listRecord->fetchAll());
             } else {
                 // unknown type
@@ -94,7 +94,7 @@ class c_listing_objekty
             }
         }
 
-        if(!isset($allRecords)) {
+        if (!isset($allRecords)) {
             $this->error(2);
             return;
         }
@@ -105,7 +105,7 @@ class c_listing_objekty
 
         try {
             $allLists = ceil($allRecords / $this->interval);
-        } catch(DivisionByZeroError $e) {
+        } catch (DivisionByZeroError $e) {
         }
 
         $this->numLists = $allLists;
@@ -175,7 +175,7 @@ class c_listing_objekty
         }
         $output .= $this->after;
 
-        if($this->echo === true) {
+        if ($this->echo === true) {
             echo $output;
         } else {
             return $output;

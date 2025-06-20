@@ -69,28 +69,28 @@ class partner_servis
                  <span style=\"padding-left: 365px; \">výběr</span>
                  <span style=\"padding-left: 52px; \" >";
 
-        if((strlen($this->klient_hledat) == 0)) {
+        if ((strlen($this->klient_hledat) == 0)) {
             $output .= "<span style=\"padding-right: 70px; font-weight: bold;\">Zadejte výraz pro hledání</span>\n";
         } else {
 
             $vlastnici = $this->find_clients($this->klient_hledat);
 
-            if(is_countable($vlastnici) && count($vlastnici) == 0) {
+            if (is_countable($vlastnici) && count($vlastnici) == 0) {
                 $output .= "Žádné výsledky dle hledaného výrazu \n";
-            } elseif(is_countable($vlastnici) && count($vlastnici) > 200) {
+            } elseif (is_countable($vlastnici) && count($vlastnici) > 200) {
 
                 $output .= "<span>více nalezených klientů, prosím specifikujte hledání</span>\n";
-            } elseif(is_countable($vlastnici) && count($vlastnici) > 1) {
+            } elseif (is_countable($vlastnici) && count($vlastnici) > 1) {
 
                 $output .= "<select size=\"1\" name=\"klient_id\">\n";
                 $output .= "<option value=\"0\" class=\"select-nevybrano\">není vybráno</option>\n";
 
                 $klient_id = intval($this->klient_id);
 
-                foreach($vlastnici as $key => $value) {
+                foreach ($vlastnici as $key => $value) {
                     $output .= "\t\t<option value=\"".intval($value["id_cloveka"])."\" ";
 
-                    if($value["id_cloveka"] == $klient_id) {
+                    if ($value["id_cloveka"] == $klient_id) {
                         $output .= " selected ";
                     }
 
@@ -150,15 +150,15 @@ class partner_servis
                   <select size=\"3\" name=\"prio\">";
 
         $output .= "<option value=\"1\" ";
-        if($this->prio == 1) {
+        if ($this->prio == 1) {
             $output .= "selected";
         } $output .= " >Vysoká</option>";
         $output .= "<option value=\"2\" ";
-        if($this->prio == 2 or !isset($this->prio)) {
+        if ($this->prio == 2 or !isset($this->prio)) {
             $output .= "selected";
         } $output .= " >Normal</option>";
         $output .= "<option value=\"3\" ";
-        if($this->prio == 3) {
+        if ($this->prio == 3) {
             $output .= "selected";
         } $output .= " >Nízká</option>";
 
@@ -189,11 +189,11 @@ class partner_servis
 
         $rs_vlastnici = pg_query($this->conn_pgsql, "SELECT id_cloveka, jmeno, prijmeni, ulice, mesto FROM vlastnici ".$select."");
 
-        if($rs_vlastnici === false) {
+        if ($rs_vlastnici === false) {
             $RetArray[] = "<div>Nelze vypsat vlastniky. DB chyba! (" . pg_last_error() . ")</div>";
         }
 
-        while($array = pg_fetch_array($rs_vlastnici)) {
+        while ($array = pg_fetch_array($rs_vlastnici)) {
             $row = array();
 
             $row["id_cloveka"] = $array["id_cloveka"];
@@ -213,7 +213,7 @@ class partner_servis
 
         $rs_v = pg_query($this->conn_pgsql, "SELECT id_cloveka, jmeno, prijmeni, ulice, mesto, mail, telefon FROM vlastnici WHERE id_cloveka = '".intval($this->klient_id)."' ");
 
-        while($array = pg_fetch_array($rs_v)) {
+        while ($array = pg_fetch_array($rs_v)) {
             $this->jmeno_klienta = $array["jmeno"]." ".$array["prijmeni"];
             $this->bydliste = $array["ulice"].", ".$array["mesto"];
             $this->email = $array["mail"];
@@ -232,27 +232,27 @@ class partner_servis
         //diakriticka predloha: příliš žluťoučký kůň pěl ďábelské ódy
 
         //kontrola jmena
-        if(strlen($this->jmeno_klienta) > 50) {
+        if (strlen($this->jmeno_klienta) > 50) {
             $this->fail = true;
             $this->error .= "<div style=\"color: red; padding-left: 10px;\" ><H4>Pole \"Jméno a příjmení\" může obsahovat maximálně 50 znaků.</H4></div>";
-        } elseif((strlen($this->jmeno_klienta) < 2) and ($this->odeslat == "ULOŽIT")) {
+        } elseif ((strlen($this->jmeno_klienta) < 2) and ($this->odeslat == "ULOŽIT")) {
             $this->fail = true;
             $this->error .= "<div style=\"color: red; padding-left: 10px;\" ><H4>Pole \"Jméno a příjmení\" musí být vyplněno.</H4></div>";
 
         }
 
         //kontrola bydliste / pripojneho mista
-        if(strlen($this->bydliste) > 50) {
+        if (strlen($this->bydliste) > 50) {
             $this->fail = true;
             $this->error .= "<div style=\"color: red; padding-left: 10px;\" ><H4>Pole \"Bydliště\" může obsahovat maximálně 50 znaků.</H4></div>";
-        } elseif((strlen($this->bydliste) < 5) and ($this->odeslat == "ULOŽIT")) {
+        } elseif ((strlen($this->bydliste) < 5) and ($this->odeslat == "ULOŽIT")) {
             $this->fail = true;
             $this->error .= "<div style=\"color: red; padding-left: 10px;\" ><H4>Pole \"Bydliště\" musí být vyplněno.</H4></div>";
         }
 
         //kontrola emailu
-        if((strlen($this->email) > 0) and ($this->odeslat == "ULOŽIT")) {
-            if(!(filter_var($this->email, FILTER_VALIDATE_EMAIL))) {
+        if ((strlen($this->email) > 0) and ($this->odeslat == "ULOŽIT")) {
+            if (!(filter_var($this->email, FILTER_VALIDATE_EMAIL))) {
                 $this->fail = true;
                 $this->error .= "<div style=\"color: red; padding-left: 10px;\" >".
                  "<H4>Pole \"Email\" neodpovídá tvaru emailu.</H4></div>";
@@ -260,36 +260,36 @@ class partner_servis
         }
 
         //kontrola telefonu, resp. tel. cisla
-        if(strlen($this->tel) > 0) {
+        if (strlen($this->tel) > 0) {
 
-            if(!(preg_match('/^([[:digit:]])+$/', $this->tel))) {
+            if (!(preg_match('/^([[:digit:]])+$/', $this->tel))) {
                 $this->fail = true;
                 $this->error .= "<div style=\"color: red; padding-left: 10px;\">".
                        "<H4>Pole \"Telefon\" není ve správnem formátu. (pouze číslice)</H4></div>";
             }
 
-            if(strlen($this->tel) <> 9) {
+            if (strlen($this->tel) <> 9) {
 
                 $this->fail = true;
                 $this->error .= "<div style=\"color: red; padding-left: 10px; \">".
                 "<H4>Pole \"Telefon\" musí obsahovat 9 číslic. </H4></div>";
             }
 
-        } elseif((strlen($this->tel) == 0) and ($this->odeslat == "ULOŽIT")) {
+        } elseif ((strlen($this->tel) == 0) and ($this->odeslat == "ULOŽIT")) {
             $this->fail = true;
             $this->error .= "<div style=\"color: red; padding-left: 10px;\" ><H4>Pole \"Telefon\" musí být vyplněno.</H4></div>";
         }
 
         //kontrola poznamky
-        if(strlen($this->pozn) > 0) {
-            if(strlen($this->pozn) > 500) {
+        if (strlen($this->pozn) > 0) {
+            if (strlen($this->pozn) > 500) {
 
                 $this->fail = true;
                 $this->error .= "<div style=\"color: red; padding-left: 10px;\">".
                 "<H4>Pole \"Poznámka\" musí obsahovat 9 číslic.</H4></div>";
             }
 
-        } elseif($this->odeslat == "ULOŽIT") {
+        } elseif ($this->odeslat == "ULOŽIT") {
             $this->fail = true;
             $this->error .= "<div style=\"color: red; padding-left: 10px;\" ><H4>Pole \"Poznámka\" musí být vyplněno.</H4></div>";
 
@@ -331,7 +331,7 @@ class partner_servis
     {
         $output = "";
 
-        if(isset($this->klient_id)) {
+        if (isset($this->klient_id)) {
             $this->jmeno_klienta .= ",  V:".$this->klient_id;
         }
 
@@ -369,11 +369,11 @@ class partner_servis
             <div style=\"padding-left: 20px; padding-top: 5px; \" >
                 <span style=\"font-weight: bold; \" >Priorita: </span>
                 <span style=\"padding-left: 184px; \" > ";
-        if($this->prio == 1) {
+        if ($this->prio == 1) {
             $output .= "Vysoká";
-        } elseif($this->prio == 2) {
+        } elseif ($this->prio == 2) {
             $output .= "Normální";
-        } elseif($this->prio == 3) {
+        } elseif ($this->prio == 3) {
             $output .= "Nízká";
         } else {
             $output .= "Nejze zjistit (".intval($this->prio).")";
@@ -399,7 +399,7 @@ class partner_servis
 
         $output .= "<div style=\"padding-left: 20px; padding-top: 15px; padding-bottom: 10px;\" >";
 
-        if($add) {
+        if ($add) {
             $output .= "<div style=\"color: green; font-size: 18px; font-weight: bold;\" >Záznam úspěšně uložen.</div>";
         } else {
             $output .= "<div style=\"color: red; font-weight: bold; font-size: 16px; \">Záznam nelze vložit do databáze. </div>";
@@ -416,12 +416,12 @@ class partner_servis
     {
         $output = "";
 
-        if($vyrizeni == true) {
+        if ($vyrizeni == true) {
 
             $output .= "  <div style=\"padding-left: 40px; padding-top: 20px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
                  <span style=\"border-bottom: 1px solid grey; \" >Akceptování žádostí o připojení</span>
                 </div>";
-        } elseif($update == true) {
+        } elseif ($update == true) {
             $output .= "  <div style=\"padding-left: 40px; padding-bottom: 20px; font-weight: bold; font-size: 18px; \">
                  <span style=\"border-bottom: 1px solid grey; \" >Změna poznámky</span>
                 </div>";
@@ -532,7 +532,7 @@ class partner_servis
 
             if ($this->vyrizeni == true) {
                 $output .= "<td class=\"table-vypis-1-line2\" colspan=\"2\" ><span style=\"font-weight: bold; \">Akceptovat</span></td>\n";
-            } elseif($this->update == true) {
+            } elseif ($this->update == true) {
                 $output .= "<td class=\"table-vypis-1-line2\" colspan=\"2\" ><span style=\"font-weight: bold; \">Upravit</span></td>\n";
             } else {
                 $output .= "<td class=\"table-vypis-1-line2\" ><span style=\"font-weight: bold; \">&nbsp;</span></td>
@@ -564,25 +564,25 @@ class partner_servis
 
             $output .= "<tr><td colspan=\"8\" ><br></td></tr>";
 
-            while($data = $dotaz->fetch_array()) {
+            while ($data = $dotaz->fetch_array()) {
                 $jmeno = htmlspecialchars($data["jmeno"]);
 
                 //nahrazeni id vlastníka odkazem
-                if(preg_match("/V:\d/", $jmeno)) {
+                if (preg_match("/V:\d/", $jmeno)) {
                     $id_cloveka_res = "";
                     list($v, $id_cloveka) = explode("V:", $jmeno);
                     $id_cloveka = intval($id_cloveka);
 
                     list($link_rs, $link_text) = adminator::getLinkToVlastnik($this->conn_pgsql, $id_cloveka);
 
-                    if($link_rs == true) {
+                    if ($link_rs == true) {
                         $id_cloveka_res = "<a href=\"" . $link_text . "\" >V: " . $id_cloveka . "</a>";
                     }
 
                     $jmeno = preg_replace("/V:".$id_cloveka."/", $id_cloveka_res, $jmeno);
                 }
 
-                if(($this->vyrizeni == true) or ($this->update == true)) {
+                if (($this->vyrizeni == true) or ($this->update == true)) {
                     $class = "table-vypis-suda-radka";
                 }
 
@@ -591,7 +591,7 @@ class partner_servis
                 $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">".$jmeno."</span></td>";
 
                 $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
-                if((strlen($data["adresa"]) < 1)) {
+                if ((strlen($data["adresa"]) < 1)) {
                     $output .= "&nbsp;";
                 } else {
                     $output .= htmlspecialchars($data["adresa"]);
@@ -599,7 +599,7 @@ class partner_servis
                 $output .= "</span></td>";
 
                 $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
-                if((strlen($data["email"]) < 1)) {
+                if ((strlen($data["email"]) < 1)) {
                     $output .= "&nbsp;";
                 } else {
                     $output .= htmlspecialchars($data["email"]);
@@ -607,7 +607,7 @@ class partner_servis
                 $output .= "</span></td>";
 
                 $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
-                if((strlen($data["tel"]) < 1)) {
+                if ((strlen($data["tel"]) < 1)) {
                     $output .= "&nbsp;";
                 } else {
                     $output .= htmlspecialchars($data["tel"]);
@@ -617,7 +617,7 @@ class partner_servis
                 $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">";
 
 
-                if($data["akceptovano"] == 1) {
+                if ($data["akceptovano"] == 1) {
                     $output .= "<span style=\"color: green; font-weight: bold; \">Ano </span>";
                     $output .= "<span style=\"\">(".htmlspecialchars($data["akceptovano_kym"]).")</span>";
                 } else {
@@ -629,9 +629,9 @@ class partner_servis
                 $output .= "<td class=\"".$class."\" >&nbsp;</td>";
                 $output .= "<td class=\"".$class."\" >&nbsp;</td>";
 
-                if($this->vyrizeni == true) {
+                if ($this->vyrizeni == true) {
                     $output .= "<td colspan=\"2\" class=\"".$class."\"><a href=\"?accept=1&id=".intval($data["id"])."\">akceptovat</a></td>";
-                } elseif($this->update == true) {
+                } elseif ($this->update == true) {
                     $output .= "<td colspan=\"2\" class=\"".$class."\"><a href=\"?edit=1&id=".intval($data["id"])."\">upravit</a></td>";
                 } else {
                     $output .= "<td class=\"".$class."\" ><span style=\"font-size: 13px; \">&nbsp;</span></td>";
@@ -645,7 +645,7 @@ class partner_servis
                     $output .= "<tr>";
 
                     $output .= "<td colspan=\"2\" class=\"table-vypis-suda-radka\" ><span style=\"font-size: 12px; color: #555555; \">";
-                    if((strlen($data["poznamky"]) < 1)) {
+                    if ((strlen($data["poznamky"]) < 1)) {
                         $output .= "poznámka nevložena";
                     } else {
                         $output .= htmlspecialchars($data["poznamky"]);
@@ -653,7 +653,7 @@ class partner_servis
                     $output .= "</span></td>";
 
                     $output .= "<td colspan=\"1\" class=\"table-vypis-suda-radka\" ><span style=\"font-size: 12px; color: #555555; \">";
-                    if((strlen($data["vlozil"]) < 1)) {
+                    if ((strlen($data["vlozil"]) < 1)) {
                         $output .= "vložil";
                     } else {
                         $output .= htmlspecialchars($data["vlozil"]);
@@ -662,11 +662,11 @@ class partner_servis
 
                     $output .= "<td class=\"table-vypis-suda-radka\" ><span style=\"font-size: 13px; color: gray; \">";
 
-                    if($data["prio"] == 1) {
+                    if ($data["prio"] == 1) {
                         $output .= "<span style=\"color: #990033;\">Vysoká</span>";
-                    } elseif($data["prio"] == 2) {
+                    } elseif ($data["prio"] == 2) {
                         $output .= "Normální";
-                    } elseif($data["prio"] == 3) {
+                    } elseif ($data["prio"] == 3) {
                         $output .= "Nízká";
                     } else {
                         $output .= "Nelze zjistit";
@@ -675,7 +675,7 @@ class partner_servis
                     $output .= "</span></td>";
 
                     $output .= "<td colspan=\"2\" class=\"table-vypis-suda-radka\" ><span style=\"font-size: 12px; color: #555555; \">";
-                    if((strlen($data["akceptovano_pozn"]) < 1)) {
+                    if ((strlen($data["akceptovano_pozn"]) < 1)) {
                         $output .= "poznámka nevložena";
                     } else {
                         $output .= $data["akceptovano_pozn"];
@@ -684,7 +684,7 @@ class partner_servis
 
                     $output .= "<td colspan=\"2\" class=\"table-vypis-suda-radka\" >
                         <span style=\"font-size: 12px; color: #555555; \">";
-                    if($data["datum_vlozeni2"] == "00.00.0000 00:00:00") {
+                    if ($data["datum_vlozeni2"] == "00.00.0000 00:00:00") {
                         $output .= "není dostupné";
                     } else {
                         $output .= $data["datum_vlozeni2"];

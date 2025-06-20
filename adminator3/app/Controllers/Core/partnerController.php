@@ -41,7 +41,7 @@ class partnerController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(75)) {
+        if (!$this->checkLevel(75)) {
             return $this->response;
         };
 
@@ -60,7 +60,7 @@ class partnerController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(75)) {
+        if (!$this->checkLevel(75)) {
             return $this->response;
         };
 
@@ -79,7 +79,7 @@ class partnerController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(76)) {
+        if (!$this->checkLevel(76)) {
             return $this->response;
         };
 
@@ -100,7 +100,7 @@ class partnerController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(75)) {
+        if (!$this->checkLevel(75)) {
             return $this->response;
         };
 
@@ -127,7 +127,7 @@ class partnerController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(77)) {
+        if (!$this->checkLevel(77)) {
             return $this->response;
         };
 
@@ -147,7 +147,7 @@ class partnerController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(119)) {
+        if (!$this->checkLevel(119)) {
             return $this->response;
         };
 
@@ -167,7 +167,7 @@ class partnerController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(111)) {
+        if (!$this->checkLevel(111)) {
             return $this->response;
         };
 

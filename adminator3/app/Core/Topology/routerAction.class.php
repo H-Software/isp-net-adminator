@@ -74,11 +74,11 @@ class RouterAction extends adminator
 
         $this->loadFormData();
 
-        if($this->form_odeslat == "OK") { // zda je odesláno
+        if ($this->form_odeslat == "OK") { // zda je odesláno
             $this->checkFormData();
         }
 
-        if(($this->form_odeslat == "OK") and ($this->form_error != 1)) {
+        if (($this->form_odeslat == "OK") and ($this->form_error != 1)) {
             // proces ukladani ..
 
             list($content, $rs_db) = $this->saveDataIntoDatabase();
@@ -87,7 +87,7 @@ class RouterAction extends adminator
             $output .= $this->showResults();
 
             // if save data failed, return only error msq and corresponding status code
-            if($rs_db == false) {
+            if ($rs_db == false) {
                 $output = $this->error_messages . $output;
                 return [$output, 500];
             }
@@ -97,11 +97,11 @@ class RouterAction extends adminator
 
             // pokud update, tak zjistit predchozi hodnoty
             // nacteni promennych, pokud se nedna o upravu a neodeslal sem form
-            if($this->form_update_id > 0 and ($this->form_odeslat != "OK")) {
+            if ($this->form_update_id > 0 and ($this->form_odeslat != "OK")) {
                 $rs = $this->loadPreviousData();
 
                 // if load data failed, return only error msq and corresponding status code
-                if($rs === false) {
+                if ($rs === false) {
                     $output .= $this->error_messages;
                     return [$output, 500];
                 }
@@ -157,36 +157,36 @@ class RouterAction extends adminator
             ;
             return false;
         } else {
-            while($data_top = $dotaz_top->fetch_array()):
+            while ($data_top = $dotaz_top->fetch_array()):
 
-                if($this->form_nazev == "") {
+                if ($this->form_nazev == "") {
                     $this->form_nazev = $data_top["nazev"];
                 }
-                if($this->form_ip_adresa == "") {
+                if ($this->form_ip_adresa == "") {
                     $this->form_ip_adresa = $data_top["ip_adresa"];
                 }
-                if($this->form_parent_router == "") {
+                if ($this->form_parent_router == "") {
                     $this->form_parent_router = $data_top["parent_router"];
                 }
-                if($this->form_mac == "") {
+                if ($this->form_mac == "") {
                     $this->form_mac = $data_top["mac"];
                 }
-                if($this->form_filtrace == "") {
+                if ($this->form_filtrace == "") {
                     $this->form_filtrace = $data_top["filtrace"];
                 }
-                if($this->form_monitoring == "") {
+                if ($this->form_monitoring == "") {
                     $this->form_monitoring = $data_top["monitoring"];
                 }
-                if($this->form_monitoring_cat == "") {
+                if ($this->form_monitoring_cat == "") {
                     $this->form_monitoring_cat = $data_top["monitoring_cat"];
                 }
-                if($this->form_alarm == "") {
+                if ($this->form_alarm == "") {
                     $this->form_alarm = $data_top["alarm"];
                 }
-                if($this->form_poznamka == "") {
+                if ($this->form_poznamka == "") {
                     $this->form_poznamka = $data_top["poznamka"];
                 }
-                if($this->form_selected_nod == "") {
+                if ($this->form_selected_nod == "") {
                     $this->form_selected_nod = $data_top["id_nodu"];
                 }
             endwhile;
@@ -198,10 +198,10 @@ class RouterAction extends adminator
     private function checkFormData(): void
     {
 
-        if(($this->form_monitoring == 1)) {
+        if (($this->form_monitoring == 1)) {
 
             //monitoring potrebuje i monitoring kategorii
-            if(($this->form_monitoring_cat == 0)) {
+            if (($this->form_monitoring_cat == 0)) {
                 $this->p_bs_alerts["Vyberte kategorii pro monitoring."] = "danger";
                 $this->form_error = 1;
             }
@@ -209,7 +209,7 @@ class RouterAction extends adminator
             //test api a spravnosti konfigurace routeru
             $rs_test = adminator::test_router_for_monitoring($this->conn_mysql, $this->form_ip_adresa);
 
-            if($rs_test[0] == false) {
+            if ($rs_test[0] == false) {
                 $text = "Nelze uložit s parametrem \"<b>Monitoring - Ano</b>\", selhala kontrola nastavení či stavu routeru pro monitoring.";
                 $text .= "<div style=\"color: grey;\" >výpis testu: <pre>".htmlspecialchars($rs_test[1])."</pre></div>";
 
@@ -219,13 +219,13 @@ class RouterAction extends adminator
         } //end od if monitoring == 1
 
         //nadrazený router musí být vyplnen
-        if(intval($this->form_parent_router) < 1) {
+        if (intval($this->form_parent_router) < 1) {
             $this->p_bs_alerts["Je třeba vyplnit pole \"Nadřazený router\" </br>(kvůli filtraci a QoSu na reinhardech)."] = "danger";
             $this->form_error = 1;
         }
 
         //kontrola IP adresy
-        if((strlen($this->form_ip_adresa) > 0)) {
+        if ((strlen($this->form_ip_adresa) > 0)) {
             if (filter_var($this->form_ip_adresa, FILTER_VALIDATE_IP) == false) {
                 $this->p_bs_alerts["IP adresa (".$this->form_ip_adresa.") není ve správném formátu !!!"] = "danger";
                 $this->form_error = 1;
@@ -233,25 +233,25 @@ class RouterAction extends adminator
         }
 
         //check dns nazvu
-        if((strlen($this->form_nazev) > 0)) {
+        if ((strlen($this->form_nazev) > 0)) {
 
             //kontrola správnosti zadání
             $dns_check = preg_match('/^([[:alnum:]]|\.|-)+$/', $this->form_nazev);
 
-            if($dns_check == false) {
+            if ($dns_check == false) {
                 $this->p_bs_alerts["Název (".$this->form_nazev.") není ve správnem formátu."] = "danger";
                 $this->form_error = 1;
             }
 
             //kontrola delky
-            if((strlen($this->form_nazev) > 40)) {
+            if ((strlen($this->form_nazev) > 40)) {
                 $this->p_bs_alerts["DNS záznam (".$this->form_nazev.") je moc dlouhý! Maximální délka je 40 znaků."] = "danger";
                 $this->form_error = 1;
             }
         }
 
         //kontrola mac adresy
-        if((strlen($this->form_mac) > 0)) {
+        if ((strlen($this->form_mac) > 0)) {
 
             if (filter_var($this->form_mac, FILTER_VALIDATE_MAC) == false) {
                 $this->p_bs_alerts["MAC adresa (".$this->form_mac.") není ve správném formátu!"] = "danger";
@@ -260,7 +260,7 @@ class RouterAction extends adminator
         }
 
         //povinné údaje
-        if((strlen($this->form_nazev) == 0) or (strlen($this->form_ip_adresa) == 0) or (strlen($this->form_parent_router) == 0)) {
+        if ((strlen($this->form_nazev) == 0) or (strlen($this->form_ip_adresa) == 0) or (strlen($this->form_parent_router) == 0)) {
             $this->p_bs_alerts["Nejsou vyplněny všechny potřebné údaje. </br>(Název, IP adresa, Nadřazený router)"] = "danger";
             $this->form_error = 1;
         }
@@ -296,7 +296,7 @@ class RouterAction extends adminator
 
         $output .= "<option value=\"0\" class=\"select-nevybrano\" > není zvoleno </option>";
 
-        while($data_parent = $dotaz_parent->fetch_array()) {
+        while ($data_parent = $dotaz_parent->fetch_array()) {
             $output .= "<option value=\"".$data_parent["id"]."\" ";
 
             if ($data_parent["id"] == $this->form_parent_router) {
@@ -358,7 +358,7 @@ class RouterAction extends adminator
 
         $output .= "<option value=\"0\" class=\"select-nevybrano\"> Není zvoleno </option>";
 
-        while($data_cat = $dotaz_cat->fetch_array()) {
+        while ($data_cat = $dotaz_cat->fetch_array()) {
             $output .= "<option value=\"".$data_cat["id"]."\" ";
 
             if ($data_cat["id"] == $this->form_monitoring_cat) {
@@ -417,11 +417,11 @@ class RouterAction extends adminator
 
         $output .= '<select size="1" name="selected_nod" onChange="self.document.forms.form1.submit()" >';
 
-        if(($radku == 0)) {
+        if (($radku == 0)) {
             $output .= "<option value=\"0\" style=\"color: gray; \" selected >nelze zjistit / žádný nod nenalezen </option>";
         } else {
             $output .= '<option value="0" style="color: gray; font-style: bold; "';
-            if((!isset($this->form_selected_nod))) {
+            if ((!isset($this->form_selected_nod))) {
                 $output .= "selected";
             }
             $output .= ' > Není vybráno</option>';
@@ -537,9 +537,9 @@ class RouterAction extends adminator
 
         $output .= "<b>Monitorování: </b>";
 
-        if($this->form_monitoring == 1) {
+        if ($this->form_monitoring == 1) {
             $output .= "Ano";
-        } elseif($this->form_monitoring == 0) {
+        } elseif ($this->form_monitoring == 0) {
             $output .= "Ne";
         } else {
             $output .= "nelze zjistit";
@@ -556,9 +556,9 @@ class RouterAction extends adminator
         $output .= "<br>";
 
         $output .= "<b>Alarm: </b>";
-        if($this->form_alarm == 1) {
+        if ($this->form_alarm == 1) {
             $output .= "Ano";
-        } elseif($this->form_alarm == 0) {
+        } elseif ($this->form_alarm == 0) {
             $output .= "Ne";
         } else {
             $output .= "nelze zjistit";
@@ -566,9 +566,9 @@ class RouterAction extends adminator
         $output .= "<br>";
         $output .= "<b>Filtrace: </b>";
 
-        if($this->form_filtrace == 1) {
+        if ($this->form_filtrace == 1) {
             $output .= "Ano";
-        } elseif($this->form_filtrace == 0) {
+        } elseif ($this->form_filtrace == 0) {
             $output .= "Ne";
         } else {
             $output .= "nelze zjistit";
@@ -593,11 +593,11 @@ class RouterAction extends adminator
 
         $this->form_poznamka = addslashes($this->form_poznamka);
 
-        if(strlen($this->form_mac) <= 0) {
+        if (strlen($this->form_mac) <= 0) {
             $this->form_mac = "00:00:00:00:00:00";
         }
 
-        if($this->form_update_id > 0) {
+        if ($this->form_update_id > 0) {
 
             // prvne zjistime puvodni hodnoty
             try {
@@ -613,13 +613,13 @@ class RouterAction extends adminator
                 return [$output, false];
             }
 
-            if($dotaz_top_radku < 1) {
+            if ($dotaz_top_radku < 1) {
                 $this->error_messages .= "<div style=\"color: red;\">"
                                         . "Chyba! Nelze načíst zdrojové hodnoty pro ArchivZmen. (zero rows found in DB)"
                                         . "</div>";
                 return [$output, false];
             } else {
-                while($data_top = $dotaz_top->fetch_array()):
+                while ($data_top = $dotaz_top->fetch_array()):
 
                     $this->origDataArray["nazev"] = $data_top["nazev"];
                     $this->origDataArray["ip_adresa"] = $data_top["ip_adresa"];
@@ -639,7 +639,7 @@ class RouterAction extends adminator
                             mac='$this->form_mac', monitoring='$this->form_monitoring', monitoring_cat='$this->form_monitoring_cat', alarm='$this->form_alarm',
                     filtrace='$this->form_filtrace', id_nodu='$this->form_selected_nod', poznamka = '$this->form_poznamka' WHERE id=".intval($this->form_update_id)." Limit 1 ");
 
-            if($uprava) {
+            if ($uprava) {
                 $output .= "<div style=\"color: green; font-weight: bold; padding-top: 10px; \">Záznam úspěšně upraven.</div><br>";
                 $vysledek_write = 1;
             } else {
@@ -663,7 +663,7 @@ class RouterAction extends adminator
                             . " '$this->form_filtrace', '$this->form_selected_nod', '$this->form_poznamka' ) "
             );
 
-            if($add) {
+            if ($add) {
                 $output .= "<div style=\"color: green; font-weight: bold; padding-top: 10px; \">Záznam úspěšně vložen.</div>";
                 $vysledek_write = 1;
             } else {
@@ -703,15 +703,15 @@ class RouterAction extends adminator
         $pole3 .= " diferencialni data: ";
 
         //novy zpusob archivovani dat
-        foreach($this->origDataArray as $key => $val) {
-            if(!($nod_upd[$key] == $val)) {
-                if($key == "parent_router") {
+        foreach ($this->origDataArray as $key => $val) {
+            if (!($nod_upd[$key] == $val)) {
+                if ($key == "parent_router") {
                     $pole3 .= "změna <b>Nadřazený router</b> z: ";
                     $pole3 .= "<span class=\"az-s1\">";
 
                     $dotaz_router1 = $this->conn_mysql->query("SELECT nazev FROM router_list WHERE id = '$val'");
-                    if(($dotaz_router1->num_rows == 1)) {
-                        while($data = $dotaz_router1->fetch_array()) {
+                    if (($dotaz_router1->num_rows == 1)) {
+                        while ($data = $dotaz_router1->fetch_array()) {
                             $pole3 .= $data["nazev"]." (".$val.")";
                         }
                     } else {
@@ -722,8 +722,8 @@ class RouterAction extends adminator
 
                     $id = $nod_upd[$key];
                     $dotaz_router2 = $this->conn_mysql->query("SELECT nazev FROM router_list WHERE id = '$id'");
-                    if(($dotaz_router2->num_rows == 1)) {
-                        while($data = $dotaz_router2->fetch_array()) {
+                    if (($dotaz_router2->num_rows == 1)) {
+                        while ($data = $dotaz_router2->fetch_array()) {
                             $pole3 .= $data["nazev"]." (".$id.")";
                         }
                     } else {
@@ -733,12 +733,12 @@ class RouterAction extends adminator
                     $pole3 .= "</span>";
                     $pole3 .= ", ";
                 } //konec key == parent_router
-                elseif($key == "monitoring") {
+                elseif ($key == "monitoring") {
                     $pole3 .= "změna <b>Monitorování</b> z: "."<span class=\"az-s1\">";
 
-                    if($val == 1) {
+                    if ($val == 1) {
                         $pole3 .= "Ano";
-                    } elseif($val == 0) {
+                    } elseif ($val == 0) {
                         $pole3 .= "Ne";
                     } else {
                         $pole3 .= $val;
@@ -747,9 +747,9 @@ class RouterAction extends adminator
                     $pole3 .= "</span>";
                     $pole3 .= " na: <span class=\"az-s2\">";
 
-                    if($nod_upd[$key] == 1) {
+                    if ($nod_upd[$key] == 1) {
                         $pole3 .= "Ano";
-                    } elseif($nod_upd[$key] == 0) {
+                    } elseif ($nod_upd[$key] == 0) {
                         $pole3 .= "Ne";
                     } else {
                         $pole3 .= $nod_upd[$key];
@@ -758,16 +758,16 @@ class RouterAction extends adminator
                     $pole3 .= "</span>";
                     $pole3 .= ", ";
                 } //konec key == monitoring
-                elseif($key == "monitoring_cat") {
+                elseif ($key == "monitoring_cat") {
                     $pole3 .= "změna <b>Monitoring kategorie</b> z: "."<span class=\"az-s1\">".$val."</span>";
                     $pole3 .= " na: <span class=\"az-s2\">".$nod_upd[$key]."</span>, ";
                 } //konec key == monitoring_cat
-                elseif($key == "alarm") {
+                elseif ($key == "alarm") {
                     $pole3 .= "změna <b>Alarmu</b> z: "."<span class=\"az-s1\">";
 
-                    if($val == 1) {
+                    if ($val == 1) {
                         $pole3 .= "Zapnuto";
-                    } elseif($val == 0) {
+                    } elseif ($val == 0) {
                         $pole3 .= "Vypnuto";
                     } else {
                         $pole3 .= $val;
@@ -776,9 +776,9 @@ class RouterAction extends adminator
                     $pole3 .= "</span>";
                     $pole3 .= " na: <span class=\"az-s2\">";
 
-                    if($nod_upd[$key] == 1) {
+                    if ($nod_upd[$key] == 1) {
                         $pole3 .= "Zapnuto";
-                    } elseif($nod_upd[$key] == 0) {
+                    } elseif ($nod_upd[$key] == 0) {
                         $pole3 .= "Vypnuto";
                     } else {
                         $pole3 .= $nod_upd[$key];
@@ -787,7 +787,7 @@ class RouterAction extends adminator
                     $pole3 .= "</span>";
                     $pole3 .= ", ";
                 } //konec key == alarm
-                elseif($key == "id_nodu") {
+                elseif ($key == "id_nodu") {
                     $pole3 .= "změna <b>Připojného bodu</b> z: ";
 
                     $vysl_t1 = $this->conn_mysql->query("select jmeno FROM nod_list WHERE id = '$val'");
@@ -806,12 +806,12 @@ class RouterAction extends adminator
 
                     $pole3 .= ", ";
                 } // konec key == id_nodu
-                elseif($key == "filtrace") {
+                elseif ($key == "filtrace") {
                     $pole3 .= "změna <b>Filtrace</b> z: "."<span class=\"az-s1\">";
 
-                    if($val == 1) {
+                    if ($val == 1) {
                         $pole3 .= "Ano";
-                    } elseif($val == 0) {
+                    } elseif ($val == 0) {
                         $pole3 .= "Ne";
                     } else {
                         $pole3 .= $val;
@@ -820,9 +820,9 @@ class RouterAction extends adminator
                     $pole3 .= "</span>";
                     $pole3 .= " na: <span class=\"az-s2\">";
 
-                    if($nod_upd[$key] == 1) {
+                    if ($nod_upd[$key] == 1) {
                         $pole3 .= "Ano";
-                    } elseif($nod_upd[$key] == 0) {
+                    } elseif ($nod_upd[$key] == 0) {
                         $pole3 .= "Ne";
                     } else {
                         $pole3 .= $nod_upd[$key];
@@ -839,7 +839,7 @@ class RouterAction extends adminator
             } // konec if key == val
         } // konec foreach
 
-        if(preg_match("/.*změna.*/", $pole3) == false) {
+        if (preg_match("/.*změna.*/", $pole3) == false) {
             $pole3 .= " <b>nebyly provedeny žádné změny</b> ";
         }
 
@@ -853,7 +853,7 @@ class RouterAction extends adminator
             $db_error = '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
         }
 
-        if($add) {
+        if ($add) {
             $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
         } else {
             $this->p_bs_alerts["Akci se nepodařilo zaznamenat do archivu změn." . $db_error] = "warning";
@@ -876,7 +876,7 @@ class RouterAction extends adminator
             $db_error = '<div>(Caught exception: ' . $e->getMessage() . ")</div>";
         }
 
-        if($add) {
+        if ($add) {
             $this->p_bs_alerts["Akce byla úspěšně zaznamenána do archivu změn."] = "success";
         } else {
             $this->p_bs_alerts["Akci se nepodařilo zaznamenat do archivu změn." . $db_error] = "warning";

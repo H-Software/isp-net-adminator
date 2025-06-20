@@ -50,7 +50,7 @@ class topologyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(5)) {
+        if (!$this->checkLevel(5)) {
             return $this->response;
         };
 
@@ -75,7 +75,7 @@ class topologyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(4)) {
+        if (!$this->checkLevel(4)) {
             return $this->response;
         };
 
@@ -99,7 +99,7 @@ class topologyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(25)) {
+        if (!$this->checkLevel(25)) {
             return $this->response;
         };
 
@@ -123,7 +123,7 @@ class topologyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(85)) {
+        if (!$this->checkLevel(85)) {
             return $this->response;
         };
 
@@ -148,7 +148,7 @@ class topologyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(86)) {
+        if (!$this->checkLevel(86)) {
             return $this->response;
         };
 

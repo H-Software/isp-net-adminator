@@ -21,7 +21,7 @@ class boardRss
     public function check_login_rss($get_sid)
     {
 
-        if(!(preg_match('/^([[:alnum:]]|_|-)+$/', $get_sid))) {
+        if (!(preg_match('/^([[:alnum:]]|_|-)+$/', $get_sid))) {
             return false;
             //exit;
         } else {
@@ -34,16 +34,16 @@ class boardRss
                 return false;
             }
 
-            while($data = $MSQ_S->fetch_array()) {
+            while ($data = $MSQ_S->fetch_array()) {
                 $login = $data["login"];
                 $login_crypt = md5($login);
 
-                if($login_crypt == $get_sid) {
+                if ($login_crypt == $get_sid) {
                     $pocet_vysl++;
                 }
             }
 
-            if($pocet_vysl == 1) {
+            if ($pocet_vysl == 1) {
                 return true;
             } else {
                 return false;

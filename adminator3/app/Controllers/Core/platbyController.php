@@ -44,7 +44,7 @@ class platbyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(92)) {
+        if (!$this->checkLevel(92)) {
             return $this->response;
         };
 
@@ -84,7 +84,7 @@ class platbyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(107)) {
+        if (!$this->checkLevel(107)) {
             return $this->response;
         };
 
@@ -103,7 +103,7 @@ class platbyController extends adminatorController
         $this->request = $request;
         $this->response = $response;
 
-        if(!$this->checkLevel(149)) {
+        if (!$this->checkLevel(149)) {
             return $this->response;
         };
 
