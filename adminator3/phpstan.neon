@@ -10,6 +10,7 @@ parameters:
 		- app/Core/shared/voip.class.php
 		- app/Core/shared/ros_api_qos.php
 		- app/Core/shared/ros_api_restriction.php
+		- app/AsynqClient
 	ignoreErrors:
     # for phpunit
 	-
