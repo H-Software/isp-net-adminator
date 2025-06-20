@@ -154,7 +154,7 @@ class Client
         if ($uniqueTTL > 0) {
             return $this->broker->AddToGroupUnique($msg, $group, $uniqueTTL);
         }
-        return $this->broker->AddToGroup($msg,$group);
+        return $this->broker->AddToGroup($msg, $group);
     }
 
 }
