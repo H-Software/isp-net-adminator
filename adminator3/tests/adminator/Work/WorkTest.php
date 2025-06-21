@@ -46,8 +46,11 @@ final class WorkTest extends AdminatorTestCase
 
         $faker = \Faker\Factory::create();
 
-        $task = $work->taskEnqueue($faker->numberBetween(1, 30));
+        for ($i = 0; $i < 10; $i++) {
 
-        $this->assertTrue($task);
+            $task = $work->taskEnqueue($faker->numberBetween(1, 30));
+
+            $this->assertTrue($task);
+        }
     }
 }
