@@ -106,9 +106,9 @@ $time = strftime("%d/%m/%Y %H:%M:%S", time());
     */
     
     //novej zpusob osvezovani, pridat do fronty
-    Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-    Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
-    Aglobal::work_handler("3"); //reinhard-fiber (linux) - iptables (net-n/sikana atd)
+    // Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+    // Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+    // Aglobal::work_handler("3"); //reinhard-fiber (linux) - iptables (net-n/sikana atd)
     
   } //konec else od pg
   

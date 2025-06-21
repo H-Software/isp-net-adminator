@@ -528,4 +528,45 @@ class work
         // }
     }
 
+    public function workActionTopologyNodeDiff(): void
+    {
+        // TODO: fix automatic restarts
+        // if(ereg(".*Routeru, kde se provádí filtrace.*", $pole3)) {
+        //     Aglobal::work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
+        // }
+
+        // if(ereg(".*<b>Routeru</b>.*", $pole3)) {
+        //     Aglobal::work_handler("1");	//reinhard-3 (ros) - restrictions (net-n/sikana)
+        //     Aglobal::work_handler("20"); 	//reinhard-3 (ros) - shaper (client's tariffs)
+
+        //     Aglobal::work_handler("24");	//reinhard-5 (ros) - restrictions (net-n/sikana)
+        //     Aglobal::work_handler("23");	//reinhard-5 (ros) - shaper (client's tariffs)
+
+        //     Aglobal::work_handler("13");	//reinhard-wifi (ros) - shaper (client's tariffs)
+        //     Aglobal::work_handler("2");	//reinhard-wifi (ros) - restrictions (net-n/sikana)
+
+        //     Aglobal::work_handler("14"); 	//(trinity) filtrace-IP-on-Mtik's-restart
+
+        // }
+
+        // if(ereg(".*vlan_id.*", $pole3)) {
+        //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
+
+        //     Aglobal::work_handler("4"); //reinhard-fiber - radius
+        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        // }
+
+        // if(ereg(".*změna.*koncového.*zařízení.*", $pole3)) {
+        //     Aglobal::work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
+
+        //     Aglobal::work_handler("4"); //reinhard-fiber - radius
+        //     Aglobal::work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        // }
+    }
+
+    public function workActionTopologyNodeAdd(): void
+    {
+        // TODO: add work items
+    }
+
 }

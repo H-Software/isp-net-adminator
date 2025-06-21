@@ -79,8 +79,8 @@ require ("include/charset.php");
 
 	    $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce, provedeno_kym, vysledek) VALUES ('$pole','" . $loggedUser . "', '$res_w')");
 	
-	    Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
-	    Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart      		     
+	    // Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
+	    // Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart      		     
 	
 	} // konec else erase_id < 1
     

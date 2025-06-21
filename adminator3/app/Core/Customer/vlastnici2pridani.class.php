@@ -502,13 +502,6 @@ class vlastnici2pridani extends adminator
                 <td>'
                 . $output_return_link_vlastnik
                 .'</td>
-
-                <td align="right">Restart (all iptables ) </td>
-                <td><form action="/work" method="POST" >'
-                . $this->csrf_html
-                . '<input type="hidden" name="iptables" value="1" >
-                    <input type="submit" value="ZDE" name="odeslat" >'
-                . '</form> </td>
                 </tr>
                 </table>';
 

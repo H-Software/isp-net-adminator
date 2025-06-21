@@ -24,11 +24,6 @@
  <script type="text/javascript" src="/plugins/tigra_calendar/custom-a2-vlastnici2-change.js"></script>
 {/if}
 
-{* // probably unused *}
-{if $enable_fn_check|default:'0' == 1}
- <script language="JavaScript" src="/public/js/fn_check.js" ></script>
-{/if}
-
 {* <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> *}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
