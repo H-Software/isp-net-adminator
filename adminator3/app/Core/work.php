@@ -6,7 +6,6 @@ use Psr\Container\ContainerInterface;
 use SebastianBergmann\Type\VoidType;
 use Illuminate\Support\Facades\Redis;
 use HyssaDev\HibikenAsynqClient\Client;
-use HyssaDev\HibikenAsynqClient\Rdb;
 
 class work
 {
@@ -64,9 +63,11 @@ class work
         try {
             $asynq_client = new Client($this->redis);
             $res = $asynq_client->Enqueue([
-                'typename' => "adminator3:workitem:$item_id",
+                'typename' => "adminator3:workitem:basic",
                 'payload' => [
                     'item_id' => $item_id,
+                    'createdAt' => time(),
+                    'createdBy' => $this->loggedUserEmail,
                 ],
                 'opts' => [
                     'timeout' => 86400,
