@@ -1,5 +1,6 @@
 {include file="base.tpl"}
 
+<!--
 <div style="padding-left: 5px;" >
 
 <form method="POST" action="{$action}" >
@@ -31,6 +32,19 @@
  
  <div class="work-main-window" id='restart-stav' ><div id='work-vyberte-akci' >Vyberte požadovanou akci:</div></div>
  
+</div>
+-->
+
+<div style="padding-left: 5px;" >
+
+{if $p_bs_alerts|default:'0' }
+    <div style="padding-top: 5px">
+    {include file="partials/bootstrap-alert-with-columns-array.tpl"}
+    </div>
+{/if}
+
+{include file="work/work-queue-table.tpl"}
+
 </div>
 
 {include file="base-end.tpl"}
