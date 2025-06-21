@@ -23,6 +23,13 @@ jobs:
         php-versions: ['8.2']
 
     name: Test on ${{ matrix.os }} with PHP ${{ matrix.php-versions }}
+
+    services:
+      redis:
+        image: redis:7.4
+        ports:
+          - 16379:6379
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
