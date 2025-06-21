@@ -152,8 +152,8 @@ require ("include/charset.php");
      $add=$conn_mysql->query("INSERT INTO archiv_zmen (akce,provedeno_kym,vysledek) VALUES ('$pole','" . \Cartalyst\Sentinel\Native\Facades\Sentinel::getUser()->email . "','$vysledek_write') ");
 
      //zde reset monitoringu 2
-     Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
-     Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart
+    //  Aglobal::work_handler("18"); //monitoring - Monitoring II - Feeder-restart
+    //  Aglobal::work_handler("22"); //monitoring - Monitoring II - checker-restart
                                           	       
     }
     else

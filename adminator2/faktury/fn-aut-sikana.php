@@ -127,11 +127,11 @@ if( isset($odeslano2) )
  //vyvolani restartu
  if($count > 0)
  {
-    Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
-    Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
+    // Aglobal::work_handler("1"); //reinhard-3 (ros) - restrictions (net-n/sikana)
+    // Aglobal::work_handler("2"); //reinhard-wifi (ros) - restrictions (net-n/sikana)
 	 
-    Aglobal::work_handler("3"); //reinhard-fiber - sikana/net-n	       
-    Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana) 
+    // Aglobal::work_handler("3"); //reinhard-fiber - sikana/net-n	       
+    // Aglobal::work_handler("24"); //reinhard-5 (ros) - restrictions (net-n/sikana) 
  }
  
 } //konec if isset(odeslano2)

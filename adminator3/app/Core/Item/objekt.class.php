@@ -1441,9 +1441,6 @@ class objekt extends adminator
                     ->table('objekty')
                     ->insertGetId($obj_add, "id_komplu");
 
-                //zjistit, krz kterého reinharda jde objekt
-                // $inserted_id = \Aglobal::pg_last_inserted_id($this->conn_pgsql, "objekty");
-
                 if ($this->insertedId > 0) {
                     $vysledek_write = 1;
                     $output .= "<br><H3><div style=\"color: green; \" >Data úspěšně uloženy do databáze.</div></H3>\n";
