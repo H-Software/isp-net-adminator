@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use SebastianBergmann\Type\VoidType;
 use Illuminate\Support\Facades\Redis;
 use HyssaDev\HibikenAsynqClient\Client;
+use HyssaDev\HibikenAsynqClient\Rdb;
 
 class work
 {
@@ -24,6 +25,11 @@ class work
 
     protected $loggedUserEmail;
 
+    /**
+     * {@inheritdoc}
+     */
+    public array $p_bs_alerts = [];
+
     public function __construct(ContainerInterface $container)
     {
         // $this->container = $container;
@@ -39,6 +45,16 @@ class work
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
 
         $this->logger->info(message: __CLASS__ . "\\" . __FUNCTION__ . " called");
+    }
+
+    public function getItemName(int $id): string|null
+    {
+        $rs_item_name = $this->conn_mysql->query("SELECT name FROM workitems_names WHERE id = '$id' ");
+
+        $rs_item_name->data_seek(0);
+        list($item_name) = $rs_item_name->fetch_row();
+
+        return $item_name;
     }
 
     public function taskEnqueue(int $item_id): bool|int
@@ -68,6 +84,46 @@ class work
         return $res;
     }
 
+    public function taskGroupList(): array
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        try {
+            $allGroups = $this->redis::sinter("asynq:{adminator3:workitem}:groups");
+        } catch (\RedisException $ex) {
+            $m = $ex->getMessage();
+
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Redis error: $m");
+            $this->p_bs_alerts["Nelze načíst data pro výpis tasks groups. <br>(Redis error: $m)"] = "danger";
+
+            return [false, "Redis error: $m"];
+        }
+
+        if (empty($allGroups)) {
+            $this->p_bs_alerts["Queue: Data pro výpis tasks groups nenalezeny."] = "warning";
+            return [false, "Redis: empty results: no data in groups"];
+        }
+
+        for ($i = 0; $i < count($allGroups); $i++) {
+            $groupId = $allGroups[$i];
+
+            $groupCount = $this->redis::zcount("asynq:{adminator3:workitem}:g:$groupId", "-inf", "+inf");
+            if ($groupCount == 0) {
+                $this->p_bs_alerts["Queue: Tasks group $groupId neobsahuje žádné úkoly."] = "warning";
+            }
+
+            // N.B. smarty is not displaying NULL values, so we don't care about return value of getItemName()
+            $r[$groupId] = ["count" => $groupCount, "name" => $this->getItemName($groupId)];
+        }
+
+        if (empty($r)) {
+            $this->p_bs_alerts["Queue: Tasks groups neobsahují žádné úkoly."] = "warning";
+            return [false, "Redis: empty results: no tasks in any group"];
+        }
+
+        return [true, $r];
+    }
+
     public function work_handler($item_id): array
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
@@ -84,10 +140,7 @@ class work
         $output = "";
 
         // load workitem's name from database
-        $rs_item_name = $this->conn_mysql->query("SELECT name FROM workitems_names WHERE id = '$item_id' ");
-
-        $rs_item_name->data_seek(0);
-        list($item_name) = $rs_item_name->fetch_row();
+        $item_name = $this->getItemName($item_id);
 
         if (is_null($item_name)) {
             //TODO: add warning over bootstrap.JS
