@@ -69,7 +69,7 @@ class work
                     'item_id' => $item_id,
                 ],
                 'opts' => [
-                    'timeout' => 0, // TODO: change to 24h
+                    'timeout' => 86400,
                 ]
             ], [
                 'queue' => "adminator3:workitem",
