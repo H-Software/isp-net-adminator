@@ -27,6 +27,7 @@ use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Illuminate\Support\Facades\Facade;
 
 abstract class AdminatorTestCase extends TestCase
 {
@@ -44,6 +45,8 @@ abstract class AdminatorTestCase extends TestCase
 
     public static function setUpBeforeClass(): void
     {
+        Facade::clearResolvedInstances();
+
         $settings = require __DIR__ . '/../config/settings.php';
 
         // boot ORM and get DB handler
@@ -86,6 +89,8 @@ abstract class AdminatorTestCase extends TestCase
         self::$phinxManager = null;
 
         m::close();
+
+        Facade::clearResolvedInstances();
     }
 
     protected function initDIcontainer(

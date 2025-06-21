@@ -8,62 +8,91 @@ use Illuminate\Support\Facades\Redis;
 // use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Redis\Connections\PhpRedisConnection;
-// use Lunaweb\RedisMock\MockPredisConnection;
+use Lunaweb\RedisMock\MockPredisConnection;
 use Lunaweb\RedisMock\Providers\RedisMockServiceProvider;
+use Illuminate\Container\Container;
+use Lunaweb\RedisMock\MockPredisConnector;
 
 class AsynqClientTest extends \PHPUnit\Framework\TestCase
 {
-    public $app;
+    public $appMock;
 
-    public function getEnvironmentSetUp($app)
+    protected function setUp(): void
     {
+        Facade::clearResolvedInstances();
 
-        $app['config']->set('app.debug', true);
-        $app['config']->set('database.redis.client', 'mock');
+        /**
+        * Setup a new app instance container
+        *
+        * @var \Illuminate\Container\Container
+        */
+        $app = new Container();
 
+        $app->singleton('redis', function () use ($app) {
 
-        $app->register(RedisMockServiceProvider::class);
+            $r = new \Illuminate\Redis\RedisManager($app, 'predis', [
+                'cluster' => false,
+                'default' => [
+                    'host'     => '127.0.0.1',
+                    'port'     => '116379',
+                    'database' => 0,
+                    'timeout'  => 2,
+                ],
+            ]);
 
-        $this->app = $app;
+            $r->extend('mock', function () { return new MockPredisConnector(); });
+            $r->setDriver('mock');
+
+            return $r;
+        });
+
+        $this->appMock = $app;
+
+        /**
+        * Set $app as FacadeApplication handler
+        */
+        Facade::setFacadeApplication($this->appMock);
+    }
+
+    protected function tearDown(): void
+    {
+        Facade::clearResolvedInstances();
     }
 
     public function testRedisConnectionInstance()
     {
 
-        $this->assertInstanceOf(PhpRedisConnection::class, Redis::connection());
+        $this->assertInstanceOf('Lunaweb\RedisMock\MockPredisConnection', Redis::connection());
 
     }
 
     public function testSetAndGet()
     {
 
-        Redis::set('key', 'test');
-        $this->assertEquals('test', Redis::get('key'));
+        $faker = \Faker\Factory::create();
+
+        $key = $faker->randomNumber(3);
+
+        Redis::set($key, 'test');
+        $this->assertEquals('test', Redis::get($key));
 
     }
 
     public function testEnqueue()
     {
-        /**
-        * Set $app as FacadeApplication handler
-        */
-        Facade::setFacadeApplication($this->app);
-
         $redis = new Redis();
 
-        /**
-        * Set $app as FacadeApplication handler
-        */
-        Facade::setFacadeApplication($this->app);
-
-        $redis = new Redis($this->app);
-
         $clinet = new Client($redis);
+
+        $faker = \Faker\Factory::create();
+
+        $key = $faker->randomNumber(3);
+
         $res = $clinet->Enqueue([
             'typename' => 'newtest:user:xxxx',
             'payload' => [
                 'test' => 'xxxx',
-                'user' => 1111
+                'user' => $key
             ]
         ]);
         $this->assertTrue($res);
