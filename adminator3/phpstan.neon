@@ -43,15 +43,17 @@ parameters:
 		path: boostrap/containerAfter.php
 	# redis
 	-
-		message: "#^Class Illuminate\\\\Support\\\\Facades\\\\Redis does not have a constructor and must be instantiated without any parameters\\.$#"
-		count: 1
-		path: boostrap/containerAfter.php
+		message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Redis.*$#"
+		path: app/Core/work.php
 	-
 		message: "#^Call to an undefined static method Illuminate\\\\Support\\\\Facades\\\\Redis.*$#"
-		count: 3
 		path: boostrap/containerAfter.php
 	-
 		message: "#^Parameter \\#1 \\$app of static method Illuminate\\\\Support\\\\Facades\\\\Facade\\:\\:setFacadeApplication\\(\\) expects Illuminate\\\\Contracts\\\\Foundation\\\\Application\\|null, Illuminate\\\\Container\\\\Container given\\.$#"
+		count: 1
+		path: boostrap/containerAfter.php
+	-
+		message: "#^Parameter \\#1 \\$app of class Illuminate\\\\Redis\\\\RedisManager constructor expects Illuminate\\\\Contracts\\\\Foundation\\\\Application, Illuminate\\\\Container\\\\Container given\\.$#"
 		count: 1
 		path: boostrap/containerAfter.php
 	# auth stuff
