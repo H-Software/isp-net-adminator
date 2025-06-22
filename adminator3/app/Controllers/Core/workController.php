@@ -49,10 +49,14 @@ class workController extends adminatorController
             return $this->response;
         };
 
+        $csrf = $this->generateCsrfToken($request, $response, true);
+        // $this->logger->info("workController\work: csrf generated: ".var_export($csrf_name, true));
+
         // $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
 
         $assignData = [
             "page_title" => "Adminator3 :: Work",
+            "csrf_html" => $csrf[0]
         ];
 
         $work = new work($this->container);
