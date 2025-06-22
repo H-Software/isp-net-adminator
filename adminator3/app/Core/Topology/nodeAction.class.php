@@ -127,7 +127,7 @@ class nodeAction extends adminator
             //automaticke restarty
             list($work_output) = $this->work->workActionTopologyNodeAdd($pole);
             $output .= $work_output;
-            
+
         } else {
             //zobrazime formular
 

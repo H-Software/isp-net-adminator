@@ -637,7 +637,7 @@ class work extends adminator
             $work_output[] = $this->work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
         }
 
-        if (preg_match("/.*<b>Routeru</b>.*/", $changes)) {
+        if (preg_match("/.*<b>Routeru<\/b>.*/", $changes)) {
             $work_output[] = $this->work_handler("1");	//reinhard-3 (ros) - restrictions (net-n/sikana)
             $work_output[] = $this->work_handler("20"); 	//reinhard-3 (ros) - shaper (client's tariffs)
 
@@ -702,7 +702,7 @@ class work extends adminator
 
             $work_output[] = $this->work_handler("4");
             $work_output[] = $this->work_handler("21");
-        }       
+        }
         // $output .= var_export($work_output, true);
 
         foreach ($work_output as $id => $item) {
