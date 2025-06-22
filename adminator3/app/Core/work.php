@@ -633,11 +633,11 @@ class work extends adminator
         $output = "";
         $work_output = [];
 
-        if(preg_match("/.*Routeru, kde se provádí filtrace.*/", $changes)) {
+        if (preg_match("/.*Routeru, kde se provádí filtrace.*/", $changes)) {
             $work_output[] = $this->work_handler("14"); //(trinity) filtrace-IP-on-Mtik's-restart
         }
 
-        if(preg_match("/.*<b>Routeru</b>.*/", $changes)) {
+        if (preg_match("/.*<b>Routeru</b>.*/", $changes)) {
             $work_output[] = $this->work_handler("1");	//reinhard-3 (ros) - restrictions (net-n/sikana)
             $work_output[] = $this->work_handler("20"); 	//reinhard-3 (ros) - shaper (client's tariffs)
 
@@ -650,19 +650,19 @@ class work extends adminator
             $work_output[] = $this->work_handler("14"); 	//(trinity) filtrace-IP-on-Mtik's-restart
         }
 
-        if(preg_match("/.*vlan_id.*/", $changes)) {
+        if (preg_match("/.*vlan_id.*/", $changes)) {
             $work_output[] = $this->work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
 
             $work_output[] = $this->work_handler("4"); //reinhard-fiber - radius
             $work_output[] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
         }
 
-        // if(ereg(".*změna.*koncového.*zařízení.*", $pole3)) {
-        //     $work_output[] = $this->work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
+        if (preg_match("/.*změna.*koncového.*zařízení.*/", $changes)) {
+            $work_output[] = $this->work_handler("7"); //(trinity) - sw.h3c.vlan.set.pl update
 
-        //     $work_output[] = $this->work_handler("4"); //reinhard-fiber - radius
-        //     $work_output[] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
-        // }
+            $work_output[] = $this->work_handler("4"); //reinhard-fiber - radius
+            $work_output[] = $this->work_handler("21"); //artemis - radius (tunel. verejky, optika)
+        }
 
         // $output .= var_export($work_output, true);
 
@@ -673,14 +673,43 @@ class work extends adminator
         return array($output);
     }
 
-    public function workActionTopologyNodeAdd(): void
+    public function workActionTopologyNodeAdd(string $changes): array
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
         $output = "";
         $work_output = [];
 
-        // TODO: add work items
+        // wifi
+        if (preg_match("/.*\[typ_nodu\]=> 1.*/", $changes)) {
+            $work_output[] = $this->work_handler("1");
+            $work_output[] = $this->work_handler("20");
+
+            $work_output[] = $this->work_handler("24");
+            $work_output[] = $this->work_handler("23");
+
+            $work_output[] = $this->work_handler("13");
+            $work_output[] = $this->work_handler("2");
+
+            $work_output[] = $this->work_handler("14");
+
+            $work_output[] = $this->work_handler("21");
+        }
+
+        //optika
+        if (preg_match("/.*\[typ_nodu\]=> 2.*/", $changes)) {
+            $work_output[] = $this->work_handler("7");
+
+            $work_output[] = $this->work_handler("4");
+            $work_output[] = $this->work_handler("21");
+        }       
+        // $output .= var_export($work_output, true);
+
+        foreach ($work_output as $id => $item) {
+            $output .= $item[0];
+        }
+
+        return array($output);
     }
 
 }
