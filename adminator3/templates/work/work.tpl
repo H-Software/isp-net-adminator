@@ -2,6 +2,8 @@
 
 <div style="padding-left: 5px;" >
 
+{include file="work/work-add-item.tpl"}
+
 {if $p_bs_alerts|default:'0' }
     <div style="padding-top: 5px">
     {include file="partials/bootstrap-alert-with-columns-array.tpl"}

@@ -6,6 +6,7 @@ use Psr\Container\ContainerInterface;
 use SebastianBergmann\Type\VoidType;
 use Illuminate\Support\Facades\Redis;
 use HyssaDev\HibikenAsynqClient\Client;
+use Exception;
 
 class work
 {
@@ -15,6 +16,8 @@ class work
     protected \mysqli|\PDO $conn_mysql;
 
     protected \PgSql\Connection|\PDO|null $conn_pgsql;
+
+    public \PDO|null $pdoMysql;
 
     protected $sentinel;
 
@@ -35,6 +38,7 @@ class work
         $this->logger = $container->get('logger');
         $this->conn_mysql = $container->get('connMysql');
         $this->conn_pgsql = $container->get('connPgsql');
+        $this->pdoMysql = $container->get('pdoMysql');
 
         $this->sentinel = $container->get('sentinel');
 
@@ -44,6 +48,49 @@ class work
         $this->loggedUserEmail = $this->sentinel->getUser()->email;
 
         $this->logger->info(message: __CLASS__ . "\\" . __FUNCTION__ . " called");
+    }
+
+    public function callPdoQueryAndFetch($query): array
+    {
+        $rs_error = null;
+        try {
+            $rs = $this->pdoMysql->query($query);
+        } catch (Exception $e) {
+            $rs_error = $e->getMessage();
+        }
+
+        if (is_object($rs)) {
+            $rs_data = $rs->fetchAll();
+
+        } else {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": PDO result is not object");
+            $rs_data = [];
+        }
+
+        return [$rs_data, $rs_error];
+    }
+
+    public function getAllItems(): array
+    {
+        $q = "SELECT id, name FROM workitems_names ORDER BY id";
+        list($data_rs, $dotaz_error) = $this->callPdoQueryAndFetch($q);
+
+        if ($dotaz_error != null) {
+            $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Caught Exception: " . var_export($dotaz_error, true));
+            $this->p_bs_alerts["Nelze načíst data pro výpis akcí pro manuální restart. <br>(SQL error: $dotaz_error)"] = "danger";
+
+            return [false, []];
+
+        } elseif (count($data_rs) < 1) {
+            $this->p_bs_alerts["Žádné data pro výpis akcí pro manuální restart."] = "warning";
+
+            return [true, []];
+        } else {
+            foreach ($data_rs as $key => $val) {
+                $itemsList[] = ["id" => $val["id"], "name" => $val["name"]];
+            }
+            return [true, $itemsList];
+        }
     }
 
     public function getItemName(int $id): string|null

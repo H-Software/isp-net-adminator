@@ -57,6 +57,9 @@ class workController extends adminatorController
 
         $work = new work($this->container);
 
+        list($allItemsRs, $allItemsData) = $work->getAllItems();
+        $assignData["items_list_select"] = $allItemsData;
+
         $rs = $work->taskGroupList();
         $assignData["p_bs_alerts"] = $work->p_bs_alerts;
 
