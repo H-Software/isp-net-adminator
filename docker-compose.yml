@@ -54,6 +54,9 @@ services:
       - POSTGRES_USER=adminator
       - POSTGRES_PASSWD=isp-net-passwd
       - POSTGRES_DB=adminator.new
+      # redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
       # otel
       - OTEL_PHP_AUTOLOAD_ENABLED=true
       - OTEL_SERVICE_NAME=isp-adminator3
