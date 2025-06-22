@@ -285,7 +285,7 @@ require ("include/charset.php");
   
   <tr>
     <td colspan="1" height="30" ><br></td>
-    <td class="map-tab map-tab-right" ><a href="work.php" >Work</a></td>
+    <td class="map-tab map-tab-right" >Work</td>
   </tr>
   
   <tr>
