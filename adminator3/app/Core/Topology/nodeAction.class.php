@@ -687,7 +687,7 @@ class nodeAction extends adminator
 
             } // konec foreach
 
-            $pole .= "".$pole3;
+            $pole .= $pole3;
 
             if ($uprava) {
                 $vysledek_write = 1;
@@ -702,7 +702,7 @@ class nodeAction extends adminator
             );
 
             //automaticke restarty
-            $this->work->workActionTopologyNodeDiff();
+            $this->work->workActionTopologyNodeDiff($pole, $id_new, $pole_puvodni_data, );
 
         } else {
             //zobrazime formular
