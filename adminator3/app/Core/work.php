@@ -231,7 +231,8 @@ class work extends adminator
         $item_name = $this->getItemName($item_id);
 
         if (is_null($item_name)) {
-            //TODO: add warning over bootstrap.JS
+            // TODO: check/fix rendering in objekty/topology page(s)
+            $this->p_bs_alerts["Nepodařilo se načíst název WorkItem položky. <br>(item_id: $item_id)"] = "warning";
             $this->logger->warning(message: __CLASS__ . "\\" . __FUNCTION__ . ": parsing item_name failed (item_id $item_id)");
         } else {
             $this->logger->info(message: __CLASS__ . "\\" . __FUNCTION__ . ": parsed item_name: " . var_export($item_name, true));
