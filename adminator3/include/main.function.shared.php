@@ -752,47 +752,6 @@ function zjisti_fa_text_a_castku($fakturacni_skupina_id, $platit)
 #  konec presun z export_ucetni.inc.function.php
 #
 
-# gen.router.php
-
-function gen_router_vypis_router($id)
-{
-
-    global $mac, $conn_mysql;
-
-    $dotaz_router = $conn_mysql->query("SELECT * FROM router_list WHERE id = $id order by id");
-    $dotaz_router_radku = $dotaz_router->num_rows;
-
-    if ($dotaz_router_radku <> 1) {
-        echo "Chybnej pocet radku";
-        $mac = "E";
-
-    } else {
-        while ($data = $dotaz_router->fetch_array()) {
-            $parent_router = $data["parent_router"];
-
-            if ($parent_router == 0) {
-                //erik - nedelat nic
-
-            } elseif ($parent_router == 1) {
-                // konec retezce, vypisem
-
-                if ((strlen($mac) <= 0)) {
-                    $mac = $data["mac"];
-                }
-                // $mac="CCC";
-                //if ( ( strlen($rb_ip) <= 0) ) { $rb_ip=$data["ip_adresa"]; }
-
-            } else {
-                gen_router_vypis_router($parent_router);
-            }
-
-        } // konec while
-    } // konec else
-
-} // konec funkce
-
-# enf of gen.router.php
-
 # start of phd_global_function.php
 
 function generate_fully_fin_index($id_vlastnika)
