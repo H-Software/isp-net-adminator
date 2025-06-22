@@ -8,14 +8,14 @@ use Illuminate\Support\Facades\Redis;
 use HyssaDev\HibikenAsynqClient\Client;
 use Exception;
 
-class work
+class work extends adminator
 {
     // DI
-    protected \Monolog\Logger $logger;
+    public \Monolog\Logger $logger;
 
-    protected \mysqli|\PDO $conn_mysql;
+    public \mysqli|\PDO $conn_mysql;
 
-    protected \PgSql\Connection|\PDO|null $conn_pgsql;
+    public \PgSql\Connection|\PDO|null $conn_pgsql;
 
     public \PDO|null $pdoMysql;
 
@@ -31,6 +31,10 @@ class work
      * {@inheritdoc}
      */
     public array $p_bs_alerts = [];
+
+    public $action_form;
+
+    public int $form_single_action;
 
     public function __construct(ContainerInterface $container)
     {
@@ -72,7 +76,7 @@ class work
 
     public function getAllItems(): array
     {
-        $q = "SELECT id, name FROM workitems_names ORDER BY id";
+        $q = "SELECT id, name FROM workitems_names WHERE id > 0 ORDER BY id";
         list($data_rs, $dotaz_error) = $this->callPdoQueryAndFetch($q);
 
         if ($dotaz_error != null) {
@@ -103,7 +107,43 @@ class work
         return $item_name;
     }
 
-    public function taskEnqueue(int $item_id): bool|int
+    public function handleSingleActionForm(): void
+    {
+        $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
+
+        // get form data
+        $this->action_form = $this->formInit();
+        $form_data = $this->action_form->validate("single_action");
+        $this->form_single_action = intval($form_data["single_action"]);
+
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": " . var_export($this->form_single_action, true));
+
+        // check if form was sended
+        if ($this->form_single_action > 0) {
+            // test if we have valid ID
+            $item_name = $this->getItemName($this->form_single_action);
+
+            if (is_null($item_name)) {
+                $this->logger->warning(message: __CLASS__ . "\\" . __FUNCTION__ . ": parsing item_name failed (item_id $this->form_single_action)");
+            } else {
+                [$queue_rs, $queue_err] = $this->taskEnqueue($this->form_single_action);
+                if ($queue_rs) {
+                    $this->p_bs_alerts["Manuální přidání akce pro restart bylo provedeno úspěšně"] = "success";
+                } else {
+                    $this->p_bs_alerts["Manuální přidání akce pro restart selhalo. </br> ($queue_err)"] = "danger";
+                    $this->logger->error(message: __CLASS__ . "\\" . __FUNCTION__ . ": single_action failed ($queue_err)");
+                }
+            }
+        }
+    }
+
+    /**
+     * @return array [
+     *  bool, // false if something failed
+     *  bool|int|string, // results from asynq_client or error message
+     * ]
+     */
+    public function taskEnqueue(int $item_id): array
     {
         $this->logger->info(__CLASS__ . "\\" . __FUNCTION__ . " called");
 
@@ -126,10 +166,10 @@ class work
         } catch (\RedisException $ex) {
             $m = $ex->getMessage();
             $this->logger->error(__CLASS__ . "\\" . __FUNCTION__ . ": Redis error: $m");
-            return false;
+            return [false, "Redis error: $m"];
         }
 
-        return $res;
+        return [true, $res];
     }
 
     public function taskGroupList(): array
@@ -198,10 +238,10 @@ class work
         }
 
         // asynqClient part
-        $rs_queue = $this->taskEnqueue($item_id);
-        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": rs_queue: " . var_export($rs_queue, true));
+        [$queue_rs, $queue_err] = $this->taskEnqueue($item_id);
+        $this->logger->debug(__CLASS__ . "\\" . __FUNCTION__ . ": rs_queue: " . var_export($queue_rs, true));
 
-        if ($rs_queue) {
+        if ($queue_rs) {
             $rs_write = 1;
         } else {
             $rs_write = 0;
@@ -219,7 +259,7 @@ class work
         // generate output view
         $output .= "<div style=\"\">Požadavek na restart <b>\"".$item_name."\"</b> (No. ".$item_id.")";
 
-        if ($rs_queue) {
+        if ($queue_rs) {
             $output .= "<div> - <span style=\"color: green;\"> úspěšně přidán do fronty</span></div>";
         } else {
             $output .= "<div> - <span style=\"color: red;\"> chyba při přidání požadavku do fronty</span></div>";

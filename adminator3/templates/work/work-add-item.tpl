@@ -1,6 +1,6 @@
 <div style="padding-left: 5px;" >
 
-<form method="POST" action="{$action}" >
+<form method="POST" >
  {$csrf_html}
 
  <div style="width: 30%; float: left; font-weight: bold;" >Manuální přidání akce pro restart: </div>

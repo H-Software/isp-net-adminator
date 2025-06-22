@@ -52,11 +52,9 @@ class workController extends adminatorController
         $csrf = $this->generateCsrfToken($request, $response, true);
         // $this->logger->info("workController\work: csrf generated: ".var_export($csrf_name, true));
 
-        // $this->smarty->assign("action", $_SERVER['SCRIPT_URL']);
-
         $assignData = [
             "page_title" => "Adminator3 :: Work",
-            "csrf_html" => $csrf[0]
+            "csrf_html" => $csrf[0],
         ];
 
         $work = new work($this->container);
@@ -65,11 +63,14 @@ class workController extends adminatorController
         $assignData["items_list_select"] = $allItemsData;
 
         $rs = $work->taskGroupList();
-        $assignData["p_bs_alerts"] = $work->p_bs_alerts;
 
         if ($rs[0] === true) {
             $assignData["work_list_groups_items"] = $rs[1];
         }
+
+        $work->handleSingleActionForm();
+
+        $assignData["p_bs_alerts"] = $work->p_bs_alerts;
 
         return $this->renderer->template($request, $response, 'work/work.tpl', $assignData);
     }

@@ -48,7 +48,7 @@ final class WorkTest extends AdminatorTestCase
 
         for ($i = 0; $i < 250; $i++) {
 
-            $task = $work->taskEnqueue($faker->numberBetween(1, 30));
+            [$rs, $task] = $work->taskEnqueue($faker->numberBetween(1, 30));
 
             $this->assertTrue($task);
         }
