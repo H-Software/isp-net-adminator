@@ -1,6 +1,6 @@
 <?php
 
-function init_helper_base_html($app_name = "adminator")
+function init_helper_base_html($app_name = "adminator"): string
 {
     $base_html = "<html>
   <head>
@@ -20,13 +20,17 @@ function init_helper_base_html($app_name = "adminator")
 
     return $base_html;
 }
-function init_mysql($app_name = "adminator")
+function init_mysql($app_name = "adminator", $print_html = true)
 {
 
-    $hlaska_connect = init_helper_base_html($app_name)."\n<div style=\"color: black; padding-left: 20px;  \">\n";
-    $hlaska_connect .= "<div style=\"padding-top: 50px; font-size: 18px; \">\n";
-    $hlaska_connect .= "Omlouváme se, " . $app_name . " v tuto chvíli není dostupný! </div>\n";
-    $hlaska_connect .= "<div style=\"padding-top: 10px; font-size: 12px; \" >\nDetailní informace: Chyba! Nelze se pripojit k Mysql databázi. </div>\n";
+    if ($print_html) {
+        $hlaska_connect = init_helper_base_html($app_name)."\n<div style=\"color: black; padding-left: 20px;  \">\n";
+        $hlaska_connect .= "<div style=\"padding-top: 50px; font-size: 18px; \">\n";
+        $hlaska_connect .= "Omlouváme se, " . $app_name . " v tuto chvíli není dostupný! </div>\n";
+        $hlaska_connect .= "<div style=\"padding-top: 10px; font-size: 12px; \" >\nDetailní informace: Chyba! Nelze se pripojit k Mysql databázi. </div>\n";
+    } else {
+        $hlaska_connect = "Detailní informace: Chyba! Nelze se pripojit k Mysql databázi.\n";
+    }
 
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -50,7 +54,9 @@ function init_mysql($app_name = "adminator")
         if ($conn_mysql->connect_error) {
             echo "connection error: " . $conn_mysql->connect_error . "\n";
         }
-        echo  "</div></div></body></html>\n";
+        if ($print_html) {
+            echo  "</div></div></body></html>\n";
+        }
         die();
     }
 
@@ -69,13 +75,17 @@ function init_mysql($app_name = "adminator")
     return $conn_mysql;
 }
 
-function init_postgres($app_name = "adminator")
+function init_postgres($app_name = "adminator", $print_html = true)
 {
 
-    $hlaska_connect = init_helper_base_html($app_name)."<div style=\"color: black; padding-left: 20px;  \">";
-    $hlaska_connect .= "<div style=\"padding-top: 50px; font-size: 18px; \">";
-    $hlaska_connect .= "Omlouváme se, Adminátor2 v tuto chvíli není dostupný! </div>";
-    $hlaska_connect .= "<div style=\"padding-top: 10px; font-size: 12px; \" >Detailní informace: Chyba! Nelze se pripojit k Postgre databázi. </div>";
+    if ($print_html) {
+        $hlaska_connect = init_helper_base_html($app_name)."<div style=\"color: black; padding-left: 20px;  \">";
+        $hlaska_connect .= "<div style=\"padding-top: 50px; font-size: 18px; \">";
+        $hlaska_connect .= "Omlouváme se, Adminátor2 v tuto chvíli není dostupný! </div>";
+        $hlaska_connect .= "<div style=\"padding-top: 10px; font-size: 12px; \" >Detailní informace: Chyba! Nelze se pripojit k Postgre databázi. </div>";
+    } else {
+        $hlaska_connect = "Detailní informace: Chyba! Nelze se pripojit k Postgre databázi.\n";
+    }
 
     $POSTGRES_SERVER = getenv("POSTGRES_SERVER") ? getenv("POSTGRES_SERVER") : "localhost";
     $POSTGRES_USER = getenv("POSTGRES_USER") ? getenv("POSTGRES_USER") : "root";
@@ -97,9 +107,14 @@ function init_postgres($app_name = "adminator")
         die($hlaska_connect . 'Caught exception: ' .  $e->getMessage() . "\n" . "</div></div></body></html>\n");
     }
 
-    if (!($db_ok2)) {
-        die($hlaska_connect.pg_last_error()."</div></div></body></html>");
+    if ($db_ok2 === false) {
+        try {
+            die($hlaska_connect.pg_last_error()."</div></div></body></html>");
+        } catch (\Throwable $e) {
+            die($hlaska_connect . 'Caught exception: ' .  $e->getMessage() . "\n" . "</div></div></body></html>\n");
+        }
     }
+
     return $db_ok2;
 }
 
