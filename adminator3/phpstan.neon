@@ -18,6 +18,10 @@ parameters:
 	-
 		message: "#^Variable \\$.* in (empty|isset)\\(\\) is never defined\\.$#"
 		path: app/Controllers/Core/*
+	# for cli/queue
+	-
+		message: "#^Dead catch - Throwable is never thrown in the try block\\.$#"
+		path: include/main.function.shared.php
 	# common known issues
 	-
 		message: '#Undefined variable: \$.*#'
