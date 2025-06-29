@@ -29,25 +29,13 @@ include ("include/charset.php");
 
 <?php
 
-//  require("include/js.include.1.php");
-
 //  $windowtext = "Aktuální informace o platbách má účetní. Zde jsou zpožděné informace/platby. ";
 
-//  // velikost okna
-//  $windowdelka = 300;
-//  $windowpadding = 40;
-
-//  // pozice okna
-//  $windowtop = 370;
-//  $windowleft = 350;
-
-//  require("include/window-main.php");
- 
  ?>
   
 </head> 
 
-<body onload="showWindow()" > 
+<body> 
 
 <?php require("head.php"); ?> 
 

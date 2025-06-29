@@ -5,7 +5,7 @@ require("include/config.php");
 require("include/check_login.php");
 require("include/check_level.php");
 
-if(!(check_level($level, 44))) {
+if (!(check_level($level, 44))) {
     // neni level
     $stranka = 'nolevelpage.php';
     header("Location: ".$stranka);
@@ -82,11 +82,11 @@ try {
     echo "<div style=\"color: red; \" >Database Error: ". $e->getMessage() . "</div>";
 }
 
-if(!$vyber) {
+if (!$vyber) {
     echo "<div style=\"color: red; \" >Chyba! Data nelze načíst! </div>";
     echo "<div style=\"color: red; \" >Error: No database handler.</div>";
     echo "<div style=\"color: red; \" >" . pg_last_error() . "</div>";
-} elseif(pg_num_rows($vyber) < 1) {
+} elseif (pg_num_rows($vyber) < 1) {
     echo "<div style=\"\" >zadne platby</div>";
 } else {
     // $listovani->listInterval();    //zobrazení stránkovače
